@@ -12,24 +12,15 @@ MAPITableIterator::~MAPITableIterator()
 {
     if (m_pRows != NULL)
         FreeProws(m_pRows);
-    if (m_pTable != NULL)
-    {
-        UlRelease(m_pTable);
-        m_pTable = NULL;
-    }
 }
 
 void MAPITableIterator::Initialize(LPMAPITABLE pTable, LPMAPIFOLDER pFolder,
     MAPISession &session, ULONG ulItemTypeMask)
 {
+	UNREFERENCED_PARAMETER(ulItemTypeMask);
     HRESULT hr = S_OK;
 
     m_session = &session;
-    if (m_pTable != NULL)
-    {
-        UlRelease(m_pTable);
-        m_pTable = NULL;
-    }
     if (m_pParentFolder != NULL)
     {
         UlRelease(m_pParentFolder);
@@ -46,15 +37,7 @@ void MAPITableIterator::Initialize(LPMAPITABLE pTable, LPMAPIFOLDER pFolder,
         throw GenericException(hr, L"MAPITableIterator::Initialize():SetColumns Failed.",
             __LINE__, __FILE__);
     }
-
-    // to remove
-    FILETIME tmpTime = { 0, 0 };
-
-    if (FAILED(hr = m_pTable->Restrict(GetRestriction(ulItemTypeMask, tmpTime), 0)))
-    {
-        throw GenericException(hr, L"MAPITableIterator::Initialize():Restrict Failed.",
-            __LINE__, __FILE__);
-    }
+    
     if (GetSortOrder() != NULL)
     {
         if (FAILED(hr = m_pTable->SortTable(GetSortOrder(), 0)))

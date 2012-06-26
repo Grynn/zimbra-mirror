@@ -1627,7 +1627,7 @@ void MAPIMessage::ToMimePPMessage(mimepp::Message &msg)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MessageIterator
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MessageIterator::MIRestriction MessageIterator::m_restriction;
+MIRestriction MessageIterator::m_restriction;
 MessageIterator::MessageIterPropTags MessageIterator::m_props = {
     NMSGPROPS, { PR_ENTRYID, PR_LONGTERM_ENTRYID_FROM_TABLE, PR_CLIENT_SUBMIT_TIME,
                  PR_MESSAGE_CLASS }
@@ -1686,7 +1686,7 @@ BOOL MessageIterator::GetNext(__int64 &date, SBinary &bin)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MessageIterator::MIRestriction
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Zimbra::MAPI::MessageIterator::MIRestriction::MIRestriction()
+Zimbra::MAPI::MIRestriction::MIRestriction()
 {
     // Task
     _pTaskClass = new WCHAR[10];
@@ -1837,7 +1837,7 @@ Zimbra::MAPI::MessageIterator::MIRestriction::MIRestriction()
     // pR[23].res.resProperty.lpProp will be set in GetRestriction
 }
 
-MessageIterator::MIRestriction::~MIRestriction()
+MIRestriction::~MIRestriction()
 {
     delete[] _pContactClass;
     delete[] _pMailClass;
@@ -1847,7 +1847,7 @@ MessageIterator::MIRestriction::~MIRestriction()
     delete[] _pDistListClass;
 }
 
-LPSRestriction MessageIterator::MIRestriction::GetRestriction(ULONG TypeMask, FILETIME
+LPSRestriction MIRestriction::GetRestriction(ULONG TypeMask, FILETIME
     startDate)
 {
     int iCounter = 13;

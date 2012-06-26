@@ -151,12 +151,12 @@ public:
     void ToMimePPMessage(mimepp::Message &msg);
 };
 
+class MIRestriction;
+
 // Message Iterator class
 class MessageIterator: public MAPITableIterator
 {
 private:
-    class MIRestriction;
-
     typedef enum _MessageIterPropTagIdx
     {
         MI_ENTRYID, MI_LONGTERM_ENTRYID_FROM_TABLE, MI_DATE, MI_MESSAGE_CLASS, NMSGPROPS
@@ -188,11 +188,11 @@ public:
 protected:
     static MessageIterPropTags m_props;
     static MessageIterSortOrder m_sortOrder;
-    static MessageIterator::MIRestriction m_restriction;
+    static MIRestriction m_restriction;
 };
 
 // Restriction class
-class MessageIterator::MIRestriction
+class MIRestriction
 {
 public:
     MIRestriction();

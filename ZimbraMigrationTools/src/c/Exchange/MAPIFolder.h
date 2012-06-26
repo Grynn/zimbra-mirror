@@ -90,6 +90,8 @@ private:
     MAPISession *m_session;
     MAPIStore *m_store;
     wstring m_folderpath;
+	LPMAPITABLE m_pContentsTable;
+	LPMAPITABLE m_pHierarchyTable;
 
     wstring FindFolderPath();
 

@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Exchange.h"
 #include "MAPIFolder.h"
+#include "MAPIMessage.h"
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Exception class
@@ -71,12 +72,16 @@ MAPIFolder::MAPIFolder(): m_folder(NULL), m_session(NULL), m_store(NULL)
 {
     m_EntryID.cb = 0;
     m_EntryID.lpb = NULL;
+	m_pContentsTable = NULL;
+	m_pHierarchyTable = NULL;
 }
 
 MAPIFolder::MAPIFolder(MAPISession &session, MAPIStore &store): m_folder(NULL)
 {
     m_EntryID.cb = 0;
     m_EntryID.lpb = NULL;
+	m_pContentsTable = NULL;
+	m_pHierarchyTable=NULL;
     m_session = &session;
     m_store = &store;
 }
@@ -87,6 +92,11 @@ MAPIFolder::~MAPIFolder()
         UlRelease(m_folder);
     if (m_EntryID.lpb != NULL)
         MAPIFreeBuffer(m_EntryID.lpb);
+	if(m_pContentsTable != NULL)
+		UlRelease(m_pContentsTable);
+	if(m_pHierarchyTable!=NULL)
+		UlRelease(m_pHierarchyTable);
+	m_pContentsTable = NULL;
     m_folder = NULL;
     m_EntryID.lpb = NULL;
     m_EntryID.cb = 0;
@@ -96,22 +106,62 @@ MAPIFolder::MAPIFolder(const MAPIFolder &folder)
 {
     m_folder = folder.m_folder;
     m_displayname = folder.m_displayname;
-    CopyEntryID((SBinary &)folder.m_EntryID, m_EntryID);
+	m_pContentsTable = folder.m_pContentsTable;
+	m_pHierarchyTable= folder.m_pHierarchyTable;
+	CopyEntryID((SBinary &)folder.m_EntryID, m_EntryID);
 }
 
 void MAPIFolder::Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary pEntryId)
 {
+	HRESULT hr=S_OK;
     if (m_folder != NULL)
         UlRelease(m_folder);
     if (m_EntryID.lpb != NULL)
         FreeEntryID(m_EntryID);
+	if(m_pContentsTable != NULL)
+		UlRelease(m_pContentsTable);
+	if(m_pHierarchyTable!=NULL)
+		UlRelease(m_pHierarchyTable);
+
     m_folder = pFolder;
     m_displayname = displayName;
     CopyEntryID(*pEntryId, m_EntryID);
+	
+	//Get folder hierarchy table
+	if (FAILED(hr = m_folder->GetHierarchyTable(fMapiUnicode, &m_pHierarchyTable)))
+    {
+        throw MAPIFolderException(E_FAIL, L"GetFolderIterator(): GetHierarchyTable Failed.",
+            __LINE__, __FILE__);
+    }
+	
+	//get folders content tabel
+	if (FAILED(hr = m_folder->GetContentsTable(fMapiUnicode, &m_pContentsTable)))
+	{
+		throw MAPIFolderException(hr, L"Initialize(): GetContentsTable Failed.",
+            __LINE__, __FILE__);
+	}    
+	
+	//find container class
+	ULONG ulItemMask =ZCM_ALL;
+    wstring wstrCntrClass = L"";
+    if(S_OK==ContainerClass(wstrCntrClass))
+    {
+        if (_tcsicmp(wstrCntrClass.c_str(), _TEXT("IPF.NOTE")) == 0)
+            ulItemMask = ZCM_MAIL;
+    }    
+
+	//Apply restrictions.
+	Zimbra::MAPI::MIRestriction restriction;
+	FILETIME tmpTime = { 0, 0 };
+	if (FAILED(hr = m_pContentsTable->Restrict(restriction.GetRestriction(ulItemMask, tmpTime), 0)))
+    {
+        throw MAPIFolderException(hr, L"MAPIFolder::Initialize():Restrict Failed.",
+            __LINE__, __FILE__);
+    }
+
     if (m_session)
     {
         wstring wstrFolderPath = FindFolderPath();
-
         m_folderpath = wstrFolderPath;
     }
 }
@@ -282,92 +332,20 @@ HRESULT MAPIFolder::GetItemCount(ULONG &ulCount)
     HRESULT hr = S_OK;
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
 
-    // Get PR_CONTENT_COUNT
-    if (FAILED(hr = HrGetOneProp(m_folder, PR_CONTENT_COUNT, pPropValues.getptr())))
+	if (FAILED(hr = m_pContentsTable->GetRowCount(0, &ulCount)))
     {
-        // if failed, try to read contents table and get count out of it.
-        Zimbra::Util::ScopedInterface<IMAPITable> lpTable;
-
-        if (FAILED(hr = m_folder->GetContentsTable(fMapiUnicode, lpTable.getptr())))
-        {
-            throw MAPIFolderException(E_FAIL, L"GetItemCount(): GetContentsTable() Failed.",
-                __LINE__, __FILE__);
-        }
-        if (FAILED(hr = lpTable->GetRowCount(0, &ulCount)))
-        {
-            throw MAPIFolderException(E_FAIL, L"GetItemCount(): GetRowCount() Failed.",
-                __LINE__, __FILE__);
-        }
-    }
-    else
-    {
-        ulCount = pPropValues->Value.ul;
+        throw MAPIFolderException(E_FAIL, L"GetItemCount(): GetRowCount() Failed.",
+            __LINE__, __FILE__);
     }
     return hr;
 }
 
 HRESULT MAPIFolder::GetFolderIterator(FolderIterator &folderIter)
 {
-    HRESULT hr = S_OK;
-
     if (m_folder == NULL)
         return MAPI_E_NOT_FOUND;
 
-    LPMAPITABLE pTable = NULL;
-
-    if (FAILED(hr = m_folder->GetHierarchyTable(fMapiUnicode, &pTable)))
-    {
-        throw MAPIFolderException(E_FAIL, L"GetFolderIterator(): GetHierarchyTable Failed.",
-            __LINE__, __FILE__);
-    }
-
-/*
- *      SPropTagArray arrPropTags;
- *      arrPropTags.cValues=1;
- *      arrPropTags.aulPropTag[0]=PR_CONTAINER_CLASS;
- *      if(FAILED(hr = pTable->SetColumns( (LPSPropTagArray)&arrPropTags, 0 )))
- *      {
- *
- *      }
- *      SPropValue spv;
- *      spv.dwAlignPad = 0;
- *      spv.ulPropTag = PR_CONTAINER_CLASS;
- *      spv.Value.LPSZ = L"ipm.note";
- *
- *      SRestriction sr[3];
- *      //sr[0].rt = RES_OR;
- *      //sr[0].res.resOr.cRes = 2;
- *      //sr[0].res.resOr.lpRes = &sr[1];
- *
- *              //sr[1].rt=RES_NOT;
- *              //sr[1].res.resNot.lpRes = &sr[4];
- *
- *                      //sr[1].rt= RES_EXIST;
- *                      //sr[1].res.resExist.ulPropTag=PR_CONTAINER_CLASS_W;
- * /*
- *      sr[2].rt= RES_AND;
- *      sr[2].res.resAnd.cRes = 2;
- *      sr[2].res.resAnd.lpRes = &sr[5];
- *              sr[5].rt = RES_EXIST;
- *              sr[5].res.resExist.ulPropTag=PR_CONTAINER_CLASS;
- *                      sr[6].rt = RES_PROPERTY ;
- *                      sr[6].res.resProperty.relop = RELOP_RE ;
- *                      sr[6].res.resContent.ulFuzzyLevel = FL_IGNORECASE ;
- *                      sr[6].res.resProperty.lpProp = &spv;
- *
- *      sr[0].rt= RES_AND;
- *      sr[0].res.resAnd.cRes = 2;
- *      sr[0].res.resAnd.lpRes = &sr[1];
- *              sr[1].rt = RES_EXIST;
- *              sr[1].res.resExist.ulPropTag=PR_CONTAINER_CLASS;
- *                      sr[2].rt = RES_PROPERTY ;
- *                      sr[2].res.resProperty.relop = RELOP_RE ;
- *                      sr[2].res.resContent.ulFuzzyLevel = FL_IGNORECASE ;
- *                      sr[2].res.resProperty.lpProp = &spv;
- *
- *      hr=pTable->Restrict(&sr[0],0);
- */
-    folderIter.Initialize(pTable, m_folder, *m_session);
+    folderIter.Initialize(m_pHierarchyTable, m_folder, *m_session);
     return S_OK;
 }
 
@@ -379,24 +357,6 @@ HRESULT MAPIFolder::GetMessageIterator(MessageIterator &msgIterator)
             __LINE__, __FILE__);
     }
 
-    HRESULT hr = S_OK;
-    LPMAPITABLE pContentsTable = NULL;
-
-    if (FAILED(hr = m_folder->GetContentsTable(fMapiUnicode, &pContentsTable)))
-    {
-        throw MAPIFolderException(E_FAIL, L"GetMessageIterator(): GetContentsTable Failed.",
-            __LINE__, __FILE__);
-    }
-
-    //ULONG ulItemMask =ZCM_ALL;
-    //wstring wstrCntrClass = L"";
-    //if(S_OK==ContainerClass(wstrCntrClass))
-    //{
-    //    if (_tcsicmp(wstrCntrClass.c_str(), _TEXT("IPF.NOTE")) == 0)
-    //        ulItemMask  &= ~ZCM_APPOINTMENTS;
-    //}
-    // Init message iterator
-    //msgIterator.Initialize(pContentsTable, m_folder, *m_session,ulItemMask);
-    msgIterator.Initialize(pContentsTable, m_folder, *m_session);
-    return S_OK;
+    msgIterator.Initialize(m_pContentsTable, m_folder, *m_session);
+	return S_OK;
 }
