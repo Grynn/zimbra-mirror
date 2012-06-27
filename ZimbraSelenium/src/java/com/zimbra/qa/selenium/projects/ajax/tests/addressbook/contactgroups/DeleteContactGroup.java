@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contactgroups;
 
 
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -22,7 +23,11 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		// All tests start at the Address page
 		super.startingPage = app.zPageAddressbook;
 
-		super.startingAccountPreferences = null;		
+		// Enable user preference checkboxes
+		super.startingAccountPreferences = new HashMap<String , String>() {
+		   {
+		    	put("zimbraPrefShowSelectionCheckbox", "TRUE");		         
+		   }};				
 		
 	}
 	
