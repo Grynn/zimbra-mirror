@@ -1,7 +1,7 @@
 OPENSSL_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(OPENSSL_ROOT)/../..; pwd)
 MAKE ?= make
-MAKEARGS := -j3
+MAKEARGS := -j3 DEFINES="-DOPENSSL_USE_IPV6"
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
@@ -55,6 +55,7 @@ build:
 	(tar xzf src/openssl-$(OPENSSL_VERSION).tar.gz; \
 	cd openssl-$(OPENSSL_VERSION); \
 	patch -p1 -N -g0 < ../patches/mac-fix.patch; \
+	patch -p1 -N -g0 < ../patches/ipv6.patch; \
 	CFLAGS="-g -O2" \
 	CXXFLAGS="-g -O2" \
 	PERL=/usr/bin/perl \
