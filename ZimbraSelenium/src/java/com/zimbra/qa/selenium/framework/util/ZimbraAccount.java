@@ -267,9 +267,32 @@ public class ZimbraAccount {
 
 					// If the domain does not exist, create it
 					ZimbraAdminAccount.GlobalAdmin().soapSend(
-							"<CreateDomainRequest xmlns='urn:zimbraAdmin'>"
+								"<CreateDomainRequest xmlns='urn:zimbraAdmin'>"
 							+		"<name>"+ domain +"</name>"
+							+		"<a n='zimbraGalMode'>zimbra</a>"
+							+		"<a n='zimbraGalMaxResults'>15</a>"
 							+	"</CreateDomainRequest>");
+					
+					
+					// Create the Sync GAL Account
+					String galAccountName = "galaccount"+ ZimbraSeleniumProperties.getUniqueString() + "@"+ domain;
+					String datasourceName = "datasource" + ZimbraSeleniumProperties.getUniqueString();
+					ZimbraAdminAccount.GlobalAdmin().soapSend(
+								"<CreateGalSyncAccountRequest xmlns='urn:zimbraAdmin' name='"+ datasourceName + "' type='zimbra' domain='"+ domain +"' >"
+							+		"<account by='name'>"+ galAccountName +"</account>"
+							+		"<password>"+ ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123") +"</password>"
+							+	"</CreateGalSyncAccountRequest>");
+					
+					String galAccountID = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:CreateGalSyncAccountResponse/admin:account", "id");
+
+					// Sync the GAL Account
+					ZimbraAdminAccount.GlobalAdmin().soapSend(
+								"<SyncGalAccountRequest xmlns='urn:zimbraAdmin'>"
+							+		"<account id='"+ galAccountID +"'>"
+							+			"<datasource by='name' fullSync='true' reset='true'>"+ datasourceName +"</datasource>"
+							+		"</account>"
+							+	"</SyncGalAccountRequest>");
+
 
 				}	
 
