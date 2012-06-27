@@ -1,7 +1,7 @@
 OPENSSL_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(OPENSSL_ROOT)/../..; pwd)
 MAKE ?= make
-MAKEARGS := -j3 DEFINES="-DOPENSSL_USE_IPV6"
+MAKEARGS := -j3
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
