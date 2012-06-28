@@ -14,21 +14,21 @@ ZIMBRA_HOME ?= /opt/zimbra
 PATCH	:=
 ifdef BETA
 	include $(PHP_ROOT)/../beta_versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/dns.patch;
+	PATCH	:= 
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
-	PATCH	:= patch -g0 -N -p1 < ../patches/dns.patch; patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
+	PATCH	:= patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
 endif
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.7)
-	PATCH	:= patch -g0 -N -p1 < ../patches/dns.patch; patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
+	PATCH	:= patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
 endif
 else
 	include $(PHP_ROOT)/../versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/dns.patch;
+	PATCH	:= 
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
-	PATCH	:= patch -g0 -N -p1 < ../patches/dns.patch; patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
+	PATCH	:= patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
 endif
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.7)
-	PATCH	:= patch -g0 -N -p1 < ../patches/dns.patch; patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
+	PATCH	:= patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
 endif
 endif
 
