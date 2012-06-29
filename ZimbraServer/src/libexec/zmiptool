@@ -128,20 +128,26 @@ if ($zimbraIPMode eq "ipv4") {
   }
   if ($zimbra_zmjava_options !~ /-Djava.net.preferIPv4Stack=true/) {
       $zimbra_zmjava_options .= " -Djava.net.preferIPv4Stack=true";
-    if ($dryrun) {
-      print "Would set zimbra_zmjava_options to $zimbra_zmjava_options\n";
-    } else {
-      setLocalConfig("zimbra_zmjava_options", $zimbra_zmjava_options);
-    }
+  }
+  if ($zimbra_zmjava_options =~ /-Djava.net.preferIPv6Addresses=true/) {
+      $zimbra_zmjava_options =~ s/ -Djava.net.preferIPv6Addresses=true//;
+  }
+  if ($dryrun) {
+    print "Would set zimbra_zmjava_options to $zimbra_zmjava_options\n";
+  } else {
+    setLocalConfig("zimbra_zmjava_options", $zimbra_zmjava_options);
   }
   if ($storeserver) {
     if ($mailboxd_java_options !~ /-Djava.net.preferIPv4Stack=true/) {
       $mailboxd_java_options .= " -Djava.net.preferIPv4Stack=true";
-      if ($dryrun) {
-        print "Would set mailboxd_java_options to $mailboxd_java_options\n";
-      } else {
-        setLocalConfig("mailboxd_java_options", $mailboxd_java_options);
-      }
+    }
+    if ($mailboxd_java_options =~ /-Djava.net.preferIPv6Addresses=true/) {
+      $mailboxd_java_options =~ s/ -Djava.net.preferIPv6Addresses=true//;
+    }
+    if ($dryrun) {
+      print "Would set mailboxd_java_options to $mailboxd_java_options\n";
+    } else {
+      setLocalConfig("mailboxd_java_options", $mailboxd_java_options);
     }
   }
 }
@@ -155,21 +161,27 @@ elsif ($zimbraIPMode eq "both") {
     print "Error: Unable to resolve $host AAAA record\n";
   }
   if ($zimbra_zmjava_options =~ /-Djava.net.preferIPv4Stack=true/) {
-    $zimbra_zmjava_options =~ s/-Djava.net.preferIPv4Stack=true//;
-    if ($dryrun) {
-      print "Would set zimbra_zmjava_options to $zimbra_zmjava_options\n";
-    } else {
-      setLocalConfig("zimbra_zmjava_options", $zimbra_zmjava_options);
-    }
+    $zimbra_zmjava_options =~ s/ -Djava.net.preferIPv4Stack=true//;
+  }
+  if ($zimbra_zmjava_options =~ /-Djava.net.preferIPv6Addresses=true/) {
+    $zimbra_zmjava_options =~ s/ -Djava.net.preferIPv6Addresses=true//;
+  }
+  if ($dryrun) {
+    print "Would set zimbra_zmjava_options to $zimbra_zmjava_options\n";
+  } else {
+    setLocalConfig("zimbra_zmjava_options", $zimbra_zmjava_options);
   }
   if ($storeserver) {
     if ($mailboxd_java_options =~ /-Djava.net.preferIPv4Stack=true/) {
-      $mailboxd_java_options =~ s/-Djava.net.preferIPv4Stack=true//;
-      if ($dryrun) {
-        print "Would set mailboxd_java_options to $mailboxd_java_options\n";
-      } else {
-        setLocalConfig("mailboxd_java_options", $mailboxd_java_options);
-      }
+      $mailboxd_java_options =~ s/ -Djava.net.preferIPv4Stack=true//;
+    }
+    if ($mailboxd_java_options =~ /-Djava.net.preferIPv6Addresses=true/) {
+      $mailboxd_java_options =~ s/ -Djava.net.preferIPv6Addresses=true//;
+    }
+    if ($dryrun) {
+      print "Would set mailboxd_java_options to $mailboxd_java_options\n";
+    } else {
+      setLocalConfig("mailboxd_java_options", $mailboxd_java_options);
     }
   }
 }
@@ -179,21 +191,27 @@ elsif ($zimbraIPMode eq "ipv6") {
     print "Error: Unable to resolve $host AAAA record\n";
   }
   if ($zimbra_zmjava_options =~ /-Djava.net.preferIPv4Stack=true/) {
-    $zimbra_zmjava_options =~ s/-Djava.net.preferIPv4Stack=true//;
-    if ($dryrun) {
-      print "Would set zimbra_zmjava_options to $zimbra_zmjava_options\n";
-    } else {
-      setLocalConfig("zimbra_zmjava_options", $zimbra_zmjava_options);
-    }
+    $zimbra_zmjava_options =~ s/ -Djava.net.preferIPv4Stack=true//;
+  }
+  if ($zimbra_zmjava_options !~ /-Djava.net.preferIPv6Addresses=true/) {
+    $zimbra_zmjava_options .= " -Djava.net.preferIPv6Addresses=true";
+  }
+  if ($dryrun) {
+    print "Would set zimbra_zmjava_options to $zimbra_zmjava_options\n";
+  } else {
+    setLocalConfig("zimbra_zmjava_options", $zimbra_zmjava_options);
   }
   if ($storeserver) {
     if ($mailboxd_java_options =~ /-Djava.net.preferIPv4Stack=true/) {
-      $mailboxd_java_options =~ s/-Djava.net.preferIPv4Stack=true//;
-      if ($dryrun) {
-        print "Would set mailboxd_java_options to $mailboxd_java_options\n";
-      } else {
-        setLocalConfig("mailboxd_java_options", $mailboxd_java_options);
-      }
+      $mailboxd_java_options =~ s/ -Djava.net.preferIPv4Stack=true//;
+    }
+    if ($mailboxd_java_options !~ /-Djava.net.preferIPv6Addresses=true/) {
+      $mailboxd_java_options .= " -Djava.net.preferIPv6Addresses=true";
+    }
+    if ($dryrun) {
+      print "Would set mailboxd_java_options to $mailboxd_java_options\n";
+    } else {
+      setLocalConfig("mailboxd_java_options", $mailboxd_java_options);
     }
   }
 }
