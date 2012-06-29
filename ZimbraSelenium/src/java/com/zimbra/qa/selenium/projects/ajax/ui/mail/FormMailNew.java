@@ -1,15 +1,24 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.zimbra.qa.selenium.framework.core.SeleniumService;
-import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.IItem;
+import com.zimbra.qa.selenium.framework.items.MailItem;
+import com.zimbra.qa.selenium.framework.items.RecipientItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem.RecipientType;
-import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.ui.AbsApplication;
+import com.zimbra.qa.selenium.framework.ui.AbsForm;
+import com.zimbra.qa.selenium.framework.ui.AbsPage;
+import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.AutocompleteEntry;
 import com.zimbra.qa.selenium.projects.ajax.ui.AutocompleteEntry.Icon;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 
 
 
@@ -498,7 +507,25 @@ public class FormMailNew extends AbsForm {
 			
 			locator = Locators.zToField;
 			
-			// FALL THROUGH
+			// Make sure the button exists
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
+			
+			// Seems that the client can't handle filling out the new mail form too quickly
+			// Click in the "To" fields, etc, to make sure the client is ready
+			this.sFocus(locator);
+			this.zClick(locator);
+			this.zWaitForBusyOverlay();
+
+			// Enter text
+			this.sType(locator, value);
+			
+			// For some reason, no bubble takes place.  As a workaround, type Tab
+			this.sTypeKeys(locator, "\t");
+			
+			this.zWaitForBusyOverlay();
+
+			return;
 			
 		} else if ( field == Field.From ) {
 			
@@ -509,8 +536,26 @@ public class FormMailNew extends AbsForm {
 			
 			locator = Locators.zCcField;
 			
-			// FALL THROUGH
+			// Make sure the button exists
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
 			
+			// Seems that the client can't handle filling out the new mail form too quickly
+			// Click in the "To" fields, etc, to make sure the client is ready
+			this.sFocus(locator);
+			this.zClick(locator);
+			this.zWaitForBusyOverlay();
+
+			// Enter text
+			this.sType(locator, value);
+			
+			// For some reason, no bubble takes place.  As a workaround, type Tab
+			this.sTypeKeys(locator, "\t");
+			
+			this.zWaitForBusyOverlay();
+
+			return;
+						
 		} else if ( field == Field.Bcc ) {
 			
 			locator = Locators.zBccField;
@@ -520,8 +565,26 @@ public class FormMailNew extends AbsForm {
 				this.zToolbarPressButton(Button.B_SHOWBCC);
 			}
 			
-			// FALL THROUGH
+			// Make sure the button exists
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
 			
+			// Seems that the client can't handle filling out the new mail form too quickly
+			// Click in the "To" fields, etc, to make sure the client is ready
+			this.sFocus(locator);
+			this.zClick(locator);
+			this.zWaitForBusyOverlay();
+
+			// Enter text
+			this.sType(locator, value);
+			
+			// For some reason, no bubble takes place.  As a workaround, type Tab
+			this.sTypeKeys(locator, "\t");
+			
+			this.zWaitForBusyOverlay();
+
+			return;
+						
 		} else if ( field == Field.Subject ) {
 			
 			locator = Locators.zSubjectField;
