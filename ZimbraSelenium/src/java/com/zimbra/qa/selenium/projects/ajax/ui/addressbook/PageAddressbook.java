@@ -30,7 +30,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
-import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 
 public class PageAddressbook extends AbsTab {
 
@@ -315,18 +314,21 @@ public class PageAddressbook extends AbsTab {
 			String fileAs = sGetText(contactDisplayedLocator);
 		    logger.info(" found " + fileAs);
 		    
-			//check if it is a contact or a contactgroup item
+			//check if it is a contact. contactgroup, gal, or dlist item
 			if ( contactType.equals(ContactGroupItem.IMAGE_CLASS)) {
                 ci=new ContactGroupItem(fileAs);
 			}
 			else if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
 				ci=new ContactItem(fileAs);		    			
 			}
+			else if (  contactType.equals(GALItem.IMAGE_CLASS) ) {
+				ci=new GALItem(fileAs);		    			
+			}
 			else if (  contactType.equals(DistributionListItem.IMAGE_CLASS) ) {
-				ci=new DistributionListItem(fileAs);		    			
+				ci=new DistributionListItem(fileAs,fileAs); //TODO???		    			
 			}
 			else {
-				throw new HarnessException("Image not neither conntact group nor contact.");		
+				throw new HarnessException("Image type not valid.");		
 			}
 			
 			list.add(ci);	    	      
@@ -1010,12 +1012,12 @@ public class PageAddressbook extends AbsTab {
 				cmi=CONTEXT_MENU.CONTACT_SEARCH;
 				if (subOption == Button.O_SEARCH_MAIL_SENT_TO_CONTACT) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_SENT_TO_CONTACT;
-		    		page = ((AppAjaxClient)MyApplication).zPageMail;
+		    		page = ((AppAjaxClient)MyApplication).zPageSearch;
 				}
 			
 				else if (subOption == Button.O_SEARCH_MAIL_RECEIVED_FROM_CONTACT) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_RECEIVED_FROM_CONTACT;
-					page = ((AppAjaxClient)MyApplication).zPageMail;
+					page = ((AppAjaxClient)MyApplication).zPageSearch;
 					
 				}
 					
@@ -1129,6 +1131,15 @@ public class PageAddressbook extends AbsTab {
    
        // SleepUtil.sleep(987654321);
     	//else {
+       if (option == Button.B_SEARCH) {
+			if (subOption == Button.O_SEARCH_MAIL_SENT_TO_CONTACT) {
+				locator="css=td[id^=SEARCH_TO__DWT][id$=_title]:contains('Sent To Contact')";
+			}
+		
+			else if (subOption == Button.O_SEARCH_MAIL_RECEIVED_FROM_CONTACT) {
+				locator="css=td[id^=SEARCH__DWT][id$=_title]:contains('Received From Contact')";
+			}
+       }		
     		sFocus(locator);
             sMouseOver(locator);
             //jClick(locator);
@@ -1392,6 +1403,11 @@ public class PageAddressbook extends AbsTab {
 		
 	}
 
+	public DisplayDList getDisplayDList() {
+		return new DisplayDList(MyApplication);		
+	}
+	
+	
 	@Override
 	public AbsPage zListItem(Action action, String contact) throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ contact +")");
@@ -1420,8 +1436,10 @@ public class PageAddressbook extends AbsTab {
 			
 		}
 		else if ( action == Action.A_CHECKBOX) {
+            //enable user preference for checkbox
+			
+			
 			//get the checkbox locator
-//			contactLocator=contactLocator.substring(0, contactLocator.length()-2) + "1" + ") div.ImgCheckboxUnchecked";
 			contactLocator=contactLocator + " div.ImgCheckboxUnchecked";
 					
 			//check the box			
