@@ -1,7 +1,5 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -14,26 +12,19 @@ import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
-public class SendDocAttachment extends AjaxCommonTest {
+public class SendDocAttachment extends FeatureBriefcaseTest {
 
 	public SendDocAttachment() {
 		logger.info("New " + SendDocAttachment.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			
-			private static final long serialVersionUID = 1L;
-			
-			{
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
-			}
-		};
+		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
 	}
 
 	@Test(description = "Create document through SOAP - click Send as attachment, Cancel & verify through GUI", groups = { "functional" })

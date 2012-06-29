@@ -1,11 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
-import java.util.HashMap;
 import java.util.List;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -18,25 +15,18 @@ import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 
-public class OpenDocument extends AjaxCommonTest {
+public class OpenDocument extends FeatureBriefcaseTest {
 
 	public OpenDocument() {
 		logger.info("New " + OpenDocument.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			
-			private static final long serialVersionUID = 1L;
-			
-			{
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
-			}
-		};	
+		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
 	}
 
 	@Test(description = "Create document through SOAP - open & verify through GUI", groups = { "smoke" })

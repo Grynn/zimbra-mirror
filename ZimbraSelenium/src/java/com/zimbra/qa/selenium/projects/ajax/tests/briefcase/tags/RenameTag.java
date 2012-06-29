@@ -8,17 +8,16 @@ import com.zimbra.qa.selenium.framework.items.TagItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
-public class RenameTag extends AjaxCommonTest {
+public class RenameTag extends FeatureBriefcaseTest {
 
 	public RenameTag() {
 		logger.info("New " + RenameTag.class.getCanonicalName());
 
 		// All tests start at the Briefcase page
-		super.startingPage = app.zPageBriefcase;
-		super.startingAccountPreferences = null;
+		super.startingPage = app.zPageBriefcase;	
 	}
 
 	@Test(description = "Rename a tag - Right click, Rename", groups = { "functional" })

@@ -1,21 +1,17 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
-import java.util.HashMap;
 import java.util.List;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 
-public class TagFile extends AjaxCommonTest {
+public class TagFile extends FeatureBriefcaseTest {
 
 	public TagFile() throws HarnessException {
 		logger.info("New " + TagFile.class.getCanonicalName());
@@ -23,19 +19,11 @@ public class TagFile extends AjaxCommonTest {
 		// All tests start at the Briefcase page
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			
-			private static final long serialVersionUID = 1L;
-			
-			{
-			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
-		    			"FOSS")){
-				put("zimbraPrefShowSelectionCheckbox","TRUE");
-			    }
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
+		    super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox","TRUE");
+		}
 			    
-			    put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
-			}
-		};
+		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
 	}
 
 	@Test(description = "Tag a File using Toolbar -> Tag -> New Tag", groups = { "smoke" })

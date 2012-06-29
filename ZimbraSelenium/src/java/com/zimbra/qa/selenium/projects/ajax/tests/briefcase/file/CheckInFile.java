@@ -1,7 +1,5 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -13,24 +11,17 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogCheckInFile;
 
-public class CheckInFile extends AjaxCommonTest {
+public class CheckInFile extends FeatureBriefcaseTest {
 
 	public CheckInFile() {
 		logger.info("New " + CheckInFile.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			
-			private static final long serialVersionUID = 1L;
-			
-			{
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
-			}
-		};
+		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
 	}
 
 	@Test(description = "Check Out File through SOAP - right click 'Check In' - click 'Cancel'", groups = { "functional" })

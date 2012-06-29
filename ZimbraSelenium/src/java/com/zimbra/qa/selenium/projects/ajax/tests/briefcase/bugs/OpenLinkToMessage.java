@@ -2,27 +2,23 @@ package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.bugs;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.MailItem;
-import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
 
-public class OpenLinkToMessage extends AjaxCommonTest {
-
+public class OpenLinkToMessage extends FeatureBriefcaseTest {
 	String url;
 
-	@SuppressWarnings("serial")
 	public OpenLinkToMessage() {
 		logger.info("New " + OpenLinkToMessage.class.getCanonicalName());
 
@@ -30,12 +26,8 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 		super.startingPage = app.zPageBriefcase;
 
 		// use an account with message view
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			{
-				put("zimbraPrefGroupMailBy", "message");
-				put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
-			}
-		};
+		super.startingAccountPreferences.put("zimbraPrefGroupMailBy", "message");
+		super.startingAccountPreferences.put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
 	}
 
 	@Bugs(ids = "56802,64833,65939,67059")

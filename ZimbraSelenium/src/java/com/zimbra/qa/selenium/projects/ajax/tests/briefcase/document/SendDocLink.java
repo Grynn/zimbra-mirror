@@ -1,7 +1,5 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -15,27 +13,20 @@ import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogConfirm;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
-public class SendDocLink extends AjaxCommonTest {
+public class SendDocLink extends FeatureBriefcaseTest {
 
 	public SendDocLink() {
 		logger.info("New " + SendDocLink.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			
-			private static final long serialVersionUID = 1L;
-			
-			{
-				put("zimbraPrefComposeFormat", "html");
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
-			}
-		};
+		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "html");
+		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
 	}
 
 	@Test(description = "Create document through SOAP - click Send Link, Cancel & verify through GUI", groups = { "functional" })

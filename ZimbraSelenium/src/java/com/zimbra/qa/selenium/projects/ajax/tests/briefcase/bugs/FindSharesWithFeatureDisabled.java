@@ -1,6 +1,5 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.bugs;
 
-import java.util.HashMap;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -11,13 +10,12 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogFindShares;
 
-public class FindSharesWithFeatureDisabled extends AjaxCommonTest {
+public class FindSharesWithFeatureDisabled extends FeatureBriefcaseTest {
 	String url;
 
-	@SuppressWarnings("serial")
 	public FindSharesWithFeatureDisabled() {
 		logger.info("New "
 				+ FindSharesWithFeatureDisabled.class.getCanonicalName());
@@ -26,13 +24,9 @@ public class FindSharesWithFeatureDisabled extends AjaxCommonTest {
 		super.startingPage = app.zPageBriefcase;
 
 		// use an account with some of the Features disabled
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			{
-				put("zimbraFeatureCalendarEnabled", "FALSE");
-				// put("zimbraFeatureTasksEnabled", "FALSE");
-			}
-		};
-	}
+		super.startingAccountPreferences.put("zimbraFeatureCalendarEnabled", "FALSE");
+		// super.startingAccountPreferences.put("zimbraFeatureTasksEnabled", "FALSE");
+	}	
 
 	@Bugs(ids = "60854")
 	@Test(description = "Click on Find Shares link when some of the Features are disabled - Verify Find Shares dialog is displayed", groups = { "functional" })

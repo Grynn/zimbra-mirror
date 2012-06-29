@@ -1,7 +1,5 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -13,32 +11,26 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogConfirm;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
-public class SendFileLink extends AjaxCommonTest {
+public class SendFileLink extends FeatureBriefcaseTest {
 
-	@SuppressWarnings("serial")
 	public SendFileLink() throws HarnessException {
 		logger.info("New " + SendFileLink.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			{
-			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
-		    			"FOSS")){
-				put("zimbraPrefShowSelectionCheckbox","TRUE");
-			    }
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
+		    super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox","TRUE");
+		}
+		   
+		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "html");
 			    
-			    put("zimbraPrefComposeFormat", "html");
-			    
-			    put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
-			}
-		};
-	}
+		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
+	}	
 
 	@Test(description = "Upload file through RestUtil - click Send Link, Cancel & verify through GUI", groups = { "functional" })
 	public void SendFileLink_01() throws HarnessException {

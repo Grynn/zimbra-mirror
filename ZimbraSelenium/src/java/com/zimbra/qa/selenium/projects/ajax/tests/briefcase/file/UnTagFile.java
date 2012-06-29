@@ -1,15 +1,13 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 
-public class UnTagFile extends AjaxCommonTest {
+public class UnTagFile extends FeatureBriefcaseTest {
 
 	public UnTagFile() throws HarnessException {
 		logger.info("New " + UnTagFile.class.getCanonicalName());
@@ -17,19 +15,11 @@ public class UnTagFile extends AjaxCommonTest {
 		// All tests start at the Briefcase page
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = new HashMap<String, String>() {
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
+		    super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox","TRUE");
+		}
 			
-			private static final long serialVersionUID = 1L;
-			
-			{
-			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
-		    			"FOSS")){
-				put("zimbraPrefShowSelectionCheckbox","TRUE");
-			    }
-			
-			    put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
-			}
-		};
+		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
 	}
 
 	@Test(description = "Remove a tag from a File using Toolbar -> Tag -> Remove Tag", groups = { "smoke" })

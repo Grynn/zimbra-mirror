@@ -1,15 +1,13 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 
-public class UnTagDocument extends AjaxCommonTest {
+public class UnTagDocument extends FeatureBriefcaseTest {
 
 	public UnTagDocument() {
 		logger.info("New " + UnTagDocument.class.getCanonicalName());
@@ -17,14 +15,7 @@ public class UnTagDocument extends AjaxCommonTest {
 		// All tests start at the Briefcase page
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			
-			private static final long serialVersionUID = 1L;
-			
-			{
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
-			}
-		};
+		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
 	}
 
 	@Test(description = "Remove a tag from a Document using Toolbar -> Tag -> Remove Tag", groups = { "smoke" })

@@ -8,43 +8,34 @@ import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 import org.testng.annotations.AfterMethod;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 
-public class MoveFile extends AjaxCommonTest {
+public class MoveFile extends FeatureBriefcaseTest {
 
 	public MoveFile() throws HarnessException {
 		logger.info("New " + MoveFile.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			
-			private static final long serialVersionUID = 1L;
-			
-			{
-			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
-		    			"FOSS")){
-				put("zimbraPrefShowSelectionCheckbox","TRUE");
-			    }
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
+		    super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox","TRUE");
+		}
 	
-			    put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
-			}
-		};
-		
+		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
+			
 		// Make sure we are using an account with message view
-		// super.startingAccountPreferences = new HashMap<String, String>()
-		// {{put("zimbraPrefGroupMailBy", "message");}};
+		// super.startingAccountPreferences.put("zimbraPrefGroupMailBy", "message");
 	}
 
 	@Test(description = "Upload file through RestUtil - move & verify through GUI", groups = { "smoke" })

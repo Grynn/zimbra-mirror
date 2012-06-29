@@ -1,7 +1,5 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -16,25 +14,18 @@ import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogConfirm;
 
-public class DeleteDocument extends AjaxCommonTest {
+public class DeleteDocument extends FeatureBriefcaseTest {
 
 	public DeleteDocument() {
 		logger.info("New " + DeleteDocument.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 		
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			
-			private static final long serialVersionUID = 1L;
-			
-			{
-				put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
-				put("zimbraPrefShowSelectionCheckbox","TRUE");
-			}
-		};	
+		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
+		super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox","TRUE");
 	}
 
 	@Test(description = "Create document through SOAP - delete & check trash", groups = { "smoke" })

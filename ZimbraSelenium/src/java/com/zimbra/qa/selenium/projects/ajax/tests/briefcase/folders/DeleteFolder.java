@@ -6,17 +6,15 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 
-public class DeleteFolder extends AjaxCommonTest {
+public class DeleteFolder extends FeatureBriefcaseTest {
 
 	public DeleteFolder() {
 		logger.info("New " + DeleteFolder.class.getCanonicalName());
 
 		// All tests start at the Briefcase page
 		super.startingPage = app.zPageBriefcase;
-		super.startingAccountPreferences = null;
-
 	}
 
 	@Test(description = "Delete a briefcase sub-folder - Right click, Delete", groups = { "smoke" })

@@ -1,6 +1,5 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
-import java.util.HashMap;
 import java.util.List;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
@@ -14,30 +13,22 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 
-public class OpenFile extends AjaxCommonTest {
+public class OpenFile extends FeatureBriefcaseTest {
 
 	public OpenFile() throws HarnessException {
 		logger.info("New " + OpenFile.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			
-			private static final long serialVersionUID = 1L;
-			
-			{
-			    if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
-		    			"FOSS")){
-				put("zimbraPrefShowSelectionCheckbox","TRUE");
-			    }
-			    
-			    put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
-			}
-		};
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
+		    super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox","TRUE");
+		}
+		
+		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");			
 	}
 
 	@Test(description = "Upload file through RestUtil - open & verify through GUI", groups = { "smoke" })

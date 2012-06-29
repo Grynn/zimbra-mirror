@@ -10,16 +10,14 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 
-public class DisplayDocument extends AjaxCommonTest {
+public class DisplayDocument extends FeatureBriefcaseTest {
 
 	public DisplayDocument() {
 		logger.info("New " + DisplayDocument.class.getCanonicalName());
 
-		super.startingPage = app.zPageBriefcase;
-
-		super.startingAccountPreferences = null;
+		super.startingPage = app.zPageBriefcase;		
 	}
 
 	@Test(description = "Create document through SOAP - verify through GUI", groups = { "smoke" })

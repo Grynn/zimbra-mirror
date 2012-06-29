@@ -7,17 +7,16 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogEditProperties;
 
-public class EditProperties extends AjaxCommonTest {
+public class EditProperties extends FeatureBriefcaseTest {
 
 	public EditProperties() {
 		logger.info("New " + EditProperties.class.getCanonicalName());
 
 		// All tests start at the Briefcase page
-		super.startingPage = app.zPageBriefcase;
-		super.startingAccountPreferences = null;
+		super.startingPage = app.zPageBriefcase;		
 	}
 
 	@Test(description = "Edit Properties - Rename folder using context menu", groups = { "functional" })

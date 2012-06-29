@@ -9,16 +9,14 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
 
-public class DisplayFile extends AjaxCommonTest {
+public class DisplayFile extends FeatureBriefcaseTest {
 
 	public DisplayFile() {
 		logger.info("New " + DisplayFile.class.getCanonicalName());
 
-		super.startingPage = app.zPageBriefcase;
-
-		super.startingAccountPreferences = null;
+		super.startingPage = app.zPageBriefcase;		
 	}
 
 	@Test(description = "Upload file through RestUtil - verify through GUI", groups = { "smoke" })
