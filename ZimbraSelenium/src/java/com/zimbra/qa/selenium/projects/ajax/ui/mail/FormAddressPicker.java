@@ -307,8 +307,11 @@ public class FormAddressPicker extends AbsForm {
 		this.zWaitForBusyOverlay();
 
 		// Enter text
-		this.zKeyboard.zTypeCharacters(value);
+		// this.zKeyboard.zTypeCharacters(value);
 		// this.sType(locator, value);
+		
+		// June 29, 2012 - the first character is getting stolen.  Type a space first.
+		this.zKeyboard.zTypeCharacters(" "+ value);
 		
 		this.zWaitForBusyOverlay();
 
