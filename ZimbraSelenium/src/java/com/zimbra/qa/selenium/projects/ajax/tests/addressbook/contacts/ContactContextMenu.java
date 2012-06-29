@@ -197,17 +197,14 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 
 		ContactItem contactItem = createSelectAContactItem(app.zGetActiveAccount().getPref("displayName"), lastName, app.zGetActiveAccount().EmailAddress);
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());		
 		
 		//Click Find Emails->Sent To Contact
         app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_SEARCH, Button.O_SEARCH_MAIL_SENT_TO_CONTACT , contactItem.fileAs);
 
         
-        // Get all the messages in the inbox
-		List<MailItem> messages = app.zPageMail.zListGetMessages();
-		ZAssert.assertNotNull(messages, "Verify the message list exists");
-
-		// TODO: "Verify the message is in the inbox");
+        // Get the bubleText
+		String bubleText = app.zPageSearch.sGetText("css=[class='addrBubble']");
+		ZAssert.assertEquals(bubleText, "tocc:"+ app.zGetActiveAccount().EmailAddress ,"Verify the message list exists");
                 
 	}
 	
@@ -234,18 +231,16 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		MailItem.importFromSOAP(ZimbraAccount.AccountB(), "subject:("+ subject +")");
 
 		ContactItem contactItem = createSelectAContactItem(app.zGetActiveAccount().getPref("displayName"),lastName, ZimbraAccount.AccountB().EmailAddress);
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		
 		
 		//Click Find Emails->Received From Contact
         app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_SEARCH, Button.O_SEARCH_MAIL_RECEIVED_FROM_CONTACT, contactItem.fileAs);
 
         
-        // Get all the messages in the inbox
-		List<MailItem> messages = app.zPageMail.zListGetMessages();
-		ZAssert.assertNotNull(messages, "Verify the message list exists");
-
-		// TODO: "Verify the message is in the inbox");
+        // Get the bubleText
+		String bubleText = app.zPageSearch.sGetText("css=[class='addrBubble']");
+		ZAssert.assertEquals(bubleText, "from:"+ ZimbraAccount.AccountB().EmailAddress ,"Verify the message list exists");
+		
                 
 	}
 }
