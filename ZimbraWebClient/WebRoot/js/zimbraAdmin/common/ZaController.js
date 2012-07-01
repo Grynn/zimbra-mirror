@@ -427,8 +427,10 @@ function(ex, method, params, restartOnError, obj) {
 			this.popupErrorDialog(ZaMsg.ERROR_INVALID_VOLUME_PATH, ex);
 		} else if(ex.code == ZmCsfeException.NO_SUCH_VOLUME) {
 			this.popupErrorDialog(ZaMsg.ERROR_NO_SUCH_VOLUME, ex);
-		}else if (ex.code == ZmCsfeException.CANNOT_CHANGE_VOLUME) {
-                	this.popupErrorDialog(ZaMsg.ERROR_CANNOT_CHANGE_VOLUME, ex);
+		} else if (ex.code == ZmCsfeException.CANNOT_CHANGE_VOLUME) {
+        	this.popupErrorDialog(ZaMsg.ERROR_CANNOT_CHANGE_VOLUME, ex);
+		} else if (ex.code == ZmCsfeException.CANNOT_DELETE_VOLUME_IN_USE) {
+        	this.popupErrorDialog(ZaMsg.CANNOT_DELETE_VOLUME_IN_USE, ex);
 		} else if(ex.code == ZmCsfeException.ALREADY_EXISTS) {
 			this.popupErrorDialog(ZaMsg.ERROR_VOLUME_ALREADY_EXISTS, ex);
 		} else if(ex.code == ZmCsfeException.LICENSE_ERROR) {
@@ -439,7 +441,7 @@ function(ex, method, params, restartOnError, obj) {
 			this.popupErrorDialog(ZaMsg.ERROR_TOO_MANY_SEARCH_RESULTS, ex);
 		} else if (ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
 			this.popupErrorDialog(ZaMsg.ERROR_NO_SUCH_DOMAIN, ex);
-		}else if (ex.code == ZmCsfeException.CSFE_SVC_ERROR || 
+		} else if (ex.code == ZmCsfeException.CSFE_SVC_ERROR || 
 					ex.code == ZmCsfeException.SVC_FAILURE || 
 						(typeof(ex.code) == 'string' && ex.code && ex.code.match(/^(service|account|mail)\./))
 

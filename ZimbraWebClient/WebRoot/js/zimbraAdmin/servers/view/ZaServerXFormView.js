@@ -474,23 +474,27 @@ ZaServerXFormView.loadVolumesCallback = function(resp) {
 	}	
 }
 
-ZaServerXFormView.doDeleteVolume = function(selArr, deletedVolumes) {
+ZaServerXFormView.doDeleteVolume = function(selArr, deletedVolumes, respObj) {
 	ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
-	if(AjxUtil.isEmpty(selArr)) {
-		if(!AjxUtil.isEmpty(deletedVolumes)) {
-			ZaApp.getInstance().getCurrentController().popupMsgDialog(ZaMsg.DELETED_VOLUMES_CONFIRMATION);
-			var callback = new AjxCallback(this,ZaServerXFormView.loadVolumesCallback);
-			ZaServer.prototype.loadVolumes.call(this.getForm().parent.getObject(),callback);
+	if(respObj != null && respObj.isException && respObj.isException()) {
+		ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaServerXFormView.doDeleteVolume");
+	} else {
+		if(AjxUtil.isEmpty(selArr)) {
+			if(!AjxUtil.isEmpty(deletedVolumes)) {
+				ZaApp.getInstance().getCurrentController().popupMsgDialog(ZaMsg.DELETED_VOLUMES_CONFIRMATION);
+				var callback = new AjxCallback(this,ZaServerXFormView.loadVolumesCallback);
+				ZaServer.prototype.loadVolumes.call(this.getForm().parent.getObject(),callback);
+			}
+			return;
 		}
-		return;
+		var nextVolume = selArr.shift();
+		if(!deletedVolumes) {
+			deletedVolumes = [];
+		}
+		deletedVolumes.push(nextVolume);
+		var callback = new AjxCallback(this,ZaServerXFormView.doDeleteVolume,[selArr,deletedVolumes]);
+		ZaServer.prototype.deleteVolume.call(this.getForm().parent.getObject(),nextVolume[ZaServer.A_VolumeId],callback);
 	}
-	var nextVolume = selArr.shift();
-	if(!deletedVolumes) {
-		deletedVolumes = [];
-	}
-	deletedVolumes.push(nextVolume);
-	var callback = new AjxCallback(this,ZaServerXFormView.doDeleteVolume,[selArr,deletedVolumes]);
-	ZaServer.prototype.deleteVolume.call(this.getForm().parent.getObject(),nextVolume[ZaServer.A_VolumeId],callback);
 }
 
 ZaServerXFormView.deleteButtonListener = function () {
