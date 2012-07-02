@@ -240,10 +240,6 @@ public class ZimbraAccount {
 		put("zimbraPrefWarnOnExit","FALSE");
 	}};
 
-	/**
-	 * A list of domains that exist on the server, so the harness doesn't need to resend GetDomainrequest/CreateDomainRequest
-	 */
-	protected static List<String> domainList = new ArrayList<String>();
 
 	/**
 	 * Creates the account on the ZCS using CreateAccountRequest
@@ -251,54 +247,11 @@ public class ZimbraAccount {
 	public ZimbraAccount provision() {
 		try {
 
+			
 			// Make sure domain exists
-			String domain = EmailAddress.split("@")[1];
-
-			if ( !domainList.contains(domain) ) {
-
-				// Check if the domain exists
-				ZimbraAdminAccount.GlobalAdmin().soapSend(
-						"<GetDomainRequest xmlns='urn:zimbraAdmin'>"
-						+		"<domain by='name'>"+ domain +"</domain>"
-						+	"</GetDomainRequest>");
-				Element response = ZimbraAdminAccount.GlobalAdmin().soapSelectNode("//admin:GetDomainResponse/admin:domain", 1);
-
-				if ( response == null ) {
-
-					// If the domain does not exist, create it
-					ZimbraAdminAccount.GlobalAdmin().soapSend(
-								"<CreateDomainRequest xmlns='urn:zimbraAdmin'>"
-							+		"<name>"+ domain +"</name>"
-							+		"<a n='zimbraGalMode'>zimbra</a>"
-							+		"<a n='zimbraGalMaxResults'>15</a>"
-							+	"</CreateDomainRequest>");
-					
-					
-					// Create the Sync GAL Account
-					String galAccountName = "galaccount"+ ZimbraSeleniumProperties.getUniqueString() + "@"+ domain;
-					String datasourceName = "datasource" + ZimbraSeleniumProperties.getUniqueString();
-					ZimbraAdminAccount.GlobalAdmin().soapSend(
-								"<CreateGalSyncAccountRequest xmlns='urn:zimbraAdmin' name='"+ datasourceName + "' type='zimbra' domain='"+ domain +"' >"
-							+		"<account by='name'>"+ galAccountName +"</account>"
-							+		"<password>"+ ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123") +"</password>"
-							+	"</CreateGalSyncAccountRequest>");
-					
-					String galAccountID = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:CreateGalSyncAccountResponse/admin:account", "id");
-
-					// Sync the GAL Account
-					ZimbraAdminAccount.GlobalAdmin().soapSend(
-								"<SyncGalAccountRequest xmlns='urn:zimbraAdmin'>"
-							+		"<account id='"+ galAccountID +"'>"
-							+			"<datasource by='name' fullSync='true' reset='true'>"+ datasourceName +"</datasource>"
-							+		"</account>"
-							+	"</SyncGalAccountRequest>");
-
-
-				}	
-
-				domainList.add(domain);
-
-			}
+			ZimbraDomain domain = new ZimbraDomain( EmailAddress.split("@")[1]);
+			domain.provision();
+			
 
 
 			// Build the list of default preferences
@@ -381,6 +334,9 @@ public class ZimbraAccount {
 			}
 			// End: Dev environment hack
 
+			
+			// Sync the GAL to put the account into the list
+			domain.syncGalAccount();
 
 		} catch (HarnessException e) {
 
