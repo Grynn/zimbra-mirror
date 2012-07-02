@@ -914,8 +914,12 @@ class Program
                             zimbraAPI.LastError.Count();
 
                             System.Console.WriteLine();
-                            string message = "Logon to to Zimbra Server  for adminAccount failed " +
-                                myXmlConfig.ConfigObj.ZimbraServer.AdminID + zimbraAPI.LastError;
+                           /* string message = "Logon to Zimbra Server for adminAccount " +
+                                myXmlConfig.ConfigObj.ZimbraServer.AdminID +"Failed ."+ zimbraAPI.LastError;*/
+                            string message = "Logon to Zimbra Server for adminAccount " +
+                                myXmlConfig.ConfigObj.ZimbraServer.AdminID + " Failed. " + System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(zimbraAPI.LastError.ToLower());
+
+                           
                             System.Console.WriteLine(message);
                             Log.err(message);
                          /*   ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
@@ -1051,7 +1055,7 @@ class Program
                                     ConsoleColor.Red, " error provisioning user " +
                                     acctName);*/
                                 err = "error provisioning user " +
-                                    acctName + zimbraAPI.LastError + "\n";
+                                    acctName + ". " + System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(zimbraAPI.LastError.ToLower()) + "\n";
                                 System.Console.WriteLine(err);
                                 Log.err(err);
                                user.IsProvisioned=false;
@@ -1131,8 +1135,8 @@ class Program
                                         30, '\u2591', ConsoleColor.Red,
                                         "Logon to to Zimbra Server  for userAccount failed " +
                                         ZCSID);*/
-                                err = "Logon to to Zimbra Server  for userAccount failed " +
-                                        ZCSID + zimbraAPI.LastError;
+                                err = "Logon to to Zimbra Server for userAccount " +
+                                        ZCSID + " Failed. " + System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(zimbraAPI.LastError.ToLower());
                                 System.Console.WriteLine(err);
                                 Log.err(err);
                                 System.Console.WriteLine("......... \n");
