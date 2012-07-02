@@ -24,7 +24,10 @@ public class FolderItem extends AFolderItem implements IItem, IOctListViewItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 	private boolean _isDesktopClientFolder = false;
 	private boolean _isDesktopLocalFolder = false;
-
+    
+	// a place holder for virtual folder "Distribution Lists"
+	public static FolderItem DistributionListFolder= new FolderItem();
+    
 	public boolean isDesktopClientFolder() {
       return _isDesktopClientFolder;
    }
