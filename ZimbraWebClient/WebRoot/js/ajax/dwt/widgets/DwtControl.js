@@ -643,7 +643,7 @@ function(key, value) {
  */
 DwtControl.prototype.isDisposed =
 function() {
-	return this._isDisposed;
+	return this._disposed;
 };
 
 /**
