@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose.addresspicker;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain.ResultListener;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -55,6 +56,10 @@ public class AddTo extends PrefGroupMailByMessageTest {
 		pickerform.zFillField(FormAddressPicker.Field.Search, ZimbraAccount.AccountB().EmailAddress);
 		pickerform.zToolbarPressButton(Button.B_SEARCH);
 		pickerform.zToolbarPressButton(Button.B_TO);
+		
+		/* TODO: MATT ... debugging to be removed */
+		ResultListener.captureScreen();
+		
 		pickerform.zSubmit();
 		
 		// Addresspicker should now be closed

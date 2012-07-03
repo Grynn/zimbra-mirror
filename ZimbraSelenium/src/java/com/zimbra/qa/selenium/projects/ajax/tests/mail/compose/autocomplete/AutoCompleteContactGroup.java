@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.testng.annotations.*;
 
+import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain.ResultListener;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -124,6 +125,11 @@ public class AutoCompleteContactGroup extends PrefGroupMailByMessageTest {
 				break;
 			}
 		}
+		
+		/* TODO: MATT ... debugging to be removed */
+		ResultListener.captureScreen();
+		
+
 		ZAssert.assertNotNull(found, "Verify the autocomplete entry exists in the returned list");
 		mailform.zAutocompleteSelectItem(found);
 		
