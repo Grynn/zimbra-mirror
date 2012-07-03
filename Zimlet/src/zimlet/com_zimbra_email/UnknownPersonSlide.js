@@ -367,8 +367,15 @@ function(attrs) {
     if (im) {
         imParts = im.split(":");
         if (imParts.length == 2){
-            im = im.split(":")[1];
-            im = "<a  id='UnknownPersonSlide_imAnchorId' href='" + "xmpp:" + im + "'>" + AjxStringUtil.htmlEncode(im.substring(2)) + "</a>" ;
+			var imProtocol = imParts[0];
+			im = im.split(":")[1];
+			if (imProtocol && imProtocol == "other") {
+				imProtocol = "im";
+			}
+			else if (imProtocol && imProtocol == "aol") {
+				imProtocol = "aim";
+			}
+            im = "<a  id='UnknownPersonSlide_imAnchorId' href='" + imProtocol + ":" + im + "'>" + AjxStringUtil.htmlEncode(im.substring(2)) + "</a>" ;
             this.imURI = attrs["imURI"] = im;
         }
     }
