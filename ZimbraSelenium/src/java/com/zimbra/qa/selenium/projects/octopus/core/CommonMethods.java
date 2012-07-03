@@ -2,13 +2,11 @@ package com.zimbra.qa.selenium.projects.octopus.core;
 
 import java.util.ArrayList;
 
-import com.zimbra.common.soap.Element;
+
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.*;
+
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 public class CommonMethods {
@@ -93,8 +91,8 @@ public class CommonMethods {
 	}
 	
 	// create a new zimbra account
-	protected ZimbraAccount getNewAccount() {
-		ZimbraAccount newAccount = new ZimbraAccount();
+	protected OctopusAccount getNewAccount() {
+		OctopusAccount newAccount = new OctopusAccount();
 		newAccount.provision();
 		newAccount.authenticate();
 		return newAccount;
@@ -180,6 +178,15 @@ public class CommonMethods {
         // Upload file to server through RestUtil
         String attachmentId = account.uploadFile(filePath);
 
+        // if file already upload, then delete and upload it again
+        if (attachmentId == null) {
+        	account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
+    				+ "<action id='" + attachmentId + "' op='trash'/>"
+    				+ "</ItemActionRequest>");
+        	
+        	attachmentId = account.uploadFile(filePath);
+        }
+        
         // Save uploaded file to the root folder through SOAP
          account.soapSend(
          "<SaveDocumentRequest xmlns='urn:zimbraMail'>" + "<doc l='"

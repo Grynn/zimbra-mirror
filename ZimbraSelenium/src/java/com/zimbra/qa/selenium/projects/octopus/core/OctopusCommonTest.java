@@ -20,6 +20,7 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.OctopusAccount;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -149,7 +150,7 @@ public class OctopusCommonTest extends CommonMethods implements CommonConstants{
 		}
 
 		// If AccountZWC is not currently logged in, then login now
-		if (!ZimbraAccount.AccountZWC().equals(app.zGetActiveAccount())) {
+		if (!OctopusAccount.AccountZWC().equals(app.zGetActiveAccount())) {
 			logger
 					.debug("commonTestBeforeMethod: AccountZWC is not currently logged in");
 
@@ -165,12 +166,12 @@ public class OctopusCommonTest extends CommonMethods implements CommonConstants{
 			        }
 				}
 			
-			app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());
+			app.zPageLogin.zLogin(OctopusAccount.AccountZWC());
 
 			// Confirm
-			if (!ZimbraAccount.AccountZWC().equals(app.zGetActiveAccount())) {
+			if (!OctopusAccount.AccountZWC().equals(app.zGetActiveAccount())) {
 				throw new HarnessException("Unable to authenticate as "
-						+ ZimbraAccount.AccountZWC().EmailAddress);
+						+ OctopusAccount.AccountZWC().EmailAddress);
 			}
 
 			DialogError dialog = app.zPageOctopus
