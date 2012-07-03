@@ -28,10 +28,8 @@ DwtUiEvent = function(init) {
 DwtUiEvent.prototype = new DwtEvent;
 DwtUiEvent.prototype.constructor = DwtUiEvent;
 
-DwtUiEvent.prototype.toString = 
-function() {
-	return "DwtUiEvent";
-}
+DwtUiEvent.prototype.isDwtUiEvent;
+DwtUiEvent.prototype.toString = function() { return "DwtUiEvent"; }
 
 DwtUiEvent.prototype.reset =
 function() {
@@ -227,7 +225,9 @@ function(ev, stopPropagation, allowDefault, dontCallPreventDefault) {
 
 DwtUiEvent.setDhtmlBehaviour =
 function(dhtmlEv, stopPropagation, allowDefault, dontCallPreventDefault) {
-	dhtmlEv = dhtmlEv || window.event;
+
+	dhtmlEv = DwtUiEvent.getEvent(dhtmlEv);
+	if (!dhtmlEv) { return; }
 
 	// stopPropagation is referring to the function found in Mozilla's event object
 	if (dhtmlEv.stopPropagation != null) {
