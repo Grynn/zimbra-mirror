@@ -25,15 +25,8 @@ AjxXmlDoc = function() {
 		AjxXmlDoc._init();
 }
 
-/**
- * Returns a string representation of the object.
- * 
- * @return	{string}	a string representation of the object
- */
-AjxXmlDoc.prototype.toString =
-function() {
-	return "AjxXmlDoc";
-}
+AjxXmlDoc.prototype.isAjxXmlDoc = true;
+AjxXmlDoc.prototype.toString = function() {	return "AjxXmlDoc"; }
 
 //
 // Constants

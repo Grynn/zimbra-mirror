@@ -24,10 +24,8 @@ AjxSoapDoc = function() {
 	this._soapURI = AjxSoapDoc._SOAP_URI;
 }
 
-AjxSoapDoc.prototype.toString =
-function() {
-	return "AjxSoapDoc";
-};
+AjxSoapDoc.prototype.isAjxSoapDoc = true;
+AjxSoapDoc.prototype.toString = function() { return "AjxSoapDoc"; };
 
 AjxSoapDoc._SOAP_URI = "http://www.w3.org/2003/05/soap-envelope";
 // AjxSoapDoc._SOAP_URI = "http://schemas.xmlsoap.org/soap/envelope/";
