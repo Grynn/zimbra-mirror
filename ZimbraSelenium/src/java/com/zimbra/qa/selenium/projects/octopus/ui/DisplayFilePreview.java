@@ -1,23 +1,30 @@
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
-import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.ui.AbsApplication;
+import com.zimbra.qa.selenium.framework.ui.AbsDisplay;
+import com.zimbra.qa.selenium.framework.ui.AbsPage;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 public class DisplayFilePreview extends AbsDisplay {
 
 	public static class Locators {
 		public static final Locators zFilePreview = new Locators(
-				"css=div[id=my-files-preview]");
+		"css=div[id=my-files-preview]");
 		public static final Locators zFileWatchIcon = new Locators(
-				"css=div[id=my-files-preview-toolbar] span[class=file-info-view-watch-icon]");
+		"css=div[id=my-files-preview-toolbar] span[class=file-info-view-watch-icon]");
 		public static final Locators zFileImageIcon = new Locators(
-				"css=div[id=my-files-preview-toolbar] span[class=file-info-view-file-icon]>span[class^=Img]");
+		"css=div[id=my-files-preview-toolbar] span[class=file-info-view-file-icon]>span[class^=Img]");
 		public static final Locators zHistory = new Locators(
-				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar] button[id=show-activitystream-button]");
+		"css=div[id=my-files-preview] div[id=my-files-preview-toolbar] button[id=show-activitystream-button]");
 		public static final Locators zComments = new Locators(
-				"css=div[id=my-files-preview] div[id=my-files-preview-toolbar] button[id=my-files-preview-show-comments-button]");
+		"css=div[id=my-files-preview] div[id=my-files-preview-toolbar] button[id=my-files-preview-show-comments-button]");
 		public static final Locators zPreviewFileName=new Locators(
-				"css=div[id=my-files-preview-toolbar] span[class=file-info-view-file-name]");
+		"css=div[id=my-files-preview-toolbar] span[class=file-info-view-file-name]");
+		public static final Locators zPreviewFileVersion = new Locators(
+		"css=div[id=my-files-preview-toolbar] span[class=file-info-view-file-version]");
+		public static final Locators zPreviewFileSize = new Locators(
+		"css=div[id=my-files-preview-toolbar] span[class=file-info-view-file-size]");
 
 		public final String locator;
 
@@ -59,10 +66,10 @@ public class DisplayFilePreview extends AbsDisplay {
 		// Based on the button specified, take the appropriate action(s)
 		if (button == Button.B_WATCH) {
 			buttonLocator = Locators.zFileWatchIcon.locator
-					+ " span[class^=unwatched-icon]";
+			+ " span[class^=unwatched-icon]";
 		} else if (button == Button.B_UNWATCH) {
 			buttonLocator = Locators.zFileWatchIcon.locator
-					+ " span[class^=watched-icon]";
+			+ " span[class^=watched-icon]";
 		} else if (button == Button.B_HISTORY) {
 			buttonLocator = Locators.zHistory.locator;
 
@@ -81,7 +88,7 @@ public class DisplayFilePreview extends AbsDisplay {
 					+ buttonLocator);
 
 		// Default behavior, process the locator by clicking on it
-		
+
 		// Click it
 		sClickAt(buttonLocator,"0,0");
 
@@ -102,16 +109,22 @@ public class DisplayFilePreview extends AbsDisplay {
 	 */
 	public String zGetFileProperty(Field field) throws HarnessException {
 		logger.info("DocumentPreview.zGetDocumentProperty(" + field + ")");
-		String locator = null;
+
+		String fileName =null;
+		String version=null;
+		String size = null;
 
 		if (field == Field.Name) {
-			throw new HarnessException("implement me!");
+			if (this.sIsElementPresent(DisplayFilePreview.Locators.zPreviewFileName.locator)){
+				fileName =this.sGetText(DisplayFilePreview.Locators.zPreviewFileName.locator);
+			}
+			return fileName;
 		} else if (field == Field.Body) {
 			/*
 			 * To get the body contents, need to switch iframes
 			 */
 			try {
-				this.sSelectFrame("//iframe[contains(@class, 'PreviewFrame')]");
+				this.sSelectFrame("//iframe");
 				String bodyLocator = "css=body";
 				// Make sure the body is present
 				if (!this.sIsElementPresent(bodyLocator))
@@ -129,13 +142,16 @@ public class DisplayFilePreview extends AbsDisplay {
 				this.sSelectFrame("relative=top");
 			}
 		} else if (field == Field.Version) {
-			locator = "css=";
-			this.sGetText(locator);
-			throw new HarnessException("implement me!");
+			if (this.sIsElementPresent(DisplayFilePreview.Locators.zPreviewFileVersion.locator)){
+				version =this.sGetText(DisplayFilePreview.Locators.zPreviewFileVersion.locator);
+			}
+			return version;
+
 		} else if (field == Field.Size) {
-			locator = "css=";
-			this.sGetText(locator);
-			throw new HarnessException("implement me!");
+			if (this.sIsElementPresent(DisplayFilePreview.Locators.zPreviewFileSize.locator)){
+				size =this.sGetText(DisplayFilePreview.Locators.zPreviewFileSize.locator);
+			}
+			return size;
 		} else {
 			throw new HarnessException(" no such field " + field);
 		}
