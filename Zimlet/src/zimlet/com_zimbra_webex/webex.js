@@ -1000,9 +1000,9 @@ WebExZimlet.prototype._getWebExBodyString = function(joinMeetingUrl, editorType,
 	var html = [];
 	html.push(noHeader ? "" : this._getMeetingDetailshdr(this.getMessage("WebExZimlet_teleconferenceDetails"), editorType));
 	if (editorType == "HTML") {
-		html.push("<table cellpadding='0' cellspacing='0' border='0' width=94% align=center><tr><td>");
-		html.push("<div style='border-bottom: 1px solid #6E6E6E; border-right: 1px solid #6E6E6E; border-left: 1px solid #CECECE;'>");
-		html.push("<table cellpadding='4' width=100% cellspacing='0'>");
+		html.push("<table width='94%' align='center'><tr><td>");
+		html.push("<div style='border-bottom:1px solid #6E6E6E; border-right:1px solid #6E6E6E; border-left:1px solid #CECECE;'>");
+		html.push("<table width='100%' class='ZPropertySheet' cellspacing='6'>");
 	}
 	var isRowOdd = true;
 	var hasTeleconfDetails = false;
@@ -1037,9 +1037,9 @@ WebExZimlet.prototype._getWebExBodyString = function(joinMeetingUrl, editorType,
 	var html = [];
 	html.push(noHeader ? "" : this._getMeetingDetailshdr(this.getMessage("WebExZimlet_webExDetails"), editorType));
 	if (editorType == "HTML") {
-		html.push("<table cellpadding='0' cellspacing='0' border='0' width=94% align=center><tr><td>");
-		html.push("<div style='border-bottom: 1px solid #6E6E6E; border-right: 1px solid #6E6E6E; border-left: 1px solid #CECECE;'>");
-		html.push("<table cellpadding='4' width=100% cellspacing='0'>");
+		html.push("<table width='94%' align='center'><tr><td>");
+		html.push("<div style='border-bottom:1px solid #6E6E6E; border-right:1px solid #6E6E6E; border-left:1px solid #CECECE;'>");
+		html.push("<table width='100%' class='ZPropertySheet' cellspacing='6'>");
 	}
 	html.push(this._getMeetingDetailsRow(this.getMessage("WebExZimlet_webExUrl"), joinMeetingUrl, editorType, false, true));
 	html.push(this._getMeetingDetailsRow(this.getMessage("WebExZimlet_userName"), this.getMessage("WebExZimlet_enterYourName"), editorType, false, false));
@@ -1077,7 +1077,7 @@ WebExZimlet.prototype._getMeetingDetailsRow = function(name, val, editorType, no
 	if (editorType == "HTML") {
 		val = val.replace(/\n/g, "<br/>");//make sure to replace newLine to br
 		var rStyle = !isRowOdd ? " style='background-color:#FBF9F4' " : " style='background-color:#FEFDFC' ";
-		return ["<tr ",rStyle,"><td width=20%><b>",name,"</b> </td><td> ", val, "</td></tr>"].join("");
+		return ["<tr ",rStyle,"><td width='20%'><b>",name,"</b> </td><td> ", val, "</td></tr>"].join("");
 	} else {
 		if (noDelimiter) {
 			return [name, val].join("");
@@ -1096,8 +1096,8 @@ WebExZimlet.prototype._getMeetingDetailsRow = function(name, val, editorType, no
 WebExZimlet.prototype._getMeetingDetailshdr = function(hdrName, editorType) {
 	if (editorType == "HTML") {
 		return	["<br/>",
-			"<table cellpadding='0' cellspacing='0' border='0' width=94% align=center><tr><td>",
-			"<div style='background: #808080; border-bottom: 1px solid #6E6E6E;border-right: 1px solid #6E6E6E;font-weight:bold;color:white;padding:2px;'>",
+			"<table width='94%' align='center'><tr><td>",
+			"<div style='background:#808080;border-bottom:1px solid #6E6E6E;border-right:1px solid #6E6E6E;font-weight:bold;color:white;padding:2px;'>",
 			"<b>",hdrName,"</b>",
 			"</div>", "</tr></td></table>"].join("");
 	} else {
@@ -1542,7 +1542,7 @@ function() {
 	this._accntPrefsHelpObjsHash = [];
 	var html = [];
 	if (!AjxEnv.isIE) {//w/o this, stupid IE will break
-		html.push("<table width=96% align=center><tr><td>");
+		html.push("<table width='96%' align='center'><tr><td>");
 	}
 	for (var indx = 1; indx < 6; indx++) {
 		if (indx == 1) {
@@ -1569,11 +1569,11 @@ function(indx, notes) {
 	var html = [];
 	var j = 0;
 	var prefLabel = this.getMessage("WebExZimlet_accountNumber").replace("{0}", indx);
-	html.push("<div class='webExZimlet_YellowBold '>");
+	html.push("<div class='webExZimlet_YellowBold'>");
 	html.push("<div class='webExZimlet_grayAccntHdr'>", prefLabel, "</div>")
 	html.push("<div class='webExZimlet_lightGray'>", this.getMessage("WebExZimlet_accountSettings"), "</div>");
 
-	html.push("<table class='webExZimlet_table'>");
+	html.push("<table class='webExZimlet_table ZPropertySheet' cellspacing='6'>");
 	for (var i = 0; i < WebExZimlet.SINGLE_WEBEX_ACCNT_PROPS.length; i++) {
 		var obj = WebExZimlet.SINGLE_WEBEX_ACCNT_PROPS[i];
 		var type = obj.objType ? obj.objType : "text";
@@ -1583,10 +1583,10 @@ function(indx, notes) {
 			var helpLinkId = Dwt.getNextId();
 			this._accntPrefsHelpObjsHash.push({helpLinkId:helpLinkId, propId:obj.propId});
 			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", id, "'  type='", type, "'/>",
-				"&nbsp; <a href='javascript:void(0)' id='",helpLinkId,"' style='color:darkBlue;text-decoration:underline'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>");
+				"&nbsp; <a href='javascript:void(0)' id='",helpLinkId,"'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>");
 		} else {
 			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", id, "'  type='", type, "'/>",
-				"<label style='color:gray'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
+				"<label style='color:gray;'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
 		}
 	}
 
@@ -1594,17 +1594,17 @@ function(indx, notes) {
 	html.push("</table>");
 
 	html.push("<br/><div class='webExZimlet_lightGray'>", this.getMessage("WebExZimlet_teleConfSettings"), "</div>");
-	html.push("<table class='webExZimlet_table'>");
+	html.push("<table class='webExZimlet_table ZPropertySheet' cellspacing='6'>");
 	for (var i = 0; i < WebExZimlet.WEBEX_TELECONF_PROPS.length; i++) {
 		var obj = WebExZimlet.WEBEX_TELECONF_PROPS[i];
 		var id = [obj.propId , indx].join("");
 		this._accntPrefsObjsHash.push(id);
 		if (obj.propId != WebExZimlet.PROP_OTHER_PHONE_NUMBERS.propId) {
 			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", id,
-					"'  type='text'/>", "<label style='color:gray'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
+					"'  type='text'/>", "<label style='color:gray;'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
 		} else {
 			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><textarea id='", id,
-					"' rows='5' cols='20'></textarea>", "<label style='color:gray'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
+					"' rows='5' cols='20'></textarea>", "<label style='color:gray;'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
 		}
 	}
 	html.push("</table>");
@@ -1612,7 +1612,7 @@ function(indx, notes) {
 	html.push("<br/><div class='webExZimlet_lightGray'>", this.getMessage("WebExZimlet_associateCalendarHdr"), "</div>");
 	var obj = WebExZimlet.PROP_ASSOCIATED_CALENDAR;
 	html.push("<div style='padding:5px'><label style='color:blue;font-weight:bold'>", this.getMessage(obj.label),
-			"</label><label style='color:gray'>", this._getCalendarFoldersList(indx), "<label style='color:gray'>", this.getMessage(obj.extraLabel),
+			"</label><label style='color:gray;'>", this._getCalendarFoldersList(indx), "<label style='color:gray;'>", this.getMessage(obj.extraLabel),
 			"</label></div></div><br/><br/>");
 
 	return html.join("");
@@ -1859,10 +1859,10 @@ function() {
 	var html = [];
 	html.push("<div class='webExZimlet_YellowBold '>");
 	html.push("<div class='webExZimlet_gray'>", this.getMessage("WebExZimlet_appendMeetingInfoToSubOrLoc"), "</div>");
-	html.push("<table cellpadding=0 cellspacing=4>");
+	html.push("<table class='ZPropertySheet' cellspacing='6'>");
 	for (var i = 0; i < WebExZimlet.APPEND_SUB_OPTIONS.length; i++) {
 		var obj = WebExZimlet.APPEND_SUB_OPTIONS[i];
-		html.push("<tr><td>", this.getMessage(obj.label), "</td><td>", this._getAppendSelectListMenuHtml(obj.propId), "</td></tr>");
+		html.push("<tr><td class='ZmFieldLabelRight'>", this.getMessage(obj.label), "</td><td>", this._getAppendSelectListMenuHtml(obj.propId), "</td></tr>");
 	}
 	html.push("</table>");
 	html.push("<br/>");
@@ -2117,15 +2117,15 @@ function(selectHtml) {
 		this._showSelectAccntsDlg._altHostFieldId = "WebExZimlet_showSelectAccntsDlg_altHostFieldId";
 		this._showSelectAccntsDlg._altHelpLinkId = "WebExZimlet_showSelectAccntsDlg_altHelpLinkId";
 		this._showSelectAccntsDlg._mPwdFieldId = "WebExZimlet_showSelectAccntsDlg_mPwdFieldId";
-		html.push("<div style='padding:5px'>", this.getMessage("WebExZimlet_webExAccntToUse"), " <span>", selectHtml, "</span></div>");
+		html.push("<div style='padding:5px;'>", this.getMessage("WebExZimlet_webExAccntToUse"), " <span>", selectHtml, "</span></div>");
 		html.push("<br/>");
 		html.push("<div id='webexZimlet_showSelectAccnts_OptionsDiv' >");
 		html.push("<div><b>",this.getMessage("WebExZimlet_getAccounts"),"</b></div>");
-		html.push("<table class='webExZimlet_table'>");
+		html.push("<table class='webExZimlet_table ZPropertySheet' cellspacing='6'>");
 		html.push("<tr><td>", this.getMessage(WebExZimlet.PROP_ALT_HOSTS.label), "</td><td><input  id='", this._showSelectAccntsDlg._altHostFieldId, "'  type='text'/>",
-				"&nbsp; <a href='javascript:void(0)' id='",this._showSelectAccntsDlg._altHelpLinkId,"' style='color:darkBlue;text-decoration:underline'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>");
+				"&nbsp; <a href='javascript:void(0)' id='",this._showSelectAccntsDlg._altHelpLinkId,"'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>");
 		html.push("<tr><td>", this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.label), "</td><td><input id='", this._showSelectAccntsDlg._mPwdFieldId, "'  type='text'/>",
-				"<label style='color:gray'>", this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.extraLabel), "</label></td></tr>");
+				"<label style='color:gray;'>", this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.extraLabel), "</label></td></tr>");
 		html.push("</table>");
 		html.push("</div>");
 
@@ -2517,11 +2517,11 @@ WebExZimlet.prototype._createOneClickMeetingView =
 function(selectHtml) {
 
 	var html = [];
-	html.push("<table class='webExZimlet_table' width=100%>");
-	html.push("<tr><td width=30px colspan=2>", this.getMessage("WebExZimlet_webExAccntToUse"), " </td><td>", selectHtml, "</td></tr>");
+	html.push("<table width='100%' class='webExZimlet_table ZPropertySheet' cellspacing='6'>");
+	html.push("<tr><td colspan='2' class='ZmFieldLabelRight'>", this.getMessage("WebExZimlet_webExAccntToUse"), " </td><td>", selectHtml, "</td></tr>");
 	html.push("<tr>",
-			"<td width=30px></td><td width=15px id='webexZimlet__oneClickMeeting_toButton'></td>",
-			"<td><input  style='width:400px' type='text' id='webExZimlet_oneClickAttendeesField'> </input></td></tr>");
+			"<td width='30'></td><td width='15' id='webexZimlet__oneClickMeeting_toButton'></td>",
+			"<td><input  style='width:400px;' type='text' id='webExZimlet_oneClickAttendeesField'> </input></td></tr>");
 	html.push("</table>");
 	return html.join("");
 };
