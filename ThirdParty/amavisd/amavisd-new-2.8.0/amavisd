@@ -1,5 +1,4 @@
-#!/usr/bin/perl -T
-#!/usr/bin/perl -d:NYTProf
+#!/usr/bin/perl
 
 #------------------------------------------------------------------------------
 # This is amavisd-new.
@@ -2079,9 +2078,9 @@ sub read_config_file($$) {
     elsif ($errn)        { $msg = "is inaccessible: $!" }
     elsif (-d _)         { $msg = "is a directory" }
     elsif (!-f _)        { $msg = "is not a regular file" }
-    elsif ($> && -o _)   { $msg = "should not be owned by EUID $>"}
+#    elsif ($> && -o _)   { $msg = "should not be owned by EUID $>"}
     elsif ($> && -w _)   { $msg = "is writable by EUID $>, EGID $)" }
-    elsif ($owner_uid)   { $msg = "should be owned by root (uid 0) "}
+#    elsif ($owner_uid)   { $msg = "should be owned by root (uid 0) "}
     if (defined $msg)    { die "Config file \"$config_file\" $msg," }
     $read_config_files_depth++;  push(@actual_config_files, $config_file);
     if ($read_config_files_depth >= 100) {
@@ -4799,6 +4798,9 @@ sub make_query_keys($$$;$) {
     my(@dkeys); my $d = $domain;
     for (;;) {            # (@).sub.example.com (@).example.com (@).com (@).
       push(@dkeys, $prepend_to_domain.'.'.$d);
+      if ($d ne '') {
+        push(@dkeys, $d);
+      }
       last  if $d eq '';
       $d = ($d =~ /^([^.]*)\.(.*)\z/s) ? $2 : '';
     }
@@ -11066,7 +11068,7 @@ sub init_builtin_macros() {
     P => sub {$MSGINFO->partition_tag}, # SQL partition tag
     partition_tag => sub {$MSGINFO->partition_tag},  # synonym for %P
     q => sub {my $q = $MSGINFO->quarantined_to;
-              $q && [map { my $m=$_; $m=~s{^\Q$QUARANTINEDIR\E/}{}; $m } @$q];
+              $q && [map { my($m)=$_; $m=~s{^\Q$QUARANTINEDIR\E/}{}; $m=~s/^march.*\.archive$//; $m } @$q];
              },  # list of quarantine mailboxes
     v => sub {!defined $av_output ? undef     # anti-virus scanner output
                 : [split(/[ \t]*\r?\n/, $av_output)]},
@@ -11403,8 +11405,8 @@ sub after_chroot_init() {
           rename($config_file.'.moved', $config_file);
           $m = 'is writable (confirmed)';
         }
-        push(@msg, "Directory of a config file \"$config_file\" $m, ".
-                   "UID $<, EUID $>, EGID $)" );
+#        push(@msg, "Directory of a config file \"$config_file\" $m, ".
+#                   "UID $<, EUID $>, EGID $)" );
       }
       last  if @msg;
     }
@@ -15702,6 +15704,15 @@ sub do_notify_and_quarantine($$) {
       push(@q_tuples, [$qar_method, $q, 'Arch'])  if defined $q && $q ne '';
     }
   }  # endfor per_recip_data
+
+  if (defined($qar_method) && $qar_method ne '') {  # archiving quarantine on sender
+    my($sender) = $msginfo->sender;
+    if ($sender ne '') {
+      my($q) = lookup(0,$sender,@{ca('archive_quarantine_to_maps')});
+      $q = $sender  if $q ne '' && $qar_method =~ /^bsmtp:/i;  # orig.recip
+      push(@q_tuples, [$qar_method,$q,'Arch'])  if defined $q && $q ne '';
+    }
+  }
 
   if ($ccat == CC_SPAM) {
     my $sqbsm = ca('spam_quarantine_bysender_to_maps');
