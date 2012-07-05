@@ -38,7 +38,7 @@ public class BasicRegistration extends AjaxCommonTest {
 		// Create a subfolder in Inbox
 		ZimbraAccount.AccountZWC().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+		"<folder name='" + foldername +"' l='" + inbox.getId() +"'/>"
+				+		"<folder name='" + foldername +"' l='" + inbox.getId() +"' view='message'/>"
 				+	"</CreateFolderRequest>");
 		String folderid = ZimbraAccount.AccountZWC().soapSelectValue("//mail:folder", "id");
 
@@ -91,8 +91,8 @@ public class BasicRegistration extends AjaxCommonTest {
 		
 		
 		// After logging in, make sure the page appears correctly
-		app.zPageMain.zWaitForActive();
-		boolean loaded = app.zPageMain.zIsActive();
+		app.zPageExternalMain.zWaitForActive();
+		boolean loaded = app.zPageExternalMain.zIsActive();
 		ZAssert.assertTrue(loaded, "Verify that the main page became active");
 		
 		

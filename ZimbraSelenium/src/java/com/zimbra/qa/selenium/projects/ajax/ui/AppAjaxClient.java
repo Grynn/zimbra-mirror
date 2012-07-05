@@ -57,6 +57,7 @@ public class AppAjaxClient extends AbsApplication {
 	public PageLogin					zPageLogin = null;
 	public PageExternalRegistration		zPageExternalRegistration = null;
 	public PageMain						zPageMain = null;
+	public PageExternalMain				zPageExternalMain = null;
 	public PageSearch					zPageSearch = null;
 	public PageAdvancedSearch			zPageAdvancedSearch = null;
 	public PageMail						zPageMail = null;
@@ -95,6 +96,9 @@ public class AppAjaxClient extends AbsApplication {
 		// Main page
 		zPageMain = new PageMain(this);
 		pages.put(zPageMain.myPageName(), zPageMain);
+		
+		zPageExternalMain = new PageExternalMain(this);
+		pages.put(zPageExternalMain.myPageName(), zPageExternalMain);
 		
 		zPageSearch = new PageSearch(this);
 		pages.put(zPageSearch.myPageName(), zPageSearch);
