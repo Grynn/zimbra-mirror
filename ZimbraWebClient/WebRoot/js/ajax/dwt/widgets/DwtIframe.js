@@ -140,7 +140,7 @@ DwtIframe.prototype._rawEventHandler = function(ev) {
 
 	var capture = DwtMouseEventCapture.getCaptureObj();
 	capture = capture && dw.button != DwtMouseEvent.RIGHT; // ignore capture if it's right-click
-	if (AjxEnv.isIE || (AjxEnv.isSafari && !AjxEnv.isChrome) || !capture) {
+	if (AjxEnv.isIE || !capture) {
 		// go for Dwt events
 		DwtEventManager.notifyListeners(type, dw);
 		this.parent.notifyListeners(type, dw);
