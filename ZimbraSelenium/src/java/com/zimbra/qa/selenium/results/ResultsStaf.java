@@ -1,13 +1,21 @@
 package com.zimbra.qa.selenium.results;
 
-import java.io.*;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.*;
-import org.dom4j.DocumentException;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
-import com.ibm.staf.*;
-import com.ibm.staf.service.*;
+import com.ibm.staf.STAFException;
+import com.ibm.staf.STAFHandle;
+import com.ibm.staf.STAFResult;
+import com.ibm.staf.STAFUtil;
+import com.ibm.staf.service.STAFCommandParseResult;
+import com.ibm.staf.service.STAFCommandParser;
+import com.ibm.staf.service.STAFServiceInterfaceLevel30;
 
 
 public class ResultsStaf implements STAFServiceInterfaceLevel30 {
@@ -116,7 +124,7 @@ public class ResultsStaf implements STAFServiceInterfaceLevel30 {
 
 	}
 	
-	private STAFResult handleExecute(RequestInfo info) throws IOException, DocumentException {
+	private STAFResult handleExecute(RequestInfo info) {
 
         mLog.info("STAF: handleExecute ...");
 
@@ -145,11 +153,22 @@ public class ResultsStaf implements STAFServiceInterfaceLevel30 {
 			return (parseResult);
 		}	        
 
-        ResultsCore core = new ResultsCore();
-        core.execute(new File(valueRoot));
+        try {
+        	
+            ResultsCore core = new ResultsCore();
+            
+			core.execute(new File(valueRoot));
+			
+			// Return ok code with the parsable return string
+			return (new STAFResult(STAFResult.Ok, core.getResultString()));
+			
+		} catch (Exception e) {
+			
+			// TODO: convert the message to a stack trace
+			return (new STAFResult(STAFResult.JavaError, e.getMessage()));
+			
+		}
 		
-		// Return ok code with the parsable return string
-		return (new STAFResult(STAFResult.Ok, core.getResultString()));
 
 	}
 	

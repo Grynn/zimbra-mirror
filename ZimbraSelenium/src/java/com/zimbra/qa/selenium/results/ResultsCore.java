@@ -256,7 +256,7 @@ public class ResultsCore {
 	}
 	
 	
-	public void execute(File testngRoot) throws UnsupportedEncodingException, IOException, DocumentException {
+	public void execute(File testngRoot) throws UnsupportedEncodingException, IOException, DocumentException, ResultsException {
 		
 		
 		/*
