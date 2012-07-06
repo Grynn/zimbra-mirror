@@ -281,7 +281,8 @@ public class FormAddressPicker extends AbsForm {
 		
 		if ( field == Field.Search ) {
 			
-			locator = "css=input[id='ZmContactPicker_searchField']";
+			locator = "css=input[id*='ZmContactPicker_searchField']";
+			this.sGetCssCount(locator);
 			
 			// FALL THROUGH
 			
