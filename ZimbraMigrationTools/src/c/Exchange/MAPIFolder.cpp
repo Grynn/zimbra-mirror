@@ -140,16 +140,19 @@ void MAPIFolder::Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary 
 		throw MAPIFolderException(hr, L"Initialize(): GetContentsTable Failed.",
             __LINE__, __FILE__);
 	}    
-	
-	//find container class
+
 	ULONG ulItemMask =ZCM_ALL;
+	//disable restriction for only mails on IPF.Note folders.
+	//Lets migrate everything in it for now.
+/*
+	//find container class	
     wstring wstrCntrClass = L"";
     if(S_OK==ContainerClass(wstrCntrClass))
     {
         if (_tcsicmp(wstrCntrClass.c_str(), _TEXT("IPF.NOTE")) == 0)
             ulItemMask = ZCM_MAIL;
     }    
-
+*/
 	//Apply restrictions.
 	Zimbra::MAPI::MIRestriction restriction;
 	FILETIME tmpTime = { 0, 0 };
