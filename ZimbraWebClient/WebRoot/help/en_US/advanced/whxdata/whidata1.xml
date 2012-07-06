@@ -1,5 +1,23 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
+<key name="email messages" >
+  <topic name="Replying to Email Messages" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <key name="replying" >
+    <topic name="Replying to Email Messages" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  </key>
+</key>
+<key name="email notification" >
+  <topic name="Setting Email and SMS Reminder Notification" url="zwc_help_files/8_scheduling/setting_email_and_sms_reminder_notification.htm" />
+</key>
+<key name="email replies" >
+  <topic name="Set Preferences for Email Replies" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+</key>
+<key name="email, send later" >
+  <topic name="Composing and Sending Email" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="emailed contacts" >
+  <topic name="Automatically Add Contacts to Emailed Contacts List" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+</key>
 <key name="emailed contacts list" >
   <topic name="Automatically Add Contacts to Emailed Contacts List" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
   <key name="automatically add contacts" >
@@ -211,32 +229,6 @@
 </key>
 <key name="new mail notification" >
   <topic name="Receiving New Mail Notification to Another Email Address" url="zwc_help_files/2_manage_email/receiving_new_mail_notification_to_another_email_address.htm" />
-</key>
-<key name="notifications" >
-  <topic name="Setting Desktop Alerts For New Email Messages" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
-</key>
-<key name="originator" >
-  <topic name="Forward a Message as the Originator" url="zwc_help_files/3_compose/forward_a_message_as_the_originator.htm" />
-</key>
-<key name="out of office reply message" >
-  <topic name="Setting Up an Out of Office Message" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
-</key>
-<key name="overview pane" >
-  <topic name="Navigating the Zimbra Web Client" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
-</key>
-<key name="password" >
-  <topic name="Changing Your Password" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
-</key>
-<key name="performing" >
-  <key name="quick search" >
-    <topic name="Performing a Quick Search" url="zwc_help_files/12_search/performing_a_quick_search.htm" />
-  </key>
-</key>
-<key name="persona settings" >
-  <topic name="Add Personas" url="zwc_help_files/3_compose/add_personas.htm" />
-</key>
-<key name="POP" >
-  <topic name="Accessing Your External Accounts" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
 </key>
 
 </indexdata>

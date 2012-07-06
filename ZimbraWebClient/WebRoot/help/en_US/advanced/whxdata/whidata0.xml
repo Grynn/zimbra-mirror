@@ -174,6 +174,9 @@
     <topic name="Creating a Filter" url="zwc_help_files/4_filters/creating_a_filter.htm" />
   </key>
 </key>
+<key name="date, group by" >
+  <topic name="Group Messages" url="zwc_help_files/2_manage_email/group_messages.htm" />
+</key>
 <key name="default mail search" >
   <topic name="Customizing Your Mailbox Initial View" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
 </key>
@@ -207,6 +210,18 @@
     <topic name="Disable a Zimlet" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
   </key>
 </key>
+<key name="distribution list" >
+  <topic name="Create Distribution Lists" url="zwc_help_files/6_address_book/create_distribution_lists.htm" />
+</key>
+<key name="distribution list, manage" >
+  <topic name="Managing Distribution Lists" url="zwc_help_files/6_address_book/managing_distribution_lists.htm" />
+</key>
+<key name="distribution list, modify" >
+  <topic name="Modify a Distribution List" url="zwc_help_files/6_address_book/modify_a_distribution_list.htm" />
+</key>
+<key name="distribution list, unsubscribe" >
+  <topic name="Unsubscribe to a Distribution List" url="zwc_help_files/6_address_book/unsubscribe_to_a_distribution_list.htm" />
+</key>
 <key name="draft" >
   <topic name="Save a Message as a Draft" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
 </key>
@@ -218,21 +233,6 @@
 </key>
 <key name="email filters" >
   <topic name="Working with Email Filters" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
-</key>
-<key name="email messages" >
-  <topic name="Replying to Email Messages" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
-  <key name="replying" >
-    <topic name="Replying to Email Messages" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
-  </key>
-</key>
-<key name="email replies" >
-  <topic name="Set Preferences for Email Replies" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
-</key>
-<key name="email, send later" >
-  <topic name="Composing and Sending Email" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
-</key>
-<key name="emailed contacts" >
-  <topic name="Automatically Add Contacts to Emailed Contacts List" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
 </key>
 
 </indexdata>

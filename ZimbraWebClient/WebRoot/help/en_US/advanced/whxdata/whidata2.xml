@@ -1,5 +1,32 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
+<key name="notifications" >
+  <topic name="Setting Desktop Alerts For New Email Messages" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+  <topic name="Setting Email and SMS Reminder Notification" url="zwc_help_files/8_scheduling/setting_email_and_sms_reminder_notification.htm" />
+</key>
+<key name="originator" >
+  <topic name="Forward a Message as the Originator" url="zwc_help_files/3_compose/forward_a_message_as_the_originator.htm" />
+</key>
+<key name="out of office reply message" >
+  <topic name="Setting Up an Out of Office Message" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="overview pane" >
+  <topic name="Navigating the Zimbra Web Client" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+</key>
+<key name="password" >
+  <topic name="Changing Your Password" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+</key>
+<key name="performing" >
+  <key name="quick search" >
+    <topic name="Performing a Quick Search" url="zwc_help_files/12_search/performing_a_quick_search.htm" />
+  </key>
+</key>
+<key name="persona settings" >
+  <topic name="Add Personas" url="zwc_help_files/3_compose/add_personas.htm" />
+</key>
+<key name="POP" >
+  <topic name="Accessing Your External Accounts" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+</key>
 <key name="POP behavior" >
   <topic name="Set Up POP Behavior for Your Account" url="zwc_help_files/1_setting_up/set_up_pop_behavior_for_your_account.htm" />
 </key>
@@ -105,9 +132,6 @@
 <key name="screen view" >
   <topic name="Navigating the Zimbra Web Client" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
 </key>
-<key name="search examples" >
-  <topic name="Search Examples" url="zwc_help_files/12_search/search_examples.htm" />
-</key>
 <key name="search query" >
   <topic name="Saving a Search Query" url="zwc_help_files/12_search/saving_a_search_query.htm" />
   <key name="saving" >
@@ -175,6 +199,12 @@
 <key name="signatures preferences" >
   <topic name="Customizing Your Options for Composing Messages" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
 </key>
+<key name="size, group by" >
+  <topic name="Group Messages" url="zwc_help_files/2_manage_email/group_messages.htm" />
+</key>
+<key name="SMS reminders" >
+  <topic name="Setting Email and SMS Reminder Notification" url="zwc_help_files/8_scheduling/setting_email_and_sms_reminder_notification.htm" />
+</key>
 <key name="sorting" >
   <topic name="Sorting Messages in the Content Pane" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
   <topic name="Sorting Tasks within a Task List" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
@@ -208,37 +238,6 @@
   <topic name="Creating a Task List" url="zwc_help_files/9_tasks/creating_a_task_list.htm" />
   <key name="exporting" >
     <topic name="Exporting a Task List" url="zwc_help_files/9_tasks/exporting_a_task_list.htm" />
-  </key>
-</key>
-<key name="tasks" >
-  <topic name="Sorting Tasks within a Task List" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
-  <topic name="Moving a Task to Another List" url="zwc_help_files/9_tasks/moving_a_task_to_another_list.htm" />
-  <key name="moving" >
-    <topic name="Moving a Task to Another List" url="zwc_help_files/9_tasks/moving_a_task_to_another_list.htm" />
-  </key>
-  <key name="sorting" >
-    <topic name="Sorting Tasks within a Task List" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
-  </key>
-</key>
-<key name="theme" >
-  <topic name="Personalizing the View of Your Account" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
-</key>
-<key name="time zone" >
-  <topic name="Change Your Default Time Zone" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
-</key>
-<key name="trash" >
-  <topic name="Empty Your Trash Folder" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
-</key>
-<key name="trusted addresses" >
-  <topic name="Maintaining a Trusted Addresses List" url="zwc_help_files/2_manage_email/maintaining_a_trusted_addresses_list.htm" />
-</key>
-<key name="type face" >
-  <topic name="Personalizing the View of Your Account" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
-</key>
-<key name="upload email attachments" >
-  <topic name="Upload Email Attachments to Briefcase" url="zwc_help_files/10_briefcase/upload_email_attachments_to_briefcase.htm" />
-  <key name="briefcase" >
-    <topic name="Upload Email Attachments to Briefcase" url="zwc_help_files/10_briefcase/upload_email_attachments_to_briefcase.htm" />
   </key>
 </key>
 

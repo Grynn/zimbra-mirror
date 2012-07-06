@@ -8,8 +8,8 @@
   <item name="Using Keyboard Shortcuts" url="zwc_help_files/1_setting_up/using_keyboard_shortcuts.htm" />
 </book>
 <book name="Organizing  Your Account" >
-  <item name="Organizing Your Account" url="zwc_help_files/5_organize_account/organizing_your_account.htm" />
   <item name="Navigating Your Account " url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+  <item name="Organizing Your Account" url="zwc_help_files/5_organize_account/organizing_your_account.htm" />
   <item name="Customizing Your Mailbox Initial View" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
   <item name="Personalizing the View of Your Account" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
   <item name="Change Your Default Time Zone" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
@@ -24,7 +24,7 @@
   <item name="Changing How Often Your Account Checks for New Mail" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
   <item name="Setting Desktop Alerts For New Email Messages" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
   <item name="Assigning Retention Policies to Email Folders" url="zwc_help_files/2_manage_email/assigning_retention_policies_to_email_folders.htm" />
-  <item name="Group Messages" url="zwc_help_files/2_manage_email/group_messages.htm" />
+  <item name="Group Messages in your Folders" url="zwc_help_files/2_manage_email/group_messages.htm" />
   <item name="Sorting Messages in the Content Pane" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
   <item name="Moving Less Important Mail Out of the Inbox" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
   <item name="Moving Email Messages" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
@@ -89,6 +89,8 @@
   <item name="Exporting an Address Book" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
   <item name="Printing a Contact Name or Address Book" url="zwc_help_files/6_address_book/printing_a_contact_name_or_address_book.htm" />
   <item name="Deleting Contacts" url="zwc_help_files/6_address_book/deleting_contacts.htm" />
+  <item name="Managing Distribution Lists" url="zwc_help_files/6_address_book/managing_distribution_lists.htm" />
+  <item name="Create Distribution Lists" url="zwc_help_files/6_address_book/create_distribution_lists.htm" />
 </book>
 <book name="Managing Your Calendars" >
 <chunk name="Managing Your Calendars" ref="whtdata1.xml" />
@@ -119,13 +121,14 @@
   <item name="Mobile Security Features" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
   <item name="Wipe your mobile device" url="zwc_help_files/11_mobile/wipe_your_mobile_device.htm" />
 </book>
-<book name="Sending Secure Email Messages" >
-<chunk name="Sending Secure Email Messages" ref="whtdata9.xml" />
+<book name="Sending Secure Email Messages (Network Edition Only)" >
+<chunk name="Sending Secure Email Messages (Network Edition Only)" ref="whtdata9.xml" />
+</book>
+<book name="Voice Service (Network Edition Only)" >
+<chunk name="Voice Service (Network Edition Only)" ref="whtdata10.xml" />
 </book>
 <book name="Using Zimlets" >
   <item name="Managing Your Zimlets" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
-  <item name="Using Zimlets" url="zwc_help_files/14_zimlets/using_zimlets.htm" />
-  <item name="Enable an Optional Zimlet" url="zwc_help_files/14_zimlets/enable_an_optional_zimlet.htm" />
   <item name="Disable a Zimlet" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
 </book>
 

@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\review docs\SearchHelpTopics.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Advanced Search Query Language Description</title>
+<link rel="stylesheet" href="../searchhelptopics.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Searching for Items\nUnderstanding Advanced Search Query Language ");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Home", "../../advanced_web_client.htm");
+document.write("<a href=\"searching_your_account.htm\">Searching for Items<\/a> &gt; Understanding Advanced Search Query Language <\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Understanding Advanced Search Query Language </p>
+<p class="FM_Body">This advanced topic describes in detail the search grammar 
+ used for @CollaborationProductShortName@ Search 
+ feature.</p>
+<p class="FM_2Heading">Search Language Structure</p>
+<p class="FM_Body">Simple searches can be done by just entering a word 
+ into the search field. Bare words (words without a search operator) are 
+ interpreted to search in the 'content:' operator -- this matches any text 
+ in the message.</p>
+<p class="FM_Body">More advanced searches can be done by specifying a <span 
+	 style="font-weight: bold;">search operator</span>. A search operator 
+ is a special keyword followed by a colon, followed by some other parameter 
+ specific to that operator. For example:</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal; 
+	 font: 6.0pt 'Times New Roman';">&#160;</span></span><span style="font-weight: bold;">in: 
+	 inbox</span>&#160;the operator is &quot;in&quot; 
+	 and the parameter is &quot; inbox&quot; 
+	 - this returns messages which are in the folder named &quot; inbox&quot;</p></li>
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal; 
+	 font: 6.0pt 'Times New Roman';">&#160;&#160;</span></span><span style="font-weight: bold;">from:someone</span>&#160;the 
+	 operator is &quot;from&quot; and the parameter is &quot;someone&quot; 
+	 - this returns messages which have the word &quot;someone&quot; in 
+	 their email address</p></li>
+</ul>
+<p class="FM_Body">You can prefix any keyword with the word &quot;not&quot; 
+ to specify items that do not have that criterion, for example <span style="font-weight: bold;">not 
+ in: inbox</span>. Search is not case sensitive, meaning that &quot;in:inbox&quot; 
+ is the same as &quot;in:Inbox&quot;. The minus sign (<span style="font-weight: bold;">-</span>) 
+ is a synonym for <span style="font-weight: bold;">NOT</span>&#160;So: 
+ <span style="font-weight: bold;">not in:inbox</span>&#160;is the same 
+ as <span style="font-weight: bold;">-in:inbox</span></p>
+<p class="FM_Body">In most cases, it is not necessary to include punctuation-type 
+ characters in your search string, as these are ignored by the search code. 
+ There are certain times where this is not true (for example, searching 
+ for a time '9:30' in a message) and in those cases you should enclose 
+ the search parameter in quotation marks. For example: <span style="font-weight: bold;">subject:&quot;9:30&quot;</span>&#160;will 
+ return messages which have the string 9:30 in the subject.</p>
+<p class="FM_Body">Allowable characters in the search parameter:</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal; 
+	 font: 6.0pt 'Times New Roman';">&#160;</span></span>The following 
+	 characters cannot be anywhere in a search parameter unless it is enclosed 
+	 by quotes: ~ '&#160;! # $ % ^ &amp; * ( ) _&#160;? / { }[ ]&#160;;&#160;:</p></li>
+	<li><p class="FM_Bulleted1">The following characters are allowed in 
+	 a search parameter as long as they are not the first character: - 
+	 + &lt; &gt;</p></li>
+</ul>
+<p class="FM_Notice"><span class="FM_Bold">Note: &#160;&#160;</span>Special 
+ characters, such as trademark symbols that are part of a word, are removed 
+ when the word is indexed for search. They are ignored in a search. For 
+ example, a search for Zimbra™ finds all references to Zimbra, including 
+ those without the trademark symbol.</p>
+<p class="FM_2Heading">Multiple Search Terms</p>
+<p class="FM_Body">If multiple search terms are entered (separated by spaces), 
+ they are &quot; ANDed&quot; together by default. <span style="font-weight: bold;">in:inbox 
+ tim</span>&#160;means &quot;return me messages which are in the inbox 
+ AND which have the word tim in them&quot;. For searches using multiple 
+ criteria, you can either find items that match one of the specified criteria 
+ or all of them. You can perform both types of searches from the advanced 
+ search page.</p>
+<p class="FM_Body">For all search panes other than the Basic search, the 
+ rules are:</p>
+<p class="FM_Bulleted1">Searching for messages that match any of the specified 
+ criteria is called an '<span style="font-weight: bold;">OR'</span>&#160;search, 
+ because if the message contains either X or Y, then it is considered a 
+ match.</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1">Searching for messages that contain both 
+	 X and Y is called an '<span style="font-weight: bold;">AND'</span>&#160;search, 
+	 because the message must meet&#160;all the specified criteria in order 
+	 to be considered a match. </p></li>
+	<li><p class="FM_Body">Only &quot;OR&quot; appears in a query. If you 
+	 selected as an option to show the search query in the Search bar as 
+	 you make selections in the Advanced search, the Search text box updates 
+	 to show the resulting query. With the '<span style="font-weight: bold;">AND'</span>&#160;type 
+	 of search, the word '<span style="font-weight: bold;">AND'</span> 
+	 does not appear.</p></li>
+</ul>
+<p class="FM_Body"><span style="font-weight: bold;">Tip</span>: Using parenthesis 
+ with AND and OR. Words within parentheses are 
+ considered as a unit. For example <span style="font-weight: bold;">from: 
+ (john thomas)</span>&#160;is equivalent to 
+ <span style="font-weight: bold;">from:john AND from: thomas</span>. 
+ If you use OR in the parenthesis, <span style="font-weight: bold;">from:(john 
+ or smith)</span>, the search is for results <span style="font-weight: bold;">from:john 
+ OR from: smith</span>.</p>
+<p class="FM_2Heading">Using * as a Wildcard in Search</p>
+<p class="FM_Body">The asterisk (<span style="font-weight: bold;">*</span>) 
+ can be used as a wildcard at the end of a word in a search to find content 
+ that contains words that have similar spellings.</p>
+<p class="FM_Body">Use the asterisk <span style="font-weight: bold;">*</span>&#160;as 
+ a wildcard. For example, the search string <span style="font-weight: bold;">do*</span>&#160;returns 
+ items such as <span style="font-style: italic;">do</span>, <span style="font-style: italic;">dog</span>, 
+ <span style="font-style: italic;">door</span>, etc.</p>
+<p class="FM_Notice"><span class="FM_Bold">Note: &#160;&#160;</span>A double-byte 
+ asterisk sign in a search query is not considered a wildcard character 
+ and is ignored when the search runs.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

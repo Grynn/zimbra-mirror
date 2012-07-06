@@ -6,9 +6,9 @@
 <item name="Scheduling an All-Day Appointment" url="zwc_help_files/8_scheduling/scheduling_an_all-day_appointment.htm" />
 <item name="Quick Appointments from the Mini Calendar" url="zwc_help_files/8_scheduling/quick_appointments_from_the_mini_calendar.htm" />
 <item name="Using Email Messages to Set Up Meetings" url="zwc_help_files/8_scheduling/using_email_messages_to_set_up_meetings.htm" />
+<item name="Create a Meeting Request From a Contact" url="zwc_help_files/8_scheduling/create_a_meeting_request_from_a_contact.htm" />
 <item name="Scheduling an Appointment Within an Email Message" url="zwc_help_files/8_scheduling/scheduling_an_appointment_within_an_email_message.htm" />
 <item name="Creating an Appointment from an Existing Appointment" url="zwc_help_files/8_scheduling/creating_an_appointment_from_an_existing_appointment.htm" />
-<item name="Create a Meeting Request From a Contact" url="zwc_help_files/8_scheduling/create_a_meeting_request_from_a_contact.htm" />
 <item name="Using the Scheduling Tool to Set Location Preferences" url="zwc_help_files/8_scheduling/using_the_scheduling_tool_to_set_location_preferences.htm" />
 <item name="Using the Scheduling Tool to Find Attendee Availability" url="zwc_help_files/8_scheduling/using_the_scheduling_tool_to_find_attendee_availability.htm" />
 <item name="Scheduling Equipment" url="zwc_help_files/8_scheduling/scheduling_equipment.htm" />
@@ -25,6 +25,7 @@
 <item name="Send Your Free/Busy Status to Others" url="zwc_help_files/7_calendars/send_your_free_busy_status_to_others.htm" />
 <item name="Display Your Free/Busy Information" url="zwc_help_files/7_calendars/display_your_free_busy_information.htm" />
 <item name="Responding to a Meeting Invitation" url="zwc_help_files/8_scheduling/responding_to_a_meeting_invitation.htm" />
+<item name="Setting Email and SMS Reminder Notification" url="zwc_help_files/8_scheduling/setting_email_and_sms_reminder_notification.htm" />
 <item name="Automatically add received appointments to calendar." url="zwc_help_files/7_calendars/automatically_add_received_appointments_to_calendar.htm" />
 <item name="Show reminders" url="zwc_help_files/8_scheduling/show_reminders.htm" />
 <item name="Hide Declined Meetings in Your Calendar" url="zwc_help_files/8_scheduling/hide_declined_meetings_in_your_calendar.htm" />
