@@ -229,6 +229,7 @@ PERL_LIBS 	:= \
 	G/GR/GRANTM/XML-Simple-2.20.tar.gz \
 	IO::Socket::INET6 \
 	$(MODULE_NETADDR_IP) \
+	IO::Socket::IP \
 	Net::DNS::Resolver::Programmable \
 	Geography::Countries \
 	IP::Country \
