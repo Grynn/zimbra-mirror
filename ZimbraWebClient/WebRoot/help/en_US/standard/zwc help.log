@@ -181,7 +181,11 @@ standard\subscribing_to_rss_atom_feeds.htm
 standard\using_the_trash_folder.htm
 version.htm
 zimbra_basic_user_help.htm
+zwc_help_files\12_search\and_versus_or_searches.htm
+zwc_help_files\12_search\non-western_language_attachments.htm
+zwc_help_files\12_search\search_example.htm
 zwc_help_files\12_search\search_syntax.htm
+zwc_help_files\12_search\searching_using_key_words.htm
 zwc_help_files\12_search\using_as_a_wildcard_in_search.htm
 zwc_help_files\1_setting_up\change_your_default_time_zone.htm
 zwc_help_files\1_setting_up\signing_in_and_signing_out.htm
@@ -209,6 +213,7 @@ zwc_help_files\4_filters\filter_conditions.htm
 zwc_help_files\9_tasks\using_task_lists.htm
 zimbra_user_help.glo
 zwc_8.css
+zwc_help_files\searchhelptopics.css
 basicsearchfolder.png
 groupcontasticon.png
 standard\navigating_around_your_mailbox00001.jpg
@@ -232,6 +237,7 @@ whxdata\package_7.xml
 whxdata\package_8.xml
 whxdata\package_9.xml
 whxdata\package_10.xml
+whxdata\package_11.xml
 whxdata\packageindex.xml
 whxdata\synonym.xml
 whxdata\topictable_0.xml
@@ -298,6 +304,8 @@ whgdata\whlstf10.htm
 whgdata\whlstf11.htm
 whgdata\whlstf12.htm
 whgdata\whlstf13.htm
+whgdata\whlstf14.htm
+whgdata\whlstf15.htm
 whgdata\whlstg0.htm
 zimbra_user_help.htm
 zimbra_user_help_csh.htm
