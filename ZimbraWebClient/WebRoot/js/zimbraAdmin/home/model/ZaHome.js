@@ -274,34 +274,39 @@ ZaHome.loadActiveSesson = function () {
             if (parameterList.length > 0) {
                 var currentSession = parameterList.shift();
                 try {
-                    var soapDoc = AjxSoapDoc.create("GetSessionsRequest", ZaZimbraAdmin.URN, null);
-                    var sessionCallback = new  AjxCallback (this, loadOneSessionNumer);
-                    var params = {};
-                    params.type = currentSession.type;
+            		var server = ZaServer.getServerById(currentSession.targetServer);
+            		if(server) {
+            			if(ZaItem.hasRight(ZaServer.RIGHT_GET_SESSIONS, server)) {
+            				 var soapDoc = AjxSoapDoc.create("GetSessionsRequest", ZaZimbraAdmin.URN, null);
+                             var sessionCallback = new  AjxCallback (this, loadOneSessionNumer);
+                             var params = {};
+                             params.type = currentSession.type;
 
-                    soapDoc.getMethod().setAttribute("type", params.type);
+                             soapDoc.getMethod().setAttribute("type", params.type);
 
-                    params.fresh = 1;
-                    soapDoc.getMethod().setAttribute("refresh", params.fresh);
+                             params.fresh = 1;
+                             soapDoc.getMethod().setAttribute("refresh", params.fresh);
 
-                    soapDoc.getMethod().setAttribute("limit", ZaServerSessionStatsPage.PAGE_LIMIT);
+                             soapDoc.getMethod().setAttribute("limit", ZaServerSessionStatsPage.PAGE_LIMIT);
 
-                    params.offset = 0 ;
+                             params.offset = 0 ;
 
-                    soapDoc.getMethod().setAttribute("offset", params.offset);
+                             soapDoc.getMethod().setAttribute("offset", params.offset);
 
-                    params.sortBy = "nameAsc";
+                             params.sortBy = "nameAsc";
 
-                    soapDoc.getMethod().setAttribute("sortBy", params.sortBy);
+                             soapDoc.getMethod().setAttribute("sortBy", params.sortBy);
 
-                    var getSessCmd = new ZmCsfeCommand ();
-                    params.soapDoc = soapDoc ;
-                    params.asyncMode = true;
-                    params.noAuthToken = true;
-                    params.callback = sessionCallback;
-                    params.targetServer = currentSession.targetServer ;
+                             var getSessCmd = new ZmCsfeCommand ();
+                             params.soapDoc = soapDoc ;
+                             params.asyncMode = true;
+                             params.noAuthToken = true;
+                             params.callback = sessionCallback;
+                             params.targetServer = currentSession.targetServer ;
 
-                    var resp = getSessCmd.invoke(params);
+                             var resp = getSessCmd.invoke(params);
+            			}
+            		}
 
                 } catch (ex) {
                     // Won't do anything here to avoid disturbe the loading process.

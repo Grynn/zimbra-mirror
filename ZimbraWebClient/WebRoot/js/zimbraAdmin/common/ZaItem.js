@@ -48,6 +48,7 @@ ZaItem.COS = "cos";
 ZaItem.GLOBAL_CONFIG = "config";
 ZaItem.GLOBAL_GRANT = "global";
 ZaItem.SERVER = "server";
+ZaItem.STATS = "stats";
 ZaItem.ZIMLET = "zimlet";
 ZaItem.MAILQ_ITEM = "message";
 ZaItem.MAILQ = "mailque";

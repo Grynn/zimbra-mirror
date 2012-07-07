@@ -283,6 +283,7 @@ ZaServer.DOT_TO_CIDR["0xffffffff"] = ZaServer.DOT_TO_CIDR["255.255.255.255"] = 3
 
 ZaServer.FLUSH_CACHE_RIGHT = "flushCache";
 ZaServer.MANAGE_VOLUME_RIGHT = "manageVolume";
+ZaServer.RIGHT_GET_SESSIONS="getSessions";
 
 ZaServer.isValidPostfixSubnetString = function(mask) {
 	//is this a CIDR
