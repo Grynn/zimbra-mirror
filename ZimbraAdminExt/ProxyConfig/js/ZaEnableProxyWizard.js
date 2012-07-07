@@ -14,6 +14,7 @@
  */
 
 /*---Enable Proxy Wizard Model---*/
+if(ZaSettings && ZaSettings.EnabledZimlet["com_zimbra_proxy_config"]) {
 function ZaEnableProxy () {
 	ZaItem.call(this, "ZaEnableProxy");
 	this._init();
@@ -811,3 +812,4 @@ ZaEnableProxyWizard.myXFormModifier = function(xFormObject) {
 	];
 }
 ZaXDialog.XFormModifiers["ZaEnableProxyWizard"].push(ZaEnableProxyWizard.myXFormModifier);
+}

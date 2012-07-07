@@ -14,6 +14,7 @@
  */
 
 /*---Disable Proxy Wizard Model---*/
+if(ZaSettings && ZaSettings.EnabledZimlet["com_zimbra_proxy_config"]) {
 function ZaDisableProxy () {
 	ZaItem.call(this, "ZaDisableProxy");
 	this._init();
@@ -505,3 +506,4 @@ ZaDisableProxyWizard.myXFormModifier = function(xFormObject) {
 	];
 }
 ZaXDialog.XFormModifiers["ZaDisableProxyWizard"].push(ZaDisableProxyWizard.myXFormModifier);
+}

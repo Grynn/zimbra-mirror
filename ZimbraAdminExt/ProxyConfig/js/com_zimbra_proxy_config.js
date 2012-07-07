@@ -300,7 +300,7 @@ ZaProxyConfig.changeActionsStateMethod = function () {
     }
 	
 	// check to enable "Disable Proxy Wizard" or not
-	isToEnable = ZaProxy.isProxyWizardEnabled(obj, attrsArray, rightsArray);
+	isToEnable = ZaProxyConfig.isProxyWizardEnabled(obj, attrsArray, rightsArray);
 	
 	if(this._popupOperations[ZaOperation.DISABLE_PROXY]) {
         this._popupOperations[ZaOperation.DISABLE_PROXY].enabled = isToEnable;
