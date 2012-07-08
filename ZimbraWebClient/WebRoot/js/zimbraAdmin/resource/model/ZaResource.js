@@ -288,26 +288,43 @@ function(mods) {
 	var soapDoc = AjxSoapDoc.create("ModifyCalendarResourceRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	for (var aname in mods) {
-		//multy value attribute
+		hasSomething = true;
+		//multi value attribute
 		if(mods[aname] instanceof Array) {
 			var cnt = mods[aname].length;
 			if(cnt) {
+				var nonemptyElements = false;
 				for(var ix=0; ix <cnt; ix++) {
-					if(mods[aname][ix]) { //if there is an empty element in the array - don't send it
+					var attr = null;
+					if(mods[aname][ix] instanceof String || AjxUtil.isString(mods[aname][ix])) {
+						if(AjxUtil.isEmpty(mods[aname][ix])) {
+							continue;
+						} else {
+							nonemptyElements = true;
+						}
+						var attr = soapDoc.set("a", mods[aname][ix].toString());
+					} else if(mods[aname][ix] instanceof Object) {
+						var attr = soapDoc.set("a", mods[aname][ix].toString());
+						nonemptyElements = true;
+					} else {
 						var attr = soapDoc.set("a", mods[aname][ix]);
-						attr.setAttribute("n", aname);
-						hasSomething = true;
+						nonemptyElements = true;
 					}
+					
+					if(attr)
+						attr.setAttribute("n", aname);
+				}
+				if(!nonemptyElements) {
+					var attr = soapDoc.set("a", "");
+					attr.setAttribute("n", aname);
 				}
 			} else {
 				var attr = soapDoc.set("a", "");
 				attr.setAttribute("n", aname);
-				hasSomething = true;
 			}
 		} else {
 			var attr = soapDoc.set("a", mods[aname]);
 			attr.setAttribute("n", aname);
-			hasSomething = true;
 		}
 	}
 	if(!hasSomething) {

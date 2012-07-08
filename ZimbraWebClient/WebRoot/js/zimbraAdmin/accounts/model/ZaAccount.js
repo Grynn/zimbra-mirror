@@ -1030,20 +1030,30 @@ function(mods) {
 		if(mods[aname] instanceof Array) {
 			var cnt = mods[aname].length;
 			if(cnt) {
+				var nonemptyElements = false;
 				for(var ix=0; ix <cnt; ix++) {
 					var attr = null;
 					if(mods[aname][ix] instanceof String || AjxUtil.isString(mods[aname][ix])) {
 						if(AjxUtil.isEmpty(mods[aname][ix])) {
 							continue;
+						} else {
+							nonemptyElements = true;
 						}
 						var attr = soapDoc.set("a", mods[aname][ix].toString());
 					} else if(mods[aname][ix] instanceof Object) {
 						var attr = soapDoc.set("a", mods[aname][ix].toString());
+						nonemptyElements = true;
 					} else {
 						var attr = soapDoc.set("a", mods[aname][ix]);
+						nonemptyElements = true;
 					}
+					
 					if(attr)
 						attr.setAttribute("n", aname);
+				}
+				if(!nonemptyElements) {
+					var attr = soapDoc.set("a", "");
+					attr.setAttribute("n", aname);
 				}
 			} else {
 				var attr = soapDoc.set("a", "");
