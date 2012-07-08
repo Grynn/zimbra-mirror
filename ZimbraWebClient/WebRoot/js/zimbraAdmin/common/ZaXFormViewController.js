@@ -55,8 +55,7 @@ function(entry) {
 ZaXFormViewController.prototype.handleXFormChange = function (ev) {
 	if(ev && ev.form.hasErrors() && this._toolbar && this._toolbar.getButton(ZaOperation.SAVE)) { 
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-        if (appNewUI)
-            ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
+        ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
 	}
 }
 /**
@@ -314,8 +313,7 @@ function (params) {
 			if(this._toolbar)
 				this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 
-            if (appNewUI)
-                ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
+            ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
 		
 			this.closeCnfrmDlg();
 
@@ -346,44 +344,32 @@ function (params) {
 **/
 ZaXFormViewController.prototype.setDirty = 
 function (isD) {
-    if (!appNewUI) {
-        if(!this._toolbar || !this._toolbar.getButton(ZaOperation.SAVE))
-            return;
+    var settingMenu = ZaZimbraAdmin.getInstance().getSettingMenu();
+    if (!settingMenu ||
+        !this._popupOperations ||
+        !this._popupOperations[ZaOperation.SAVE] ||
+        !this._popupOperations[ZaOperation.SAVE].id)
+        return;
 
-        if(isD)
-            this._toolbar.getButton(ZaOperation.SAVE).setEnabled(true);
-        else
-            this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-    } else {
-        var settingMenu = ZaZimbraAdmin.getInstance().getSettingMenu();
-        if (!settingMenu ||
-            !this._popupOperations ||
-            !this._popupOperations[ZaOperation.SAVE] ||
-            !this._popupOperations[ZaOperation.SAVE].id)
-            return;
+    if (!this._popupOperations)
+        return;
 
-        if (!this._popupOperations)
-            return;
+    if (!this._popupOperations[ZaOperation.SAVE])
+        return;
 
-        if (!this._popupOperations[ZaOperation.SAVE])
-            return;
+    var saveItem = settingMenu.getMenuItem(this._popupOperations[ZaOperation.SAVE].id)
+    if (AjxUtil.isEmpty(saveItem))
+        return;
 
-        var saveItem = settingMenu.getMenuItem(this._popupOperations[ZaOperation.SAVE].id)
-        if (AjxUtil.isEmpty(saveItem))
-            return;
+    if(isD)
+        saveItem.setEnabled(true);
+    else
+        saveItem.setEnabled(false);
 
-        if(isD)
-            saveItem.setEnabled(true);
-        else
-            saveItem.setEnabled(false);
-
-        if (appNewUI) {
-            if(isD)
-                ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, true);
-            else
-                ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
-        }
-    }
+    if(isD)
+        ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, true);
+    else
+        ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
 }
 
 /**

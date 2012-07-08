@@ -274,11 +274,9 @@ function () {
 
 ZaAccountListController.initPopupMenuMethod =
 function () {
-    if(appNewUI) {
-        //push it firstly to make it as the first one
-        this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "NewAccount", "AccountDis",new AjxListener(this, ZaAccountListController.prototype._newAccountListener));;
-        this._popupOrder.push(ZaOperation.NEW_MENU);
-    }
+    //push it firstly to make it as the first one
+    this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "NewAccount", "AccountDis",new AjxListener(this, ZaAccountListController.prototype._newAccountListener));;
+    this._popupOrder.push(ZaOperation.NEW_MENU);
 
     this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Edit", "EditDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
     this._popupOrder.push(ZaOperation.EDIT);

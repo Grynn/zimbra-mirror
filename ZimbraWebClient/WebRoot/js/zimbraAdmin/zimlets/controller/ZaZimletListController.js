@@ -32,7 +32,6 @@ ZaZimletListController.prototype = new ZaListViewController();
 ZaZimletListController.prototype.constructor = ZaZimletListController;
 ZaZimletListController.helpButtonText = ZaMsg.helpManageZimlets;
 
-ZaController.initToolbarMethods["ZaZimletListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaZimletListController"] = new Array();
 ZaController.changeActionsStateMethods["ZaZimletListController"] = new Array(); 
 /**
@@ -64,29 +63,15 @@ function(list, openInNewTab) {
 	}*/
 }
 
-ZaZimletListController.initToolbarMethod =
-function () {
-	this._toolbarOperations[ZaOperation.DEPLOY_ZIMLET]=new ZaOperation(ZaOperation.DEPLOY_ZIMLET,ZaMsg.TBB_DeployNew, ZaMsg.TBB_DeployNew_tt, "Deploy", "Deploy", new AjxListener(this, this.deployZimletListener));				
-   	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Undeploy, ZaMsg.DTBB_Undeploy_tt, "Undeploy", "Undeploy", new AjxListener(this, this._undeployButtonListener));    	    		
-	this._toolbarOperations[ZaOperation.TOGGLE]=new ZaOperation(ZaOperation.TOGGLE,ZaMsg.TBB_Toggle, ZaMsg.TBB_Toggle_tt, "ToggleStatus", "ToggleStatus", new AjxListener(this, this._toggleButtonListener));    	    		
-	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-	this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
-	
-	this._toolbarOrder.push(ZaOperation.DEPLOY_ZIMLET);
-	this._toolbarOrder.push(ZaOperation.TOGGLE);
-	this._toolbarOrder.push(ZaOperation.DELETE);
-	this._toolbarOrder.push(ZaOperation.NONE);	
-	this._toolbarOrder.push(ZaOperation.HELP);					
-}
-ZaController.initToolbarMethods["ZaZimletListController"].push(ZaZimletListController.initToolbarMethod);
-
 ZaZimletListController.initPopupMenuMethod =
 function () {
-    if (appNewUI) {
-	    this._popupOperations[ZaOperation.DEPLOY_ZIMLET]=new ZaOperation(ZaOperation.DEPLOY_ZIMLET,ZaMsg.TBB_DeployNew, ZaMsg.TBB_DeployNew_tt, "Deploy", "Deploy", new AjxListener(this, this.deployZimletListener));
-    }
+    this._popupOperations[ZaOperation.DEPLOY_ZIMLET]=new ZaOperation(ZaOperation.DEPLOY_ZIMLET,ZaMsg.TBB_DeployNew, ZaMsg.TBB_DeployNew_tt, "Deploy", "Deploy", new AjxListener(this, this.deployZimletListener));
    	this._popupOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Undeploy, ZaMsg.DTBB_Undeploy_tt, "Undeploy", "Undeploy", new AjxListener(this, this._undeployButtonListener));    	    		
-   	this._popupOperations[ZaOperation.TOGGLE]=new ZaOperation(ZaOperation.TOGGLE,ZaMsg.TBB_Toggle, ZaMsg.TBB_Toggle_tt, "ToggleStatus", "ToggleStatus", new AjxListener(this, this._toggleButtonListener));    	    		
+   	this._popupOperations[ZaOperation.TOGGLE]=new ZaOperation(ZaOperation.TOGGLE,ZaMsg.TBB_Toggle, ZaMsg.TBB_Toggle_tt, "ToggleStatus", "ToggleStatus", new AjxListener(this, this._toggleButtonListener));
+   	this._popupOrder.push(ZaOperation.DEPLOY_ZIMLET);
+   	this._popupOrder.push(ZaOperation.DELETE);
+   	this._popupOrder.push(ZaOperation.TOGGLE);
+
    
 }
 ZaController.initPopupMenuMethods["ZaZimletListController"].push(ZaZimletListController.initPopupMenuMethod);
@@ -323,27 +308,12 @@ function () {
 	var offArray = [];
 	var onArray = [];
 	if(cnt < 1) {
-		if(this._toolbarOperations[ZaOperation.EDIT])	
-			this._toolbarOperations[ZaOperation.EDIT].enabled = false;
-					
-		if(this._toolbarOperations[ZaOperation.DISABLE_ZIMLET])	
-			this._toolbarOperations[ZaOperation.DISABLE_ZIMLET].enabled = false;
-
-		if(this._toolbarOperations[ZaOperation.ENABLE_ZIMLET])	
-			this._toolbarOperations[ZaOperation.ENABLE_ZIMLET].enabled = false;
-
-		if(this._toolbarOperations[ZaOperation.TOGGLE])	
-			this._toolbarOperations[ZaOperation.TOGGLE].enabled = false;
-			
 			
 		if(this._popupOperations[ZaOperation.EDIT])	
 			this._popupOperations[ZaOperation.EDIT].enabled = false;
 					
-		if(this._popupOperations[ZaOperation.DISABLE_ZIMLET])	
-			this._popupOperations[ZaOperation.DISABLE_ZIMLET].enabled = false;
-
-		if(this._popupOperations[ZaOperation.ENABLE_ZIMLET])	
-			this._popupOperations[ZaOperation.ENABLE_ZIMLET].enabled = false;
+		if(this._popupOperations[ZaOperation.DELETE])	
+			this._popupOperations[ZaOperation.DELETE].enabled = false;
 
 		if(this._popupOperations[ZaOperation.TOGGLE])	
 			this._popupOperations[ZaOperation.TOGGLE].enabled = false;			
