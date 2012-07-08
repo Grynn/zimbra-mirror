@@ -198,13 +198,13 @@ function() {
 //	sourceHeaderList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, 100, sortable++,ZaAccount.A_displayname, true, true);
 
 	var xFormObject = {
-		numCols:2, colSizes:[140,140], height:"300px",width:"390px",align:_CENTER_,cssStyle:"text-align:center",
+		numCols:1, height:"300px",width: (AjxEnv.isIE ? "490px" : "495px"),align:_CENTER_,cssStyle:"text-align:center",
 		items:[
 			{ type: _DWT_ALERT_,
 				  style: DwtAlert.INFORMATION,
 				  iconVisible: true, 
 				  content: null,
-				  ref:DeleteAcctsPgrsDlg._STATUS,align:_CENTER_, valign:_MIDDLE_,colSpan:"*",width:"100%",
+				  ref:DeleteAcctsPgrsDlg._STATUS,align:_CENTER_, valign:_MIDDLE_,colSpan:"*",width: (AjxEnv.isIE ? "490px" : "495px"),
 				  visibilityChecks:[[XForm.checkInstanceValueEmty,DeleteAcctsPgrsDlg._ERROR_MSG]],
 				  visibilityChangeEventSources:[DeleteAcctsPgrsDlg._ERROR_MSG]
 			},
@@ -212,14 +212,14 @@ function() {
 				  style: DwtAlert.CRITICAL,
 				  iconVisible: true, 
 				  content: null,
-				  ref:DeleteAcctsPgrsDlg._ERROR_MSG, align:_CENTER_, valign:_MIDDLE_,colSpan:"*", width:"100%",
+				  ref:DeleteAcctsPgrsDlg._ERROR_MSG, align:_CENTER_, valign:_MIDDLE_,colSpan:"*", width: (AjxEnv.isIE ? "490px" : "495px"),
 				  visibilityChecks:[[XForm.checkInstanceValueNotEmty,DeleteAcctsPgrsDlg._ERROR_MSG]],
 				  visibilityChangeEventSources:[DeleteAcctsPgrsDlg._ERROR_MSG]				  				  
 			},			
 			{type:_SPACER_, height:"5"},	
 			{type:_OUTPUT_,value:ZaMsg.NAD_DeletedAccounts,colSpan:"*", colSpan:"*",align:_LEFT_},
 		   	{type:_SPACER_, height:"10"},
-		   	{ref:DeleteAcctsPgrsDlg._DELETED_ACCTS, type:_DWT_LIST_, height:"180", width:"100%",colSpan:"*",  cssClass: "DLSource", 
+		   	{ref:DeleteAcctsPgrsDlg._DELETED_ACCTS, type:_DWT_LIST_, height:(AjxEnv.isIE ? "180px" : "210px"), width:(AjxEnv.isIE ? "490px" : "495px"), colSpan:"*",  cssClass: "DLSource",align:_CENTER_, 
 				forceUpdate: true, widgetClass:ZaAccMiniListView, headerList:sourceHeaderList, hideHeader: false
 			}			
 		]		
