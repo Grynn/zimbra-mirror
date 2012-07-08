@@ -481,6 +481,7 @@ function(item, ev) {
 	var a = this._selectedItems.getArray();
 	var numSelectedItems = this._selectedItems.size();
     var currentDataItem =  item.getData("dataItem");
+    var isShowInHistory = currentDataItem.isShowHistory;
     var isAlias = currentDataItem.isAlias();
     if (isAlias) {
         var aliasImage = currentDataItem.image;
@@ -489,7 +490,6 @@ function(item, ev) {
             currentDataItem.image = aliasImage;
         this._updateHistoryObj(currentDataItem);
     }
-    var isShowInHistory = currentDataItem.isShowHistory;
 	if (currentDataItem.isLeaf() && !isAlias) {
 		if (numSelectedItems > 0) {
 			for (i = 0; i < numSelectedItems; i++) {

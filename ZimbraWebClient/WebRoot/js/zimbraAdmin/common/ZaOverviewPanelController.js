@@ -2291,6 +2291,7 @@ function() {
                 text: objList[i].displayName,
                 type:1,
                 image:image,
+                isShowHistory:false,
                 forceNode: (i+1 != objList.length),
                 path: objList[i].path
                 }
