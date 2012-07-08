@@ -184,7 +184,6 @@ function (xModelMetaData, xFormMetaData,entry) {
 	this._drawn = true;
 }
 
-if (appNewUI) {
 ZaXWizardDialog.prototype.initForm =
 function (xModelMetaData, xFormMetaData,entry) {
 	if(xModelMetaData == null || xFormMetaData == null)
@@ -216,7 +215,6 @@ function (xModelMetaData, xFormMetaData,entry) {
 	this._drawn = true;
 }
 ZaXWizardDialog.prototype.supportMinimize = true;
-}
 /**
 * member of  ZaXWizardDialog
 * @return the object contained in the view
