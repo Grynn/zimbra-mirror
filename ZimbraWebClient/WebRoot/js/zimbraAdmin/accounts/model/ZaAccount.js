@@ -240,6 +240,8 @@ ZaAccount.A_zimbraFeatureFiltersEnabled="zimbraFeatureFiltersEnabled";
 ZaAccount.A_zimbraFeatureGalEnabled="zimbraFeatureGalEnabled";
 ZaAccount.A_zimbraFeatureMAPIConnectorEnabled = "zimbraFeatureMAPIConnectorEnabled";
 ZaAccount.A_zimbraFeatureSharingEnabled="zimbraFeatureSharingEnabled";
+ZaAccount.A_zimbraPublicSharingEnabled="zimbraPublicSharingEnabled";
+ZaAccount.A_zimbraExternalSharingEnabled="zimbraExternalSharingEnabled";
 //ZaAccount.A_zimbraFeatureNotebookEnabled = "zimbraFeatureNotebookEnabled";
 ZaAccount.A_zimbraFeatureBriefcasesEnabled = "zimbraFeatureBriefcasesEnabled";
 ZaAccount.A_zimbraFeatureHtmlComposeEnabled = "zimbraFeatureHtmlComposeEnabled";
@@ -1995,6 +1997,8 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraFeatureHtmlComposeEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureHtmlComposeEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureMailForwardingEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureMailForwardingEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureSharingEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureSharingEnabled, choices:ZaModel.BOOLEAN_CHOICES},
+        {id:ZaAccount.A_zimbraExternalSharingEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraExternalSharingEnabled, choices:ZaModel.BOOLEAN_CHOICES},
+        {id:ZaAccount.A_zimbraPublicSharingEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPublicSharingEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureOutOfOfficeReplyEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureOutOfOfficeReplyEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureNewMailNotificationEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureNewMailNotificationEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureMailPollingIntervalPreferenceEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureMailPollingIntervalPreferenceEnabled, choices:ZaModel.BOOLEAN_CHOICES},

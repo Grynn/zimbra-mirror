@@ -1174,6 +1174,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 						items:[							
 							{ref:ZaAccount.A_zimbraFeatureTaggingEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureTaggingEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureTaggingEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureSharingEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureSharingEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureSharingEnabled,trueValue:"TRUE", falseValue:"FALSE"},
+							{ref:ZaAccount.A_zimbraExternalSharingEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraExternalSharingEnabled,checkBoxLabel:ZaMsg.LBL_zimbraExternalSharingEnabled,trueValue:"TRUE", falseValue:"FALSE",
+								visibilityChecks:[[ZaItem.hasReadPermission], [XForm.checkInstanceValue, ZaAccount.A_zimbraFeatureSharingEnabled, "TRUE"]], visibilityChangeEventSources:[ZaAccount.A_zimbraFeatureSharingEnabled]
+							},
+							{ref:ZaAccount.A_zimbraPublicSharingEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPublicSharingEnabled,checkBoxLabel:ZaMsg.LBL_zimbraPublicSharingEnabled,trueValue:"TRUE", falseValue:"FALSE",
+								visibilityChecks:[[ZaItem.hasReadPermission], [XForm.checkInstanceValue, ZaAccount.A_zimbraFeatureSharingEnabled, "TRUE"]], visibilityChangeEventSources:[ZaAccount.A_zimbraFeatureSharingEnabled]
+							},							
 							{ref:ZaAccount.A_zimbraFeatureChangePasswordEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureChangePasswordEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureChangePasswordEnabled,trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureSkinChangeEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureSkinChangeEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureSkinChangeEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureManageZimlets, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureManageZimlets,checkBoxLabel:ZaMsg.LBL_zimbraFeatureManageZimlets, trueValue:"TRUE", falseValue:"FALSE"},

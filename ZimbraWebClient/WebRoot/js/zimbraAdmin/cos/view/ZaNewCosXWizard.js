@@ -557,6 +557,12 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                 items:[
                     {ref:ZaCos.A_zimbraFeatureTaggingEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureTaggingEnabled,label:ZaMsg.LBL_zimbraFeatureTaggingEnabled,trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureSharingEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureSharingEnabled,label:ZaMsg.LBL_zimbraFeatureSharingEnabled,trueValue:"TRUE", falseValue:"FALSE"},
+                    {ref:ZaCos.A_zimbraExternalSharingEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraExternalSharingEnabled,label:ZaMsg.LBL_zimbraExternalSharingEnabled,trueValue:"TRUE", falseValue:"FALSE",
+                    	visibilityChecks:[[ZaItem.hasReadPermission], [XForm.checkInstanceValue, ZaCos.A_zimbraFeatureSharingEnabled, "TRUE"]], visibilityChangeEventSources:[ZaCos.A_zimbraFeatureSharingEnabled]
+                    },
+                    {ref:ZaCos.A_zimbraPublicSharingEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraPublicSharingEnabled,label:ZaMsg.LBL_zimbraPublicSharingEnabled,trueValue:"TRUE", falseValue:"FALSE",
+                    	visibilityChecks:[[ZaItem.hasReadPermission], [XForm.checkInstanceValue, ZaCos.A_zimbraFeatureSharingEnabled, "TRUE"]], visibilityChangeEventSources:[ZaCos.A_zimbraFeatureSharingEnabled]
+                    },
                     {ref:ZaCos.A_zimbraFeatureChangePasswordEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureChangePasswordEnabled,label:ZaMsg.LBL_zimbraFeatureChangePasswordEnabled, trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureSkinChangeEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureSkinChangeEnabled,label:ZaMsg.LBL_zimbraFeatureSkinChangeEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureManageZimlets, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureManageZimlets,label:ZaMsg.LBL_zimbraFeatureManageZimlets,  trueValue:"TRUE", falseValue:"FALSE"},
@@ -564,7 +570,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                     //{ref:ZaCos.A_zimbraFeatureShortcutAliasesEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureShortcutAliasesEnabled,label:ZaMsg.LBL_zimbraFeatureShortcutAliasesEnabled, trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureGalEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureGalEnabled,label:ZaMsg.LBL_zimbraFeatureGalEnabled, trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureMAPIConnectorEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureMAPIConnectorEnabled,label:ZaMsg.LBL_zimbraFeatureMAPIConnectorEnabled, trueValue:"TRUE", falseValue:"FALSE"},
-		    {ref:ZaCos.A_zimbraFeatureGalAutoCompleteEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled,label:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled, trueValue:"TRUE", falseValue:"FALSE"},
+                    {ref:ZaCos.A_zimbraFeatureGalAutoCompleteEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled,label:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled, trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureImportFolderEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureImportFolderEnabled,label:ZaMsg.LBL_zimbraFeatureImportFolderEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 		    		{ref:ZaCos.A_zimbraFeatureExportFolderEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureExportFolderEnabled,label:ZaMsg.LBL_zimbraFeatureExportFolderEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 					{ref:ZaCos.A_zimbraDumpsterEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.MSG_zimbraDumpsterEnabled,label:ZaMsg.LBL_zimbraDumpsterEnabled, trueValue:"TRUE", falseValue:"FALSE"},

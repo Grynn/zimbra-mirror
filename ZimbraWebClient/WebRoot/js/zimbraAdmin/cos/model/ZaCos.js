@@ -172,6 +172,8 @@ ZaCos.A_zimbraFeatureMailForwardingEnabled = "zimbraFeatureMailForwardingEnabled
 ZaCos.A_zimbraFeatureMailSendLaterEnabled = "zimbraFeatureMailSendLaterEnabled";
 //ZaCos.A_zimbraFeatureFreeBusyViewEnabled = "zimbraFeatureFreeBusyViewEnabled";
 ZaCos.A_zimbraFeatureSharingEnabled="zimbraFeatureSharingEnabled";
+ZaCos.A_zimbraExternalSharingEnabled = "zimbraExternalSharingEnabled";
+ZaCos.A_zimbraPublicSharingEnabled = "zimbraPublicSharingEnabled";
 ZaCos.A_zimbraFeatureCalendarReminderDeviceEmailEnabled = "zimbraFeatureCalendarReminderDeviceEmailEnabled";
 //ZaCos.A_zimbraFeatureNotebookEnabled="zimbraFeatureNotebookEnabled"
 ZaCos.A_zimbraFeatureBriefcasesEnabled="zimbraFeatureBriefcasesEnabled";
@@ -749,6 +751,8 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraImapEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraImapEnabled, type:_ENUM_},
         {id:ZaCos.A_zimbraPop3Enabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPop3Enabled, type:_ENUM_},
         {id:ZaCos.A_zimbraFeatureSharingEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureSharingEnabled, type:_ENUM_},
+        {id:ZaCos.A_zimbraExternalSharingEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraExternalSharingEnabled, type:_ENUM_},
+        {id:ZaCos.A_zimbraPublicSharingEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPublicSharingEnabled, type:_ENUM_},
         {id:ZaCos.A_zimbraFeatureOutOfOfficeReplyEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureOutOfOfficeReplyEnabled, type:_ENUM_},
         {id:ZaCos.A_zimbraFeatureNewMailNotificationEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureNewMailNotificationEnabled, type:_ENUM_},
         {id:ZaCos.A_zimbraFeatureMailPollingIntervalPreferenceEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureMailPollingIntervalPreferenceEnabled, type:_ENUM_},
