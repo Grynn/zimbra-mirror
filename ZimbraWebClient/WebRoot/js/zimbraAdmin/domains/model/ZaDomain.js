@@ -1730,26 +1730,46 @@ function(tmods,tmpObj) {
 	var modifyDomainDoc = soapDoc.set("ModifyDomainRequest", null, null, ZaZimbraAdmin.URN);
 	soapDoc.set("id", this.id,modifyDomainDoc);
 	
-    	for (var aname in mods) {
-		//multy value attribute
+	for (var aname in mods) {
+		gotSomething = true;
+		//multi value attribute
 		if(mods[aname] instanceof Array) {
 			var cnt = mods[aname].length;
 			if(cnt) {
+				var nonemptyElements = false;
 				for(var ix=0; ix <cnt; ix++) {
-					if(mods[aname][ix]) { //if there is an empty element in the array - don't send it
+					var attr = null;
+					if(mods[aname][ix] instanceof String || AjxUtil.isString(mods[aname][ix])) {
+						if(AjxUtil.isEmpty(mods[aname][ix])) {
+							continue;
+						} else {
+							nonemptyElements = true;
+						}
+						var attr = soapDoc.set("a", mods[aname][ix].toString(),modifyDomainDoc);
+					} else if(mods[aname][ix] instanceof Object) {
+						var attr = soapDoc.set("a", mods[aname][ix].toString(),modifyDomainDoc);
+						nonemptyElements = true;
+					} else {
 						var attr = soapDoc.set("a", mods[aname][ix],modifyDomainDoc);
-						attr.setAttribute("n", aname);
+						nonemptyElements = true;
 					}
+					
+					if(attr)
+						attr.setAttribute("n", aname);
+				}
+				if(!nonemptyElements) {
+					var attr = soapDoc.set("a", "",modifyDomainDoc);
+					attr.setAttribute("n", aname);
 				}
 			} else {
-				var attr = soapDoc.set("a", "",modifyDomainDoc);
+				var attr = soapDoc.set("a", "");
 				attr.setAttribute("n", aname);
 			}
-		} else {		
-			var attr = soapDoc.set("a", mods[aname],modifyDomainDoc);
+		} else {
+			var attr = soapDoc.set("a", mods[aname]);
 			attr.setAttribute("n", aname);
 		}
-    	}
+	}
     
 	if(tmpObj[ZaDomain.A2_gal_sync_accounts] && !AjxUtil.isEmpty(tmpObj[ZaDomain.A2_gal_sync_accounts])) {
         for (var i in tmpObj[ZaDomain.A2_gal_sync_accounts]) {
