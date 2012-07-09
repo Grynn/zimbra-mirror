@@ -53,7 +53,11 @@ public class AddTo extends PrefGroupMailByMessageTest {
 		FormAddressPicker pickerform = (FormAddressPicker)mailform.zToolbarPressButton(Button.B_TO);
 		ZAssert.assertTrue(pickerform.zIsActive(), "Verify the address picker opened corectly");
 		
-		pickerform.zFillField(FormAddressPicker.Field.Search, ZimbraAccount.AccountB().EmailAddress);
+		//pickerform.zFillField(FormAddressPicker.Field.Search, ZimbraAccount.AccountB().EmailAddress);
+		/* TODO:... debugging to be removed */
+		pickerform.sClickAt("css=td>input[id*=ZmContactPicker_searchField]", "");
+		pickerform.sType("css=td>input[id*=ZmContactPicker_searchField]", ZimbraAccount.AccountB().EmailAddress);
+
 		pickerform.zToolbarPressButton(Button.B_SEARCH);
 		pickerform.zToolbarPressButton(Button.B_TO);
 		
