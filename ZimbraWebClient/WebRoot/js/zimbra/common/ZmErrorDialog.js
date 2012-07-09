@@ -194,6 +194,7 @@ function() {
 		// Skip functions
 		if(typeof navigator[i] == "function") {continue;}
 		if(typeof navigator[i] == "unknown") {continue;}	// IE7
+		if(AjxEnv.isIE && i === "mimeTypes") {continue;}
 		strNav[idx++] = i + ": " + navigator[i] + "\n";
 	}
 	return strNav.join("");
