@@ -11,6 +11,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.OctopusAccount;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -37,7 +38,7 @@ public class ViewSharedComment extends OctopusCommonTest {
 		super.startingPage = app.zPageMyFiles;
 		super.startingAccountPreferences = null;
 		
-		destination = new ZimbraAccount();		
+		destination = new OctopusAccount();		
 		destination.setPref("displayName", "DisplayName"+ ZimbraSeleniumProperties.getUniqueString());
 		destination.provision();
 		destination.authenticate();
