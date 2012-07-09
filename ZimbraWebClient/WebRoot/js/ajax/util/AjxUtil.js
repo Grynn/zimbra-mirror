@@ -449,6 +449,42 @@ AjxUtil.uniq = function(array) {
 	}
 	return AjxUtil.keys(object);
 };
+
+
+/**
+ * Remove duplicates from the given array,
+ * <strong>in-place</strong>. Stable with regards to ordering.
+ *
+ * Please note that this method is O(n^2) if Array is backed by an
+ * array/vector data structure.
+ *
+ * @param array [array]     array to process
+ * @param keyfn [function]  used to extract a comparison key from each
+ *                          list element, default is to compare
+ *                          elements directly. if the comparison key
+ *                          is 'undefined', the element is always
+ *                          retained
+ */
+AjxUtil.dedup = function(array, keyfn) {
+	if (!keyfn)
+		keyfn = function(v) { return v; };
+
+	var seen = {};
+
+	for (var i = 0; i < array.length; i++) {
+		var key = keyfn(array[i]);
+		console.log(array[i], key);
+
+		if (key !== undefined && seen[key]) {
+			array.splice(i, i+1);
+			i -= 1;
+		}
+
+		seen[key] = true;
+	}
+};
+
+
 AjxUtil.concat = function(array1 /* ..., arrayN */) {
 	var array = [];
 	for (var i = 0; i < arguments.length; i++) {
