@@ -998,20 +998,18 @@ function () {
     }
 
     // For New UI
-    if (appNewUI) {
-        var isCurrentController;
-        var currentController = ZaApp.getInstance().getCurrentController();
-        if ( currentController && this != currentController) {
-            isCurrentController = false;
-        } else {
-            isCurrentController = true;
-        }
-        var settingMenu = ZaZimbraAdmin.getInstance().getSettingMenu();
-        if (isCurrentController && this._popupOperations && settingMenu) {
-            for(var i in this._popupOperations) {
-                if(this._popupOperations[i] instanceof ZaOperation && !AjxUtil.isEmpty(settingMenu.getMenuItem(this._popupOperations[i].id))) {
-                    settingMenu.getMenuItem(this._popupOperations[i].id).setEnabled(this._popupOperations[i].enabled);
-                }
+    var isCurrentController;
+    var currentController = ZaApp.getInstance().getCurrentController();
+    if ( currentController && this != currentController) {
+        isCurrentController = false;
+    } else {
+        isCurrentController = true;
+    }
+    var settingMenu = ZaZimbraAdmin.getInstance().getSettingMenu();
+    if (isCurrentController && this._popupOperations && settingMenu) {
+        for(var i in this._popupOperations) {
+            if(this._popupOperations[i] instanceof ZaOperation && !AjxUtil.isEmpty(settingMenu.getMenuItem(this._popupOperations[i].id))) {
+                settingMenu.getMenuItem(this._popupOperations[i].id).setEnabled(this._popupOperations[i].enabled);
             }
         }
     }

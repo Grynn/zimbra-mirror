@@ -1162,34 +1162,40 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 	var nonMemberOfHeaderList = new ZaAccountMemberOfsourceHeaderList(ZaAccountMemberOfsourceHeaderList.NON);
     
     this.tabChoices = new Array();
-	
+    this.helpMap = {};
 	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6;
 	_tab1 = ++this.TAB_INDEX;
 	this.tabChoices.push({value:_tab1, label:ZaMsg.DLXV_TabMembers});
-
+	this.helpMap[_tab1] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/distribution_lists.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+	
 	if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.NOTES_TAB_ATTRS, ZaDLXFormView.NOTES_TAB_RIGHTS)) {
 		_tab2 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab2, label:ZaMsg.DLXV_TabNotes});	
+		this.helpMap[_tab2] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/distribution_lists.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 
 	if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.MEMBEROF_TAB_ATTRS, ZaDLXFormView.MEMBEROF_TAB_RIGHTS)  && (!entry.dynamic)) {
 		_tab3 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});	
+		this.helpMap[_tab3] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/distribution_lists.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 
 	if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.ALIASES_TAB_ATTRS, ZaDLXFormView.ALIASES_TAB_RIGHTS)) {
 		_tab4 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Aliases});	
+		this.helpMap[_tab4] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/distribution_lists.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 
     if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.OWNER_TAB_ATTRS, ZaDLXFormView.OWNER_TAB_RIGHTS)) {
         _tab5 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Owners});
+        this.helpMap[_tab5] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/distribution_lists.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
 
 	if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.PREF_TAB_ATTRS, ZaDLXFormView.PREF_TAB_RIGHTS)) {
 		_tab6 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab6, label:ZaMsg.TABT_Preferences});
+		this.helpMap[_tab6] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/distribution_lists.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";

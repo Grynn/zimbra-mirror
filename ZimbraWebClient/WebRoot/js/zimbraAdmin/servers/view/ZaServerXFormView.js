@@ -636,18 +636,21 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8, _tab9;
 
     var tabBarChoices = [] ;
-    
+    this.helpMap = {};
 	_tab1 = ++this.TAB_INDEX;
     tabBarChoices.push ({value:_tab1, label:ZaMsg.TABT_GeneralPage});
-
+    this.helpMap[_tab1] = [location.pathname, ZaUtil.HELP_URL, "managing_servers/managing_servers.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+    
     if(ZaTabView.isTAB_ENABLED(entry,ZaServerXFormView.SERVICE_TAB_ATTRS, ZaServerXFormView.SERVICE_TAB_RIGHTS)) {
     	_tab2 = ++this.TAB_INDEX;
          tabBarChoices.push ({value:_tab2, label:ZaMsg.NAD_Tab_Services});
+         this.helpMap[_tab2] = [location.pathname, ZaUtil.HELP_URL, "managing_servers/managing_servers.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
 
     if(ZaTabView.isTAB_ENABLED(entry,ZaServerXFormView.MTA_TAB_ATTRS, ZaServerXFormView.MTA_TAB_RIGHTS)) {
     	_tab3 = ++this.TAB_INDEX;
          tabBarChoices.push ({value:_tab3, label:ZaMsg.NAD_Tab_MTA});
+         this.helpMap[_tab3] = [location.pathname, ZaUtil.HELP_URL, "managing_servers/configuring_the_mta_tab_for_servers.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
 
     /* bug 71233, bug 71234, remove SPNEGO & 2-way SSL
@@ -659,22 +662,26 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
     if(ZaTabView.isTAB_ENABLED(entry,ZaServerXFormView.IMAP_TAB_ATTRS, ZaServerXFormView.IMAP_TAB_RIGHTS)) {
         _tab5 = ++this.TAB_INDEX;
         tabBarChoices.push ({value:_tab5, label:ZaMsg.NAD_Tab_IMAP});
+        this.helpMap[_tab5] = [location.pathname, ZaUtil.HELP_URL, "managing_servers/volume_management.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
 
     if(ZaTabView.isTAB_ENABLED(entry,ZaServerXFormView.POP_TAB_ATTRS, ZaServerXFormView.POP_TAB_RIGHTS)) {
         _tab6 = ++this.TAB_INDEX;
         tabBarChoices.push ({value:_tab6, label:ZaMsg.NAD_Tab_POP});
+        this.helpMap[_tab6] = [location.pathname, ZaUtil.HELP_URL, "managing_servers/volume_management.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }    
         
 
     if(ZaTabView.isTAB_ENABLED(entry,ZaServerXFormView.VOLUMES_TAB_ATTRS, ZaServerXFormView.VOLUMES_TAB_RIGHTS)) {
     	_tab7 = ++this.TAB_INDEX;
         tabBarChoices.push ({value:_tab7, label:ZaMsg.NAD_Tab_VolumeMgt});
+        this.helpMap[_tab7] = [location.pathname, ZaUtil.HELP_URL, "managing_servers/volume_management.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
 
     if(ZaTabView.isTAB_ENABLED(entry,ZaServerXFormView.BIND_IP_TAB_ATTRS, ZaServerXFormView.BIND_IP_TAB_RIGHTS)) {
         _tab8 = ++this.TAB_INDEX;
         tabBarChoices.push ({value:_tab8, label:ZaMsg.NAD_Tab_Bind_IP});
+        this.helpMap[_tab8] = [location.pathname, ZaUtil.HELP_URL, "managing_servers/volume_management.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
     var switchItems = [];
 

@@ -524,7 +524,8 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 	var _tab2;
 	var _tab1 = ++this.TAB_INDEX;
     this.tabChoices.push({value:_tab1, label:ZaMsg.TABT_ResourceProperties});
-    
+    this.helpMap = {};
+    this.helpMap[_tab1] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/managing_resource.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	if(ZaTabView.isTAB_ENABLED(entry,ZaResourceXFormView.CONTACT_TAB_ATTRS, ZaResourceXFormView.CONTACT_TAB_RIGHTS)) {
 		_tab2 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab2, label:ZaMsg.TABT_ResLocationContact});	
@@ -768,6 +769,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 
     var defaultWidth = 200 ;
 	if(_tab2) {
+		this.helpMap[_tab2] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/managing_resource.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         var case2={type:_ZATABCASE_, numCols:1, caseKey:_tab2,
              paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
             items: [

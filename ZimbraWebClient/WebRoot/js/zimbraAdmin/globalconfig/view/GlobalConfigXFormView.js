@@ -416,8 +416,10 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 	
     var tabBarChoices = [];
     var switchItems = [];
+    this.helpMap = {};
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.GENERAL_TAB_ATTRS, GlobalConfigXFormView.GENERAL_TAB_RIGHTS)) {
     	_tab1 = ++this.TAB_INDEX;
+    	this.helpMap[_tab1] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/global_settings.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     	var case1 = {type:_ZATABCASE_, caseKey:_tab1,
 				colSizes:["auto"],numCols:1,paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 				items:[
@@ -460,6 +462,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
     }
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.ATTACHMENTS_TAB_ATTRS, GlobalConfigXFormView.ATTACHMENTS_TAB_RIGHTS)) {
     	_tab2 = ++this.TAB_INDEX;
+    	this.helpMap[_tab2] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/blocking_attachments_to_email.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         tabBarChoices.push ({value:_tab2, label:ZaMsg.NAD_Tab_Attachments});
         var case2 = 	
         {type:_ZATABCASE_, caseKey:_tab2, id:"gs_form_attachment_tab",     paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0), numCols:2, colSizes: ["40%","60%"], items:[
@@ -549,7 +552,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
     
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.MTA_TAB_ATTRS, GlobalConfigXFormView.MTA_TAB_RIGHTS)) {
     	_tab3 = ++this.TAB_INDEX;
-
+    	this.helpMap[_tab3] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/mta_smtp_restrictions.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         tabBarChoices.push ({value:_tab3, label:ZaMsg.NAD_Tab_MTA});
         var case3 = 		{type:_ZATABCASE_, caseKey:_tab3,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					colSizes:["auto"],numCols:1,id:"global_mta_tab",
@@ -777,7 +780,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.IMAP_TAB_ATTRS, GlobalConfigXFormView.IMAP_TAB_RIGHTS)) {
     	_tab4 = ++this.TAB_INDEX;
-
+    	this.helpMap[_tab4] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/imap_and_pop_proxy_server.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         tabBarChoices.push ({value:_tab4, label:ZaMsg.NAD_Tab_IMAP});
         var case4 ={type:_ZATABCASE_, caseKey:_tab4,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					colSizes:["auto"],numCols:1,id:"global_imap_tab",
@@ -841,7 +844,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.POP_TAB_ATTRS, GlobalConfigXFormView.POP_TAB_RIGHTS)) {
     	_tab5 = ++this.TAB_INDEX;
-
+    	this.helpMap[_tab5] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/configuring_pop.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         tabBarChoices.push ({value:_tab5, label:ZaMsg.NAD_Tab_POP});
         var case5 = 		{type:_ZATABCASE_, caseKey:_tab5,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					colSizes:["auto"],numCols:1,id:"global_pop_tab",
@@ -900,7 +903,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
 	if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.ASAV_TAB_ATTRS, GlobalConfigXFormView.ASAV_TAB_RIGHTS)) {
     	_tab6 = ++this.TAB_INDEX;
-
+    	this.helpMap[_tab6] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/anti-spam_protection.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         tabBarChoices.push ({value:_tab6, label:ZaMsg.NAD_Tab_ASAV});
         var case6 = 	// anti-spam
 				{type: _ZATABCASE_, caseKey:_tab6,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
@@ -953,7 +956,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
   	if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.INTEROP_TAB_ATTRS, GlobalConfigXFormView.INTEROP_TAB_RIGHTS)) {
     	_tab7 = ++this.TAB_INDEX;
-
+    	this.helpMap[_tab7] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/making_free_busy_view__available_.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         tabBarChoices.push ({value:_tab7, label:ZaMsg.TABT_Interop});
         var case7 = 		// Interop
 				{type: _ZATABCASE_, caseKey:_tab7,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
@@ -1004,7 +1007,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
   	if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.SKIN_TAB_ATTRS, GlobalConfigXFormView.SKIN_TAB_RIGHTS)) {
     	_tab8 = ++this.TAB_INDEX;
-
+    	this.helpMap[_tab8] = [location.pathname, ZaUtil.HELP_URL, "cos/customizing_ui_themes.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         tabBarChoices.push ({value:_tab8, label:ZaMsg.TABT_Themes});
         var case8 =             //skin properties
                 {type: _ZATABCASE_, caseKey:_tab8,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
@@ -1057,7 +1060,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.BC_TAB_ATTRS, GlobalConfigXFormView.BC_TAB_RIGHTS)) {
     	_tab9 = ++this.TAB_INDEX;
-
+    	this.helpMap[_tab9] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/account_email_validation.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         tabBarChoices.push ({value:_tab9, label:ZaMsg.Domain_Tab_Advanced});
         var case9 = 
                 {type: _ZATABCASE_, caseKey:_tab9,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
@@ -1100,7 +1103,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.AUTH_TAB_ATTRS, GlobalConfigXFormView.AUTH_TAB_RIGHTS)) {
     	_tab10 = ++this.TAB_INDEX;
-
+    	this.helpMap[_tab10] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/global_settings.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         tabBarChoices.push ({value:_tab10, label:ZaMsg.NAD_Tab_AUTH});
         var case10 =
                 {type: _ZATABCASE_, caseKey:_tab10,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
@@ -1272,7 +1275,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.RETENTION_POLICY_TAB_ATTRS, GlobalConfigXFormView.RETENTION_POLICY_TAB_RIGHTS)) {
         _tab11 = ++this.TAB_INDEX;
-
+        this.helpMap[_tab11] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/global_settings.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         tabBarChoices.push ({value:_tab11, label:ZaMsg.TABT_RetentionPolicy});
         var case11 =
         {type: _SUPER_TABCASE_, caseKey:_tab11,

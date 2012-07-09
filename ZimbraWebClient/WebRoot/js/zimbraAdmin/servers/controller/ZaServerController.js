@@ -125,6 +125,7 @@ function () {
 }
 ZaController.initPopupMenuMethods["ZaServerController"].push(ZaServerController.initPopupMethod);
 
+/*
 ZaServerController.prototype.getAppBarAction =
 function () {
     if (AjxUtil.isEmpty(this._appbarOperation)) {
@@ -143,7 +144,7 @@ function () {
     }
 
     return this._appbarOrder;
-}
+}*/
 
 /**
 *	@method setViewMethod 

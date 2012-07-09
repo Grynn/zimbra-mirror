@@ -37,6 +37,7 @@ ZaTabView.ObjectModifiers["ZaCosXFormView"] = [] ;
 ZaCosXFormView.prototype.TAB_INDEX=0;
 ZaCosXFormView.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 ZaCosXFormView.themeChoices = new XFormChoices([], XFormChoices.OBJECT_LIST);
+
 /**
 * @method setObject sets the object contained in the view
 * @param entry - ZaDomain object to display
@@ -601,7 +602,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
     //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
     headerListPurge[i++] = new ZaListHeaderItem(ZaRetentionPolicy.A2_name, ZaMsg.CLV_Policy_Name_col, null, "200px", sortable++, ZaRetentionPolicy.A2_name, true, true);
     headerListPurge[i++] = new ZaListHeaderItem(ZaRetentionPolicy.A2_lifetime, ZaMsg.CLV_Policy_Purge_col, null, "auto", null, null, true, true);
-
+    this.helpMap = {};
     this.tabChoices = new Array();
 	var _tab1 = ++this.TAB_INDEX;
 	var _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8;
@@ -623,41 +624,48 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 					 		}];
 							
 	this.tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
-
+	this.helpMap[_tab1] = [location.pathname, ZaUtil.HELP_URL, ZaCosController.helpURL, "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.FEATURE_TAB_ATTRS, ZaCosXFormView.FEATURE_TAB_RIGHTS)) {
         _tab2 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab2, label:ZaMsg.TABT_Features});
+        this.helpMap[_tab2] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/user_interface_features.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
     
     if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.PREFERENCES_TAB_ATTRS, ZaCosXFormView.PREFERENCES_TAB_RIGHTS)) {
     	_tab3 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_Preferences});
+        this.helpMap[_tab3] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/preferences.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
     
     if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.SKIN_TAB_ATTRS, ZaCosXFormView.SKIN_TAB_RIGHTS)) {
        	_tab4 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Themes});
+        this.helpMap[_tab4] = [location.pathname, ZaUtil.HELP_URL, "ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
     
     var allZimlets = ZaZimlet.getAll(ZaZimlet.EXCLUDE_EXTENSIONS);
     if(allZimlets != null && !AjxUtil.isEmpty(allZimlets.getArray()) && ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.ZIMLET_TAB_ATTRS, ZaCosXFormView.ZIMLET_TAB_RIGHTS)) {
 		_tab5 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Zimlets});
+        this.helpMap[_tab5] = [location.pathname, ZaUtil.HELP_URL, "about_zimlets.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
 
     if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.SERVERPOOL_TAB_ATTRS, ZaCosXFormView.SERVERPOOL_TAB_RIGHTS)) {
     	_tab6 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab6, label:ZaMsg.TABT_ServerPool});
+        this.helpMap[_tab6] = [location.pathname, ZaUtil.HELP_URL, ZaCosController.helpURL, "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
 
     if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.ADVANCED_TAB_ATTRS, ZaCosXFormView.ADVANCED_TAB_RIGHTS)) {
     	_tab7 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab7, label:ZaMsg.TABT_Advanced});
+        this.helpMap[_tab7] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/account_advanced_features.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
 
     if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.RETENTION_POLICY_TAB_ATTRS, ZaCosXFormView.RETENTION_POLICY_TAB_RIGHTS)) {
         _tab8 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab8, label:ZaMsg.TABT_RetentionPolicy});
+        this.helpMap[_tab8] = [location.pathname, ZaUtil.HELP_URL, ZaCosController.helpURL, "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
 
     var cases = [];

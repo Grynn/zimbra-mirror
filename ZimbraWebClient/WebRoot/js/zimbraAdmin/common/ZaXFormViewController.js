@@ -396,29 +396,10 @@ ZaXFormViewController.prototype._createUI =
 function () {
 	this._contentView = this._view = new this.tabConstructor(this._container);
 
-	this._initToolbar();
-	//always add Help button at the end of the toolbar
-	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-	this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
-	this._toolbarOrder.push(ZaOperation.NONE);
-	this._toolbarOrder.push(ZaOperation.HELP);
-	
-	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder);		
-	
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 
-
-
-    if(!appNewUI) {
-        elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-        var tabParams = {
-		        openInNewTab: true,
-		        tabId: this.getContentViewId()
-	        }
-	    ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-    } else
-        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+    ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
@@ -433,3 +414,33 @@ ZaXFormViewController.prototype._findAlias = function (alias) {
 	return results.list.getArray()[0];
 };
 
+ZaXFormViewController.prototype.getAppBarAction =
+function () {
+    if (AjxUtil.isEmpty(this._appbarOperation)) {
+    	this._appbarOperation[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
+        this._appbarOperation[ZaOperation.SAVE]= new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "", "", new AjxListener(this, this.saveButtonListener));
+        this._appbarOperation[ZaOperation.CLOSE] = new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "", "", new AjxListener(this, this.closeButtonListener));
+    }
+
+    return this._appbarOperation;
+}
+
+ZaXFormViewController.prototype.getAppBarOrder =
+function () {
+    if (AjxUtil.isEmpty(this._appbarOrder)) {
+    	this._appbarOrder.push(ZaOperation.HELP);
+        this._appbarOrder.push(ZaOperation.SAVE);
+        this._appbarOrder.push(ZaOperation.CLOSE);
+    }
+
+    return this._appbarOrder;
+}
+
+ZaXFormViewController.prototype._helpButtonListener =
+function() {
+	var helpUrl = this._helpURL; 
+	if(this._contentView && this._contentView.helpMap && this._contentView.getCurrentTab() && this._contentView.helpMap[this._contentView.getCurrentTab()]) {
+		helpUrl = this._contentView.helpMap[this._contentView.getCurrentTab()];
+	}
+	window.open(helpUrl);
+}

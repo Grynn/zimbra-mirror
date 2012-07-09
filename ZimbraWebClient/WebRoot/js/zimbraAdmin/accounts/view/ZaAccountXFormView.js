@@ -1567,58 +1567,68 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 					 
     this.tabChoices = new Array();
 	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8, _tab9, _tab10, _tab11;
-	
+	this.helpMap = {};
 	_tab1 = ++this.TAB_INDEX;
 	this.tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
-		
+	this.helpMap[_tab1] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/user_interface_features.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");	
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.CONTACT_TAB_ATTRS, ZaAccountXFormView.CONTACT_TAB_RIGHTS)) {
 		_tab2 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab2, label:ZaMsg.TABT_ContactInfo});	
+		this.helpMap[_tab2] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/user_interface_features.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 		
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.MEMBEROF_TAB_ATTRS, ZaAccountXFormView.MEMBEROF_TAB_RIGHTS)) {
 		_tab3 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});	
+		this.helpMap[_tab3] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/adding_distribution_lists_to_an_account.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.FEATURE_TAB_ATTRS, ZaAccountXFormView.FEATURE_TAB_RIGHTS)) {
 		_tab4 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Features});	
+		this.helpMap[_tab4] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/user_interface_features.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 	
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.PREFERENCES_TAB_ATTRS, ZaAccountXFormView.PREFERENCES_TAB_RIGHTS)) {
 		_tab5 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Preferences});	
+		this.helpMap[_tab5] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/preferences.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 	
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.ALIASES_TAB_ATTRS, ZaAccountXFormView.ALIASES_TAB_RIGHTS)) {
 		_tab6 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab6, label:ZaMsg.TABT_Aliases});	
+		this.helpMap[_tab6] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/user_interface_features.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 			
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.FORWARDING_TAB_ATTRS, ZaAccountXFormView.FORWARDING_TAB_RIGHTS)) {
 		_tab7 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab7, label:ZaMsg.TABT_Forwarding});	
+		this.helpMap[_tab7] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/forwarding_mail.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 				
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.INTEROP_TAB_ATTRS, ZaAccountXFormView.INTEROP_TAB_RIGHTS)) {
 		_tab8 = ++this.TAB_INDEX;
-		this.tabChoices.push({value: _tab8, label: ZaMsg.TABT_Interop}) ;	
+		this.tabChoices.push({value: _tab8, label: ZaMsg.TABT_Interop}) ;
+		this.helpMap[_tab8] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/user_interface_features.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 		
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.SKIN_TAB_ATTRS, ZaAccountXFormView.SKIN_TAB_RIGHTS)) {
 		_tab9 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab9, label:ZaMsg.TABT_Themes});	
+		this.helpMap[_tab9] = [location.pathname, ZaUtil.HELP_URL, "ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 	 			
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.ZIMLET_TAB_ATTRS, ZaAccountXFormView.ZIMLET_TAB_RIGHTS)) {
 		_tab10 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab10, label:ZaMsg.TABT_Zimlets});	
+		this.helpMap[_tab10] = [location.pathname, ZaUtil.HELP_URL, "zimlets/about_zimlets.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 		
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.ADVANCED_TAB_ATTRS, ZaAccountXFormView.ADVANCED_TAB_RIGHTS)) {
 		_tab11 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab11, label:ZaMsg.TABT_Advanced});	
+		this.helpMap[_tab11] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/account_advanced_features.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 
 	var cases = [];

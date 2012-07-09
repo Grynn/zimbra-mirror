@@ -171,7 +171,7 @@ function () {
     this._popupOrder.push(ZaOperation.DELETE);
 }
 ZaController.initPopupMenuMethods["ZaResourceController"].push(ZaResourceController.initPopupMenuMethod);
-
+/*
 ZaResourceController.prototype.getAppBarAction =
 function () {
     if (AjxUtil.isEmpty(this._appbarOperation)) {
@@ -190,7 +190,7 @@ function () {
     }
 
     return this._appbarOrder;
-}
+}*/
 
 ZaResourceController.prototype.getPopUpOperation =
 function() {

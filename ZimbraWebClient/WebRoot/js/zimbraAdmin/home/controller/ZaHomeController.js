@@ -89,3 +89,21 @@ function() {
         xformView.setInstanceValue(true, ZaHome.A2_showWarningPanel);
     }
 }
+
+ZaHomeController.prototype.getAppBarAction =
+function () {
+    if (AjxUtil.isEmpty(this._appbarOperation)) {
+    	this._appbarOperation[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
+    }
+
+    return this._appbarOperation;
+}
+
+ZaHomeController.prototype.getAppBarOrder =
+function () {
+    if (AjxUtil.isEmpty(this._appbarOrder)) {
+    	this._appbarOrder.push(ZaOperation.HELP);
+    }
+
+    return this._appbarOrder;
+}
