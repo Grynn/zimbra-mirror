@@ -159,6 +159,16 @@ public class IntroViewModel: BaseViewModel
         }
         else
         {
+            // FBS bug 75936 -- 7/9/12
+            if (isServer)
+            {
+                m_configViewModelS.ProfileList.Clear();
+            }
+            else
+            {
+                m_configViewModelU.ProfileList.Clear();
+            }
+            ///////
             foreach (string s in profiles)
             {
                 if (s.IndexOf("GetListofMapiProfiles Exception") != -1)
