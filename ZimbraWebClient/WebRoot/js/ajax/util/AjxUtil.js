@@ -473,7 +473,6 @@ AjxUtil.dedup = function(array, keyfn) {
 
 	for (var i = 0; i < array.length; i++) {
 		var key = keyfn(array[i]);
-		console.log(array[i], key);
 
 		if (key !== undefined && seen[key]) {
 			array.splice(i, i+1);
