@@ -32,10 +32,7 @@ public class OctopusAccount extends ZimbraAccount {
 	private static final Map<String, String> accountAttrs = new HashMap<String, String>() {{
 		put("zimbraPrefLocale", ZimbraSeleniumProperties.getStringProperty("locale"));
 		put("zimbraPrefAutoAddAddressEnabled", "FALSE");
-		put("zimbraPrefTimeZoneId", ZimbraSeleniumProperties.getStringProperty("zimbraPrefTimeZoneId", "America/Los_Angeles"));
-		put("zimbraFeatureReadReceiptsEnabled", "TRUE");
-		put("zimbraPrefComposeFormat", "html");
-		put("zimbraPrefWarnOnExit","FALSE");
+		put("zimbraPrefTimeZoneId", ZimbraSeleniumProperties.getStringProperty("zimbraPrefTimeZoneId", "America/Los_Angeles"));			
 	}};
 
 	/**
