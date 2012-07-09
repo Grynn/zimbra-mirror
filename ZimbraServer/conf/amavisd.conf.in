@@ -99,7 +99,7 @@ $policy_bank{'ORIGINATING'} = {  # mail supposedly originating from our users
   # notify administrator of locally originating malware
   virus_admin_maps => ['@@av_notify_user@@'],
   spam_admin_maps  => ['@@av_notify_user@@'],
-  warnbadhsender   => 1,
+  warnbadhsender   => 0,
   # forward to a smtpd service providing DKIM signing service
   #forward_method => 'smtp:[127.0.0.1]:10027',
   # force MTA conversion to 7-bit (e.g. before DKIM signing)
