@@ -281,9 +281,8 @@ public class FormAddressPicker extends AbsForm {
 		
 		if ( field == Field.Search ) {
 			
-			locator = "css=input[id*='ZmContactPicker_searchField']";
-			this.sGetCssCount(locator);
-			
+			locator = "css=td>input[id*=ZmContactPicker_searchField]";
+
 			// FALL THROUGH
 			
 		} else {
@@ -301,18 +300,11 @@ public class FormAddressPicker extends AbsForm {
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
 		
-		// Seems that the client can't handle filling out the new mail form too quickly
-		// Click in the "To" fields, etc, to make sure the client is ready
-		this.sFocus(locator);
-		this.zClick(locator);
-		this.zWaitForBusyOverlay();
-
-		// Enter text
-		// this.zKeyboard.zTypeCharacters(value);
-		// this.sType(locator, value);
+		// Click at the field
+		this.sClickAt(locator, "");
 		
-		// June 29, 2012 - the first character is getting stolen.  Type a space first.
-		this.zKeyboard.zTypeCharacters(" "+ value);
+		// Type the value
+		this.sType(locator, value);
 		
 		this.zWaitForBusyOverlay();
 
