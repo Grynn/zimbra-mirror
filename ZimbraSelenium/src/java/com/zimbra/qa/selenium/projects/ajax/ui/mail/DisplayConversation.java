@@ -70,7 +70,7 @@ public class DisplayConversation extends DisplayMail {
 				}
 				
 				String clazz = this.sGetAttribute(locator + "@class");
-				if ( !("ZmMailMsgCapsuleView".equals(clazz)) ) {
+				if ( (clazz == null) || (!clazz.contains("ZmMailMsgCapsuleView")) ) {
 					continue;
 				}
 				

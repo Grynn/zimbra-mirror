@@ -46,6 +46,7 @@ public class GetAttachment extends PrefGroupMailByConversationTest {
 		
 		// Get the list of messages
 		List<DisplayConversationMessage> messages = display.zListGetMessages();
+		ZAssert.assertGreaterThan(messages.size(), 0, "Verify one message is in the conversation");
 
 		// Get the first message
 		List<AttachmentItem> items = messages.get(0).zListGetAttachments();
@@ -85,6 +86,7 @@ public class GetAttachment extends PrefGroupMailByConversationTest {
 		
 		// Get the list of messages
 		List<DisplayConversationMessage> messages = display.zListGetMessages();
+		ZAssert.assertGreaterThan(messages.size(), 0, "Verify one message is in the conversation");
 
 		// Get the first message
 		List<AttachmentItem> items = messages.get(0).zListGetAttachments();
