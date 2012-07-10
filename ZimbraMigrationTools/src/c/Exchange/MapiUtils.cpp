@@ -1270,38 +1270,6 @@ void Zimbra::MAPI::Util::AddBodyToPart(mimepp::BodyPart *pPart, LPSTR pStr, size
         delete[] pBuf;
 }
 
-void GetContentTypeFromExtension(LPSTR pExt, LPSTR &pContentType)
-{
-    pContentType = NULL;
-    if (pExt == NULL)
-        return;
-
-    HKEY hExtKey;
-
-    if (RegOpenKeyA(HKEY_CLASSES_ROOT, pExt, &hExtKey) != ERROR_SUCCESS)
-        return;
-
-    DWORD type;
-    DWORD nBytes;
-
-    if ((RegQueryValueExA(hExtKey, "Content Type", NULL, &type, NULL, &nBytes) !=
-        ERROR_SUCCESS) || (type != REG_SZ))
-    {
-        RegCloseKey(hExtKey);
-        return;
-    }
-    pContentType = new CHAR[nBytes];
-    if (RegQueryValueExA(hExtKey, "Content Type", NULL, &type, (LPBYTE)pContentType, &nBytes) !=
-        ERROR_SUCCESS)
-    {
-        RegCloseKey(hExtKey);
-        delete[] pContentType;
-        pContentType = NULL;
-        return;
-    }
-    RegCloseKey(hExtKey);
-}
-
 BYTE OID_MAC_BINARY[] = { 0x2A, 0x86, 0x48, 0x86, 0xf7, 0x14, 0x03, 0x0B, 0x01 };
 mimepp::BodyPart *Zimbra::MAPI::Util::AttachPartFromIAttach(MAPISession &session, LPATTACH
     pAttach, LPSTR pCharset, LONG codepage)
@@ -1380,10 +1348,13 @@ mimepp::BodyPart *Zimbra::MAPI::Util::AttachPartFromIAttach(MAPISession &session
 
         mimepp::String AttStr(pMimeAttName);
 
-        pAttachPart->headers().contentDisposition().setFilename(AttStr);
+		pAttachPart->headers().contentDisposition().setFilename(AttStr); 
         pAttachPart->headers().contentDisposition().assemble();
         if (pMimeAttName != NULL)
+		{
+			WtoA(pAttname,pAttachFilename);
             delete[] pMimeAttName;
+		}
     }
     else if (pProps[ATTACH_LONG_FILENAME].ulPropTag == PR_ATTACH_LONG_FILENAME_A)
     {
@@ -1580,6 +1551,8 @@ mimepp::BodyPart *Zimbra::MAPI::Util::AttachPartFromIAttach(MAPISession &session
         strContentType += ";";
         pAttachPart->headers().contentType().setString(strContentType);
         pAttachPart->headers().contentType().parse();
+		delete[] pAttachFilename;
+		pAttachFilename = NULL;
     }
     MAPIFreeBuffer(pProps);
     return pAttachPart;
@@ -3130,4 +3103,36 @@ CString Zimbra::MAPI::Util::GetGUID()
 	unique += "_migwiz";
 
 	return unique;
+}
+
+void Zimbra::MAPI::Util::GetContentTypeFromExtension(LPSTR pExt, LPSTR &pContentType)
+{
+    pContentType = NULL;
+    if (pExt == NULL)
+        return;
+
+    HKEY hExtKey;
+
+    if (RegOpenKeyA(HKEY_CLASSES_ROOT, pExt, &hExtKey) != ERROR_SUCCESS)
+        return;
+
+    DWORD type;
+    DWORD nBytes;
+
+    if ((RegQueryValueExA(hExtKey, "Content Type", NULL, &type, NULL, &nBytes) !=
+        ERROR_SUCCESS) || (type != REG_SZ))
+    {
+        RegCloseKey(hExtKey);
+        return;
+    }
+    pContentType = new CHAR[nBytes];
+    if (RegQueryValueExA(hExtKey, "Content Type", NULL, &type, (LPBYTE)pContentType, &nBytes) !=
+        ERROR_SUCCESS)
+    {
+        RegCloseKey(hExtKey);
+        delete[] pContentType;
+        pContentType = NULL;
+        return;
+    }
+    RegCloseKey(hExtKey);
 }
