@@ -198,6 +198,7 @@ wstring CommonDateString(FILETIME ft);
 
 LPWSTR EscapeCategoryName(LPCWSTR pwszOrigCategoryName);
 CString GetGUID();
+void GetContentTypeFromExtension(LPSTR pExt, LPSTR &pContentType);
 
 namespace CharsetUtil
 {
