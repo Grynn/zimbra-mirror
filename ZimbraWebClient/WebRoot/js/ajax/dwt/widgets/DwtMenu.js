@@ -580,7 +580,7 @@ function(x, y) {
 
 DwtMenu.prototype.getKeyMapName = 
 function() {
-	return "DwtMenu";
+	return DwtKeyMap.MAP_MENU;
 };
 
 DwtMenu.prototype._handleScroll =

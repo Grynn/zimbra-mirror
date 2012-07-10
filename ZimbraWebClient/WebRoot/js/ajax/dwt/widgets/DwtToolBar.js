@@ -63,8 +63,7 @@ DwtToolBar = function(params) {
     this._numFillers = 0;
 	this._curFocusIndex = 0;
 
-	var suffix = (this._style == DwtToolBar.HORIZ_STYLE) ? "horiz" : "vert";
-	this._keyMapName = ["DwtToolBar", suffix].join("-");
+	this._keyMapName = (this._style == DwtToolBar.HORIZ_STYLE) ? DwtKeyMap.MAP_TOOLBAR_HORIZ : DwtKeyMap.MAP_TOOLBAR_VERT;
 };
 
 DwtToolBar.PARAMS = ["parent", "className", "posStyle", "style", "index", "id"];
@@ -72,15 +71,8 @@ DwtToolBar.PARAMS = ["parent", "className", "posStyle", "style", "index", "id"];
 DwtToolBar.prototype = new DwtComposite;
 DwtToolBar.prototype.constructor = DwtToolBar;
 
-/**
- * Returns a string representation of the object.
- * 
- * @return		{string}		a string representation of the object
- */
-DwtToolBar.prototype.toString =
-function() {
-	return "DwtToolBar";
-};
+DwtToolBar.prototype.isDwtToolBar = true;
+DwtToolBar.prototype.toString = function() { return "DwtToolBar"; };
 
 //
 // Constants
@@ -410,13 +402,13 @@ function(item) {
 			var kmm = kbm.__keyMapMgr;
 			if (kmm) {
 				if (this._style == DwtToolBar.HORIZ_STYLE) {
-					kmm.removeMapping("DwtButton", "ArrowRight");
-					kmm.setMapping("DwtButton", "ArrowDown", DwtKeyMap.SUBMENU);
+					kmm.removeMapping(DwtKeyMap.MAP_BUTTON, "ArrowRight");
+					kmm.setMapping(DwtKeyMap.MAP_BUTTON, "ArrowDown", DwtKeyMap.SUBMENU);
 				} else {
-					kmm.removeMapping("DwtButton", "ArrowDown");
-					kmm.setMapping("DwtButton", "ArrowRight", DwtKeyMap.SUBMENU);
+					kmm.removeMapping(DwtKeyMap.MAP_BUTTON, "ArrowDown");
+					kmm.setMapping(DwtKeyMap.MAP_BUTTON, "ArrowRight", DwtKeyMap.SUBMENU);
 				}
-				kmm.reloadMap("DwtButton");
+				kmm.reloadMap(DwtKeyMap.MAP_BUTTON);
 			}
 		}
 		this._submenuKeySet = true;

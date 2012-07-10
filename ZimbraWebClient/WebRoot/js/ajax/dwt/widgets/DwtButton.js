@@ -587,7 +587,7 @@ function(menu) {
  */
 DwtButton.prototype.getKeyMapName =
 function() {
-	return "DwtButton";
+	return DwtKeyMap.MAP_BUTTON;
 };
 
 /**

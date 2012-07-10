@@ -139,9 +139,8 @@ DwtDialog.PARAMS = ["parent", "className", "title", "standardButtons", "extraBut
 DwtDialog.prototype = new DwtBaseDialog;
 DwtDialog.prototype.constructor = DwtDialog;
 
-DwtDialog.prototype.toString = function() {
-	return "DwtDialog";
-};
+DwtDialog.prototype.isDwtDialog = true;
+DwtDialog.prototype.toString = function() { return "DwtDialog"; };
 
 //
 // Constants
@@ -391,7 +390,7 @@ function(id) {
 
 DwtDialog.prototype.getKeyMapName = 
 function() {
-	return "DwtDialog";
+	return DwtKeyMap.MAP_DIALOG;
 };
 
 DwtDialog.prototype.handleKeyAction =

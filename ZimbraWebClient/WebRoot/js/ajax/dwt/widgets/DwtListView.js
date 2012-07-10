@@ -126,6 +126,8 @@ DwtListView = function(params) {
 DwtListView.prototype = new DwtComposite;
 DwtListView.prototype.constructor = DwtListView;
 
+DwtListView.prototype.isDwtListView = true;
+DwtListView.prototype.toString = function() { return "DwtListView"; };
 
 // Consts
 
@@ -156,10 +158,6 @@ DwtListView._KBFOCUS_CLASS				= "_kfc";
 
 // Public methods
 
-DwtListView.prototype.toString =
-function() {
-	return "DwtListView";
-};
 
 DwtListView.prototype.dispose =
 function() {
@@ -1048,7 +1046,7 @@ function(list) {
 
 DwtListView.prototype.getKeyMapName =
 function() {
-	return "DwtListView";
+	return DwtKeyMap.MAP_LIST;
 };
 
 DwtListView.prototype.handleKeyAction =

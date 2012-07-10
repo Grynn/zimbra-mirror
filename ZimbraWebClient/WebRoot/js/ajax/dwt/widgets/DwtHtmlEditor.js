@@ -1486,7 +1486,7 @@ function(ev) {
 
 DwtHtmlEditor.prototype.getKeyMapName =
 function() {
-	return "DwtHtmlEditor";
+	return DwtKeyMap.MAP_EDITOR;
 };
 
 DwtHtmlEditor.prototype.handleKeyAction =

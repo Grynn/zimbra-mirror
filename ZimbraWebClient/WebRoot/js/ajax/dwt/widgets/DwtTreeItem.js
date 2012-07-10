@@ -109,6 +109,9 @@ DwtTreeItem.PARAMS = ["parent", "index", "text", "imageInfo", "deferred", "class
 DwtTreeItem.prototype = new DwtComposite;
 DwtTreeItem.prototype.constructor = DwtTreeItem;
 
+DwtTreeItem.prototype.isDwtTreeItem = true;
+DwtTreeItem.prototype.toString = function() { return "DwtTreeItem"; };
+
 DwtTreeItem.prototype.TEMPLATE = "dwt.Widgets#ZTreeItem";
 
 DwtTreeItem.prototype._checkBoxVisible = true; // Assume it's shown, if check style
@@ -133,10 +136,6 @@ function() {
 	DwtComposite.prototype.dispose.call(this);
 };
 
-DwtTreeItem.prototype.toString =
-function() {
-	return "DwtTreeItem";
-};
 
 /**
  * Checks if the item is checked.
@@ -423,7 +422,7 @@ function(child) {
 
 DwtTreeItem.prototype.getKeyMapName =
 function() {
-	return "DwtTreeItem";
+	return DwtKeyMap.MAP_TREE;
 };
 
 DwtTreeItem.prototype.handleKeyAction =

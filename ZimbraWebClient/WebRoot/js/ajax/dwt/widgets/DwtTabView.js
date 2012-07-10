@@ -54,6 +54,8 @@ DwtTabView.PARAMS = ["parent", "className", "posStyle"];
 DwtTabView.prototype = new DwtComposite;
 DwtTabView.prototype.constructor = DwtTabView;
 
+DwtTabView.prototype.isDwtTabView = true;
+DwtTabView.prototype.toString = function() { return "DwtTabView"; };
 
 // Constants
 
@@ -68,10 +70,6 @@ DwtTabView.prototype.TEMPLATE = "dwt.Widgets#ZTabView";
 
 // Public methods
 
-DwtTabView.prototype.toString =
-function() {
-	return "DwtTabView";
-};
 
 /**
  * Adds a state change listener.
@@ -305,7 +303,7 @@ function() {
 
 DwtTabView.prototype.getKeyMapName =
 function() {
-	return "DwtTabView";
+	return DwtKeyMap.MAP_TAB_VIEW;
 };
 
 DwtTabView.prototype.resetKeyBindings =
@@ -315,16 +313,16 @@ function() {
 		var kmm = kbm.__keyMapMgr;
 		if (!kmm) { return; }
 		var num = this.getNumTabs();
-		var seqs = kmm.getKeySequences("DwtTabView", "GoToTab");
+		var seqs = kmm.getKeySequences(DwtKeyMap.MAP_TAB_VIEW, "GoToTab");
 		for (var k = 0; k < seqs.length; k++) {
 			var ks = seqs[k];
 			for (var i = 1; i <= num; i++) {
                 var keycode = 48 + i;
 				var newKs = ks.replace(/NNN/, keycode);
-				kmm.setMapping("DwtTabView", newKs, "GoToTab" + i);
+				kmm.setMapping(DwtKeyMap.MAP_TAB_VIEW, newKs, "GoToTab" + i);
 			}
 		}
-		kmm.reloadMap("DwtTabView");
+		kmm.reloadMap(DwtKeyMap.MAP_TAB_VIEW);
 	}
 };
 
