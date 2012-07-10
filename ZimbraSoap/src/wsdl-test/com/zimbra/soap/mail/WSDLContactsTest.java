@@ -16,19 +16,23 @@ package com.zimbra.soap.mail;
 
 import java.util.List;
 
-import com.google.common.base.Strings;
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.zimbra.soap.Utility;
 
+import generated.zcsclient.mail.testContactGroupMember;
 import generated.zcsclient.mail.testContactInfo;
 import generated.zcsclient.mail.testContactSpec;
 import generated.zcsclient.mail.testCreateContactRequest;
 import generated.zcsclient.mail.testCreateContactResponse;
 import generated.zcsclient.mail.testCreateTagRequest;
 import generated.zcsclient.mail.testCreateTagResponse;
+import generated.zcsclient.mail.testModifyContactAttr;
+import generated.zcsclient.mail.testModifyContactGroupMember;
 import generated.zcsclient.mail.testModifyContactRequest;
 import generated.zcsclient.mail.testModifyContactResponse;
+import generated.zcsclient.mail.testModifyContactSpec;
 import generated.zcsclient.mail.testNewContactAttr;
+import generated.zcsclient.mail.testNewContactGroupMember;
 import generated.zcsclient.mail.testTagInfo;
 import generated.zcsclient.mail.testTagSpec;
 import generated.zcsclient.ws.service.ZcsPortType;
@@ -86,7 +90,7 @@ public class WSDLContactsTest {
         // create a contact
         testCreateContactRequest req = new testCreateContactRequest();
         testContactSpec origSpec = new testContactSpec();
-        origSpec.setL("7");
+        origSpec.setL("7");  // Folder ID - would be nice if wasn't hard coded.
         testNewContactAttr nam = new testNewContactAttr();
         nam.setN("firstName");
         nam.setValue(firstName);
@@ -133,10 +137,10 @@ public class WSDLContactsTest {
         testModifyContactRequest modReq = new testModifyContactRequest();
         modReq.setReplace(false);
         modReq.setVerbose(true);
-        testContactSpec modSpec = new testContactSpec();
+        testModifyContactSpec modSpec = new testModifyContactSpec();
         modSpec.setId(Integer.valueOf(contactId));
         modSpec.setTn(tag1 + "," + tag2);
-        testNewContactAttr lnam = new testNewContactAttr();
+        testModifyContactAttr lnam = new testModifyContactAttr();
         lnam.setN("lastName");
         lnam.setValue(surName);
         modSpec.getA().add(lnam);
@@ -173,5 +177,114 @@ public class WSDLContactsTest {
         Assert.assertEquals("ModifiedContact 4 number of attrs", 2, attrs.size());
         tags = modCn.getTn();
         Assert.assertTrue("ModifiedContact 4 tags", tags == null);
+    }
+
+    @Test
+    public void modifyContactGroup() throws Exception {
+        final String fileAs = "bug75912";
+        final String nickName = "contactGrp";
+        final String qaTeam = "uid=qa-team,ou=people,dc=example,dc=com";
+        final String terryp = "\"Terry Pratchett\" <terryp@example.test>";
+        final String neilg = "\"Neil Gaiman\" <neilg@example.test>";
+        final String jrrtolkien = "\"JRR Tolkien\" <jrrtolkien@example.test>";
+        Utility.ensureAccountExists(testAcct);
+        testCreateContactRequest req = new testCreateContactRequest();
+        req.setVerbose(true);
+        testContactSpec origSpec = new testContactSpec();
+        req.setCn(origSpec);
+        origSpec.setL("7");  // Folder ID - would be nice if wasn't hard coded.
+
+        testNewContactAttr nam = new testNewContactAttr();
+        nam.setN("fileAs");
+        nam.setValue("8:" + fileAs);  // 8: means fileAs is freeform (i.e. not Company, or first/last etc)
+        origSpec.getA().add(nam);
+        nam = new testNewContactAttr();
+        nam.setN("nickname");
+        nam.setValue(nickName);
+        origSpec.getA().add(nam);
+        nam = new testNewContactAttr();
+        nam.setN("type");
+        nam.setValue("group");
+        origSpec.getA().add(nam);
+
+        testNewContactGroupMember member = new testNewContactGroupMember();
+        member.setType("G");
+        member.setValue(qaTeam);
+        origSpec.getM().add(member);
+        member = new testNewContactGroupMember();
+        member.setType("I");
+        member.setValue(terryp);
+        origSpec.getM().add(member);
+
+        Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)mailSvcEIF, testAcct);
+        testCreateContactResponse resp = mailSvcEIF.createContactRequest(req);
+        Assert.assertNotNull("CreateContactResponse object", resp);
+        testContactInfo createdContact = resp.getCn();
+        Assert.assertNotNull("CreateContactResponse/cn object", createdContact);
+        String contactId = createdContact.getId();
+        Assert.assertNotNull("CreateContactResponse/cn contactId", contactId);
+        Assert.assertEquals("Created FileAs string", fileAs, createdContact.getFileAsStr());
+        Assert.assertEquals("Folder string", "7", createdContact.getL());
+        Assert.assertTrue("Revision should be positive", createdContact.getRev() > 0);
+        List<testContactAttr> attrs = createdContact.getA();
+        Assert.assertEquals("Original number of attrs", 3, attrs.size());
+        Assert.assertEquals("Original number of members", 2, createdContact.getM().size());
+
+        // Modify to remove a member
+        testModifyContactRequest modReq = new testModifyContactRequest();
+        modReq.setReplace(false);
+        modReq.setVerbose(true);
+        testModifyContactSpec modSpec = new testModifyContactSpec();
+        modSpec.setId(Integer.valueOf(contactId));
+        modReq.setCn(modSpec);
+        testModifyContactGroupMember modMember = new testModifyContactGroupMember();
+        modMember.setOp("-");
+        modMember.setType("I");
+        modMember.setValue(terryp);
+        modSpec.getM().add(modMember);
+
+        testModifyContactResponse modResp = mailSvcEIF.modifyContactRequest(modReq);
+        Assert.assertEquals("After 1st mod number of members", 1, modResp.getCn().getM().size());
+        testContactGroupMember firstMember = modResp.getCn().getM().get(0);
+        firstMember.getValue();
+        Assert.assertEquals("After 1st mod first member value", qaTeam, firstMember.getValue());
+ 
+        // Modify to replace all members with one new member
+        modReq = new testModifyContactRequest();
+        modReq.setReplace(false);
+        modReq.setVerbose(true);
+        modSpec = new testModifyContactSpec();
+        modSpec.setId(Integer.valueOf(contactId));
+        modReq.setCn(modSpec);
+        modMember = new testModifyContactGroupMember();
+        modMember.setOp("+");
+        modMember.setType("I");
+        modMember.setValue(neilg);
+        modSpec.getM().add(modMember);
+
+        modResp = mailSvcEIF.modifyContactRequest(modReq);
+        Assert.assertEquals("After 2nd mod number of members", 2, modResp.getCn().getM().size());
+
+        // Modify to add a member
+        modReq = new testModifyContactRequest();
+        modReq.setReplace(false);
+        modReq.setVerbose(true);
+        modSpec = new testModifyContactSpec();
+        modSpec.setId(Integer.valueOf(contactId));
+        modReq.setCn(modSpec);
+        modMember = new testModifyContactGroupMember();
+        modMember.setOp("reset");
+        modSpec.getM().add(modMember);
+        modMember = new testModifyContactGroupMember();
+        modMember.setOp("+");
+        modMember.setType("I");
+        modMember.setValue(jrrtolkien);
+        modSpec.getM().add(modMember);
+
+        modResp = mailSvcEIF.modifyContactRequest(modReq);
+        Assert.assertEquals("After 3rd mod number of members", 1, modResp.getCn().getM().size());
+        firstMember = modResp.getCn().getM().get(0);
+        firstMember.getValue();
+        Assert.assertEquals("After 3rd mod first member value", jrrtolkien, firstMember.getValue());
     }
 }
