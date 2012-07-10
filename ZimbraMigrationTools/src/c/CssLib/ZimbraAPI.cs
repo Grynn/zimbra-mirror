@@ -97,9 +97,12 @@ public class ZimbraAPI
     }
     private Dictionary<string, string> dFolderMap;
 
-    public ZimbraAPI(bool isServer)
+    private LogLevel loglevel;
+
+    public ZimbraAPI(bool isServer,LogLevel level = LogLevel.Info)
     {
         bIsServerMigration = isServer;
+        loglevel = level;
         dFolderMap = new Dictionary<string, string>();
     }
 
@@ -593,7 +596,11 @@ public class ZimbraAPI
 
         string rsp = "";
 
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        WriteSoapLog(rsp.ToString(),false);
+        
         if (client.status == 0)
         {
             ParseLogon(rsp, isAdmin);
@@ -643,8 +650,11 @@ public class ZimbraAPI
         }
 
         string rsp = "";
-
+        WriteSoapLog(sb.ToString(),true);
+        //Log.dump("Soap Request for GetInfo", sb.ToString());
         client.InvokeService(sb.ToString(), out rsp);
+        //Log.dump("Soap Response for GetInfo", rsp.ToString());
+        WriteSoapLog(rsp.ToString(),false);
         if (client.status == 0)
         {
             ParseGetInfo(rsp);
@@ -693,8 +703,11 @@ public class ZimbraAPI
         }
 
         string rsp = "";
-
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         if (client.status == 0)
         {
             ParseGetAllDomain(rsp);
@@ -743,8 +756,11 @@ public class ZimbraAPI
         }
 
         string rsp = "";
-
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         if (client.status == 0)
         {
             ParseGetAllCos(rsp);
@@ -796,8 +812,11 @@ public class ZimbraAPI
         }
 
         string rsp = "";
-
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         retval = client.status;
         if (client.status == 0)
         {
@@ -874,8 +893,11 @@ public class ZimbraAPI
         }
 
         string rsp = "";
-
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         retval = client.status;
         if (client.status == 0)
         {
@@ -977,8 +999,11 @@ public class ZimbraAPI
         }
 
         string rsp = "";
-
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         retval = client.status;
         return retval;
     }
@@ -1030,7 +1055,11 @@ public class ZimbraAPI
 
         string rsp = "";
 
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         retval = client.status;
         return retval;
     }
@@ -1130,8 +1159,11 @@ public class ZimbraAPI
             }
 
             string rsp = "";
-
+            WriteSoapLog(sb.ToString(),true);
+            
             client.InvokeService(sb.ToString(), out rsp);
+            
+            WriteSoapLog(rsp.ToString(),false);
             retval = client.status;
             if (client.status == 0)
             {
@@ -1234,8 +1266,11 @@ public class ZimbraAPI
         }
 
         string rsp = "";
-
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         retval = client.status;
 
         return retval;
@@ -1687,8 +1722,11 @@ public class ZimbraAPI
             writer.WriteEndDocument();
         }
         string rsp = "";
-
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         retval = client.status;
         if (client.status != 0)
         {
@@ -2083,8 +2121,11 @@ public class ZimbraAPI
             writer.WriteEndDocument();
         }
         string rsp = "";
-
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         retval = client.status;
         return retval;
     }
@@ -2144,8 +2185,11 @@ public class ZimbraAPI
             writer.WriteEndDocument();
         }
         string rsp = "";
-
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         retval = client.status;
         return retval;
     }
@@ -2266,8 +2310,11 @@ public class ZimbraAPI
             writer.WriteEndDocument();
         }
         string rsp = "";
-
+        
+        WriteSoapLog(sb.ToString(),true);
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         retval = client.status;
         return retval;
     }
@@ -2322,8 +2369,11 @@ public class ZimbraAPI
         }
 
         string rsp = "";
-
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         retval = client.status;
         if (client.status == 0)
         {
@@ -2447,8 +2497,11 @@ public class ZimbraAPI
         }
 
         string rsp = "";
-
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         retval = client.status;
         if (client.status == 0)
         {
@@ -2507,8 +2560,11 @@ public class ZimbraAPI
         }
 
         string rsp = "";
-
+        WriteSoapLog(sb.ToString(),true);
+        
         client.InvokeService(sb.ToString(), out rsp);
+        
+        WriteSoapLog(rsp.ToString(),false);
         retval = client.status;
         if (client.status == 0)
         {
@@ -2570,6 +2626,37 @@ public class ZimbraAPI
             }
         }
     }
+
     // ///////////////////////
+
+   private bool WriteSoapLog(string  message,bool request)
+{
+    bool bReturn        = false;
+    if (loglevel == LogLevel.Trace)
+    {
+        try
+        {
+            
+            string path = Path.GetTempPath() + "\\SoapXml.log";
+            FileStream fs = new FileStream(path, FileMode.Append,
+                    FileAccess.Write);
+            StreamWriter w = new StreamWriter(fs);
+            if( request)
+            w.WriteLine("Soap Request -------------------");
+            else
+                w.WriteLine("Soap Response -------------------");
+            w.WriteLine(message);
+            w.WriteLine("\n");
+            w.Close();
+            bReturn = true;
+        }
+        catch (Exception)
+        {
+            bReturn = false;
+        }
+    }
+    return bReturn;
+}
+
 }
 }

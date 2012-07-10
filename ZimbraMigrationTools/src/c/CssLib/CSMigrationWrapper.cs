@@ -777,7 +777,7 @@ public class CSMigrationWrapper
         }
         Log.info("Acct.TotalItems=", Acct.TotalItems.ToString());
 
-        ZimbraAPI api = new ZimbraAPI(isServer);
+        ZimbraAPI api = new ZimbraAPI(isServer, logLevel);
         api.AccountID = Acct.AccountID;
         api.AccountName = Acct.AccountName;
 

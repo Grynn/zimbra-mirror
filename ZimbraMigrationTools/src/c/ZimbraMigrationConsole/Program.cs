@@ -895,7 +895,7 @@ class Program
                         Log.info("Connecting to to Zimbra Server \n   ");
                         System.Console.WriteLine();
 
-                        ZimbraAPI zimbraAPI = new ZimbraAPI(true);
+                        ZimbraAPI zimbraAPI = new ZimbraAPI(true, importopts.VerboseOn);
                         /*int stat = zimbraAPI.Logon(
                             myXmlConfig.ConfigObj.zimbraServer.Hostname,
                             myXmlConfig.ConfigObj.zimbraServer.Port,
@@ -1108,7 +1108,7 @@ class Program
                         accountname = accountname + "@" + ZCSHost;
                         string accountid = (Pstfile != "") ? Pstfile : userid;
 
-                            ZimbraAPI zimbraAPI = new ZimbraAPI(false);
+                        ZimbraAPI zimbraAPI = new ZimbraAPI(false, importopts.VerboseOn);
 
                             System.Console.WriteLine();
                            /* ProgressUtil.RenderConsoleProgress(
@@ -1135,7 +1135,7 @@ class Program
                                         30, '\u2591', ConsoleColor.Red,
                                         "Logon to to Zimbra Server  for userAccount failed " +
                                         ZCSID);*/
-                                err = "Logon to to Zimbra Server for userAccount " +
+                                err = "Logon to Zimbra Server for userAccount " +
                                         ZCSID + " Failed. " + System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(zimbraAPI.LastError.ToLower());
                                 System.Console.WriteLine(err);
                                 Log.err(err);
