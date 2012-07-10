@@ -268,8 +268,8 @@ function(response, contact) {
 
     attrs = attrs || contact && contact.attr || {};
 
-    attrs["fullName"] =  attrs["fullName"] || contact && contact._fileAs || this.emailZimlet.fullName;
-    this._presentity = attrs["email"] = attrs["email"] || this.emailZimlet.emailAddress;        // email is the presence identity
+    attrs["fullName"] =  this.emailZimlet.fullName || attrs["fullName"] || contact && contact._fileAs;
+    this._presentity = attrs["email"] = this.emailZimlet.emailAddress || attrs["email"];        // email is the presence identity
 
     var image = attrs[ZmContact.F_image];
     var imagepart =  attrs[ZmContact.F_imagepart];
