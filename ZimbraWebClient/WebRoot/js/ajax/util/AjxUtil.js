@@ -836,7 +836,7 @@ function(arg) {
 		return arg;
 	}
 	else if (arg.isAjxVector) {
-		return arg.toArray();
+        return arg.getArray();
 	}
 	else {
 		return [arg];
