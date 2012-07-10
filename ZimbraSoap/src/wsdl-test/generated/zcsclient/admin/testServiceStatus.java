@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlValue;
 public class testServiceStatus {
 
     @XmlValue
-    protected int value;
+    protected String value;
     @XmlAttribute(name = "server", required = true)
     protected String server;
     @XmlAttribute(name = "service", required = true)
@@ -45,16 +45,24 @@ public class testServiceStatus {
     /**
      * Gets the value of the value property.
      * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
     /**
      * Sets the value of the value property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
-    public void setValue(int value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

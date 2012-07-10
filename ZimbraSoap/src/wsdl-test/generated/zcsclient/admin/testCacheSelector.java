@@ -21,8 +21,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="entry" type="{urn:zimbraAdmin}cacheEntrySelector" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
+ *       &lt;attribute name="type" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="allServers" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -37,10 +37,10 @@ import javax.xml.bind.annotation.XmlType;
 public class testCacheSelector {
 
     protected List<testCacheEntrySelector> entry;
+    @XmlAttribute(name = "type", required = true)
+    protected String type;
     @XmlAttribute(name = "allServers")
     protected Boolean allServers;
-    @XmlAttribute(name = "type")
-    protected String type;
 
     /**
      * Gets the value of the entry property.
@@ -72,30 +72,6 @@ public class testCacheSelector {
     }
 
     /**
-     * Gets the value of the allServers property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isAllServers() {
-        return allServers;
-    }
-
-    /**
-     * Sets the value of the allServers property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setAllServers(Boolean value) {
-        this.allServers = value;
-    }
-
-    /**
      * Gets the value of the type property.
      * 
      * @return
@@ -117,6 +93,30 @@ public class testCacheSelector {
      */
     public void setType(String value) {
         this.type = value;
+    }
+
+    /**
+     * Gets the value of the allServers property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isAllServers() {
+        return allServers;
+    }
+
+    /**
+     * Sets the value of the allServers property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setAllServers(Boolean value) {
+        this.allServers = value;
     }
 
 }

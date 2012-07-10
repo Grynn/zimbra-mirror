@@ -193,15 +193,15 @@ public class testFilterRule {
     public static class FilterActions {
 
         @XmlElements({
-            @XmlElement(name = "actionFlag", type = testFlagAction.class),
-            @XmlElement(name = "actionFileInto", type = testFileIntoAction.class),
-            @XmlElement(name = "actionTag", type = testTagAction.class),
-            @XmlElement(name = "actionDiscard", type = testDiscardAction.class),
-            @XmlElement(name = "actionReply", type = testReplyAction.class),
             @XmlElement(name = "actionKeep", type = testKeepAction.class),
+            @XmlElement(name = "actionReply", type = testReplyAction.class),
             @XmlElement(name = "actionRedirect", type = testRedirectAction.class),
             @XmlElement(name = "actionStop", type = testStopAction.class),
-            @XmlElement(name = "actionNotify", type = testNotifyAction.class)
+            @XmlElement(name = "actionTag", type = testTagAction.class),
+            @XmlElement(name = "actionFileInto", type = testFileIntoAction.class),
+            @XmlElement(name = "actionDiscard", type = testDiscardAction.class),
+            @XmlElement(name = "actionNotify", type = testNotifyAction.class),
+            @XmlElement(name = "actionFlag", type = testFlagAction.class)
         })
         protected List<testFilterAction> actionKeepOrActionDiscardOrActionFileInto;
 
@@ -223,15 +223,15 @@ public class testFilterRule {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testFlagAction }
-         * {@link testFileIntoAction }
-         * {@link testTagAction }
-         * {@link testDiscardAction }
-         * {@link testReplyAction }
          * {@link testKeepAction }
+         * {@link testReplyAction }
          * {@link testRedirectAction }
          * {@link testStopAction }
+         * {@link testTagAction }
+         * {@link testFileIntoAction }
+         * {@link testDiscardAction }
          * {@link testNotifyAction }
+         * {@link testFlagAction }
          * 
          * 
          */

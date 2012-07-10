@@ -30,8 +30,9 @@ import javax.xml.bind.annotation.XmlType;
  *           &lt;element name="cos" type="{urn:zimbraAdmin}cosInfo"/>
  *         &lt;/choice>
  *       &lt;/sequence>
- *       &lt;attribute name="more" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="searchTotal" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
+ *       &lt;attribute name="num" type="{http://www.w3.org/2001/XMLSchema}long" />
+ *       &lt;attribute name="more" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="searchTotal" type="{http://www.w3.org/2001/XMLSchema}long" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -46,18 +47,20 @@ import javax.xml.bind.annotation.XmlType;
 public class testSearchDirectoryResponse {
 
     @XmlElements({
+        @XmlElement(name = "account", type = testAccountInfo.class),
         @XmlElement(name = "calresource", type = testCalendarResourceInfo.class),
+        @XmlElement(name = "cos", type = testCosInfo.class),
         @XmlElement(name = "domain", type = testDomainInfo.class),
         @XmlElement(name = "alias", type = testAliasInfo.class),
-        @XmlElement(name = "account", type = testAccountInfo.class),
-        @XmlElement(name = "dl", type = testDistributionListInfo.class),
-        @XmlElement(name = "cos", type = testCosInfo.class)
+        @XmlElement(name = "dl", type = testDistributionListInfo.class)
     })
     protected List<Object> calresourceOrDlOrAlias;
-    @XmlAttribute(name = "more", required = true)
-    protected boolean more;
-    @XmlAttribute(name = "searchTotal", required = true)
-    protected long searchTotal;
+    @XmlAttribute(name = "num")
+    protected Long num;
+    @XmlAttribute(name = "more")
+    protected Boolean more;
+    @XmlAttribute(name = "searchTotal")
+    protected Long searchTotal;
 
     /**
      * Gets the value of the calresourceOrDlOrAlias property.
@@ -77,12 +80,12 @@ public class testSearchDirectoryResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link testAccountInfo }
      * {@link testCalendarResourceInfo }
+     * {@link testCosInfo }
      * {@link testDomainInfo }
      * {@link testAliasInfo }
-     * {@link testAccountInfo }
      * {@link testDistributionListInfo }
-     * {@link testCosInfo }
      * 
      * 
      */
@@ -94,34 +97,74 @@ public class testSearchDirectoryResponse {
     }
 
     /**
+     * Gets the value of the num property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getNum() {
+        return num;
+    }
+
+    /**
+     * Sets the value of the num property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setNum(Long value) {
+        this.num = value;
+    }
+
+    /**
      * Gets the value of the more property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
-    public boolean isMore() {
+    public Boolean isMore() {
         return more;
     }
 
     /**
      * Sets the value of the more property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
-    public void setMore(boolean value) {
+    public void setMore(Boolean value) {
         this.more = value;
     }
 
     /**
      * Gets the value of the searchTotal property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
      */
-    public long getSearchTotal() {
+    public Long getSearchTotal() {
         return searchTotal;
     }
 
     /**
      * Sets the value of the searchTotal property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
      */
-    public void setSearchTotal(long value) {
+    public void setSearchTotal(Long value) {
         this.searchTotal = value;
     }
 

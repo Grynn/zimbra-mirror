@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="m" type="{urn:zimbraMail}msgToSend" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="needCalendarSentByFixup" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="isCalendarForward" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="noSave" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="suid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
@@ -38,6 +39,8 @@ public class testSendMsgRequest {
     protected testMsgToSend m;
     @XmlAttribute(name = "needCalendarSentByFixup")
     protected Boolean needCalendarSentByFixup;
+    @XmlAttribute(name = "isCalendarForward")
+    protected Boolean isCalendarForward;
     @XmlAttribute(name = "noSave")
     protected Boolean noSave;
     @XmlAttribute(name = "suid")
@@ -89,6 +92,30 @@ public class testSendMsgRequest {
      */
     public void setNeedCalendarSentByFixup(Boolean value) {
         this.needCalendarSentByFixup = value;
+    }
+
+    /**
+     * Gets the value of the isCalendarForward property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIsCalendarForward() {
+        return isCalendarForward;
+    }
+
+    /**
+     * Sets the value of the isCalendarForward property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsCalendarForward(Boolean value) {
+        this.isCalendarForward = value;
     }
 
     /**

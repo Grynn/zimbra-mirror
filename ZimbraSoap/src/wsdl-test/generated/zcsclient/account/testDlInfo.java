@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="{urn:zimbraAccount}objectInfo">
  *       &lt;all>
  *       &lt;/all>
+ *       &lt;attribute name="ref" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="dynamic" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="via" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -36,6 +37,8 @@ public class testDlInfo
     extends testObjectInfo
 {
 
+    @XmlAttribute(name = "ref", required = true)
+    protected String ref;
     @XmlAttribute(name = "d")
     protected String d;
     @XmlAttribute(name = "dynamic")
@@ -46,6 +49,30 @@ public class testDlInfo
     protected Boolean isOwner;
     @XmlAttribute(name = "isMember")
     protected Boolean isMember;
+
+    /**
+     * Gets the value of the ref property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getRef() {
+        return ref;
+    }
+
+    /**
+     * Sets the value of the ref property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setRef(String value) {
+        this.ref = value;
+    }
 
     /**
      * Gets the value of the d property.

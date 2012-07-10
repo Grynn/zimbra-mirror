@@ -10,22 +10,19 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for contactSpec complex type.
+ * <p>Java class for modifyContactSpec complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="contactSpec">
+ * &lt;complexType name="modifyContactSpec">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="vcard" type="{urn:zimbraMail}vCardInfo" minOccurs="0"/>
- *         &lt;element name="a" type="{urn:zimbraMail}newContactAttr" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="m" type="{urn:zimbraMail}newContactGroupMember" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="a" type="{urn:zimbraMail}modifyContactAttr" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="m" type="{urn:zimbraMail}modifyContactGroupMember" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="tn" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,48 +32,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "contactSpec", propOrder = {
-    "vcard",
+@XmlType(name = "modifyContactSpec", propOrder = {
     "a",
     "m"
 })
-public class testContactSpec {
+public class testModifyContactSpec {
 
-    protected testVCardInfo vcard;
-    protected List<testNewContactAttr> a;
-    protected List<testNewContactGroupMember> m;
+    protected List<testModifyContactAttr> a;
+    protected List<testModifyContactGroupMember> m;
     @XmlAttribute(name = "id")
     protected Integer id;
-    @XmlAttribute(name = "l")
-    protected String l;
-    @XmlAttribute(name = "t")
-    protected String t;
     @XmlAttribute(name = "tn")
     protected String tn;
-
-    /**
-     * Gets the value of the vcard property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link testVCardInfo }
-     *     
-     */
-    public testVCardInfo getVcard() {
-        return vcard;
-    }
-
-    /**
-     * Sets the value of the vcard property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link testVCardInfo }
-     *     
-     */
-    public void setVcard(testVCardInfo value) {
-        this.vcard = value;
-    }
 
     /**
      * Gets the value of the a property.
@@ -96,13 +63,13 @@ public class testContactSpec {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testNewContactAttr }
+     * {@link testModifyContactAttr }
      * 
      * 
      */
-    public List<testNewContactAttr> getA() {
+    public List<testModifyContactAttr> getA() {
         if (a == null) {
-            a = new ArrayList<testNewContactAttr>();
+            a = new ArrayList<testModifyContactAttr>();
         }
         return this.a;
     }
@@ -125,13 +92,13 @@ public class testContactSpec {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testNewContactGroupMember }
+     * {@link testModifyContactGroupMember }
      * 
      * 
      */
-    public List<testNewContactGroupMember> getM() {
+    public List<testModifyContactGroupMember> getM() {
         if (m == null) {
-            m = new ArrayList<testNewContactGroupMember>();
+            m = new ArrayList<testModifyContactGroupMember>();
         }
         return this.m;
     }
@@ -158,54 +125,6 @@ public class testContactSpec {
      */
     public void setId(Integer value) {
         this.id = value;
-    }
-
-    /**
-     * Gets the value of the l property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getL() {
-        return l;
-    }
-
-    /**
-     * Sets the value of the l property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setL(String value) {
-        this.l = value;
-    }
-
-    /**
-     * Gets the value of the t property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getT() {
-        return t;
-    }
-
-    /**
-     * Sets the value of the t property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setT(String value) {
-        this.t = value;
     }
 
     /**

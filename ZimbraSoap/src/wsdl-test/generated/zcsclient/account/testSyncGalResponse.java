@@ -30,6 +30,7 @@ import generated.zcsclient.zm.testId;
  *       &lt;attribute name="more" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="token" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="galDefinitionLastModified" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="throttled" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -54,6 +55,8 @@ public class testSyncGalResponse {
     protected String token;
     @XmlAttribute(name = "galDefinitionLastModified")
     protected String galDefinitionLastModified;
+    @XmlAttribute(name = "throttled")
+    protected Boolean throttled;
 
     /**
      * Gets the value of the cnOrDeleted property.
@@ -155,6 +158,30 @@ public class testSyncGalResponse {
      */
     public void setGalDefinitionLastModified(String value) {
         this.galDefinitionLastModified = value;
+    }
+
+    /**
+     * Gets the value of the throttled property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isThrottled() {
+        return throttled;
+    }
+
+    /**
+     * Sets the value of the throttled property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setThrottled(Boolean value) {
+        this.throttled = value;
     }
 
 }

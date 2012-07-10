@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{urn:zimbraAccount}dl"/>
+ *         &lt;element name="dl" type="{urn:zimbraAccount}dlInfo"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,17 +33,17 @@ import javax.xml.bind.annotation.XmlType;
 public class testCreateDistributionListResponse {
 
     @XmlElement(required = true)
-    protected testDistributionListInfo dl;
+    protected testDlInfo dl;
 
     /**
      * Gets the value of the dl property.
      * 
      * @return
      *     possible object is
-     *     {@link testDistributionListInfo }
+     *     {@link testDlInfo }
      *     
      */
-    public testDistributionListInfo getDl() {
+    public testDlInfo getDl() {
         return dl;
     }
 
@@ -52,10 +52,10 @@ public class testCreateDistributionListResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link testDistributionListInfo }
+     *     {@link testDlInfo }
      *     
      */
-    public void setDl(testDistributionListInfo value) {
+    public void setDl(testDlInfo value) {
         this.dl = value;
     }
 

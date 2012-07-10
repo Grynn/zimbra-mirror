@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;simpleType name="action">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *     &lt;enumeration value="edit"/>
  *     &lt;enumeration value="revoke"/>
  *     &lt;enumeration value="expire"/>
  *   &lt;/restriction>
@@ -25,6 +26,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum testAction {
 
+    @XmlEnumValue("edit")
+    EDIT("edit"),
     @XmlEnumValue("revoke")
     REVOKE("revoke"),
     @XmlEnumValue("expire")

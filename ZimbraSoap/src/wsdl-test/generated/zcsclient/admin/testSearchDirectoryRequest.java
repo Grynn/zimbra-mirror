@@ -29,6 +29,7 @@ import generated.zcsclient.zm.testAttributeSelectorImpl;
  *       &lt;attribute name="sortBy" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="types" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="sortAscending" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="countOnly" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -62,6 +63,8 @@ public class testSearchDirectoryRequest
     protected String types;
     @XmlAttribute(name = "sortAscending")
     protected Boolean sortAscending;
+    @XmlAttribute(name = "countOnly")
+    protected Boolean countOnly;
 
     /**
      * Gets the value of the query property.
@@ -301,6 +304,30 @@ public class testSearchDirectoryRequest
      */
     public void setSortAscending(Boolean value) {
         this.sortAscending = value;
+    }
+
+    /**
+     * Gets the value of the countOnly property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isCountOnly() {
+        return countOnly;
+    }
+
+    /**
+     * Sets the value of the countOnly property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setCountOnly(Boolean value) {
+        this.countOnly = value;
     }
 
 }

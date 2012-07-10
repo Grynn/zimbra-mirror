@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="user" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="pass" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="scheme" use="required" type="{urn:zimbraAdmin}authScheme" />
+ *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -41,6 +42,8 @@ public class testExchangeAuthSpec {
     protected String pass;
     @XmlAttribute(name = "scheme", required = true)
     protected testAuthScheme scheme;
+    @XmlAttribute(name = "type")
+    protected String type;
 
     /**
      * Gets the value of the url property.
@@ -136,6 +139,30 @@ public class testExchangeAuthSpec {
      */
     public void setScheme(testAuthScheme value) {
         this.scheme = value;
+    }
+
+    /**
+     * Gets the value of the type property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * Sets the value of the type property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setType(String value) {
+        this.type = value;
     }
 
 }

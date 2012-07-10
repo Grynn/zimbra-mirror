@@ -3,7 +3,7 @@ package generated.zcsclient.admin;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -17,9 +17,9 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;all>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="newName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/all>
- *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="newName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -33,9 +33,9 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class testRenameUCServiceRequest {
 
-    @XmlAttribute(name = "id", required = true)
+    @XmlElement(required = true)
     protected String id;
-    @XmlAttribute(name = "newName", required = true)
+    @XmlElement(required = true)
     protected String newName;
 
     /**

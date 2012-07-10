@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="cn" type="{urn:zimbraMail}contactSpec"/>
+ *         &lt;element name="cn" type="{urn:zimbraMail}modifyContactSpec"/>
  *       &lt;/sequence>
  *       &lt;attribute name="replace" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="verbose" type="{http://www.w3.org/2001/XMLSchema}boolean" />
@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
 public class testModifyContactRequest {
 
     @XmlElement(required = true)
-    protected testContactSpec cn;
+    protected testModifyContactSpec cn;
     @XmlAttribute(name = "replace")
     protected Boolean replace;
     @XmlAttribute(name = "verbose")
@@ -47,10 +47,10 @@ public class testModifyContactRequest {
      * 
      * @return
      *     possible object is
-     *     {@link testContactSpec }
+     *     {@link testModifyContactSpec }
      *     
      */
-    public testContactSpec getCn() {
+    public testModifyContactSpec getCn() {
         return cn;
     }
 
@@ -59,10 +59,10 @@ public class testModifyContactRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link testContactSpec }
+     *     {@link testModifyContactSpec }
      *     
      */
-    public void setCn(testContactSpec value) {
+    public void setCn(testModifyContactSpec value) {
         this.cn = value;
     }
 

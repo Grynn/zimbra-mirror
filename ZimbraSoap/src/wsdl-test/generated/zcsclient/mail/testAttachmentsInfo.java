@@ -47,8 +47,8 @@ import org.w3c.dom.Element;
 public class testAttachmentsInfo {
 
     @XmlElements({
-        @XmlElement(name = "cn", type = testContactAttachSpec.class),
         @XmlElement(name = "m", type = testMsgAttachSpec.class),
+        @XmlElement(name = "cn", type = testContactAttachSpec.class),
         @XmlElement(name = "mp", type = testMimePartAttachSpec.class),
         @XmlElement(name = "doc", type = testDocAttachSpec.class)
     })
@@ -76,8 +76,8 @@ public class testAttachmentsInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testContactAttachSpec }
      * {@link testMsgAttachSpec }
+     * {@link testContactAttachSpec }
      * {@link testMimePartAttachSpec }
      * {@link testDocAttachSpec }
      * 

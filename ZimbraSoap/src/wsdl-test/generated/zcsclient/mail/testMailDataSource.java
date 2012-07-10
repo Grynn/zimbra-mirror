@@ -39,7 +39,6 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="defaultSignature" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="forwardReplySignature" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="fromDisplay" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="fromAddress" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="replyToAddress" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="replyToDisplay" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="importClass" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -102,8 +101,6 @@ public abstract class testMailDataSource {
     protected String forwardReplySignature;
     @XmlAttribute(name = "fromDisplay")
     protected String fromDisplay;
-    @XmlAttribute(name = "fromAddress")
-    protected String fromAddress;
     @XmlAttribute(name = "replyToAddress")
     protected String replyToAddress;
     @XmlAttribute(name = "replyToDisplay")
@@ -548,30 +545,6 @@ public abstract class testMailDataSource {
      */
     public void setFromDisplay(String value) {
         this.fromDisplay = value;
-    }
-
-    /**
-     * Gets the value of the fromAddress property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFromAddress() {
-        return fromAddress;
-    }
-
-    /**
-     * Sets the value of the fromAddress property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFromAddress(String value) {
-        this.fromAddress = value;
     }
 
     /**

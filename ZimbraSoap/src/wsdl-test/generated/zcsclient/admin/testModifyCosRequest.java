@@ -3,7 +3,6 @@ package generated.zcsclient.admin;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -16,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="modifyCosRequest">
  *   &lt;complexContent>
  *     &lt;extension base="{urn:zimbraAdmin}adminAttrsImpl">
- *       &lt;all>
- *       &lt;/all>
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;sequence>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -27,12 +26,13 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "modifyCosRequest")
+@XmlType(name = "modifyCosRequest", propOrder = {
+    "id"
+})
 public class testModifyCosRequest
     extends testAdminAttrsImpl
 {
 
-    @XmlAttribute(name = "id")
     protected String id;
 
     /**

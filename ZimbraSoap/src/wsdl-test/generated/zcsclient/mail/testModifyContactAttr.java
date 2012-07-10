@@ -9,18 +9,19 @@ import javax.xml.bind.annotation.XmlValue;
 
 
 /**
- * <p>Java class for newContactAttr complex type.
+ * <p>Java class for modifyContactAttr complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="newContactAttr">
+ * &lt;complexType name="modifyContactAttr">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
  *       &lt;attribute name="n" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="aid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="part" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="op" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -29,10 +30,10 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "newContactAttr", propOrder = {
+@XmlType(name = "modifyContactAttr", propOrder = {
     "value"
 })
-public class testNewContactAttr {
+public class testModifyContactAttr {
 
     @XmlValue
     protected String value;
@@ -44,6 +45,8 @@ public class testNewContactAttr {
     protected Integer id;
     @XmlAttribute(name = "part")
     protected String part;
+    @XmlAttribute(name = "op")
+    protected String op;
 
     /**
      * Gets the value of the value property.
@@ -163,6 +166,30 @@ public class testNewContactAttr {
      */
     public void setPart(String value) {
         this.part = value;
+    }
+
+    /**
+     * Gets the value of the op property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getOp() {
+        return op;
+    }
+
+    /**
+     * Sets the value of the op property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setOp(String value) {
+        this.op = value;
     }
 
 }
