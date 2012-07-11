@@ -100,6 +100,7 @@ $policy_bank{'ORIGINATING'} = {  # mail supposedly originating from our users
   virus_admin_maps => ['@@av_notify_user@@'],
   spam_admin_maps  => ['@@av_notify_user@@'],
   warnbadhsender   => 0,
+  %%uncomment LOCAL:amavis_originating_bypass_sa%%bypass_spam_checks_maps   => [1], # don't spam-check internal mail
   # forward to a smtpd service providing DKIM signing service
   #forward_method => 'smtp:[127.0.0.1]:10027',
   # force MTA conversion to 7-bit (e.g. before DKIM signing)
