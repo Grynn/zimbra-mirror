@@ -14,19 +14,19 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.client.ZContact;
 import com.zimbra.client.ZFeatures;
 import com.zimbra.client.ZFilterRule;
 import com.zimbra.client.ZFolder;
 import com.zimbra.client.ZGetInfoResult;
 import com.zimbra.client.ZIdentity;
+import com.zimbra.client.ZLicenses;
 import com.zimbra.client.ZMailbox;
 import com.zimbra.client.ZPrefs;
 import com.zimbra.client.ZSignature;
+import com.zimbra.common.service.ServiceException;
 
 import java.net.URI;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -84,6 +84,8 @@ public class ZMailboxBean {
     public ZPrefs getPrefs() throws ServiceException { return mMbox.getPrefs(); }
     
     public ZFeatures getFeatures() throws ServiceException { return mMbox.getFeatures(); }
+
+    public ZLicenses getLicenses() throws ServiceException { return mMbox.getLicenses(); }
 
     public Boolean getAdminDelegated() throws ServiceException { return mMbox.getAccountInfo(false).getAdminDelegated(); }
 
