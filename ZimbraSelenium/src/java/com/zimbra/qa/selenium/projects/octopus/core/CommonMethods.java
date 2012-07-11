@@ -24,9 +24,7 @@ public class CommonMethods {
 				+ "</action>"
 				+ "</FolderActionRequest>");
 
-
 	}
-
 	// create mountpoint via soap
 	protected void mountFolderViaSoap(ZimbraAccount account, ZimbraAccount grantee, FolderItem folder,
 			String permission, FolderItem mountPointFolder, String mountPointName) throws HarnessException {
@@ -66,7 +64,6 @@ public class CommonMethods {
 				+ "<notes _content='You are invited to view my shared folder " + folder.getName() + " '/>"
 				+ "</SendShareNotificationRequest>");
 	}
-
 	// create a new folder via soap
 	protected FolderItem createFolderViaSoap(ZimbraAccount account, FolderItem ...folderItemArray) throws HarnessException {
 
@@ -88,7 +85,24 @@ public class CommonMethods {
 		// verify folder creation on the server
 		return FolderItem.importFromSOAP(account, foldername);
 	}
+	// Create a new folder, pass the required folder name
+	protected FolderItem createFolderViaSoap(ZimbraAccount account, String folderName, FolderItem ...folderItemArray) throws HarnessException
+	{
+		FolderItem folderItem = FolderItem.importFromSOAP(account, SystemFolder.Briefcase);
 
+		if ((folderItemArray != null) && folderItemArray.length >0) {
+			folderItem = folderItemArray[0];
+		}
+
+		// send soap request
+		account.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
+				+ "<folder name='" + folderName + "' l='"
+				+ folderItem.getId()
+				+ "' view='document'/>" + "</CreateFolderRequest>");
+
+		// verify folder creation on the server
+		return FolderItem.importFromSOAP(account, folderName);
+	}
 	// create a new zimbra account
 	protected OctopusAccount getNewAccount() {
 		OctopusAccount newAccount = new OctopusAccount();
@@ -96,7 +110,6 @@ public class CommonMethods {
 		newAccount.authenticate();
 		return newAccount;
 	}
-
 	// return comment id
 	protected String makeCommentViaSoap(ZimbraAccount account, String fileId, String comment)
 	throws HarnessException {
@@ -109,9 +122,7 @@ public class CommonMethods {
 		//TODO: verify valid id?
 		return account.soapSelectValue("//mail:AddCommentResponse//mail:comment", "id");
 	}
-
-
-
+	//Rename a file via Soap
 	protected String renameViaSoap(ZimbraAccount account, String fileId, String newName)
 	throws HarnessException {
 		// Rename file using SOAP
@@ -127,7 +138,7 @@ public class CommonMethods {
 
 		return newName;
 	}
-
+	// Mark file favorite using soap
 	protected void markFileFavoriteViaSoap(ZimbraAccount account, String fileId)
 	throws HarnessException {
 		account.soapSend("<DocumentActionRequest xmlns='urn:zimbraMail'>"
@@ -141,7 +152,7 @@ public class CommonMethods {
 		"Verify file is marked as favorite");
 
 	}
-
+	// Unmark file favorite using soap
 	protected void unMarkFileFavoriteViaSoap(ZimbraAccount account, String fileId)
 	throws HarnessException {
 		account.soapSend("<DocumentActionRequest xmlns='urn:zimbraMail'>"
@@ -190,10 +201,33 @@ public class CommonMethods {
 		return account.soapSelectValue(
 				"//mail:SaveDocumentResponse//mail:doc", "id");
 	}
-	/*
-	 * Function returns the array list containing folder Items. folder structure gets created is with hierarchy folder1>folder2>folder3.
-	 */
+	// save document request
+	protected void saveDocumentRequestViaSoap(ZimbraAccount account, FolderItem folder,String attachmentId) throws HarnessException
+	{
+		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
+				+ "<doc l='" + folder.getId() + "'><upload id='"
+				+ attachmentId + "'/></doc></SaveDocumentRequest>");
+	}
+	// get activity stream request
+	protected void getActivityStreamRequest(ZimbraAccount account,FolderItem folder) throws HarnessException
+	{
+		account.soapSend(
+				"<GetActivityStreamRequest xmlns='urn:zimbraMail' offset='0' limit='250' id='"
+				+ folder.getId() + "'/>"
+		);
+	}
+	// delete folder via Soap
+	protected void deleteFolderViaSoap(ZimbraAccount account, FolderItem folder)throws HarnessException
+	{
+		account.soapSend(
+				"<ItemActionRequest xmlns='urn:zimbraMail'>"
+				+ "<action id='" + folder.getId() + "' op='delete'/>"
+				+ "</ItemActionRequest>"
+		);
+	}
+	//Function returns the array list containing folder Items. folder structure gets created is with hierarchy folder1>folder2>folder3.
 	protected ArrayList<FolderItem> createMultipleSubfolders(ZimbraAccount act,String ParentFolder,int noOfSubFolders) throws HarnessException
+
 	{
 		ArrayList<FolderItem> folderNames = new ArrayList<FolderItem>();
 
@@ -221,6 +255,7 @@ public class CommonMethods {
 		return folderNames;
 
 	}
+	// Function for checking if required document is present in destination folder or not.
 	public boolean isDocumentPresentInFolder(ZimbraAccount acount,String folderName, String fileName)throws HarnessException
 	{
 		boolean docPresent= false;
