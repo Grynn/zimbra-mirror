@@ -67,7 +67,7 @@ public class GlobalHistory extends HistoryCommonTest {
 
 		//rename via soap
 		String newName = "NewName " + ZimbraSeleniumProperties.getUniqueString() +
-				fileName.substring(fileName.indexOf("."),fileName.length());
+		fileName.substring(fileName.indexOf("."),fileName.length());
 		renameViaSoap(app.zGetActiveAccount(), fileId, newName);
 
 		//To get file rename  history ,user needs to do refresh first -Workaround
@@ -171,8 +171,8 @@ public class GlobalHistory extends HistoryCommonTest {
 
 		// Click on Share option in the file Context menu
 		DialogFileShare dialogFileShare = (DialogFileShare) app.zPageMyFiles
-				.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
-						Button.O_FILE_SHARE, fileName);
+		.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
+				Button.O_FILE_SHARE, fileName);
 
 		// Click on Close button
 		dialogFileShare.zClickButton(Button.B_CLOSE);
@@ -184,7 +184,7 @@ public class GlobalHistory extends HistoryCommonTest {
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
 				PageMyFiles.Locators.zMyFilesListViewItems.locator
 				+ " img[src*='shared_badge.png']", "3000"),
-				"Verify the file share icon is displayed");
+		"Verify the file share icon is displayed");
 
 		//Click on History tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
@@ -224,21 +224,13 @@ public class GlobalHistory extends HistoryCommonTest {
 				SystemFolder.Briefcase);
 		// Create the sub-folder
 		String subFolderName = "folder"
-				+ ZimbraSeleniumProperties.getUniqueString();
-
-		account.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+ "<folder name='" + subFolderName + "' l='"
-				+ briefcaseRootFolder.getId() + "' view='document'/>"
-				+ "</CreateFolderRequest>");
+			+ ZimbraSeleniumProperties.getUniqueString();
 
 		// Verify the sub-folder exists on the server
-		FolderItem subFolder = FolderItem
-				.importFromSOAP(account, subFolderName);
+		FolderItem subFolder = createFolderViaSoap(account, briefcaseRootFolder);
 
 		// delete folder using SOAP
-		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
-				+ "<action id='" + subFolder.getId() + "' op='delete'/>"
-				+ "</ItemActionRequest>");
+		deleteFolderViaSoap(account,subFolder);
 
 		//To get file folder deletion history ,user needs to do refresh first -Workaround
 		app.zPageMyFiles.zRefresh();
@@ -287,27 +279,15 @@ public class GlobalHistory extends HistoryCommonTest {
 		// Create two briefcase sub-folders:
 		// One folder to Move & Another folder to move into
 		String subFolderName1 = "folder1"
-				+ ZimbraSeleniumProperties.getUniqueString();
+			+ ZimbraSeleniumProperties.getUniqueString();
 		String subFolderName2 = "folder2"
-				+ ZimbraSeleniumProperties.getUniqueString();
-
-		account.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+ "<folder name='" + subFolderName1 + "' l='"
-				+ briefcaseRootFolder.getId() + "' view='document'/>"
-				+ "</CreateFolderRequest>");
+			+ ZimbraSeleniumProperties.getUniqueString();
 
 		// Verify the sub-folder exists on the server
-		FolderItem subFolderItem1 = FolderItem.importFromSOAP(account,
-				subFolderName1);
-
-		account.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+ "<folder name='" + subFolderName2 + "' l='"
-				+ briefcaseRootFolder.getId() + "' view='document'/>"
-				+ "</CreateFolderRequest>");
+		FolderItem subFolderItem1 = createFolderViaSoap(account,subFolderName1,briefcaseRootFolder);
 
 		// Verify the destination sub-folder exists on the server
-		FolderItem subFolderItem2 = FolderItem.importFromSOAP(account,
-				subFolderName2);
+		FolderItem subFolderItem2 = createFolderViaSoap(account,subFolderName2,briefcaseRootFolder);
 
 		// move folder using SOAP
 		app.zPageOctopus.moveItemUsingSOAP(subFolderItem1.getId(),
@@ -321,7 +301,7 @@ public class GlobalHistory extends HistoryCommonTest {
 
 		// Verify the first sub-folder is now in the destination folder
 		ZAssert.assertTrue(app.zPageOctopus.zIsItemInCurentListView(subFolderName1),
-				"Verify the first sub-folder was moved to the destination folder");
+		"Verify the first sub-folder was moved to the destination folder");
 
 		//To get folder move history ,user needs to do refresh first -Workaround
 		app.zPageMyFiles.zRefresh();
