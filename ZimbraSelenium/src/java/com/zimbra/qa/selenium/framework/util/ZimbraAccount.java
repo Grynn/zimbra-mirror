@@ -27,7 +27,6 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.dom4j.DocumentException;
 import org.dom4j.InvalidXPathException;
 
 import com.zimbra.common.auth.ZAuthToken;
@@ -39,6 +38,7 @@ import com.zimbra.common.soap.SoapParseException;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.SoapUtil;
 import com.zimbra.common.soap.Element.ContainerException;
+import com.zimbra.common.soap.XmlParseException;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.ui.I18N;
@@ -718,7 +718,7 @@ public class ZimbraAccount {
 			if ( !(this instanceof ZimbraAdminAccount) ) {
 				ExecuteHarnessMain.tracer.trace(EmailAddress +" sends "+ Element.parseXML(request).getName());
 			}
-		} catch (DocumentException e) {
+		} catch (XmlParseException e) {
 			ExecuteHarnessMain.tracer.warn("Unable to parse "+ request);
 		}
 
@@ -978,7 +978,7 @@ public class ZimbraAccount {
 
 				 return (sendSOAP(host, requestContext, Element.parseXML(request), destinationType));
 
-			 } catch (DocumentException e) {
+			 } catch (XmlParseException e) {
 				 throw new HarnessException("Unable to parse request "+ request, e);
 			 } catch (ContainerException e) {
 				 throw new HarnessException("Unable to parse request "+ request, e);
@@ -1592,7 +1592,8 @@ public class ZimbraAccount {
 			 }
 		 }
 
-		 protected Element parseSoapResponse(String envelopeStr, boolean raw) throws SoapParseException, SoapFaultException {
+		@Override
+        protected Element parseSoapResponse(String envelopeStr, boolean raw) throws SoapParseException, SoapFaultException {
 			 Element env;
 			 try {
 				 if (envelopeStr.trim().startsWith("<")) {
@@ -1601,7 +1602,7 @@ public class ZimbraAccount {
 				 } else {
 					 env = Element.parseJSON(envelopeStr);
 				 }
-			 } catch (DocumentException de) {
+			 } catch (XmlParseException e) {
 				 throw new SoapParseException("unable to parse response", envelopeStr);
 			 }
 

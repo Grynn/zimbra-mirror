@@ -6,7 +6,9 @@ package com.zimbra.qa.selenium.framework.items;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.XmlParseException;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -249,9 +251,10 @@ public class DocumentItem implements IItem {
 	 * Sample DocItem Driver
 	 * 
 	 * @param args
-	 * @throws Exception
+	 * @throws HarnessException 
+	 * @throws ServiceException 
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws HarnessException, XmlParseException {
 		DocumentItem d = new DocumentItem();
 		d.createUsingSOAP(ZimbraAccount.AccountA());
 

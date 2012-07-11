@@ -24,13 +24,13 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.dom4j.DocumentException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.zimbra.common.httpclient.HttpClientUtil;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.XmlParseException;
 import com.zimbra.common.util.ZimbraHttpConnectionManager;
 import com.zimbra.cs.offline.OfflineLog;
 
@@ -166,7 +166,7 @@ public class AutoUpdateTest {
         return httpMethod.getResponseBodyAsString();
     }
     
-    void verifyExpectedUpdate(String response, String os, UpdateInfo updateInfo) throws DocumentException, ServiceException {
+    void verifyExpectedUpdate(String response, String os, UpdateInfo updateInfo) throws ServiceException {
         String fileSuffix = updateInfo.getPlatform(os).getFileSuffix();
         String hash = updateInfo.getPlatform(os).getHash();
         int size = updateInfo.getPlatform(os).getSize();
@@ -185,13 +185,14 @@ public class AutoUpdateTest {
         Assert.assertEquals(size, Integer.parseInt(patch.getAttribute(A_SIZE)));
     }
     
-    void verifyNoUpdate(String response) throws DocumentException, ServiceException {
+    void verifyNoUpdate(String response) throws XmlParseException {
         Element xml = Element.parseXML(response);
         Assert.assertEquals(E_UPDATES,xml.getName());
         Assert.assertEquals(0, xml.listElements(E_UPDATE).size());
     }
     
-    void sendAndVerify(String chn, String ver, int bid, String os) throws HttpException, IOException, DocumentException, ServiceException {
+    void sendAndVerify(String chn, String ver, int bid, String os)
+    throws HttpException, IOException, ServiceException {
         NameValuePair[] nvp = new NameValuePair[4];
         nvp[0] = new NameValuePair(PARAM_CHN, chn);
         nvp[1] = new NameValuePair(PARAM_VER, ver);
@@ -220,56 +221,56 @@ public class AutoUpdateTest {
     String[] platforms = {"macos", "linux", "win32"};
     
     @Test
-    public void ga201() throws HttpException, IOException, DocumentException, ServiceException {
+    public void ga201() throws HttpException, IOException, ServiceException {
         for (String platform: platforms) {
             sendAndVerify(CHN_RELEASE, "2.0.1", 10659, platform);
         }
     }
 
     @Test
-    public void ga701() throws HttpException, IOException, DocumentException, ServiceException {
+    public void ga701() throws HttpException, IOException, ServiceException {
         for (String platform: platforms) {
             sendAndVerify(CHN_RELEASE, "7.0.1", 10791, platform);
         }
     }
     
     @Test
-    public void beta711() throws HttpException, IOException, DocumentException, ServiceException {
+    public void beta711() throws HttpException, IOException, ServiceException {
         for (String platform: platforms) {
             sendAndVerify(CHN_BETA, "7.1.1", 10867, platform);
         }
     }
 
     @Test
-    public void ga711() throws HttpException, IOException, DocumentException, ServiceException {
+    public void ga711() throws HttpException, IOException, ServiceException {
         for (String platform: platforms) {
             sendAndVerify(CHN_RELEASE, "7.1.1", 10917, platform);
         }
     }
 
     @Test
-    public void ga712() throws HttpException, IOException, DocumentException, ServiceException {
+    public void ga712() throws HttpException, IOException, ServiceException {
         for (String platform: platforms) {
             sendAndVerify(CHN_RELEASE, "7.1.2", 10978, platform);
         }
     }
 
     @Test
-    public void beta713() throws HttpException, IOException, DocumentException, ServiceException {
+    public void beta713() throws HttpException, IOException, ServiceException {
         for (String platform: platforms) {
             sendAndVerify(CHN_BETA, "7.1.3", 11139, platform);
         }
     }
 
     @Test
-    public void beta714() throws HttpException, IOException, DocumentException, ServiceException {
+    public void beta714() throws HttpException, IOException, ServiceException {
         for (String platform: platforms) {
             sendAndVerify(CHN_BETA, "7.1.4", 11234, platform);
         }
     }
 
     @Test
-    public void alreadyUpdated() throws HttpException, IOException, DocumentException, ServiceException {
+    public void alreadyUpdated() throws HttpException, IOException, ServiceException {
         for (String platform: platforms) {
             sendAndVerify(CHN_RELEASE, updateInfo.get(CHN_RELEASE).getExpectedAttrVersion(), updateInfo.get(CHN_RELEASE).getExpectedBuild(), platform);
         }
