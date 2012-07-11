@@ -632,9 +632,9 @@ public class PageBriefcase extends AbsTab {
 
 				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 
-				optionLocator = "css=td[class=ZWidgetTitle]:contains(" + option
-						+ ")";
-
+				optionLocator = "//td[contains(@id,'_title') and contains(text(),'" 
+					+ option + "')]";
+								
 				page = null;
 
 				// FALL THROUGH
