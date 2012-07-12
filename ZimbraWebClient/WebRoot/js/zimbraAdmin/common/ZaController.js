@@ -266,28 +266,7 @@ function(entry, openInNewTab, skipRefresh) {
 	}
 	this.changeActionsState();	
 	//Instrumentation code end	
-	/*
-	if (openInNewTab) {
-		var tab = new ZaAppTab (ZaApp.getInstance().getTabGroup(),  
-				entry.name, entry.getTabIcon() , null, null, true, true, ZaApp.getInstance()._currentViewId) ;
-		tab.setToolTipContent( entry.getTabToolTip()) ;
-	}*/
 }
-
-//Switch to the main tab and display the current view.
-/*
-ZaController.prototype.updateMainTab =
-function (icon, titleLabel, tabId ) {
-	titleLabel = titleLabel || this._contentView.getTitle () ;
-	tabId = tabId || ZaApp.getInstance()._currentViewId ;
-	var tabGroup = ZaApp.getInstance().getTabGroup() ;
-	var mainTab = tabGroup.getMainTab() ;
-	mainTab.setToolTipContent (titleLabel) ;
-	mainTab.resetLabel (titleLabel) ;
-	mainTab.setImage (icon) ;
-	mainTab.setTabId (tabId) ;
-	tabGroup.selectTab(mainTab);
-}*/
 
 ZaController.prototype.getMainTab =
 function () {
@@ -687,21 +666,6 @@ function() {
 * @private
 **/
 ZaController.prototype._initToolbar = function () {
-	//Instrumentation code start
-	/*if(ZaController.initToolbarMethods[this._iKeyName]) {
-		var methods = ZaController.initToolbarMethods[this._iKeyName];
-		var cnt = methods.length;
-		for(var i = 0; i < cnt; i++) {
-			if(typeof(methods[i]) == "function") {
-				try {
-					methods[i].call(this);
-				} catch (ex) {
-					this._handleException(ex, "ZaController.prototype._initToolbar");
-				}
-			}
-		}
-	}	*/
-	//Instrumentation code end
 }
 
 /**
@@ -745,10 +709,7 @@ function () {
 **/
 ZaController.prototype.getToolBar = 
 function () {
-	if (this._toolbar != null)	
-		return this._toolbar;	
-	else
-		return null;
+	return null;
 }
 
 /**
@@ -969,9 +930,6 @@ function () {
 		}                                      
 	}
     //enable More Actions Buttons
-    if(this._toolbar) {
-    	this._toolbar.enableMoreActionsMenuItems () ;
-    }
 
     // For New UI
     var isCurrentController;
