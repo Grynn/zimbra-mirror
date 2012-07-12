@@ -65,6 +65,7 @@ $syslog_facility = 'local0';   # Syslog facility as a string
            # choose from: emerg, alert, crit, err, warning, notice, info, debug
 
 $enable_db = 0;              # enable use of BerkeleyDB/libdb (SNMP and nanny)
+# $enable_zmq = 1;           # enable use of ZeroMQ (SNMP and nanny)
 $nanny_details_level = 2;    # nanny verbosity: 1: traditional, 2: detailed
 $enable_dkim_verification = 1;  # enable DKIM signatures verification
 $enable_dkim_signing = 1;    # load DKIM signing code, keys defined by dkim_key
@@ -370,39 +371,43 @@ $banned_filename_re = new_RE(
 
 @decoders = (
   ['mail', \&do_mime_decode],
-  ['asc',  \&do_ascii],
-  ['uue',  \&do_ascii],
-  ['hqx',  \&do_ascii],
-  ['ync',  \&do_ascii],
-  ['F',    \&do_uncompress, ['unfreeze','freeze -d','melt','fcat'] ],
-  ['Z',    \&do_uncompress, ['uncompress','gzip -d','zcat'] ],
-  ['gz',   \&do_uncompress,  'gzip -d'],
+  [[qw(asc uue hqx ync)], \&do_ascii],  # not safe
+  ['F',    \&do_uncompress, ['unfreeze', 'freeze -d', 'melt', 'fcat'] ],
+  ['Z',    \&do_uncompress, ['uncompress', 'gzip -d', 'zcat'] ],
+  ['gz',   \&do_uncompress, 'gzip -d'],
   ['gz',   \&do_gunzip],
-  ['bz2',  \&do_uncompress,  'bzip2 -d'],
-  ['xz',   \&Amavis::Unpackers::do_uncompress,
-           ['xzdec'. 'xz -dc', 'unxz -c', 'xzcat'] ],
-  ['lzma', \&Amavis::Unpackers::do_uncompress,
+  ['bz2',  \&do_uncompress, 'bzip2 -d'],
+  ['xz',   \&do_uncompress,
+           ['xzdec', 'xz -dc', 'unxz -c', 'xzcat'] ],
+  ['lzma', \&do_uncompress,
            ['lzmadec', 'xz -dc --format=lzma',
             'lzma -dc', 'unlzma -c', 'lzcat', 'lzmadec'] ],
-  ['lzo',  \&do_uncompress,  'lzop -d'],
-  ['rpm',  \&do_uncompress, ['rpm2cpio.pl','rpm2cpio'] ],
-  ['cpio', \&do_pax_cpio,   ['pax','gcpio','cpio'] ],
-  ['tar',  \&do_pax_cpio,   ['pax','gcpio','cpio'] ],
-  ['deb',  \&do_ar,          'ar'],
-# ['a',    \&do_ar,          'ar'],  # unpacking .a seems an overkill
-  ['zip',  \&do_unzip],
-  ['7z',   \&do_7zip,       ['7zr','7za','7z'] ],
-  ['rar',  \&do_unrar,      ['rar','unrar'] ],
-  ['arj',  \&do_unarj,      ['arj','unarj'] ],
-  ['arc',  \&do_arc,        ['nomarch','arc'] ],
-  ['zoo',  \&do_zoo,        ['zoo','unzoo'] ],
-  ['lha',  \&do_lha,         'lha'],
-# ['doc',  \&do_ole,         'ripole'],
-  ['cab',  \&do_cabextract,  'cabextract'],
-  ['tnef', \&do_tnef_ext,    'tnef'],
+  ['lrz',  \&do_uncompress,
+           ['lrzip -q -k -d -o -', 'lrzcat -q -k'] ],
+  ['lzo',  \&do_uncompress, 'lzop -d'],
+  ['rpm',  \&do_uncompress, ['rpm2cpio.pl', 'rpm2cpio'] ],
+  [['cpio','tar'], \&do_pax_cpio, ['pax', 'gcpio', 'cpio'] ],
+           # ['/usr/local/heirloom/usr/5bin/pax', 'pax', 'gcpio', 'cpio']
+  ['deb',  \&do_ar, 'ar'],
+# ['a',    \&do_ar, 'ar'],  # unpacking .a seems an overkill
+  ['rar',  \&do_unrar, ['unrar', 'rar'] ],
+  ['arj',  \&do_unarj, ['unarj', 'arj'] ],
+  ['arc',  \&do_arc,   ['nomarch', 'arc'] ],
+  ['zoo',  \&do_zoo,   ['zoo', 'unzoo'] ],
+  ['doc',  \&do_ole,   'ripole'],
+  ['cab',  \&do_cabextract, 'cabextract'],
+  ['tnef', \&do_tnef_ext, 'tnef'],
   ['tnef', \&do_tnef],
-# ['sit',  \&do_unstuff,     'unstuff'],  # broken/unsafe decoder
-  ['exe',  \&do_executable, ['rar','unrar'], 'lha', ['arj','unarj'] ],
+# ['lha',  \&do_lha,   'lha'],  # not safe, use 7z instead
+# ['sit',  \&do_unstuff, 'unstuff'],  # not safe
+  [['zip','kmz'], \&do_7zip,  ['7za', '7z'] ],
+  [['zip','kmz'], \&do_unzip],
+  ['7z',   \&do_7zip,  ['7zr', '7za', '7z'] ],
+  [[qw(7z zip gz bz2 Z tar)],
+           \&do_7zip,  ['7za', '7z'] ],
+  [[qw(xz lzma jar cpio arj rar swf lha iso cab deb rpm)],
+           \&do_7zip,  '7z' ],
+  ['exe',  \&do_executable, ['unrar','rar'], 'lha', ['unarj','arj'] ],
 );
 
 
@@ -426,7 +431,7 @@ $banned_filename_re = new_RE(
 # ['Avira SAVAPI',
 #   \&ask_daemon, ["*", 'savapi:/var/tmp/.savapi3', 'product-id'],
 #   qr/^(200|210)/m,  qr/^(310|420|319)/m,
-#   qr/^(?:310|420)[,\s]*(?:.* <<< )?(.+?)(?: ; |$)/m
+#   qr/^(?:310|420)[,\s]*(?:.* <<< )?(.+?)(?: ; |$)/m ],
 # settings for the SAVAPI3.conf: ArchiveScan=1, HeurLevel=2, MailboxScan=1
 
 # ### http://www.clamav.net/
@@ -459,7 +464,7 @@ $banned_filename_re = new_RE(
 # ### http://www.grisoft.com/
 # ['AVG Anti-Virus',
 #   \&ask_daemon, ["SCAN {}\n", '127.0.0.1:55555'],
-#   qr/^200/m, qr/^403/m, qr/^403 .*?: ([^\r\n]+)/m ],
+#   qr/^200/m, qr/^403/m, qr/^403[- ].*: ([^\r\n]+)/m ],
 
 # ### http://www.f-prot.com/
 # ['F-Prot fpscand',  # F-PROT Antivirus for BSD/Linux/Solaris, version 6
@@ -586,18 +591,20 @@ $banned_filename_re = new_RE(
     qr/^(?:Info|Virus Name):\s+(.+)/m ],
     # NOTE: check options and patterns to see which entry better applies
 
-# ### http://www.f-secure.com/products/anti-virus/  version 4.65
+# ### http://www.f-secure.com/products/anti-virus/  version 5.52
 #  ['F-Secure Antivirus for Linux servers',
 #   ['/opt/f-secure/fsav/bin/fsav', 'fsav'],
-#   '--delete=no --disinf=no --rename=no --archive=yes --auto=yes '.
-#   '--dumb=yes --list=no --mime=yes {}', [0], [3,6,8],
-#   qr/(?:infection|Infected|Suspected): (.+)/m ],
+#   '--virus-action1=report --archive=yes --auto=yes '.
+#   '--dumb=yes --list=no --mime=yes {}', [0], [3,4,6,8],
+#   qr/(?:infection|Infected|Suspected|Riskware): (.+)/m ],
+#   # NOTE: internal archive handling may be switched off by '--archive=no'
+#   #   to prevent fsav from exiting with status 9 on broken archives
 
-  ### http://www.f-secure.com/products/anti-virus/  version 5.52
-   ['F-Secure Antivirus for Linux servers',
+  ### http://www.f-secure.com/ version 9.14
+   ['F-Secure Linux Security',
     ['/opt/f-secure/fsav/bin/fsav', 'fsav'],
     '--virus-action1=report --archive=yes --auto=yes '.
-    '--dumb=yes --list=no --mime=yes {}', [0], [3,4,6,8],
+    '--list=no --nomimeerr {}', [0], [3,4,6,8],
     qr/(?:infection|Infected|Suspected|Riskware): (.+)/m ],
     # NOTE: internal archive handling may be switched off by '--archive=no'
     #   to prevent fsav from exiting with status 9 on broken archives
