@@ -74,5 +74,14 @@
             </jaxb:nameXmlTransform>
         </jaxb:schemaBindings>
     </jaxb:bindings>
+    <jaxb:bindings schemaLocation="../../build/classes/com/zimbra/soap/zimbraVoice.xsd"
+        node="//xsd:schema[@targetNamespace='urn:zimbraVoice']">
+        <jaxb:schemaBindings>
+            <jaxb:package name="generated.zcsclient.voice" />
+            <jaxb:nameXmlTransform>
+                <jaxb:typeName prefix="test" />
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
 </jaxb:bindings>
 
