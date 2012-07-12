@@ -167,78 +167,20 @@ function () {
 }
 ZaController.initPopupMenuMethods["ZaDomainListController"].push(ZaDomainListController.initPopupMenuMethod);
 
-/**
-* This method is called from {@link ZaController#_initToolbar}
-**/
-ZaDomainListController.initToolbarMethod =
-function () {
-	// first button in the toolbar is a menu.
-	if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_TOP_DOMAIN, ZaZimbraAdmin.currentAdminAccount)) {	
-	
-		this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainListController.prototype._newButtonListener));
-		this._toolbarOperations[ZaOperation.ADD_DOMAIN_ALIAS]=new ZaOperation(ZaOperation.ADD_DOMAIN_ALIAS,ZaMsg.TBB_AddDomainAlias,
-                ZaMsg.DTBB_addDomainAlias_tt, "DomainAlias", "DomainAliasDis", new AjxListener(this, ZaDomainListController.prototype._addDomainAliasListener));
-	}
-  	this._toolbarOperations[ZaOperation.EDIT]=new ZaOperation(ZaOperation.EDIT,ZaMsg.TBB_Edit, ZaMsg.DTBB_Edit_tt, "Edit", "EditDis",  new AjxListener(this, ZaDomainListController.prototype._editButtonListener));    	
-   	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaDomainListController.prototype._deleteButtonListener));    	    	
-    this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS]=new ZaOperation(ZaOperation.VIEW_DOMAIN_ACCOUNTS,ZaMsg.Domain_view_accounts, ZaMsg.Domain_view_accounts_tt, "Search", "SearchDis", new AjxListener(this, this.viewAccountsButtonListener));
-	this._toolbarOperations[ZaOperation.GAL_WIZARD]=new ZaOperation(ZaOperation.GAL_WIZARD,ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainListController.prototype._galWizButtonListener));   		
-	this._toolbarOperations[ZaOperation.AUTH_WIZARD]=new ZaOperation(ZaOperation.AUTH_WIZARD,ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainListController.prototype._authWizButtonListener));
-   /* bug 71235, remove auto provisioning
-	this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD]=new ZaOperation(ZaOperation.AUTOPROV_WIZARD,ZaMsg.DTBB_AutoProvConfigWiz, ZaMsg.DTBB_AutoProvConfigWiz_tt, "Backup", "BackupDis", new AjxListener(this, ZaDomainListController.prototype._autoProvWizButtonListener));
-	*/
-	if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_TOP_DOMAIN, ZaZimbraAdmin.currentAdminAccount)) {
-		this._toolbarOrder.push(ZaOperation.NEW);
-	}
-	this._toolbarOrder.push(ZaOperation.EDIT);
-	this._toolbarOrder.push(ZaOperation.DELETE);
-	this._toolbarOrder.push(ZaOperation.ADD_DOMAIN_ALIAS);
-    this._toolbarOrder.push(ZaOperation.VIEW_DOMAIN_ACCOUNTS);
-    this._toolbarOrder.push(ZaOperation.GAL_WIZARD);
-	this._toolbarOrder.push(ZaOperation.AUTH_WIZARD);
-    /* bug 71235 removew auto privisioning this._toolbarOrder.push(ZaOperation.AUTOPROV_WIZARD); */
-	
-}
-ZaController.initToolbarMethods["ZaDomainListController"].push(ZaDomainListController.initToolbarMethod);
-
 //private and protected methods
 ZaDomainListController.prototype._createUI = 
 function (openInNewTab, openInSearchTab) {
 	this._contentView = new ZaDomainListView(this._container);
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	// create the menu operations/listeners first	
-    this._initToolbar();
 	//always add Help and navigation buttons at the end of the toolbar    
-	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);	
-	this._toolbarOperations[ZaOperation.PAGE_BACK]=new ZaOperation(ZaOperation.PAGE_BACK,ZaMsg.Previous, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, this._prevPageListener));
-
-	this._toolbarOrder.push(ZaOperation.NONE);
-	this._toolbarOrder.push(ZaOperation.PAGE_BACK);
-	this._toolbarOrder.push(ZaOperation.PAGE_FORWARD);
-	this._toolbarOrder.push(ZaOperation.HELP);
-
 	//add the acount number counts
-	ZaSearch.searchResultCountsView(this._toolbarOperations, this._toolbarOrder);
+	//ZaSearch.searchResultCountsView(this._toolbarOperations, this._toolbarOrder);
 	
-	this._toolbarOperations[ZaOperation.PAGE_FORWARD]=new ZaOperation(ZaOperation.PAGE_FORWARD,ZaMsg.Next, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, this._nextPageListener));
-	this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));				
-
-	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_DMLIST);    
 		
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-    if (!appNewUI) {
-        elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-        //ZaApp.getInstance().createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
-        var tabParams = {
-                openInNewTab: openInNewTab ? openInNewTab : false,
-                tabId: this.getContentViewId(),
-                tab: openInNewTab ? null : (openInSearchTab ? this.getSearchTab() : this.getMainTab())
-            }
-        ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-    } else {
-        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
-    }
+    ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 	this._initPopupMenu();
 	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations, ZaId.VIEW_DMLIST, ZaId.MENU_POP);
 	
@@ -714,31 +656,16 @@ function () {
 		var item = this._contentView.getSelection()[0];
 		if(item) {
 			if(item.attrs[ZaDomain.A_domainType] == "alias"){
-				if(this._toolbarOperations[ZaOperation.ADD_DOMAIN_ALIAS])
-                                        this._toolbarOperations[ZaOperation.ADD_DOMAIN_ALIAS].enabled=false;
 				
 				if(this._popupOperations[ZaOperation.ADD_DOMAIN_ALIAS])
                                         this._popupOperations[ZaOperation.ADD_DOMAIN_ALIAS].enabled=false;
 
-				if(this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD])
-                                        this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD].enabled=false;
 
 				if(this._popupOperations[ZaOperation.AUTOPROV_WIZARD])
                                         this._popupOperations[ZaOperation.AUTOPROV_WIZARD].enabled=false;
 			}
 			
 			if(item.attrs[ZaDomain.A_zimbraDomainStatus] == ZaDomain.DOMAIN_STATUS_SHUTDOWN) {
-				if(this._toolbarOperations[ZaOperation.EDIT])
-					this._toolbarOperations[ZaOperation.EDIT].enabled=false;
-			
-				if(this._toolbarOperations[ZaOperation.AUTH_WIZARD])
-					this._toolbarOperations[ZaOperation.AUTH_WIZARD].enabled=false;
-
-				if(this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD])
-					this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD].enabled=false;
-
-				if(this._toolbarOperations[ZaOperation.GAL_WIZARD])
-					this._toolbarOperations[ZaOperation.GAL_WIZARD].enabled=false;
 					
 				if(this._popupOperations[ZaOperation.EDIT])
 					this._popupOperations[ZaOperation.EDIT].enabled=false;
@@ -752,9 +679,6 @@ function () {
 				if(this._popupOperations[ZaOperation.GAL_WIZARD])
 					this._popupOperations[ZaOperation.GAL_WIZARD].enabled=false;
 
-                if(this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS])
-					this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS].enabled=false;
-
                 if (this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS])
                     this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS].enabled=false;                    
             } else {
@@ -763,33 +687,24 @@ function () {
 				}
 				
 				if(!(ZaDomain.canConfigureGal(item))) {
-					if(this._toolbarOperations[ZaOperation.GAL_WIZARD])
-						this._toolbarOperations[ZaOperation.GAL_WIZARD].enabled = false;
 					
 					if(this._popupOperations[ZaOperation.GAL_WIZARD])
 						this._popupOperations[ZaOperation.GAL_WIZARD].enabled=false;						
 				}
 		
 				if(!(ZaDomain.canConfigureAuth(item))) {
-					if(this._toolbarOperations[ZaOperation.AUTH_WIZARD])
-						this._toolbarOperations[ZaOperation.AUTH_WIZARD].enabled = false;
 			
 					if(this._popupOperations[ZaOperation.AUTH_WIZARD])
 						this._popupOperations[ZaOperation.AUTH_WIZARD].enabled=false;
 				}
 
 				if(!(ZaDomain.canConfigureAutoProv(item))) {
-					if(this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD])
-						this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD].enabled = false;
 
 					if(this._popupOperations[ZaOperation.AUTOPROV_WIZARD])
 						this._popupOperations[ZaOperation.AUTOPROV_WIZARD].enabled=false;
 				}
 
 				if(!item.rights[ZaDomain.RIGHT_DELETE_DOMAIN]) {
-					if(this._toolbarOperations[ZaOperation.DELETE]) {
-						this._toolbarOperations[ZaOperation.DELETE].enabled=false;
-					}
 					
 					if(this._popupOperations[ZaOperation.DELETE]) {
 						this._popupOperations[ZaOperation.DELETE].enabled=false;
@@ -798,18 +713,6 @@ function () {
             }
 		}
 	} else if (cnt > 1){
-		if(this._toolbarOperations[ZaOperation.AUTH_WIZARD])
-			this._toolbarOperations[ZaOperation.AUTH_WIZARD].enabled=false;
-
-		if(this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD])
-			this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD].enabled=false;
-
-		if(this._toolbarOperations[ZaOperation.GAL_WIZARD])
-			this._toolbarOperations[ZaOperation.GAL_WIZARD].enabled=false;
-		
-		if(this._toolbarOperations[ZaOperation.EDIT])
-			this._toolbarOperations[ZaOperation.EDIT].enabled=false;
-
 		if(this._popupOperations[ZaOperation.AUTH_WIZARD])
 			this._popupOperations[ZaOperation.AUTH_WIZARD].enabled=false;
 
@@ -822,27 +725,9 @@ function () {
 		if(this._popupOperations[ZaOperation.EDIT])
 			this._popupOperations[ZaOperation.EDIT].enabled=false;
 
-        if(this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS])
-            this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS].enabled=false;
-
         if (this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS])
             this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS].enabled=false;    
     } else {
-		if(this._toolbarOperations[ZaOperation.EDIT])
-			this._toolbarOperations[ZaOperation.EDIT].enabled=false;
-		
-		if(this._toolbarOperations[ZaOperation.DELETE])
-			this._toolbarOperations[ZaOperation.DELETE].enabled=false;
-		
-		if(this._toolbarOperations[ZaOperation.AUTH_WIZARD])
-			this._toolbarOperations[ZaOperation.AUTH_WIZARD].enabled=false;
-
-		if(this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD])
-			this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD].enabled=false;
-
-		if(this._toolbarOperations[ZaOperation.GAL_WIZARD])
-			this._toolbarOperations[ZaOperation.GAL_WIZARD].enabled=false;
-			
 			
 		if(this._popupOperations[ZaOperation.EDIT])
 			this._popupOperations[ZaOperation.EDIT].enabled=false;
@@ -858,9 +743,6 @@ function () {
 					
 		if(this._popupOperations[ZaOperation.GAL_WIZARD])
 			this._popupOperations[ZaOperation.GAL_WIZARD].enabled=false;
-
-        if(this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS])
-            this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS].enabled=false;
 
         if (this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS])
             this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS].enabled=false;    

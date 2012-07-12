@@ -57,7 +57,7 @@ function(entry, openInNewTab, skipRefresh) {
 	this._setView(entry, openInNewTab, skipRefresh);
 }
 
-ZaAccountViewController.initToolbarMethod =
+/*ZaAccountViewController.initToolbarMethod =
 function () {
 	var showNewAccount = false;
 	if(ZaSettings.HAVE_MORE_DOMAINS || ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
@@ -97,7 +97,7 @@ function () {
 					
 }
 ZaController.initToolbarMethods["ZaAccountViewController"].push(ZaAccountViewController.initToolbarMethod);
-
+*/
 ZaAccountViewController.initPopupMenuMethod =
 function () {
 	var showNewAccount = false;
@@ -191,14 +191,9 @@ function(entry) {
 	try {
 		this._currentObject = entry;
 
-		this._initToolbar();
+		//this._initToolbar();
         this._initPopupMenu();
 		//make sure these are last
-		this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-		this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));		
-		this._toolbarOrder.push(ZaOperation.NONE);
-		this._toolbarOrder.push(ZaOperation.HELP);
-		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations, this._toolbarOrder, null, null, ZaId.VIEW_ACCT);
 
 		if(!entry[ZaModel.currentTab])
 			entry[ZaModel.currentTab] = "1";
@@ -213,16 +208,7 @@ function(entry) {
 	  		this._contentView = this._view = new this.tabConstructor(this._container,entry);
 			var elements = new Object();
 			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-            if(!appNewUI) {
-                elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-
-                var tabParams = {
-                    openInNewTab: true,
-                    tabId: this.getContentViewId()
-                }
-                ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams);
-            } else
-                ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+            ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 	    	//associate the controller with the view by viewId
 		    ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 			//ZaApp.getInstance().pushView(ZaZimbraAdmin._ACCOUNT_VIEW);
@@ -240,15 +226,8 @@ function(entry) {
 			}
 		}
 
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-        if (appNewUI)
-            ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
+        ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
 
-		if(!entry.id) {
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
-		} else {
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
-		}
 		this._view.setDirty(false);
 		entry.attrs[ZaAccount.A_password] = null; //get rid of VALUE-BLOCKED
 		entry[ZaModel.currentTab] = "1";
@@ -309,13 +288,11 @@ ZaAccountViewController.changeActionsStateMethod = function () {
     }
 
     if (!isDeleteEnabled) {
-        this._toolbarOperations[ZaOperation.DELETE].enabled = isDeleteEnabled;
         if(this._popupOperations[ZaOperation.DELETE])
             this._popupOperations[ZaOperation.DELETE].enabled = isDeleteEnabled;
     }
 
 	if(!ZaItem.hasRight(ZaAccount.REINDEX_MBX_RIGHT,this._currentObject))	{
-		this._toolbarOperations[ZaOperation.REINDEX_MAILBOX].enabled = false;
         if(this._popupOperations[ZaOperation.REINDEX_MAILBOX])
             this._popupOperations[ZaOperation.REINDEX_MAILBOX].enabled = isDeleteEnabled;
 	}
@@ -328,8 +305,6 @@ ZaAccountViewController.changeActionsStateMethod = function () {
 
     var isToEnable = (this._view && this._view.isDirty());
 
-    if(this._toolbarOperations[ZaOperation.SAVE])
-        this._toolbarOperations[ZaOperation.SAVE].enabled = isToEnable;
 
     if(this._popupOperations[ZaOperation.SAVE]) {
         this._popupOperations[ZaOperation.SAVE].enabled = isToEnable;

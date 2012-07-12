@@ -34,7 +34,6 @@ ZaXFormViewController = function(appCtxt, container,iKeyName) {
 	ZaController.call(this, appCtxt, container,iKeyName);
 	this.deleteMsg = ZaMsg.Q_DELETE_ACCOUNT;
 	this._toolbarOrder = new Array();
-	this._toolbarOperations = new Array();
 }
 
 ZaXFormViewController.prototype = new ZaController();
@@ -53,8 +52,7 @@ function(entry) {
 }
 
 ZaXFormViewController.prototype.handleXFormChange = function (ev) {
-	if(ev && ev.form.hasErrors() && this._toolbar && this._toolbar.getButton(ZaOperation.SAVE)) { 
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+	if(ev && ev.form.hasErrors() && this._toolbar) { 
         ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
 	}
 }
@@ -310,9 +308,6 @@ function (params) {
 	try {
 		if(this._saveChanges()) {
 			this._view.setDirty(false);
-			if(this._toolbar)
-				this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-
             ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
 		
 			this.closeCnfrmDlg();

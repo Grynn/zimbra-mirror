@@ -57,21 +57,11 @@ function(item, openInNewTab) {
 	this._setView(item, false);
 }
 
-ZaGlobalConfigViewController.initToolbarMethod =
-function () {
-	this._toolbarOperations[ZaOperation.SAVE] = new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));    			
-	this._toolbarOperations[ZaOperation.DOWNLOAD_GLOBAL_CONFIG] = new ZaOperation(ZaOperation.DOWNLOAD_GLOBAL_CONFIG, ZaMsg.TBB_DownloadConfig, ZaMsg.GLOBTBB_DownloadConfig_tt, "DownloadGlobalConfig", "DownloadGlobalConfig", new AjxListener(this, this.downloadConfigButtonListener));
-	this._toolbarOrder.push(ZaOperation.SAVE);
-	this._toolbarOrder.push(ZaOperation.DOWNLOAD_GLOBAL_CONFIG);
-}
-ZaController.initToolbarMethods["ZaGlobalConfigViewController"].push(ZaGlobalConfigViewController.initToolbarMethod);
-
 ZaGlobalConfigViewController.initPopupMenuMethod =
 function () {
-    for (var key in this._toolbarOperations) {
-        // For zimlet issue.
-        this._popupOperations[key] = ZaOperation.duplicate(this._toolbarOperations[key]);
-    }
+	this._popupOperations[ZaOperation.SAVE] = new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));    			
+	this._popupOperations[ZaOperation.DOWNLOAD_GLOBAL_CONFIG] = new ZaOperation(ZaOperation.DOWNLOAD_GLOBAL_CONFIG, ZaMsg.TBB_DownloadConfig, ZaMsg.GLOBTBB_DownloadConfig_tt, "DownloadGlobalConfig", "DownloadGlobalConfig", new AjxListener(this, this.downloadConfigButtonListener));
+
 }
 ZaController.initPopupMenuMethods["ZaGlobalConfigViewController"].push(ZaGlobalConfigViewController.initPopupMenuMethod);
 
@@ -100,26 +90,11 @@ function () {
 ZaGlobalConfigViewController.setViewMethod = function (item) {
     try {
 	    if ( !this._UICreated || (this._view == null) || (this._toolbar == null)) {
-            this._initToolbar();
             this._initPopupMenu();
-            this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-            this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
-            this._toolbarOrder.push(ZaOperation.NONE);
-            this._toolbarOrder.push(ZaOperation.HELP);
-            this._toolbar = new ZaToolBar(this._container, this._toolbarOperations, this._toolbarOrder, null, null, ZaId.VIEW_GSET);
             this._contentView = this._view = new this.tabConstructor(this._container,item);
             var elements = new Object();
             elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-            if (!appNewUI) {
-                elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-                var tabParams = {
-                    openInNewTab: false,
-                    tabId: this.getContentViewId(),
-                    tab: this.getMainTab()
-                }
-                ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-            } else
-                ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+            ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
             this._UICreated = true;
             ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
         }
@@ -145,10 +120,6 @@ function(enable) {
 ZaGlobalConfigViewController.changeActionsStateMethod =
 function () {
     var isToEnable = (this._view && this._view.isDirty());
-    if(this._toolbarOperations[ZaOperation.SAVE]) {
-        this._toolbarOperations[ZaOperation.SAVE].enabled = isToEnable;
-    }
-
     if(this._popupOperations[ZaOperation.SAVE]) {
         this._popupOperations[ZaOperation.SAVE].enabled = isToEnable;
     }

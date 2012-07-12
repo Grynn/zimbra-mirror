@@ -53,49 +53,8 @@ function(item,openInNewTab) {
 
 
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		if (!appNewUI) {
-			this._toolbarOperations[ZaOperation.REFRESH] = new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshListener));
-			this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-			this._toolbarOperations[ZaOperation.PAGE_BACK] = new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Previous, ZaMsg.PrevPage_tt, 
-										"LeftArrow", "LeftArrowDis",  
-										new AjxListener(this, ZaServerStatsController.prototype._prevPageListener));
 
-			this._toolbarOperations[ZaOperation.SEP]=new ZaOperation(ZaOperation.SEP);
-			this._toolbarOperations[ZaOperation.LABEL] = new ZaOperation(ZaOperation.LABEL, AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [1,1]),
-															 null, null, null, null,null,null, "ZaSearchResultCountLabel", "PageInfo");
-					
-			this._toolbarOperations[ZaOperation.PAGE_FORWARD] = new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Next, ZaMsg.NextPage_tt,
-										"RightArrow", "RightArrowDis", 
-										new AjxListener(this, ZaServerStatsController.prototype._nextPageListener));
-
-			this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));				
-
-			this._toolbarOrder.push(ZaOperation.REFRESH);
-			this._toolbarOrder.push(ZaOperation.NONE);
-			this._toolbarOrder.push(ZaOperation.PAGE_BACK);
-			this._toolbarOrder.push(ZaOperation.SEP);
-			this._toolbarOrder.push(ZaOperation.LABEL);
-			this._toolbarOrder.push(ZaOperation.SEP);
-			this._toolbarOrder.push(ZaOperation.PAGE_FORWARD);
-			this._toolbarOrder.push(ZaOperation.HELP);
-			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_STATIS);
-
-			//disable the page_forward and page_back at the beginning
-			this._toolbar.enable([ZaOperation.PAGE_FORWARD, ZaOperation.PAGE_BACK, ZaOperation.LABEL], false);
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-
-			var tabParams = {
-				openInNewTab: openInNewTab,
-				tabId: this.getContentViewId()
-			};
-			if(!openInNewTab) {
-				tabParams.tab = this.getMainTab();
-			}
-			ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-		}
-		else{
-			ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
-		}
+		ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 		this._UICreated = true;
 		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	}

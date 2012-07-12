@@ -90,31 +90,7 @@ function(list, openInNewTab, openInSearchTab, hasMore) {
 	}
 	this._removeList = new Array();
 	this.changeActionsState();
-	
-	var s_result_start_n = (this._currentPageNum - 1) * this.RESULTSPERPAGE + 1;
-	var s_result_end_n = this._currentPageNum  * this.RESULTSPERPAGE;
-	if(this.numPages <= this._currentPageNum) {
-		s_result_end_n = this._searchTotal ;
-		this._toolbar.enable([ZaOperation.PAGE_FORWARD], false);
-	} else {
-		this._toolbar.enable([ZaOperation.PAGE_FORWARD], true);
-	}
-	if(this._currentPageNum == 1) {
-		this._toolbar.enable([ZaOperation.PAGE_BACK], false);
-	} else {
-		this._toolbar.enable([ZaOperation.PAGE_BACK], true);
-	}
-	
-	//update the search result number count now
-	var srCountBt = this._toolbar.getButton (ZaOperation.SEARCH_RESULT_COUNT) ;
-	if (srCountBt ) {
-		if  (this._searchTotal == 0) {
-			s_result_end_n = 0;
-			s_result_start_n = 0;
-		}
-		srCountBt.setText ( AjxMessageFormat.format (ZaMsg.searchResultCount, 
-				[s_result_start_n + " - " + s_result_end_n, this._searchTotal]));
-	}
+
 }
 
 ZaListViewController.prototype.closeButtonListener =
@@ -125,10 +101,6 @@ function(ev, noPopView, func, obj, params) {
 		ZaApp.getInstance().popView () ;
 	}
 	this._UICreated = false;
-	if(this._toolbar) {
-		this._toolbar.dispose();
-		this._toolbar = null;
-	}
 	if(this._contentView) {
 		this._contentView.dispose();
 		this._contentView = null;
@@ -138,9 +110,7 @@ function(ev, noPopView, func, obj, params) {
 		this._actionMenu.dispose();
 		this._actionMenu = null;
 	}
-	this._toolbarOperations = [];
 	this._popupOperations = [];
-	this._toolbarOrder = [];	
 }
 
 ZaListViewController.prototype.multipleSearchCallback =

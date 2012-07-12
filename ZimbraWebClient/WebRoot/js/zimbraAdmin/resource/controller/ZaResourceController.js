@@ -42,24 +42,13 @@ ZaResourceController.prototype.toString = function () {
 };
 
 ZaResourceController.prototype.setDirty = function (isDirty) {
-	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(isDirty) ;
-    if (appNewUI)
-        ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, isDirty);
+    ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, isDirty);
 }
 
 ZaResourceController.prototype.handleXFormChange = function (ev) {
 	if(ev && ev.form.hasErrors()) { 
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-        if (appNewUI)
-            ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
-	}	/*
-	else if(ev && ev.formItem instanceof Dwt_TabBar_XFormItem) {	
-		//do nothing - only switch the tab and it won't change the dirty status of the xform
-		//this._view.setDirty (false);	
-	}else if (this._UICreated){
-		this._view.setDirty (true);
-		//this._toolbar.getButton(ZaOperation.SAVE).setEnabled(true);
-	}*/
+        ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
+	}
 }
 ZaResourceController.prototype.show =
 function(entry, openInNewTab, skipRefresh) {
@@ -67,14 +56,7 @@ function(entry, openInNewTab, skipRefresh) {
 }
 
 ZaResourceController.changeActionsStateMethod = function () {
-	if(!ZaItem.hasRight(ZaResource.DELETE_CALRES_RIGHT,this._currentObject))	{
-		this._toolbarOperations[ZaOperation.DELETE].enabled = false;
-	}
-
     var isToEnable = (this._view && this._view.isDirty());
-
-    if(this._toolbarOperations[ZaOperation.SAVE])
-        this._toolbarOperations[ZaOperation.SAVE].enabled = isToEnable;
 
     if(this._popupOperations[ZaOperation.SAVE]) {
         this._popupOperations[ZaOperation.SAVE].enabled = isToEnable;
@@ -88,10 +70,7 @@ function (entry)	{
 	try {
 		//ZaApp.getInstance().pushView(ZaZimbraAdmin._RESOURCE_VIEW);
 		ZaApp.getInstance().pushView(this.getContentViewId());
-		if(!entry.id) {
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
-		} else {
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
+		if(entry.id) {
 			//get the calendar resource by id
 			entry.load("id", entry.id, null);			
 		}	
@@ -100,47 +79,13 @@ function (entry)	{
 	
 		this._view.setObject(entry);
 		//disable the save button at the beginning of showing the form
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-        if (appNewUI)
-            ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
+        ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
 		this._currentObject = entry;
 	} catch (ex) {
 		this._handleException(ex, "ZaResourceController.prototype.show", null, false);
 	}	
 };
 ZaController.setViewMethods["ZaResourceController"].push(ZaResourceController.setViewMethod);
-
-ZaResourceController.initToolbarMethod =
-function () {
-	var showNewCalRes = false;
-	if(ZaSettings.HAVE_MORE_DOMAINS || ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
-		showNewCalRes = true;
-	} else {
-		var domainList = ZaApp.getInstance().getDomainList().getArray();
-		var cnt = domainList.length;
-		for(var i = 0; i < cnt; i++) {
-			if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_CALRES,domainList[i])) {
-				showNewCalRes = true;
-				break;
-			}	
-		}
-	}		
-
-   	this._toolbarOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
-   	this._toolbarOrder.push(ZaOperation.SAVE);
-   	this._toolbarOperations[ZaOperation.CLOSE]=new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));    	
-   	this._toolbarOrder.push(ZaOperation.CLOSE);
-   	this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
-	this._toolbarOrder.push(ZaOperation.SEP);
-   	if(showNewCalRes) {
-		this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", new AjxListener(this, this.newButtonListener));
-		this._toolbarOrder.push(ZaOperation.NEW);
-   	}
-   	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.RESTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
-   	this._toolbarOrder.push(ZaOperation.DELETE);
-	
-}
-ZaController.initToolbarMethods["ZaResourceController"].push(ZaResourceController.initToolbarMethod);
 
 ZaResourceController.initPopupMenuMethod =
 function () {
@@ -241,27 +186,12 @@ function (entry) {
 	// create the menu operations/listeners first	
 	this._contentView = this._view = new this.tabConstructor(this._container, entry);
 
-    this._initToolbar();
     this._initPopupMenu();
 	//always add Help button at the end of the toolbar    
-	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-	this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));		
-	this._toolbarOrder.push(ZaOperation.NONE);
-	this._toolbarOrder.push(ZaOperation.HELP);
-	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_RES);    
 		
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-    if(!appNewUI) {
-	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-	//ZaApp.getInstance().createView(ZaZimbraAdmin._RESOURCE_VIEW, elements);
-	var tabParams = {
-			openInNewTab: true,
-			tabId: this.getContentViewId()
-		}
-	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-    } else
-         ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+	ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 	this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], null, ZaId.VIEW_RES + "_removeConfirm");			
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;

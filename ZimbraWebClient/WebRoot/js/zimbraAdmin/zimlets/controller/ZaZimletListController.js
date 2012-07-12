@@ -145,8 +145,6 @@ ZaZimletListController.prototype._createUI = function () {
 	try {
 		var elements = new Object();
 		this._contentView = new ZaZimletListView(this._container);
-		this._initToolbar();
-		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_ZIMLIST);
 
 		this._initPopupMenu();
 		this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations, ZaId.VIEW_ZIMLIST, ZaId.MENU_POP);
@@ -154,17 +152,7 @@ ZaZimletListController.prototype._createUI = function () {
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		//ZaApp.getInstance().createView(ZaZimbraAdmin._ZIMLET_LIST_VIEW, elements);
 		//ZaApp.getInstance().createView(ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW, elements);
-        if(!appNewUI) {
-            elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-            var tabParams = {
-                openInNewTab: false,
-                tabId: this.getContentViewId(),
-                tab: this.getMainTab()
-            }
-            ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-        } else {
-            ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
-        }
+        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
 		this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], null, ZaId.CTR_PREFIX + ZaId.VIEW_ZIMLIST + "_removeConfirm");					

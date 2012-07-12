@@ -101,33 +101,7 @@ function() {
          * This statement will tell the view manager to make the view visible
          */
 
-        if (!appNewUI) {
-            /**
-             * Appearance of the toolbar is controlled by two maps:
-             *  - this._toolbarOperations is a map of ZaOperation instances
-             *  - this._toolbarOrder is an array that controls the order of the buttons in the toolbar
-             */
-            this._toolbarOperations[ZaOperation.REFRESH] = new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshListener));
-            this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-            this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
-
-
-            this._toolbarOrder.push(ZaOperation.REFRESH);
-            this._toolbarOrder.push(ZaOperation.NONE);
-            this._toolbarOrder.push(ZaOperation.HELP);
-
-            this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_STATISLIST);
-            elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-
-            var tabParams = {
-                openInNewTab: false,
-                tabId: this.getContentViewId(),
-                tab: this.getMainTab()
-            }
-            ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-        } else{
-            ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
-        }
+        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 
         /**
          * We need this in order to be able to get a handle of this controler instance

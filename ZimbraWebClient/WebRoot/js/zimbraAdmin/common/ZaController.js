@@ -45,14 +45,10 @@ ZaController = function(appCtxt, container,iKeyName) {
     this.objType = ZaEvent.S_ACCOUNT;
     this._helpURL = ZaController.helpURL;
     this._helpButtonText = ZaController.helpButtonText;
-   	this._toolbarOperations = new Array();
-   	this._toolbarOrder = new Array();
    	this._popupOperations = new Array();
     this._popupOrder = new Array();
-    if (appNewUI) {
-        this._appbarOperation = new Array();
-        this._appbarOrder = new Array();
-    }
+    this._appbarOperation = new Array();
+    this._appbarOrder = new Array();
 }
 ZaController.CLICK_DELAY = 150;
 ZaController.prototype.initDialogs = function (refresh) {
@@ -692,7 +688,7 @@ function() {
 **/
 ZaController.prototype._initToolbar = function () {
 	//Instrumentation code start
-	if(ZaController.initToolbarMethods[this._iKeyName]) {
+	/*if(ZaController.initToolbarMethods[this._iKeyName]) {
 		var methods = ZaController.initToolbarMethods[this._iKeyName];
 		var cnt = methods.length;
 		for(var i = 0; i < cnt; i++) {
@@ -704,7 +700,7 @@ ZaController.prototype._initToolbar = function () {
 				}
 			}
 		}
-	}	
+	}	*/
 	//Instrumentation code end
 }
 
@@ -943,13 +939,6 @@ function () {
 	if(this.changeAcStateAcId)
 		this.changeAcStateAcId = null;
 		
-	if(this._toolbarOperations) {
-		for(var i in this._toolbarOperations) {
-			if(this._toolbarOperations[i] instanceof ZaOperation) {
-				this._toolbarOperations[i].enabled = true;
-			}
-		}
-	}	
 	if(this._popupOperations) {
 		for(var i in  this._popupOperations) {
 			if(this._popupOperations[i] instanceof ZaOperation) {
@@ -971,19 +960,6 @@ function () {
 			}
 		}
 	}	
-	
-	if(this._toolbar && this._toolbarOperations) {
-		for(var i in  this._toolbarOperations) {
-			if(this._toolbarOperations[i] instanceof ZaOperation &&  !AjxUtil.isEmpty(this._toolbar.getButton(this._toolbarOperations[i].id))) {
-				//paging button should be excluded
-	            if (this._toolbarOperations[i].id == ZaOperation.PAGE_BACK || this._toolbarOperations[i].id == ZaOperation.PAGE_FORWARD) {
-	                //do nothing
-	            }else{
-	                this._toolbar.getButton(this._toolbarOperations[i].id).setEnabled(this._toolbarOperations[i].enabled);
-	            }
-	        }
-		}
-	}
 	
 	if(this._actionMenu && this._popupOperations) {
 		for(var i in this._popupOperations) {

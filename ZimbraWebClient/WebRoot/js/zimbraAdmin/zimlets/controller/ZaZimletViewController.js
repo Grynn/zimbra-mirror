@@ -75,33 +75,10 @@ ZaZimletViewController.prototype._createUI =
 function () {
 	this._contentView = this._view = new this.tabConstructor(this._container);
 
-    this._initToolbar();
-    if(appNewUI)
-        this._initPopupMenu();
-    this._toolbarOrder.push(ZaOperation.CLOSE);
-    this._toolbarOrder.push(ZaOperation.NONE);
-    this._toolbarOrder.push(ZaOperation.HELP);
-
-    this._toolbarOperations[ZaOperation.CLOSE]=new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));
-    //always add Help button at the end of the toolbar
-	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-	this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));							
-	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,  this._toolbarOrder, null, null, ZaId.VIEW_ZIMLET);		
-
-
+    this._initPopupMenu();
     var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-    if(!appNewUI) {
-        elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-        //ZaApp.getInstance().createView(ZaZimbraAdmin._ZIMLET_VIEW, elements);
-        var tabParams = {
-            openInNewTab: true,
-            tabId: this.getContentViewId()
-        }
-        ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-    } else {
-        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
-    }
+    ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 }

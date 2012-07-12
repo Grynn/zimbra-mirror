@@ -21,7 +21,6 @@
 **/
 ZaAdminExtListController = function(appCtxt, container) {
 	ZaListViewController.call(this, appCtxt, container,"ZaAdminExtListController");
-   	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	this.objType = ZaEvent.S_ZIMLET;
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "admin_console_misc/enhancing_the_zimbra_admin_console_user_interface.htm?locid="+AjxEnv.DEFAULT_LOCALE;
@@ -93,10 +92,6 @@ ZaAdminExtListController.prototype._createUI = function () {
 	try {
 		var elements = new Object();
 		this._contentView = new ZaAdminExtListView(this._container);
-		//this._initToolbar();
-
-		//this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_AELIST);
-
 		this._initPopupMenu();
 		this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations, ZaId.VIEW_AELIST, ZaId.MENU_POP);
 

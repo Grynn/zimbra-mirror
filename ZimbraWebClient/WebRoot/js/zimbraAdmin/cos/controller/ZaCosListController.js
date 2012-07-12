@@ -120,23 +120,7 @@ ZaController.initPopupMenuMethods["ZaCosListController"].push(ZaCosListControlle
 **/
 ZaCosListController.initToolbarMethod =
 function () {
-	if(ZaItem.hasRight(ZaCos.CREATE_COS_RIGHT, ZaZimbraAdmin.currentAdminAccount)) {
-		this._toolbarOrder.push(ZaOperation.NEW);
-		this._toolbarOrder.push(ZaOperation.DUPLICATE);
-	}
-	this._toolbarOrder.push(ZaOperation.EDIT);
-	this._toolbarOrder.push(ZaOperation.DELETE);
-	this._toolbarOrder.push(ZaOperation.NONE);	
-	this._toolbarOrder.push(ZaOperation.PAGE_BACK);
-	this._toolbarOrder.push(ZaOperation.PAGE_FORWARD);
-	this._toolbarOrder.push(ZaOperation.HELP);
 		
-	if(ZaItem.hasRight(ZaCos.CREATE_COS_RIGHT, ZaZimbraAdmin.currentAdminAccount)) {
-   		this._toolbarOperations[ZaOperation.NEW] = new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosListController.prototype._newButtonListener));
-	}
-   	this._toolbarOperations[ZaOperation.DUPLICATE] = new ZaOperation(ZaOperation.DUPLICATE, ZaMsg.TBB_Duplicate, ZaMsg.COSTBB_Duplicate_tt, "DuplicateCOS", "DuplicateCOSDis", new AjxListener(this, ZaCosListController.prototype._duplicateButtonListener));    	
-   	this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.COSTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaCosListController.prototype._editButtonListener));    	    	
-	this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaCosListController.prototype._deleteButtonListener));   		
 }
 ZaController.initToolbarMethods["ZaCosListController"].push(ZaCosListController.initToolbarMethod);
 
@@ -146,33 +130,21 @@ function (openInNewTab, openInSearchTab) {
 	this._contentView = new ZaCosListView(this._container);
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	// create the menu operations/listeners first	
-    this._initToolbar();
+    //this._initToolbar();
 	//always add Help and navigation buttons at the end of the toolbar    
-	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);	
-	this._toolbarOperations[ZaOperation.PAGE_BACK]=new ZaOperation(ZaOperation.PAGE_BACK,ZaMsg.Previous, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, this._prevPageListener));
+	//this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);	
+	//this._toolbarOperations[ZaOperation.PAGE_BACK]=new ZaOperation(ZaOperation.PAGE_BACK,ZaMsg.Previous, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, this._prevPageListener));
 	
 	//add the acount number counts
-	ZaSearch.searchResultCountsView(this._toolbarOperations, this._toolbarOrder);
 	
-	this._toolbarOperations[ZaOperation.PAGE_FORWARD]=new ZaOperation(ZaOperation.PAGE_FORWARD,ZaMsg.Next, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, this._nextPageListener));
-	this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));				
+	//this._toolbarOperations[ZaOperation.PAGE_FORWARD]=new ZaOperation(ZaOperation.PAGE_FORWARD,ZaMsg.Next, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, this._nextPageListener));
+	//this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));				
 
-	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_COSLIST);    
+	//this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_COSLIST);    
 		
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-    if (!appNewUI) {
-        elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-        //ZaApp.getInstance().createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
-        var tabParams = {
-                openInNewTab: openInNewTab ? openInNewTab : false,
-                tabId: this.getContentViewId(),
-                tab: openInNewTab ? null : (openInSearchTab ? this.getSearchTab() : this.getMainTab())
-            }
-        ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-    }
-    else
-        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+    ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 
 	this._initPopupMenu();
 	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations, ZaId.VIEW_COSLIST, ZaId.MENU_POP);
@@ -476,10 +448,6 @@ function (enableArray,disableArray) {
 		var item = this._contentView.getSelection()[0];
 		if(item) {
 			if(hasDefault) {
-				if(this._toolbarOperations[ZaOperation.DELETE]) {
-					this._toolbarOperations[ZaOperation.DELETE].enabled=false;
-				}
-				
 				if(this._popupOperations[ZaOperation.DELETE]) {
 					this._popupOperations[ZaOperation.DELETE].enabled=false;
 				}
@@ -488,10 +456,6 @@ function (enableArray,disableArray) {
 					item.loadEffectiveRights("id", item.id, false);
 				}
 				if(!ZaItem.hasRight(ZaCos.DELETE_COS_RIGHT, item)) {
-					if(this._toolbarOperations[ZaOperation.DELETE]) {
-						this._toolbarOperations[ZaOperation.DELETE].enabled=false;
-					}
-					
 					if(this._popupOperations[ZaOperation.DELETE]) {
 						this._popupOperations[ZaOperation.DELETE].enabled=false;
 					}
@@ -500,19 +464,9 @@ function (enableArray,disableArray) {
 		}
 	} else if (cnt > 1){
 		if(hasDefault) {
-			if(this._toolbarOperations[ZaOperation.DELETE]) {
-				this._toolbarOperations[ZaOperation.DELETE].enabled=false;
-			}		
-			
 			if(this._popupOperations[ZaOperation.DELETE]) {
 				this._popupOperations[ZaOperation.DELETE].enabled=false;
 			}					
-		}
-		if(this._toolbarOperations[ZaOperation.DUPLICATE] && this._toolbarOperations[ZaOperation.DUPLICATE].enabled) {
-			this._toolbarOperations[ZaOperation.DUPLICATE].enabled=false;
-		}		
-		if(this._toolbarOperations[ZaOperation.EDIT]) {
-			this._toolbarOperations[ZaOperation.EDIT].enabled=false;
 		}
 		
 		if(this._popupOperations[ZaOperation.DUPLICATE] && this._popupOperations[ZaOperation.DUPLICATE].enabled) {
@@ -522,16 +476,6 @@ function (enableArray,disableArray) {
 			this._popupOperations[ZaOperation.EDIT].enabled=false;
 		}					
 	} else {
-		if(this._toolbarOperations[ZaOperation.EDIT]) {
-			this._toolbarOperations[ZaOperation.EDIT].enabled=false;
-		}	
-		if(this._toolbarOperations[ZaOperation.DELETE]) {
-			this._toolbarOperations[ZaOperation.DELETE].enabled=false;
-		}	
-		if(this._toolbarOperations[ZaOperation.DUPLICATE] && this._toolbarOperations[ZaOperation.DUPLICATE].enabled) {
-			this._toolbarOperations[ZaOperation.DUPLICATE].enabled=false;
-		}
-
 		if(this._popupOperations[ZaOperation.EDIT]) {
 			this._popupOperations[ZaOperation.EDIT].enabled=false;
 		}	

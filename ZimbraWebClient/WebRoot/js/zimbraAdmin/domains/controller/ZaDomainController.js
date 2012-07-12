@@ -58,100 +58,11 @@ function(entry) {
 ZaDomainController.changeActionsStateMethod = function () {
     var isToEnable = (this._view && this._view.isDirty());
 
-    if(this._toolbarOperations[ZaOperation.SAVE])
-        this._toolbarOperations[ZaOperation.SAVE].enabled = isToEnable;
-
     if(this._popupOperations[ZaOperation.SAVE]) {
         this._popupOperations[ZaOperation.SAVE].enabled = isToEnable;
     }
-		
-	if(this._currentObject.attrs[ZaDomain.A_zimbraDomainStatus] == ZaDomain.DOMAIN_STATUS_SHUTDOWN) {
-		if(this._toolbarOperations[ZaOperation.DELETE])
-			this._toolbarOperations[ZaOperation.DELETE].enabled = false;
-
-		if(this._toolbarOperations[ZaOperation.GAL_WIZARD])
-			this._toolbarOperations[ZaOperation.GAL_WIZARD].enabled = false;
-					
-		if(this._toolbarOperations[ZaOperation.AUTH_WIZARD])
-			this._toolbarOperations[ZaOperation.AUTH_WIZARD].enabled = false;
-
-	} else {
-
-		if(this._toolbarOperations[ZaOperation.GAL_WIZARD] && !ZaDomain.canConfigureGal(this._currentObject)) {
-			this._toolbarOperations[ZaOperation.GAL_WIZARD].enabled = false;
-		}
-
-		if(this._toolbarOperations[ZaOperation.AUTH_WIZARD]	&& !ZaDomain.canConfigureAuth(this._currentObject)) {
-			this._toolbarOperations[ZaOperation.AUTH_WIZARD].enabled = false;
-		}
-	}		
 }
 ZaController.changeActionsStateMethods["ZaDomainController"].push(ZaDomainController.changeActionsStateMethod);
-
-/**
-* @method initToolbarMethod
-* This method creates ZaOperation objects 
-* All the ZaOperation objects are added to this._toolbarOperations array which is then used to 
-* create the toolbar for this view.
-* Each ZaOperation object defines one toolbar button.
-* Help button is always the last button in the toolbar
-**/
-ZaDomainController.initToolbarMethod =          
-function () {                                    
-	this._toolbarOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.DTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
-	this._toolbarOrder.push(ZaOperation.SAVE);		
-
-	this._toolbarOperations[ZaOperation.CLOSE]=new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));    	
-	this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
-
-
-	this._toolbarOrder.push(ZaOperation.CLOSE);
-	this._toolbarOrder.push(ZaOperation.SEP);
-
-	if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_TOP_DOMAIN, ZaZimbraAdmin.currentAdminAccount)
-	|| ZaItem.hasRight(ZaDomain.RIGHT_CREATE_SUB_DOMAIN, this._currentObject)) {
-		this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, this._newButtonListener));
-		this._toolbarOrder.push(ZaOperation.NEW);		
-	}
-
-	if(ZaItem.hasRight(ZaDomain.RIGHT_DELETE_DOMAIN,this._currentObject))	{
-		this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
-		this._toolbarOrder.push(ZaOperation.DELETE);		    	    	
-	}
-		
-    this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS]=new ZaOperation(ZaOperation.VIEW_DOMAIN_ACCOUNTS,ZaMsg.Domain_view_accounts, ZaMsg.Domain_view_accounts_tt, "Search", "SearchDis", new AjxListener(this, this.viewAccountsButtonListener));
-    this._toolbarOrder.push(ZaOperation.VIEW_DOMAIN_ACCOUNTS);
-
-
-    //if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_GAL_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-    if(ZaDomain.canConfigureGal(this._currentObject))	{
-		this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
-		this._toolbarOperations[ZaOperation.GAL_WIZARD]=new ZaOperation(ZaOperation.GAL_WIZARD,ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainController.prototype._galWizButtonListener));   		
-		this._toolbarOrder.push(ZaOperation.SEP);
-		this._toolbarOrder.push(ZaOperation.GAL_WIZARD);			
-	}
-	if(ZaDomain.canConfigureAuth(this._currentObject)) {
-	//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_AUTH_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		this._toolbarOperations[ZaOperation.AUTH_WIZARD]=new ZaOperation(ZaOperation.AUTH_WIZARD,ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainController.prototype._authWizButtonListener));
-		this._toolbarOrder.push(ZaOperation.AUTH_WIZARD);		   		   		
-	}
-
-	if(ZaItem.hasRight(ZaDomain.RIGHT_CHECK_MX_RECORD,this._currentObject)) {
-	//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_CHECK_MX_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-	   	this._toolbarOperations[ZaOperation.CHECK_MX_RECORD]=new ZaOperation(ZaOperation.CHECK_MX_RECORD,ZaMsg.DTBB_CheckMX, ZaMsg.DTBB_CheckMX_tt, "ReindexMailboxes", "ReindexMailboxes", new AjxListener(this, ZaDomainController.prototype._checkMXButtonListener));
-		this._toolbarOrder.push(ZaOperation.CHECK_MX_RECORD);	   	
-	}
-
-	/* bug 71235, remove auto provisioning
-	if(ZaDomain.canConfigureAutoProv(this._currentObject)) {
-		this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD]=new ZaOperation(ZaOperation.AUTOPROV_WIZARD,ZaMsg.DTBB_AutoProvConfigWiz,
-                ZaMsg.DTBB_AutoProvConfigWiz_tt, "Backup", "BackupDis",
-                new AjxListener(this, ZaDomainController.prototype._autoProvWizButtonListener));
-		this._toolbarOrder.push(ZaOperation.AUTOPROV_WIZARD);
-	} */
-
-}
-ZaController.initToolbarMethods["ZaDomainController"].push(ZaDomainController.initToolbarMethod);
 
 
 ZaDomainController.initPopupMenuMethod =
@@ -240,26 +151,12 @@ ZaDomainController.prototype._createUI =
 function (entry) {
 	this._contentView = this._view = new this.tabConstructor(this._container, entry);
 
-	this._initToolbar();
     this._initPopupMenu();
 	//always add Help button at the end of the toolbar
-	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-	this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));							
-	this._toolbarOrder.push(ZaOperation.NONE);
-	this._toolbarOrder.push(ZaOperation.HELP);	
-	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_DOMAIN);		
 	
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-    if (!appNewUI) {
-        elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-        var tabParams = {
-            openInNewTab: true,
-            tabId: this.getContentViewId()
-        }
-        ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-    } else
-        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+    ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 }

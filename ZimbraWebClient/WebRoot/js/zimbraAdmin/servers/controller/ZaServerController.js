@@ -58,18 +58,10 @@ function(entry) {
 ZaServerController.changeActionsStateMethod = function () {
     var isToEnable = (this._view && this._view.isDirty());
 
-	if(this._toolbarOperations[ZaOperation.SAVE])
-		this._toolbarOperations[ZaOperation.SAVE].enabled = isToEnable;
-
     if(this._popupOperations[ZaOperation.SAVE]) {
         this._popupOperations[ZaOperation.SAVE].enabled = isToEnable;
     }
 		
-	if(this._toolbarOperations[ZaOperation.FLUSH_CACHE]) {
-		if(!ZaItem.hasRight(ZaServer.FLUSH_CACHE_RIGHT,this._currentObject) || !this._currentObject.attrs[ZaServer.A_zimbraMailboxServiceEnabled] || !this._currentObject.attrs[ZaServer.A_zimbraMailboxServiceInstalled]) {
-			this._toolbarOperations[ZaOperation.FLUSH_CACHE].enabled = false;
-		}
-	}
 }
 ZaController.changeActionsStateMethods["ZaServerController"].push(ZaServerController.changeActionsStateMethod);
 
@@ -95,27 +87,6 @@ ZaServerController.prototype.removeServerChangeListener =
 function(listener) {
 	this._evtMgr.removeListener(ZaEvent.E_MODIFY, listener);    	
 }
-
-/**
-* @method initToolbarMethod
-* This method creates ZaOperation objects 
-* All the ZaOperation objects are added to this._toolbarOperations array which is then used to 
-* create the toolbar for this view.
-* Each ZaOperation object defines one toolbar button.
-* Help button is always the last button in the toolbar
-**/
-ZaServerController.initToolbarMethod = 
-function () {
-	this._toolbarOrder.push(ZaOperation.SAVE);	
-	this._toolbarOrder.push(ZaOperation.FLUSH_CACHE);	
-	this._toolbarOrder.push(ZaOperation.DOWNLOAD_SERVER_CONFIG);
-	this._toolbarOrder.push(ZaOperation.CLOSE);			
-	this._toolbarOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
-   	this._toolbarOperations[ZaOperation.FLUSH_CACHE] = new ZaOperation(ZaOperation.FLUSH_CACHE, ZaMsg.SERTBB_FlushCache, ZaMsg.SERTBB_FlushCache_tt, "FlushCache", "FlushCache", new AjxListener(this, ZaServerController.prototype.flushCacheButtonListener));	
-	this._toolbarOperations[ZaOperation.DOWNLOAD_SERVER_CONFIG]=new ZaOperation(ZaOperation.DOWNLOAD_SERVER_CONFIG,ZaMsg.TBB_DownloadConfig, ZaMsg.SERTBB_DownloadConfig_tt, "DownloadServerConfig", "DownloadServerConfig", new AjxListener(this, this.downloadConfigButtonListener));	
-	this._toolbarOperations[ZaOperation.CLOSE]=new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));    	
-}
-ZaController.initToolbarMethods["ZaServerController"].push(ZaServerController.initToolbarMethod);
 
 ZaServerController.initPopupMethod =
 function () {
@@ -169,28 +140,12 @@ ZaServerController.prototype._createUI =
 function (entry) {
 	this._contentView = this._view = new this.tabConstructor(this._container, entry);
 
-	this._initToolbar();
     this._initPopupMenu();
 	//always add Help button at the end of the toolbar
-	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-	this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
-	this._toolbarOrder.push(ZaOperation.NONE);
-	this._toolbarOrder.push(ZaOperation.HELP);								
-	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder,null,null, ZaId.VIEW_SERVER);		
 	
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-	if (!appNewUI) {
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-		var tabParams = {
-			openInNewTab: true,
-			tabId: this.getContentViewId()
-		}
-		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-	}
-	else{
-		ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
-	}
+	ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 }
