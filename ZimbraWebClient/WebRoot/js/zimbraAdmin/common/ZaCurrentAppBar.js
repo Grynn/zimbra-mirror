@@ -112,9 +112,11 @@ function (opList, appBarOrder) {
         var ix;
         for(var i in appBarOrder) {
             ix = appBarOrder[i];
-            b = this._createActionButton(opList[ix].id, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true, opList[ix].className, opList[ix].type, opList[ix].menuOpList);
-
-            b.addSelectionListener(opList[ix].listener);
+            if(opList[ix]) {
+            	b = this._createActionButton(opList[ix].id, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true, opList[ix].className, opList[ix].type, opList[ix].menuOpList);
+            	b.addSelectionListener(opList[ix].listener);
+            }
+            
         }
     }
 
