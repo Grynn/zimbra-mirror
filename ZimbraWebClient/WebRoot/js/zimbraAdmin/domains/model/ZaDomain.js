@@ -170,7 +170,7 @@ ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled = "zimbraAdminConsoleLDAPAuthEnable
 ZaDomain.A_zimbraAuthLdapStartTlsEnabled = "zimbraAuthLdapStartTlsEnabled";
 ZaDomain.A_zimbraAuthFallbackToLocal = "zimbraAuthFallbackToLocal";
 ZaDomain.A_zimbraPasswordChangeListener = "zimbraPasswordChangeListener";
-
+ZaDomain.A_domainMaxAccounts = "zimbraDomainMaxAccounts";
 //internal attributes - not synched with the server code yet
 //GAL               
 ZaDomain.A_GALServerType = "galservertype";
@@ -1762,11 +1762,11 @@ function(tmods,tmpObj) {
 					attr.setAttribute("n", aname);
 				}
 			} else {
-				var attr = soapDoc.set("a", "");
+				var attr = soapDoc.set("a", "", modifyDomainDoc);
 				attr.setAttribute("n", aname);
 			}
 		} else {
-			var attr = soapDoc.set("a", mods[aname]);
+			var attr = soapDoc.set("a", mods[aname], modifyDomainDoc);
 			attr.setAttribute("n", aname);
 		}
 	}
@@ -2443,6 +2443,7 @@ ZaDomain.myXModel = {
         {id:ZaDomain.A2_zimbraAutoProvAccountPoolPageTotal,ref:ZaDomain.A2_zimbraAutoProvAccountPoolPageTotal, type:_NUMBER_,defaultValue:1},
         {id:ZaDomain.A2_zimbraAutoProvAccountPassword	, type:_STRING_, ref:ZaDomain.A2_zimbraAutoProvAccountPassword, maxLength:256},
         // Domain Quota
+    	{id:ZaDomain.A_domainMaxAccounts, type:_INT_, ref:"attrs/" + ZaDomain.A_domainMaxAccounts,minInclusive:0},
         {id:ZaDomain.A_zimbraMailDomainQuota, type:_NUMBER_, ref: "attrs/"+ZaDomain.A_zimbraMailDomainQuota, minInclusive:0},
         {id:ZaDomain.A_zimbraDomainAggregateQuota, type:_NUMBER_, ref: "attrs/"+ZaDomain.A_zimbraDomainAggregateQuota, minInclusive:0},
         {id:ZaDomain.A_zimbraDomainAggregateQuotaWarnPercent, type:_NUMBER_, ref:"attrs/"+ZaDomain.A_zimbraDomainAggregateQuotaWarnPercent, maxInclusive:100, minInclusive:0},
