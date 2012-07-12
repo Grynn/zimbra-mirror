@@ -157,8 +157,10 @@ public class LoginTag extends ZimbraSimpleTag {
             if (mVarAuthResult != null) {
                 jctxt.setAttribute(mVarAuthResult, mbox.getAuthResult(), PageContext.REQUEST_SCOPE);
             }
-            
-            if (mImportData && !mAdminPreAuth) {
+
+            //bug: 75754 invoking import data request only when zimbraDataSourceImportOnLogin is set
+            boolean importDataOnLoginAttr = mbox.getFeatures().getDataSourceImportOnLogin();
+            if (mImportData && !mAdminPreAuth && importDataOnLoginAttr) {
                 mbox.importData(mbox.getAllDataSources());
             }
 
