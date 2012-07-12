@@ -1,10 +1,12 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.sharing;
 
 import org.testng.annotations.Test;
+
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.OctopusAccount;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -23,7 +25,7 @@ public class IgnoreShare extends OctopusCommonTest {
 		super.startingPage = app.zPageSharing;
 		super.startingAccountPreferences = null;
 
-		ownerAccount = new ZimbraAccount();
+		ownerAccount = new OctopusAccount();
 		ownerAccount.provision();
 		ownerAccount.authenticate();
 	}
@@ -40,46 +42,15 @@ public class IgnoreShare extends OctopusCommonTest {
 		String ownerFoldername = "ownerFolder"
 				+ ZimbraSeleniumProperties.getUniqueString();
 
-		ownerAccount.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+ "<folder name='" + ownerFoldername + "' l='"
-				+ ownerBriefcaseRootFolder.getId() + "'/>"
-				+ "</CreateFolderRequest>");
-
 		// Verify the share folder exists on the server
-		FolderItem ownerFolderItem = FolderItem.importFromSOAP(ownerAccount,
-				ownerFoldername);
+		FolderItem ownerFolderItem = createFolderViaSoap(ownerAccount, ownerFoldername,ownerBriefcaseRootFolder);
 
 		ZAssert.assertNotNull(ownerFolderItem,
 				"Verify the owner share folder exists");
 
-		ZimbraAccount currentAccount = app.zGetActiveAccount();
+		ZimbraAccount granteeAccount = app.zGetActiveAccount();
 
-		ownerAccount.soapSend("<FolderActionRequest xmlns='urn:zimbraMail'>"
-				+ "<action id='" + ownerFolderItem.getId() + "' op='grant'>"
-				+ "<grant d='" + currentAccount.EmailAddress
-				+ "' gt='usr' perm='r'/>" + "</action>"
-				+ "</FolderActionRequest>");
-
-		// Owner sends share notification to the current user
-		/*
-		 * ownerAccount.soapSend("<SendShareNotificationRequest xmlns='urn:zimbraMail'>"
-		 * + "<share l='" + ownerFolder.getId() + "' gt='usr' zid='" +
-		 * currentAccount.ZimbraId + "' name='" + currentAccount.EmailAddress +
-		 * "'><notes _content='test'/></share>" +
-		 * "</SendShareNotificationRequest>");
-		 */
-		ownerAccount
-				.soapSend("<SendShareNotificationRequest xmlns='urn:zimbraMail'>"
-						+ "<share l='"
-						+ ownerFolderItem.getId()
-						+ "' gt='usr'"
-						+ " zid='"
-						+ currentAccount.ZimbraId
-						+ "'"
-						+ " name='"
-						+ currentAccount.EmailAddress
-						+ "'/>"
-						+ "</SendShareNotificationRequest>");
+		shareFolderViaSoap(ownerAccount, granteeAccount, ownerFolderItem, SHARE_AS_READ);
 
 		SleepUtil.sleepMedium();
 
@@ -88,15 +59,13 @@ public class IgnoreShare extends OctopusCommonTest {
 				.zToolbarPressButton(Button.B_TAB_SHARING);
 
 		// Currrent user gets share notification
-		currentAccount
-				.soapSend("<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>");
+		granteeAccount.soapSend("<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>");
 
-		ZAssert
-				.assertTrue(pageSharing.zWaitForElementPresent(
-						PageSharing.Locators.zShareNotificationListView.locator
-								+ ":contains(" + ownerFolderItem.getName()
-								+ ")", "9000"),
-						"Verify the owner share folder is displayed in the Share Invitation view");
+		ZAssert.assertTrue(pageSharing.zWaitForElementPresent(
+				PageSharing.Locators.zShareNotificationListView.locator
+				+ ":contains(" + ownerFolderItem.getName()
+				+ ")", "9000"),
+				"Verify the owner share folder is displayed in the Share Invitation view");
 
 		// click on Ignore button
 		pageSharing.zToolbarPressButton(Button.B_IGNORE, ownerFolderItem);
@@ -106,13 +75,12 @@ public class IgnoreShare extends OctopusCommonTest {
 				PageSharing.Locators.zIgnoredItemsView.locator + ":contains("
 						+ ownerFolderItem.getName() + ")", "5000"),
 				"Verify item appears in the Ignored Items View");
-	
+
 		// Click on My Files tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
 		// Verify the ignored folder doesn't appear in My Files list view
-		ZAssert
-				.assertFalse(app.zPageOctopus.zIsItemInCurentListView(ownerFolderItem.getName()),
-						"Verify the ignored share folder doesn't appears in My Files list view");
+		ZAssert.assertFalse(app.zPageOctopus.zIsItemInCurentListView(ownerFolderItem.getName()),
+				"Verify the ignored share folder doesn't appears in My Files list view");
 	}
 }

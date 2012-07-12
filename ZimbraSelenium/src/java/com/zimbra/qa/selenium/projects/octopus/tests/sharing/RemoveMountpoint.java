@@ -1,11 +1,15 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.sharing;
 
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.FolderMountpointItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
+import com.zimbra.qa.selenium.framework.items.FolderMountpointItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.OctopusAccount;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -15,7 +19,7 @@ import com.zimbra.qa.selenium.projects.octopus.ui.DialogFolderShare;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
 
 public class RemoveMountpoint extends OctopusCommonTest {
-	
+
 	private ZimbraAccount ownerAccount = null;
 	private boolean _folderIsCreated = false;
 	private String _folderName = null;
@@ -37,7 +41,7 @@ public class RemoveMountpoint extends OctopusCommonTest {
 		super.startingPage = app.zPageSharing;
 		super.startingAccountPreferences = null;
 
-		ownerAccount = new ZimbraAccount();
+		ownerAccount = new OctopusAccount();
 		ownerAccount.provision();
 		ownerAccount.authenticate();
 	}
@@ -54,38 +58,14 @@ public class RemoveMountpoint extends OctopusCommonTest {
 		String ownerFoldername = "ownerFolder"
 				+ ZimbraSeleniumProperties.getUniqueString();
 
-		ownerAccount.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+ "<folder name='" + ownerFoldername + "' l='"
-				+ ownerBriefcaseRootFolder.getId() + "'/>"
-				+ "</CreateFolderRequest>");
-
 		// Verify the share folder exists on the server
-		FolderItem ownerFolder = FolderItem.importFromSOAP(ownerAccount,
-				ownerFoldername);
+		FolderItem ownerFolder =  createFolderViaSoap(ownerAccount, ownerFoldername,ownerBriefcaseRootFolder);
 
-		ZAssert.assertNotNull(ownerFolder,
-				"Verify the owner share folder exists");
+		ZAssert.assertNotNull(ownerFolder,"Verify the owner share folder exists");
 
 		ZimbraAccount currentGranteeAccount = app.zGetActiveAccount();
 
-		ownerAccount.soapSend("<FolderActionRequest xmlns='urn:zimbraMail'>"
-				+ "<action id='" + ownerFolder.getId() + "' op='grant'>"
-				+ "<grant d='" + currentGranteeAccount.EmailAddress
-				+ "' gt='usr' perm='rwidxa'/>" + "</action>"
-				+ "</FolderActionRequest>");
-		
-		ownerAccount
-		.soapSend("<SendShareNotificationRequest xmlns='urn:zimbraMail'>"
-				+ "<share l='"
-				+ ownerFolder.getId()
-				+ "' gt='usr'"
-				+ " zid='"
-				+ currentGranteeAccount.ZimbraId
-				+ "'"
-				+ " name='"
-				+ currentGranteeAccount.EmailAddress
-				+ "'/>"
-				+ "</SendShareNotificationRequest>");
+		shareFolderViaSoap(ownerAccount, currentGranteeAccount, ownerFolder, SHARE_AS_ADMIN);
 
 		// Currrent user gets share notification
 		String getShareNotifcationRequest = "<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>";
@@ -100,21 +80,14 @@ public class RemoveMountpoint extends OctopusCommonTest {
 
 		String folderMountpointName = "mountpoint"
 				+ ZimbraSeleniumProperties.getUniqueString();
-		
-		currentGranteeAccount
-				.soapSend("<CreateMountpointRequest xmlns='urn:zimbraMail'>"
-						+ "<link l='" + currentAccountRootFolder.getId()
-						+ "' name='" + folderMountpointName
-						+ "' view='document' rid='" + ownerFolder.getId()
-						+ "' zid='" + ownerAccount.ZimbraId + "'/>"
-						+ "</CreateMountpointRequest>");
+
+		mountRequestViaSoap(ownerAccount, currentGranteeAccount, ownerFolder, currentAccountRootFolder, folderMountpointName);
 
 		// Verify the mountpoint exists on the server
 		FolderMountpointItem folderMountpointItem = FolderMountpointItem
 				.importFromSOAP(currentGranteeAccount, folderMountpointName);
-		
-		ZAssert.assertNotNull(folderMountpointItem,
-				"Verify the mountpoint is available");
+
+		ZAssert.assertNotNull(folderMountpointItem,"Verify the mountpoint is available");
 
 		// Open My Files page
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
@@ -148,52 +121,21 @@ public class RemoveMountpoint extends OctopusCommonTest {
 		String ownerFoldername = "ownerFolder"
 				+ ZimbraSeleniumProperties.getUniqueString();
 
-		ownerAccount.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+ "<folder name='" + ownerFoldername + "' l='"
-				+ ownerBriefcaseRootFolder.getId() + "'/>"
-				+ "</CreateFolderRequest>");
-
 		// Verify the share folder exists on the server
-		FolderItem ownerFolder = FolderItem.importFromSOAP(ownerAccount,
-				ownerFoldername);
+		FolderItem ownerFolder = createFolderViaSoap(ownerAccount, ownerFoldername,ownerBriefcaseRootFolder);
 
 		ZAssert.assertNotNull(ownerFolder,
 				"Verify the owner share folder exists");
 
 		ZimbraAccount currentGranteeAccount = app.zGetActiveAccount();
 
-		ownerAccount.soapSend("<FolderActionRequest xmlns='urn:zimbraMail'>"
-				+ "<action id='" + ownerFolder.getId() + "' op='grant'>"
-				+ "<grant d='" + currentGranteeAccount.EmailAddress
-				+ "' gt='usr' perm='rwidxa'/>" + "</action>"
-				+ "</FolderActionRequest>");
-
-		ownerAccount
-				.soapSend("<SendShareNotificationRequest xmlns='urn:zimbraMail'>"
-						+ "<share l='"
-						+ ownerFolder.getId()
-						+ "' gt='usr'"
-						+ " zid='"
-						+ currentGranteeAccount.ZimbraId
-						+ "'"
-						+ " name='"
-						+ currentGranteeAccount.EmailAddress
-						+ "'/>" + "</SendShareNotificationRequest>");
+		shareFolderViaSoap(ownerAccount, currentGranteeAccount, ownerFolder, SHARE_AS_ADMIN);
 
 		// Current user creates the mountpoint that points to the share
 		FolderItem currentAccountRootFolder = FolderItem.importFromSOAP(
 				currentGranteeAccount, SystemFolder.Briefcase);
 
-		//String folderMountpointName = "mountpoint"
-		//		+ ZimbraSeleniumProperties.getUniqueString();
-
-		currentGranteeAccount
-				.soapSend("<CreateMountpointRequest xmlns='urn:zimbraMail'>"
-						+ "<link l='" + currentAccountRootFolder.getId()
-						+ "' name='" + ownerFoldername
-						+ "' view='document' rid='" + ownerFolder.getId()
-						+ "' zid='" + ownerAccount.ZimbraId + "'/>"
-						+ "</CreateMountpointRequest>");
+		mountRequestViaSoap(ownerAccount, currentGranteeAccount, ownerFolder, currentAccountRootFolder, ownerFoldername);
 
 		// Verify the mountpoint exists on the server
 		FolderMountpointItem folderMountpointItem = FolderMountpointItem
@@ -215,7 +157,7 @@ public class RemoveMountpoint extends OctopusCommonTest {
 						Button.O_FOLDER_SHARE, ownerFoldername);
 
 		SleepUtil.sleepSmall();
-		
+
 		// Click on Leave This shared folder button
 		dialogShare.zClickButton(Button.B_LEAVE_THIS_SHARED_FOLDER);
 
@@ -224,7 +166,7 @@ public class RemoveMountpoint extends OctopusCommonTest {
 				PageMyFiles.Locators.zMyFilesListView.locator + ":contains("
 						+ ownerFoldername + ")", "5000"),
 				"Verify mountpoint folder disappears from My Files tab");
-	
+
 		// click on Sharing tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_SHARING);
 
@@ -256,7 +198,7 @@ public class RemoveMountpoint extends OctopusCommonTest {
 			try {
 				// Delete it from Server
 				FolderItem
-						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
+				.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
 			} catch (Exception e) {
 				logger.info("Failed while removing the folder.", e);
 			} finally {

@@ -1,13 +1,16 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.sharing;
 
 import java.util.List;
+
 import org.testng.annotations.Test;
+
 import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.items.FolderMountpointItem;
 import com.zimbra.qa.selenium.framework.items.IOctListViewItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.OctopusAccount;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -24,7 +27,7 @@ public class CreateMountpoint extends OctopusCommonTest {
 		super.startingPage = app.zPageSharing;
 		super.startingAccountPreferences = null;
 
-		ownerAccount = new ZimbraAccount();
+		ownerAccount = new OctopusAccount();
 		ownerAccount.provision();
 		ownerAccount.authenticate();
 	}
@@ -41,68 +44,44 @@ public class CreateMountpoint extends OctopusCommonTest {
 		String ownerFoldername = "ownerFolder"
 				+ ZimbraSeleniumProperties.getUniqueString();
 
-		ownerAccount.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+ "<folder name='" + ownerFoldername + "' l='"
-				+ ownerBriefcaseRootFolder.getId() + "'/>"
-				+ "</CreateFolderRequest>");
-
 		// Verify the share folder exists on the server
-		FolderItem ownerFolder = FolderItem.importFromSOAP(ownerAccount,
-				ownerFoldername);
+		FolderItem ownerFolderItem = createFolderViaSoap(ownerAccount, ownerFoldername,ownerBriefcaseRootFolder);
 
-		ZAssert
-				.assertNotNull(ownerFolder,
-						"Verify the owner share folder exists");
+		ZAssert.assertNotNull(ownerFolderItem,"Verify the owner share folder exists");
 
-		ZimbraAccount currentAccount = app.zGetActiveAccount();
-
-		ownerAccount.soapSend("<FolderActionRequest xmlns='urn:zimbraMail'>"
-				+ "<action id='" + ownerFolder.getId() + "' op='grant'>"
-				+ "<grant d='" + currentAccount.EmailAddress
-				+ "' gt='usr' perm='r'/>" + "</action>"
-				+ "</FolderActionRequest>");
+		ZimbraAccount granteeAccount = app.zGetActiveAccount();
 
 		// Current user creates the mountpoint that points to the share
 		FolderItem currentAccountRootFolder = FolderItem.importFromSOAP(
-				currentAccount, SystemFolder.Briefcase);
+				granteeAccount, SystemFolder.Briefcase);
 
 		String folderMountpointName = "mountpoint"
 				+ ZimbraSeleniumProperties.getUniqueString();
 
-		currentAccount
-				.soapSend("<CreateMountpointRequest xmlns='urn:zimbraMail'>"
-						+ "<link l='" + currentAccountRootFolder.getId()
-						+ "' name='" + folderMountpointName
-						+ "' view='document' rid='" + ownerFolder.getId()
-						+ "' zid='" + ownerAccount.ZimbraId + "'/>"
-						+ "</CreateMountpointRequest>");
+		mountFolderViaSoap(ownerAccount, granteeAccount, ownerFolderItem, SHARE_AS_READ, currentAccountRootFolder, folderMountpointName);
 
 		// Verify the mountpoint exists on the server
 		FolderMountpointItem folderMountpointItem = FolderMountpointItem
-				.importFromSOAP(currentAccount, folderMountpointName);
+				.importFromSOAP(granteeAccount, folderMountpointName);
 
 		ZAssert.assertNotNull(folderMountpointItem,
 				"Verify the mountpoint is available");
 
 		ZAssert.assertEquals(folderMountpointItem.getName(), folderMountpointName,
 				"Verify the server mountpoint name");
-		
+
 		// click on My Files tab
 		PageMyFiles pageMyFiles = (PageMyFiles) app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
-				
+
 		// Verify the mountpoint exists in the list view
 		List<IOctListViewItem> items = app.zPageOctopus.zGetListViewItems();
-		
+
 		ZAssert.assertNotNull(items,  "Verify list view is not empty");
-		
-		//ZAssert.assertContains(items, folderMountpointName,
-		//"Verify list view contains mountpoint folder");	
-		
-		ZAssert
-		.assertTrue(pageMyFiles.zWaitForElementPresent(
+
+		ZAssert.assertTrue(pageMyFiles.zWaitForElementPresent(
 				PageMyFiles.Locators.zMyFilesListViewItems.locator
-						+ ":contains(" + folderMountpointName
-						+ ")", "3000"),
+				+ ":contains(" + folderMountpointName
+				+ ")", "3000"),
 				"Verify the mountpoint folder is displayed in the My Files list view");
-	}	
+	}
 }

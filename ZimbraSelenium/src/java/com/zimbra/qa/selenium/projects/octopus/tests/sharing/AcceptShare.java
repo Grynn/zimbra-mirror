@@ -1,10 +1,12 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.sharing;
 
 import org.testng.annotations.Test;
+
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.OctopusAccount;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -22,7 +24,7 @@ public class AcceptShare extends OctopusCommonTest {
 		super.startingPage = app.zPageSharing;
 		super.startingAccountPreferences = null;
 
-		ownerAccount = new ZimbraAccount();
+		ownerAccount = new OctopusAccount();
 		ownerAccount.provision();
 		ownerAccount.authenticate();
 	}
@@ -39,65 +41,31 @@ public class AcceptShare extends OctopusCommonTest {
 		String ownerFoldername = "ownerFolder"
 				+ ZimbraSeleniumProperties.getUniqueString();
 
-		ownerAccount.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+ "<folder name='" + ownerFoldername + "' l='"
-				+ ownerBriefcaseRootFolder.getId() + "'/>"
-				+ "</CreateFolderRequest>");
-
 		// Verify the share folder exists on the server
-		FolderItem ownerFolderItem = FolderItem.importFromSOAP(ownerAccount,
-				ownerFoldername);
+		FolderItem ownerFolderItem = createFolderViaSoap(ownerAccount, ownerFoldername,ownerBriefcaseRootFolder);
 
-		ZAssert.assertNotNull(ownerFolderItem,
-				"Verify the owner share folder exists");
+		ZAssert.assertNotNull(ownerFolderItem,"Verify the owner share folder exists");
 
-		ZimbraAccount currentAccount = app.zGetActiveAccount();
+		ZimbraAccount granteeAccount = app.zGetActiveAccount();
 
-		ownerAccount.soapSend("<FolderActionRequest xmlns='urn:zimbraMail'>"
-				+ "<action id='" + ownerFolderItem.getId() + "' op='grant'>"
-				+ "<grant d='" + currentAccount.EmailAddress
-				+ "' gt='usr' perm='r'/>" + "</action>"
-				+ "</FolderActionRequest>");
+		shareFolderViaSoap(ownerAccount, granteeAccount, ownerFolderItem, SHARE_AS_READ);
 
-		// Owner sends share notification to the current user
-		/*
-		 * ownerAccount.soapSend("<SendShareNotificationRequest xmlns='urn:zimbraMail'>"
-		 * + "<share l='" + ownerFolder.getId() + "' gt='usr' zid='" +
-		 * currentAccount.ZimbraId + "' name='" + currentAccount.EmailAddress +
-		 * "'><notes _content='test'/></share>" +
-		 * "</SendShareNotificationRequest>");
-		 */
-		ownerAccount
-				.soapSend("<SendShareNotificationRequest xmlns='urn:zimbraMail'>"
-						+ "<share l='"
-						+ ownerFolderItem.getId()
-						+ "' gt='usr'"
-						+ " zid='"
-						+ currentAccount.ZimbraId
-						+ "'"
-						+ " name='"
-						+ currentAccount.EmailAddress
-						+ "'/>"
-						+ "</SendShareNotificationRequest>");
-
-		// Currrent user gets share notification
+		// Currrent/grantee user gets share notification
 		String getShareNotifcationRequest = "<GetShareNotificationsRequest xmlns='urn:zimbraMail'/>";
-		
-		app.zPageOctopus.waitForResponse(currentAccount, getShareNotifcationRequest, ownerFoldername, 5);
 
-		currentAccount.soapSend(getShareNotifcationRequest);
-		
+		app.zPageOctopus.waitForResponse(granteeAccount, getShareNotifcationRequest, ownerFoldername, 5);
+
+		granteeAccount.soapSend(getShareNotifcationRequest);
+
 		// Open Sharing tab
-		app.zPageOctopus
-				.zToolbarPressButton(Button.B_TAB_SHARING);
+		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_SHARING);
 
-		ZAssert
-				.assertTrue(app.zPageSharing.zWaitForElementPresent(
-						PageSharing.Locators.zShareNotificationListView.locator
-								+ ":contains(" + ownerFolderItem.getName()
-								+ ")", "9000"),
-						"Verify the owner share folder is displayed in the Share Invitation view");
-		
+		ZAssert.assertTrue(app.zPageSharing.zWaitForElementPresent(
+				PageSharing.Locators.zShareNotificationListView.locator
+				+ ":contains(" + ownerFolderItem.getName()
+				+ ")", "9000"),
+				"Verify the owner share folder is displayed in the Share Invitation view");
+
 		// click on Add To My Files button
 		app.zPageSharing.zToolbarPressButton(Button.B_ADD_TO_MY_FILES,
 				ownerFolderItem);
@@ -111,9 +79,8 @@ public class AcceptShare extends OctopusCommonTest {
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_MY_FILES);
 
 		// Make sure the accepted shared folder appears in My Files list view
-		ZAssert
-				.assertTrue(
-						app.zPageOctopus.zIsItemInCurentListView(ownerFolderItem.getName()),
-						"Verify the accepted shared folder appears in My Files list view");
+		ZAssert.assertTrue(
+				app.zPageOctopus.zIsItemInCurentListView(ownerFolderItem.getName()),
+				"Verify the accepted shared folder appears in My Files list view");
 	}
 }
