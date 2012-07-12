@@ -896,11 +896,11 @@ function(tmpObj) {
 **/
 ZaAccount.createMethod = 
 function (tmpObj, account) {
-	tmpObj.attrs[ZaAccount.A_mail] = tmpObj.name;	
+	tmpObj.attrs[ZaAccount.A_mail] = tmpObj.name.replace(/[\s]+/g,"");	
 	var resp;	
 	//create SOAP request
 	var soapDoc = AjxSoapDoc.create("CreateAccountRequest", ZaZimbraAdmin.URN, null);
-	soapDoc.set(ZaAccount.A_name, tmpObj.name);
+	soapDoc.set(ZaAccount.A_name, tmpObj.attrs[ZaAccount.A_mail]);
 	if(tmpObj.attrs[ZaAccount.A_password] && tmpObj.attrs[ZaAccount.A_password].length > 0)
 		soapDoc.set(ZaAccount.A_password, tmpObj.attrs[ZaAccount.A_password]);
 		
