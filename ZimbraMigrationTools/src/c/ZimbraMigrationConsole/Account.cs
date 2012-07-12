@@ -393,7 +393,7 @@ class Account: BackgroundWorker
             {
                 if (f.FolderName != null)
                 {
-                    string msg2 = "{0} of {1}";
+                    string msg2 = "{0} of {1} for account  " + f.AccountID.ToString();
                     string msgF = String.Format(msg2, f.CurrentCountOfItems, f.TotalCountOfItems);
 
                     System.Console.WriteLine(msgF);
