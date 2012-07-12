@@ -88,23 +88,10 @@ ZaAccountListController.prototype.show = function (doPush) {
 ZaAccountListController.prototype._show = 
 function (list, openInNewTab, openInSearchTab, hasMore) {
 	this._updateUI(list, openInNewTab, openInSearchTab, hasMore);
-//	ZaApp.getInstance().pushView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
     this.updatePopupMenu();
 	ZaApp.getInstance().pushView(this.getContentViewId (), openInNewTab, openInSearchTab);
-	this.updateToolbar();
-    if(appNewUI) return;
-	//TODO: need to standardize the way to handle the tab.
-	//hacking: currently, dllistview, aliasListView, accountListView and resourceListView share the same controller instance. It is BAD!
-	//It should be changed when we allow the list view to be open in a new tab
-	if (openInSearchTab) {
-		ZaApp.getInstance().updateSearchTab();
-	}else{
-		ZaApp.getInstance().updateTab(this.getMainTab(), ZaApp.getInstance()._currentViewId );
-	}
+    return;
 }
-
-
-
 
 
 ZaAccountListController.prototype.setDefaultType = function (type) {
@@ -112,57 +99,6 @@ ZaAccountListController.prototype.setDefaultType = function (type) {
 	this._defaultType = type;
 	
 };
-
-ZaAccountListController.prototype.updateToolbar = 
-function () {
-	if(!this._toolbar)
-		return;
-	
-	var type = this._defaultType ;	
-	var newButton = this._toolbar.getButton(ZaOperation.NEW_MENU);	
-	if (newButton != null) {
-		newButton.removeSelectionListeners();
-		// set the new menu action
-		if (type == ZaItem.ACCOUNT ) {
-			newButton.setToolTipContent(ZaMsg.ACTBB_New_tt);
-			newButton.setImage("Account");
-			newButton.addSelectionListener(this._newAcctListener);
-			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.ACTBB_Edit_tt);
-			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.ACTBB_Delete_tt);
-			if(this._toolbar.getButton(ZaOperation.CHNG_PWD))			
-				this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.ACTBB_ChngPwd_tt);
-			
-			if(this._toolbar.getButton(ZaOperation.EXPIRE_SESSION))	
-				this._toolbar.getButton(ZaOperation.EXPIRE_SESSION).setToolTipContent(ZaMsg.ACTBB_ExpireSessions_tt);
-				
-		} else if (type == ZaItem.ALIAS) {
-			newButton.setToolTipContent(ZaMsg.ALTBB_New_tt);
-			newButton.setImage("AccountAlias");
-			newButton.addSelectionListener(this._newALListener);
-			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.ACTBB_Edit_tt);
-			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.ALTBB_Delete_tt);
-			if(this._toolbar.getButton(ZaOperation.CHNG_PWD))
-				this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.ACTBB_ChngPwd_tt);
-			
-			if(this._toolbar.getButton(ZaOperation.EXPIRE_SESSION))
-                                this._toolbar.getButton(ZaOperation.EXPIRE_SESSION).setToolTipContent(ZaMsg.ACTBB_ExpireSessions_tt);
-		} else if (type == ZaItem.DL) {
-			newButton.setToolTipContent(ZaMsg.DLTBB_New_tt);
-			newButton.setImage("DistributionList");
-			newButton.addSelectionListener(this._newDLListener);
-			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.DLTBB_Edit_tt);
-			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.DLTBB_Delete_tt);
-		} else if (type == ZaItem.RESOURCE ){
-		  	newButton.setToolTipContent(ZaMsg.RESTBB_New_tt);
-			newButton.setImage("Resource");
-			newButton.addSelectionListener(this._newResListener);
-			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.RESBB_Edit_tt);
-			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.RESBB_Delete_tt);
-			if(this._toolbar.getButton(ZaOperation.CHNG_PWD))
-				this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.RESBB_CHNG_PWD_tt);
-		}
-	}
-}
 
 ZaAccountListController.prototype.updatePopupMenu =
 function () {
@@ -270,39 +206,6 @@ function () {
 
 ZaAccountListController.initPopupMenuMethod =
 function () {
-    //push it firstly to make it as the first one
-    this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "NewAccount", "AccountDis",new AjxListener(this, ZaAccountListController.prototype._newAccountListener));;
-    this._popupOrder.push(ZaOperation.NEW_MENU);
-
-    this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Edit", "EditDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
-    this._popupOrder.push(ZaOperation.EDIT);
-
-	this._popupOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener));
-    this._popupOrder.push(ZaOperation.DELETE);
-
-	if(this._defaultType == ZaItem.ACCOUNT) {
-		this._popupOperations[ZaOperation.CHNG_PWD] = new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener));
-		this._popupOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, ZaAccountListController.prototype._expireSessionListener));
-        this._popupOrder.push(ZaOperation.CHNG_PWD);
-        this._popupOrder.push(ZaOperation.EXPIRE_SESSION);
-	}
-
-	if(this._defaultType == ZaItem.ALIAS) {	
-		this._popupOperations[ZaOperation.MOVE_ALIAS] = new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener));
-		this._popupOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, ZaAccountListController.prototype._expireSessionListener));
-        this._popupOrder.push(ZaOperation.MOVE_ALIAS);
-        this._popupOrder.push(ZaOperation.EXPIRE_SESSION);
-	}
-}
-ZaController.initPopupMenuMethods["ZaAccountListController"].push(ZaAccountListController.initPopupMenuMethod);
-
-/**
-* This method is called from {@link ZaController#_initToolbar}
-**/
-ZaAccountListController.initToolbarMethod =
-function () {
-	// first button in the toolbar is a menu.
-	var newMenuOpList = new Array();
 	this.showNewAccount = false;
 	this.showNewDL = false;
 	this.showNewCalRes = false;
@@ -334,20 +237,32 @@ function () {
 		}
 	}
 	
-	if(this.showNewAccount) {
-		newMenuOpList.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "NewAccount", "AccountDis", this._newAcctListener));
+    //push it firstly to make it as the first one
+    this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "NewAccount", "AccountDis",new AjxListener(this, ZaAccountListController.prototype._newAccountListener));;
+    this._popupOrder.push(ZaOperation.NEW_MENU);
+
+    this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Edit", "EditDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
+    this._popupOrder.push(ZaOperation.EDIT);
+
+	this._popupOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener));
+    this._popupOrder.push(ZaOperation.DELETE);
+
+	if(this._defaultType == ZaItem.ACCOUNT) {
+		this._popupOperations[ZaOperation.CHNG_PWD] = new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener));
+		this._popupOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, ZaAccountListController.prototype._expireSessionListener));
+        this._popupOrder.push(ZaOperation.CHNG_PWD);
+        this._popupOrder.push(ZaOperation.EXPIRE_SESSION);
 	}
-	if(this.showNewAlias) {
-		newMenuOpList.push(new ZaOperation(ZaOperation.NEW_ALIAS, ZaMsg.ALTBB_New_menuItem, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener));
+
+	if(this._defaultType == ZaItem.ALIAS) {	
+		this._popupOperations[ZaOperation.MOVE_ALIAS] = new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener));
+		this._popupOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, ZaAccountListController.prototype._expireSessionListener));
+        this._popupOrder.push(ZaOperation.MOVE_ALIAS);
+        this._popupOrder.push(ZaOperation.EXPIRE_SESSION);
 	}
-	if(this.showNewDL) {
-		newMenuOpList.push(new ZaOperation(ZaOperation.NEW_DL, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "DistributionList", "DistributionListDis", this._newDLListener));
-	}
-	if(this.showNewCalRes) {
-		newMenuOpList.push(new ZaOperation(ZaOperation.NEW_RESOURCE, ZaMsg.RESTBB_New_menuItem, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener));
-	}	
 }
-//ZaController.initToolbarMethods["ZaAccountListController"].push(ZaAccountListController.initToolbarMethod);
+ZaController.initPopupMenuMethods["ZaAccountListController"].push(ZaAccountListController.initPopupMenuMethod);
+
 
 //private and protected methods
 ZaAccountListController.prototype._createUI = 
@@ -362,7 +277,6 @@ function (openInNewTab, openInSearchTab) {
 	this._newResListener = new AjxListener(this, ZaAccountListController.prototype._newResourceListener);
 	this._newALListener = new AjxListener(this, ZaAccountListController.prototype._newAliasListener);
    
-    this._initToolbar();
 	//always add Help and navigation buttons at the end of the toolbar    
 	//add the acount number counts
 	
@@ -376,9 +290,9 @@ function (openInNewTab, openInSearchTab) {
 	//set a selection listener on the account list view
 	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-	if(!ZaApp.getInstance().dialogs["ConfirmMessageDialog"])
+	if(!ZaApp.getInstance().dialogs["ConfirmMessageDialog"]) {
 		ZaApp.getInstance().dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], null, ZaId.CTR_PREFIX + ZaId.VIEW_ACCTLIST + "_ConfirmMessage");			
-	
+	}
 	this._UICreated = true;
 	
 }
