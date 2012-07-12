@@ -1051,7 +1051,6 @@ ZaAccountXFormView.ACCOUNT_NAME_GROUP_ATTRS = [ZaAccount.A_name,
         ZaAccount.A_initials,
         ZaAccount.A_lastName,
         ZaAccount.A_displayname,
-	//ZaAccount.A_zimbraMailCanonicalAddress,
 	ZaAccount.A_zimbraHideInGal 
 ];
 
@@ -1222,6 +1221,7 @@ ZaAccountXFormView.ADVANCED_TAB_ATTRS = [ZaAccount.A_zimbraAttachmentsBlocked,
 	ZaAccount.A_zimbraDumpsterUserVisibleAge,
 	ZaAccount.A_zimbraMailDumpsterLifetime,
 	ZaAccount.A_zimbraFreebusyExchangeUserOrg,
+	ZaAccount.A_zimbraMailCanonicalAddress,	
 	ZaAccount.A_zimbraMailTransport	
 	];
 ZaAccountXFormView.ADVANCED_TAB_RIGHTS = [];
@@ -2269,7 +2269,6 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
                         			ZaAccount.A_zimbraPrefShowSearchString,
                         			ZaAccount.A_zimbraPrefImapSearchFoldersEnabled,
                         			ZaAccount.A_zimbraPrefUseKeyboardShortcuts,
-//                        			ZaAccount.A_zimbraMailCanonicalAddress,
                         			ZaAccount.A_zimbraPrefWarnOnExit,
                         			ZaAccount.A_zimbraPrefAdminConsoleWarnOnExit,
                         			ZaAccount.A_zimbraPrefShowSelectionCheckbox,
@@ -3508,20 +3507,29 @@ nowrap:false, labelWrap:true,
                                 }
                             ]
                         },
-
-                	{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_MailTransportGrouper, id:"mailtransport_setting",
-                                colSizes:["275px","*"],numCols:2,
-                                visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
-                                                [ZaAccount.A_zimbraMailTransport]]],
-                                items:[
-                                {ref:ZaAccount.A_zimbraMailTransport, type:_TEXTFIELD_, msgName:ZaMsg.NAD_MailTransport,label:ZaMsg.NAD_MailTransport,
-                                        labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:220
-                                },
-                            	{type:_OUTPUT_,ref:".",label:"", labelLocation:_LEFT_, value: ZaMsg.MSG_MailTransportMessage}
-
-				]
-			},
-                        {type: _SPACER_ , height: "10px" }  //add some spaces at the bottom of the page
+	                	{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_MailTransportGrouper, id:"mailtransport_setting",
+	                                colSizes:["275px","*"],numCols:2,
+	                                visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+	                                                [ZaAccount.A_zimbraMailTransport, ZaAccount.A_zimbraMailCanonicalAddress]]],
+	                           items:[
+	                                {type:_OUTPUT_,ref:".",label:"", labelLocation:_LEFT_, value: ZaMsg.MSG_MailTransportMessage},
+	                                {ref:ZaAccount.A_zimbraMailTransport, type:_TEXTFIELD_, msgName:ZaMsg.NAD_MailTransport,label:ZaMsg.NAD_MailTransport,
+	                                        labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:220
+	                                },
+	                                {type: _DWT_ALERT_, 
+	                                	content:ZaMsg.CannonicalWarning,
+	                    			 	visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraMailCanonicalAddress]],
+	                    			 	visibilityChangeEventSources:[ZaAccount.A_zimbraMailCanonicalAddress],
+	                    				containerCssStyle: "width:400px;",
+	                    				style: DwtAlert.WARNING, iconVisible: true
+	                    			},
+	                            	{ref:ZaAccount.A_zimbraMailCanonicalAddress, type:_TEXTFIELD_, msgName:ZaMsg.NAD_CanonicalFrom,label:ZaMsg.NAD_CanonicalFrom,
+	                                    labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:220
+	                                }
+	
+	                    		]
+	                	},
+	                	{type: _SPACER_ , height: "10px" }  //add some spaces at the bottom of the page
                     ]
                 });
 	}
