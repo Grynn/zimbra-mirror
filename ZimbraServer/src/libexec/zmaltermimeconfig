@@ -65,6 +65,7 @@ sub writeFile($$) {
   my ($file, $content) = @_;
   open(DATA, ">$file");
   print DATA "$content";
+  print DATA "\n";
   close(DATA);
 }
 
