@@ -488,7 +488,8 @@ public class EditDocument extends FeatureBriefcaseTest {
 			editDocName = "editDocName"
 					+ ZimbraSeleniumProperties.getUniqueString();
 
-			documentBriefcaseEdit.typeDocumentName(editDocName);
+			//documentBriefcaseEdit.typeDocumentName(editDocName);
+			documentBriefcaseEdit.zFillField(DocumentBriefcaseNew.Field.Name, editDocName);
 
 			// Save and close
 			documentBriefcaseEdit.zSubmit();
