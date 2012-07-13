@@ -23,7 +23,8 @@
  * 
  * @param {hash}	params		a hash of parameters
  * @param {DwtComposite}      parent		the parent widget
- * @param {hash}	inputParams		params for the input (see {@link DwtInputField})
+ * @param {boolean}	useLabel		Set to true if the value should be shown in a DwtLabel. Defaults to false, showing it in a DwtInputField.
+ * @param {hash}	inputParams		params for the input (see {@link DwtInputField} or {@link DwtLabel})
  * @param {string}      className		the CSS class
  * @param {constant}      posStyle		the positioning style (see {@link DwtControl})
  * @param {int}     maxRows         The number of maxRows needed in drop down(see {@link DwtMenu})
@@ -51,6 +52,7 @@ DwtComboBox = function(params) {
 	this._menuItemListenerObj = new AjxListener(this, this._menuItemListener);
 
     this._inputParams = params.inputParams;
+	this._useLabel = Boolean(params.useLabel);
 	this._maxRows = params.maxRows;
 	this._layout = params.layout;
 	this._autoScroll = params.autoScroll || false;
@@ -185,7 +187,7 @@ DwtComboBox.prototype.setValue = function(value) {
  */
 DwtComboBox.prototype.getText =
 function() {
-	return this.input.getValue();
+	return this._useLabel ? this.input.getText() : this.input.getValue();
 };
 
 /**
@@ -195,7 +197,10 @@ function() {
  */
 DwtComboBox.prototype.setText =
 function(text) {
-	this.input.setValue(text);
+	if (this._useLabel)
+		this.input.setText(text);
+	else
+		this.input.setValue(text);
 };
 
 DwtComboBox.prototype.setEnabled =
@@ -250,9 +255,9 @@ function(menu, text) {
 DwtComboBox.prototype._menuItemListener =
 function(ev) {
 	var menuItem = ev.dwtObj;
-	var ovalue = this.input.getValue();
+	var ovalue = this.getText();
 	var nvalue = menuItem.getText();
-	this.input.setValue(nvalue);
+	this.setText(nvalue);
 	this._menu.popdown();
 
 	// notify our listeners
@@ -260,13 +265,15 @@ function(ev) {
 	event._args = { selectObj: this, newValue: nvalue, oldValue: ovalue };
 	this.notifyListeners(DwtEvent.ONCHANGE, event);
 
-	var input = this.input.getInputElement();
-	input.focus();
-	input.select();
+	if (!this._useLabel) {
+	    var input = this.input.getInputElement();
+	    input.focus();
+	    input.select();
+	}
 };
 
 DwtComboBox.prototype._handleKeyDown = function(ev) {
-	this.__ovalue = this.input.getValue();
+	this.__ovalue = this.getText();
 	return true;
 };
 
@@ -275,7 +282,7 @@ DwtComboBox.prototype._handleKeyUp = function(ev) {
 	DwtInputField._keyUpHdlr(ev);
 	// notify our listeners
 	var event = DwtUiEvent.getEvent(ev);
-	var newValue = this.input.getValue();
+	var newValue = this.getText();
 	event._args = { selectObj: this, newValue: newValue, oldValue: this.__ovalue };
 	this.notifyListeners(DwtEvent.ONCHANGE, event);
 	if (this._menu && this._autoScroll && newValue != this.__ovalue) {
@@ -311,7 +318,8 @@ DwtComboBox.prototype._createHtmlFromTemplate = function(templateId, data) {
 	inputParams.size = inputParams.size || 40;
 	delete this._inputParams;
     
-    this.input = new DwtInputField(inputParams);
+	this.input = (this._useLabel ?
+	              new DwtLabel(inputParams) : new DwtInputField(inputParams));
     this.input.replaceElement(data.id + "_input");
 	this.input.setHandler(DwtEvent.ONKEYDOWN, AjxCallback.simpleClosure(this._handleKeyDown, this));
 	this.input.setHandler(DwtEvent.ONKEYUP, AjxCallback.simpleClosure(this._handleKeyUp, this));
@@ -336,7 +344,10 @@ function(oel, nel, inheritClass, inheritStyle) {
 	DwtComposite.prototype._replaceElementHook.apply(this, arguments);
 	// set input settings
 	if (oel.size) {
-		this.input.getInputElement().size = oel.size;
+		var el = (this._useLabel ?
+		          this.input.getHtmlElement() :
+		          this.input.getInputElement());
+		el.size = oel.size;
 	}
 	if (oel.title) {
 		this.input.setHint(oel.title);
