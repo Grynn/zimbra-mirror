@@ -578,7 +578,12 @@ deployCA() {
   if [ -s "${zimbra_conf_directory}/ca/commercial_ca.pem" ]; then
     cd ${zimbra_conf_directory}/ca
     for pem in commercial_ca*.pem; do
-      ln -f -s $pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`.0
+      incr=0
+      hash=`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`
+      while [ -L ${zimbra_conf_directory}/ca/${hash}.${incr} ]; do
+        incr=$[$incr+1]
+      done
+      ln -f -s $pem ${zimbra_conf_directory}/ca/${hash}.${incr}
       chmod 644 ${zimbra_conf_directory}/ca/$pem
     done
   fi
@@ -749,7 +754,12 @@ deployCert() {
     if [ -s "${zimbra_conf_directory}/ca/commercial_ca.pem" ]; then
       cd ${zimbra_conf_directory}/ca
       for pem in commercial_ca*.pem; do
-        ln -f -s $pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`.0
+        incr=0
+        hash=`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`
+        while [ -L ${zimbra_conf_directory}/ca/${hash}.${incr} ]; do
+          incr=$[$incr+1]
+        done
+        ln -f -s $pem ${zimbra_conf_directory}/ca/${hash}.${incr}
         chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/ca/$pem
         chmod 640 ${zimbra_conf_directory}/ca/$pem
       done
