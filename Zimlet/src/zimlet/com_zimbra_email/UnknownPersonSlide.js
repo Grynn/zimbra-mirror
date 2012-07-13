@@ -300,7 +300,7 @@ UnknownPersonSlide.prototype._getPresence =
         // Also check for cache staleness: currently anything over 30 secs is considered stale
         var then = this._presenceCache[this._presentity] && this._presenceCache[this._presentity].timestamp || 0;
 
-        if (now - then < 30000)  {
+        if (now - then < 5000)  {
             return this._presenceCache[this._presentity];
         }
 
