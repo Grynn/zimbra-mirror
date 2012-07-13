@@ -151,6 +151,8 @@ PRE_PERL_LIBS	:= \
 	Test::Warn
 
 PERL_LIBS 	:= \
+	ExtUtils::Constant \
+	Socket \
 	IO \
 	Scalar::Util \
 	IO::Socket::SSL \
