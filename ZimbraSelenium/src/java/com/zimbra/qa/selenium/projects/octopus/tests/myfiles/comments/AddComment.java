@@ -1,14 +1,21 @@
 package com.zimbra.qa.selenium.projects.octopus.tests.myfiles.comments;
 
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.OctopusAccount;
+import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
+import com.zimbra.qa.selenium.projects.octopus.ui.DialogFileShare;
 import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFileComments;
 import com.zimbra.qa.selenium.projects.octopus.ui.DisplayFilePreview;
 import com.zimbra.qa.selenium.projects.octopus.ui.PageMyFiles;
@@ -19,6 +26,7 @@ public class AddComment extends OctopusCommonTest {
 	private String _folderName = null;
 	private boolean _fileAttached = false;
 	private String _fileId = null;
+	private ZimbraAccount grantee=null;
 
 	@BeforeMethod(groups = { "always" })
 	public void testReset() {
@@ -34,6 +42,10 @@ public class AddComment extends OctopusCommonTest {
 		// test starts at the My Files tab
 		super.startingPage = app.zPageMyFiles;
 		super.startingAccountPreferences = null;
+
+		grantee = new OctopusAccount();
+		grantee.provision();
+		grantee.authenticate();
 	}
 
 	@Test(description = "Add file comments - verify comments text in the file Comments through SOAP", groups = { "functional" })
@@ -127,7 +139,7 @@ public class AddComment extends OctopusCommonTest {
 		// Verify file exists in My Files view
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
 				PageMyFiles.Locators.zMyFilesListViewItems.locator
-						+ ":contains(" + fileName + ")", "3000"),
+				+ ":contains(" + fileName + ")", "3000"),
 				"Verify file appears in My Files view");
 
 		// Select file in the list view
@@ -141,13 +153,13 @@ public class AddComment extends OctopusCommonTest {
 		// Verify comments text appears in the file Comments view
 		ZAssert.assertTrue(app.zPageOctopus.zWaitForElementPresent(
 				DisplayFileComments.Locators.zFileCommentsView.locator
-						+ ":contains(" + comment + ")", "3000"),
+				+ ":contains(" + comment + ")", "3000"),
 				"Verify comments text appears in the file Comments view");
 
 		// Verify account user name appears in the file Comments view
 		ZAssert.assertTrue(app.zPageOctopus.zWaitForElementPresent(
 				DisplayFileComments.Locators.zFileCommentsView.locator
-						+ ":contains(" + account.EmailAddress.split("@")[0]
+				+ ":contains(" + account.EmailAddress.split("@")[0]
 						+ ")", "3000"),
 				"Verify account user name appears in the file Comments view");
 
@@ -157,6 +169,131 @@ public class AddComment extends OctopusCommonTest {
 				"3000"), "Verify Close button in the Comments view");
 
 		// close Comments view
+		fileComments.zPressButton(Button.B_CLOSE);
+	}
+
+	@Test(description = "User should able to add comments on publicly shared file", groups = { "smoke" })
+	public void AddComment_PubliclyShareFile() throws HarnessException
+	{
+		ZimbraAccount account = app.zGetActiveAccount();
+		String fileName=TEXT_FILE;
+
+		_fileAttached = true;
+		_fileId=uploadFileViaSoap(account, fileName);
+
+		String name = account.soapSelectValue(
+				"//mail:SaveDocumentResponse//mail:doc", "name");
+
+		// verify the file is uploaded
+		ZAssert.assertEquals(fileName, name, "Verify file is uploaded");
+
+		//Click on Share publicly option in the file Context menu
+		DialogFileShare dialogFileShare = (DialogFileShare) app.zPageMyFiles
+				.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
+						Button.O_FILE_SHARE, fileName);
+
+		//Click on Close button
+		dialogFileShare.zClickButton(Button.B_CLOSE);
+
+		//make comment via soap
+		String comment = "Comment" + ZimbraSeleniumProperties.getUniqueString();
+		makeCommentViaSoap(app.zGetActiveAccount(), _fileId, comment);
+
+		// Verify comments text appears in the file Comments view
+		ZAssert.assertTrue(app.zPageOctopus.zWaitForElementPresent(
+				DisplayFileComments.Locators.zFileCommentsView.locator
+				+ ":contains(" + comment + ")", "3000"),
+				"Verify comments text appears in the file Comments view");
+	}
+
+	@Test(description = "Add comment on file from shared mount-point folder by grantee", groups = { "smoke1" })
+	public void AddCommentOnFileUnderSharedMountpoint() throws HarnessException
+	{
+		//Create current account
+		ZimbraAccount account = app.zGetActiveAccount();
+		String fileName=TEXT_FILE;
+
+		//Create a folder
+		FolderItem folder = createFolderViaSoap(account);
+
+		_fileAttached = true;
+		_fileId=uploadFileViaSoap(account, fileName,folder);
+
+		//Share folder with grantee with Admin access.
+		shareFolderViaSoap(account, grantee, folder, SHARE_AS_ADMIN);
+
+		//Create a mount point of shared folder in grantee's account
+		FolderItem granteeBrifcase = FolderItem.importFromSOAP(grantee, SystemFolder.Briefcase);
+		String mountPointFolderName = "mountFolderAdmin";
+		mountRequestViaSoap(account, grantee, folder, granteeBrifcase, mountPointFolderName);
+
+		// Logout owner
+		app.zPageOctopus.zLogout();
+
+		// Login with grantee's Credential's.
+		app.zPageLogin.zLogin(grantee);
+
+		// click on mount point folder
+		app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, mountPointFolderName);
+
+		//Select file in the list view
+		DisplayFilePreview filePreview = (DisplayFilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, fileName);
+
+		//Create comment.
+		String comment = "GranteeComment" + ZimbraSeleniumProperties.getUniqueString();
+
+		//Click on Comments button
+		DisplayFileComments fileComments = (DisplayFileComments) filePreview
+				.zPressButton(Button.B_COMMENTS);
+
+		//Add Comment
+		app.zPageOctopus.sType(DisplayFileComments.Locators.zCommentsTextArea.locator, comment);
+		app.zPageOctopus.sClickAt(DisplayFileComments.Locators.zAddCommentButton.locator, "0,0");
+
+		// Verify comments text appears in the file Comments view
+		ZAssert.assertTrue(app.zPageOctopus.zWaitForElementPresent(
+				DisplayFileComments.Locators.zFileCommentsView.locator
+				+ ":contains(" + comment + ")", "3000"),
+				"Verify comments text appears in the file Comments view");
+	}
+
+	@Test(description = "Commentor pic should be displayed", groups = { "smoke" })
+	public void VerifyCommentorPic() throws HarnessException
+	{
+		ZimbraAccount account = app.zGetActiveAccount();
+		String fileName=TEXT_FILE;
+
+		_fileAttached = true;
+		_fileId=uploadFileViaSoap(account, fileName);
+
+		String name = account.soapSelectValue(
+				"//mail:SaveDocumentResponse//mail:doc", "name");
+
+		// verify the file is uploaded
+		ZAssert.assertEquals(fileName, name, "Verify file is uploaded");
+
+		// Select file in the list view
+		DisplayFilePreview filePreview = (DisplayFilePreview) app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, fileName);
+
+		//make comment via soap
+		String comment = "Comment" + ZimbraSeleniumProperties.getUniqueString();
+		makeCommentViaSoap(app.zGetActiveAccount(), _fileId, comment);
+
+		// Click on Comments button
+		DisplayFileComments fileComments = (DisplayFileComments) filePreview
+				.zPressButton(Button.B_COMMENTS);
+
+		// Verify comments text appears in the file Comments view
+		ZAssert.assertTrue(app.zPageOctopus.zWaitForElementPresent(
+				DisplayFileComments.Locators.zFileCommentsView.locator
+				+ ":contains(" + comment + ")", "3000"),
+				"Verify comments text appears in the file Comments view");
+
+		// Verify user profile appears in the file Comments view
+		ZAssert.assertTrue(app.zPageOctopus.sIsElementPresent(DisplayFileComments.Locators.zProfileImage.locator),
+				"Verify commentor pic should be displayed");
+
+		//close Comments view
 		fileComments.zPressButton(Button.B_CLOSE);
 	}
 
@@ -178,7 +315,7 @@ public class AddComment extends OctopusCommonTest {
 			try {
 				// Delete it from Server
 				FolderItem
-						.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
+				.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
 			} catch (Exception e) {
 				logger.info("Failed while removing the folder.",e);
 			} finally {

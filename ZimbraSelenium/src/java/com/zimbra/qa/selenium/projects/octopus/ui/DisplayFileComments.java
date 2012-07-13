@@ -3,11 +3,11 @@ package com.zimbra.qa.selenium.projects.octopus.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zimbra.qa.selenium.framework.items.CommentItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsDisplay;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.items.CommentItem;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 public class DisplayFileComments extends AbsDisplay {
@@ -17,6 +17,12 @@ public class DisplayFileComments extends AbsDisplay {
 				"css=div[id=comments-stream-view]");
 		public static final Locators zFileCommentsViewCloseBtn = new Locators(
 				"css=div[id=comments-stream-view] img[class='icon Cancel']");
+		public static final Locators zCommentsTextArea = new Locators(
+				"css=div[id=comments-add-textarea] textarea[class=field]");
+		public static final Locators zAddCommentButton = new Locators(
+				"css=span[id='comments-add-button']");
+		public static final Locators zProfileImage = new Locators(
+				"css=div[class=profile-img-container] [class=profile-image]");
 
 		public final String locator;
 
@@ -74,22 +80,22 @@ public class DisplayFileComments extends AbsDisplay {
 	}
 
 	public void zDeleteComment(CommentItem comment) throws HarnessException {
-		
-		if ( comment == null ) 
+
+		if ( comment == null )
 			throw new HarnessException("The comment cannot be null");
-		
+
 		if ( comment.getLocator() == null )
 			throw new HarnessException("The comment's locator is unset/null");
-		
+
 
 		String locator = comment.getLocator() + " span[class='comment-delete']";
 		this.zClickAt(locator, "0,0");
-		
+
 		this.zWaitForBusyOverlayOctopus();
-		
-		
+
+
 	}
-	
+
 	/**
 	 * <div tabindex="-1" id="sc2553" class="comments-list-item" style=""><div class="comment-container"><div class="comment-header"><div class="profile-img-container"><img src="/profile/vmwen1@zqa-394.eng.vmware.com/image?v=0" data-handlebars-id="2555" class="profile-image" width="32" height="32"></div><div class="comment-creator"><span tabindex="-1" id="sc2558" class="" style=""></span>
                 <span tabindex="-1" id="sc2561" class="" style="">
@@ -104,49 +110,49 @@ public class DisplayFileComments extends AbsDisplay {
             </div></div><div class="comment-body">comments from other</div></div></div>
 	 */
 	public List<CommentItem> zGetCommentsList() throws HarnessException {
-		
+
 		List<CommentItem> items = new ArrayList<CommentItem>();
 
 		// Is this necessary?
 		this.zWaitForBusyOverlayOctopus();
-		
+
 		String listLocator = "css=div[id='comments-list-view'] div[class='comments-list-item']";
 		int count = this.sGetCssCount(listLocator);
 		for (int i = 1; i <= count; i++) {
-			
+
 			String locator;
 			String itemLocator = listLocator + ":nth-of-type("+ i +") ";
-			
+
 			CommentItem item = new CommentItem();
 
 			// Set the locator to the item
 			item.setLocator(itemLocator);
-			
-			
+
+
 			// Get the Image
 			// TODO
-			
+
 			// Get the Email
 			locator = itemLocator + " div[class='comment-creator'] span";
 			item.setCommentEmail(this.sGetText(locator));
-			
+
 			// Get the Time
 			locator = itemLocator + " div[class='comment-time'] span";
 			item.setCommentTime(this.sGetText(locator));
-			
+
 			// Get the Comment Text
 			locator = itemLocator + " div[class='comment-body']";
 			item.setCommentText(this.sGetText(locator));
-			
+
 			logger.info(item.prettyPrint());
-			
+
 			items.add(item);
 		}
-		
+
 		return (items);
 	}
-	
-	
+
+
 	@Override
 	public boolean zIsActive() throws HarnessException {
 
