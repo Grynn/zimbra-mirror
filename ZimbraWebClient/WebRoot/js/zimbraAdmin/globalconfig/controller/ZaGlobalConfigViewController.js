@@ -65,7 +65,7 @@ function () {
 }
 ZaController.initPopupMenuMethods["ZaGlobalConfigViewController"].push(ZaGlobalConfigViewController.initPopupMenuMethod);
 
-/*ZaGlobalConfigViewController.prototype.getAppBarAction =
+ZaGlobalConfigViewController.prototype.getAppBarAction =
 function () {
     if (AjxUtil.isEmpty(this._appbarOperation)) {
     	this._appbarOperation[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
@@ -85,7 +85,7 @@ function () {
     }
 
     return this._appbarOrder;
-}*/
+}
 
 ZaGlobalConfigViewController.setViewMethod = function (item) {
     try {
