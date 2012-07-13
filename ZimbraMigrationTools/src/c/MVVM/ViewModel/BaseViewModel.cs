@@ -265,6 +265,17 @@ public class BaseViewModel: INotifyPropertyChanged
             fileName += htmlFile;
             urlString = "file:///" + fileName;
             bDoProcess = File.Exists(fileName);
+            
+            // FBS bug 76005 -- 7/13/12 -- build system does not use the extra level for help files
+            if (!bDoProcess)
+            {
+                fileName = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).InstallDir;
+                fileName += "/";
+                fileName += htmlFile;
+                urlString = "file:///" + fileName;
+                bDoProcess = File.Exists(fileName);
+            }
+            ///
         }
         if (bDoProcess)
             Process.Start(new ProcessStartInfo(urlString));
