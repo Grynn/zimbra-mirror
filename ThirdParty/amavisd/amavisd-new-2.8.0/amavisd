@@ -2606,7 +2606,7 @@ BEGIN {
   $enc_ascii  or die "Amavis::Util: unknown encoding 'ascii'";
   $enc_utf8   or die "Amavis::Util: unknown encoding 'UTF-8'";
   $enc_tainted = substr($ENV{PATH}.$ENV{HOME}, 0,0);  # tainted empty string
-  tainted($enc_tainted) or warn "Amavis::Util: can't obtain a tainted string";
+  #tainted($enc_tainted) or warn "Amavis::Util: can't obtain a tainted string";
   1;
 }
 
