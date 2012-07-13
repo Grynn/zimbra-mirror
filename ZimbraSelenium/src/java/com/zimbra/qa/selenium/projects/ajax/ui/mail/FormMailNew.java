@@ -45,7 +45,7 @@ public class FormMailNew extends AbsForm {
 		public static final String zSaveDraftIconBtn	= "css=[id^=zb__COMPOSE][id$=__SAVE_DRAFT_title]";
 		public static final String zSpellCheckIconBtn	= "css=[id^=zb__COMPOSE][id$=__SPELL_CHECK_title]";
 
-		public static final String zToField				= "css=[id^=zv__COMPOSE][id$=_to_control]";
+		public static final String zToField				= "css=div>input[id^=zv__COMPOSE][id$=_to_control]";
 		public static final String zCcField				= "css=[id^=zv__COMPOSE][id$=_cc_control]";
 		public static final String zBccField			= "css=[id^=zv__COMPOSE][id$=_bcc_control]";
 		public static final String zSubjectField		= "css=div[id^=zv__COMPOSE] input[id$=_subject_control]";
