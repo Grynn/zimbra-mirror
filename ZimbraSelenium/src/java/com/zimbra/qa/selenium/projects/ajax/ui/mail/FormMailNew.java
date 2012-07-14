@@ -965,7 +965,7 @@ public class FormMailNew extends AbsForm {
 		// Seems that the client can't handle filling out the new mail form too quickly
 		// Click in the "To" fields, etc, to make sure the client is ready
 		this.sFocus(locator);
-		this.zClick(locator);
+		this.sClickAt(locator,"");
 		this.zWaitForBusyOverlay();
 
 		// Instead of sType() use zKeyboard
