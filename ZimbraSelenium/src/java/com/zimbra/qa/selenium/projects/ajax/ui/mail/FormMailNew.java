@@ -973,6 +973,7 @@ public class FormMailNew extends AbsForm {
 		
 		// workaround
 		sType(locator, value);
+		sTypeKeys(locator, "39");
 		sKeyPressNative("32");
 		
 		this.zWaitForBusyOverlay();
