@@ -214,7 +214,7 @@ function (loc) {
                 kbMgr.grabFocus(this._tabGroup.getFocusMember());
         }
 
-        if(appNewUI && AjxEnv.isIE && this._supportMinimize) {
+        if(AjxEnv.isIE && this._supportMinimize) {
             //reset title width in IE, when the dialog has the minimize icon
             this.setTitleWidthForIE();
         }
