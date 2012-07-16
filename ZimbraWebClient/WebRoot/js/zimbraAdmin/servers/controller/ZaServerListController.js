@@ -104,16 +104,16 @@ function(ev) {
 			if(arrItems && arrItems.length) {
 				srvList = [];
 				srvList._version = 1;
-				dataId = [];
+				var uuid = [];
 				for(var i=0;i<arrItems.length;i++) {
 					var srv = arrItems[i];
 					srv["status"] = 0;
 					srvList.push(srv);
-					dataId.push(srv.id);
+					uuid.push(srv.id);
 				}
-				obj = {statusMessage:null,flushZimlet:true,flushSkin:true,flushLocale:true,serverList:srvList,status:0,name:ZaMsg.multiple_servers};
-				obj._uuid = dataId.join("__");
-				ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container, {id:dataId.join("__"), name:ZaMsg.multiple_servers});
+				obj = {statusMessage:null,flushZimlet:true,flushSkin:true,flushLocale:true,serverList:srvList,status:0,name:(uuid.length > 1 ? ZaMsg.multiple_servers : srvList[0].name), _uuid:(uuid.length > 1 ? uuid.join("__") : uuid[0])};
+				obj._uuid = uuid.join("__");
+				ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container, {id:(uuid.length > 1 ? uuid.join("__") : uuid[0]), name:(uuid.length > 1 ? ZaMsg.multiple_servers : srvList[0].name)});
 				ZaApp.getInstance().dialogs["flushCacheDialog"].setObject(obj);
 				ZaApp.getInstance().dialogs["flushCacheDialog"].popup();
 			}
