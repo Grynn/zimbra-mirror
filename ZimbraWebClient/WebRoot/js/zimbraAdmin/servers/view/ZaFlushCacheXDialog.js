@@ -32,6 +32,7 @@ ZaFlushCacheXDialog = function(parent) {
 }
 
 ZaFlushCacheXDialog.prototype = new ZaXDialog;
+ZaFlushCacheXDialog.prototype.supportMinimize = true;
 ZaFlushCacheXDialog.prototype.constructor = ZaFlushCacheXDialog;
 
 ZaFlushCacheXDialog.flushingServerModel = {
