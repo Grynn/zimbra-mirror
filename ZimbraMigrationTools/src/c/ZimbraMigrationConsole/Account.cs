@@ -250,7 +250,14 @@ class Account: BackgroundWorker
                 // TestObj.Migrate(MigrateOptions);
                
                 mw.StartMigration(MyAcct, argumentTest.Mailoptions, argumentTest.serverMigration, argumentTest.Mailoptions.VerboseOn);
-               
+
+
+                //Last item migration
+                string msg2 = "{0} of {1} for account  " + MyFolder.AccountID.ToString();
+                string msgF = String.Format(msg2, MyFolder.CurrentCountOfItems, MyFolder.TotalCountOfItems);
+
+                System.Console.WriteLine(msgF);
+                
             }
         }
         if(_shouldStop)
@@ -405,6 +412,7 @@ class Account: BackgroundWorker
                 if (e.NewValue != null)
                 {
                     string folderName = e.NewValue.ToString();
+                    
                     //  string folderType = GetFolderTypeForUserResults(f.FolderView);
                     string msg3 = "Migrating {0} " + " For  " + f.AccountID ;
                     
@@ -526,6 +534,7 @@ class Account: BackgroundWorker
                      
         //signal the countdown event for the main thread exit.
             {
+                
                 System.Console.WriteLine();
                 System.Console.WriteLine();
                 string mesg = "Total Errors For UserAccount " + argumentTest.AccountName + " are " + argumentTest.NumofErrors.ToString();
