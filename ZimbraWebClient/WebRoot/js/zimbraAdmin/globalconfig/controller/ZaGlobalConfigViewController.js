@@ -369,14 +369,15 @@ ZaXFormViewController.preSaveValidationMethods["ZaGlobalConfigViewController"].p
 ZaGlobalConfigViewController.prototype.openFlushCacheDlg =
 function (serverList) {
 	ZaApp.getInstance().dialogs["confirmMessageDialog2"].popdown();
-	if(!ZaApp.getInstance().dialogs["flushCacheDialog"]) {
-		ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container);
-	}
+	
 	serverList._version = 1;
+	var uuid = [];
 	for(var i=0;i<serverList.length;i++) {
 		serverList[i]["status"] = 0;
+		uuid.push(serverList[i].id)
 	}
-	obj = {statusMessage:null,flushZimlet:false,flushSkin:true,flushLocale:false,serverList:serverList,status:0};
+	obj = {statusMessage:null,flushZimlet:false,flushSkin:true,flushLocale:false,serverList:serverList,status:0, _uuid:uuid.join("__"), name:ZaMsg.multiple_servers};
+	ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container, {id:uuid.join("__"), name:ZaMsg.multiple_servers});
 	ZaApp.getInstance().dialogs["flushCacheDialog"].setObject(obj);
 	ZaApp.getInstance().dialogs["flushCacheDialog"].popup();
 }

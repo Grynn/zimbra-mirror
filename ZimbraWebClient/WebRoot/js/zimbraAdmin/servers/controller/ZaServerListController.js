@@ -102,17 +102,18 @@ function(ev) {
 		if(this._contentView.getSelectionCount()>0) {
 			var arrItems = this._contentView.getSelection();
 			if(arrItems && arrItems.length) {
-				if(!ZaApp.getInstance().dialogs["flushCacheDialog"]) {
-					ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container);
-				}
 				srvList = [];
 				srvList._version = 1;
+				dataId = [];
 				for(var i=0;i<arrItems.length;i++) {
 					var srv = arrItems[i];
 					srv["status"] = 0;
 					srvList.push(srv);
+					dataId.push(srv.id);
 				}
-				obj = {statusMessage:null,flushZimlet:true,flushSkin:true,flushLocale:true,serverList:srvList,status:0};
+				obj = {statusMessage:null,flushZimlet:true,flushSkin:true,flushLocale:true,serverList:srvList,status:0,name:ZaMsg.multiple_servers};
+				obj._uuid = dataId.join("__");
+				ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container, {id:dataId.join("__"), name:ZaMsg.multiple_servers});
 				ZaApp.getInstance().dialogs["flushCacheDialog"].setObject(obj);
 				ZaApp.getInstance().dialogs["flushCacheDialog"].popup();
 			}

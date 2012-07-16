@@ -697,16 +697,13 @@ function(ev) {
 ZaServerController.prototype.flushCacheButtonListener = 
 function(ev) {
 	try {
-		if(!ZaApp.getInstance().dialogs["flushCacheDialog"]) {
-			ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container);
-		}
 		srvList = [];
 		srvList._version = 1;
 		var srv = this._currentObject;
 		srv["status"] = 0;
 		srvList.push(srv);
-	
-		obj = {statusMessage:null,flushZimlet:true,flushSkin:true,flushLocale:true,serverList:srvList,status:0};
+		obj = {statusMessage:null,flushZimlet:true,flushSkin:true,flushLocale:true,serverList:srvList,status:0, _uuid:srv.id, name:srv.name};
+		ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container, srv);
 		ZaApp.getInstance().dialogs["flushCacheDialog"].setObject(obj);
 		ZaApp.getInstance().dialogs["flushCacheDialog"].popup();
 	} catch (ex) {

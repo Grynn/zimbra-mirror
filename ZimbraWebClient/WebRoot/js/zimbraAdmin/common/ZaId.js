@@ -624,8 +624,9 @@ ZaId.DLG_AUTPROV_MANUAL         = "AUTOPROV_MANUAL";
 ZaId.DLG_AUTPROV_MANUAL_PWD     = "AUTOPROV_MANUAL_PWD";
 ZaId.DLG_AUTH_SPNEGO            = "AUTH_SPNEGO";
 ZaId.DLG_AUTH_SPNEGO_UA         = "AUTH_SPNEGO_UA";
-ZaId.DLG_NEW_DL                 = "NEW_DL"
-ZaId.DLG_NEW_COS                = "NEW_COS"
+ZaId.DLG_NEW_DL                 = "NEW_DL";
+ZaId.DLG_NEW_COS                = "NEW_COS";
+ZaId.FLUSH_SERVER_CACHE			= "FLUSH_SERVER_CACHE";
 
 ZaId.DLG_MSG			= "MSG";
 ZaId.DLG_ERR			= "ERR";
