@@ -271,7 +271,7 @@ LDAPAPI := \
 	Net-LDAPapi-3.0.3
 
 XML_PARSER := \
-	XML-Parser-2.40
+	XML-Parser-2.41
 
 NET_SERVER := \
 	Net-Server-2.005
