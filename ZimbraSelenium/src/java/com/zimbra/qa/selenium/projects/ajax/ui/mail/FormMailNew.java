@@ -14,6 +14,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.AutocompleteEntry;
@@ -972,10 +973,19 @@ public class FormMailNew extends AbsForm {
 		// this.zKeyboard.zTypeCharacters(value);
 		
 		// workaround
-		sType(locator, value);
-		sTypeKeys(locator, "39");
-		sKeyPressNative("32");
-		
+		if(ZimbraSeleniumProperties.isWebDriver()){
+		    clearField(locator);
+		    sType(locator, value);
+		}else{
+		    if(value.length() > 0){
+			sType(locator, value.substring(0, value.length()-1));
+			sFireEvent(locator, "keyup");
+		    }
+		    zWaitForBusyOverlay();
+		    sType(locator, value);
+		    sFireEvent(locator, "keyup");
+		}
+				
 		this.zWaitForBusyOverlay();
 
 		waitForAutocomplete();
