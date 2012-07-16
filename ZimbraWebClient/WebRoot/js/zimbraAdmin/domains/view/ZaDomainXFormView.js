@@ -995,8 +995,13 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 				},
 				{ref:ZaDomain.A_zimbraGalMode, type:_OUTPUT_, label:ZaMsg.Domain_GalMode, choices:this.GALModes,visibilityChecks:[ZaItem.hasReadPermission] },
 				{ref:ZaDomain.A_zimbraGalMaxResults, type:_TEXTFIELD_, label:ZaMsg.LBL_zimbraGalMaxResults, msgName:ZaMsg.MSG_zimbraGalMaxResults, autoSaveValue:true, labelLocation:_LEFT_,
-                    cssClass:"admin_xform_number_input"},
-                {type:_REPEAT_, ref:ZaDomain.A2_gal_sync_accounts, colSpan: "*",  label: ZaMsg.LBL_GALAccount ,
+                    cssClass:"admin_xform_number_input"}
+				]
+		},
+		{type:_ZA_TOP_GROUPER_, label:ZaMsg.LBL_GALAccount, numCols:2,colSizes: ["275px","auto"],
+			visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]],
+			items:[
+                {type:_REPEAT_, ref:ZaDomain.A2_gal_sync_accounts, colSpan: "*",  label:null,
                     showAddButton:false,
                     showRemoveButton: false,
                     visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]],
