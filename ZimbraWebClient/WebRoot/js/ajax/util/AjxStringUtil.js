@@ -981,13 +981,16 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor, onlyOne
 		text[idx++] = "\n";
 	} else if (nodeName == "td" && el.parentNode.firstChild != el) {
 		text[idx++] = "\t";
-	} else if (nodeName == "div") {
-        if(el.parentNode && !( el.parentNode.nodeName.toLowerCase() === "body" && el.parentNode.firstChild === el ) ){//No \n for body element first Child if it is div
+	} else if (nodeName == "div" || nodeName == "address") {
+        if (idx && text[idx - 1] !== "\n") {
             text[idx++] = "\n";
         }
 	} else if (nodeName == "blockquote") {
 		text[idx++] = "\n\n";
 	} else if (nodeName == "pre") {
+        if (idx && text[idx - 1] !== "\n") {
+            text[idx++] = "\n";
+        }
 		ctxt.isPreformatted = true;
 	} else if (nodeName == "#comment" ||
 			   nodeName == "script" ||
@@ -1011,10 +1014,11 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor, onlyOne
 	}
 
 	if (nodeName == "h1" || nodeName == "h2" || nodeName == "h3" || nodeName == "h4"
-		|| nodeName == "h5" || nodeName == "h6") {
+		|| nodeName == "h5" || nodeName == "h6" || nodeName == "div" || nodeName == "address") {
 			text[idx++] = "\n";
 			ctxt.list = false;
 	} else if (nodeName == "pre") {
+        text[idx++] = "\n";
 		ctxt.isPreformatted = false;
 	} else if (nodeName == "li") {
 		if (!ctxt.list) {
