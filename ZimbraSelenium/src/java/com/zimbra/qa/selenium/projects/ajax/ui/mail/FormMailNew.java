@@ -1078,7 +1078,7 @@ public class FormMailNew extends AbsForm {
 		
 		String containerLocator = "css=div[id^='zac__COMPOSE-'][style*='display: block;']";
 
-		if ( !this.sIsElementPresent(containerLocator) ) {
+		if ( !this.zWaitForElementPresent(containerLocator,"5000") ) {
 			// Autocomplete is not visible, return an empty list.
 			return (items);
 		}
