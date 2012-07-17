@@ -546,6 +546,9 @@ class State:
 						else:
 							if restart == "archiving" and not self.serverconfig.getServices(restart):
 								Log.logMsg(5, "%s not enabled, skipping stop" % (restart,))
+							elif restart == "opendkim" and self.serverconfig.getServices("mta"):
+								Log.logMsg(5, "Adding restart opendkim")
+								self.curRestarts(restart, -1)
 							else:
 								Log.logMsg(5, "Adding stop %s" % (restart,))
 								self.curRestarts(restart, 0)
