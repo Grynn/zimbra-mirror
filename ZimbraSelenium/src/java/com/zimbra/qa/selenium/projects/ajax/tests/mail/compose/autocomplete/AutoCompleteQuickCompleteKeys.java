@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -57,7 +58,11 @@ public class AutoCompleteQuickCompleteKeys extends PrefGroupMailByMessageTest {
 		// Auto complete a name
 		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, FirstName);
 		ZAssert.assertGreaterThan(entries.size(), 0, "Verify some results are returned");
-		app.zPageMail.zKeyboardTypeString(",");
+		//app.zPageMail.zKeyboardTypeString(",");
+		//workaround
+		SleepUtil.sleepSmall();
+		ClientSessionFactory.session().selenium()
+		.keyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\188");
 		
 		// Send the message
 		mailform.zSubmit();
@@ -90,7 +95,11 @@ public class AutoCompleteQuickCompleteKeys extends PrefGroupMailByMessageTest {
 		// Auto complete a name
 		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, FirstName);
 		ZAssert.assertGreaterThan(entries.size(), 0, "Verify some results are returned");
-		app.zPageMail.zKeyboardTypeString(";");
+		//app.zPageMail.zKeyboardTypeString(";");
+		//workaround
+		SleepUtil.sleepSmall();
+		ClientSessionFactory.session().selenium()
+		.keyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\59");
 		
 		// Send the message
 		mailform.zSubmit();
@@ -123,7 +132,11 @@ public class AutoCompleteQuickCompleteKeys extends PrefGroupMailByMessageTest {
 		// Auto complete a name
 		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, FirstName);
 		ZAssert.assertGreaterThan(entries.size(), 0, "Verify some results are returned");
-		app.zPageMail.zKeyboardTypeString("	"); // Whitespace is 'tab' character
+		//app.zPageMail.zKeyboardTypeString("	"); // Whitespace is 'tab' character
+		//workaround
+		SleepUtil.sleepSmall();
+		ClientSessionFactory.session().selenium()
+		.keyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\9");
 		
 		// Send the message
 		mailform.zSubmit();
