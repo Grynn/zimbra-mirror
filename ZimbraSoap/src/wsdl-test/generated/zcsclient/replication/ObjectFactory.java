@@ -51,139 +51,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testStopFailoverClientRequest }
+     * Create an instance of {@link testReplicationStatusResponse }
      * 
      */
-    public testStopFailoverClientRequest createtestStopFailoverClientRequest() {
-        return new testStopFailoverClientRequest();
-    }
-
-    /**
-     * Create an instance of {@link testStartCatchupResponse }
-     * 
-     */
-    public testStartCatchupResponse createtestStartCatchupResponse() {
-        return new testStartCatchupResponse();
-    }
-
-    /**
-     * Create an instance of {@link testStartCatchupRequest }
-     * 
-     */
-    public testStartCatchupRequest createtestStartCatchupRequest() {
-        return new testStartCatchupRequest();
-    }
-
-    /**
-     * Create an instance of {@link testStopFailoverClientResponse }
-     * 
-     */
-    public testStopFailoverClientResponse createtestStopFailoverClientResponse() {
-        return new testStopFailoverClientResponse();
-    }
-
-    /**
-     * Create an instance of {@link testReplicationSlaveCatchupStatus }
-     * 
-     */
-    public testReplicationSlaveCatchupStatus createtestReplicationSlaveCatchupStatus() {
-        return new testReplicationSlaveCatchupStatus();
-    }
-
-    /**
-     * Create an instance of {@link testStartFailoverDaemonRequest }
-     * 
-     */
-    public testStartFailoverDaemonRequest createtestStartFailoverDaemonRequest() {
-        return new testStartFailoverDaemonRequest();
-    }
-
-    /**
-     * Create an instance of {@link testReplicationStatusRequest }
-     * 
-     */
-    public testReplicationStatusRequest createtestReplicationStatusRequest() {
-        return new testReplicationStatusRequest();
-    }
-
-    /**
-     * Create an instance of {@link testStartFailoverDaemonResponse }
-     * 
-     */
-    public testStartFailoverDaemonResponse createtestStartFailoverDaemonResponse() {
-        return new testStartFailoverDaemonResponse();
-    }
-
-    /**
-     * Create an instance of {@link testBringDownServiceIPRequest }
-     * 
-     */
-    public testBringDownServiceIPRequest createtestBringDownServiceIPRequest() {
-        return new testBringDownServiceIPRequest();
-    }
-
-    /**
-     * Create an instance of {@link testBecomeMasterResponse }
-     * 
-     */
-    public testBecomeMasterResponse createtestBecomeMasterResponse() {
-        return new testBecomeMasterResponse();
-    }
-
-    /**
-     * Create an instance of {@link testStopFailoverDaemonResponse }
-     * 
-     */
-    public testStopFailoverDaemonResponse createtestStopFailoverDaemonResponse() {
-        return new testStopFailoverDaemonResponse();
-    }
-
-    /**
-     * Create an instance of {@link testBringUpServiceIPResponse }
-     * 
-     */
-    public testBringUpServiceIPResponse createtestBringUpServiceIPResponse() {
-        return new testBringUpServiceIPResponse();
-    }
-
-    /**
-     * Create an instance of {@link testStartFailoverClientResponse }
-     * 
-     */
-    public testStartFailoverClientResponse createtestStartFailoverClientResponse() {
-        return new testStartFailoverClientResponse();
-    }
-
-    /**
-     * Create an instance of {@link testBecomeMasterRequest }
-     * 
-     */
-    public testBecomeMasterRequest createtestBecomeMasterRequest() {
-        return new testBecomeMasterRequest();
-    }
-
-    /**
-     * Create an instance of {@link testReplicationMasterStatus }
-     * 
-     */
-    public testReplicationMasterStatus createtestReplicationMasterStatus() {
-        return new testReplicationMasterStatus();
-    }
-
-    /**
-     * Create an instance of {@link testBringUpServiceIPRequest }
-     * 
-     */
-    public testBringUpServiceIPRequest createtestBringUpServiceIPRequest() {
-        return new testBringUpServiceIPRequest();
-    }
-
-    /**
-     * Create an instance of {@link testReplicationSlaveStatus }
-     * 
-     */
-    public testReplicationSlaveStatus createtestReplicationSlaveStatus() {
-        return new testReplicationSlaveStatus();
+    public testReplicationStatusResponse createtestReplicationStatusResponse() {
+        return new testReplicationStatusResponse();
     }
 
     /**
@@ -195,11 +67,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testReplicationMasterCatchupStatus }
+     * Create an instance of {@link testStartCatchupResponse }
      * 
      */
-    public testReplicationMasterCatchupStatus createtestReplicationMasterCatchupStatus() {
-        return new testReplicationMasterCatchupStatus();
+    public testStartCatchupResponse createtestStartCatchupResponse() {
+        return new testStartCatchupResponse();
     }
 
     /**
@@ -211,11 +83,99 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link testReplicationStatusResponse }
+     * Create an instance of {@link testBringDownServiceIPRequest }
      * 
      */
-    public testReplicationStatusResponse createtestReplicationStatusResponse() {
-        return new testReplicationStatusResponse();
+    public testBringDownServiceIPRequest createtestBringDownServiceIPRequest() {
+        return new testBringDownServiceIPRequest();
+    }
+
+    /**
+     * Create an instance of {@link testStopFailoverClientRequest }
+     * 
+     */
+    public testStopFailoverClientRequest createtestStopFailoverClientRequest() {
+        return new testStopFailoverClientRequest();
+    }
+
+    /**
+     * Create an instance of {@link testBringUpServiceIPResponse }
+     * 
+     */
+    public testBringUpServiceIPResponse createtestBringUpServiceIPResponse() {
+        return new testBringUpServiceIPResponse();
+    }
+
+    /**
+     * Create an instance of {@link testReplicationSlaveStatus }
+     * 
+     */
+    public testReplicationSlaveStatus createtestReplicationSlaveStatus() {
+        return new testReplicationSlaveStatus();
+    }
+
+    /**
+     * Create an instance of {@link testReplicationMasterCatchupStatus }
+     * 
+     */
+    public testReplicationMasterCatchupStatus createtestReplicationMasterCatchupStatus() {
+        return new testReplicationMasterCatchupStatus();
+    }
+
+    /**
+     * Create an instance of {@link testStartFailoverDaemonResponse }
+     * 
+     */
+    public testStartFailoverDaemonResponse createtestStartFailoverDaemonResponse() {
+        return new testStartFailoverDaemonResponse();
+    }
+
+    /**
+     * Create an instance of {@link testStartFailoverClientResponse }
+     * 
+     */
+    public testStartFailoverClientResponse createtestStartFailoverClientResponse() {
+        return new testStartFailoverClientResponse();
+    }
+
+    /**
+     * Create an instance of {@link testReplicationSlaveCatchupStatus }
+     * 
+     */
+    public testReplicationSlaveCatchupStatus createtestReplicationSlaveCatchupStatus() {
+        return new testReplicationSlaveCatchupStatus();
+    }
+
+    /**
+     * Create an instance of {@link testBecomeMasterResponse }
+     * 
+     */
+    public testBecomeMasterResponse createtestBecomeMasterResponse() {
+        return new testBecomeMasterResponse();
+    }
+
+    /**
+     * Create an instance of {@link testStopFailoverClientResponse }
+     * 
+     */
+    public testStopFailoverClientResponse createtestStopFailoverClientResponse() {
+        return new testStopFailoverClientResponse();
+    }
+
+    /**
+     * Create an instance of {@link testReplicationStatusRequest }
+     * 
+     */
+    public testReplicationStatusRequest createtestReplicationStatusRequest() {
+        return new testReplicationStatusRequest();
+    }
+
+    /**
+     * Create an instance of {@link testStopFailoverDaemonResponse }
+     * 
+     */
+    public testStopFailoverDaemonResponse createtestStopFailoverDaemonResponse() {
+        return new testStopFailoverDaemonResponse();
     }
 
     /**
@@ -224,6 +184,46 @@ public class ObjectFactory {
      */
     public testStopFailoverDaemonRequest createtestStopFailoverDaemonRequest() {
         return new testStopFailoverDaemonRequest();
+    }
+
+    /**
+     * Create an instance of {@link testBringUpServiceIPRequest }
+     * 
+     */
+    public testBringUpServiceIPRequest createtestBringUpServiceIPRequest() {
+        return new testBringUpServiceIPRequest();
+    }
+
+    /**
+     * Create an instance of {@link testReplicationMasterStatus }
+     * 
+     */
+    public testReplicationMasterStatus createtestReplicationMasterStatus() {
+        return new testReplicationMasterStatus();
+    }
+
+    /**
+     * Create an instance of {@link testBecomeMasterRequest }
+     * 
+     */
+    public testBecomeMasterRequest createtestBecomeMasterRequest() {
+        return new testBecomeMasterRequest();
+    }
+
+    /**
+     * Create an instance of {@link testStartFailoverDaemonRequest }
+     * 
+     */
+    public testStartFailoverDaemonRequest createtestStartFailoverDaemonRequest() {
+        return new testStartFailoverDaemonRequest();
+    }
+
+    /**
+     * Create an instance of {@link testStartCatchupRequest }
+     * 
+     */
+    public testStartCatchupRequest createtestStartCatchupRequest() {
+        return new testStartCatchupRequest();
     }
 
     /**

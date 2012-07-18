@@ -213,6 +213,8 @@ import generated.zcsclient.admin.testGetAllServersRequest;
 import generated.zcsclient.admin.testGetAllServersResponse;
 import generated.zcsclient.admin.testGetAllSkinsRequest;
 import generated.zcsclient.admin.testGetAllSkinsResponse;
+import generated.zcsclient.admin.testGetAllUCProvidersRequest;
+import generated.zcsclient.admin.testGetAllUCProvidersResponse;
 import generated.zcsclient.admin.testGetAllUCServicesRequest;
 import generated.zcsclient.admin.testGetAllUCServicesResponse;
 import generated.zcsclient.admin.testGetAllVolumesRequest;
@@ -417,6 +419,8 @@ import generated.zcsclient.admin.testRemoveAccountAliasRequest;
 import generated.zcsclient.admin.testRemoveAccountAliasResponse;
 import generated.zcsclient.admin.testRemoveAccountLoggerRequest;
 import generated.zcsclient.admin.testRemoveAccountLoggerResponse;
+import generated.zcsclient.admin.testRemoveDeviceRequest;
+import generated.zcsclient.admin.testRemoveDeviceResponse;
 import generated.zcsclient.admin.testRemoveDistributionListAliasRequest;
 import generated.zcsclient.admin.testRemoveDistributionListAliasResponse;
 import generated.zcsclient.admin.testRemoveDistributionListMemberRequest;
@@ -437,6 +441,8 @@ import generated.zcsclient.admin.testResetAllLoggersRequest;
 import generated.zcsclient.admin.testResetAllLoggersResponse;
 import generated.zcsclient.admin.testRestoreRequest;
 import generated.zcsclient.admin.testRestoreResponse;
+import generated.zcsclient.admin.testResumeDeviceRequest;
+import generated.zcsclient.admin.testResumeDeviceResponse;
 import generated.zcsclient.admin.testRevokeRightRequest;
 import generated.zcsclient.admin.testRevokeRightResponse;
 import generated.zcsclient.admin.testRolloverRedoLogRequest;
@@ -461,6 +467,8 @@ import generated.zcsclient.admin.testSetCurrentVolumeRequest;
 import generated.zcsclient.admin.testSetCurrentVolumeResponse;
 import generated.zcsclient.admin.testSetPasswordRequest;
 import generated.zcsclient.admin.testSetPasswordResponse;
+import generated.zcsclient.admin.testSuspendDeviceRequest;
+import generated.zcsclient.admin.testSuspendDeviceResponse;
 import generated.zcsclient.admin.testSyncGalAccountRequest;
 import generated.zcsclient.admin.testSyncGalAccountResponse;
 import generated.zcsclient.admin.testUndeployZimletRequest;
@@ -506,14 +514,15 @@ import generated.zcsclient.adminext.testPurgeBulkIMAPImportTasksResponse;
 @WebService(name = "zcsAdminPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.mail.ObjectFactory.class,
+    generated.zcsclient.sync.ObjectFactory.class,
     generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.admin.ObjectFactory.class,
+    generated.zcsclient.mail.ObjectFactory.class,
+    generated.zcsclient.voice.ObjectFactory.class,
+    generated.zcsclient.account.ObjectFactory.class,
     generated.zcsclient.adminext.ObjectFactory.class,
     generated.zcsclient.appblast.ObjectFactory.class,
-    generated.zcsclient.account.ObjectFactory.class,
-    generated.zcsclient.admin.ObjectFactory.class,
-    generated.zcsclient.zm.ObjectFactory.class,
-    generated.zcsclient.sync.ObjectFactory.class
+    generated.zcsclient.zm.ObjectFactory.class
 })
 public interface ZcsAdminPortType {
 
@@ -1758,6 +1767,18 @@ public interface ZcsAdminPortType {
      * 
      * @param parameters
      * @return
+     *     returns generated.zcsclient.admin.testGetAllUCProvidersResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetAllUCProviders")
+    @WebResult(name = "GetAllUCProvidersResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testGetAllUCProvidersResponse getAllUCProvidersRequest(
+        @WebParam(name = "GetAllUCProvidersRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testGetAllUCProvidersRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns generated.zcsclient.admin.testGetAllUCServicesResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/GetAllUCServices")
@@ -2982,6 +3003,18 @@ public interface ZcsAdminPortType {
      * 
      * @param parameters
      * @return
+     *     returns generated.zcsclient.admin.testRemoveDeviceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/RemoveDevice")
+    @WebResult(name = "RemoveDeviceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testRemoveDeviceResponse removeDeviceRequest(
+        @WebParam(name = "RemoveDeviceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testRemoveDeviceRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns generated.zcsclient.admin.testRemoveDistributionListAliasResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/RemoveDistributionListAlias")
@@ -3097,6 +3130,18 @@ public interface ZcsAdminPortType {
     public testRestoreResponse restoreRequest(
         @WebParam(name = "RestoreRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testRestoreRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testResumeDeviceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/ResumeDevice")
+    @WebResult(name = "ResumeDeviceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testResumeDeviceResponse resumeDeviceRequest(
+        @WebParam(name = "ResumeDeviceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testResumeDeviceRequest parameters);
 
     /**
      * 
@@ -3241,6 +3286,18 @@ public interface ZcsAdminPortType {
     public testSetPasswordResponse setPasswordRequest(
         @WebParam(name = "SetPasswordRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testSetPasswordRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.admin.testSuspendDeviceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/SuspendDevice")
+    @WebResult(name = "SuspendDeviceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testSuspendDeviceResponse suspendDeviceRequest(
+        @WebParam(name = "SuspendDeviceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testSuspendDeviceRequest parameters);
 
     /**
      * 

@@ -26,6 +26,7 @@ import generated.zcsclient.zm.testGranteeType;
  *       &lt;attribute name="key" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="pw" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="deny" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="chkgt" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -51,6 +52,8 @@ public class testAccountACEInfo {
     protected String pw;
     @XmlAttribute(name = "deny")
     protected Boolean deny;
+    @XmlAttribute(name = "chkgt")
+    protected Boolean chkgt;
 
     /**
      * Gets the value of the zid property.
@@ -218,6 +221,30 @@ public class testAccountACEInfo {
      */
     public void setDeny(Boolean value) {
         this.deny = value;
+    }
+
+    /**
+     * Gets the value of the chkgt property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isChkgt() {
+        return chkgt;
+    }
+
+    /**
+     * Sets the value of the chkgt property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setChkgt(Boolean value) {
+        this.chkgt = value;
     }
 
 }

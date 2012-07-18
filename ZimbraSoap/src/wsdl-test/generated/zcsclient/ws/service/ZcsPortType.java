@@ -387,6 +387,34 @@ import generated.zcsclient.sync.testResumeDeviceRequest;
 import generated.zcsclient.sync.testResumeDeviceResponse;
 import generated.zcsclient.sync.testSuspendDeviceRequest;
 import generated.zcsclient.sync.testSuspendDeviceResponse;
+import generated.zcsclient.voice.testChangeUCPasswordRequest;
+import generated.zcsclient.voice.testChangeUCPasswordResponse;
+import generated.zcsclient.voice.testGetUCInfoRequest;
+import generated.zcsclient.voice.testGetUCInfoResponse;
+import generated.zcsclient.voice.testGetVoiceFeaturesRequest;
+import generated.zcsclient.voice.testGetVoiceFeaturesResponse;
+import generated.zcsclient.voice.testGetVoiceFolderRequest;
+import generated.zcsclient.voice.testGetVoiceFolderResponse;
+import generated.zcsclient.voice.testGetVoiceInfoRequest;
+import generated.zcsclient.voice.testGetVoiceInfoResponse;
+import generated.zcsclient.voice.testGetVoiceMailPrefsRequest;
+import generated.zcsclient.voice.testGetVoiceMailPrefsResponse;
+import generated.zcsclient.voice.testModifyFromNumRequest;
+import generated.zcsclient.voice.testModifyFromNumResponse;
+import generated.zcsclient.voice.testModifyVoiceFeaturesRequest;
+import generated.zcsclient.voice.testModifyVoiceFeaturesResponse;
+import generated.zcsclient.voice.testModifyVoiceMailPinRequest;
+import generated.zcsclient.voice.testModifyVoiceMailPinResponse;
+import generated.zcsclient.voice.testModifyVoiceMailPrefsRequest;
+import generated.zcsclient.voice.testModifyVoiceMailPrefsResponse;
+import generated.zcsclient.voice.testResetVoiceFeaturesRequest;
+import generated.zcsclient.voice.testResetVoiceFeaturesResponse;
+import generated.zcsclient.voice.testSearchVoiceRequest;
+import generated.zcsclient.voice.testSearchVoiceResponse;
+import generated.zcsclient.voice.testUploadVoiceMailRequest;
+import generated.zcsclient.voice.testUploadVoiceMailResponse;
+import generated.zcsclient.voice.testVoiceMsgActionRequest;
+import generated.zcsclient.voice.testVoiceMsgActionResponse;
 
 
 /**
@@ -398,14 +426,15 @@ import generated.zcsclient.sync.testSuspendDeviceResponse;
 @WebService(name = "zcsPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.mail.ObjectFactory.class,
+    generated.zcsclient.sync.ObjectFactory.class,
     generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.admin.ObjectFactory.class,
+    generated.zcsclient.mail.ObjectFactory.class,
+    generated.zcsclient.voice.ObjectFactory.class,
+    generated.zcsclient.account.ObjectFactory.class,
     generated.zcsclient.adminext.ObjectFactory.class,
     generated.zcsclient.appblast.ObjectFactory.class,
-    generated.zcsclient.account.ObjectFactory.class,
-    generated.zcsclient.admin.ObjectFactory.class,
-    generated.zcsclient.zm.ObjectFactory.class,
-    generated.zcsclient.sync.ObjectFactory.class
+    generated.zcsclient.zm.ObjectFactory.class
 })
 public interface ZcsPortType {
 
@@ -2701,5 +2730,173 @@ public interface ZcsPortType {
     public testFinishEditDocumentResponse finishEditDocumentRequest(
         @WebParam(name = "FinishEditDocumentRequest", targetNamespace = "urn:zimbraAppblast", partName = "parameters")
         testFinishEditDocumentRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testChangeUCPasswordResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/ChangeUCPassword")
+    @WebResult(name = "ChangeUCPasswordResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testChangeUCPasswordResponse changeUCPasswordRequest(
+        @WebParam(name = "ChangeUCPasswordRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testChangeUCPasswordRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testGetUCInfoResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/GetUCInfo")
+    @WebResult(name = "GetUCInfoResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testGetUCInfoResponse getUCInfoRequest(
+        @WebParam(name = "GetUCInfoRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testGetUCInfoRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testGetVoiceFeaturesResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/GetVoiceFeatures")
+    @WebResult(name = "GetVoiceFeaturesResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testGetVoiceFeaturesResponse getVoiceFeaturesRequest(
+        @WebParam(name = "GetVoiceFeaturesRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testGetVoiceFeaturesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testGetVoiceFolderResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/GetVoiceFolder")
+    @WebResult(name = "GetVoiceFolderResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testGetVoiceFolderResponse getVoiceFolderRequest(
+        @WebParam(name = "GetVoiceFolderRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testGetVoiceFolderRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testGetVoiceInfoResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/GetVoiceInfo")
+    @WebResult(name = "GetVoiceInfoResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testGetVoiceInfoResponse getVoiceInfoRequest(
+        @WebParam(name = "GetVoiceInfoRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testGetVoiceInfoRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testGetVoiceMailPrefsResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/GetVoiceMailPrefs")
+    @WebResult(name = "GetVoiceMailPrefsResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testGetVoiceMailPrefsResponse getVoiceMailPrefsRequest(
+        @WebParam(name = "GetVoiceMailPrefsRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testGetVoiceMailPrefsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testModifyFromNumResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/ModifyFromNum")
+    @WebResult(name = "ModifyFromNumResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testModifyFromNumResponse modifyFromNumRequest(
+        @WebParam(name = "ModifyFromNumRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testModifyFromNumRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testModifyVoiceFeaturesResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/ModifyVoiceFeatures")
+    @WebResult(name = "ModifyVoiceFeaturesResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testModifyVoiceFeaturesResponse modifyVoiceFeaturesRequest(
+        @WebParam(name = "ModifyVoiceFeaturesRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testModifyVoiceFeaturesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testModifyVoiceMailPinResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/ModifyVoiceMailPin")
+    @WebResult(name = "ModifyVoiceMailPinResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testModifyVoiceMailPinResponse modifyVoiceMailPinRequest(
+        @WebParam(name = "ModifyVoiceMailPinRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testModifyVoiceMailPinRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testModifyVoiceMailPrefsResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/ModifyVoiceMailPrefs")
+    @WebResult(name = "ModifyVoiceMailPrefsResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testModifyVoiceMailPrefsResponse modifyVoiceMailPrefsRequest(
+        @WebParam(name = "ModifyVoiceMailPrefsRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testModifyVoiceMailPrefsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testResetVoiceFeaturesResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/ResetVoiceFeatures")
+    @WebResult(name = "ResetVoiceFeaturesResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testResetVoiceFeaturesResponse resetVoiceFeaturesRequest(
+        @WebParam(name = "ResetVoiceFeaturesRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testResetVoiceFeaturesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testSearchVoiceResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/SearchVoice")
+    @WebResult(name = "SearchVoiceResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testSearchVoiceResponse searchVoiceRequest(
+        @WebParam(name = "SearchVoiceRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testSearchVoiceRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testUploadVoiceMailResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/UploadVoiceMail")
+    @WebResult(name = "UploadVoiceMailResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testUploadVoiceMailResponse uploadVoiceMailRequest(
+        @WebParam(name = "UploadVoiceMailRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testUploadVoiceMailRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns generated.zcsclient.voice.testVoiceMsgActionResponse
+     */
+    @WebMethod(action = "urn:zimbraVoice/VoiceMsgAction")
+    @WebResult(name = "VoiceMsgActionResponse", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+    public testVoiceMsgActionResponse voiceMsgActionRequest(
+        @WebParam(name = "VoiceMsgActionRequest", targetNamespace = "urn:zimbraVoice", partName = "parameters")
+        testVoiceMsgActionRequest parameters);
 
 }

@@ -45,14 +45,14 @@ import javax.xml.bind.annotation.XmlType;
 public class testDeleteDataSourceRequest {
 
     @XmlElements({
-        @XmlElement(name = "yab", type = testYabDataSourceNameOrId.class),
-        @XmlElement(name = "imap", type = testImapDataSourceNameOrId.class),
-        @XmlElement(name = "rss", type = testRssDataSourceNameOrId.class),
-        @XmlElement(name = "caldav", type = testCaldavDataSourceNameOrId.class),
         @XmlElement(name = "pop3", type = testPop3DataSourceNameOrId.class),
-        @XmlElement(name = "gal", type = testGalDataSourceNameOrId.class),
+        @XmlElement(name = "rss", type = testRssDataSourceNameOrId.class),
         @XmlElement(name = "cal", type = testCalDataSourceNameOrId.class),
-        @XmlElement(name = "unknown", type = testUnknownDataSourceNameOrId.class)
+        @XmlElement(name = "caldav", type = testCaldavDataSourceNameOrId.class),
+        @XmlElement(name = "gal", type = testGalDataSourceNameOrId.class),
+        @XmlElement(name = "imap", type = testImapDataSourceNameOrId.class),
+        @XmlElement(name = "unknown", type = testUnknownDataSourceNameOrId.class),
+        @XmlElement(name = "yab", type = testYabDataSourceNameOrId.class)
     })
     protected List<testDataSourceNameOrId> imapOrPop3OrCaldav;
 
@@ -74,14 +74,14 @@ public class testDeleteDataSourceRequest {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testYabDataSourceNameOrId }
-     * {@link testImapDataSourceNameOrId }
-     * {@link testRssDataSourceNameOrId }
-     * {@link testCaldavDataSourceNameOrId }
      * {@link testPop3DataSourceNameOrId }
-     * {@link testGalDataSourceNameOrId }
+     * {@link testRssDataSourceNameOrId }
      * {@link testCalDataSourceNameOrId }
+     * {@link testCaldavDataSourceNameOrId }
+     * {@link testGalDataSourceNameOrId }
+     * {@link testImapDataSourceNameOrId }
      * {@link testUnknownDataSourceNameOrId }
+     * {@link testYabDataSourceNameOrId }
      * 
      * 
      */

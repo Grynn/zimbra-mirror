@@ -45,13 +45,13 @@ import javax.xml.bind.annotation.XmlType;
 public class testImportDataRequest {
 
     @XmlElements({
-        @XmlElement(name = "yab", type = testYabDataSourceNameOrId.class),
-        @XmlElement(name = "unknown", type = testUnknownDataSourceNameOrId.class),
         @XmlElement(name = "pop3", type = testPop3DataSourceNameOrId.class),
-        @XmlElement(name = "gal", type = testGalDataSourceNameOrId.class),
+        @XmlElement(name = "yab", type = testYabDataSourceNameOrId.class),
         @XmlElement(name = "caldav", type = testCaldavDataSourceNameOrId.class),
-        @XmlElement(name = "rss", type = testRssDataSourceNameOrId.class),
+        @XmlElement(name = "gal", type = testGalDataSourceNameOrId.class),
         @XmlElement(name = "imap", type = testImapDataSourceNameOrId.class),
+        @XmlElement(name = "unknown", type = testUnknownDataSourceNameOrId.class),
+        @XmlElement(name = "rss", type = testRssDataSourceNameOrId.class),
         @XmlElement(name = "cal", type = testCalDataSourceNameOrId.class)
     })
     protected List<testDataSourceNameOrId> imapOrPop3OrCaldav;
@@ -74,13 +74,13 @@ public class testImportDataRequest {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testYabDataSourceNameOrId }
-     * {@link testUnknownDataSourceNameOrId }
      * {@link testPop3DataSourceNameOrId }
-     * {@link testGalDataSourceNameOrId }
+     * {@link testYabDataSourceNameOrId }
      * {@link testCaldavDataSourceNameOrId }
-     * {@link testRssDataSourceNameOrId }
+     * {@link testGalDataSourceNameOrId }
      * {@link testImapDataSourceNameOrId }
+     * {@link testUnknownDataSourceNameOrId }
+     * {@link testRssDataSourceNameOrId }
      * {@link testCalDataSourceNameOrId }
      * 
      * 
