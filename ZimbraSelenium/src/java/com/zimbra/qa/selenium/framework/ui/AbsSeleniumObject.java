@@ -17,6 +17,7 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.Mouse;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.Point;
@@ -2165,19 +2166,33 @@ public abstract class AbsSeleniumObject {
 		}
 		logger.info("keypress(" + code + ")");
 	}
+	
+	/**
+	 * keyDown()
+	 */
+	public void sKeyDown(String locator, String code) throws HarnessException {
+		if (ZimbraSeleniumProperties.isWebDriver()){
+			logger.info("...WebDriver...Actions.keyDown()");
+			Actions builder = new Actions(webDriver());
+			builder.keyDown(getElement(locator),Keys.valueOf(code)).build().perform();				
+		}else{
+			ClientSessionFactory.session().selenium().keyDown(locator, code);
+		}
+		logger.info("keyDown(" + code + ")");
+	}
 
 	/**
-	 * DefaultSelenium.keyUp()
+	 * keyUp()
 	 */
 	public void sKeyUp(String locator, String code) throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...action.release()");
+			logger.info("...WebDriver...Actions.keyUp()");
 			Actions builder = new Actions(webDriver());
-			builder.release(getElement(locator)).build().perform();				
+			builder.keyUp(getElement(locator),Keys.valueOf(code)).build().perform();				
 		}else{
 			ClientSessionFactory.session().selenium().keyUp(locator, code);
 		}
-		logger.info("keyup(" + code + ")");
+		logger.info("keyUp(" + code + ")");
 	}
 
 	/**

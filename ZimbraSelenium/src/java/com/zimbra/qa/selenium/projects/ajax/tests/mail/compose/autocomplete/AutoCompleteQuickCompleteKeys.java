@@ -61,8 +61,7 @@ public class AutoCompleteQuickCompleteKeys extends PrefGroupMailByMessageTest {
 		//app.zPageMail.zKeyboardTypeString(",");
 		//workaround
 		SleepUtil.sleepSmall();
-		ClientSessionFactory.session().selenium()
-		.keyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\188");
+		mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\188");
 		
 		// Send the message
 		mailform.zSubmit();
@@ -98,8 +97,7 @@ public class AutoCompleteQuickCompleteKeys extends PrefGroupMailByMessageTest {
 		//app.zPageMail.zKeyboardTypeString(";");
 		//workaround
 		SleepUtil.sleepSmall();
-		ClientSessionFactory.session().selenium()
-		.keyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\59");
+		mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\59");
 		
 		// Send the message
 		mailform.zSubmit();
@@ -135,8 +133,7 @@ public class AutoCompleteQuickCompleteKeys extends PrefGroupMailByMessageTest {
 		//app.zPageMail.zKeyboardTypeString("	"); // Whitespace is 'tab' character
 		//workaround
 		SleepUtil.sleepSmall();
-		ClientSessionFactory.session().selenium()
-		.keyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\9");
+		mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\9");
 		
 		// Send the message
 		mailform.zSubmit();

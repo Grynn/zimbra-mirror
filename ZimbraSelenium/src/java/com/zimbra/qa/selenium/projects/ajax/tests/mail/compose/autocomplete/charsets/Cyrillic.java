@@ -64,9 +64,13 @@ public class Cyrillic extends PrefGroupMailByMessageTest {
 
 		// Set the To field
 		// Don't use the autocomplete code, since the Cyrillic will be rejected
-		mailform.zFillField(Field.To, firstname);
-		mailform.zAutocompleteFillField(Field.To, ";");
-		
+		//mailform.zFillField(Field.To, firstname);
+		//mailform.zAutocompleteFillField(Field.To, ";");
+		//workaround
+		mailform.zAutocompleteFillField(Field.To, firstname);
+		SleepUtil.sleepSmall();
+		mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\59");
+
 		// Send the message
 		mailform.zSubmit();
 
@@ -106,9 +110,13 @@ public class Cyrillic extends PrefGroupMailByMessageTest {
 
 		// Set the To field
 		// Don't use the autocomplete code, since the Cyrillic will be rejected
-		mailform.zFillField(Field.To, contact.getPref("givenName"));
-		mailform.zAutocompleteFillField(Field.To, ";");
-		
+		//mailform.zFillField(Field.To, contact.getPref("givenName"));
+		//mailform.zAutocompleteFillField(Field.To, ";");
+		//workaround
+		mailform.zAutocompleteFillField(Field.To, contact.getPref("givenName"));
+		SleepUtil.sleepSmall();
+		mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\59");
+
 		// Send the message
 		mailform.zSubmit();
 
