@@ -312,7 +312,7 @@ function(params) {
 		if (word.para) {
 			// paragraph break - output what we have, add a blank line
 			if (wds.length) {
-				result += addPrefix + (curP || "") + wds.join("").replace(/^ /,"") + eol;
+				result += addPrefix + (curP || "") + wds.join("").replace(/^ +/,"") + eol;
 			}
 			result += addPrefix + p + eol;
 			wds = [];
@@ -329,7 +329,7 @@ function(params) {
 		} else {
 			// output what we have and start a new line
 			if (wds.length) {
-				result += addPrefix + (curP || "") + wds.join("").replace(/^ /,"") + eol;
+				result += addPrefix + (curP || "") + wds.join("").replace(/^ +/,"") + eol;
 			}
 			wds = [w];
 			curLen = w.length;
