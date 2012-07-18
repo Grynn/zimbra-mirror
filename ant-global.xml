@@ -207,6 +207,7 @@
         <delete dir="${test.dir}" quiet="true"/>
         <mkdir dir="${test.dir}/output"/>
         <mkdir dir="${test.dir}/report"/>
+        <copy file="${test.src.dir}/log4j-test.properties" tofile="${test.classes.dir}/log4j.properties" failonerror="false"/>
         <junit printsummary="on" showoutput="true" failureproperty="junit.failure" tempdir="${test.dir}">
             <classpath refid="class.path"/>
             <classpath path="${test.classes.dir}"/>
@@ -249,6 +250,7 @@
       <delete dir="${test.dir}" quiet="true"/>
       <mkdir dir="${test.dir}/output"/>
       <mkdir dir="${test.dir}/report"/>
+      <copy file="${test.src.dir}/log4j-test.properties" tofile="${test.classes.dir}/log4j.properties" failonerror="false"/>
       <taskdef resource="emma_ant.properties" classpathref="emma.lib"/>
       <junit fork="yes" printsummary="on" failureproperty="junit.failure" tempdir="${test.dir}">
         <classpath refid="emma.lib" />
