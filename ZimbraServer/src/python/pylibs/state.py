@@ -954,6 +954,9 @@ class State:
 		return str(val)
 
 	def transform(self, line):
+		 if(line.count('@') < 2 and line.count('%') < 2):
+			return line
+
 		line = re.sub(r"@@([^@]+)@@", self.xformLocalConfig, line)
 
 		# If the line begins and ends with %%, then we are asking a special action be done
