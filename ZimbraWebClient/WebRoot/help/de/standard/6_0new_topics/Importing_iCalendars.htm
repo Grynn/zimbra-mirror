@@ -1,18 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>iCalendars importieren</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Importando iCalendars</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,27 +20,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Kalender verwalten\niCalendars importieren");
-addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
+	addTocInfo("Gerenciando sua agenda\nImportando iCalendars");
+addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -52,10 +64,8 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,33 +81,41 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>iCalendars importieren</h1>
-<p><span>Sie können iCalendars-Kalender (iCal), die im Format *.ics gespeichert wurden, importieren. iCalendar ist das Standardformat für den Austausch von Kalenderdaten über das Internet, das Dateiformat lautet *.ics.</span></p>
-<p><span>Sie können Ihren iCal-Kalender in einen vorhandenen Kalender importieren oder </span><a 
- href="../Calendar/b_Create_New_Calendar.htm">einen neuen Kalender anlegen</a><span> und die *.ics-Datei in diese Datei importieren. </span></p>
-<p><span>So importieren Sie einen iCal-Kalender</span></p>
-<ol class=whs1 style="list-style: decimal;" type=1>
-	<li class=p><p>Öffnen Sie die Registerkarte "Kalender".</p></li>
-	<li class=p><p>Klicken Sie in der Kalenderübersicht auf <span style="font-weight: bold;"><B><b>Bearbeiten</b></B></span><span>.</p></li>
-	<li class=p><p>Wählen Sie im Übersichtsfenster des Kalenders einen Kalender in der Liste aus oder legen Sie einen neuen Kalender an, um die Datei *.ics zu importieren. </p></li>
-	<li class=p><p>Suchen Sie im Feld <span style="font-weight: bold;"><B>Aus</B></span> 
- <span style="font-weight: bold;"><B><b>.ICS-Datei importieren</b></B></span> die zu importierende *.ics-Datei.</p></li>
-	<li class=p><p>Klicken Sie auf <span style="font-weight: bold;"><B>Importieren</B></span>.</p></li>
-	<li class=p><p>Klicken Sie auf <span style="font-weight: bold;"><B><b>OK</b></B></span>.</p></li>
+//]]></script>
+<h1>Importando iCalendars</h1>
+<p><span>Você pode importar agendas iCalendar (iCal) que são salvas no formato .ics. iCalendar é o padrão de troca de dados de agenda na Internet e .ics é o formato padrão das informações iCalendar.</span></p>
+<p><span>Você pode importar sua agenda iCal para uma agenda existente ou</span> <a href="../Calendar/b_Create_New_Calendar.htm">criar uma nova</a> <span>e importar o arquivo .ics para ela.</span></p>
+<p><span>Para importar uma agenda iCal:</span></p>
+<ol class="whs1" type="1">
+<li class="p">
+<p>Selecione a aba Agenda.</p>
+</li>
+<li class="p">
+<p>No painel Visão geral da agenda, clique em <span style="font-weight: bold;"><b><b>Editar</b></b></span><span>.</span></p>
+</li>
+<li class="p">
+<p>No painel Visão geral da agenda, selecione uma agenda da lista ou crie uma nova para receber o arquivo .ics importado.</p>
+</li>
+<li class="p">
+<p>No campo <span style="font-weight: bold;"><b>Importar</b></span> <span style="font-weight: bold;"><b><b>de arquivo .ICS</b></b></span>, localize o arquivo .ics para importar.</p>
+</li>
+<li class="p">
+<p>Clique em <span style="font-weight: bold;"><b>Importar</b></span>.</p>
+</li>
+<li class="p">
+<p>Clique em <span style="font-weight: bold;"><b><b>OK</b></b></span>.</p>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

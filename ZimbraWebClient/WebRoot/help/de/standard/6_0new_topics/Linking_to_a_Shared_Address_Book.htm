@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Link zu freigegebenem Adressbuch einrichten</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Criando link para uma lista de endereços compartilhada</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,27 +20,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Ordner freigeben\nAdressbücher freigeben\nLink zu freigegebenem Adressbuch einrichten");
-addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
+	addTocInfo("Compartilhando pastas\nCompartilhando as listas de endereços\nCriando link para uma lista de endereços compartilhada");
+addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,29 +81,39 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Link zu freigegebenem Adressbuch einrichten</h1>
-<p>Wenn Sie per Mail informiert werden, dass Ihnen der Zugriff auf das Adressbuch einer anderen Person gewährt wird, müssen Sie einen Link zu dem freigegebenen Adressbuch einrichten. Sie benötigen hierfür die vollständige Mail-Adresse des Besitzers und den genauen Namen des freigegebenen Adressbuchs.</p>
-<p>So richten Sie einen Link zu einem freigegebenen Adressbuch ein</p>
-<ol type="1" class="whs1">
-	<li class=p><p>Wählen Sie das Adressbuch aus und klicken Sie auf <span style="font-weight: bold;"><B>Bearbeiten</B></span>.</p></li>
-	<li class=p><p>Wählen Sie in der Symbolleiste die Option <span style="font-weight: bold;"><B>Link zu freigegebenem Adressbuch</B></span>.</p></li>
-	<li class=p><p>Im Fenster "Kontakte" geben Sie dem freigegebenen Adressbuch den Namen, der in Ihrer Liste angezeigt werden soll.</p></li>
-	<li class=p><p>Geben Sie die Mail-Adresse des Besitzers und den Adressbuchnamen ein.</p></li>
-	<li class=p><p>Wählen Sie für dieses freigegebene Adressbuch eine Farbe aus.</p></li>
-	<li class=p><p>Klicken Sie auf <span style="font-weight: bold;"><B>Adressbuch erstellen</B></span>. </p></li>
+//]]></script>
+<h1>Criando link para uma lista de endereços compartilhada</h1>
+<p>Se você receber uma notificação por e-mail dizendo que recebeu acesso para compartilhar a lista de endereços de outra pessoa, você terá de criar um link para essa lista. Você terá de saber o endereço de e-mail completo do proprietário e o nome exato da lista de endereços a ser compartilhada.</p>
+<p>Para criar um link para uma lista de endereços compartilhada:</p>
+<ol type="1">
+<li class="p">
+<p>Selecione Lista de endereços e clique em <span style="font-weight: bold;"><b>editar</b></span>.</p>
+</li>
+<li class="p">
+<p>Na barra de ferramentas, selecione <span style="font-weight: bold;"><b>Link para a lista de endereços</b></span>.</p>
+</li>
+<li class="p">
+<p>No painel Contatos, dê à lista de endereços compartilhada o nome que você quer que apareça na lista.</p>
+</li>
+<li class="p">
+<p>Insira o endereço de e-mail e o nome da lista de endereços do proprietário.</p>
+</li>
+<li class="p">
+<p>Selecione a cor dessa lista de endereços compartilhada.</p>
+</li>
+<li class="p">
+<p>Clique em <span style="font-weight: bold;"><b>Criar lista de endereços</b></span>.</p>
+</li>
 </ol>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>
