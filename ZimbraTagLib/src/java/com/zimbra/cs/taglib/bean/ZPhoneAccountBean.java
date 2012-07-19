@@ -20,25 +20,30 @@ import com.zimbra.common.service.ServiceException;
 
 public class ZPhoneAccountBean {
 
-    private ZPhoneAccount mAccount;
+    private ZPhoneAccount account;
 
     public ZPhoneAccountBean(ZPhoneAccount account) {
-        mAccount = account;
+        this.account = account;
     }
 
     public ZFolderBean getRootFolder() {
-        return new ZFolderBean(mAccount.getRootFolder());
+        return new ZFolderBean(account.getRootFolder());
     }
 
     public ZPhone getPhone() {
-        return mAccount.getPhone();
+        return account.getPhone();
     }
 
     public ZCallFeaturesBean getCallFeatures() throws ServiceException {
-        return new ZCallFeaturesBean(mAccount.getCallFeatures(), false);
+        return new ZCallFeaturesBean(account.getCallFeatures(), false);
     }
 
 	public boolean getHasVoiceMail() {
-		return mAccount.getHasVoiceMail();
+		return account.getHasVoiceMail();
 	}
+
+    public String getPhoneType() {
+        return account.getPhoneType();
+    }
+
 }
