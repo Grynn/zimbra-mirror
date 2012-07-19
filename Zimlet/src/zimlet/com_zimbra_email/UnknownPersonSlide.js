@@ -124,13 +124,17 @@ function(img) {
 		return;
 	}
 	div.innerHTML = "";
+	div.style.textAlign = "center";
 	div.appendChild(img);
 	if (this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN) != -1) {
 		img.onclick =  AjxCallback.simpleClosure(this._handleProfileImageClick, this); 
 		img.style.cursor = "pointer";
+		img.style.maxHeight = "80px";
+		img.style.maxWidth = "65px";
 	}
-	img.width = 65;
-	img.height = 80;
+	if (AjxEnv.isIE) {
+		img.height = 80;
+	}
 };
 
 UnknownPersonSlide.prototype._handleProfileImageClick =
