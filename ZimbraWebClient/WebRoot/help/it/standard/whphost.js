@@ -601,6 +601,12 @@ function onSendMessage(oMsg)
 			  if(typeof(ftsElem.contentWindow.document.forms[0]) != "undefined")
 			  {
 			    var str1 = ftsElem.contentWindow.document.forms[0].quesn.value;
+				if (ftsElem.contentWindow.document.forms[0].quesnsyn)
+				{
+					var str2 = ftsElem.contentWindow.document.forms[0].quesnsyn.value;
+					if (str2 != "")
+						str1 += str2 ;
+				}
 			    oMsg.oParam = str1;
 			  }
 			}

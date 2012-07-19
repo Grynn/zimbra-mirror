@@ -1,0 +1,234 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="corrector ortográfico obligatorio" >
+  <topic name="Comprobar la ortografía de todos los mensajes antes de enviarlos" url="zwc_help_files/3_compose/spell_check_all_messages_before_they_are_sent.htm" />
+  <topic name="Personalizar las opciones para redactar mensajes" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <topic name="Comprobar la ortografía de un mensaje" url="zwc_help_files/3_compose/spell_check_a_message.htm" />
+</key>
+<key name="correo" >
+  <topic name="Leer el correo" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <key name="leer" >
+    <topic name="Leer el correo" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  </key>
+</key>
+<key name="correo cifrado" >
+  <topic name="Configuración de S/MIME para enviar y recibir mensajes de correo cifrados y firmados" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+</key>
+<key name="correo reenviado" >
+  <topic name="Configurar las preferencias para el correo reenviado" url="zwc_help_files/3_compose/set_preferences_for_forwarded_email.htm" />
+</key>
+<key name="correo, enviar más tarde" >
+  <topic name="Redactar y enviar mensajes" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="crear" >
+  <topic name="Crear una carpeta" url="zwc_help_files/5_organize_account/create_a_folder.htm" />
+  <topic name="Trabajar con el Maletín" url="zwc_help_files/10_briefcase/working_in_briefcase.htm" />
+  <topic name="Crear un filtro" url="zwc_help_files/4_filters/creating_a_filter.htm" />
+  <key name="carpeta" >
+    <topic name="Crear una carpeta" url="zwc_help_files/5_organize_account/create_a_folder.htm" />
+  </key>
+  <key name="carpetas del maletín" >
+    <topic name="Trabajar con el Maletín" url="zwc_help_files/10_briefcase/working_in_briefcase.htm" />
+  </key>
+  <key name="filtro" >
+    <topic name="Crear un filtro" url="zwc_help_files/4_filters/creating_a_filter.htm" />
+  </key>
+</key>
+<key name="criterios de búsqueda avanzada" >
+  <topic name="Criterios de búsqueda avanzada" url="zwc_help_files/12_search/advanced_search_criteria.htm" />
+</key>
+<key name="cuenta POP externa" >
+  <topic name="Configurar el comportamiento de POP para tu cuenta" url="zwc_help_files/1_setting_up/set_up_pop_behavior_for_your_account.htm" />
+</key>
+<key name="cuentas externas,acceso" >
+  <topic name="Acceder a tus cuentas externas" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+</key>
+<key name="desactivar" >
+  <topic name="Deshabilitar un Zimlet" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+  <key name="zimlet" >
+    <topic name="Deshabilitar un Zimlet" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+  </key>
+</key>
+<key name="diccionario del corrector ortográfico" >
+  <topic name="Añadir palabras al diccionario del corrector ortográfico" url="zwc_help_files/3_compose/adding_words_to_the_spell_dictionary.htm" />
+</key>
+<key name="direcciones fiables" >
+  <topic name="Mantener una lista de direcciones fiables" url="zwc_help_files/2_manage_email/maintaining_a_trusted_addresses_list.htm" />
+</key>
+<key name="dispositivo móvil" >
+  <topic name="Borrar el contenido de tu dispositivo móvil" url="zwc_help_files/11_mobile/wipe_your_mobile_device.htm" />
+</key>
+<key name="editar" >
+  <topic name="Editar la información de contacto" url="zwc_help_files/6_address_book/editing_contact_information.htm" />
+  <key name="información de contacto" >
+    <topic name="Editar la información de contacto" url="zwc_help_files/6_address_book/editing_contact_information.htm" />
+  </key>
+</key>
+<key name="ejecutar filtro" >
+  <topic name="Aplicar un filtro" url="zwc_help_files/4_filters/applying_a_filter.htm" />
+</key>
+<key name="elementos compartidos contigo" >
+  <topic name="Encontrar elementos compartidos contigo" url="zwc_help_files/13_sharing/finding_items_shared_with_you.htm" />
+</key>
+<key name="eliminar" >
+  <topic name="Eliminar un mensaje" url="zwc_help_files/2_manage_email/deleting_a_message.htm" />
+  <topic name="Eliminar una carpeta" url="zwc_help_files/5_organize_account/delete_a_folder.htm" />
+  <key name="carpeta" >
+    <topic name="Eliminar una carpeta" url="zwc_help_files/5_organize_account/delete_a_folder.htm" />
+  </key>
+  <key name="mensaje" >
+    <topic name="Eliminar un mensaje" url="zwc_help_files/2_manage_email/deleting_a_message.htm" />
+  </key>
+</key>
+<key name="eliminar archivos adjuntos" >
+  <topic name="Abrir archivos adjuntos en un mensaje" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</key>
+<key name="eliminar contactos" >
+  <topic name="Eliminar contactos" url="zwc_help_files/6_address_book/deleting_contacts.htm" />
+</key>
+<key name="enviar correo" >
+  <topic name="Redactar y enviar mensajes" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="enviar mensaje más tarde" >
+  <topic name="Redactar y enviar mensajes" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="equipo" >
+  <topic name="Programar equipos" url="zwc_help_files/8_scheduling/scheduling_equipment.htm" />
+  <key name="programar" >
+    <topic name="Programar equipos" url="zwc_help_files/8_scheduling/scheduling_equipment.htm" />
+  </key>
+</key>
+<key name="espacio de almacenamiento de tu cuenta" >
+  <topic name="Gestionar el espacio de almacenamiento de tu cuenta" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</key>
+<key name="etiqueta" >
+  <topic name="Quitar una etiqueta" url="zwc_help_files/5_organize_account/remove_a_tag.htm" />
+</key>
+<key name="exportar" >
+  <topic name="Exportar una libreta de direcciones" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  <key name="libreta de direcciones" >
+    <topic name="Exportar una libreta de direcciones" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  </key>
+</key>
+<key name="exportar tu agenda ical" >
+  <topic name="Exportar tu agenda iCal" url="zwc_help_files/7_calendars/export_your_ical_calendar.htm" />
+</key>
+<key name="fecha, agrupar por" >
+  <topic name="Agrupar mensajes" url="zwc_help_files/2_manage_email/group_messages.htm" />
+</key>
+<key name="filtrar las invitaciones de la agenda" >
+  <topic name="Crear un filtro para las invitaciones de la agenda" url="zwc_help_files/4_filters/creating_a_filter_for_calendar_invitations.htm" />
+</key>
+<key name="filtrar mensajes" >
+  <topic name="Retirar los mensajes menos importantes de la bandeja de entrada" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+</key>
+<key name="filtro" >
+  <topic name="Editar un filtro" url="zwc_help_files/4_filters/editing_a_filter.htm" />
+  <topic name="Crear un filtro para las invitaciones de la agenda" url="zwc_help_files/4_filters/creating_a_filter_for_calendar_invitations.htm" />
+  <topic name="Crear un filtro" url="zwc_help_files/4_filters/creating_a_filter.htm" />
+  <key name="crear" >
+    <topic name="Crear un filtro" url="zwc_help_files/4_filters/creating_a_filter.htm" />
+  </key>
+  <key name="editar" >
+    <topic name="Editar un filtro" url="zwc_help_files/4_filters/editing_a_filter.htm" />
+  </key>
+</key>
+<key name="filtro activo" >
+  <topic name="Activar o desactivar un filtro" url="zwc_help_files/4_filters/making_a_filter_active_or_inactive.htm" />
+</key>
+<key name="filtros básicos" >
+  <topic name="Criterios de búsqueda avanzada" url="zwc_help_files/12_search/advanced_search_criteria.htm" />
+</key>
+<key name="filtros de correo" >
+  <topic name="Trabajar con filtros de correo" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+</key>
+<key name="firmas" >
+  <topic name="Usar firmas automáticamente" url="zwc_help_files/3_compose/using_signatures_automatically.htm" />
+</key>
+<key name="flujo de actividad" >
+  <topic name="Retirar los mensajes menos importantes de la bandeja de entrada" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+  <topic name="Trabajar con filtros de correo" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+</key>
+<key name="fuentes RSS" >
+  <topic name="Suscribirse a una fuente RSS" url="zwc_help_files/2_manage_email/subscribing_to_rss_feeds.htm" />
+  <key name="suscribirse" >
+    <topic name="Suscribirse a una fuente RSS" url="zwc_help_files/2_manage_email/subscribing_to_rss_feeds.htm" />
+  </key>
+</key>
+<key name="funcionamiento de globos de dirección" >
+  <topic name="Cómo funcionan los globos de direcciones" url="zwc_help_files/2_manage_email/how_address_bubbles_work.htm" />
+</key>
+<key name="funciones de seguridad para móviles" >
+  <topic name="Funciones de seguridad para móviles" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
+</key>
+<key name="galería de zimlet" >
+  <topic name="Gestionar tus zimlets" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+</key>
+<key name="gestionar" >
+  <topic name="Gestionar tus dispositivos móviles" url="zwc_help_files/11_mobile/managing_your_mobile_devices.htm" />
+  <topic name="Administrar los elementos compartidos" url="zwc_help_files/13_sharing/managing_your_shared_items.htm" />
+  <key name="tus dispositivos móviles" >
+    <topic name="Gestionar tus dispositivos móviles" url="zwc_help_files/11_mobile/managing_your_mobile_devices.htm" />
+  </key>
+  <key name="tus elementos compartidos" >
+    <topic name="Administrar los elementos compartidos" url="zwc_help_files/13_sharing/managing_your_shared_items.htm" />
+  </key>
+</key>
+<key name="grupo de contactos" >
+  <topic name="Crear un grupo de contactos" url="zwc_help_files/6_address_book/creating_a_contact_group.htm" />
+</key>
+<key name="guardar borrador" >
+  <topic name="Guardar un mensaje como borrador" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+</key>
+<key name="habilitar" >
+  <topic name="Habilitar un Zimlet opcional" url="zwc_help_files/14_zimlets/enable_an_optional_zimlet.htm" />
+  <key name="zimlet opcional" >
+    <topic name="Habilitar un Zimlet opcional" url="zwc_help_files/14_zimlets/enable_an_optional_zimlet.htm" />
+  </key>
+</key>
+<key name="html" >
+  <topic name="Sintaxis de búsqueda" url="zwc_help_files/12_search/search_syntax.htm" />
+  <topic name="Mostrar mensajes en formato HTML o en texto sin formato" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <topic name="Usar HTML para redactar mensajes" url="zwc_help_files/3_compose/using_html_to_compose_messages.htm" />
+</key>
+<key name="icalendar, añadir" >
+  <topic name="Añadir un iCalendar desde un mensaje de correo" url="zwc_help_files/7_calendars/adding_an_icalendar_from_an_email_message.htm" />
+</key>
+<key name="ics" >
+  <topic name="Añadir un iCalendar desde un mensaje de correo" url="zwc_help_files/7_calendars/adding_an_icalendar_from_an_email_message.htm" />
+</key>
+<key name="idioma, cambiar" >
+  <topic name="Personalizar la vista de la cuenta" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="imap" >
+  <topic name="Acceder a tus cuentas externas" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+</key>
+<key name="importar" >
+  <topic name="Importar una libreta de direcciones" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  <topic name="Importar una lista de tareas" url="zwc_help_files/9_tasks/importing_a_task_lists.htm" />
+  <key name="libreta de direcciones" >
+    <topic name="Importar una libreta de direcciones" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  </key>
+  <key name="listas de tareas" >
+    <topic name="Importar una lista de tareas" url="zwc_help_files/9_tasks/importing_a_task_lists.htm" />
+  </key>
+</key>
+<key name="importar tu agenda ical" >
+  <topic name="Importar tu agenda iCal" url="zwc_help_files/7_calendars/import_your_ical_calendar.htm" />
+</key>
+<key name="imprimir" >
+  <topic name="Imprimir un mensaje de correo electrónico" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
+  <topic name="Imprimir una agenda" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  <topic name="Imprimir una conversación (todos los mensajes)" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  <key name="agenda" >
+    <topic name="Imprimir una agenda" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  </key>
+  <key name="conversación" >
+    <topic name="Imprimir una conversación (todos los mensajes)" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  </key>
+  <key name="mensaje de correo" >
+    <topic name="Imprimir un mensaje de correo electrónico" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
+  </key>
+</key>
+
+</indexdata>

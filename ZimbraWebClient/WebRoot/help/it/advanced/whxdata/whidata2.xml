@@ -1,0 +1,233 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="impostazione" >
+  <topic name="Opzioni posta Spam" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+  <topic name="Utilizzo dei filtri delle email" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+  <key name="con regole filtro" >
+    <topic name="Utilizzo dei filtri delle email" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+  </key>
+  <key name="opzioni posta Spam" >
+    <topic name="Opzioni posta Spam" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+  </key>
+</key>
+<key name="impostazioni delle preferenze" >
+  <topic name="Esecuzione di una ricerca avanzata" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="impostazioni personalità" >
+  <topic name="Aggiunta di personalità" url="zwc_help_files/3_compose/add_personas.htm" />
+</key>
+<key name="in arrivo" >
+  <topic name="Rimozione delle email meno importanti dalla cartella In arrivo" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+  <key name="rimozione automatica delle email meno importanti" >
+    <topic name="Rimozione delle email meno importanti dalla cartella In arrivo" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+  </key>
+</key>
+<key name="indirizzario globale" >
+  <topic name="Esecuzione di una ricerca rapida" url="zwc_help_files/12_search/performing_a_quick_search.htm" />
+</key>
+<key name="indirizzi affidabili" >
+  <topic name="Gestione di un elenco Indirizzi affidabili" url="zwc_help_files/2_manage_email/maintaining_a_trusted_addresses_list.htm" />
+</key>
+<key name="inoltro contatto" >
+  <topic name="Inoltro di informazioni sui contatti" url="zwc_help_files/6_address_book/forwarding_contact_information.htm" />
+</key>
+<key name="inoltro messaggi" >
+  <topic name="Inoltro automatico dei messaggi ricevuti" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <topic name="Inoltro dei messaggi email" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+</key>
+<key name="invio di email" >
+  <topic name="Composizione e invio di email" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="invio messaggio successivamente" >
+  <topic name="Composizione e invio di email" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="invito alla riunione" >
+  <topic name="Risposta a un invito a una riunione" url="zwc_help_files/8_scheduling/responding_to_a_meeting_invitation.htm" />
+  <key name="risposta" >
+    <topic name="Risposta a un invito a una riunione" url="zwc_help_files/8_scheduling/responding_to_a_meeting_invitation.htm" />
+  </key>
+</key>
+<key name="lingua, modifica" >
+  <topic name="Personalizzazione della vista dell'account" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="lista di distribuzione" >
+  <topic name="Creare liste di distribuzione" url="zwc_help_files/6_address_book/create_distribution_lists.htm" />
+</key>
+<key name="lista di distribuzione, abbandonare" >
+  <topic name="Abbandonare una lista di distribuzione" url="zwc_help_files/6_address_book/unsubscribe_to_a_distribution_list.htm" />
+</key>
+<key name="lista di distribuzione, gestisci" >
+  <topic name="Gestire le liste di distribuzione" url="zwc_help_files/6_address_book/managing_distribution_lists.htm" />
+</key>
+<key name="lista di distribuzione, modifica" >
+  <topic name="Modificare una lista di distribuzione" url="zwc_help_files/6_address_book/modify_a_distribution_list.htm" />
+</key>
+<key name="livello di priorità" >
+  <topic name="Contrassegnazione del livello di priorità di un messaggio" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+</key>
+<key name="mail" >
+  <topic name="Lettura di email" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <key name="lettura" >
+    <topic name="Lettura di email" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  </key>
+</key>
+<key name="messaggi con firma digitale, composizione" >
+  <topic name="Composizione e invio di un messaggio con firma digitale" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="messaggi criptati, composizione" >
+  <topic name="Composizione e invio di un messaggio criptato" url="zwc_help_files/15_s_mime/compose_and_send_an_encrypted_message.htm" />
+</key>
+<key name="messaggi email" >
+  <topic name="Risposta ai messaggi email" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <key name="risposta" >
+    <topic name="Risposta ai messaggi email" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  </key>
+</key>
+<key name="messaggio consegna futura" >
+  <topic name="Composizione e invio di email" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="messaggio di assenza" >
+  <topic name="Impostazione di un messaggio di risposta automatica" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="messaggio di risposta automatica" >
+  <topic name="Impostazione di un messaggio di risposta automatica" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="messaggio reindirizzato" >
+  <topic name="Inoltro di un messaggio come messaggio reindirizzato" url="zwc_help_files/3_compose/forward_a_message_as_a_redirected_message.htm" />
+</key>
+<key name="miniagenda" >
+  <topic name="Navigazione in Zimbra Web Client" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+</key>
+<key name="mittente" >
+  <topic name="Inoltro di un messaggio come mittente" url="zwc_help_files/3_compose/forward_a_message_as_the_originator.htm" />
+</key>
+<key name="modifica" >
+  <topic name="Modifica delle informazioni su un contatto" url="zwc_help_files/6_address_book/editing_contact_information.htm" />
+  <key name="informazioni di contatto" >
+    <topic name="Modifica delle informazioni su un contatto" url="zwc_help_files/6_address_book/editing_contact_information.htm" />
+  </key>
+</key>
+<key name="modifica della password" >
+  <topic name="Modifica della password" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+</key>
+<key name="modifica vista messaggi" >
+  <topic name="Gestione dei messaggi email" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="mostra sempre la stringa di ricerca" >
+  <topic name="Esecuzione di una ricerca avanzata" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="notifica arrivo messaggio" >
+  <topic name="Impostazione degli avvisi sul desktop per l'arrivo di nuove email" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+</key>
+<key name="Notifica email" >
+  <topic name="Impostare le notifiche di promemoria via E-mail e SMS" url="zwc_help_files/8_scheduling/setting_email_and_sms_reminder_notification.htm" />
+</key>
+<key name="notifica nuove mail" >
+  <topic name="Ricezione della notifica di nuove email in un altro indirizzo email" url="zwc_help_files/2_manage_email/receiving_new_mail_notification_to_another_email_address.htm" />
+</key>
+<key name="notifiche" >
+  <topic name="Impostazione degli avvisi sul desktop per l'arrivo di nuove email" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+  <topic name="Impostare le notifiche di promemoria via E-mail e SMS" url="zwc_help_files/8_scheduling/setting_email_and_sms_reminder_notification.htm" />
+</key>
+<key name="nuovo contatto" >
+  <topic name="Aggiunta di contatti a una rubrica" url="zwc_help_files/6_address_book/adding_contacts_to_an_address_book.htm" />
+</key>
+<key name="opzioni posta Spam" >
+  <topic name="Opzioni posta Spam" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+</key>
+<key name="ordinamento" >
+  <topic name="Ordinamento dei messaggi nel riquadro del contenuto" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
+  <topic name="Ordinamento degli impegni in un elenco impegno" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  <key name="impegni" >
+    <topic name="Ordinamento degli impegni in un elenco impegno" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  </key>
+  <key name="messaggi" >
+    <topic name="Ordinamento dei messaggi nel riquadro del contenuto" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
+  </key>
+</key>
+<key name="ordine filtro" >
+  <topic name="Visualizzazione dei filtri" url="zwc_help_files/4_filters/viewing_filters.htm" />
+  <key name="visualizzazione" >
+    <topic name="Visualizzazione dei filtri" url="zwc_help_files/4_filters/viewing_filters.htm" />
+  </key>
+</key>
+<key name="pagina di condivisione preferenze" >
+  <topic name="Condivisione di una cartella dalla pagina Condivisione della scheda Preferenze" url="zwc_help_files/13_sharing/share_a_folder_from_the_preferences_sharing_page.htm" />
+</key>
+<key name="password" >
+  <topic name="Modifica della password" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+</key>
+<key name="pianificazione" >
+  <topic name="Pianificazione dell'attrezzatura" url="zwc_help_files/8_scheduling/scheduling_equipment.htm" />
+  <key name="attrezzatura" >
+    <topic name="Pianificazione dell'attrezzatura" url="zwc_help_files/8_scheduling/scheduling_equipment.htm" />
+  </key>
+</key>
+<key name="POP" >
+  <topic name="Accesso agli account esterni" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+</key>
+<key name="posta indesiderata" >
+  <topic name="Rimozione dello spam" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="preferenze agenda" >
+  <topic name="Impostazione delle preferenze dell'Agenda" url="zwc_help_files/7_calendars/setting_your_calendar_preferences.htm" />
+</key>
+<key name="preferenze di ricerca personali" >
+  <topic name="Impostazione delle preferenze di ricerca" url="zwc_help_files/12_search/setting_your_search_preferences.htm" />
+</key>
+<key name="preferenze firme" >
+  <topic name="Personalizzazione delle opzioni di composizione dei messaggi" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+</key>
+<key name="preferenze sul controllo di nuove email" >
+  <topic name="Modifica della frequenza con cui l'account controlla l'arrivo di nuove email" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+</key>
+<key name="privilegi di accesso" >
+  <topic name="Privilegi di accesso" url="zwc_help_files/13_sharing/access_privileges.htm" />
+</key>
+<key name="Promemoria SMS" >
+  <topic name="Impostare le notifiche di promemoria via E-mail e SMS" url="zwc_help_files/8_scheduling/setting_email_and_sms_reminder_notification.htm" />
+</key>
+<key name="query di ricerca" >
+  <topic name="Salvataggio di una query di ricerca" url="zwc_help_files/12_search/saving_a_search_query.htm" />
+  <key name="salvataggio" >
+    <topic name="Salvataggio di una query di ricerca" url="zwc_help_files/12_search/saving_a_search_query.htm" />
+  </key>
+</key>
+<key name="raggruppamento messaggi" >
+  <topic name="Raggruppamento di messaggi" url="zwc_help_files/2_manage_email/group_messages.htm" />
+</key>
+<key name="recupero elementi eliminati" >
+  <topic name="Recupero degli elementi eliminati dal Cestino" url="zwc_help_files/2_manage_email/recover_items_purged_from_trash.htm" />
+</key>
+<key name="revoca condivisione" >
+  <topic name="Rimozione dell'accesso utente a una cartella condivisa" url="zwc_help_files/13_sharing/removing_user_access_to_a_shared_folder.htm" />
+</key>
+<key name="ricerca avanzata" >
+  <topic name="Esecuzione di una ricerca avanzata" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="ricerca di condivisioni" >
+  <topic name="Individuazione dei propri elementi condivisi" url="zwc_help_files/13_sharing/finding_items_shared_with_you.htm" />
+</key>
+<key name="ricerca predefinita delle email" >
+  <topic name="Personalizzazione della vista iniziale della casella di posta" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+</key>
+<key name="ridenominazione cartella" >
+  <topic name="Ridenominazione di una cartella" url="zwc_help_files/5_organize_account/rename_a_folder.htm" />
+</key>
+<key name="ridenominazione tag" >
+  <topic name="Ridenominazione di un tag" url="zwc_help_files/5_organize_account/rename_a_tag.htm" />
+</key>
+<key name="rimozione allegati" >
+  <topic name="Apertura di allegati a un messaggio email" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</key>
+<key name="riquadro del contenuto." >
+  <topic name="Navigazione in Zimbra Web Client" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+</key>
+<key name="riquadro di lettura" >
+  <topic name="Uso di un riquadro di lettura" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+<key name="riquadro di lettura, spostamento" >
+  <topic name="Personalizzazione della vista dell'account" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+
+</indexdata>

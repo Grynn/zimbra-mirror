@@ -1,0 +1,109 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="archivos adjuntos" >
+  <topic name="Abrir archivos adjuntos en un mensaje" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</key>
+<key name="borrador" >
+  <topic name="Guardar un mensaje como borrador" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+</key>
+<key name="búsqueda de correo predeterminada" >
+  <topic name="Personalizar la vista inicial del buzón de correo" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+</key>
+<key name="cambiar la vista de mensaje" >
+  <topic name="Gestionar tus mensajes" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="cerrar sesión" >
+  <topic name="Iniciar y cerrar sesión" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+</key>
+<key name="cliente web avanzado" >
+  <topic name="Usar las versiones avanzada y estándar del cliente" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="cliente web estándar" >
+  <topic name="Usar las versiones avanzada y estándar del cliente" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="comodín" >
+  <topic name="Utilizar el asterisco * como comodín en las búsquedas" url="zwc_help_files/12_search/using_as_a_wildcard_in_search.htm" />
+</key>
+<key name="condiciones de los filtros" >
+  <topic name="condiciones de los filtros" url="zwc_help_files/4_filters/filter_conditions.htm" />
+</key>
+<key name="conversación" >
+  <topic name="Gestionar tus mensajes" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="correo" >
+  <topic name="Leer el correo" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <key name="leer" >
+    <topic name="Leer el correo" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  </key>
+</key>
+<key name="correo reenviado" >
+  <topic name="Configurar las preferencias para el correo reenviado" url="zwc_help_files/3_compose/set_preferences_for_forwarded_email.htm" />
+</key>
+<key name="eliminar archivos adjuntos" >
+  <topic name="Abrir archivos adjuntos en un mensaje" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</key>
+<key name="espacio de almacenamiento de tu cuenta" >
+  <topic name="Gestionar el espacio de almacenamiento de tu cuenta" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</key>
+<key name="guardar borrador" >
+  <topic name="Guardar un mensaje como borrador" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+</key>
+<key name="html" >
+  <topic name="Sintaxis de búsqueda" url="zwc_help_files/12_search/search_syntax.htm" />
+  <topic name="Mostrar mensajes en formato HTML o en texto sin formato" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <topic name="Usar HTML para redactar mensajes" url="zwc_help_files/3_compose/using_html_to_compose_messages.htm" />
+</key>
+<key name="iniciar sesión" >
+  <topic name="Iniciar y cerrar sesión" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+</key>
+<key name="mensaje de respuesta por ausencia" >
+  <topic name="Configurar un mensaje por ausencia" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="mensaje por ausencia" >
+  <topic name="Configurar un mensaje por ausencia" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="mensajes de correo electrónico" >
+  <topic name="Responder a los mensajes" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <key name="responder" >
+    <topic name="Responder a los mensajes" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  </key>
+</key>
+<key name="mover mensaje" >
+  <topic name="Mover los mensajes de correo" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+</key>
+<key name="nivel de prioridad" >
+  <topic name="Marcar el nivel de prioridad de un mensaje" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+</key>
+<key name="panel de lectura" >
+  <topic name="Usar un panel de lectura" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+<key name="panel de lectura activado o desactivado" >
+  <topic name="Usar un panel de lectura" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+<key name="reenviar mensajes" >
+  <topic name="Reenviar automáticamente los mensajes recibidos" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <topic name="Reenviar mensajes" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+</key>
+<key name="respuestas de correo" >
+  <topic name="Configurar las preferencias para las respuestas de correo" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+</key>
+<key name="spam" >
+  <topic name="Eliminar Spam" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="usar las listas de tareas" >
+  <topic name="Usar las listas de tareas" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+</key>
+<key name="vaciar spam" >
+  <topic name="Eliminar Spam" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="versión" >
+  <topic name="Usar las versiones avanzada y estándar del cliente" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="zona horaria" >
+  <topic name="Cambiar la zona horaria predeterminada" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+<key name="zona horaria predeterminada" >
+  <topic name="Cambiar la zona horaria predeterminada" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+
+</indexdata>

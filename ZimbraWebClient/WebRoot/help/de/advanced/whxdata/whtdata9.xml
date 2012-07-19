@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<item name="S/MIME zum Senden und Empfangen signierter und verschlüsselter Mails einrichten" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+<item name="Sicherheitseinstellungen für S/MIME festlegen" url="zwc_help_files/15_s_mime/setting_security_preferences_for_using_s_mime.htm" />
+<item name="Kontakten im Adressbuch Zertifikate hinzufügen" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+<item name="Digital signierte Mail verfassen und senden" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+<item name="Verschlüsselte Mail verfassen und senden" url="zwc_help_files/15_s_mime/compose_and_send_an_encrypted_message.htm" />
+
+</tocdata>

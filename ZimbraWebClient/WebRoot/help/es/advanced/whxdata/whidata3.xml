@@ -1,0 +1,122 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="Recordatorios mediante SMS" >
+  <topic name="Establecer notificaciones de recordatorios de correo electrónico y SMS" url="zwc_help_files/8_scheduling/setting_email_and_sms_reminder_notification.htm" />
+</key>
+<key name="recuperar elementos eliminados" >
+  <topic name="Recuperar elementos eliminados de la papelera" url="zwc_help_files/2_manage_email/recover_items_purged_from_trash.htm" />
+</key>
+<key name="redactar de derecha a izquierda" >
+  <topic name="Personalizar la vista de la cuenta" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="redactar mensaje s/mime" >
+  <topic name="Redactar y enviar mensajes firmados digitalmente" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="redactar mensajes" >
+  <topic name="Personalizar las opciones para redactar mensajes" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+</key>
+<key name="reenviar contacto" >
+  <topic name="Reenviar los datos de contacto" url="zwc_help_files/6_address_book/forwarding_contact_information.htm" />
+</key>
+<key name="reenviar mensajes" >
+  <topic name="Reenviar automáticamente los mensajes recibidos" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <topic name="Reenviar mensajes" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+</key>
+<key name="respuestas de correo" >
+  <topic name="Configurar las preferencias para las respuestas de correo" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+</key>
+<key name="revisa si hay mensajes nuevos" >
+  <topic name="Cambiar la frecuencia en la que se revisa si hay mensajes nuevos" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+</key>
+<key name="revocar uso compartido" >
+  <topic name="Eliminar el acceso de un usuario a una carpeta compartida" url="zwc_help_files/13_sharing/removing_user_access_to_a_shared_folder.htm" />
+</key>
+<key name="rol" >
+  <topic name="Compartir una carpeta desde la página de preferencias para compartir" url="zwc_help_files/13_sharing/share_a_folder_from_the_preferences_sharing_page.htm" />
+</key>
+<key name="s/mime, añadir certificados a la libreta de direcciones" >
+  <topic name="Añadir certificados a los contactos de la libreta de direcciones" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+</key>
+<key name="s/mime, configurar" >
+  <topic name="Configuración de S/MIME para enviar y recibir mensajes de correo cifrados y firmados" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+</key>
+<key name="s/mime, redactar mensaje" >
+  <topic name="Redactar y enviar mensajes firmados digitalmente" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="servicio de voz, escuchar mensajes" >
+  <topic name="Escuchar mensajes de correo de voz" url="zwc_help_files/voiceservice/listening_to_a_voice_mail_message.htm" />
+</key>
+<key name="sintaxis de búsqueda" >
+  <topic name="Realizar una búsqueda avanzada" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="spam" >
+  <topic name="Eliminar Spam" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="tamaño, agrupar por" >
+  <topic name="Agrupar mensajes" url="zwc_help_files/2_manage_email/group_messages.htm" />
+</key>
+<key name="tareas" >
+  <topic name="Ordenar las tareas dentro de una lista de tareas" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  <topic name="Mover una tarea a otra lista" url="zwc_help_files/9_tasks/moving_a_task_to_another_list.htm" />
+  <key name="mover" >
+    <topic name="Mover una tarea a otra lista" url="zwc_help_files/9_tasks/moving_a_task_to_another_list.htm" />
+  </key>
+  <key name="ordenar" >
+    <topic name="Ordenar las tareas dentro de una lista de tareas" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  </key>
+</key>
+<key name="tema" >
+  <topic name="Personalizar la vista de la cuenta" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="tipo de fuente" >
+  <topic name="Personalizar la vista de la cuenta" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="tus preferencias de búsqueda" >
+  <topic name="Configurar tus preferencias de búsqueda" url="zwc_help_files/12_search/setting_your_search_preferences.htm" />
+</key>
+<key name="usar las listas de tareas" >
+  <topic name="Usar las listas de tareas" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+</key>
+<key name="utilizar los zimlets" >
+  <topic name="Utilizar los Zimlets" url="zwc_help_files/14_zimlets/using_zimlets.htm" />
+</key>
+<key name="vaciar la papelera" >
+  <topic name="Vaciar la papelera" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+</key>
+<key name="vaciar spam" >
+  <topic name="Eliminar Spam" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="ver historial de versión" >
+  <topic name="Ver el historial de versión de un archivo del Maletín" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  <key name="archivo del maletín" >
+    <topic name="Ver el historial de versión de un archivo del Maletín" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  </key>
+</key>
+<key name="ver varias agendas" >
+  <topic name="Ver varias agendas" url="zwc_help_files/7_calendars/view_multiple_calendars.htm" />
+</key>
+<key name="versión" >
+  <topic name="Usar las versiones avanzada y estándar del cliente" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <topic name="Enviar y comprobar archivos en el Maletín" url="zwc_help_files/10_briefcase/checking_out_and_checking_in_files_to_briefcase.htm" />
+</key>
+<key name="vista de listas" >
+  <topic name="Ver las actividades de la agenda en una lista" url="zwc_help_files/7_calendars/viewing_calendar_activities_in_a_list.htm" />
+</key>
+<key name="vista de pantalla" >
+  <topic name="Navegar por el cliente web Zimbra" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+</key>
+<key name="vista de semana laboral" >
+  <topic name="Trabajar con las agendas" url="zwc_help_files/7_calendars/working_with_calendars.htm" />
+</key>
+<key name="zimlets" >
+  <topic name="Deshabilitar un Zimlet" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+  <topic name="Gestionar tus zimlets" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+</key>
+<key name="zona horaria" >
+  <topic name="Cambiar la zona horaria predeterminada" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+<key name="zona horaria predeterminada" >
+  <topic name="Cambiar la zona horaria predeterminada" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+
+</indexdata>

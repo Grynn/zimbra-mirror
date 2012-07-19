@@ -31,10 +31,10 @@ function delayReload()
 	}
 }
 
-var gsToolbarOrder = "toc|idx|fts|blankblock|banner";
+var gsToolbarOrder = "toc|idx|fts|blankblock|searchform";
 var gsMinibarOrder = "blankblock|hide2|";
 
-var gsTopic = "Getting_Started/Zimbra_Basic_User_Help.htm";
+var gsTopic = "zimbra_basic_user_help.htm";
 var PANE_OPT_SEARCH = 1;
 var PANE_OPT_BROWSESEQ = 2;
 var gnOpts=-1;

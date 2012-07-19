@@ -1,0 +1,243 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="Mail verschieben" >
+  <topic name="Mails verschieben" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+</key>
+<key name="Mail-Anhänge hochladen" >
+  <topic name="Mailanhänge in den Ordner &quot;Dateien&quot; hochladen" url="zwc_help_files/10_briefcase/upload_email_attachments_to_briefcase.htm" />
+  <key name="Dateien" >
+    <topic name="Mailanhänge in den Ordner &quot;Dateien&quot; hochladen" url="zwc_help_files/10_briefcase/upload_email_attachments_to_briefcase.htm" />
+  </key>
+</key>
+<key name="Mail-Antworten" >
+  <topic name="Einstellungen für Mail-Antworten festlegen" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+</key>
+<key name="Mail-Ordner freigeben" >
+  <topic name="Mail-Ordner freigeben" url="zwc_help_files/13_sharing/share_mail_folders.htm" />
+</key>
+<key name="Mail-Papierkorb" >
+  <topic name="Gelöschte Elemente aus dem Papierkorb wiederherstellen" url="zwc_help_files/2_manage_email/recover_items_purged_from_trash.htm" />
+</key>
+<key name="Mailansicht ändern" >
+  <topic name="Mails verwalten" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="Mailbenachrichtigung" >
+  <topic name="Mail- und SMS-Erinnerungsbenachrichtigungen einrichten" url="zwc_help_files/8_scheduling/setting_email_and_sms_reminder_notification.htm" />
+</key>
+<key name="Mailempfänger" >
+  <topic name="Kontakte automatisch zur Liste der Mailempfänger hinzufügen" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+</key>
+<key name="Mailempfängerliste" >
+  <topic name="Kontakte automatisch zur Liste der Mailempfänger hinzufügen" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+  <key name="Kontakte automatisch hinzufügen" >
+    <topic name="Kontakte automatisch zur Liste der Mailempfänger hinzufügen" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+  </key>
+</key>
+<key name="Mailfilter" >
+  <topic name="Mit Mailfiltern arbeiten" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+</key>
+<key name="Mails" >
+  <topic name="Mails beantworten" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <key name="Antworten" >
+    <topic name="Mails beantworten" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  </key>
+</key>
+<key name="Mails filtern" >
+  <topic name="Weniger wichtige Mails aus dem Posteingang verschieben" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+</key>
+<key name="Mails gruppieren" >
+  <topic name="Mails gruppieren" url="zwc_help_files/2_manage_email/group_messages.htm" />
+</key>
+<key name="Mails manuell abrufen" >
+  <topic name="Häufigkeit der Überprüfung auf neue Mails im Account ändern" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+</key>
+<key name="Mails verfassen" >
+  <topic name="Optionen zum Verfassen von Mails anpassen" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+</key>
+<key name="Mails weiterleiten" >
+  <topic name="Empfangene Mails automatisch weiterleiten" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <topic name="Mails weiterleiten" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+</key>
+<key name="Markieren" >
+  <topic name="Mail oder Unterhaltung markieren" url="zwc_help_files/5_organize_account/flag_a_message_or_conversation.htm" />
+  <topic name="Markierung aus einer Mail oder Unterhaltung entfernen" url="zwc_help_files/5_organize_account/remove_a_flag_from_a_message_or_conversation.htm" />
+</key>
+<key name="Mehrere Kalender anzeigen" >
+  <topic name="Mehrere Kalender anzeigen" url="zwc_help_files/7_calendars/view_multiple_calendars.htm" />
+</key>
+<key name="Mini-Kalender" >
+  <topic name="Im Zimbra-Webclient navigieren" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+</key>
+<key name="Mobilgerät" >
+  <topic name="Mobilgerät mit der Wipe-Funktion löschen" url="zwc_help_files/11_mobile/wipe_your_mobile_device.htm" />
+</key>
+<key name="Nachricht später senden" >
+  <topic name="Mail verfassen und senden" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="Neuer Kontakt" >
+  <topic name="Kontakte zu einem Adressbuch hinzufügen" url="zwc_help_files/6_address_book/adding_contacts_to_an_address_book.htm" />
+</key>
+<key name="Nutzerzugriff" >
+  <topic name="Nutzerzugriff auf einen freigegebenen Ordner entfernen" url="zwc_help_files/13_sharing/removing_user_access_to_a_shared_folder.htm" />
+  <key name="Entfernen" >
+    <topic name="Nutzerzugriff auf einen freigegebenen Ordner entfernen" url="zwc_help_files/13_sharing/removing_user_access_to_a_shared_folder.htm" />
+  </key>
+</key>
+<key name="Obligatorische Rechtschreibprüfung" >
+  <topic name="Rechtschreibung aller Mails vor dem Senden überprüfen" url="zwc_help_files/3_compose/spell_check_all_messages_before_they_are_sent.htm" />
+  <topic name="Optionen zum Verfassen von Mails anpassen" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <topic name="Rechtschreibung einer Mail prüfen" url="zwc_help_files/3_compose/spell_check_a_message.htm" />
+</key>
+<key name="Optionen für Spam-Mail" >
+  <topic name="Optionen für Spam-Mail" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+</key>
+<key name="Order freigeben" >
+  <topic name="Ordner freigeben" url="zwc_help_files/13_sharing/sharing_a_folder.htm" />
+</key>
+<key name="Ordner für Aufgabenliste freigeben" >
+  <topic name="Ordner für Aufgabenliste freigeben" url="zwc_help_files/13_sharing/share_task_list_folders.htm" />
+</key>
+<key name="Ordner umbenennen" >
+  <topic name="Ordner umbenennen" url="zwc_help_files/5_organize_account/rename_a_folder.htm" />
+</key>
+<key name="Original anzeigen" >
+  <topic name="Herkunft einer Mail finden" url="zwc_help_files/2_manage_email/finding_the_origin_of_an_email_message.htm" />
+</key>
+<key name="Papierkorb" >
+  <topic name="Papierkorb leeren" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+</key>
+<key name="Papierkorb leeren" >
+  <topic name="Papierkorb leeren" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+</key>
+<key name="Passwort" >
+  <topic name="Passwort ändern" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+</key>
+<key name="Passwort ändern" >
+  <topic name="Passwort ändern" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+</key>
+<key name="Persönlichkeiten hinzufügen" >
+  <topic name="Persönlichkeiten hinzufügen" url="zwc_help_files/3_compose/add_personas.htm" />
+</key>
+<key name="Persönlichkeitseinstellungen" >
+  <topic name="Persönlichkeiten hinzufügen" url="zwc_help_files/3_compose/add_personas.htm" />
+</key>
+<key name="POP" >
+  <topic name="Auf externe Accounts zugreifen" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+</key>
+<key name="POP-Verhalten" >
+  <topic name="POP-Verhalten für den Account einrichten" url="zwc_help_files/1_setting_up/set_up_pop_behavior_for_your_account.htm" />
+</key>
+<key name="Posteingang" >
+  <topic name="Weniger wichtige Mails aus dem Posteingang verschieben" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+  <key name="Weniger wichtige Mails automatisch verschieben" >
+    <topic name="Weniger wichtige Mails aus dem Posteingang verschieben" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+  </key>
+</key>
+<key name="Prioritätsstufe" >
+  <topic name="Prioriätsstufe einer Mail kennzeichnen" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+</key>
+<key name="Rolle" >
+  <topic name="Ordner auf der Seite &quot;Einstellungen&quot; &gt; &quot;Freigaben&quot; freigeben" url="zwc_help_files/13_sharing/share_a_folder_from_the_preferences_sharing_page.htm" />
+</key>
+<key name="RSS-Feeds" >
+  <topic name="RSS-Feeds abonnieren" url="zwc_help_files/2_manage_email/subscribing_to_rss_feeds.htm" />
+  <key name="Abonnieren" >
+    <topic name="RSS-Feeds abonnieren" url="zwc_help_files/2_manage_email/subscribing_to_rss_feeds.htm" />
+  </key>
+</key>
+<key name="S/MIME einrichten" >
+  <topic name="S/MIME zum Senden und Empfangen signierter und verschlüsselter Mails einrichten" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+</key>
+<key name="S/MIME-Mail verfassen" >
+  <topic name="Digital signierte Mail verfassen und senden" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="S/MIME, Zertifikate zu Adressbuch hinzufügen" >
+  <topic name="Kontakten im Adressbuch Zertifikate hinzufügen" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+</key>
+<key name="Schriftart" >
+  <topic name="Account-Ansicht personalisieren" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="Sicherheitsfunktionen bei Mobilgeräten" >
+  <topic name="Sicherheitsfunktionen bei Mobilgeräten" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
+</key>
+<key name="Signaturen" >
+  <topic name="Automatisch Signaturen verwenden" url="zwc_help_files/3_compose/using_signatures_automatically.htm" />
+</key>
+<key name="SMS-Erinnerungen" >
+  <topic name="Mail- und SMS-Erinnerungsbenachrichtigungen einrichten" url="zwc_help_files/8_scheduling/setting_email_and_sms_reminder_notification.htm" />
+</key>
+<key name="Sortieren" >
+  <topic name="Mails im Inhaltsfenster sortieren" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
+  <topic name="Aufgaben in einer Aufgabenliste sortieren" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  <key name="Aufgaben" >
+    <topic name="Aufgaben in einer Aufgabenliste sortieren" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  </key>
+  <key name="Mails" >
+    <topic name="Mails im Inhaltsfenster sortieren" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
+  </key>
+</key>
+<key name="Spam" >
+  <topic name="Spam entfernen" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="Spam-Ordner leeren" >
+  <topic name="Spam entfernen" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="Sprache ändern" >
+  <topic name="Account-Ansicht personalisieren" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="Sprachnachrichten-Dienst, Nachrichten abhören" >
+  <topic name="Sprachnachricht abhören" url="zwc_help_files/voiceservice/listening_to_a_voice_mail_message.htm" />
+</key>
+<key name="Standard-Webclient" >
+  <topic name="Standard-Client und erweiterten Client verwenden" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="Standardbesprechungsdauer festlegen" >
+  <topic name="Standardbesprechungsdauer festlegen" url="zwc_help_files/8_scheduling/configure_your_default_meeting_duration.htm" />
+</key>
+<key name="Standardmailsuche" >
+  <topic name="Startansicht der Mailbox anpassen" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+</key>
+<key name="Standardzeitzone" >
+  <topic name="Standardzeitzone ändern" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+<key name="Stil" >
+  <topic name="Account-Ansicht personalisieren" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="Suchabfrage" >
+  <topic name="Suchabfrage speichern" url="zwc_help_files/12_search/saving_a_search_query.htm" />
+  <key name="Speichern" >
+    <topic name="Suchabfrage speichern" url="zwc_help_files/12_search/saving_a_search_query.htm" />
+  </key>
+</key>
+<key name="Suchsyntax" >
+  <topic name="Erweiterte Suche durchführen" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="Suchzeichenfolge immer anzeigen" >
+  <topic name="Erweiterte Suche durchführen" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="Tag" >
+  <topic name="Tag entfernen" url="zwc_help_files/5_organize_account/remove_a_tag.htm" />
+</key>
+<key name="Tag umbenennen" >
+  <topic name="Tag umbenennen" url="zwc_help_files/5_organize_account/rename_a_tag.htm" />
+</key>
+<key name="Tastenkürzel" >
+  <topic name="Tastenkürzel verwenden" url="zwc_help_files/1_setting_up/using_keyboard_shortcuts.htm" />
+</key>
+<key name="Übersichtsfenster" >
+  <topic name="Im Zimbra-Webclient navigieren" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+</key>
+<key name="Umgeleitete Mail" >
+  <topic name="Mail als umgeleitete Mail weiterleiten" url="zwc_help_files/3_compose/forward_a_message_as_a_redirected_message.htm" />
+</key>
+<key name="Unterhaltung" >
+  <topic name="Mails verwalten" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="Verschlüsselte Mail" >
+  <topic name="S/MIME zum Senden und Empfangen signierter und verschlüsselter Mails einrichten" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+</key>
+<key name="Verschlüsselte Mails verfassen" >
+  <topic name="Verschlüsselte Mail verfassen und senden" url="zwc_help_files/15_s_mime/compose_and_send_an_encrypted_message.htm" />
+</key>
+
+</indexdata>

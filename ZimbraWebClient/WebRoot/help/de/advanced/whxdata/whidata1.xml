@@ -1,0 +1,242 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="Erweiterte Suche" >
+  <topic name="Erweiterte Suche durchführen" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="Erweiterte Suchkriterien" >
+  <topic name="Erweiterte Suchkriterien" url="zwc_help_files/12_search/advanced_search_criteria.htm" />
+</key>
+<key name="Erweiterter Webclient" >
+  <topic name="Standard-Client und erweiterten Client verwenden" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="Exportieren" >
+  <topic name="Adressbuch exportieren" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  <key name="Adressbuch" >
+    <topic name="Adressbuch exportieren" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  </key>
+</key>
+<key name="Externe Accounts hinzufügen" >
+  <topic name="Auf externe Accounts zugreifen" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+  <topic name="Mails mit einer anderen Account-Identität senden" url="zwc_help_files/3_compose/using_other_account_identities_when_you_send_an_email.htm" />
+</key>
+<key name="Externe Accounts, Zugriff" >
+  <topic name="Auf externe Accounts zugreifen" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+</key>
+<key name="Externen Kalender hinzufügen" >
+  <topic name="Externe Kalender hinzufügen" url="zwc_help_files/7_calendars/adding_external_calendars.htm" />
+</key>
+<key name="Externer POP-Account" >
+  <topic name="POP-Verhalten für den Account einrichten" url="zwc_help_files/1_setting_up/set_up_pop_behavior_for_your_account.htm" />
+</key>
+<key name="Festlegen" >
+  <topic name="Optionen für Spam-Mail" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+  <topic name="Mit Mailfiltern arbeiten" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+  <key name="Filterregeln" >
+    <topic name="Mit Mailfiltern arbeiten" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+  </key>
+  <key name="Optionen für Spam-Mail" >
+    <topic name="Optionen für Spam-Mail" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+  </key>
+</key>
+<key name="Filter" >
+  <topic name="Filter bearbeiten" url="zwc_help_files/4_filters/editing_a_filter.htm" />
+  <topic name="Filter für Kalendereinladungen erstellen" url="zwc_help_files/4_filters/creating_a_filter_for_calendar_invitations.htm" />
+  <topic name="Filter erstellen" url="zwc_help_files/4_filters/creating_a_filter.htm" />
+  <key name="Bearbeiten" >
+    <topic name="Filter bearbeiten" url="zwc_help_files/4_filters/editing_a_filter.htm" />
+  </key>
+  <key name="Erstellen" >
+    <topic name="Filter erstellen" url="zwc_help_files/4_filters/creating_a_filter.htm" />
+  </key>
+</key>
+<key name="Filter aktiv" >
+  <topic name="Filter aktivieren oder deaktivieren" url="zwc_help_files/4_filters/making_a_filter_active_or_inactive.htm" />
+</key>
+<key name="Filter ausführen" >
+  <topic name="Filter anwenden" url="zwc_help_files/4_filters/applying_a_filter.htm" />
+</key>
+<key name="Filterbedingungen" >
+  <topic name="Filterbedingungen" url="zwc_help_files/4_filters/filter_conditions.htm" />
+  <topic name="Von Filtern unterstützte Bedingungen und Aktionen" url="zwc_help_files/4_filters/filter_conditions_and_actions_supported.htm" />
+</key>
+<key name="Filterreihenfolge" >
+  <topic name="Filter anzeigen" url="zwc_help_files/4_filters/viewing_filters.htm" />
+  <key name="Anzeigen" >
+    <topic name="Filter anzeigen" url="zwc_help_files/4_filters/viewing_filters.htm" />
+  </key>
+</key>
+<key name="Frei/Belegt" >
+  <topic name="Frei/Belegt-Informationen anzeigen" url="zwc_help_files/7_calendars/display_your_free_busy_information.htm" />
+</key>
+<key name="Freigabe annehmen" >
+  <topic name="Eine Einladung für freigegebene Objekte annehmen" url="zwc_help_files/13_sharing/accepting_an_invitation_to_share_items.htm" />
+</key>
+<key name="Freigabe entziehen" >
+  <topic name="Nutzerzugriff auf einen freigegebenen Ordner entfernen" url="zwc_help_files/13_sharing/removing_user_access_to_a_shared_folder.htm" />
+</key>
+<key name="Freigabeeinstellungen (Seite)" >
+  <topic name="Ordner auf der Seite &quot;Einstellungen&quot; &gt; &quot;Freigaben&quot; freigeben" url="zwc_help_files/13_sharing/share_a_folder_from_the_preferences_sharing_page.htm" />
+  <topic name="Zugriff auf der Seite &quot;Einstellungen&quot; &gt; &quot;Freigaben&quot; ändern" url="zwc_help_files/13_sharing/change_access_from_the_sharing_preferences_page.htm" />
+  <key name="Zugriff ändern auf" >
+    <topic name="Zugriff auf der Seite &quot;Einstellungen&quot; &gt; &quot;Freigaben&quot; ändern" url="zwc_help_files/13_sharing/change_access_from_the_sharing_preferences_page.htm" />
+  </key>
+</key>
+<key name="Freigaben suchen" >
+  <topic name="Für mich freigegebene Objekte finden" url="zwc_help_files/13_sharing/finding_items_shared_with_you.htm" />
+</key>
+<key name="Freigeben" >
+  <topic name="Account-Ordner freigeben" url="zwc_help_files/13_sharing/sharing_your_account_folders.htm" />
+  <key name="Account-Ordner" >
+    <topic name="Account-Ordner freigeben" url="zwc_help_files/13_sharing/sharing_your_account_folders.htm" />
+  </key>
+</key>
+<key name="Für Sie freigegebene Elemente" >
+  <topic name="Für mich freigegebene Objekte finden" url="zwc_help_files/13_sharing/finding_items_shared_with_you.htm" />
+</key>
+<key name="Ganztägige Termine" >
+  <topic name="Ganztägige Termine in der Arbeitswochenansicht anzeigen" url="zwc_help_files/7_calendars/displaying_all_day_appointments_in_your_work_week_view.htm" />
+</key>
+<key name="Gelöschte Objekte wiederherstellen" >
+  <topic name="Gelöschte Elemente aus dem Papierkorb wiederherstellen" url="zwc_help_files/2_manage_email/recover_items_purged_from_trash.htm" />
+</key>
+<key name="Globale Adressliste" >
+  <topic name="Schnellsuche durchführen" url="zwc_help_files/12_search/performing_a_quick_search.htm" />
+</key>
+<key name="Größe, gruppieren nach" >
+  <topic name="Mails gruppieren" url="zwc_help_files/2_manage_email/group_messages.htm" />
+</key>
+<key name="Hinzufügen" >
+  <topic name="Kalender erstellen" url="zwc_help_files/7_calendars/create_a_calendar.htm" />
+  <key name="Kalender" >
+    <topic name="Kalender erstellen" url="zwc_help_files/7_calendars/create_a_calendar.htm" />
+  </key>
+</key>
+<key name="HTML" >
+  <topic name="Suchsyntax" url="zwc_help_files/12_search/search_syntax.htm" />
+  <topic name="Mails im HTML-Format oder als Plain-Text anzeigen" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <topic name="Mails im HTML-Format verfassen" url="zwc_help_files/3_compose/using_html_to_compose_messages.htm" />
+</key>
+<key name="iCal-Aufgabenliste" >
+  <topic name="Aufgabenliste erstellen" url="zwc_help_files/9_tasks/creating_a_task_list.htm" />
+</key>
+<key name="iCal-Kalender exportieren" >
+  <topic name="iCal-Kalender exportieren" url="zwc_help_files/7_calendars/export_your_ical_calendar.htm" />
+</key>
+<key name="iCal-Kalender importieren" >
+  <topic name="iCal-Kalender importieren" url="zwc_help_files/7_calendars/import_your_ical_calendar.htm" />
+</key>
+<key name="iCalendar hinzufügen" >
+  <topic name="iCalendar aus einer Mail hinzufügen" url="zwc_help_files/7_calendars/adding_an_icalendar_from_an_email_message.htm" />
+</key>
+<key name="iCS" >
+  <topic name="iCalendar aus einer Mail hinzufügen" url="zwc_help_files/7_calendars/adding_an_icalendar_from_an_email_message.htm" />
+</key>
+<key name="IMAP" >
+  <topic name="Auf externe Accounts zugreifen" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+</key>
+<key name="Importieren" >
+  <topic name="Adressbuch importieren" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  <topic name="Aufgabenliste importieren" url="zwc_help_files/9_tasks/importing_a_task_lists.htm" />
+  <key name="Adressbuch" >
+    <topic name="Adressbuch importieren" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  </key>
+  <key name="Aufgabenlisten" >
+    <topic name="Aufgabenliste importieren" url="zwc_help_files/9_tasks/importing_a_task_lists.htm" />
+  </key>
+</key>
+<key name="Inhaltsfenster" >
+  <topic name="Im Zimbra-Webclient navigieren" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+</key>
+<key name="Junk" >
+  <topic name="Spam entfernen" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="Kalender" >
+  <topic name="Weitere Kalendereinstellungen konfigurieren" url="zwc_help_files/7_calendars/other_calendar_preferences_to_configure.htm" />
+  <topic name="Kalender drucken" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  <key name="Drucken" >
+    <topic name="Kalender drucken" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  </key>
+</key>
+<key name="Kalender freigeben" >
+  <topic name="Kalender freigeben" url="zwc_help_files/13_sharing/share_calendars.htm" />
+</key>
+<key name="Kalender in Gruppen" >
+  <topic name="Kalender in Gruppen organisieren" url="zwc_help_files/7_calendars/organize_your_calendars_into_groups.htm" />
+</key>
+<key name="Kalender mit Farben codieren" >
+  <topic name="Farbe zu einem Kalender hinzufügen" url="zwc_help_files/7_calendars/add_color_to_a_calendar.htm" />
+</key>
+<key name="Kalendereinladungen filtern" >
+  <topic name="Filter für Kalendereinladungen erstellen" url="zwc_help_files/4_filters/creating_a_filter_for_calendar_invitations.htm" />
+</key>
+<key name="Kalendereinstellungen" >
+  <topic name="Kalendereinstellungen einrichten" url="zwc_help_files/7_calendars/setting_your_calendar_preferences.htm" />
+</key>
+<key name="Konfigurieren" >
+  <topic name="Sicherheitsfunktionen bei Mobilgeräten" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
+  <key name="PIN" >
+    <topic name="Sicherheitsfunktionen bei Mobilgeräten" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
+  </key>
+</key>
+<key name="Kontakt" >
+  <topic name="Kontakt in ein anderes Adressbuch verschieben" url="zwc_help_files/6_address_book/moving_a_contact_to_another_address_book.htm" />
+  <key name="Verschieben" >
+    <topic name="Kontakt in ein anderes Adressbuch verschieben" url="zwc_help_files/6_address_book/moving_a_contact_to_another_address_book.htm" />
+  </key>
+</key>
+<key name="Kontakt weiterleiten" >
+  <topic name="Kontaktinformationen weiterleiten" url="zwc_help_files/6_address_book/forwarding_contact_information.htm" />
+</key>
+<key name="Kontakte löschen" >
+  <topic name="Kontakte löschen" url="zwc_help_files/6_address_book/deleting_contacts.htm" />
+</key>
+<key name="Kontaktgruppe" >
+  <topic name="Kontaktgruppe erstellen" url="zwc_help_files/6_address_book/creating_a_contact_group.htm" />
+</key>
+<key name="Kontaktgruppenliste" >
+  <topic name="Mitglieder zu einer Kontaktgruppenliste hinzufügen" url="zwc_help_files/6_address_book/adding_members_to_a_contact_group_list.htm" />
+</key>
+<key name="Kontrollkästchen" >
+  <topic name="Mehrere Nachrichten für eine Aktion kennzeichnen" url="zwc_help_files/2_manage_email/marking_multiple_messages_for_the_same_action.htm" />
+</key>
+<key name="Lesebestätigungen" >
+  <topic name="Lesebestätigungen senden" url="zwc_help_files/2_manage_email/returning_read_receipts.htm" />
+  <topic name="Optionen zum Verfassen von Mails anpassen" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <topic name="Lesebestätigung anfordern" url="zwc_help_files/3_compose/request_a_return_receipt.htm" />
+</key>
+<key name="Lesefenster" >
+  <topic name="Lesefenster verwenden" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+<key name="Lesefenster ein- oder ausgeblendet" >
+  <topic name="Lesefenster verwenden" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+<key name="Lesefenster verschieben" >
+  <topic name="Account-Ansicht personalisieren" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="Listenansicht" >
+  <topic name="Kalenderaktivitäten in einer Liste anzeigen" url="zwc_help_files/7_calendars/viewing_calendar_activities_in_a_list.htm" />
+</key>
+<key name="Löschen" >
+  <topic name="Mail löschen" url="zwc_help_files/2_manage_email/deleting_a_message.htm" />
+  <topic name="Ordner löschen" url="zwc_help_files/5_organize_account/delete_a_folder.htm" />
+  <key name="Mail" >
+    <topic name="Mail löschen" url="zwc_help_files/2_manage_email/deleting_a_message.htm" />
+  </key>
+  <key name="Ordner" >
+    <topic name="Ordner löschen" url="zwc_help_files/5_organize_account/delete_a_folder.htm" />
+  </key>
+</key>
+<key name="Mail" >
+  <topic name="Mail lesen" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <key name="Lesen" >
+    <topic name="Mail lesen" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  </key>
+</key>
+<key name="Mail senden" >
+  <topic name="Mail verfassen und senden" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="Mail später senden" >
+  <topic name="Mail verfassen und senden" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+
+</indexdata>

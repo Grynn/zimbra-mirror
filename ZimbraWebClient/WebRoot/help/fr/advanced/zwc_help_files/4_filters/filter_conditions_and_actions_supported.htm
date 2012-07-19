@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Conditions et actions de filtre prises en charge</title>
+<link rel="StyleSheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Utilisation des filtres de mails\nConditions et actions de filtre prises en charge");
+addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Accueil", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">Utilisation des filtres de mails<\/a> &gt; Conditions et actions de filtre prises en charge<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Conditions et actions de filtre prises en charge</p>
+<p style="font-size: 11pt;">Les règles de filtrage sont insensibles aux majuscules, ce qui signifie que les règles ne tiennent pas compte des majuscules.</p>
+<p class="FM_2Heading">Conditions</p>
+<p>Les champs de comparaison incluent les éléments suivants:</p>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">De</span>.<span  	 class="FM_attribute"> </span> À utiliser pour spécifier un nom dans l'en-tête De d'un mail.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">À</span>. Identique au champ De, mais la recherche des noms spécifiés s'effectue dans l'en-tête À: Cc:.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span  	 class="FM_attribute">Cc</span>. Identique au champ De, mais s'affiche dans l'en-tête Cc : .</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">À ou Cc</span>. Identique au champ De, mais s'affiche dans l'en-tête À et Cc.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Objet</span>. Recherche dans l'en-tête Objet du mail.</p></li>
+</ul>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Taille</span>. Utilisez cette option pour sélectionner les mails d'une taille supérieure ou inférieure à la taille spécifiée. La taille d'un mail inclut les pièces jointes. Vous pouvez utiliser cette option pour supprimer les mails trop volumineux.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Date</span>. Utilisez cette option pour spécifier les mails envoyés avant ou après une date.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Corps du message</span>. Les options de contenu sont Contient/Ne contient pas et vous pouvez spécifier les mots correspondants dans le corps du mail. Vous ne pouvez pas filtrer les mots des pièces jointes.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Accusé de lecture</span>. Les mails d'accusé de lecture peuvent être filtrés.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Pièce jointe</span>. Filtrez vos mails, qu'ils contiennent ou non des pièces jointes.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Adresse dans</span>. Vérifie la présence d'une adresse dans vos contacts. Le champ suivant sert à indiquer l'adresse.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Invitation dans le calendrier</span>. Filtre les mails relatifs au calendrier.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Social</span>.<span  	 class="FM_attribute"> </span>Filtre les messages provenant de sites de réseautage social.</p></li>
+	<li class="p"><p class="FM_Bulleted1" style="margin-left: 23px;"><span  	 class="FM_attribute">En-tête nommé</span>. Lorsque cette option est sélectionnée, un champ d'entrée de texte supplémentaire apparaît avant l'opérateur de comparaison (la&quot;partie&quot; contient). Cette option vous permet d'indiquer l'en-tête mail de votre choix. Vous pouvez non seulement spécifier les champs standard À: ou De:, mais également les champs de Date, Répondre à et d'autres champs personnalisés qui peuvent être inclus dans l'en-tête du message. Vous pouvez utiliser cette option pour filtrer les e-mails qui ont des &quot;en-têtes&quot; mal formées, ce qui signifie qu'elles ne contiennent pas certaines informations qui sont normalement considérés comme standard pour un message e-mail. Parfois les spams (générés automatiquement) omettent des informations, telles que les champs Expéditeur et Répondre à. Utilisez la deuxième zone de texte (le champ situé immédiatement à droite de l'opérateur de comparaison) pour spécifier l'en-tête à tester.</p></li>
+</ul>
+<h3>Actions</h3>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Conserver dans la Boîte de réception</span>. Enregistre les mails dans la boîte de réception. Si aucune règle de filtre ne correspond à un mail, cette action s'exécute par défaut.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Ranger dans un dossier</span>. Transfère un mail vers un dossier défini.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Détruire</span>. Supprime le mail sans le distribuer. Le mail ne fait pas partie de vos dossiers, même pas du dossier Corbeille.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Faire suivre</span>. Fait suivre le mail à l'adresse indiquée.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Marquer</span>. Sélectionnez <span class="FM_attribute">comme lu</span> ou <span class="FM_attribute">avec drapeau</span>.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Affecter d'une balise</span>.  Vous pouvez marquer les mails correspondants avec un tag sélectionné.</p></li>
+</ul>
+<h3>Actions multiples</h3>
+<p>Vous pouvez créer une règle de filtre constituée de plusieurs actions. Les combinaisons d'actions dans vos règles sont interprétées comme suit:</p>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Détruire</span>. Si elle est combinée avec d'autres actions, l'action de suppression est ignorée et les autres actions deviennent effectives.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Ranger dans un dossier</span>. Plusieurs &quot;fichiers&quot; en action résultent en plusieurs copies du message étant stockées dans des dossiers différents. Si aucun dossier n'est spécifié, le mail sera conservé dans la boîte de réception.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Baliser/Marquer</span>. Ces actions s'appliquent au mail envoyé par la dernière action exécutée. Dans le cas de plusieurs actions &quot;Ranger dans&quot;, il peut arriver que plusieurs copies du mail soient sauvergardées sans tag, et d'autres avec.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Conserver dans la Boîte de réception</span>. Plusieurs &quot;actions de&quot; maintient peuvent être spécifiées, mais une seule copie du message est sauvegardée dans la boîte de réception.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Faire suivre à l'adresse</span>. <span style="font-weight: normal;">Le mail est transféré vers l'adresse indiquée.</span></p></li>
+</ul>
+<p></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

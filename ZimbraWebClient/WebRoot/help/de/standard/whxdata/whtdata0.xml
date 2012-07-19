@@ -1,0 +1,102 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<book name="Erste Schritte" >
+  <item name="Erste Schritte mit dem einfachen ZCS-Webclient" url="zimbra_basic_user_help.htm" />
+  <item name="Standard-Client und erweiterten Client verwenden" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <item name="Anmelden und abmelden" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+  <item name="Tastenkürzel" url="standard/b_keyboard_shortcut_keys.htm" />
+</book>
+<book name="In der Mailbox navigieren" >
+  <item name="In der Mailbox navigieren" url="standard/b_navigating_around_your_mailbox.htm" />
+  <item name="In der Mail navigieren" url="standard/b_how_to_navigate_with_mail.htm" />
+  <item name="Einstellungen festlegen" url="standard/b_setting_your_options.htm" />
+  <item name="Account-Kontingent verwalten" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</book>
+<book name="Mails verwalten" >
+  <item name="Mails verwalten" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+  <item name="Anzeige der Mails einrichten" url="standard/b_managing_how_email_is_displayed.htm" />
+  <item name="Startansicht der Mailbox anpassen" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+  <item name="Mails im HTML-Format oder als Plain-Text anzeigen" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <item name="Mails verschieben" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+  <item name="Mails drucken" url="standard/b_printing_email_messages.htm" />
+  <item name="Papierkorb verwenden" url="standard/using_the_trash_folder.htm" />
+  <item name="Gelöschte Mails wiederherstellen" url="standard/recovering_deleted_mail_messages.htm" />
+  <item name="Mails löschen" url="standard/b_purging_email_messages.htm" />
+  <item name="Spam entfernen" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+  <item name="RSS-/ATOM-Feeds abonnieren" url="standard/subscribing_to_rss_atom_feeds.htm" />
+  <item name="Abwesenheits-Mail einrichten" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</book>
+<book name="Mails lesen" >
+  <item name="Mails lesen" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <item name="Lesefenster verwenden" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+  <item name="Mails als ungelesen markieren" url="standard/b_marking_mail_as_unread.htm" />
+  <item name="Anhänge einer Mail öffnen" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+  <item name="Empfang neuer Mails erkennen" url="standard/b_how_do_i_know_when_i_receive_new_messages.htm" />
+</book>
+<book name="Mails verfassen" >
+  <item name="Neue Mails verfassen" url="standard/b_composing_email_message.htm" />
+  <item name="Mail adressieren" url="zwc_help_files/3_compose/addressing_a_message.htm" />
+  <item name="Dateien an Mails anhängen" url="standard/b_attaching_files_to_your_message.htm" />
+  <item name="Signatur automatisch einfügen" url="standard/b_automatically_adding_your_signature.htm" />
+  <item name="Mail als Entwurf speichern" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+  <item name="Prioriätsstufe einer Mail kennzeichnen" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+</book>
+<book name="Mails beantworten und weiterleiten" >
+  <item name="Mails beantworten" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <item name="Einstellungen für Mail-Antworten einrichten" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+  <item name="Mails weiterleiten" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+  <item name="Empfangene Mails automatisch weiterleiten" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+</book>
+<book name="Adressbücher verwalten" >
+  <item name="Adressbücher" url="standard/b_your_address_books.htm" />
+  <item name="Adressbücher verwenden" url="standard/b_using_address_books.htm" />
+  <item name="Neue Kontakte hinzufügen" url="standard/b_adding_new_contacts.htm" />
+  <item name="Kontaktliste importieren" url="standard/b_importing_a_contact_list.htm" />
+  <item name="Kontaktliste exportieren" url="standard/exporting_a_contact_list.htm" />
+  <item name="Kontaktnamen drucken" url="standard/printing_contact_names.htm" />
+</book>
+<book name="Kalender verwalten" >
+  <item name="Wissenswertes zum Kalender" url="standard/b_about_calendar.htm" />
+  <item name="Neuen Kalender erstellen" url="standard/b_create_new_calendar.htm" />
+  <item name="Kalender farbcodieren" url="standard/adding_background_color_to_calendars.htm" />
+  <item name="Kalenderansichten" url="standard/calendar_views.htm" />
+  <item name="iCalendars importieren" url="standard/importing_icalendars.htm" />
+  <item name="iCalendars exportieren" url="standard/b_exporting_icalenders.htm" />
+  <item name="Kalender bereinigen" url="standard/b_cleaning_up_your_calendar.htm" />
+</book>
+<book name="Termine planen" >
+  <item name="Besprechung anlegen" url="standard/b_scheduling_a_meeting.htm" />
+  <item name="Wiederkehrende Termine anlegen" url="standard/b_creating_recurring_appointments.htm" />
+  <item name="Besprechung absagen" url="standard/b_canceling_a_meeting.htm" />
+</book>
+<book name="Aufgabenlisten nutzen" >
+  <item name="Aufgabenlisten nutzen" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+  <item name="Aufgabe ändern" url="standard/changing_a_task.htm" />
+</book>
+<book name="Im Ordner &quot;Dateien&quot; arbeiten" >
+  <item name="Im Ordner &quot;Dateien&quot; arbeiten" url="standard/b_working_in_briefcase.htm" />
+</book>
+<book name="Ordner freigeben" >
+  <item name="Links zu freigegebenen Kalendern einrichten" url="standard/linke_to_shared_calendars.htm" />
+  <item name="Links zu freigegebenen Adressbüchern einrichten" url="standard/link_to_shared_address_books.htm" />
+</book>
+<book name="Nach Objekten suchen" >
+  <item name="Suche durchführen" url="standard/b_using_search.htm" />
+  <item name="Suchabfrage erstellen und speichern" url="standard/b_create_and_save_a_search_query.htm" />
+  <item name="Suchsyntax" url="zwc_help_files/12_search/search_syntax.htm" />
+  <item name="Platzhalter * bei der Suche nutzen" url="zwc_help_files/12_search/using_as_a_wildcard_in_search.htm" />
+  <item name="Probleme bei der Suche nach Anhängen mit nicht westeuropäischem Zeichensatz" url="standard/search_issues_with_non-western_language_attachments.htm" />
+  <item name="Mails suchen, die von einem Kontakt empfangen oder gesendet wurden" url="standard/searching_for_messages_sent_to_or_received_from_a_contact_name.htm" />
+  <item name="Mails suchen, die vom Absender gesendet oder empfangen wurden" url="standard/searching_for_messages_sent_to_or_from_the_sender.htm" />
+</book>
+<book name="Objekte mit Tags und Ordnern organisieren" >
+  <item name="Mails und Kontakte mit Tags versehen" url="standard/b_assigning_tags_to_messages_and_contacts.htm" />
+  <item name="Mails markieren" url="standard/b_flagging_an_email_message.htm" />
+  <item name="Ordner löschen" url="standard/bc_deleting_folders.htm" />
+</book>
+<book name="Mailfilter verwenden" >
+  <item name="Mails filtern" url="standard/bc_filtering_your_messages.htm" />
+  <item name="Filterbedingungen" url="standard/b_filter_conditions.htm" />
+</book>
+
+</tocdata>

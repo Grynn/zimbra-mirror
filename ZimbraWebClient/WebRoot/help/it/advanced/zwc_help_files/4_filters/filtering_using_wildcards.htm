@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\zwcHelp\zimbra_user_help_source\4_filters.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Filtro usando i caratteri jolly</title>
+<link rel="stylesheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Uso dei filtri di posta\nFiltro usando i caratteri jolly");
+addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Casa", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">Uso dei filtri di posta<\/a> &gt; Filtro usando i caratteri jolly<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Attività di filtro tramite caratteri jolly</p>
+<p class="FM_Body">I caratteri jolly possono essere usati nelle operazioni di confronto basate sull'utilizzo dell'operatore &quot;Corrisponde al criterio&quot;. I due caratteri jolly sono * e ?</p>
+<p class="FM_2Heading">Asterisco (*)</p>
+<p class="FM_Body">L'asterisco * è un segnaposto per &quot;zero o più caratteri di qualsiasi tipo&quot;.</p>
+<p class="FM_Body">Esempio di stringa di ricerca di un oggetto: banana*cioccolato</p>
+<p class="FM_Body">Con Corrisponde a: oggetti come &quot;banana con cioccolato&quot;, &quot;banana al cioccolato&quot;, &quot;banana-cioccolato&quot; ma non &quot;panna-banana-cioccolato&quot;</p>
+<p class="FM_Body">Esempio di stringa di ricerca di un oggetto: p*ombrelli</p>
+<p class="FM_Body">Con Corrisponde a: oggetti come &quot;portaombrelli&quot; o &quot;poggiaombrelli&quot; ma non &quot;portati ombrelli neri&quot;</p>
+<p class="FM_2Heading">Punto interrogativo (?)</p>
+<p class="FM_Body">Il punto interrogativo è un segnaposto per &quot;un solo carattere&quot;.</p>
+<p class="FM_Body">Esempio di stringa di ricerca di un oggetto: banana?cioccolato</p>
+<p class="FM_Body">Con Corrisponde a: oggetti come &quot;banana-cioccolato&quot;, &quot;banana/cioccolato&quot;, &quot;banana&cioccolato&quot; o &quot;banana cioccolato&quot;</p>
+<p class="FM_2Heading">Carattere di escape barra rovesciata: \</p>
+<p class="FM_Body">Se necessario, puoi specificare una corrispondenza esatta per una stringa contenente caratteri che in genere vengono considerati caratteri jolly, ad esempio una parola in un oggetto preceduta e seguita da tre asterischi, come nel caso di</p>
+<p class="FM_Body">***MORE MONEY!!!*** o</p>
+<p class="FM_Body">***OMAGGIO GRATUITO***</p>
+<p class="FM_Body">Per indicare che un carattere jolly è un carattere vero e proprio anziché un segnaposto, è necessario farlo precedere da una barra rovesciata (\). La stringa di confronto &quot;\*\*\**\*\*\*&quot;, ad esempio, specifica un oggetto composto da una stringa preceduta e seguita da tre asterischi (spazi inclusi).</p>
+<p class="FM_Body">&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

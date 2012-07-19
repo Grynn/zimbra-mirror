@@ -1,0 +1,90 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="Version" >
+  <topic name="Standard-Client und erweiterten Client verwenden" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <topic name="Dateien im Ordner &quot;Dateien&quot; ein- und auschecken" url="zwc_help_files/10_briefcase/checking_out_and_checking_in_files_to_briefcase.htm" />
+</key>
+<key name="Versionsverlauf anzeigen" >
+  <topic name="Versionsverlauf einer Datei im Ordner &quot;Dateien&quot; anzeigen" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  <key name="Datei im Ordner &quot;Dateien&quot;" >
+    <topic name="Versionsverlauf einer Datei im Ordner &quot;Dateien&quot; anzeigen" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  </key>
+</key>
+<key name="Verteiler" >
+  <topic name="Verteiler erstellen" url="zwc_help_files/6_address_book/create_distribution_lists.htm" />
+</key>
+<key name="Verteiler ändern" >
+  <topic name="Verteiler ändern" url="zwc_help_files/6_address_book/modify_a_distribution_list.htm" />
+</key>
+<key name="Verteiler verwalten" >
+  <topic name="Verteiler verwalten" url="zwc_help_files/6_address_book/managing_distribution_lists.htm" />
+</key>
+<key name="Verteilerliste, Abonnement kündigen" >
+  <topic name="Abonnement einer Verteilerliste kündigen" url="zwc_help_files/6_address_book/unsubscribe_to_a_distribution_list.htm" />
+</key>
+<key name="Vertrauenswürdige Adressen" >
+  <topic name="Liste mit vertrauenswürdigen Adressen verwalten" url="zwc_help_files/2_manage_email/maintaining_a_trusted_addresses_list.htm" />
+</key>
+<key name="Verwalten" >
+  <topic name="Mobilgeräte verwalten" url="zwc_help_files/11_mobile/managing_your_mobile_devices.htm" />
+  <topic name="Freigegebene Objekte verwalten" url="zwc_help_files/13_sharing/managing_your_shared_items.htm" />
+  <key name="Freigegebene Objekte" >
+    <topic name="Freigegebene Objekte verwalten" url="zwc_help_files/13_sharing/managing_your_shared_items.htm" />
+  </key>
+  <key name="Mobilgeräte" >
+    <topic name="Mobilgeräte verwalten" url="zwc_help_files/11_mobile/managing_your_mobile_devices.htm" />
+  </key>
+</key>
+<key name="Verzögert absenden, Mail" >
+  <topic name="Mail verfassen und senden" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="Von rechts nach links schreiben" >
+  <topic name="Account-Ansicht personalisieren" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="Warnmeldungen" >
+  <topic name="Desktop-Warnmeldungen für neue Mails festlegen" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+</key>
+<key name="Weitergeleitete Mail" >
+  <topic name="Einstellungen für weitergeleitete Mails festlegen" url="zwc_help_files/3_compose/set_preferences_for_forwarded_email.htm" />
+</key>
+<key name="Wildcard" >
+  <topic name="Erweiterte Suche durchführen" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+  <topic name="Das Zeichen * als Wildcard in einer Suche verwenden" url="zwc_help_files/12_search/using_as_a_wildcard_in_search.htm" />
+  <topic name="Filtern mit Wildcards" url="zwc_help_files/4_filters/filtering_using_wildcards.htm" />
+</key>
+<key name="Wipe" >
+  <topic name="Mobilgerät mit der Wipe-Funktion löschen" url="zwc_help_files/11_mobile/wipe_your_mobile_device.htm" />
+</key>
+<key name="Wipe-Funktion anstehend" >
+  <topic name="Mobilgerät mit der Wipe-Funktion löschen" url="zwc_help_files/11_mobile/wipe_your_mobile_device.htm" />
+</key>
+<key name="Wörterbuch für die Rechtschreibprüfung" >
+  <topic name="Wörter zum Rechtschreibwörterbuch hinzufügen" url="zwc_help_files/3_compose/adding_words_to_the_spell_dictionary.htm" />
+</key>
+<key name="Zeitplanung" >
+  <topic name="Ausrüstung planen" url="zwc_help_files/8_scheduling/scheduling_equipment.htm" />
+  <key name="Ausrüstung" >
+    <topic name="Ausrüstung planen" url="zwc_help_files/8_scheduling/scheduling_equipment.htm" />
+  </key>
+</key>
+<key name="Zeitzone" >
+  <topic name="Standardzeitzone ändern" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+<key name="Zertifikate zu Adressbuch hinzufügen" >
+  <topic name="Kontakten im Adressbuch Zertifikate hinzufügen" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+</key>
+<key name="Zimlet-Galerie" >
+  <topic name="Eigene Zimlets verwalten" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+</key>
+<key name="Zimlets" >
+  <topic name="Zimlet deaktivieren" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+  <topic name="Eigene Zimlets verwalten" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+</key>
+<key name="Zimlets nutzen" >
+  <topic name="Zimlets nutzen" url="zwc_help_files/14_zimlets/using_zimlets.htm" />
+</key>
+<key name="Zugriffsberechtigungen" >
+  <topic name="Zugriffsberechtigungen" url="zwc_help_files/13_sharing/access_privileges.htm" />
+</key>
+
+</indexdata>

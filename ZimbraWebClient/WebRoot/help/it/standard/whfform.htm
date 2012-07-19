@@ -1,9 +1,8 @@
-﻿<html><!-- saved from url=(0014)about:internet -->
-
+﻿<html>
 <head>
 <title>Search Form</title>
 
-<meta name="generator" content="Adobe RoboHelp 8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
 <meta name="description" content="WebHelp 5.50" />
 </head>
 <style>
@@ -173,18 +172,18 @@ if (window.gbWhForm)
 	gsMaxSearchTitle = "Search results per page" ;
 	gsMaxSearchTitle = "Risultati della ricerca per pagina";
 	setGoImage1("wht_go.gif");
-	setBackgroundcolor("#e9e9e9");
+	setBackgroundcolor("#dddddd");
 	
 	setBtnType("image");
-	setGoImage1("toolbar_searchbtn.gif");
+	setGoImage1("go.gif");
 	
 	
 	setGoText("Vai");
-	setFont("Title", "Arial","10pt","Black","Normal","Normal","none");
+	setFont("Title", "Tahoma","8pt","Black","Normal","Normal","none");
 	
 	
 	var strHiliteSearchSetting = "enable,yellow,black";
-	strHiliteSearchSetting = "enable,silver,black";
+	strHiliteSearchSetting = "enable,#b2b4bf,black";
 	var searchSetting = strHiliteSearchSetting.match("^(.+),(.+),(.*)$");
 	if(searchSetting != null && searchSetting[1] == "enable")
 		setHighlightSearch(true);

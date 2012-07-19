@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>S/MIME zum Senden und Empfangen signierter und verschlüsselter Mails einrichten</title>
+<link rel="StyleSheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Sichere Mails senden (nur Network Edition)\nS/MIME zum Senden und Empfangen signierter und verschlüsselter Mails einrichten");
+addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Startseite", "../../advanced_web_client.htm");
+document.write("<a href=\"setting_up_smime.htm\">Sichere Mails senden (nur Network Edition)<\/a> &gt; S/MIME zum Senden und Empfangen signierter und verschlüsselter Mails einrichten<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">S/MIME zum Senden und Empfangen signierter und verschlüsselter Mails einrichten</p>
+<p class="FM_Notice"><span style="font-weight: bold;"><b>Hinweis</b></span>: Diese Funktion ist nur für ZCS Network Edition vorgesehen und nur im erweiterten Webclient verfügbar.</p>
+<p class="FM_Body"><span style="mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin;  						 mso-ansi-language: EN-US; mso-fareast-language: EN-US;  						 mso-bidi-language: AR-SA;">Wenn die S/MIME-Funktion für Ihren Account aktiviert wurde, können Sie digital signierte und verschlüsselte Mails senden und empfangen.</span></p>
+<p class="FM_Body" style="mso-bidi-font-family: 'Times New Roman';"><span  	 style="mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US;  	 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Wenn Sie S/MIME mit dem @ClientNameLong@ verwenden möchten, müssen Sie über ein sicheres Mail-Signaturzertifikat verfügen, das für S/MIME-Signaturen und -Verschlüsselung geeignet ist. Das Zertifikat mit dem privaten Schlüssel muss im lokalen Zertifikatspeicher auf einem Windows-Computer, MacOSX-Computer oder bei Verwendung von Firefox im Browser-Zertifikatspeicher gespeichert werden. Informationen zum Installieren des Zertifikats finden Sie in der Dokumentation für den Computer bzw. Browser.</span></p>
+<p class="FM_Body"><span style="mso-fareast-font-family: Calibri; mso-bidi-font-family: 'Times New Roman';  						 mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US;  						 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Damit Sie verschlüsselte und signierte Mails senden und empfangen können, müssen Ihr öffentlicher Schlüssel und der öffentliche Schlüssel des Empfängers ausgetauscht werden. Um eine Kopie des öffentlichen Schlüssels des Empfängers zu erhalten, können Sie eine digital signierte Mail mit Ihrem Zertifikat an den Empfänger senden und anfordern, dass er Ihnen mit einer digital signierten Mail antwortet. Beim Empfang der Mail wird das Zertifikat des Empfängers auf der Kontaktseite des Empfängers im Adressbuch gespeichert oder es wird automatisch ein Kontakt erstellt.</span></p>
+<p class="FM_Body">Beachten Sie beim Arbeiten mit verschlüsselten Mails die folgenden Unterschiede:</p>
+<ul type="disc">
+	<li><p class="FM_Body"><span style="mso-fareast-font-family: Calibri;  								 mso-fareast-theme-font: minor-latin; mso-ansi-language: EN-US;  								 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Wenn Sie Ihren Posteingang freigeben, können delegierte Nutzer Ihre verschlüsselten Mails nicht von ihren Computern aus lesen. Zum Lesen verschlüsselter Mails ist Ihr privater Schlüssel erforderlich</span>.</p></li>
+	<li><p class="FM_Body"><span style="mso-ansi-language: EN-US; mso-fareast-language: EN-US;  								 mso-bidi-language: AR-SA;">Sie können keinen Entwurf einer verschlüsselten Mail speichern.</span></p></li>
+	<li><p class="FM_Body"><span style="mso-fareast-theme-font: minor-latin;  								 mso-ansi-language: EN-US; mso-fareast-language: EN-US;  								 mso-bidi-language: AR-SA;">Sie können keine Rechtschreibprüfung für verschlüsselte Mails durchführen.</span></p></li>
+	<li><p class="FM_Body"><span style="mso-fareast-font-family: Calibri;  								 mso-fareast-theme-font: minor-latin; mso-ansi-language: EN-US;  								 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Im Text oder in Anhängen von verschlüsselten Mails kann nicht nach Text gesucht werden.</span><span style="mso-spacerun: yes;"></span><span  	 style="mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin;  	 mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Nur die Kopfzeileninformationen wie Empfänger oder Absender, Absendedatum oder Betreff können durchsucht werden.</span></p></li>
+</ul>
+<p style="font-family: Arial, sans-serif; line-height: 115%; mso-ascii-theme-font: minor-latin; 
+	 mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin; 
+	 mso-hansi-theme-font: minor-latin; mso-bidi-font-family: 'Times New Roman'; 
+	 mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: EN-US; 
+	 mso-bidi-language: AR-SA;"></p>
+<p style="font-family: Arial, sans-serif;"></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

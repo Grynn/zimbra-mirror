@@ -1,0 +1,112 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="Abmelden" >
+  <topic name="Anmelden und Abmelden" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+</key>
+<key name="Abwesenheitsbenachrichtigung" >
+  <topic name="Abwesenheits-Mail einrichten" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="Abwesenheitsmeldung" >
+  <topic name="Abwesenheits-Mail einrichten" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="Account-Kontingent" >
+  <topic name="Account-Kontingent verwalten" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</key>
+<key name="Anhänge" >
+  <topic name="Anhänge einer Mail öffnen" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</key>
+<key name="Anhänge entfernen" >
+  <topic name="Anhänge einer Mail öffnen" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</key>
+<key name="Anmelden" >
+  <topic name="Anmelden und Abmelden" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+</key>
+<key name="Aufgabenlisten nutzen" >
+  <topic name="Aufgabenlisten nutzen" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+</key>
+<key name="Entwurf" >
+  <topic name="Mail als Entwurf speichern" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+</key>
+<key name="Entwurf speichern" >
+  <topic name="Mail als Entwurf speichern" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+</key>
+<key name="Erweiterter Webclient" >
+  <topic name="Standard-Client und erweiterten Client verwenden" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="Filterbedingungen" >
+  <topic name="Filterbedingungen" url="zwc_help_files/4_filters/filter_conditions.htm" />
+</key>
+<key name="HTML" >
+  <topic name="Suchsyntax" url="zwc_help_files/12_search/search_syntax.htm" />
+  <topic name="Mails im HTML-Format oder als Plain-Text anzeigen" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <topic name="Mails im HTML-Format verfassen" url="zwc_help_files/3_compose/using_html_to_compose_messages.htm" />
+</key>
+<key name="Junk" >
+  <topic name="Spam entfernen" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="Lesefenster" >
+  <topic name="Lesefenster verwenden" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+<key name="Lesefenster ein- oder ausgeblendet" >
+  <topic name="Lesefenster verwenden" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+<key name="Mail" >
+  <topic name="Mail lesen" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <key name="Lesen" >
+    <topic name="Mail lesen" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  </key>
+</key>
+<key name="Mail verschieben" >
+  <topic name="Mails verschieben" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+</key>
+<key name="Mail-Antworten" >
+  <topic name="Einstellungen für Mail-Antworten festlegen" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+</key>
+<key name="Mailansicht ändern" >
+  <topic name="Mails verwalten" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="Mails" >
+  <topic name="Mails beantworten" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <key name="Antworten" >
+    <topic name="Mails beantworten" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  </key>
+</key>
+<key name="Mails weiterleiten" >
+  <topic name="Empfangene Mails automatisch weiterleiten" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <topic name="Mails weiterleiten" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+</key>
+<key name="Prioritätsstufe" >
+  <topic name="Prioriätsstufe einer Mail kennzeichnen" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+</key>
+<key name="Spam" >
+  <topic name="Spam entfernen" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="Spam-Ordner leeren" >
+  <topic name="Spam entfernen" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="Standard-Webclient" >
+  <topic name="Standard-Client und erweiterten Client verwenden" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="Standardmailsuche" >
+  <topic name="Startansicht der Mailbox anpassen" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+</key>
+<key name="Standardzeitzone" >
+  <topic name="Standardzeitzone ändern" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+<key name="Unterhaltung" >
+  <topic name="Mails verwalten" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="Version" >
+  <topic name="Standard-Client und erweiterten Client verwenden" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="Weitergeleitete Mail" >
+  <topic name="Einstellungen für weitergeleitete Mails festlegen" url="zwc_help_files/3_compose/set_preferences_for_forwarded_email.htm" />
+</key>
+<key name="Wildcard" >
+  <topic name="Das Zeichen * als Wildcard in einer Suche verwenden" url="zwc_help_files/12_search/using_as_a_wildcard_in_search.htm" />
+</key>
+<key name="Zeitzone" >
+  <topic name="Standardzeitzone ändern" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+
+</indexdata>

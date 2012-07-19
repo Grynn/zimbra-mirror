@@ -1,0 +1,134 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="riquadro di navigazione" >
+  <topic name="Navigazione in Zimbra Web Client" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+</key>
+<key name="risposte via email" >
+  <topic name="Impostazione delle Preferenze per le risposte email" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+</key>
+<key name="rubrica" >
+  <topic name="Aggiunta di membri a un elenco Gruppo contatti" url="zwc_help_files/6_address_book/adding_members_to_a_contact_group_list.htm" />
+  <topic name="Esportazione di una rubrica" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  <topic name="Aggiunta automatica dei contatti all'elenco Contatti usati per email" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+  <topic name="Importazione di una rubrica" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  <topic name="Uso delle rubriche" url="zwc_help_files/6_address_book/using_address_books.htm" />
+  <key name="esportazione" >
+    <topic name="Esportazione di una rubrica" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  </key>
+  <key name="importazione" >
+    <topic name="Importazione di una rubrica" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  </key>
+</key>
+<key name="ruolo" >
+  <topic name="Condivisione di una cartella dalla pagina Condivisione della scheda Preferenze" url="zwc_help_files/13_sharing/share_a_folder_from_the_preferences_sharing_page.htm" />
+</key>
+<key name="S/MIME, aggiunta alla rubrica" >
+  <topic name="Aggiunta di certificati ai contatti nella Rubrica" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+</key>
+<key name="S/MIME, composizione messaggio" >
+  <topic name="Composizione e invio di un messaggio con firma digitale" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="S/MIME, impostazione" >
+  <topic name="Configurazione della funzione S/MIME per inviare e ricevere messaggi email firmati e criptati" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+</key>
+<key name="salvataggio di bozze" >
+  <topic name="Salvataggio di un messaggio come bozza" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+</key>
+<key name="Servizio vocale, ascoltare i messaggi" >
+  <topic name="Ascoltare un messaggio vocale" url="zwc_help_files/voiceservice/listening_to_a_voice_mail_message.htm" />
+</key>
+<key name="sintassi di ricerca" >
+  <topic name="Esecuzione di una ricerca avanzata" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="spam" >
+  <topic name="Rimozione dello spam" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="spazio a disposizione dall'account" >
+  <topic name="Gestione dello spazio disponibile dell'account" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</key>
+<key name="spostamento messaggio" >
+  <topic name="Spostamento dei messaggi email" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+</key>
+<key name="stampa" >
+  <topic name="Stampa di un messaggio email" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
+  <topic name="Stampa di un'agenda" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  <topic name="Stampa di una conversazione (tutti i messaggi)" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  <key name="Agenda" >
+    <topic name="Stampa di un'agenda" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  </key>
+  <key name="conversazione" >
+    <topic name="Stampa di una conversazione (tutti i messaggi)" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  </key>
+  <key name="messaggio email" >
+    <topic name="Stampa di un messaggio email" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
+  </key>
+</key>
+<key name="stampa cartella impegni" >
+  <topic name="Stampa di un impegno o di un elenco impegni" url="zwc_help_files/9_tasks/printing_a_task_or_task_list.htm" />
+</key>
+<key name="stampa rubrica" >
+  <topic name="Stampa di un nome del contatto o di una rubrica" url="zwc_help_files/6_address_book/printing_a_contact_name_or_address_book.htm" />
+</key>
+<key name="svuotamento cestino" >
+  <topic name="Svuotamento della cartella Cestino" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+</key>
+<key name="svuotamento posta indesiderata" >
+  <topic name="Rimozione dello spam" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="tag" >
+  <topic name="Rimozione di un tag" url="zwc_help_files/5_organize_account/remove_a_tag.htm" />
+</key>
+<key name="tasti di scelta rapida" >
+  <topic name="Uso dei tasti di scelta rapida dalla tastiera" url="zwc_help_files/1_setting_up/using_keyboard_shortcuts.htm" />
+</key>
+<key name="tema" >
+  <topic name="Personalizzazione della vista dell'account" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="tipo di caratteri" >
+  <topic name="Personalizzazione della vista dell'account" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="uscita" >
+  <topic name="Accesso e uscita" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+</key>
+<key name="uso di zimlet" >
+  <topic name="Uso degli zimlet" url="zwc_help_files/14_zimlets/using_zimlets.htm" />
+</key>
+<key name="uso elenchi impegni" >
+  <topic name="Uso dell'Elenco impegni" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+</key>
+<key name="valigetta" >
+  <topic name="Eliminazione di un documento dalla valigetta" url="zwc_help_files/10_briefcase/delete_a_document_from_briefcase.htm" />
+  <topic name="Spostamento dei file nella valigetta" url="zwc_help_files/10_briefcase/move_files_in_briefcase.htm" />
+  <topic name="Aggiunta di file alle cartelle Valigetta" url="zwc_help_files/10_briefcase/adding_files_to_your_briefcase_folders.htm" />
+</key>
+<key name="versione" >
+  <topic name="Utilizzo dei client avanzati e standard" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <topic name="Checkout e checkin dei file nella valigetta" url="zwc_help_files/10_briefcase/checking_out_and_checking_in_files_to_briefcase.htm" />
+</key>
+<key name="vista elenco" >
+  <topic name="Visualizzazione della attività dell'agenda in un elenco" url="zwc_help_files/7_calendars/viewing_calendar_activities_in_a_list.htm" />
+</key>
+<key name="vista schermo" >
+  <topic name="Navigazione in Zimbra Web Client" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+</key>
+<key name="vista settimana lavorativa" >
+  <topic name="Utilizzo delle agende" url="zwc_help_files/7_calendars/working_with_calendars.htm" />
+</key>
+<key name="visualizzazione cronologia versioni" >
+  <topic name="Visualizzazione della cronologia versione di un file Valigetta" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  <key name="file della valigetta" >
+    <topic name="Visualizzazione della cronologia versione di un file Valigetta" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  </key>
+</key>
+<key name="visualizzazione di più agende" >
+  <topic name="Visualizzazione di più agende" url="zwc_help_files/7_calendars/view_multiple_calendars.htm" />
+</key>
+<key name="visualizzazione originale" >
+  <topic name="Individuazione dell'origine di un messaggio email" url="zwc_help_files/2_manage_email/finding_the_origin_of_an_email_message.htm" />
+</key>
+<key name="zimlet" >
+  <topic name="Disattivazione di uno zimlet" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+  <topic name="Gestione degli zimlet" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+</key>
+
+</indexdata>
