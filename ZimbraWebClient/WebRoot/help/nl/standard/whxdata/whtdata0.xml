@@ -1,0 +1,102 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<book name="Aan de slag" >
+  <item name="Aan de slag met ZCS Basic Web Client" url="zimbra_basic_user_help.htm" />
+  <item name="Geavanceerde en standaardclients gebruiken" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <item name="Aanmelden en afmelden" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+  <item name="Toetsenbordsneltoetsen" url="standard/b_keyboard_shortcut_keys.htm" />
+</book>
+<book name="Navigeren in je postvak" >
+  <item name="Navigeren in je postvak" url="standard/b_navigating_around_your_mailbox.htm" />
+  <item name="Navigeren met E-mail" url="standard/b_how_to_navigate_with_mail.htm" />
+  <item name="Je voorkeuren instellen" url="standard/b_setting_your_options.htm" />
+  <item name="Je accountquotum beheren" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</book>
+<book name="E-mail beheren" >
+  <item name="E-mail beheren" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+  <item name="Beheren hoe e-mail wordt getoond" url="standard/b_managing_how_email_is_displayed.htm" />
+  <item name="De eerste weergave van je postvak aanpassen" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+  <item name="Berichten in HTML-indeling of als platte tekst weergeven" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <item name="E-mailberichten verplaatsen" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+  <item name="E-mailberichten afdrukken" url="standard/b_printing_email_messages.htm" />
+  <item name="Prullenbak gebruiken" url="standard/using_the_trash_folder.htm" />
+  <item name="Verwijderde e-mailberichten herstellen" url="standard/recovering_deleted_mail_messages.htm" />
+  <item name="E-mailberichten verwijderen" url="standard/b_purging_email_messages.htm" />
+  <item name="Spam verwijderen" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+  <item name="Abonneren op RSS/ATOM-feeds" url="standard/subscribing_to_rss_atom_feeds.htm" />
+  <item name="Een Afwezigheidsbericht opstellen" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</book>
+<book name="Mail lezen" >
+  <item name="Mail lezen" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <item name="Een Leesdeelvenster gebruiken" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+  <item name="E-mail als niet-gelezen markeren" url="standard/b_marking_mail_as_unread.htm" />
+  <item name="Bijlagen bij een e-mailbericht openen" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+  <item name="Hoe weet ik dat ik een nieuw e-mailbericht heb ontvangen?" url="standard/b_how_do_i_know_when_i_receive_new_messages.htm" />
+</book>
+<book name="E-mail opstellen" >
+  <item name="Nieuwe e-mailberichten opstellen" url="standard/b_composing_email_message.htm" />
+  <item name="Een bericht adresseren" url="zwc_help_files/3_compose/addressing_a_message.htm" />
+  <item name="Bestanden toevoegen aan berichten" url="standard/b_attaching_files_to_your_message.htm" />
+  <item name="Automatisch je handtekening toevoegen" url="standard/b_automatically_adding_your_signature.htm" />
+  <item name="Een bericht als Concept opslaan" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+  <item name="Het prioriteitsniveau van een bericht markeren" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+</book>
+<book name="Berichten beantwoorden en doorsturen" >
+  <item name="E-mailberichten beantwoorden" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <item name="Voorkeuren voor e-mailantwoorden instellen" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+  <item name="E-mailberichten doorsturen" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+  <item name="Automatisch ontvangen berichten doorsturen" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+</book>
+<book name="Je adresboeken beheren" >
+  <item name="Je adresboeken" url="standard/b_your_address_books.htm" />
+  <item name="Adresboeken gebruiken" url="standard/b_using_address_books.htm" />
+  <item name="Nieuwe contacten toevoegen" url="standard/b_adding_new_contacts.htm" />
+  <item name="Lijst met contacten importeren" url="standard/b_importing_a_contact_list.htm" />
+  <item name="Een lijst met contacten exporteren" url="standard/exporting_a_contact_list.htm" />
+  <item name="Contactnamen afdrukken" url="standard/printing_contact_names.htm" />
+</book>
+<book name="Je agenda beheren" >
+  <item name="Info over Agenda" url="standard/b_about_calendar.htm" />
+  <item name="Nieuwe agenda maken" url="standard/b_create_new_calendar.htm" />
+  <item name="Agenda's kleurcoderen" url="standard/adding_background_color_to_calendars.htm" />
+  <item name="Agendaweergaven" url="standard/calendar_views.htm" />
+  <item name="iCalendars importeren" url="standard/importing_icalendars.htm" />
+  <item name="iCalenders exporteren" url="standard/b_exporting_icalenders.htm" />
+  <item name="Je agenda opschonen" url="standard/b_cleaning_up_your_calendar.htm" />
+</book>
+<book name="Afspraken plannen" >
+  <item name="Vergadering maken" url="standard/b_scheduling_a_meeting.htm" />
+  <item name="Terugkerende afspraken maken" url="standard/b_creating_recurring_appointments.htm" />
+  <item name="Een vergadering annuleren" url="standard/b_canceling_a_meeting.htm" />
+</book>
+<book name="Taaklijsten gebruiken" >
+  <item name="Taaklijsten gebruiken" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+  <item name="Taak wijzigen" url="standard/changing_a_task.htm" />
+</book>
+<book name="Met de Aktetas werken" >
+  <item name="Met de Aktetas werken" url="standard/b_working_in_briefcase.htm" />
+</book>
+<book name="Mappen delen" >
+  <item name="Koppelen naar gedeelde agenda's" url="standard/linke_to_shared_calendars.htm" />
+  <item name="Koppeling naar gedeelde adresboeken" url="standard/link_to_shared_address_books.htm" />
+</book>
+<book name="Naar items zoeken" >
+  <item name="Zoeken gebruiken" url="standard/b_using_search.htm" />
+  <item name="Zoekopdrachten maken en opslaan" url="standard/b_create_and_save_a_search_query.htm" />
+  <item name="Zoeksyntaxis" url="zwc_help_files/12_search/search_syntax.htm" />
+  <item name="* als wildcard bij een zoekopdracht gebruiken" url="zwc_help_files/12_search/using_as_a_wildcard_in_search.htm" />
+  <item name="Problemen met bijlagen met niet-Westerse talen zoeken" url="standard/search_issues_with_non-western_language_attachments.htm" />
+  <item name="Berichten zoeken die door een contact verzonden of ontvangen zijn" url="standard/searching_for_messages_sent_to_or_received_from_a_contact_name.htm" />
+  <item name="Zoeken naar berichten die naar de afzender of door de afzender verzonden zijn" url="standard/searching_for_messages_sent_to_or_from_the_sender.htm" />
+</book>
+<book name="Labels en mappen gebruiken om items te organiseren" >
+  <item name="Labels toewijzen aan berichten en contacten" url="standard/b_assigning_tags_to_messages_and_contacts.htm" />
+  <item name="Een e-mailbericht van een vlag voorzien" url="standard/b_flagging_an_email_message.htm" />
+  <item name="Mappen verwijderen" url="standard/bc_deleting_folders.htm" />
+</book>
+<book name="Mailfilters gebruiken" >
+  <item name="Berichten filteren" url="standard/bc_filtering_your_messages.htm" />
+  <item name="Filtervoorwaarden" url="standard/b_filter_conditions.htm" />
+</book>
+
+</tocdata>

@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\review docs\SearchHelpTopics.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Descrizione del linguaggio della query di ricerca avanzata</title>
+<link rel="stylesheet" href="../searchhelptopics.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Ricerca di elementi\nCapire il linguaggio avanzato delle query di ricerca ");
+addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Casa", "../../advanced_web_client.htm");
+document.write("<a href=\"searching_your_account.htm\">Ricerca di elementi<\/a> &gt; Capire il linguaggio avanzato delle query di ricerca <\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Capire il linguaggio avanzato delle query di ricerca </p>
+<p class="FM_Body">In questa sezione viene descritta dettagliatamente la grammatica di ricerca usata nella @CollaborationProductShortName@ funzione di ricerca.</p>
+<p class="FM_2Heading">Struttura del linguaggio di query</p>
+<p class="FM_Body">Per eseguire ricerche semplici, è sufficiente inserire una parola nel boxino di ricerca. Nel caso di parole senza un operatore di ricerca, la query presume che la ricerca vada effettuata con l'operatore 'content' e restituisce come risultato qualsiasi parte di testo inclusa nel messaggio.</p>
+<p class="FM_Body">Le ricerche più avanzate possono essere eseguite specificando un <span  	 style="font-weight: bold;">operatore di ricerca</span>. L'operatore di ricerca è una parola chiave speciale seguita da due punti, a loro volta seguiti da qualche altro parametro specifico dell'operatore. Ad esempio,</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';">&#160;</span></span><span style="font-weight: bold;">in: In arrivo</span>&#160; – L'operatore è &quot;in&quot; e il parametro è &quot; In arrivo&quot;. Vengono restituiti i messaggi contenuti nella cartella &quot; In arrivo&quot;.</p></li>
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';">&#160;&#160;</span></span><span style="font-weight: bold;">from:qualcuno</span>&#160; – L'operatore   è &quot;from&quot; e il parametro è &quot;qualcuno&quot;. Vengono restituiti i messaggi che includono la parola &quot;qualcuno&quot; nell'indirizzo email.</p></li>
+</ul>
+<p class="FM_Body">È possibile far precedere le parole chiave dalla parola &quot;not&quot; per specificare elementi che non includono quel criterio, ad esempio <span style="font-weight: bold;">not in: in arrivo</span>. La ricerca non tiene conto di maiuscole e minuscole, quindi &quot;in:in arrivo&quot; è uguale a &quot;in:In arrivo&quot;. Il segno meno (<span style="font-weight: bold;">-</span>) è un sinonimo di <span style="font-weight: bold;">NOT</span>&#160;. <span style="font-weight: bold;">not in:inbox</span>&#160; equivale quindi a <span style="font-weight: bold;">-in:In arrivo</span></p>
+<p class="FM_Body">In genere non è necessario includere caratteri di punteggiatura nella stringa di ricerca dal momento che essi vengono ignorati dalla funzione di ricerca. Tuttavia, in alcuni   casi specifici, ad esempio se si cerca   l'ora '9:30' in un messaggio, è necessario racchiudere tra virgolette il parametro per ottenere i risultati desiderati. Ad esempio, <span style="font-weight: bold;">subject:&quot;9:30&quot;</span>&#160;   restituirà messaggi che includono nell'oggetto la stringa 9:30.</p>
+<p class="FM_Body">Caratteri consentiti nel parametro di ricerca:</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';">&#160;</span></span>I seguenti caratteri non possono essere inseriti in un parametro di ricerca a meno che non siano racchiusi tra virgolette: ~ '&#160;! # $ % ^ &amp; * ( ) _&#160;? / { }[ ]&#160;;&#160;:</p></li>
+	<li><p class="FM_Bulleted1">I seguenti caratteri sono consentiti in un parametro di ricerca solo se non si trovano in posizione iniziale: - + &lt; &gt;</p></li>
+</ul>
+<p class="FM_Notice"><span class="FM_Bold">Nota: &#160;&#160;</span>I caratteri speciali, come i simboli di trademark che fanno parte di una parola, vengono rimossi se la parola è indicizzata per la ricerca. Vengono ignorati in una ricerca. Per esempio, cercando Zimbra™ si otterranno tutti i riferimenti a Zimbra, compresi quelli privi del simbolo di trademark.</p>
+<p class="FM_2Heading">Termini di ricerca multipli</p>
+<p class="FM_Body">Se vengono inseriti più termini (separati da spazi), vengono uniti da un &quot; AND&quot; per impostazione predefinita. <span style="font-weight: bold;">in:in arrivo tim</span>&#160;significa &quot;mostrami i messaggi che sono nella casella in arrivo E che contengono la parola tim&quot;. Per le ricerche che usano più criteri, è possibile trovare elementi che soddisfano uno o tutti i criteri specificati. Attraverso l'opzione di ricerca Avanzate, puoi eseguire entrambi i tipi di ricerca.</p>
+<p class="FM_Body">In tutti i riquadri di ricerca, ad eccezione di Ricerca di base, vengono applicate le regole seguenti:</p>
+<p class="FM_Bulleted1">La ricerca di messaggi che soddisfano uno qualsiasi dei criteri specificati   viene chiamata ricerca <span style="font-weight: bold;">'OR'</span>&#160;,   in quanto il messaggio viene considerato una corrispondenza   se contiene o X o Y.</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1">Una ricerca di messaggi contenenti sia X che Y   viene definita ricerca '<span style="font-weight: bold;">AND'</span>&#160;. Per poter essere considerato una corrispondenza, infatti, il messaggio deve soddisfare&#160;tutti i criteri specificati. </p></li>
+	<li><p class="FM_Body">In una query, l'unico operatore visualizzato è &quot;OR&quot;. Se hai scelto di visualizzare la query nella barra di ricerca   mentre selezioni le opzioni di ricerca avanzata, il boxino di ricerca si aggiorna per mostrare la query risultante. Nelle ricerche di tipo <span style="font-weight: bold;">'AND'</span>&#160;, la parola <span style="font-weight: bold;">'AND'</span>   non appare.</p></li>
+</ul>
+<p class="FM_Body"><span style="font-weight: bold;">Suggerimento</span>: Uso di parentesi con AND e OR. Le parole racchiuse tra parentesi vengono considerate un'unità. Ad esempio <span style="font-weight: bold;">from: (john thomas)</span>&#160;è equivalente a <span style="font-weight: bold;">from:john AND from: thomas</span>. Se usi OR nelle parentesi, <span style="font-weight: bold;">from:(john o smith)</span>, la ricerca è per i risultati <span style="font-weight: bold;">from:john OR from: smith</span>.</p>
+<p class="FM_2Heading">Uso di * come carattere jolly nelle ricerche</p>
+<p class="FM_Body">L'asterisco (<span style="font-weight: bold;">*</span>) può essere usato come carattere jolly nelle ricerche per trovare contenuto che comprende parole simili fra loro.</p>
+<p class="FM_Body">Usa l'asterisco <span style="font-weight: bold;">*</span>&#160; come carattere jolly. Ad esempio, la ricerca <span style="font-weight: bold;">do*</span>&#160; restituisce parole come   <span style="font-style: italic;">donatore</span>, <span style="font-style: italic;">dono</span>, <span style="font-style: italic;">domanda</span>, ecc.</p>
+<p class="FM_Notice"><span class="FM_Bold">Nota: &#160;&#160;</span>Un asterisco a doppio byte in una query di ricerca non è considerato un carattere jolly e viene ignorat quando viene eseguita la ricerca.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

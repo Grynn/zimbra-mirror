@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\zwcHelp\zimbra_user_help_source\4_filters.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>ワイルドカードを使用してフィルターする</title>
+<link rel="stylesheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("メールフィルターを使用する\nワイルドカードを使用してフィルターする");
+addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "ホーム", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">メールフィルターを使用する<\/a> &gt; ワイルドカードを使用してフィルターする<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">ワイルドカードを使用してフィルターする</p>
+<p class="FM_Body">「パターンに一致」比較演算子を用いる比較では、ワイルドカードを使用できます。「*」と「?」の2つのワイルドカードがあります。</p>
+<p class="FM_2Heading">アスタリスク（*）</p>
+<p class="FM_Body">アスタリスク（*）は、「0文字以上の任意の文字を表す」プレースホルダーです。</p>
+<p class="FM_Body">件名欄の検索文字列の例：バナナ*フロート</p>
+<p class="FM_Body">一致の例：「バナナフロート」、「バナナリーフカセロールフロート」などの件名が一致します。「スーパーバナナフロート」は一致しません。</p>
+<p class="FM_Body">件名欄の検索文字列の例：白*靴</p>
+<p class="FM_Body">一致の例：「白い靴」や「白っぽい靴」などの件名が一致します。「白い靴を希望」は一致しません。</p>
+<p class="FM_2Heading">疑問符（?）</p>
+<p class="FM_Body">疑問符は、「1文字」を表すプレースホルダーです。</p>
+<p class="FM_Body">件名欄の検索文字列の例：バナナ?ボート</p>
+<p class="FM_Body">一致の例：「バナナのボート」、「バナナ-ボート」、「バナナ!ボート」、「バナナ（スペース）ボート」などの件名が一致します。</p>
+<p class="FM_2Heading">エスケープ文字－スラッシュ： \</p>
+<p class="FM_Body">普段ワイルドカードとしてみなされる文字を、ワイルドカードではなくその文字自体として検索文字列を指定したい場合があります。たとえば、次の例のように3つのアスタリスクで囲まれたテキストを検索文字として指定したいとします。</p>
+<p class="FM_Body">***MORE MONEY!!!***</p>
+<p class="FM_Body">***FREE GIFT***</p>
+<p class="FM_Body">ワイルドカードを他の文字の代わりではなく、その文字自体として指定するには、その文字のすぐ前にバックスラッシュ（\）を使用します。たとえば、「\*\*\**\*\*\*」と指定すると、前後が3つのアスタリスクで囲まれた任意の文字列（スペースを含む）が一致します。</p>
+<p class="FM_Body"> </p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Условия фильтра</title>
+<link rel="StyleSheet" href="../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
+</head>
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Использование почтовых фильтров\nУсловия фильтра");
+addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../zimbra_user_help.htm", "", "&gt;", "Домашний", "../zimbra_basic_user_help.htm");
+document.write("<a href=\"bc_filtering_your_messages.htm\">Использование почтовых фильтров<\/a> &gt; Условия фильтра<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Условия фильтра</p>
+<p class="FM_Body">Регистр букв правил фильтра не имеет значения, т.е. в правилах не учитываются заглавные буквы.</p>
+<p class="FM_2Heading">Условия</p>
+<p class="FM_Body">Текстовые поля сравнения включают следующие.</p>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>От.</b> Используется для указания имени в заголовке сообщения «От».</p></li>
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Кому.</b> Используется аналогично параметру «От», но выполняется поиск указанных имен в заголовке «Кому».</p></li>
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Копия.</b> Используется аналогично параметру «От», но выполняется поиск в заголовке «Копия».</p></li>
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Кому или Копия</b>. Используется аналогично параметру «От», но поиск выполняется в заголовках «Кому» и «Копия».</p></li>
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Тема.</b> Указываются данные из заголовка «Тема».</p></li>
+</ul>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Именованный заголовок.</b> При выборе этого параметра появляется дополнительное текстовое поле перед оператором сравнения (часть «содержит»). Этот параметр позволяет указывать любой заголовок сообщения. Можно указать не только стандартные поля «Кому» или «От», но также поля «Дата», «Обратный адрес» и другие специальные поля, которые могут содержаться в заголовке сообщения. Этот параметр можно использовать для фильтрации сообщений с «неправильными» заголовками, т. е. заголовками, которые не содержат стандартную для электронных сообщений информацию. Иногда в спаме, который генерируется автоматически, отсутствует информация в таких полях, как «Отправитель» или «Обратный адрес». Для указания проверяемого заголовка используется второе текстовое поле (поле, которое находится справа от оператора сравнения).</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Размер.</b> Этот параметр используется для указания сообщения, размер которого больше или меньше указанного. Размер сообщения включает любые файловые вложения. Этот параметр можно использовать для удаления сообщений слишком большого размера.</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Дата.</b> Этот параметр используется для указания сообщения, отправленного до или после определенной даты.</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Тело письма.</b> Параметры для тела письма «содержит» или «не содержит» позволяют указать соответствующие слова в теле письма. Устанавливать фильтры для слов в файловых вложениях нельзя.</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Вложение.</b> Можно установить фильтр для сообщений, которые содержат или не содержат файловые вложения.</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Адрес в.</b> Проверка наличия адреса в контактах. В следующем текстовом поле можно указать адрес.</p></li>
+</ul>
+<p class="FM_Body">Операторы сравнения включают следующие данные.</p>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l2 level1 lfo3; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Точно соответствует/не точно соответствует</b>. Указывает точное соответствие. Например, если в поле <b>Тема</b> <b>точно соответствует</b> указать <b>Яблоко</b>, то соответствием будет «Яблоко», но не «Яблоки» или «Грузовик с яблоками».</p></li>
+	<li class="MsoNormal" style="mso-list: l2 level1 lfo3; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Содержит/не содержит</b>. Этот параметр указывает, что строка темы должна содержать указанную подстроку. &#160;Например, если указать <b>Тема содержит яблоко</b>, то соответствием может быть «Я хочу яблоко».</p></li>
+	<li class="MsoNormal" style="mso-list: l2 level1 lfo3; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Соответствует/не соответствует условию поиска по шаблону</b>. Подстановочный знак звездочка (*) используется в поле сравнения почтового фильтра для подстановки одного или более знаков фильтра. Например, если указать, что тема должна соответствовать слову «&quot;яблок*&quot;», то отфильтрованы будут: «яблоко», «яблоки и груши», но не «мои яблоки».</p></li>
+</ul>
+<p class="FM_2Heading">Действия</p>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Хранить в папке «Входящие».</b> Сохраняет сообщения в папке «Входящие». Если почтовое сообщение не соответствует ни одному из правил фильтра, это действие выполняется по умолчанию.</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Отклонить.</b> Удаляет сообщение, не доставляя его. Сообщения нет ни в одной папке, даже в Корзине.</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Записать в папку.</b> Перемещает сообщения в указанную папку.</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Пометить тегом.</b> Соответствующие сообщения можно пометить указанным тегом.</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Пометить.</b> Выберите вариант <b>Прочитанное</b> или <b>С флагом</b>.</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Переслать по адресу</b>. Сообщения перенаправляются на указанный адрес.</p></li>
+</ul>
+<p class="FM_2Heading">Несколько действий</p>
+<p class="MsoNormal">Можно создать правило фильтра, состоящее из нескольких действий. Сочетания действий в правиле трактуются следующим образом.</p>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Хранить в папке «Входящие».</b> Можно определить несколько действий «сохранить», но при этом только одна копия сообщения будет сохраняться в папке «Входящие».</p></li>
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Отклонить.</b> В сочетании с другими действиями этот параметр игнорируется, выполняются другие действия.</p></li>
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Записать в папку.</b> В результате нескольких действий «Файл в» несколько копий сообщения сохраняются в разных папках. Если указанная папка не существует, сообщение сохраняется в папке «Входящие».</p></li>
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Пометить меткой/Пометить.</b> Эти действия применяются к сообщению, к которому применялось последнее действие. В случае нескольких действий «Файл в» какие-то копии сообщений сохраняются с метками, какие-то — без.</p></li>
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>Переслать по адресу.</b> Сообщения будут пересылаться по указанному адресу.</p></li>
+</ul>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

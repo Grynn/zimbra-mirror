@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<item name="設定 S/MIME 以傳送及接收已簽署及加密電郵訊息" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+<item name="使用 S/MIME 設定安全偏好設定" url="zwc_help_files/15_s_mime/setting_security_preferences_for_using_s_mime.htm" />
+<item name="正加入憑證到通訊錄中的聯絡人" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+<item name="撰寫及傳送電子簽署郵件" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+<item name="撰寫及傳送已加密郵件" url="zwc_help_files/15_s_mime/compose_and_send_an_encrypted_message.htm" />
+
+</tocdata>

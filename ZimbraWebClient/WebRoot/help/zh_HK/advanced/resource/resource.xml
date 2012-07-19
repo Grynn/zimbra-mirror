@@ -1,0 +1,246 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<resource>
+  <element name="Hide" value="隱藏" />
+  <element name="Prev" value="&lt;&lt;" />
+  <element name="FileError" value="存取共用評論檔時出錯" />
+  <element name="SendToFileMenu" value="傳送到檔案" />
+  <element name="DeleteCommentButtonToolTip" value="刪除選定的評論" />
+  <element name="PrintThisCategory" value="列印這個類別" />
+  <element name="LoginFailureTitle" value="驗證" />
+  <element name="AnonymousDlgText" value="匿名評論被接受後將會顯示。是否要匿名發表評論？" />
+  <element name="ProgressBarTitle" value="請稍候..." />
+  <element name="BrowseSeqPrintProgressMsg" value="載入要列印的主題..." />
+  <element name="ViewAcceptedComments" value="檢視已接受" />
+  <element name="NewestOnBottomLabel" value="由舊到新" />
+  <element name="UpdatingCommentsForUserMessage" value="正在傳送評論..." />
+  <element name="RecieveCommentFromServerStartMsg" value="正在接收評論..." />
+  <element name="Logo/Author" value="提供者:" />
+  <element name="DeleteCommentButton" value="刪除" />
+  <element name="ForwardButtonToolTip" value="下一步" />
+  <element name="NoUpdatePresent" value="沒有可用的更新" />
+  <element name="RSSReadLabel" value="已讀取" />
+  <element name="RSSUnReadLabel" value="未讀取" />
+  <element name="GoOnline" value="上線" />
+  <element name="ErrorMsgTitle" value="錯誤" />
+  <element name="SyncToc" value="SyncToc" />
+  <element name="Next" value="&gt;&gt;" />
+  <element name="SendToServerMenu" value="傳送到伺服器" />
+  <element name="ShowCommentButtonToolTip" value="DO NOT TRANSLATE" />
+  <element name="SaveCommentText" value="新增評論：" />
+  <element name="PreferenceDlgShowBreadCrumb" value="顯示階層連結" />
+  <element name="PrintEntireHelpString" value="是否列印所有主題？" />
+  <element name="FavoriteDeleteTopic" value="刪除" />
+  <element name="NewFolderName" value="New Folder" />
+  <element name="OpenInBrowser" value="在瀏覽器中開啟" />
+  <element name="DownloadingUpdate" value="正在下載更新..." />
+  <element name="RememberMe" value="記住我的登入資訊" />
+  <element name="PreferenceDlgAutoImportCommentsOnSignin" value="登入時接收來自伺服器的評論" />
+  <element name="SortCommentButtonToolTip" value="DO NOT TRANSLATE" />
+  <element name="BackButtonToolTip" value="返回" />
+  <element name="ViewerDialogCancelButton" value="取消" />
+  <element name="OpenInNewTab" value="在新索引標籤中開啟" />
+  <element name="IndexSearchText" value="輸入關鍵字搜尋" />
+  <element name="ViewerDialogYesButton" value="Yes" />
+  <element name="View" value="檢視" />
+  <element name="CurrentOfflineText" value="目前離線工作" />
+  <element name="ViewALLComments" value="檢視全部" />
+  <element name="ContentCategoryList" value="選擇內容類別" />
+  <element name="Seperate" value="|" />
+  <element name="AboutDescription" value="說明：" />
+  <element name="SendCommentsServerMessage" value="評論已傳送到伺服器" />
+  <element name="InvalidXML" value="XML 檔無效" />
+  <element name="AddCommentButtonToolTip" value="顯示/隱藏新增評論方塊" />
+  <element name="AddCommentHereText" value="在此處新增評論" />
+  <element name="SaveCommentTextToolTip" value="寫下您要新增的評論" />
+  <element name="PreferenceDlgCheckForUpdate" value="檢查更新" />
+  <element name="LoadingNewTabMsg" value="載入..." />
+  <element name="GlossaryBoxTitle" value="辭彙" />
+  <element name="FavoriteAddFolderTopic" value="添加資料夾" />
+  <element name="MarkAsRead" value="標示為已讀取" />
+  <element name="CloseAppButton" value="關閉" />
+  <element name="AuthenticateTitle" value="驗證" />
+  <element name="Password" value="密碼：" />
+  <element name="PreferenceDlgAutoImportCommentsOnLaunch" value="接收來自共用資料夾的評論" />
+  <element name="CommentsBy" value="作者：" />
+  <element name="ViewPendingComments" value="檢視審理中" />
+  <element name="RequireWritePermission" value="審核人應擁有共用資料夾的寫入許可。" />
+  <element name="Contents" value="內容" />
+  <element name="AboutButtonTitle" value="關於" />
+  <element name="AboutHelpID" value="説明 ID：" />
+  <element name="ShowDateMenu" value="日期" />
+  <element name="AddToFavoriteMenuItem" value="增加到連結" />
+  <element name="PrintSequence" value="列印順序" />
+  <element name="PreferenceDialogCommentsDeleteMsg" value="是否要刪除所有的註解?" />
+  <element name="PreferenceDlgAutoUpdateContent" value="自動更新內容" />
+  <element name="PreferenceDlgReviewerName" value="審核者名稱" />
+  <element name="PrintAlertTitle" value="列印" />
+  <element name="DeleteButtonTitle" value="刪除" />
+  <element name="SearchTextInputToolTip" value="輸入文字搜尋" />
+  <element name="AddNewFavoriteMenu" value="增加連結" />
+  <element name="StartModeration" value="匯入" />
+  <element name="For" value="DO NOT TRANSLATE" />
+  <element name="OnlyAccepted" value="已接受" />
+  <element name="Anonymous" value="匿名" />
+  <element name="EnableModeration" value="顯示審核器" />
+  <element name="Search" value="搜尋" />
+  <element name="Glossary" value="語彙" />
+  <element name="Disabled Prev" value="&lt;&lt;" />
+  <element name="SyncMessage" value="成功傳送/接收評論" />
+  <element name="PrintThisPage" value="列印本頁" />
+  <element name="PreferenceDialogCommentTabTitle" value="註解" />
+  <element name="FavoriteBoxTitle" value="收藏夾" />
+  <element name="NewBookmarkName" value="連結名稱" />
+  <element name="Accept" value="接受" />
+  <element name="SortByDate" value="按日期排列" />
+  <element name="SyncCommentsFromServerMsg" value="成功傳送/接收評論。" />
+  <element name="ConnectionError" value="無法存取評論的共用位置" />
+  <element name="SendRcvCommentButtonToolTip" value="傳送及接收評論" />
+  <element name="PreferenceDlgDeleteAllComments" value="刪除註解" />
+  <element name="EditOption" value="編輯" />
+  <element name="FavoriteDeleteButton" value="刪除" />
+  <element name="PreferenceDialogBrowseButtonTitle" value="瀏覽" />
+  <element name="PreferenceDlgChkCommentLocation" value="使用預設位置以同步註解" />
+  <element name="PreferenceDlgCommentSyncLocation" value="檔案夾位置:" />
+  <element name="SignOut" value="登出" />
+  <element name="SyncModerationFromServerMsg" value="成功傳送/接收評論。" />
+  <element name="ModerationPodTitle" value="審核" />
+  <element name="Disabled Next" value="&gt;&gt;" />
+  <element name="AboutVersionID" value="版本 ID：" />
+  <element name="PreferenceDlgOpenInNewTab" value="在新索引標籤中開啟說明主題" />
+  <element name="PreferenceDlgShowBrowseSequence" value="顯示瀏覽順序" />
+  <element name="SearchResultDefaultBookmark" value="此項目的搜尋結果:" />
+  <element name="FavoriteDisplayTopic" value="顯示" />
+  <element name="FavoriteRenameTopic" value="重新命名" />
+  <element name="NewRSSFeedURL" value="RSS 饋送 URL:" />
+  <element name="NoUpdateLocationSpecified" value="沒有出現更新位置" />
+  <element name="UpdateAvailable" value="有可用的更新。是否要立刻更新?" />
+  <element name="SelectAuthor" value="選擇作者" />
+  <element name="ShowReviewerMenu" value="審稿人" />
+  <element name="ShowCommentReviewerMenu" value="DO NOT TRANSLATE" />
+  <element name="TOCBoxTitle" value="目錄" />
+  <element name="IndexBoxTitle" value="索引" />
+  <element name="GlossaryDefinitionBoxTitle" value="詞彙定義" />
+  <element name="FeedsButtonTitle" value="RSS Feed" />
+  <element name="FavoriteInvalidNameError" value="無效的名稱" />
+  <element name="ErrorInDownloadingUpdate" value="下載時發生錯誤" />
+  <element name="InstallationStarted" value="開始安裝..." />
+  <element name="PreviewMode" value="預覽模式" />
+  <element name="Author" value="作者" />
+  <element name="Update" value="更新" />
+  <element name="ServerSyncRequiredButtonLabel" value="現在同步" />
+  <element name="PrintNotAllowedWariningMsg" value="不能列印以下主題。是否繼續？" />
+  <element name="LoginFailedErrorMsg" value="登入失敗。請再試一次。" />
+  <element name="ConfirmDelete" value="是否要刪除此評論？" />
+  <element name="ViewRejectedComments" value="檢視已拒絕" />
+  <element name="AboutDialogTitle" value="關於" />
+  <element name="ReceiveFromFileMenu" value="從檔案接收" />
+  <element name="CannotImportFileError" value="無法從檔案匯入" />
+  <element name="PreferenceDlgCheckUpdateButton" value="立即檢查" />
+  <element name="NewRSSFeedName" value="RSS 饋送名稱:" />
+  <element name="NewBookmarkURL" value="連結 URL" />
+  <element name="MinimizeAppButton" value="最小化" />
+  <element name="GenericDeleteMsg" value="是否要刪除選取的項目?" />
+  <element name="OnlyPending" value="審理中" />
+  <element name="WelcomeUserOnSign" value="您好，%1" />
+  <element name="NewestOnTopLabel" value="由新到舊" />
+  <element name="CommentDateTimeFormatter" value="DD/MM/YYYY, JJ:NN" />
+  <element name="CommentsAddEmptyError" value="無法新增空白評論" />
+  <element name="ShowCommentShowAllMenuItem" value="全部" />
+  <element name="CommentFileMismatchError" value="幫助 ID 不符，無法匯入評論" />
+  <element name="CommentTitle" value="評論" />
+  <element name="SendRcvCommentButton" value="傳送及接收" />
+  <element name="SaveButtonToolTip" value="按一下以新增評論到資料庫" />
+  <element name="PreferenceDialogAllCommentsDeleted" value="所有註解已刪除" />
+  <element name="ViewerDialogOKButton" value="確定" />
+  <element name="LinksButtonTitle" value="連接" />
+  <element name="NewRSSFeedDlgTitle" value="新增 RSS 饋送" />
+  <element name="MaximizeAppButton" value="最大化" />
+  <element name="ErrorInInstallingUpdate" value="安裝時發生錯誤" />
+  <element name="ErrorWhileUpdating" value="更新時發生錯誤" />
+  <element name="RSSRefreshLabel" value="重新整理" />
+  <element name="CurrentTopic" value="目前主題的評論" />
+  <element name="RejectAll" value="全部拒絕" />
+  <element name="Delete" value="刪除" />
+  <element name="Username" value="用戶名稱：" />
+  <element name="OnlyNew" value="新評論" />
+  <element name="CurrentOnlineText" value="目前在線工作" />
+  <element name="CommentsNotFoundMsg" value="找不到評論" />
+  <element name="Show" value="顯示" />
+  <element name="SendCommentsFileMessage" value="評論已傳送到共用位置" />
+  <element name="ShowTopicMenu" value="DO NOT TRANSLATE" />
+  <element name="ShowCommentShowCurrentMenuItem" value="DO NOT TRANSLATE" />
+  <element name="AddCommentButton" value="新增" />
+  <element name="SearchButtonToolTip" value="按 Ctrl+Enter 鍵在新索引標籤中開啟搜尋結果" />
+  <element name="SearchButtonTitle" value="搜索" />
+  <element name="ShowHideButtonToolTip" value="顯示/隱藏" />
+  <element name="FavoritesTopMenuToolTip" value="新增或檢視我的最愛" />
+  <element name="CommentPodToggleToolTip" value="切換註解方塊" />
+  <element name="PreferenceDialogContentTabTitle" value="一般" />
+  <element name="PreferenceDlgUseOfflineHelp" value="使用離線說明" />
+  <element name="NewSearchTabTitle" value="搜尋結果" />
+  <element name="NewBookmarkDlgTitle" value="新增連結" />
+  <element name="UpdateAvailableWithVersion" value="有可用的版本 %s 更新。是否要立刻更新?" />
+  <element name="LoginFailure" value="密碼錯誤" />
+  <element name="ClickHere" value="按此處以" />
+  <element name="CommentsModeToolTip" value="切換到評論模式" />
+  <element name="EntireHelpPrintProgressMsg" value="正在載入主題 %1，共 %2 個主題..." />
+  <element name="CommentDateFormatter" value="DD/MM/YYYY" />
+  <element name="ReceiveCommentsFileMessage" value="收到來自共用位置的評論" />
+  <element name="FavoriteAddRSSFeed" value="增加 RSS 饋送" />
+  <element name="FavoriteMessageTitle" value="我的最愛" />
+  <element name="FavoriteAlredyExists" value="已經存在於我的最愛中" />
+  <element name="OpenURL" value="開啟 URL" />
+  <element name="MarkAsUnread" value="標示為未讀取" />
+  <element name="CheckingforUpdateMsg" value="檢查更新..." />
+  <element name="NewUpdateAvailableMsg" value="新的更新" />
+  <element name="ViewerDialogNoButton" value="No" />
+  <element name="AllAuthors" value="所有作者" />
+  <element name="AllStatus" value="所有狀態" />
+  <element name="OnlyRejected" value="已拒絕" />
+  <element name="GoOffline" value="離線" />
+  <element name="ModerationModeToolTip" value="切換到審核模式" />
+  <element name="PreferenceDialogBrowseCommentSyncLocation" value="選擇要保存評論的位置：" />
+  <element name="SendCommentToServerStartMsg" value="正在傳送評論..." />
+  <element name="Index" value="索引" />
+  <element name="ReceiveCommentsServerMessage" value="收到來自伺服器的評論" />
+  <element name="ShowCommentButton" value="DO NOT TRANSLATE" />
+  <element name="SortCommentButton" value="DO NOT TRANSLATE" />
+  <element name="ViewFavoriteMenuItem" value="檢視我的最愛" />
+  <element name="PrefTitle" value="偏好設定" />
+  <element name="ErrorShowingHelpFile" value="存取說明檔案時發生錯誤" />
+  <element name="BrowseSequenceBoxTitle" value="我要如何" />
+  <element name="EditRSSFeedDlgTitle" value="編輯 RSS 饋送" />
+  <element name="CommentImportFileDlgTitle" value="選取註解 XML 檔案以匯入" />
+  <element name="PreferenceDlgHighLightSearch" value="反白搜尋結果" />
+  <element name="CommentText" value="評論" />
+  <element name="Date" value="日期" />
+  <element name="Reject" value="拒絕" />
+  <element name="LoadingCommentsForUserMessage" value="正在接收評論..." />
+  <element name="PreferenceButtonTitle" value="偏好設定" />
+  <element name="SaveXMLFileDlg" value="保存評論 XML 檔" />
+  <element name="SaveButton" value="儲存" />
+  <element name="PrintEntireHelp" value="列印整個說明" />
+  <element name="PreferenceDlgDeleteCommentButton" value="全部刪除" />
+  <element name="RSSNoneLabel" value="無" />
+  <element name="AsAnonymous" value="匿名" />
+  <element name="AcceptAll" value="全部接受" />
+  <element name="WrongPassword" value="密碼錯誤。請再試一次。" />
+  <element name="ErrorServerConnection" value="連接伺服器時出錯。請檢查網際網路連接並再試一次。" />
+  <element name="SignIn" value="登入" />
+  <element name="SelectStatus" value="選擇狀態" />
+  <element name="ReceiveFromServerMenu" value="從伺服器接收" />
+  <element name="PrintMenuOptionsToolTip" value="列印選單" />
+  <element name="PreferenceDialogUserNameError" value="請指定有效的審核者名稱" />
+  <element name="PreferenceDlgUseLoginName" value="審核者名稱一律使用登入名稱" />
+  <element name="ServerConnectionError" value="無法連線至伺服器，切換至離線模式" />
+  <element name="EditBookmarkDlgTitle" value="編輯連結" />
+  <element name="SearchResultError" value="找不到搜尋結果" />
+  <element name="UpdateMsgTitle" value="自動更新" />
+  <element name="RSSSelectLabel" value="選取:" />
+  <element name="AllTopics" value="所有主題的評論" />
+  <element name="Status" value="狀態" />
+  <element name="EndModeration" value="匯出" />
+  <element name="ShowBy" value="顯示依據" />
+  <element name="ModerationRightsNotPresent" value="顯示審核器需要具備管理員權限" />
+</resource>
+

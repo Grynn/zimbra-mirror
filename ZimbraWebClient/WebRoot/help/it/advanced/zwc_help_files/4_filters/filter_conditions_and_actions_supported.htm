@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Condizioni dei filtri e azioni supportate</title>
+<link rel="StyleSheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Uso dei filtri di posta\nCondizioni dei filtri e azioni supportate");
+addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Casa", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">Uso dei filtri di posta<\/a> &gt; Condizioni dei filtri e azioni supportate<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Condizioni dei filtri e azioni supportate</p>
+<p style="font-size: 11pt;">Le regole dei filtri non tengono conto delle differenze tra maiuscole e minuscole.</p>
+<p class="FM_2Heading">Condizioni</p>
+<p>I campi di confronto sono composti dalle opzioni seguenti:</p>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Da</span>.<span  	 class="FM_attribute"> </span> Questa condizione consente di specificare un nome nell'intestazione Da: di un messaggio email.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">A</span>. Uguale a Da, ma cerca i nomi specificati nell'intestazione A: Cc.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span  	 class="FM_attribute">Cc</span>. Uguale a Da, ma cerca nell'intestazione Cc: Cc.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">A o Cc</span>. Uguale a Da, ma cerca in entrambe le intestazioni A e Cc.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Oggetto</span>. Cerca nell'intestazione Oggetto del messaggio.</p></li>
+</ul>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Dimensione</span>. Questa opzione consente di selezionare messaggi email più grandi o più piccoli rispetto a una dimensione specificata, che tiene conto anche della presenza di eventuali allegati, e può essere usata quindi per eliminare i messaggi troppo grandi.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Data</span>. Questa opzione consente di specificare messaggi email inviati prima o dopo una data specificata.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Corpo</span>. Le opzioni relative a Corpo sono Contiene/Non contiene e consentono di specificare determinate parole corrispondenti nel corpo del messaggio email. Non è possibile applicare il filtro per la ricerca di parole nei file allegati.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Conferma di lettura</span>. È possibile filtrare i messaggi di conferma di lettura.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Allegato</span>. Consente di applicare un filtro per la ricerca di messaggi email che includono o non includono file allegati.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Indirizzo in</span>. Verifica la presenza di un indirizzo tra i contatti. Il campo successivo ti consente di specificare la Rubrica desiderata.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Invito Agenda</span>. Filtro dei messaggi correlati all'agenda.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Social</span>.<span  	 class="FM_attribute"> </span>Consente di filtrare i messaggi ricevuti dai social network..</p></li>
+	<li class="p"><p class="FM_Bulleted1" style="margin-left: 23px;"><span  	 class="FM_attribute">Nome intestazione</span>. Quando questa opzione è selezionata, prima dell'operatore di confronto (la parte &quot;contiene&quot;) compare un ulteriore campo di immissione testo. Questa opzione consente di specificare qualsiasi intestazione email. Puoi specificare non solo i campi standard A: o Da: ma anche Data, Rispondi a o altri campi personalizzati da includere nell'intestazione del messaggio. Puoi utilizzare questa opzione per filtrare i messaggi email con intestazioni &quot;errate&quot; ovvero non contenenti determinate informazioni in genere considerate standard. Talvolta i messaggi spam, che vengono generati automaticamente, non includono alcune informazioni, ad esempio i campi Mittente o Rispondi a. Il secondo boxino, immediatamente a destra dell'operatore di confronto, consente di specificare l'intestazione su cui eseguire la verifica.</p></li>
+</ul>
+<h3>Azioni</h3>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Tieni in In arrivo</span>. Salva i messaggi nella cartella In arrivo. Se nessuna delle regole dei filtri corrisponde a un messaggio email, questa azione viene eseguita per impostazione predefinita.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Archivia nella cartella</span>. Sposta i messaggi in una cartella specificata.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Ignora</span>. Elimina il messaggio email senza recapitarlo. Non ne resta traccia in nessuna cartella, nemmeno nel Cestino.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Inoltra a</span>. Inoltra i messaggi all'indirizzo specificato.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Segna</span>. Seleziona <span class="FM_attribute">Come già letto</span> o <span class="FM_attribute">Come contrassegnato</span>.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Applica tag</span>. Puoi contrassegnare con un tag selezionato i messaggi che soddisfano i criteri di corrispondenza.</p></li>
+</ul>
+<h3>Azioni multiple</h3>
+<p>Puoi creare una regola di filtro costituita da più azioni. Le combinazioni di azioni nella regola vengono interpretate nel modo seguente:</p>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Ignora</span>. Se combinata ad altre azioni, l'azione Ignora viene ignorata e vengono eseguite altre azioni.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Archivia nella cartella</span>. L'esecuzione di più azioni &quot;archivia in&quot; determina l'archiviazione di più copie del messaggio in cartelle diverse. Se la cartella specificata non esiste, il messaggio viene salvato nella cartella In arrivo.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Tag/Segna</span>. Queste azioni vengono applicate al messaggio restituito dall'azione precedente più vicina. Nel caso di più azioni &quot;Archivia in&quot;, è possibile che alcune copie del messaggio vengano archiviate senza un tag e altre con un tag.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Tieni in In arrivo</span>. È possibile specificare più azioni &quot;tieni&quot;, ma solo una copia del messaggio viene salvata nella cartella In arrivo.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Inoltra all'indirizzo</span>. <span style="font-weight: normal;">I messaggi vengono inoltrati all'indirizzo specificato.</span></p></li>
+</ul>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

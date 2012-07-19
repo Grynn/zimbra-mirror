@@ -1,0 +1,133 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<book name="Aan de slag" >
+  <item name="Geavanceerde webclient" url="advanced_web_client.htm" />
+  <item name="Geavanceerde en standaardclients gebruiken" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <item name="Aanmelden en afmelden" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+  <item name="Je wachtwoord wijzigen" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+  <item name="Toetsenbordsneltoetsen gebruiken" url="zwc_help_files/1_setting_up/using_keyboard_shortcuts.htm" />
+</book>
+<book name="Je account organiseren" >
+  <item name="Navigeren in je account " url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+  <item name="Je account organiseren" url="zwc_help_files/5_organize_account/organizing_your_account.htm" />
+  <item name="De eerste weergave van je postvak aanpassen" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+  <item name="De weergave van je account personaliseren" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+  <item name="Je standaardtijdzone wijzigen" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+  <item name="Adresbellen" url="zwc_help_files/2_manage_email/how_address_bubbles_work.htm" />
+  <item name="Je accountquotum beheren" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+  <item name="Je map Prullenbak legen" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+  <item name="Meerdere berichten voor dezelfde actie markeren" url="zwc_help_files/2_manage_email/marking_multiple_messages_for_the_same_action.htm" />
+  <item name="Een Afwezigheidsbericht opstellen" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</book>
+<book name="E-mail beheren" >
+  <item name="E-mail beheren" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+  <item name="Wijzigen hoe vaak er op nieuwe e-mail voor je account wordt gecontroleerd" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+  <item name="Bureaubladwaarschuwingen voor nieuwe e-mailberichten instellen" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+  <item name="Beleid voor bewaren toewijzen aan e-mailmappen" url="zwc_help_files/2_manage_email/assigning_retention_policies_to_email_folders.htm" />
+  <item name="Berichten in je mappen groeperen" url="zwc_help_files/2_manage_email/group_messages.htm" />
+  <item name="Berichten sorteren in het deelvenster Inhoud" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
+  <item name="Minder belangrijke e-mail uit het Postvak IN verplaatsen" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+  <item name="E-mailberichten verplaatsen" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+  <item name="Abonneren op RSS-kanalen" url="zwc_help_files/2_manage_email/subscribing_to_rss_feeds.htm" />
+  <item name="Spam verwijderen" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+  <item name="Spamopties" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+  <item name="Items uit de Prullenbak herstellen" url="zwc_help_files/2_manage_email/recover_items_purged_from_trash.htm" />
+  <item name="Het origineel van een e-mailbericht zoeken" url="zwc_help_files/2_manage_email/finding_the_origin_of_an_email_message.htm" />
+</book>
+<book name="E-mailberichten opstellen" >
+  <item name="E-mail opstellen en verzenden" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+  <item name="Je opties voor het opstellen van berichten aanpassen" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <item name="Een bericht adresseren" url="zwc_help_files/3_compose/addressing_a_message.htm" />
+  <item name="Automatisch handtekeningen gebruiken" url="zwc_help_files/3_compose/using_signatures_automatically.htm" />
+  <item name="Persona's toevoegen" url="zwc_help_files/3_compose/add_personas.htm" />
+  <item name="Andere accountidentiteiten gebruiken bij het verzenden van e-mail" url="zwc_help_files/3_compose/using_other_account_identities_when_you_send_an_email.htm" />
+  <item name="Het prioriteitsniveau van een bericht markeren" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+  <item name="Een ontvangstbewijs vragen" url="zwc_help_files/3_compose/request_a_return_receipt.htm" />
+  <item name="Bijlagen toevoegen" url="zwc_help_files/3_compose/adding_attachments.htm" />
+  <item name="De spelling van een bericht controleren" url="zwc_help_files/3_compose/spell_check_a_message.htm" />
+  <item name="Woorden aan het woordenboek toevoegen" url="zwc_help_files/3_compose/adding_words_to_the_spell_dictionary.htm" />
+  <item name="Een bericht als Concept opslaan" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+  <item name="Een bericht verwijderen" url="zwc_help_files/2_manage_email/deleting_a_message.htm" />
+</book>
+<book name="Berichten lezen" >
+  <item name="Mail lezen" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <item name="Een Leesdeelvenster gebruiken" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+  <item name="Berichten in HTML-indeling of als platte tekst weergeven" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <item name="Leesontvangstbewijzen terugzenden" url="zwc_help_files/2_manage_email/returning_read_receipts.htm" />
+  <item name="Een conversatie afdrukken (alle berichten)" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  <item name="Een e-mailbericht afdrukken" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
+  <item name="Het bericht Toestemming geweigerd ontvangen" url="zwc_help_files/8_scheduling/receiving_a_permission_denied_message.htm" />
+  <item name="Bijlagen bij een e-mailbericht openen" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</book>
+<book name="E-mail ophalen van andere accounts" >
+  <item name="Toegang tot je externe accounts" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+  <item name="E-mailkennisgevingen ontvangen op een ander e-mailadres" url="zwc_help_files/2_manage_email/receiving_new_mail_notification_to_another_email_address.htm" />
+  <item name="POP-gedrag voor je account instellen" url="zwc_help_files/1_setting_up/set_up_pop_behavior_for_your_account.htm" />
+</book>
+<book name="Berichten beantwoorden en doorsturen" >
+  <item name="Voorkeuren voor e-mailantwoorden instellen" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+  <item name="E-mailberichten beantwoorden" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <item name="Voorkeuren voor doorgestuurde e-mail instellen" url="zwc_help_files/3_compose/set_preferences_for_forwarded_email.htm" />
+  <item name="E-mailberichten doorsturen" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+  <item name="Automatisch ontvangen berichten doorsturen" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <item name="Een bericht doorsturen als maker" url="zwc_help_files/3_compose/forward_a_message_as_the_originator.htm" />
+  <item name="Een bericht doorsturen als omgeleid bericht" url="zwc_help_files/3_compose/forward_a_message_as_a_redirected_message.htm" />
+</book>
+<book name="Je adresboeken beheren" >
+  <item name="Adresboeken gebruiken" url="zwc_help_files/6_address_book/using_address_books.htm" />
+  <item name="Contactpersonen aan een adresboek toevoegen" url="zwc_help_files/6_address_book/adding_contacts_to_an_address_book.htm" />
+  <item name="Automatisch contactpersonen aan een lijst met gemailde contactpersonen toevoegen" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+  <item name="Contactgegevens bewerken" url="zwc_help_files/6_address_book/editing_contact_information.htm" />
+  <item name="Controleren of een e-mailadres in je adresboek staat" url="zwc_help_files/6_address_book/check_if_an_email_address_is_in_your_address_book.htm" />
+  <item name="Een contactpersonengroep maken" url="zwc_help_files/6_address_book/creating_a_contact_group.htm" />
+  <item name="Leden aan een contactpersonengroep toevoegen" url="zwc_help_files/6_address_book/adding_members_to_a_contact_group_list.htm" />
+  <item name="Een nieuwe contactpersoon uit een bestaand e-mailbericht toevoegen" url="zwc_help_files/6_address_book/add_a_new_contact_from_an_existing_email_message.htm" />
+  <item name="Een contactpersoon naar een ander adresboek verplaatsen" url="zwc_help_files/6_address_book/moving_a_contact_to_another_address_book.htm" />
+  <item name="Contactgegevens doorsturen" url="zwc_help_files/6_address_book/forwarding_contact_information.htm" />
+  <item name="Een lijst met vertrouwde adressen onderhouden" url="zwc_help_files/2_manage_email/maintaining_a_trusted_addresses_list.htm" />
+  <item name="Een adresboek importeren" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  <item name="Een adresboek exporteren" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  <item name="Een naam van een contactpersoon of adresboek afdrukken" url="zwc_help_files/6_address_book/printing_a_contact_name_or_address_book.htm" />
+  <item name="Contacten verwijderen" url="zwc_help_files/6_address_book/deleting_contacts.htm" />
+  <item name="Distributielijsten beheren" url="zwc_help_files/6_address_book/managing_distribution_lists.htm" />
+  <item name="Distributielijsten maken" url="zwc_help_files/6_address_book/create_distribution_lists.htm" />
+</book>
+<book name="Je agenda’s beheren" >
+<chunk name="Je agenda’s beheren" ref="whtdata1.xml" />
+</book>
+<book name="Afspraken, vergaderingen en evenementen plannen" >
+<chunk name="Afspraken, vergaderingen en evenementen plannen" ref="whtdata2.xml" />
+</book>
+<book name="Taaklijsten gebruiken" >
+<chunk name="Taaklijsten gebruiken" ref="whtdata3.xml" />
+</book>
+<book name="Met de Aktetas werken" >
+<chunk name="Met de Aktetas werken" ref="whtdata4.xml" />
+</book>
+<book name="Mappen delen" >
+<chunk name="Mappen delen" ref="whtdata5.xml" />
+</book>
+<book name="Naar items zoeken" >
+<chunk name="Naar items zoeken" ref="whtdata6.xml" />
+</book>
+<book name="Labels en mappen gebruiken om e-mail te organiseren" >
+<chunk name="Labels en mappen gebruiken om e-mail te organiseren" ref="whtdata7.xml" />
+</book>
+<book name="Mailfilters gebruiken" >
+<chunk name="Mailfilters gebruiken" ref="whtdata8.xml" />
+</book>
+<book name="Je mobiele apparaat beheren (alleen netwerkversie)" >
+<chunk name="Je mobiele apparaat beheren (alleen netwerkversie)" ref="whtdata9.xml" />
+</book>
+<book name="Veilige e-mailberichten verzenden (alleen netwerkeditie)" >
+<chunk name="Veilige e-mailberichten verzenden (alleen netwerkeditie)" ref="whtdata10.xml" />
+</book>
+<book name="Voice-service (alleen netwerkeditie)" >
+<chunk name="Voice-service (alleen netwerkeditie)" ref="whtdata11.xml" />
+</book>
+<book name="Zimlets gebruiken" >
+  <item name="Je Zimlets beheren" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+  <item name="Een Zimlet uitschakelen" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+</book>
+
+</tocdata>

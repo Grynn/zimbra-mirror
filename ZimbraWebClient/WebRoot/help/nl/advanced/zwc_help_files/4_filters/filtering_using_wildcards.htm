@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\zwcHelp\zimbra_user_help_source\4_filters.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Filteren met wildcards</title>
+<link rel="stylesheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Mailfilters gebruiken\nFilteren met wildcards");
+addButton("show",BTN_TEXT,"Weergeven","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Thuis", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">Mailfilters gebruiken<\/a> &gt; Filteren met wildcards<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Filteren met wildcards</p>
+<p class="FM_Body">Wildcards kunnen worden gebruikt in vergelijkingen die gebruikmaken van de vergelijkingsoperator &quot;Komt overeen met&quot;. De twee wildcardtekens zijn * en ?</p>
+<p class="FM_2Heading">Sterretje (*)</p>
+<p class="FM_Body">Het sterretje * is een plaatsaanduiding voor &quot;nul of meer tekens van elk willekeurig type&quot;.</p>
+<p class="FM_Body">Voorbeeld van een zoekreeks in de onderwerpregel: banaan*boom</p>
+<p class="FM_Body">Met Komt overeen met: Onderwerpregels zoals &quot;banaanboom&quot;, &quot;banaansoort&quot; of &quot;banaanstekkerboom&quot;, maar niet &quot;super-banaanboom&quot;</p>
+<p class="FM_Body">Voorbeeld van een zoekreeks in de onderwerpregel: w*bandana</p>
+<p class="FM_Body">Met Komt overeen met: Onderwerpregels zoals &quot;witte bandana&quot; of &quot;wiens bandana&quot; maar niet &quot;wiens bandana is dit?&quot;</p>
+<p class="FM_2Heading">Vraagteken (?)</p>
+<p class="FM_Body">Het vraagteken is een plaatsaanduiding voor &quot;precies één teken&quot;.</p>
+<p class="FM_Body">Voorbeeld van een zoekreeks in de onderwerpregel: banaan?boot</p>
+<p class="FM_Body">Met Komt overeen met: Onderwerpregels zoals &quot;banaan boot&quot;, &quot;banaan-boot&quot;, &quot;banaan!boot&quot; of &quot;banaan_boot&quot;</p>
+<p class="FM_2Heading">Het Escape-teken is de schuine streep achteruit: \</p>
+<p class="FM_Body">Er kunnen momenten zijn waarop je een exacte overeenkomst wilt opgeven op een reeks die tekens bevat die normaal worden beschouwd als wildcards. Je wilt bijvoorbeeld een overeenkomst opgeven op een onderwerpregel waarbij de hoofdkop wordt omgeven aan beide kanten door drie sterretjes, zoals</p>
+<p class="FM_Body">***MEER GELD!!!*** of</p>
+<p class="FM_Body">***GRATIS CADEAU***</p>
+<p class="FM_Body">Als je een wildcard wilt opgeven als zichzelf in plaats van een vervangend teken, moet je de schuine streep \ direct vóór het teken plaatsen. De vergelijkingsreeks &quot;\*\*\**\*\*\*&quot; geeft bijvoorbeeld een onderwerp aan met drie sterretjes vóór en achter een willekeurige reeks in het midden (inclusief spaties).</p>
+<p class="FM_Body">&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

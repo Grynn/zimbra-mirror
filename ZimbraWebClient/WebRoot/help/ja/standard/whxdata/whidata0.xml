@@ -1,0 +1,109 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="HTML" >
+  <topic name="検索構文" url="zwc_help_files/12_search/search_syntax.htm" />
+  <topic name="メッセージをHTML形式または標準テキストで表示する" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <topic name="HTMLを使用してメッセージを作成する" url="zwc_help_files/3_compose/using_html_to_compose_messages.htm" />
+</key>
+<key name="アカウントの割り当て容量" >
+  <topic name="アカウントの割り当て容量を管理する" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</key>
+<key name="アドバンストウェブクライアント" >
+  <topic name="アドバンストクライアントおよび標準のクライアントを使用する" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="スレッド" >
+  <topic name="メールを管理する" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="タイムゾーン" >
+  <topic name="デフォルトのタイムゾーンを変更" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+<key name="タスクリストを使用する" >
+  <topic name="タスクリストを使用する" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+</key>
+<key name="デフォルトタイムゾーン" >
+  <topic name="デフォルトのタイムゾーンを変更" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+<key name="デフォルトメール検索" >
+  <topic name="メールボックスの最初のビューをカスタマイズする" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+</key>
+<key name="バージョン" >
+  <topic name="アドバンストクライアントおよび標準のクライアントを使用する" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="フィルターの条件" >
+  <topic name="フィルターの条件" url="zwc_help_files/4_filters/filter_conditions.htm" />
+</key>
+<key name="メッセージを移動" >
+  <topic name="メールメッセージを移動する" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+</key>
+<key name="メッセージを転送する" >
+  <topic name="受信したメッセージを自動的に転送する" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <topic name="メールメッセージを転送する" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+</key>
+<key name="メッセージビューを変更" >
+  <topic name="メールを管理する" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="メール" >
+  <topic name="メールを読む" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <key name="読む" >
+    <topic name="メールを読む" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  </key>
+</key>
+<key name="メールメッセージ" >
+  <topic name="メールメッセージに返信する" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <key name="返信する" >
+    <topic name="メールメッセージに返信する" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  </key>
+</key>
+<key name="メール返信" >
+  <topic name="メール返信のプリファレンスを設定" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+</key>
+<key name="ログアウト" >
+  <topic name="ログインとログアウト" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+</key>
+<key name="ログイン" >
+  <topic name="ログインとログアウト" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+</key>
+<key name="ワイルドカード" >
+  <topic name="検索でアスタリスクワイルドカード（*）を使用する" url="zwc_help_files/12_search/using_as_a_wildcard_in_search.htm" />
+</key>
+<key name="下書き" >
+  <topic name="メッセージを下書きとして保存" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+</key>
+<key name="下書きを保存" >
+  <topic name="メッセージを下書きとして保存" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+</key>
+<key name="不在メッセージ" >
+  <topic name="外出中のメッセージを設定する" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="優先度レベル" >
+  <topic name="メッセージの優先度レベルをマーク" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+</key>
+<key name="出張時の返信メッセージ" >
+  <topic name="外出中のメッセージを設定する" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="標準のウェブクライアント" >
+  <topic name="アドバンストクライアントおよび標準のクライアントを使用する" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="添付ファイル" >
+  <topic name="メールメッセージの添付ファイルを開く" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</key>
+<key name="添付ファイルを削除" >
+  <topic name="メールメッセージの添付ファイルを開く" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</key>
+<key name="転送されたメール" >
+  <topic name="転送メールのプリファレンスを設定" url="zwc_help_files/3_compose/set_preferences_for_forwarded_email.htm" />
+</key>
+<key name="迷惑メール" >
+  <topic name="スパムを削除する" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="迷惑メールを空にする" >
+  <topic name="スパムを削除する" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="閲覧ペイン" >
+  <topic name="閲覧ペインを使用する" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+<key name="閲覧ペインのオンまたはオフ" >
+  <topic name="閲覧ペインを使用する" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+
+</indexdata>

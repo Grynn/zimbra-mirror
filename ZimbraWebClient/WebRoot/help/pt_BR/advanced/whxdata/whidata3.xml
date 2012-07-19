@@ -1,0 +1,121 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="redigir mensagem s/mime" >
+  <topic name="Redigir e enviar uma mensagem assinada digitalmente" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="remover anexos" >
+  <topic name="Abrindo anexos para uma mensagem de e-mail" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</key>
+<key name="renomear pasta" >
+  <topic name="Renomear uma pasta" url="zwc_help_files/5_organize_account/rename_a_folder.htm" />
+</key>
+<key name="renomear tag" >
+  <topic name="Renomear um marcador" url="zwc_help_files/5_organize_account/rename_a_tag.htm" />
+</key>
+<key name="respostas de e-mail" >
+  <topic name="Definir as preferências para respostas de e-mails" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+</key>
+<key name="revogar compartilhamento" >
+  <topic name="Removendo o acesso do usuário de uma pasta compartilhada" url="zwc_help_files/13_sharing/removing_user_access_to_a_shared_folder.htm" />
+</key>
+<key name="s/mime, adicionando certificados à lista de endereços" >
+  <topic name="Adicionando certificados a contatos na lista de endereços" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+</key>
+<key name="s/mime, configurando" >
+  <topic name="Configurando o S/MIME para enviar e receber mensagens de e-mail criptografadas e assinadas digitalmente" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+</key>
+<key name="s/mime, redigir mensagem" >
+  <topic name="Redigir e enviar uma mensagem assinada digitalmente" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="sair" >
+  <topic name="Entrando e saindo" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+</key>
+<key name="salvar rascunho" >
+  <topic name="Enviar uma mensagem como rascunho" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+</key>
+<key name="sempre exibir a string de busca" >
+  <topic name="Executando uma busca avançada" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="Senha" >
+  <topic name="Alterando a senha" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+</key>
+<key name="serviço de voz, ouvir mensagens" >
+  <topic name="Ouvindo uma mensagem do correio de voz" url="zwc_help_files/voiceservice/listening_to_a_voice_mail_message.htm" />
+</key>
+<key name="sinalizador" >
+  <topic name="Sinalizar uma mensagem ou conversação" url="zwc_help_files/5_organize_account/flag_a_message_or_conversation.htm" />
+  <topic name="Remover um sinalizador de uma mensagem ou conversação" url="zwc_help_files/5_organize_account/remove_a_flag_from_a_message_or_conversation.htm" />
+</key>
+<key name="sintaxe de busca" >
+  <topic name="Executando uma busca avançada" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="spam" >
+  <topic name="Removendo spam" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="suas preferências de busca" >
+  <topic name="Configurando suas preferências de busca" url="zwc_help_files/12_search/setting_your_search_preferences.htm" />
+</key>
+<key name="tag" >
+  <topic name="Remover um marcador" url="zwc_help_files/5_organize_account/remove_a_tag.htm" />
+</key>
+<key name="tamanho, agrupar por" >
+  <topic name="Mensagens em grupo" url="zwc_help_files/2_manage_email/group_messages.htm" />
+</key>
+<key name="tarefas" >
+  <topic name="Classificando tarefas em uma lista de tarefas" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  <topic name="Movendo uma tarefa para outra lista" url="zwc_help_files/9_tasks/moving_a_task_to_another_list.htm" />
+  <key name="classificando" >
+    <topic name="Classificando tarefas em uma lista de tarefas" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  </key>
+  <key name="movendo" >
+    <topic name="Movendo uma tarefa para outra lista" url="zwc_help_files/9_tasks/moving_a_task_to_another_list.htm" />
+  </key>
+</key>
+<key name="tema" >
+  <topic name="Personalizando a visualização da sua conta" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="usando listas de tarefas" >
+  <topic name="Usando listas de tarefas" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+</key>
+<key name="usando zimlets" >
+  <topic name="Usando Zimlets" url="zwc_help_files/14_zimlets/using_zimlets.htm" />
+</key>
+<key name="verifica novos e-mails" >
+  <topic name="Alterando a frequência com que a sua conta verifica novos e-mails" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+</key>
+<key name="verificação ortográfica obrigatória" >
+  <topic name="Verificar a ortografia antes de enviar mensagens" url="zwc_help_files/3_compose/spell_check_all_messages_before_they_are_sent.htm" />
+  <topic name="Personalizando as suas opções para escrever mensagens" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <topic name="Verificar a ortografia de uma mensagem" url="zwc_help_files/3_compose/spell_check_a_message.htm" />
+</key>
+<key name="verificar e-mail manualmente" >
+  <topic name="Alterando a frequência com que a sua conta verifica novos e-mails" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+</key>
+<key name="versão" >
+  <topic name="Usando os clientes avançado e padrão" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <topic name="Fazendo o check out e check in de arquivos no porta-arquivos" url="zwc_help_files/10_briefcase/checking_out_and_checking_in_files_to_briefcase.htm" />
+</key>
+<key name="visualização de tela" >
+  <topic name="Navegando no Cliente Zimbra para Web" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+</key>
+<key name="visualização em lista" >
+  <topic name="Exibindo atividades da agenda em uma lista" url="zwc_help_files/7_calendars/viewing_calendar_activities_in_a_list.htm" />
+</key>
+<key name="visualização por semana útil" >
+  <topic name="Trabalhando com agendas" url="zwc_help_files/7_calendars/working_with_calendars.htm" />
+</key>
+<key name="visualizar histórico de versões" >
+  <topic name="Visualizar o histórico de versões de um arquivo do porta-arquivos" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  <key name="arquivo do porta-arquivos" >
+    <topic name="Visualizar o histórico de versões de um arquivo do porta-arquivos" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  </key>
+</key>
+<key name="visualizar várias agendas" >
+  <topic name="Visualizar várias agendas" url="zwc_help_files/7_calendars/view_multiple_calendars.htm" />
+</key>
+<key name="zimlets" >
+  <topic name="Desativar um zimlet" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+  <topic name="Gerenciando seus Zimlets" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+</key>
+
+</indexdata>

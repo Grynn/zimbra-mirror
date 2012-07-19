@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Configuration de S/MIME pour envoyer et recevoir des mails cryptés et signés</title>
+<link rel="StyleSheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Envoi de messages électroniques sécurisés (Edition Réseau seulement)\nConfigurer S/MIME pour envoyer et recevoir des mails cryptés et signés");
+addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Accueil", "../../advanced_web_client.htm");
+document.write("<a href=\"setting_up_smime.htm\">Envoi de messages électroniques sécurisés (Edition Réseau seulement)<\/a> &gt; Configurer S/MIME pour envoyer et recevoir des mails cryptés et signés<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Configurer S/MIME pour envoyer et recevoir des mails cryptés et signés</p>
+<p class="FM_Notice"><span style="font-weight: bold;"><b>Remarque</b></span>:  cette fonctionnalité est pour ZCS Network Edition uniquement et est disponible uniquement dans le client Web avancé.</p>
+<p class="FM_Body"><span style="mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin;  						 mso-ansi-language: EN-US; mso-fareast-language: EN-US;  						 mso-bidi-language: AR-SA;">Si la fonction S/MIME est autorisée pour votre compte, vous pouvez envoyer et recevoir des messages signés numériquement et cryptés.</span></p>
+<p class="FM_Body" style="mso-bidi-font-family: 'Times New Roman';"><span  	 style="mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US;  	 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Pour utiliser S/MIME avec @ClientNameLong@, vous devez avoir un certificat de signature de messagerie électronique sécurisée adapté pour la signature et le cryptage S/MIME. Le certificat avec la clé privée doit être installé dans la mémoire de certificats locale sur un ordinateur Windows, Mac OSX, ou dans la mémoire de certificat du navigateur si vous utilisez Firefox. Pour plus d'informations sur la méthode d'installation de votre certificat, reportez-vous à la documentation de l'ordinateur ou du navigateur appropriée.</span></p>
+<p class="FM_Body"><span style="mso-fareast-font-family: Calibri; mso-bidi-font-family: 'Times New Roman';  						 mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US;  						 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Pour envoyer et recevoir des messages cryptés et signés, votre clé publique et la clé publique de votre destinataire doivent être échangées. Pour obtenir une copie de la clé publique d'un destinataire, vous pouvez envoyer un message signé numériquement en utilisant votre certificat au destinataire et lui demander de vous envoyer en retour un message signé numériquement. Lorsque le message est reçu, le certificat du destinataire est archivé dans la page Contact du destinataire dans le carnet d'adresses, ou un contact est créé automatiquement.</span></p>
+<p class="FM_Body">Lorsque vous travaillez avec des messages cryptés, il existe certaines différences, notamment:</p>
+<ul type="disc">
+	<li><p class="FM_Body"><span style="mso-fareast-font-family: Calibri;  								 mso-fareast-theme-font: minor-latin; mso-ansi-language: EN-US;  								 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Si vous partagez votre boîte de réception, les utilisateurs délégués ne peuvent pas lire vos messages cryptés à partir de leurs ordinateurs. Votre clé privée est nécessaire pour lire des messages cryptés</span>.</p></li>
+	<li><p class="FM_Body"><span style="mso-ansi-language: EN-US; mso-fareast-language: EN-US;  								 mso-bidi-language: AR-SA;">Vous ne pouvez pas enregistrer le brouillon d'un message crypté.</span></p></li>
+	<li><p class="FM_Body"><span style="mso-fareast-theme-font: minor-latin;  								 mso-ansi-language: EN-US; mso-fareast-language: EN-US;  								 mso-bidi-language: AR-SA;">Vous ne pouvez pas lancer le correcteur orthographique pour un message crypté.</span></p></li>
+	<li><p class="FM_Body"><span style="mso-fareast-font-family: Calibri;  								 mso-fareast-theme-font: minor-latin; mso-ansi-language: EN-US;  								 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Vous ne pouvez pas rechercher de texte dans le corps ou la pièce jointe d'un message crypté.</span><span style="mso-spacerun: yes;"></span><span  	 style="mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin;  	 mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA;"> Seules les informations de l'en-tête telles que l'expéditeur ou le destinataire, la date d'envoi du message ou le sujet peuvent être trouvées lors d'une recherche.</span></p></li>
+</ul>
+<p style="font-family: Arial, sans-serif; line-height: 115%; mso-ascii-theme-font: minor-latin; 
+	 mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin; 
+	 mso-hansi-theme-font: minor-latin; mso-bidi-font-family: 'Times New Roman'; 
+	 mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: EN-US; 
+	 mso-bidi-language: AR-SA;"></p>
+<p style="font-family: Arial, sans-serif;"></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

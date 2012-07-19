@@ -1,0 +1,233 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="импорт" >
+  <topic name="Импорт адресной книги" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  <topic name="Импорт списков задач" url="zwc_help_files/9_tasks/importing_a_task_lists.htm" />
+  <key name="адресная книга" >
+    <topic name="Импорт адресной книги" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  </key>
+  <key name="списки задач" >
+    <topic name="Импорт списков задач" url="zwc_help_files/9_tasks/importing_a_task_lists.htm" />
+  </key>
+</key>
+<key name="импорт ежедневника ical" >
+  <topic name="Импорт ежедневника iCal" url="zwc_help_files/7_calendars/import_your_ical_calendar.htm" />
+</key>
+<key name="использование модулей zimlet" >
+  <topic name="Использование модулей Zimlet" url="zwc_help_files/14_zimlets/using_zimlets.htm" />
+</key>
+<key name="использование списков задач" >
+  <topic name="Использование списков задач" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+</key>
+<key name="календарик" >
+  <topic name="Навигация в веб-клиенте Zimbra" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+</key>
+<key name="коллекция модулей zimlet" >
+  <topic name="Управление модулями Zimlet" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+</key>
+<key name="контакт" >
+  <topic name="Перемещение контакта в другую адресную книгу" url="zwc_help_files/6_address_book/moving_a_contact_to_another_address_book.htm" />
+  <key name="перемещение" >
+    <topic name="Перемещение контакта в другую адресную книгу" url="zwc_help_files/6_address_book/moving_a_contact_to_another_address_book.htm" />
+  </key>
+</key>
+<key name="корзина" >
+  <topic name="Очистка корзины" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+</key>
+<key name="критерии расширенного поиска" >
+  <topic name="Критерии расширенного поиска" url="zwc_help_files/12_search/advanced_search_criteria.htm" />
+</key>
+<key name="лимит учетной записи" >
+  <topic name="Управление лимитом учетной записи" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</key>
+<key name="метка" >
+  <topic name="Удаление метки" url="zwc_help_files/5_organize_account/remove_a_tag.htm" />
+</key>
+<key name="мобильное устройство" >
+  <topic name="Очистка мобильного устройства" url="zwc_help_files/11_mobile/wipe_your_mobile_device.htm" />
+</key>
+<key name="модули zimlet" >
+  <topic name="Выключение модуля Zimlet" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+  <topic name="Управление модулями Zimlet" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+</key>
+<key name="надежные адреса" >
+  <topic name="Ведение списка надежных адресов" url="zwc_help_files/2_manage_email/maintaining_a_trusted_addresses_list.htm" />
+</key>
+<key name="назначение цвета ежедневникам" >
+  <topic name="Добавление цвета в ежедневник" url="zwc_help_files/7_calendars/add_color_to_a_calendar.htm" />
+</key>
+<key name="настройка" >
+  <topic name="Параметры спама" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+  <topic name="Работа с фильтрами электронной почты" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+  <key name="настройка правил фильтра" >
+    <topic name="Работа с фильтрами электронной почты" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+  </key>
+  <key name="параметры спама" >
+    <topic name="Параметры спама" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+  </key>
+</key>
+<key name="настройка длительности собрания по умолчанию" >
+  <topic name="Настройка длительности собрания по умолчанию" url="zwc_help_files/8_scheduling/configure_your_default_meeting_duration.htm" />
+</key>
+<key name="настройки" >
+  <topic name="Выполнение расширенного поиска" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+  <topic name="Функции безопасности мобильного устройства" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
+  <key name="PIN-код" >
+    <topic name="Функции безопасности мобильного устройства" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
+  </key>
+</key>
+<key name="настройки POP" >
+  <topic name="Настройка параметров POP для учетной записи" url="zwc_help_files/1_setting_up/set_up_pop_behavior_for_your_account.htm" />
+</key>
+<key name="настройки образа" >
+  <topic name="Добавление образов" url="zwc_help_files/3_compose/add_personas.htm" />
+</key>
+<key name="начертание текста" >
+  <topic name="Персонализация вида учетной записи" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="новое почтовое уведомление" >
+  <topic name="Получение уведомления о приходе почты на другой электронный адрес" url="zwc_help_files/2_manage_email/receiving_new_mail_notification_to_another_email_address.htm" />
+</key>
+<key name="новый контакт" >
+  <topic name="Добавление контактов в адресную книгу" url="zwc_help_files/6_address_book/adding_contacts_to_an_address_book.htm" />
+</key>
+<key name="область обзора" >
+  <topic name="Навигация в веб-клиенте Zimbra" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+</key>
+<key name="область содержимого" >
+  <topic name="Навигация в веб-клиенте Zimbra" url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+</key>
+<key name="область чтения" >
+  <topic name="Использование области чтения" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+<key name="область чтения, перемещение" >
+  <topic name="Персонализация вида учетной записи" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="оборудование" >
+  <topic name="Планирование оборудования" url="zwc_help_files/8_scheduling/scheduling_equipment.htm" />
+  <key name="планирование" >
+    <topic name="Планирование оборудования" url="zwc_help_files/8_scheduling/scheduling_equipment.htm" />
+  </key>
+</key>
+<key name="общий доступ" >
+  <topic name="Общий доступ к папкам учетной записи" url="zwc_help_files/13_sharing/sharing_your_account_folders.htm" />
+  <key name="папки учетной записи" >
+    <topic name="Общий доступ к папкам учетной записи" url="zwc_help_files/13_sharing/sharing_your_account_folders.htm" />
+  </key>
+</key>
+<key name="общий доступ к адресным книгам" >
+  <topic name="Общий доступ к адресным книгам" url="zwc_help_files/13_sharing/share_address_books.htm" />
+</key>
+<key name="общий доступ к ежедневникам" >
+  <topic name="Общий доступ к ежедневникам" url="zwc_help_files/13_sharing/share_calendars.htm" />
+</key>
+<key name="общий доступ к папкам почты" >
+  <topic name="Общий доступ к папкам почты" url="zwc_help_files/13_sharing/share_mail_folders.htm" />
+</key>
+<key name="общий доступ к папке" >
+  <topic name="Общий доступ к папке" url="zwc_help_files/13_sharing/sharing_a_folder.htm" />
+</key>
+<key name="объединение сообщений" >
+  <topic name="Объединение сообщений" url="zwc_help_files/2_manage_email/group_messages.htm" />
+</key>
+<key name="обязательная проверка правописания" >
+  <topic name="Проверка правописания всех сообщений перед их отправкой" url="zwc_help_files/3_compose/spell_check_all_messages_before_they_are_sent.htm" />
+  <topic name="Настройка параметров составления сообщений" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <topic name="Проверка правописания сообщения" url="zwc_help_files/3_compose/spell_check_a_message.htm" />
+</key>
+<key name="ожидание очистки" >
+  <topic name="Очистка мобильного устройства" url="zwc_help_files/11_mobile/wipe_your_mobile_device.htm" />
+</key>
+<key name="орфографический словарь" >
+  <topic name="Добавление слов в орфографический словарь" url="zwc_help_files/3_compose/adding_words_to_the_spell_dictionary.htm" />
+</key>
+<key name="основные фильтры" >
+  <topic name="Критерии расширенного поиска" url="zwc_help_files/12_search/advanced_search_criteria.htm" />
+</key>
+<key name="ответ об отсутствии на работе" >
+  <topic name="Настройка сообщения «Нет на работе»" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="ответы по электронной почте" >
+  <topic name="Настройка параметров для отправки ответов на сообщения электронной почты" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+</key>
+<key name="отключить" >
+  <topic name="Выключение модуля Zimlet" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+  <key name="модуль zimlet" >
+    <topic name="Выключение модуля Zimlet" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+  </key>
+</key>
+<key name="отмена общего доступа" >
+  <topic name="Удаление доступа пользователя к общей папке" url="zwc_help_files/13_sharing/removing_user_access_to_a_shared_folder.htm" />
+</key>
+<key name="отображение источника" >
+  <topic name="Поиск источника сообщения электронной почты" url="zwc_help_files/2_manage_email/finding_the_origin_of_an_email_message.htm" />
+</key>
+<key name="отправитель" >
+  <topic name="Пересылка сообщения в качестве отправителя" url="zwc_help_files/3_compose/forward_a_message_as_the_originator.htm" />
+</key>
+<key name="отправить сообщение позже" >
+  <topic name="Составление и отправка сообщений электронной почты" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="отправка сообщений электронной почты" >
+  <topic name="Составление и отправка сообщений электронной почты" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="отправленные по электронной почте контакты" >
+  <topic name="Автоматическое добавление контактов в список «Отправленные по электронной почте контакты»" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+</key>
+<key name="очистить" >
+  <topic name="Очистка мобильного устройства" url="zwc_help_files/11_mobile/wipe_your_mobile_device.htm" />
+</key>
+<key name="очистка корзины" >
+  <topic name="Очистка корзины" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+</key>
+<key name="очистка спама" >
+  <topic name="Удаление спама" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="папка «Поток действий»" >
+  <topic name="Перемещение менее важной почты за пределы папки «Входящие»" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+</key>
+<key name="папка корзины" >
+  <topic name="Восстановление элементов, удаленных из папки корзина" url="zwc_help_files/2_manage_email/recover_items_purged_from_trash.htm" />
+</key>
+<key name="параметры ежедневника" >
+  <topic name="Установка настроек ежедневника" url="zwc_help_files/7_calendars/setting_your_calendar_preferences.htm" />
+</key>
+<key name="параметры подписей" >
+  <topic name="Настройка параметров составления сообщений" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+</key>
+<key name="параметры поиска" >
+  <topic name="Настройка параметров поиска" url="zwc_help_files/12_search/setting_your_search_preferences.htm" />
+</key>
+<key name="параметры проверки новой почты" >
+  <topic name="Изменение частоты проверки новой почты" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+</key>
+<key name="параметры спама" >
+  <topic name="Параметры спама" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+</key>
+<key name="пароль" >
+  <topic name="Изменение пароля" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+</key>
+<key name="переименование метки" >
+  <topic name="Переименование метки" url="zwc_help_files/5_organize_account/rename_a_tag.htm" />
+</key>
+<key name="переименование папки" >
+  <topic name="Переименование папки" url="zwc_help_files/5_organize_account/rename_a_folder.htm" />
+</key>
+<key name="перемещение сообщения" >
+  <topic name="Перемещение сообщений электронной почты" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+</key>
+<key name="перенаправленное сообщение" >
+  <topic name="Пересылка сообщения в качестве перенаправляемого" url="zwc_help_files/3_compose/forward_a_message_as_a_redirected_message.htm" />
+</key>
+<key name="пересланное сообщение электронной почты" >
+  <topic name="Настройка параметров для пересылки сообщений электронной почты" url="zwc_help_files/3_compose/set_preferences_for_forwarded_email.htm" />
+</key>
+<key name="пересылка контакта" >
+  <topic name="Пересылка контактной информации" url="zwc_help_files/6_address_book/forwarding_contact_information.htm" />
+</key>
+<key name="пересылка сообщений" >
+  <topic name="Автоматическая пересылка полученных сообщений" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <topic name="Пересылка сообщений электронной почты" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+</key>
+
+</indexdata>

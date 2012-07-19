@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>支援的過濾條件與操作</title>
+<link rel="StyleSheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("郵件過濾器使用方法\n支援的過濾條件與操作");
+addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "首頁", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">郵件過濾器使用方法<\/a> &gt; 支援的過濾條件與操作<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">支援的過濾條件與操作</p>
+<p style="font-size: 11pt;">過濾規則對大小寫不敏感，意即規則將忽略大小寫。</p>
+<p class="FM_2Heading">條件</p>
+<p>比較欄位包括下列：</p>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">寄件人</span>。<span  	 class="FM_attribute"></span>使用這個來指定「寄件人」名稱： 電子郵件的標題。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">收件人</span>。與寄件人相同，但尋找的是收件人中的指定名稱標題中指定的名字。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span  	 class="FM_attribute">副本</span>。與寄件人相同，但是在副本中尋找標題中指定的名字。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">收件人或副本</span>。與寄件人相同，但同時在收件人和副本標題中尋找。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">主題</span>。在郵件的主題標題中尋找。</p></li>
+</ul>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">大小</span>。用此選擇那些大於或小於指定大小的郵件。郵件的大小包括所包含的任何附件。你可用此條件濾除過大的郵件。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">日期</span>。用此選項指明在指定日期之前或之後傳送的郵件。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">正文</span>。正文選項為包含 / 不包含，而你可指定郵件正文中的相符的字詞。你不能對附件中的詞語進行過濾。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">讀信回條</span>。讀信回條郵件可過濾。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">附件</span>。過濾是否包含附件的郵件。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">其中的地址</span>。檢測聯絡人資料中是否存在某個地址。下一個欄位用於指定哪個地址。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">行事曆邀請</span>過濾記事簿相關郵件。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">社交</span>。<span  	 class="FM_attribute"></span>過濾來自社交網站的郵件。</p></li>
+	<li class="p"><p class="FM_Bulleted1" style="margin-left: 23px;"><span  	 class="FM_attribute">標有名字的標題</span>。當選取了此選項，在比較運算子之前會出現一個額外的文字輸入欄位 (&quot;包含&quot;部分)。此選項用於指定郵件標題。你不僅可以指定標準的「收件人：」或「寄件人：」欄位，還可以指定「日期」、「回覆地址」以及其他可能包含於郵件標題中的欄位。你可用此選項過濾標題&quot;不合規格&quot;的郵件，也就是說，其中未能包含在一般郵件中都應當有的某些標準資訊。有時候，自動生成的垃圾郵件缺少如寄件人或回覆地址等欄位的資訊。然後可用第二個欄位（緊跟在比較運算子右面的欄位）指定要檢測的標題。</p></li>
+</ul>
+<h3>操作項</h3>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">保留在收件箱</span>。將郵件儲存到收件箱。如果沒有任何過濾規則相符某個郵件，則採取此預設操作。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">歸檔到資料夾</span>。將郵件移至指定的資料夾。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">丟棄</span>。刪除郵件且不送出。被丟棄郵件不在任何資料夾中，即便是「垃圾桶」也不例外。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">轉寄</span>。將郵件轉寄至指定的地址。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">標示</span>。選擇<span class="FM_attribute">為已讀</span>或<span class="FM_attribute">有標記</span>。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">標記使用</span>。你可用選定的標記給相符的郵件標記。</p></li>
+</ul>
+<h3>多重操作項</h3>
+<p>你可建立一個由多重操作項組成的過濾規則。你的規則中的組合操作項可解釋為：</p>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">丟棄</span>。如果與其他操作結合，丟棄會被忽略而其他操作會被執行。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">歸檔到資料夾</span>。多個「歸檔到」操作項，可使多個郵件副本儲存到不同的資料夾中。如果指定的資料夾不存在，則將郵件存入收件箱。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">標記/標示</span>。這些操作套用於最近先前執行的操作返回的郵件。比如，在多重「歸檔到」操作項情況下，這可使某些儲存的郵件副本無標記，而另一些則有標記。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">保留在收件箱</span>。可指定多個&quot;保留&quot;操作，但只有一個郵件副本會儲存到收件箱。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">轉寄至地址</span>。<span style="font-weight: normal;">郵件被轉寄至指定的地址。</span></p></li>
+</ul>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

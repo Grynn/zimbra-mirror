@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>サポートされているフィルターの条件と操作</title>
+<link rel="StyleSheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("メールフィルターを使用する\nサポートされているフィルターの条件と操作");
+addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "ホーム", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">メールフィルターを使用する<\/a> &gt; サポートされているフィルターの条件と操作<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">サポートされているフィルターの条件と操作</p>
+<p style="font-size: 11pt;">フィルター規則では、アルファベットの大文字と小文字が区別されません。</p>
+<p class="FM_2Heading">条件</p>
+<p>以下の比較フィールドがあります。</p>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">差出人</span>。<span  	 class="FM_attribute"></span>[差出人]に含まれている名前を指定します。header of an email message.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">宛先:</span>。[差出人]と同じですが、[宛先:]ヘッダーに含まれている名前を指定します。header.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span  	 class="FM_attribute">Cc</span>。[差出人]と同じですが、[Cc:]ヘッダーに含まれている名前を指定します。header.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">宛先またはCc</span>。[差出人]と同じですが、[宛先]と[Cc]ヘッダーの両方に含まれている名前を指定します。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">件名</span>。メッセージの[件名]ヘッダー内を検索します。</p></li>
+</ul>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">サイズ</span>。指定したサイズより大きい、または小さいメールメッセージを選択する場合に使用します。メールのサイズには、添付ファイルも含まれます。このフィールドを使用すると、サイズが大きすぎるメールメッセージを破棄できます。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">日付</span>。指定した日付より前または後に送信されたメールメッセージを選択する場合に使用します。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">本文</span>。[次の文字列を含む]と[次の文字列を含まない]のオプションがあります。メールの本文で照合する語句を指定できます。添付ファイル内の語句を照合することはできません。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">閲覧確認：</span>。閲覧確認メッセージをフィルターできます。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">添付ファイル</span>。ファイルが添付されているメールメッセージ、またはファイルが添付されていないメールメッセージをフィルターできます。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">含まれているアドレス</span>。連絡先内にアドレスがあるかどうかを調べます。次のフィールドで、アドレスブックの場所を指定します。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">カレンダーへの招待</span>。カレンダー関連のメッセージをフィルターします。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">ソーシャル</span>。<span  	 class="FM_attribute"></span>ソーシャルネットワーキングサイトからのメッセージをフィルターします。</p></li>
+	<li class="p"><p class="FM_Bulleted1" style="margin-left: 23px;"><span  	 class="FM_attribute">ヘッダーの名前</span>。このオプションを選択すると、比較演算子（「次の文字列を含む」部分）の前にテキスト入力フィールドが表示されます。このオプションを使用すると、どのようなメールヘッダーでも指定できます。標準の[宛先:]欄や[差出人:]欄だけでなく、日付や返信先、あるいはメッセージヘッダーに含まれている可能性のあるその他のカスタムフィールドを指定できます。「不正な」ヘッダー（つまり、通常のメールメッセージにあるべき情報が含まれていないヘッダー）を含むメールアドレスを選別できます。たとえば、自動生成された迷惑メールには、送信者や返信先などの情報が含まれていないことがあります。2つ目のテキストフィールド（比較演算子の右側にあるフィールド）に、対象となるヘッダーを指定します。</p></li>
+</ul>
+<h3>操作</h3>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">受信箱に維持</span>。メールを[受信箱]に保存します。どのフィルター規則もメールメッセージに一致しない場合は、デフォルトでこの操作が適用されます。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">フォルダ内に保存</span>。メールを指定のフォルダに移動します。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">破棄</span>。メールメッセージを配信しないで削除します。このメッセージは、[ゴミ箱]フォルダを含め、どのフォルダにも保存されません。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">転送</span>。メールを指定のアドレスに転送します。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">マーク</span>。[<span class="FM_attribute">既読</span>]または[<span class="FM_attribute">フラグ付き</span>]を選択します。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">次のタグを付ける：</span>。一致するメッセージに指定のタグを付けることができます。</p></li>
+</ul>
+<h3>複数の操作</h3>
+<p>複数の操作で構成されるフィルター規則を作成できます。規則の複数の操作の組み合わせは、以下のように解釈されます。</p>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">破棄</span>。他の操作と組み合わせた場合、「破棄」は無視され、他の操作が実行されます。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">フォルダ内に保存</span>。複数の「ファイル情報」操作を実行すると、複数のメッセージコピーが異なるフォルダに保存されます。指定したフォルダが存在しない場合、そのメッセージは[受信箱]に保存されます。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">タグ/マーク</span>。これらの操作は、最も近い先行操作から返されたメッセージに適用されます。複数の「ファイル情報」操作がある場合は、いくつかのメッセージコピーにはタグが付けられ、それ以外のメッセージコピーにはタグが付けられずに保存されます。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">受信箱に維持</span>。複数の｢維持｣操作を指定できますが、[受信箱]に保存されるメッセージのコピーは1つだけです。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">アドレスに転送</span>。<span style="font-weight: normal;">メールが指定のアドレスに転送されます。</span></p></li>
+</ul>
+<p></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

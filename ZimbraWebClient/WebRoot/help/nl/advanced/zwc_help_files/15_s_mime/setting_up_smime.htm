@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>S/MIME instellen voor het verzenden en ontvangen van ondertekende en gecodeerde e-mailberichten</title>
+<link rel="StyleSheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Veilige e-mailberichten verzenden (alleen netwerkeditie)\nS/MIME instellen voor het verzenden en ontvangen van ondertekende en gecodeerde e-mailberichten");
+addButton("show",BTN_TEXT,"Weergeven","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Thuis", "../../advanced_web_client.htm");
+document.write("<a href=\"setting_up_smime.htm\">Veilige e-mailberichten verzenden (alleen netwerkeditie)<\/a> &gt; S/MIME instellen voor het verzenden en ontvangen van ondertekende en gecodeerde e-mailberichten<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">S/MIME instellen voor het verzenden en ontvangen van ondertekende en gecodeerde e-mailberichten</p>
+<p class="FM_Notice"><span style="font-weight: bold;"><b>Opmerking</b></span>: &#160;Deze functie is alleen voor ZCS Network Edition en alleen beschikbaar in de geavanceerde webclient.</p>
+<p class="FM_Body"><span style="mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin;  						 mso-ansi-language: EN-US; mso-fareast-language: EN-US;  						 mso-bidi-language: AR-SA;">Als de S/MIME-functie voor je account is ingeschakeld, kun je digitaal ondertekende en gecodeerde berichten verzenden en ontvangen.</span></p>
+<p class="FM_Body" style="mso-bidi-font-family: 'Times New Roman';"><span  	 style="mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US;  	 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Als je S/MIME wilt gebruiken met de @ClientNameLong@moet je een veilig certificaat voor het ondertekenen van e-mails hebben dat geschikt is voor ondertekenen en coderen met S/MIME. Het certificaat met persoonlijke sleutel moet worden opgeslagen op de lokale opslaglocatie voor certificaten op Windows- en Mac OSX-computers of op de opslaglocatie voor certificaten in de browser als je Firefox gebruikt. Raadpleeg de documentatie die bij de computer of browser hoort voor informatie over het installeren van je certificaat.</span></p>
+<p class="FM_Body"><span style="mso-fareast-font-family: Calibri; mso-bidi-font-family: 'Times New Roman';  						 mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US;  						 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Voor het verzenden en ontvangen van gecodeerde en ondertekende berichten moeten jouw openbare sleutel en de openbare sleutel van de ontvanger worden uitgewisseld. Voor een kopie van de openbare sleutel van de ontvanger kun je de ontvanger met jouw certificaat een digitaal ondertekend bericht sturen en vragen of hij of zij jou een digitaal ondertekend bericht terugstuurt. Zodra het bericht is ontvangen wordt het certificaat van de ontvanger opgeslagen op de contactpagina van de ontvanger in het Adresboek, of er wordt automatisch een contactpersoon aangemaakt.</span></p>
+<p class="FM_Body">Let op de volgende verschillen als je met gecodeerde berichten werkt:</p>
+<ul type="disc">
+	<li><p class="FM_Body"><span style="mso-fareast-font-family: Calibri;  								 mso-fareast-theme-font: minor-latin; mso-ansi-language: EN-US;  								 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Als je je Postvak IN deelt, kunnen gedelegeerde gebruikers je gecodeerde berichten niet vanaf hun computers lezen. Je persoonlijke sleutel is nodig om gecodeerde berichten te lezen</span>.</p></li>
+	<li><p class="FM_Body"><span style="mso-ansi-language: EN-US; mso-fareast-language: EN-US;  								 mso-bidi-language: AR-SA;">Je kunt een concept van een bericht niet gecodeerd opslaan.</span></p></li>
+	<li><p class="FM_Body"><span style="mso-fareast-theme-font: minor-latin;  								 mso-ansi-language: EN-US; mso-fareast-language: EN-US;  								 mso-bidi-language: AR-SA;">Je kunt de spelling van gecodeerde berichten niet controleren.</span></p></li>
+	<li><p class="FM_Body"><span style="mso-fareast-font-family: Calibri;  								 mso-fareast-theme-font: minor-latin; mso-ansi-language: EN-US;  								 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Je kunt geen tekst zoeken in het hoofdgedeelte of de bijlagen van een gecodeerd bericht.</span><span style="mso-spacerun: yes;">&#160;</span><span  	 style="mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin;  	 mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">&#160;Bij een zoekopdracht kun je alleen informatie zoeken over de koptekst, zoals verzonden van of aan, de datum waarop het bericht is verzonden en het onderwerp.</span></p></li>
+</ul>
+<p style="font-family: Arial, sans-serif; line-height: 115%; mso-ascii-theme-font: minor-latin; 
+	 mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin; 
+	 mso-hansi-theme-font: minor-latin; mso-bidi-font-family: 'Times New Roman'; 
+	 mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: EN-US; 
+	 mso-bidi-language: AR-SA;">&#160;</p>
+<p style="font-family: Arial, sans-serif;">&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

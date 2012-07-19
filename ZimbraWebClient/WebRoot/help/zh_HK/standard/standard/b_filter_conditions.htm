@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>過濾條件</title>
+<link rel="StyleSheet" href="../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("郵件過濾器使用方法\n過濾條件");
+addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../zimbra_user_help.htm", "", "&gt;", "首頁", "../zimbra_basic_user_help.htm");
+document.write("<a href=\"bc_filtering_your_messages.htm\">郵件過濾器使用方法<\/a> &gt; 過濾條件<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">過濾條件</p>
+<p class="FM_Body">過濾規則對大小寫不敏感，意即規則將忽略大小寫。</p>
+<p class="FM_2Heading">條件</p>
+<p class="FM_Body">比較字框包括以下：</p>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>寄件人。</b>用此在郵件寄件人標題中指定一個名字。</p></li>
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>收件人。</b>與寄件人相同，但是在收件人標題中尋找指定的名字。</p></li>
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>副本。</b>與寄件人相同，但是在副本標題中尋找。</p></li>
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>「收件人」或「副本」</b>。與「寄件人」相同，但同時尋找「收件人」和「副本」標題。</p></li>
+	<li class="MsoNormal" style="mso-list: l3 level1 lfo1; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>主題。</b>尋找郵件的「主題」標題。</p></li>
+</ul>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>標有名字的標題。</b>當選取此選項時，在比較運算子前面出現一個額外的字框 (&quot;包含&quot;部分)。此選項用於指定郵件標題。你不僅可以指定標準的收件人或寄件人字框，還可以指定日期、回覆地址或其他可能包含於郵件標題中的自訂字框。你可用此選項過濾掉標題不合規格的郵件，也就是說，其中未能包含在一般郵件中都應當有的某些標準資訊。有時候，自動生成的垃圾郵件缺少如寄件人或回覆地址等欄位的資訊。使用第二個字框 (緊跟在比較運算子右面的字框) 指定要測試的標題。</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>大小。</b>此條件可用來選擇那些大於或小於指定大小的郵件。郵件的大小包括所包含的任何附件。你可用此條件濾除過大的郵件。</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>日期。</b>此選項可用來限定在指定日期之前或之後傳送的郵件。</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>正文。</b>「正文」選項為「包含」/「不包含」，用於指定郵件正文中的相符的詞語。你不能對附件中的詞語進行過濾。</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>附件。</b>你可用過濾條件檢測郵件中是否包含附件。</p></li>
+	<li class="MsoNormal" style="mso-list: l0 level1 lfo2; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>其中的地址。</b>檢測聯絡人資料中是否存在某個地址。下一個字框讓你指定哪一個地址。</p></li>
+</ul>
+<p class="FM_Body">有以下比較運算子：</p>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l2 level1 lfo3; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>完全相符/不完全相符</b>。用於指定完全相符項。例如，指定<b>主題</b><b>完全相符</b> - <b>Banana</b> 只會與&quot;Banana&quot; 相符，而不是與 &quot;Bananas&quot; 或 &quot;A truck full of banana leaves&quot; 相符。</p></li>
+	<li class="MsoNormal" style="mso-list: l2 level1 lfo3; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>包含/不包含</b>。指定主題行必須包含某指定的子字元串。例如，若指定<b>主題中包含 Banana</b>，則 I'm going bananas 是相符項。</p></li>
+	<li class="MsoNormal" style="mso-list: l2 level1 lfo3; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>通配字元相符/通配字元條件不相符</b>。通配字元 * 是用於郵件過濾比較字框的字元，代表過濾器中的一個或多個任意字元。例如，若指定「主題」與 banana*  相符，則 bananas 或 banana-leaf casserole 都是相符項，但 my banana-leaf casserole 則是不相符項。</p></li>
+</ul>
+<p class="FM_2Heading">操作項</p>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>保留在收件箱。</b>將郵件儲存在收件箱。如果沒有任何過濾規則相符某個郵件，則採取此預設操作。</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>丟棄。</b>刪除郵件，而且不傳遞。被丟棄郵件不在任何資料夾中，即便是「垃圾桶」也不例外。</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>歸檔到資料夾。</b>將郵件移至指定的資料夾。</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>標記使用。</b>可用選定的標記給相符的郵件打標記。</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>註明。</b>選擇<b>為已讀</b>或<b>已打標記</b>。</p></li>
+	<li class="MsoNormal" style="mso-list: l4 level1 lfo4; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>轉寄至地址</b>。將郵件轉寄至指定的地址。</p></li>
+</ul>
+<p class="FM_2Heading">多重操作項</p>
+<p class="MsoNormal">你可建立一個由多重操作項組成的過濾規則。你的規則中的組合操作項可解釋為：</p>
+<ul style="margin-top: 0in;" type="disc">
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>保留在收件箱。</b>雖然可指定多重「保留」操作項，但只有一個郵件副本會存入收件箱。</p></li>
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>丟棄。</b>如果與其他操作項組合，忽略「丟棄」而執行其他操作。</p></li>
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>歸檔到資料夾。</b>多個「歸檔到」操作項，可使多個郵件副本儲存到不同的資料夾中。如果指定的資料夾不存在，則將郵件存入收件箱。</p></li>
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>標記以 / 標示。</b>這些操作項適用於從最近執行的操作項返回的郵件。比如，在多重「歸檔到」操作項情況下，這可使某些儲存的郵件副本無標記，而另一些則有標記。</p></li>
+	<li class="MsoNormal" style="mso-list: l1 level1 lfo5; tab-stops: .5in;"><p 
+		 class="FM_Bulleted1"><b>轉寄地址。</b>郵件被轉寄至指定的地址。</p></li>
+</ul>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>S/MIMEを設定し、暗号化された署名付きメールメッセージの送受信を行う</title>
+<link rel="StyleSheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("セキュリティで保護されたメールメッセージを送信する（Network Editionのみ）\n署名付きの暗号化メールメッセージを送受信するようにS/MIMEを設定する");
+addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "ホーム", "../../advanced_web_client.htm");
+document.write("<a href=\"setting_up_smime.htm\">セキュリティで保護されたメールメッセージを送信する（Network Editionのみ）<\/a> &gt; 署名付きの暗号化メールメッセージを送受信するようにS/MIMEを設定する<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">署名付きの暗号化メールメッセージを送受信するようにS/MIMEを設定する</p>
+<p class="FM_Notice"><span style="font-weight: bold;"><b>備考</b></span>：これはZCS Network Edition限定の機能であり、アドバンストウェブクライアントでのみ使用できます。</p>
+<p class="FM_Body"><span style="mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin;  						 mso-ansi-language: EN-US; mso-fareast-language: EN-US;  						 mso-bidi-language: AR-SA;">アカウントでS/MIME機能が有効になっていると、デジタル署名付きの暗号化メッセージの送受信が可能になります。</span></p>
+<p class="FM_Body" style="mso-bidi-font-family: 'Times New Roman';"><span  	 style="mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US;  	 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">@ClientNameLong@でS/MIMEを使用するには、S/MIME署名および暗号化に適したセキュリティで保護されたメールの署名証明書が必要です。秘密キーのある証明書を、Windowsコンピュータ、Mac OSXコンピュータのローカルの証明書ストアにインストールする必要があります。Firefoxを使用する場合は、ブラウザの証明書ストアに保存します。証明書のインストール方法の詳細については、コンピュータまたはブラウザのそれぞれのドキュメントを参照してください。</span></p>
+<p class="FM_Body"><span style="mso-fareast-font-family: Calibri; mso-bidi-font-family: 'Times New Roman';  						 mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US;  						 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">暗号化された署名付きメッセージを送受信するには、自分の公開キーと受信者の公開キーを交換する必要があります。受信者の公開キーのコピーを取得するには、自分の証明書を使用して受信者にデジタル署名付きメッセージを送信し、その返信でデジタル署名付きメッセージを送信するよう要求します。メッセージを受信すると、受信者の証明書がアドレスブックの受信者の連絡先ページに保存されるか、連絡先が自動的に作成されます。</span></p>
+<p class="FM_Body">暗号化されたメッセージで作業する際には次の違いに注意してください。</p>
+<ul type="disc">
+	<li><p class="FM_Body"><span style="mso-fareast-font-family: Calibri;  								 mso-fareast-theme-font: minor-latin; mso-ansi-language: EN-US;  								 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">受信箱を共有している場合、委任されたユーザーは自分のコンピュータから暗号化されたメッセージを読むことはできません。暗号化されたメッセージを読むには、秘密キーが必要です。</span></p></li>
+	<li><p class="FM_Body"><span style="mso-ansi-language: EN-US; mso-fareast-language: EN-US;  								 mso-bidi-language: AR-SA;">暗号化されたメッセージの下書きは保存できません。</span></p></li>
+	<li><p class="FM_Body"><span style="mso-fareast-theme-font: minor-latin;  								 mso-ansi-language: EN-US; mso-fareast-language: EN-US;  								 mso-bidi-language: AR-SA;">暗号化されたメッセージにはスペルチェックを実行できません。</span></p></li>
+	<li><p class="FM_Body"><span style="mso-fareast-font-family: Calibri;  								 mso-fareast-theme-font: minor-latin; mso-ansi-language: EN-US;  								 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">暗号化されたメッセージの本文または添付ファイルのテキストは検索できません。</span><span style="mso-spacerun: yes;"></span><span  	 style="mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin;  	 mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">送信先、送信元、メッセージの作成日時、件名などのヘッダー情報のみが検索対象となります。</span></p></li>
+</ul>
+<p style="font-family: Arial, sans-serif; line-height: 115%; mso-ascii-theme-font: minor-latin; 
+	 mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin; 
+	 mso-hansi-theme-font: minor-latin; mso-bidi-font-family: 'Times New Roman'; 
+	 mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: EN-US; 
+	 mso-bidi-language: AR-SA;"></p>
+<p style="font-family: Arial, sans-serif;"></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

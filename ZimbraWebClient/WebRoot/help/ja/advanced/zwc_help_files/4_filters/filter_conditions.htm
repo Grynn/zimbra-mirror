@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\zwcHelp\zimbra_user_help_source\4_filters.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>フィルターの条件</title>
+<link rel="stylesheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("メールフィルターを使用する\nフィルターの条件");
+addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "ホーム", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">メールフィルターを使用する<\/a> &gt; フィルターの条件<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">フィルターの条件</p>
+<p class="FM_Body">フィルターには、1つまたは複数の条件が含まれます。たとえば、複数のアドレスからメールメッセージを送信する人がいて、その人物からのすべてのメッセージがすべて1つのフォルダに入るようにしたい場合は、各メールアドレスについての条件とそのメールメッセージを同じフォルダに入れるという操作についての条件という2つの条件を持つ1つのフィルターを作成できます。 </p>
+<p class="FM_Body">条件の順序は重要ではありません。メールメッセージがすべての条件に合致しなければならないか、いずれか1つに合致すればよいかを選択できます。また、否定形の条件も使用できます。たとえば、特定の単語を含まないメールメールをフィルターできます。フィルター条件では大文字と小文字が区別されません。</p>
+<p class="FM_Body">フィルター条件は以下の項目に基づいて設定できます。</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>[差出人]、[宛先]、[Cc]の各欄の特定のメールアドレス</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>特定のサイズ未満あるいは特定のサイズを超えるメールメッセージ</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>日付</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>添付ファイルの有無</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>メッセージの件名または本文に含まれる語句</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>カレンダー招待</p>
+<p class="FM_3Heading">[<span style="font-style: italic;">任意</span>]と[<span style="font-style: italic;">すべて</span>]を利用したフィルタリング</p>
+<p class="FM_Body">フィルター規則内の条件は、[<span class="FM_attribute">任意</span>]と[<span class="FM_attribute">すべて</span>]を使ってグループ化できます。これらは、検索機能のトピックで説明している検索の種類（「AND」と「OR」）に似ています。[<span class="FM_attribute">任意</span>]が「OR」に対応し、[<span class="FM_attribute">すべて</span>]が「AND」に対応します。</p>
+<p class="FM_Body">新しいフィルター規則の条件を定義するときに[<span class="FM_attribute">任意</span>]を選択すると、それらの条件のうちのいずれかに一致したメッセージが一致とみなされ、そのメッセージに操作が適用されます。しかし、[<span  	 class="FM_attribute">すべて</span>]を選択した場合は、そのフィルター規則内のすべての条件に一致したメッセージだけが一致とみなされ、操作が適用されます。</p>
+<p class="FM_3Heading">「<span style="font-style: italic;">含む</span>」、「<span style="font-style: italic;">一致</span>」、および「<span style="font-style: italic;">完全一致</span>」オプションを使用したフィルタリング</p>
+<p class="FM_Body">フィルター条件には、「含む」、「パターンに一致」、および「完全に一致」という3つの比較方法があります。これらのオプションは、件名行などの項目に対して使用できます。</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>[<span  	 class="FM_attribute">含む</span>]は、指定した行に指定した文字列が含まれることを意味します。たとえば、「バナナ」を含む件名行を指定すると、「バナナでクッキング」や「朝食にバナナ」などが一致します。</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>[<span  	 class="FM_attribute">パターンに一致</span>] は、指定した行が指定した文字列に一致することを意味します。これにはワイルドカードも含まれます。たとえば、「バナ*」と指定すると、「バナナ」は一致しますが、「緑のバナナ」は一致しません。</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>[<span  	 class="FM_attribute">完全に一致</span>]は、ワイルドカードや代わりの文字を使わずに、指定した行が指定した文字列に完全に一致することを意味します。たとえば、件名行に対して「バナナ」と指定した場合、一致するのは「バナナ」という件名だけであり、「バナ」、「私のバナナ」、「バナナ？」などは一致しません。</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Настройка S/MIME на отправку и получение зашифрованных сообщений электронной почты с подписью</title>
+<link rel="StyleSheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Отправка безопасных сообщений электронной почты (только для Network Edition)\nНастройка S/MIME на отправку и получение зашифрованных сообщений электронной почты с подписью");
+addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Домашний", "../../advanced_web_client.htm");
+document.write("<a href=\"setting_up_smime.htm\">Отправка безопасных сообщений электронной почты (только для Network Edition)<\/a> &gt; Настройка S/MIME на отправку и получение зашифрованных сообщений электронной почты с подписью<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Настройка S/MIME на отправку и получение зашифрованных сообщений электронной почты с подписью</p>
+<p class="FM_Notice"><span style="font-weight: bold;"><b>Примечание</b></span>. &#160;Эта функция доступна только в выпуске ZCS Network Edition на расширенной версии веб-клиента.</p>
+<p class="FM_Body"><span style="mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin;  						 mso-ansi-language: EN-US; mso-fareast-language: EN-US;  						 mso-bidi-language: AR-SA;">Если для учетной записи включена функция S/MIME, можно отправлять и получать зашифрованные сообщения с цифровой подписью.</span></p>
+<p class="FM_Body" style="mso-bidi-font-family: 'Times New Roman';"><span  	 style="mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US;  	 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Чтобы использовать S/MIME с @ClientNameLong@, необходимо иметь сертификат для подписи защищенного сообщения электронной почты, который подходит для подписывания и шифрования S/MIME. Сертификат с закрытым ключом должен быть установлен в локальном хранилище сертификатов на компьютере с ОС Windows, компьютере Mac OSX или в хранилище сертификатов браузера (в случае использования Firefox). Сведения об установке сертификатов см. в соответствующей документации компьютера или браузера.</span></p>
+<p class="FM_Body"><span style="mso-fareast-font-family: Calibri; mso-bidi-font-family: 'Times New Roman';  						 mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US;  						 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Для отправки и получения зашифрованных сообщений с подписью должен быть произведен обмен открытыми ключами адресата и отправителя. Чтобы получить копию открытого ключа адресата, можно отправить ему сообщение с цифровой подписью, используя сертификат, и запросить у него отправить сообщение с цифровой подписью в ответ. При получении сообщения сертификат адресата сохраняется на странице контакта адресата в адресной книге, или же контакт создается автоматически.</span></p>
+<p class="FM_Body">Обратите внимание на следующие отличия при работе с зашифрованными сообщениями.</p>
+<ul type="disc">
+	<li><p class="FM_Body"><span style="mso-fareast-font-family: Calibri;  								 mso-fareast-theme-font: minor-latin; mso-ansi-language: EN-US;  								 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">При совместном использовании папки «Входящие» делегированные пользователи не могут просматривать зашифрованные сообщения на своих компьютерах. Для чтения зашифрованных сообщений необходим закрытый ключ</span>.</p></li>
+	<li><p class="FM_Body"><span style="mso-ansi-language: EN-US; mso-fareast-language: EN-US;  								 mso-bidi-language: AR-SA;">Нельзя сохранять черновик зашифрованного сообщения.</span></p></li>
+	<li><p class="FM_Body"><span style="mso-fareast-theme-font: minor-latin;  								 mso-ansi-language: EN-US; mso-fareast-language: EN-US;  								 mso-bidi-language: AR-SA;">Нельзя проверять правописание зашифрованных сообщений.</span></p></li>
+	<li><p class="FM_Body"><span style="mso-fareast-font-family: Calibri;  								 mso-fareast-theme-font: minor-latin; mso-ansi-language: EN-US;  								 mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">Нельзя искать текст в теле или вложениях зашифрованного сообщения.</span><span style="mso-spacerun: yes;">&#160;</span><span  	 style="mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin;  	 mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA;">&#160;Можно искать только данные заголовка сообщения, например, информацию в полях «Кому» и «От», дату отправки или тему сообщения.</span></p></li>
+</ul>
+<p style="font-family: Arial, sans-serif; line-height: 115%; mso-ascii-theme-font: minor-latin; 
+	 mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin; 
+	 mso-hansi-theme-font: minor-latin; mso-bidi-font-family: 'Times New Roman'; 
+	 mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: EN-US; 
+	 mso-bidi-language: AR-SA;">&#160;</p>
+<p style="font-family: Arial, sans-serif;">&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="CalDAV" >
+  <topic name="外部カレンダーを追加する" url="zwc_help_files/7_calendars/adding_external_calendars.htm" />
+</key>
+<key name="HTML" >
+  <topic name="検索構文" url="zwc_help_files/12_search/search_syntax.htm" />
+  <topic name="メッセージをHTML形式または標準テキストで表示する" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <topic name="HTMLを使用してメッセージを作成する" url="zwc_help_files/3_compose/using_html_to_compose_messages.htm" />
+</key>
+<key name="icalendar、追加" >
+  <topic name="メールメッセージからiCalendarを追加する" url="zwc_help_files/7_calendars/adding_an_icalendar_from_an_email_message.htm" />
+</key>
+<key name="icalのTo-Doリスト" >
+  <topic name="タスクリストを作成する" url="zwc_help_files/9_tasks/creating_a_task_list.htm" />
+</key>
+<key name="iCalカレンダーをインポート" >
+  <topic name="iCalカレンダーをインポート" url="zwc_help_files/7_calendars/import_your_ical_calendar.htm" />
+</key>
+<key name="iCalカレンダーをエクスポート" >
+  <topic name="iCalカレンダーをエクスポート" url="zwc_help_files/7_calendars/export_your_ical_calendar.htm" />
+</key>
+<key name="ics" >
+  <topic name="メールメッセージからiCalendarを追加する" url="zwc_help_files/7_calendars/adding_an_icalendar_from_an_email_message.htm" />
+</key>
+<key name="imap" >
+  <topic name="外部アカウントにアクセスする" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+</key>
+<key name="POP" >
+  <topic name="外部アカウントにアクセスする" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+</key>
+<key name="POPの動作" >
+  <topic name="アカウントのPOPの動作を設定" url="zwc_help_files/1_setting_up/set_up_pop_behavior_for_your_account.htm" />
+</key>
+<key name="RSSフィード" >
+  <topic name="RSSフィードを購読する" url="zwc_help_files/2_manage_email/subscribing_to_rss_feeds.htm" />
+  <key name="購読する" >
+    <topic name="RSSフィードを購読する" url="zwc_help_files/2_manage_email/subscribing_to_rss_feeds.htm" />
+  </key>
+</key>
+<key name="S/MIME、アドレスブックに証明書を追加する" >
+  <topic name="アドレスブックの連絡先に証明書を追加する" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+</key>
+<key name="S/MIME、メッセージを作成" >
+  <topic name="デジタル署名付きメッセージを作成して送信" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="S/MIME、設定" >
+  <topic name="S/MIMEを設定し、暗号化された署名付きメールメッセージの送受信を行う" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+</key>
+<key name="S/MIMEメッセージを作成" >
+  <topic name="デジタル署名付きメッセージを作成して送信" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="SMSリマインダー" >
+  <topic name="メールおよびSMSリマインダー通知を設定する" url="zwc_help_files/8_scheduling/setting_email_and_sms_reminder_notification.htm" />
+</key>
+<key name="zimlet" >
+  <topic name="Zimletを無効化" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+  <topic name="Zimletを管理する" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+</key>
+<key name="Zimletを使用する" >
+  <topic name="Zimletを使用する" url="zwc_help_files/14_zimlets/using_zimlets.htm" />
+</key>
+<key name="Zimletギャラリー" >
+  <topic name="Zimletを管理する" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+</key>
+<key name="アカウントの割り当て容量" >
+  <topic name="アカウントの割り当て容量を管理する" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</key>
+<key name="アクセス特権" >
+  <topic name="アクセス特権" url="zwc_help_files/13_sharing/access_privileges.htm" />
+</key>
+<key name="アクティビティストリーム" >
+  <topic name="重要でないメールを受信箱から移動する" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+  <topic name="メールフィルターを操作する" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+</key>
+<key name="アクティビティストリームフォルダ" >
+  <topic name="重要でないメールを受信箱から移動する" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+</key>
+<key name="アドバンストウェブクライアント" >
+  <topic name="アドバンストクライアントおよび標準のクライアントを使用する" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="アドレスバブルのしくみ" >
+  <topic name="アドレスバブルのしくみ" url="zwc_help_files/2_manage_email/how_address_bubbles_work.htm" />
+</key>
+<key name="アドレスブック" >
+  <topic name="連絡先グループリストにメンバーを追加する" url="zwc_help_files/6_address_book/adding_members_to_a_contact_group_list.htm" />
+  <topic name="アドレスブックをエクスポートする" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  <topic name="メールを送信した連絡先リストに連絡先を自動的に追加" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+  <topic name="アドレスブックをインポートする" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  <topic name="アドレスブックを使用する" url="zwc_help_files/6_address_book/using_address_books.htm" />
+  <key name="インポートする" >
+    <topic name="アドレスブックをインポートする" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  </key>
+  <key name="エクスポートする" >
+    <topic name="アドレスブックをエクスポートする" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  </key>
+</key>
+<key name="アドレスブックを共有" >
+  <topic name="アドレスブックを共有" url="zwc_help_files/13_sharing/share_address_books.htm" />
+</key>
+<key name="アドレスブックを印刷" >
+  <topic name="連絡先名またはアドレスブックを印刷する" url="zwc_help_files/6_address_book/printing_a_contact_name_or_address_book.htm" />
+</key>
+<key name="アラート" >
+  <topic name="新着メールメッセージのデスクトップアラートを設定する" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+</key>
+<key name="インポートする" >
+  <topic name="アドレスブックをインポートする" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  <topic name="タスクリストをインポートする" url="zwc_help_files/9_tasks/importing_a_task_lists.htm" />
+  <key name="アドレスブック" >
+    <topic name="アドレスブックをインポートする" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  </key>
+  <key name="タスクリスト" >
+    <topic name="タスクリストをインポートする" url="zwc_help_files/9_tasks/importing_a_task_lists.htm" />
+  </key>
+</key>
+<key name="エクスポートする" >
+  <topic name="アドレスブックをエクスポートする" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  <key name="アドレスブック" >
+    <topic name="アドレスブックをエクスポートする" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  </key>
+</key>
+<key name="カレンダー" >
+  <topic name="別のカレンダーのプリファレンスの構成" url="zwc_help_files/7_calendars/other_calendar_preferences_to_configure.htm" />
+  <topic name="カレンダーを印刷" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  <key name="印刷" >
+    <topic name="カレンダーを印刷" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  </key>
+</key>
+<key name="カレンダーのグループ分け" >
+  <topic name="カレンダーをグループ分け" url="zwc_help_files/7_calendars/organize_your_calendars_into_groups.htm" />
+</key>
+<key name="カレンダーのプリファレンス" >
+  <topic name="カレンダーのプリファレンスを指定する" url="zwc_help_files/7_calendars/setting_your_calendar_preferences.htm" />
+</key>
+<key name="カレンダーを共有" >
+  <topic name="カレンダーを共有" url="zwc_help_files/13_sharing/share_calendars.htm" />
+</key>
+<key name="カレンダーを色分けする" >
+  <topic name="カレンダーに色を追加" url="zwc_help_files/7_calendars/add_color_to_a_calendar.htm" />
+</key>
+<key name="カレンダー招待をフィルター" >
+  <topic name="カレンダー招待のフィルターを作成する" url="zwc_help_files/4_filters/creating_a_filter_for_calendar_invitations.htm" />
+</key>
+<key name="キーボードショートカット" >
+  <topic name="キーボードショートカットを使用する" url="zwc_help_files/1_setting_up/using_keyboard_shortcuts.htm" />
+</key>
+<key name="グループメッセージ" >
+  <topic name="グループメッセージ" url="zwc_help_files/2_manage_email/group_messages.htm" />
+</key>
+<key name="グローバルアドレスリスト" >
+  <topic name="簡易検索を実行する" url="zwc_help_files/12_search/performing_a_quick_search.htm" />
+</key>
+<key name="ゴミ箱" >
+  <topic name="[ゴミ箱]フォルダを空にする" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+</key>
+<key name="ゴミ箱を空にする" >
+  <topic name="[ゴミ箱]フォルダを空にする" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+</key>
+<key name="サイズ、グループ化" >
+  <topic name="グループメッセージ" url="zwc_help_files/2_manage_email/group_messages.htm" />
+</key>
+<key name="スペルチェック辞書" >
+  <topic name="スペルチェック辞書に語句を追加する" url="zwc_help_files/3_compose/adding_words_to_the_spell_dictionary.htm" />
+</key>
+<key name="スレッド" >
+  <topic name="メールを管理する" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="タイプフェイス" >
+  <topic name="アカウントのビューをパーソナライズする" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="タイムゾーン" >
+  <topic name="デフォルトのタイムゾーンを変更" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+<key name="タグ" >
+  <topic name="タグを削除" url="zwc_help_files/5_organize_account/remove_a_tag.htm" />
+</key>
+<key name="タグの名前を変更" >
+  <topic name="タグ名を変更" url="zwc_help_files/5_organize_account/rename_a_tag.htm" />
+</key>
+<key name="タスク" >
+  <topic name="タスクリスト内のタスクを並べ替える" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  <topic name="タスクを別のリストに移動する" url="zwc_help_files/9_tasks/moving_a_task_to_another_list.htm" />
+  <key name="並べ替える" >
+    <topic name="タスクリスト内のタスクを並べ替える" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  </key>
+  <key name="移動する" >
+    <topic name="タスクを別のリストに移動する" url="zwc_help_files/9_tasks/moving_a_task_to_another_list.htm" />
+  </key>
+</key>
+<key name="タスクフォルダを印刷" >
+  <topic name="タスクまたはタスクリストを印刷する" url="zwc_help_files/9_tasks/printing_a_task_or_task_list.htm" />
+</key>
+<key name="タスクリスト" >
+  <topic name="タスクリストをインポートする" url="zwc_help_files/9_tasks/importing_a_task_lists.htm" />
+  <topic name="タスクリストをエクスポートする" url="zwc_help_files/9_tasks/exporting_a_task_list.htm" />
+  <topic name="タスクを作成する" url="zwc_help_files/9_tasks/creating_a_task.htm" />
+  <topic name="詳細なタスクを作成" url="zwc_help_files/9_tasks/create_a_detailed_task.htm" />
+  <topic name="タスクリストを作成する" url="zwc_help_files/9_tasks/creating_a_task_list.htm" />
+  <key name="エクスポートする" >
+    <topic name="タスクリストをエクスポートする" url="zwc_help_files/9_tasks/exporting_a_task_list.htm" />
+  </key>
+</key>
+<key name="タスクリストを使用する" >
+  <topic name="タスクリストを使用する" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+</key>
+<key name="タスクリストフォルダを共有" >
+  <topic name="タスクリストフォルダを共有" url="zwc_help_files/13_sharing/share_task_list_folders.htm" />
+</key>
+<key name="チェックボックス" >
+  <topic name="複数のメッセージを同じ操作にマークする" url="zwc_help_files/2_manage_email/marking_multiple_messages_for_the_same_action.htm" />
+</key>
+<key name="テーマ" >
+  <topic name="アカウントのビューをパーソナライズする" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="デジタル署名付きメッセージ、作成" >
+  <topic name="デジタル署名付きメッセージを作成して送信" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="デスクトップアラート" >
+  <topic name="新着メールメッセージのデスクトップアラートを設定する" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+</key>
+<key name="デフォルトの会議期間を設定" >
+  <topic name="デフォルトの会議期間を設定" url="zwc_help_files/8_scheduling/configure_your_default_meeting_duration.htm" />
+</key>
+<key name="デフォルトタイムゾーン" >
+  <topic name="デフォルトのタイムゾーンを変更" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+<key name="デフォルトメール検索" >
+  <topic name="メールボックスの最初のビューをカスタマイズする" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+</key>
+<key name="ドラッグを使用した添付ファイル" >
+  <topic name="添付ファイルを追加する" url="zwc_help_files/3_compose/adding_attachments.htm" />
+</key>
+<key name="バージョン" >
+  <topic name="アドバンストクライアントおよび標準のクライアントを使用する" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <topic name="ファイルをブリーフケースにチェックアウト/チェックインする" url="zwc_help_files/10_briefcase/checking_out_and_checking_in_files_to_briefcase.htm" />
+</key>
+<key name="バージョン履歴を表示" >
+  <topic name="ブリーフケースファイルのバージョン履歴を表示" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  <key name="ブリーフケースファイル" >
+    <topic name="ブリーフケースファイルのバージョン履歴を表示" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  </key>
+</key>
+<key name="パスワード" >
+  <topic name="パスワードを変更する" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+</key>
+<key name="パスワードを変更する" >
+  <topic name="パスワードを変更する" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+</key>
+<key name="パーソナを追加" >
+  <topic name="パーソナを追加" url="zwc_help_files/3_compose/add_personas.htm" />
+</key>
+<key name="パーソナ設定" >
+  <topic name="パーソナを追加" url="zwc_help_files/3_compose/add_personas.htm" />
+</key>
+<key name="ファイルをチェックインする" >
+  <topic name="ファイルをブリーフケースにチェックアウト/チェックインする" url="zwc_help_files/10_briefcase/checking_out_and_checking_in_files_to_briefcase.htm" />
+  <key name="ブリーフケース" >
+    <topic name="ファイルをブリーフケースにチェックアウト/チェックインする" url="zwc_help_files/10_briefcase/checking_out_and_checking_in_files_to_briefcase.htm" />
+  </key>
+</key>
+
+</indexdata>

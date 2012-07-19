@@ -1,0 +1,159 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<book name="入门" >
+  <item name="高级网络客户端" url="advanced_web_client.htm" />
+  <item name="使用高级和标准客户端" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <item name="登录和退出" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+  <item name="更改密码" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+  <item name="使用快捷键" url="zwc_help_files/1_setting_up/using_keyboard_shortcuts.htm" />
+</book>
+<book name="整理帐户" >
+  <item name="浏览帐户 " url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+  <item name="整理帐户" url="zwc_help_files/5_organize_account/organizing_your_account.htm" />
+  <item name="自定义邮箱初始视图" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+  <item name="个性化帐户视图" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+  <item name="更改默认时区" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+  <item name="地址气泡提示框的工作方式" url="zwc_help_files/2_manage_email/how_address_bubbles_work.htm" />
+  <item name="管理帐户限额" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+  <item name="清空“已删除邮件”文件夹" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+  <item name="标记多个邮件执行相同操作" url="zwc_help_files/2_manage_email/marking_multiple_messages_for_the_same_action.htm" />
+  <item name="设置不在办公室邮件" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</book>
+<book name="管理电子邮件" >
+  <item name="管理电子邮件" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+  <item name="更改帐户检查新邮件的频率" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+  <item name="设置新电子邮件的桌面提示" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+  <item name="为电子邮件文件夹分配保留政策" url="zwc_help_files/2_manage_email/assigning_retention_policies_to_email_folders.htm" />
+  <item name="对文件夹中的邮件进行分组" url="zwc_help_files/2_manage_email/group_messages.htm" />
+  <item name="对内容窗格中的邮件排序" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
+  <item name="将不太重要的邮件移出收件箱" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+  <item name="移动电子邮件" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+  <item name="订阅 RSS 源" url="zwc_help_files/2_manage_email/subscribing_to_rss_feeds.htm" />
+  <item name="移除垃圾邮件" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+  <item name="垃圾邮件选项" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+  <item name="从已删除邮件中恢复清除的项目" url="zwc_help_files/2_manage_email/recover_items_purged_from_trash.htm" />
+  <item name="查找电子邮件的来源" url="zwc_help_files/2_manage_email/finding_the_origin_of_an_email_message.htm" />
+</book>
+<book name="编写电子邮件" >
+  <item name="编写和发送电子邮件" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+  <item name="自定义邮件编写选项" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <item name="为邮件添加地址" url="zwc_help_files/3_compose/addressing_a_message.htm" />
+  <item name="自动使用签名" url="zwc_help_files/3_compose/using_signatures_automatically.htm" />
+  <item name="添加身份" url="zwc_help_files/3_compose/add_personas.htm" />
+  <item name="发送电子邮件时使用其他帐户身份" url="zwc_help_files/3_compose/using_other_account_identities_when_you_send_an_email.htm" />
+  <item name="标记邮件的优先级" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+  <item name="请求回执" url="zwc_help_files/3_compose/request_a_return_receipt.htm" />
+  <item name="添加附件" url="zwc_help_files/3_compose/adding_attachments.htm" />
+  <item name="检查邮件内容的拼写" url="zwc_help_files/3_compose/spell_check_a_message.htm" />
+  <item name="向拼写词典添加词" url="zwc_help_files/3_compose/adding_words_to_the_spell_dictionary.htm" />
+  <item name="将邮件保存为草稿" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+  <item name="删除邮件" url="zwc_help_files/2_manage_email/deleting_a_message.htm" />
+</book>
+<book name="阅读邮件" >
+  <item name="阅读邮件" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <item name="使用阅读窗格" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+  <item name="以 HTML 格式或纯文本格式显示邮件" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <item name="返回读信回条" url="zwc_help_files/2_manage_email/returning_read_receipts.htm" />
+  <item name="打印对话（所有邮件）" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  <item name="打印电子邮件" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
+  <item name="接收“权限被拒绝”的邮件" url="zwc_help_files/8_scheduling/receiving_a_permission_denied_message.htm" />
+  <item name="打开电子邮件附件" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</book>
+<book name="收取其他帐户中的邮件" >
+  <item name="访问外部帐户" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+  <item name="在另一电子邮件地址接收新邮件通知" url="zwc_help_files/2_manage_email/receiving_new_mail_notification_to_another_email_address.htm" />
+  <item name="为您的帐户设置 POP 行为" url="zwc_help_files/1_setting_up/set_up_pop_behavior_for_your_account.htm" />
+</book>
+<book name="回复和转发邮件" >
+  <item name="设置电子邮件回复的首选项" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+  <item name="回复电子邮件" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <item name="设置转发电子邮件的首选项" url="zwc_help_files/3_compose/set_preferences_for_forwarded_email.htm" />
+  <item name="转发电子邮件" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+  <item name="自动转发接收到的邮件" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <item name="以原邮件发件人的身份转发邮件" url="zwc_help_files/3_compose/forward_a_message_as_the_originator.htm" />
+  <item name="以重定向邮件方式转发邮件" url="zwc_help_files/3_compose/forward_a_message_as_a_redirected_message.htm" />
+</book>
+<book name="管理地址簿" >
+  <item name="使用地址簿" url="zwc_help_files/6_address_book/using_address_books.htm" />
+  <item name="将联系人添加到地址簿" url="zwc_help_files/6_address_book/adding_contacts_to_an_address_book.htm" />
+  <item name="自动将联系人添加到电子邮件联系人列表" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+  <item name="编辑联系人信息" url="zwc_help_files/6_address_book/editing_contact_information.htm" />
+  <item name="检查电子邮件地址是否在地址簿中" url="zwc_help_files/6_address_book/check_if_an_email_address_is_in_your_address_book.htm" />
+  <item name="创建联系人组" url="zwc_help_files/6_address_book/creating_a_contact_group.htm" />
+  <item name="向联系人组列表添加成员" url="zwc_help_files/6_address_book/adding_members_to_a_contact_group_list.htm" />
+  <item name="从现有电子邮件中添加新联系人" url="zwc_help_files/6_address_book/add_a_new_contact_from_an_existing_email_message.htm" />
+  <item name="将联系人移动到另一个地址簿" url="zwc_help_files/6_address_book/moving_a_contact_to_another_address_book.htm" />
+  <item name="转发联系人信息" url="zwc_help_files/6_address_book/forwarding_contact_information.htm" />
+  <item name="维护可信地址列表" url="zwc_help_files/2_manage_email/maintaining_a_trusted_addresses_list.htm" />
+  <item name="导入地址簿" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  <item name="导出地址簿" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  <item name="打印联系人姓名或地址簿" url="zwc_help_files/6_address_book/printing_a_contact_name_or_address_book.htm" />
+  <item name="删除联系人" url="zwc_help_files/6_address_book/deleting_contacts.htm" />
+  <item name="管理群组列表" url="zwc_help_files/6_address_book/managing_distribution_lists.htm" />
+  <item name="创建群组列表" url="zwc_help_files/6_address_book/create_distribution_lists.htm" />
+</book>
+<book name="管理行事历" >
+  <item name="使用行事历" url="zwc_help_files/7_calendars/working_with_calendars.htm" />
+  <item name="创建行事历" url="zwc_help_files/7_calendars/create_a_calendar.htm" />
+  <item name="为行事历添加颜色" url="zwc_help_files/7_calendars/add_color_to_a_calendar.htm" />
+  <item name="设置行事历首选项" url="zwc_help_files/7_calendars/setting_your_calendar_preferences.htm" />
+  <item name="配置其他行事历首选项" url="zwc_help_files/7_calendars/other_calendar_preferences_to_configure.htm" />
+  <item name="查看多个行事历" url="zwc_help_files/7_calendars/view_multiple_calendars.htm" />
+  <item name="在工作周视图中显示所有全天约会" url="zwc_help_files/7_calendars/displaying_all_day_appointments_in_your_work_week_view.htm" />
+  <item name="查看列表中的行事历活动" url="zwc_help_files/7_calendars/viewing_calendar_activities_in_a_list.htm" />
+  <item name="从电子邮件中添加 iCalendar" url="zwc_help_files/7_calendars/adding_an_icalendar_from_an_email_message.htm" />
+  <item name="添加外部行事历" url="zwc_help_files/7_calendars/adding_external_calendars.htm" />
+  <item name="将行事历分组" url="zwc_help_files/7_calendars/organize_your_calendars_into_groups.htm" />
+  <item name="打印行事历" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  <item name="删除行事历" url="zwc_help_files/7_calendars/delete_a_calendar.htm" />
+  <item name="导入 iCal 行事历" url="zwc_help_files/7_calendars/import_your_ical_calendar.htm" />
+  <item name="导出 iCal 行事历" url="zwc_help_files/7_calendars/export_your_ical_calendar.htm" />
+</book>
+<book name="安排约会、会议和活动事项" >
+<chunk name="安排约会、会议和活动事项" ref="whtdata1.xml" />
+</book>
+<book name="使用任务列表" >
+  <item name="使用任务列表" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+  <item name="创建任务列表" url="zwc_help_files/9_tasks/creating_a_task_list.htm" />
+  <item name="创建任务" url="zwc_help_files/9_tasks/creating_a_task.htm" />
+  <item name="创建详细任务" url="zwc_help_files/9_tasks/create_a_detailed_task.htm" />
+  <item name="更新任务" url="zwc_help_files/9_tasks/update_a_task.htm" />
+  <item name="按状态过滤任务" url="zwc_help_files/9_tasks/filter_tasks_by_status.htm" />
+  <item name="对任务列表中的任务进行排序" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  <item name="在“阅读窗格”中查看任务" url="zwc_help_files/9_tasks/viewing_tasks_in_the_reading_pane.htm" />
+  <item name="将任务移动到另一个列表" url="zwc_help_files/9_tasks/moving_a_task_to_another_list.htm" />
+  <item name="将任务标记为完成" url="zwc_help_files/9_tasks/mark_a_task_complete.htm" />
+  <item name="打印任务或任务列表" url="zwc_help_files/9_tasks/printing_a_task_or_task_list.htm" />
+  <item name="导入任务列表" url="zwc_help_files/9_tasks/importing_a_task_lists.htm" />
+  <item name="导出任务列表" url="zwc_help_files/9_tasks/exporting_a_task_list.htm" />
+  <item name="删除任务或任务列表" url="zwc_help_files/9_tasks/deleting_a_task_or_task_list.htm" />
+</book>
+<book name="在公文包中工作" >
+<chunk name="在公文包中工作" ref="whtdata2.xml" />
+</book>
+<book name="共享文件夹" >
+<chunk name="共享文件夹" ref="whtdata3.xml" />
+</book>
+<book name="搜索项目" >
+<chunk name="搜索项目" ref="whtdata4.xml" />
+</book>
+<book name="使用标记和文件夹整理电子邮件" >
+<chunk name="使用标记和文件夹整理电子邮件" ref="whtdata5.xml" />
+</book>
+<book name="使用邮件过滤器" >
+<chunk name="使用邮件过滤器" ref="whtdata6.xml" />
+</book>
+<book name="管理您的移动通信设备（仅限网络版本）" >
+<chunk name="管理您的移动通信设备（仅限网络版本）" ref="whtdata7.xml" />
+</book>
+<book name="发送安全电子邮件（仅限网络版本）" >
+<chunk name="发送安全电子邮件（仅限网络版本）" ref="whtdata8.xml" />
+</book>
+<book name="语音服务（仅限网络版本）" >
+<chunk name="语音服务（仅限网络版本）" ref="whtdata9.xml" />
+</book>
+<book name="使用 Zimlet" >
+<chunk name="使用 Zimlet" ref="whtdata10.xml" />
+</book>
+
+</tocdata>

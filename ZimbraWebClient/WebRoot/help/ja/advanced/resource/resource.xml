@@ -1,0 +1,246 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<resource>
+  <element name="Hide" value="非表示" />
+  <element name="Prev" value="&lt;&lt;" />
+  <element name="FileError" value="共有コメントファイルにアクセス中にエラーが発生しました" />
+  <element name="SendToFileMenu" value="ファイルに送信" />
+  <element name="DeleteCommentButtonToolTip" value="選択したコメントを削除" />
+  <element name="PrintThisCategory" value="このカテゴリを印刷" />
+  <element name="LoginFailureTitle" value="認証" />
+  <element name="AnonymousDlgText" value="匿名コメントは、承認されると表示可能になります。コメントを匿名で投稿しますか？" />
+  <element name="ProgressBarTitle" value="お待ちください..." />
+  <element name="BrowseSeqPrintProgressMsg" value="プリントのためのトピックを読み込み中..." />
+  <element name="ViewAcceptedComments" value="承認済みを表示" />
+  <element name="NewestOnBottomLabel" value="最新を下に" />
+  <element name="UpdatingCommentsForUserMessage" value="コメントを送信中..." />
+  <element name="RecieveCommentFromServerStartMsg" value="コメントを受信中..." />
+  <element name="Logo/Author" value="Powered By" />
+  <element name="DeleteCommentButton" value="削除" />
+  <element name="ForwardButtonToolTip" value="進む" />
+  <element name="NoUpdatePresent" value="更新はありません" />
+  <element name="RSSReadLabel" value="既読" />
+  <element name="RSSUnReadLabel" value="未読" />
+  <element name="GoOnline" value="オンラインにする" />
+  <element name="ErrorMsgTitle" value="エラー" />
+  <element name="SyncToc" value="SyncToc" />
+  <element name="Next" value="&gt;&gt;" />
+  <element name="SendToServerMenu" value="サーバーに送信" />
+  <element name="ShowCommentButtonToolTip" value="DO NOT TRANSLATE" />
+  <element name="SaveCommentText" value="コメントを追加 :" />
+  <element name="PreferenceDlgShowBreadCrumb" value="ブレッドクラムを表示" />
+  <element name="PrintEntireHelpString" value="すべてのトピックをプリントしますか？" />
+  <element name="FavoriteDeleteTopic" value="削除" />
+  <element name="NewFolderName" value="New Folder" />
+  <element name="OpenInBrowser" value="ブラウザで開く" />
+  <element name="DownloadingUpdate" value="更新をダウンロード中..." />
+  <element name="RememberMe" value="次回から入力を省略" />
+  <element name="PreferenceDlgAutoImportCommentsOnSignin" value="サインイン時にサーバーからコメントを受信" />
+  <element name="SortCommentButtonToolTip" value="DO NOT TRANSLATE" />
+  <element name="BackButtonToolTip" value="戻る" />
+  <element name="ViewerDialogCancelButton" value="キャンセル" />
+  <element name="OpenInNewTab" value="新規タブで開く" />
+  <element name="IndexSearchText" value="検索するキーワードを入力" />
+  <element name="ViewerDialogYesButton" value="はい" />
+  <element name="View" value="表示" />
+  <element name="CurrentOfflineText" value="現在オフラインで作業中です" />
+  <element name="ViewALLComments" value="すべて表示" />
+  <element name="ContentCategoryList" value="コンテンツカテゴリを選択" />
+  <element name="Seperate" value="|" />
+  <element name="AboutDescription" value="詳細 :" />
+  <element name="SendCommentsServerMessage" value="サーバーにコメントが送信されました" />
+  <element name="InvalidXML" value="無効な XML ファイル" />
+  <element name="AddCommentButtonToolTip" value="コメント追加ボックスを表示 / 非表示" />
+  <element name="AddCommentHereText" value="ここにコメントを追加" />
+  <element name="SaveCommentTextToolTip" value="追加するコメントを書く " />
+  <element name="PreferenceDlgCheckForUpdate" value="更新をチェックする" />
+  <element name="LoadingNewTabMsg" value="読み込み中..." />
+  <element name="GlossaryBoxTitle" value="用語集" />
+  <element name="FavoriteAddFolderTopic" value="フォルダーを追加" />
+  <element name="MarkAsRead" value="既読にする" />
+  <element name="CloseAppButton" value="閉じる" />
+  <element name="AuthenticateTitle" value="認証" />
+  <element name="Password" value="パスワード :" />
+  <element name="PreferenceDlgAutoImportCommentsOnLaunch" value="共有フォルダーからコメントを受信" />
+  <element name="CommentsBy" value="コメントの作成者 :" />
+  <element name="ViewPendingComments" value="保留中を表示" />
+  <element name="RequireWritePermission" value="モデレーターは共有フォルダーに書き込み許可を持っている必要があります。" />
+  <element name="Contents" value="目次" />
+  <element name="AboutButtonTitle" value="バージョン情報" />
+  <element name="AboutHelpID" value="ヘルプ ID :" />
+  <element name="ShowDateMenu" value="日付" />
+  <element name="AddToFavoriteMenuItem" value="リンクを追加" />
+  <element name="PrintSequence" value="印刷順序" />
+  <element name="PreferenceDialogCommentsDeleteMsg" value="すべてのコメントを削除しますか？" />
+  <element name="PreferenceDlgAutoUpdateContent" value="コンテンツの自動更新" />
+  <element name="PreferenceDlgReviewerName" value="レビュー担当者名" />
+  <element name="PrintAlertTitle" value="印刷" />
+  <element name="DeleteButtonTitle" value="削除" />
+  <element name="SearchTextInputToolTip" value="検索するテキストを入力" />
+  <element name="AddNewFavoriteMenu" value="リンクを追加" />
+  <element name="StartModeration" value="取り込み" />
+  <element name="For" value="DO NOT TRANSLATE" />
+  <element name="OnlyAccepted" value="承認済み" />
+  <element name="Anonymous" value="匿名" />
+  <element name="EnableModeration" value="モデレーションポッドを表示" />
+  <element name="Search" value="検索" />
+  <element name="Glossary" value="用語集" />
+  <element name="Disabled Prev" value="&lt;&lt;" />
+  <element name="SyncMessage" value="コメントの送受信が完了しました" />
+  <element name="PrintThisPage" value="このページを印刷" />
+  <element name="PreferenceDialogCommentTabTitle" value="コメント" />
+  <element name="FavoriteBoxTitle" value="お気に入り" />
+  <element name="NewBookmarkName" value="リンク名" />
+  <element name="Accept" value="承認" />
+  <element name="SortByDate" value="日付順" />
+  <element name="SyncCommentsFromServerMsg" value="コメントの送受信が完了しました。" />
+  <element name="ConnectionError" value="コメントの共有場所にアクセスできません" />
+  <element name="SendRcvCommentButtonToolTip" value="コメントの送信と受信" />
+  <element name="PreferenceDlgDeleteAllComments" value="すべてのコメントを削除" />
+  <element name="EditOption" value="編集" />
+  <element name="FavoriteDeleteButton" value="削除" />
+  <element name="PreferenceDialogBrowseButtonTitle" value="参照" />
+  <element name="PreferenceDlgChkCommentLocation" value="コメントの同期にデフォルトの場所を使用" />
+  <element name="PreferenceDlgCommentSyncLocation" value="フォルダーの場所 :" />
+  <element name="SignOut" value="サインアウト" />
+  <element name="SyncModerationFromServerMsg" value="コメントの送受信が完了しました。" />
+  <element name="ModerationPodTitle" value="モデレーション" />
+  <element name="Disabled Next" value="&gt;&gt;" />
+  <element name="AboutVersionID" value="バージョン ID :" />
+  <element name="PreferenceDlgOpenInNewTab" value="ヘルプトピックを新規タブで開く" />
+  <element name="PreferenceDlgShowBrowseSequence" value="閲覧順序を表示" />
+  <element name="SearchResultDefaultBookmark" value="検索結果" />
+  <element name="FavoriteDisplayTopic" value="表示" />
+  <element name="FavoriteRenameTopic" value="名前を変更" />
+  <element name="NewRSSFeedURL" value="RSS フィードの URL :" />
+  <element name="NoUpdateLocationSpecified" value="更新する場所がありません" />
+  <element name="UpdateAvailable" value="利用可能な更新が 1 つあります。今すぐ更新しますか？" />
+  <element name="SelectAuthor" value="作成者を選択" />
+  <element name="ShowReviewerMenu" value="レビューアー" />
+  <element name="ShowCommentReviewerMenu" value="DO NOT TRANSLATE" />
+  <element name="TOCBoxTitle" value="目次" />
+  <element name="IndexBoxTitle" value="索引" />
+  <element name="GlossaryDefinitionBoxTitle" value="用語集定義" />
+  <element name="FeedsButtonTitle" value="RSS フィード" />
+  <element name="FavoriteInvalidNameError" value="無効な名前です" />
+  <element name="ErrorInDownloadingUpdate" value="ダウンロード中にエラーが発生しました" />
+  <element name="InstallationStarted" value="インストールを開始しています..." />
+  <element name="PreviewMode" value="プレビューモード" />
+  <element name="Author" value="作成者" />
+  <element name="Update" value="更新" />
+  <element name="ServerSyncRequiredButtonLabel" value="今すぐ同期" />
+  <element name="PrintNotAllowedWariningMsg" value="次にトピックをプリントできません。続行しますか？" />
+  <element name="LoginFailedErrorMsg" value="ログインに失敗しました。もう一度試してください。" />
+  <element name="ConfirmDelete" value="コメントを削除しますか？" />
+  <element name="ViewRejectedComments" value="拒否済みを表示" />
+  <element name="AboutDialogTitle" value="バージョン情報" />
+  <element name="ReceiveFromFileMenu" value="ファイルから受信" />
+  <element name="CannotImportFileError" value="ファイルから取り込めません " />
+  <element name="PreferenceDlgCheckUpdateButton" value="今すぐチェック" />
+  <element name="NewRSSFeedName" value="RSS フィード名 :" />
+  <element name="NewBookmarkURL" value="URL にリンク" />
+  <element name="MinimizeAppButton" value="最小化" />
+  <element name="GenericDeleteMsg" value="すべての項目を削除しますか？" />
+  <element name="OnlyPending" value="保留中" />
+  <element name="WelcomeUserOnSign" value="%1 さんようこそ" />
+  <element name="NewestOnTopLabel" value="最新を上に" />
+  <element name="CommentDateTimeFormatter" value="YYYY/MM/DD, JJ:NN" />
+  <element name="CommentsAddEmptyError" value="空のコメントを追加することはできません" />
+  <element name="ShowCommentShowAllMenuItem" value="すべて" />
+  <element name="CommentFileMismatchError" value="ヘルプ ID が一致しないので、コメントを取り込めません" />
+  <element name="CommentTitle" value="コメント" />
+  <element name="SendRcvCommentButton" value="送信と受信" />
+  <element name="SaveButtonToolTip" value="クリックしてコメントをデータベースに追加" />
+  <element name="PreferenceDialogAllCommentsDeleted" value="すべてのコメントが削除されました" />
+  <element name="ViewerDialogOKButton" value="OK" />
+  <element name="LinksButtonTitle" value="リンク" />
+  <element name="NewRSSFeedDlgTitle" value="新規 RSS フィードを追加" />
+  <element name="MaximizeAppButton" value="最大化" />
+  <element name="ErrorInInstallingUpdate" value="インストール中にエラーが発生しました" />
+  <element name="ErrorWhileUpdating" value="更新中にエラーが発生しました" />
+  <element name="RSSRefreshLabel" value="更新" />
+  <element name="CurrentTopic" value="現在のトピックのコメント" />
+  <element name="RejectAll" value="すべて拒否" />
+  <element name="Delete" value="削除" />
+  <element name="Username" value="ユーザー名 :" />
+  <element name="OnlyNew" value="新規" />
+  <element name="CurrentOnlineText" value="現在オンラインで作業中です" />
+  <element name="CommentsNotFoundMsg" value="コメントがありません" />
+  <element name="Show" value="表示" />
+  <element name="SendCommentsFileMessage" value="共有場所にコメントが送信されました" />
+  <element name="ShowTopicMenu" value="DO NOT TRANSLATE" />
+  <element name="ShowCommentShowCurrentMenuItem" value="DO NOT TRANSLATE" />
+  <element name="AddCommentButton" value="追加" />
+  <element name="SearchButtonToolTip" value="Ctrl+Enter キーを押すと、検索結果が新規ウィンドウで開きます" />
+  <element name="SearchButtonTitle" value="検索" />
+  <element name="ShowHideButtonToolTip" value="表示 / 非表示" />
+  <element name="FavoritesTopMenuToolTip" value="お気に入りを追加または表示" />
+  <element name="CommentPodToggleToolTip" value="コメントポッドを切り替え" />
+  <element name="PreferenceDialogContentTabTitle" value="一般" />
+  <element name="PreferenceDlgUseOfflineHelp" value="オフラインヘルプを使用" />
+  <element name="NewSearchTabTitle" value="検索結果" />
+  <element name="NewBookmarkDlgTitle" value="新規リンクを追加" />
+  <element name="UpdateAvailableWithVersion" value="バージョン %s への更新を利用できます。今すぐ更新しますか？" />
+  <element name="LoginFailure" value="不正なパスワード" />
+  <element name="ClickHere" value="ここをクリックして" />
+  <element name="CommentsModeToolTip" value="コメントモードに切り替え" />
+  <element name="EntireHelpPrintProgressMsg" value="%2 件のトピック中のトピック %1を読み込み中..." />
+  <element name="CommentDateFormatter" value="YYYY/MM/DD" />
+  <element name="ReceiveCommentsFileMessage" value="共有場所からコメントが受信されました" />
+  <element name="FavoriteAddRSSFeed" value="RSS フィードを追加" />
+  <element name="FavoriteMessageTitle" value="お気に入り" />
+  <element name="FavoriteAlredyExists" value="既にお気に入りに存在します" />
+  <element name="OpenURL" value="URL を開く" />
+  <element name="MarkAsUnread" value="未読にする" />
+  <element name="CheckingforUpdateMsg" value="更新をチェック中..." />
+  <element name="NewUpdateAvailableMsg" value="新規アップデート" />
+  <element name="ViewerDialogNoButton" value="いいえ" />
+  <element name="AllAuthors" value="すべての作成者" />
+  <element name="AllStatus" value="すべてのステータス" />
+  <element name="OnlyRejected" value="拒否済み" />
+  <element name="GoOffline" value="オフラインにする" />
+  <element name="ModerationModeToolTip" value="モデレーションモードに切り替え" />
+  <element name="PreferenceDialogBrowseCommentSyncLocation" value="コメントを保存する場所を選択 :" />
+  <element name="SendCommentToServerStartMsg" value="コメントを送信中..." />
+  <element name="Index" value="索引" />
+  <element name="ReceiveCommentsServerMessage" value="サーバーからコメントが受信されました" />
+  <element name="ShowCommentButton" value="DO NOT TRANSLATE" />
+  <element name="SortCommentButton" value="DO NOT TRANSLATE" />
+  <element name="ViewFavoriteMenuItem" value="お気に入りを表示" />
+  <element name="PrefTitle" value="環境設定" />
+  <element name="ErrorShowingHelpFile" value="ヘルプファイルへのアクセスエラー" />
+  <element name="BrowseSequenceBoxTitle" value="使い方" />
+  <element name="EditRSSFeedDlgTitle" value="RSS フィードを編集" />
+  <element name="CommentImportFileDlgTitle" value="読み込むコメント XML ファイルを選択してください" />
+  <element name="PreferenceDlgHighLightSearch" value="検索結果を強調表示" />
+  <element name="CommentText" value="コメント" />
+  <element name="Date" value="日付" />
+  <element name="Reject" value="拒否" />
+  <element name="LoadingCommentsForUserMessage" value="コメントを受信中..." />
+  <element name="PreferenceButtonTitle" value="環境設定" />
+  <element name="SaveXMLFileDlg" value="コメント XML ファイルを保存する" />
+  <element name="SaveButton" value="保存" />
+  <element name="PrintEntireHelp" value="ヘルプ全体を印刷" />
+  <element name="PreferenceDlgDeleteCommentButton" value="すべてを削除" />
+  <element name="RSSNoneLabel" value="なし" />
+  <element name="AsAnonymous" value="匿名として" />
+  <element name="AcceptAll" value="すべて承認" />
+  <element name="WrongPassword" value="不正なパスワードです。もう一度試してください。" />
+  <element name="ErrorServerConnection" value="サーバーに接続中にエラーが発生しました。インターネット接続をチェックし、再試行してください。" />
+  <element name="SignIn" value="サインイン" />
+  <element name="SelectStatus" value="ステータスを選択" />
+  <element name="ReceiveFromServerMenu" value="サーバーから受信" />
+  <element name="PrintMenuOptionsToolTip" value="印刷メニュー" />
+  <element name="PreferenceDialogUserNameError" value="有効なレビュー担当者名を指定してください" />
+  <element name="PreferenceDlgUseLoginName" value="ログイン名に常にレビュー担当者名を使用" />
+  <element name="ServerConnectionError" value="サーバへ接続できません。オフラインモードに切り替えます" />
+  <element name="EditBookmarkDlgTitle" value="リンクを編集" />
+  <element name="SearchResultError" value="検索条件に一致する結果がみつかりませんでした" />
+  <element name="UpdateMsgTitle" value="自動更新" />
+  <element name="RSSSelectLabel" value="選択 :" />
+  <element name="AllTopics" value="すべてのトピックのコメント" />
+  <element name="Status" value="ステータス" />
+  <element name="EndModeration" value="書き出し" />
+  <element name="ShowBy" value="表示基準" />
+  <element name="ModerationRightsNotPresent" value="モデレーションポッドを表示するには管理者権限が必要です" />
+</resource>
+

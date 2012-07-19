@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<item name="署名付きの暗号化メールメッセージを送受信するようにS/MIMEを設定する" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+<item name="S/MIME使用のセキュリティのプリファレンスを設定する" url="zwc_help_files/15_s_mime/setting_security_preferences_for_using_s_mime.htm" />
+<item name="アドレスブックの連絡先に証明書を追加する" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+<item name="デジタル署名付きメッセージを作成して送信" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+<item name="暗号化されたメッセージを作成して送信" url="zwc_help_files/15_s_mime/compose_and_send_an_encrypted_message.htm" />
+
+</tocdata>

@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\review docs\SearchHelpTopics.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Описание языка запроса расширенного поиска</title>
+<link rel="stylesheet" href="../searchhelptopics.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Поиск элементов\nЯзык запроса расширенного поиска ");
+addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Домашний", "../../advanced_web_client.htm");
+document.write("<a href=\"searching_your_account.htm\">Поиск элементов<\/a> &gt; Язык запроса расширенного поиска <\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Язык запроса расширенного поиска </p>
+<p class="FM_Body">Этот расшир раздел подробно описывает грамматику языка поиска, используемую @CollaborationProductShortName@ функцией поиска.</p>
+<p class="FM_2Heading">Структура языка поиска</p>
+<p class="FM_Body">Простой поиск можно выполнить, просто введя слово в поле поиска. Только слова (слова без оператора поиска) используются для поиска в операторе «content:», что соответствует любому тексту в сообщении.</p>
+<p class="FM_Body">Расширенный поиск можно выполнить, указав <span  	 style="font-weight: bold;">оператор поиска</span>. Оператор поиска — это специальное ключевое слово, за которым следует двоеточие, а затем другие параметры, специфические для этого оператора. Например:</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';">&#160;</span></span><span style="font-weight: bold;">В: входящие</span>&#160;оператором является «в», а параметром — «входящие», в результате чего отображаются сообщения, которые содержатся в папке с именем «Входящие».</p></li>
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';">&#160;&#160;</span></span><span style="font-weight: bold;">от: имя_пользователя</span>&#160;— оператором является «от», а параметром «имя_пользователя», в результате чего отображаются сообщения, которые содержат слово «имя_пользователя» в адресе электронной почты.</p></li>
+</ul>
+<p class="FM_Body">Перед любым ключевым словом можно поставить префикс «не», чтобы определить элементы, которые не содержат определенный критерий, например <span style="font-weight: bold;">не в: входящие</span>. В профиле поиска не учитывается регистр букв; это значит, что «в: входящие» равнозначно «в: Входящие». Знак минуса (<span style="font-weight: bold;">-</span>) является синонимом <span style="font-weight: bold;">NOT</span>&#160;. Поэтому <span style="font-weight: bold;">не в: входящие</span>&#160;равнозначно<span style="font-weight: bold;">-в: входящие</span>.</p>
+<p class="FM_Body">В большинстве случаев нет необходимости включать знаки пунктуации, строку поиска, поскольку они игнорируются кодом поиска. Но в определенных случаях это не так (например, поиск времени «9:30» в сообщении), и в этих случаях параметр поиска следует заключать в кавычки. Например: <span style="font-weight: bold;">тема: 9.30</span>&#160;— будут найдены сообщения, в теме сообщения которых содержится время 9.30.</p>
+<p class="FM_Body">Допустимые знаки в параметре поиска.</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';">&#160;</span></span>Следующие знаки можно использовать в параметре поиска только заключенными в кавычки: ~ '&#160;! # $ % ^ &amp; * ( ) _&#160;? / { }[ ]&#160;;&#160;:</p></li>
+	<li><p class="FM_Bulleted1">Следующие знаки можно использовать в параметре поиска, только если они не являются первыми знаками в строке: - + &lt; &gt;</p></li>
+</ul>
+<p class="FM_Notice"><span class="FM_Bold">Примечание. &#160;&#160;</span>Специальные символы (например, товарные знаки, являющиеся частью слова), удаляются, когда слово индексируется для поиска. Они игнорируются при поиске. Например, поиск по слову Zimbra™ отображает результаты со словом Zimbra как с символом товарного знака, так и без него.</p>
+<p class="FM_2Heading">Несколько условий поиска</p>
+<p class="FM_Body">Если вводится несколько условий поиска (разделенных пробелами), по умолчанию они объединяются оператором «И». Если задать условие <span style="font-weight: bold;">в: входящие Петр</span>,&#160;будут отображаться сообщения, которые находятся в папке «Входящие» И содержат слово «Петр». Для поиска с использованием нескольких критериев, можно найти элементы соответствующие одному или всем указанным критериям. Со страницы расширенного поиска можно выполнить оба типа поиска.</p>
+<p class="FM_Body">Для всех областей поиска, кроме обычного поиска, правила следующие.</p>
+<p class="FM_Bulleted1">Поиск сообщений, соответствующих любым указанным критериям называется поиском с условием '<span style="font-weight: bold;">OR'</span>&#160;, потому что, если сообщение содержит X или Y, оно считается соответствующим условиям поиска.</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1">Поиск сообщений, которые содержат X и Y, называется поиском с условием <span style="font-weight: bold;">И</span>,&#160;поскольку сообщение должно соответствовать&#160;всем указанным критериям, чтобы считаться совпадением. </p></li>
+	<li><p class="FM_Body">В запросе отображается только условие ИЛИ. Если задан параметр показывать запрос поиска на панели поиска по мере выбора в поле «Расширенный поиск», текстовое окно поиска будет обновляться и отображать полученный запрос. В профиле поиска типа <span style="font-weight: bold;">AND</span>&#160; слово <span style="font-weight: bold;">AND</span> не отображается.</p></li>
+</ul>
+<p class="FM_Body"><span style="font-weight: bold;">Совет</span>. Использование скобок с условиями И и ИЛИ. Слова в скобках считаются единицей. Например, <span style="font-weight: bold;">from: (Иван Василий)</span>&#160;равнозначно условию <span style="font-weight: bold;">от: Иван И от: Василий</span>. Если использовать ИЛИ в скобках, <span style="font-weight: bold;">от: (Иван или Сидоров)</span>, результат поиска будет <span style="font-weight: bold;">от: Иван ИЛИ от: Сидоров</span>.</p>
+<p class="FM_2Heading">Использование * (звездочки) в качестве подстановочного знака в профиле поиска</p>
+<p class="FM_Body">Звездочку (<span style="font-weight: bold;">*</span>) можно использовать в качестве подстановочного знака в конце слова при поиске содержимого, которое включает слова с похожим написанием.</p>
+<p class="FM_Body">Используйте звездочку <span style="font-weight: bold;">*</span>&#160; как подстановочный знак. Например, строка поиска <span style="font-weight: bold;">ты*</span>&#160; выдает элементы <span style="font-style: italic;">ты</span>, <span style="font-style: italic;">тыква</span>, <span style="font-style: italic;">тысяча</span> и т.д.</p>
+<p class="FM_Notice"><span class="FM_Bold">Примечание. &#160;&#160;</span>Двухбайтовый символ звездочки в запросе поиска не рассматривается как подстановочный знак и игнорируется при поиске.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

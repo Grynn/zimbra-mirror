@@ -1,0 +1,102 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<book name="はじめに" >
+  <item name="ZCS基本ウェブクライアントの概要" url="zimbra_basic_user_help.htm" />
+  <item name="アドバンストクライアントおよび標準のクライアントを使用する" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <item name="ログインとログアウト" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+  <item name="キーボードショートカット" url="standard/b_keyboard_shortcut_keys.htm" />
+</book>
+<book name="メールボックス内を移動する" >
+  <item name="メールボックス内を移動する" url="standard/b_navigating_around_your_mailbox.htm" />
+  <item name="メール内を移動する方法" url="standard/b_how_to_navigate_with_mail.htm" />
+  <item name="プリファレンスを指定する" url="standard/b_setting_your_options.htm" />
+  <item name="アカウントの割り当て容量を管理する" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</book>
+<book name="メールを管理する" >
+  <item name="メールを管理する" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+  <item name="メールの表示方法を管理する" url="standard/b_managing_how_email_is_displayed.htm" />
+  <item name="メールボックスの最初のビューをカスタマイズする" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+  <item name="メッセージをHTML形式または標準テキストで表示する" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <item name="メールメッセージを移動する" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+  <item name="メールメッセージを印刷する" url="standard/b_printing_email_messages.htm" />
+  <item name="[ゴミ箱]フォルダを使用する" url="standard/using_the_trash_folder.htm" />
+  <item name="削除したメールメッセージを復元する" url="standard/recovering_deleted_mail_messages.htm" />
+  <item name="メールメッセージを完全に削除する" url="standard/b_purging_email_messages.htm" />
+  <item name="スパムを削除する" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+  <item name="RSS/ATOMフィードを購読する" url="standard/subscribing_to_rss_atom_feeds.htm" />
+  <item name="外出中のメッセージを設定する" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</book>
+<book name="メールを読む" >
+  <item name="メールを読む" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <item name="閲覧ペインを使用する" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+  <item name="メールを未読にする" url="standard/b_marking_mail_as_unread.htm" />
+  <item name="メールメッセージの添付ファイルを開く" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+  <item name="新着メールを確認する" url="standard/b_how_do_i_know_when_i_receive_new_messages.htm" />
+</book>
+<book name="メールを作成する" >
+  <item name="新しいメールメッセージを作成する" url="standard/b_composing_email_message.htm" />
+  <item name="メッセージをアドレス指定する" url="zwc_help_files/3_compose/addressing_a_message.htm" />
+  <item name="メッセージにファイルを添付する" url="standard/b_attaching_files_to_your_message.htm" />
+  <item name="署名を自動的に追加する" url="standard/b_automatically_adding_your_signature.htm" />
+  <item name="メッセージを下書きとして保存" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+  <item name="メッセージの優先度レベルをマーク" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+</book>
+<book name="メッセージに返信/メッセージを転送" >
+  <item name="メールメッセージに返信する" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <item name="メール返信のプリファレンスを設定" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+  <item name="メールメッセージを転送する" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+  <item name="受信したメッセージを自動的に転送する" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+</book>
+<book name="アドレスブックを管理する" >
+  <item name="アドレスブック" url="standard/b_your_address_books.htm" />
+  <item name="アドレスブックを使用する" url="standard/b_using_address_books.htm" />
+  <item name="新しい連絡先を追加する" url="standard/b_adding_new_contacts.htm" />
+  <item name="連絡先リストをインポートする" url="standard/b_importing_a_contact_list.htm" />
+  <item name="連絡先リストをエクスポートする" url="standard/exporting_a_contact_list.htm" />
+  <item name="連絡先名を印刷する" url="standard/printing_contact_names.htm" />
+</book>
+<book name="カレンダーを管理する" >
+  <item name="カレンダーについて" url="standard/b_about_calendar.htm" />
+  <item name="新しいカレンダーを作成する" url="standard/b_create_new_calendar.htm" />
+  <item name="カレンダーを色分けする" url="standard/adding_background_color_to_calendars.htm" />
+  <item name="カレンダービュー" url="standard/calendar_views.htm" />
+  <item name="iCalendarをインポートする" url="standard/importing_icalendars.htm" />
+  <item name="iCalenderをエクスポートする" url="standard/b_exporting_icalenders.htm" />
+  <item name="カレンダーを削除する" url="standard/b_cleaning_up_your_calendar.htm" />
+</book>
+<book name="予約を予定する" >
+  <item name="会議を作成する" url="standard/b_scheduling_a_meeting.htm" />
+  <item name="繰り返し予約を作成する" url="standard/b_creating_recurring_appointments.htm" />
+  <item name="会議を取り消す" url="standard/b_canceling_a_meeting.htm" />
+</book>
+<book name="タスクリストを使用する" >
+  <item name="タスクリストを使用する" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+  <item name="タスクを変更する" url="standard/changing_a_task.htm" />
+</book>
+<book name="ブリーフケースで作業する" >
+  <item name="ブリーフケースで作業する" url="standard/b_working_in_briefcase.htm" />
+</book>
+<book name="フォルダを共有する" >
+  <item name="共有カレンダーにリンク" url="standard/linke_to_shared_calendars.htm" />
+  <item name="共有アドレスブックにリンク" url="standard/link_to_shared_address_books.htm" />
+</book>
+<book name="項目を検索する" >
+  <item name="検索を使用する" url="standard/b_using_search.htm" />
+  <item name="検索クエリを作成して保存する" url="standard/b_create_and_save_a_search_query.htm" />
+  <item name="検索構文" url="zwc_help_files/12_search/search_syntax.htm" />
+  <item name="検索でアスタリスクワイルドカード（*）を使用する" url="zwc_help_files/12_search/using_as_a_wildcard_in_search.htm" />
+  <item name="欧文以外の言語の添付ファイルに関する問題を検索" url="standard/search_issues_with_non-western_language_attachments.htm" />
+  <item name="特定の連絡先名との間で送受信されたメッセージを検索する" url="standard/searching_for_messages_sent_to_or_received_from_a_contact_name.htm" />
+  <item name="特定の送信者との間で送受信されたメッセージを検索する" url="standard/searching_for_messages_sent_to_or_from_the_sender.htm" />
+</book>
+<book name="タグとフォルダを使用して項目を整理する" >
+  <item name="タグをメッセージや連絡先に割り当てる" url="standard/b_assigning_tags_to_messages_and_contacts.htm" />
+  <item name="メールメッセージにフラグを付ける" url="standard/b_flagging_an_email_message.htm" />
+  <item name="フォルダを削除する" url="standard/bc_deleting_folders.htm" />
+</book>
+<book name="メールフィルターを使用する" >
+  <item name="メッセージをフィルターする" url="standard/bc_filtering_your_messages.htm" />
+  <item name="フィルターの条件" url="standard/b_filter_conditions.htm" />
+</book>
+
+</tocdata>

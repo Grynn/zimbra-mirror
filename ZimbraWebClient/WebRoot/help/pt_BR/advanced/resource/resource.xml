@@ -1,0 +1,246 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<resource>
+  <element name="Hide" value="Esconder" />
+  <element name="Prev" value="&lt;&lt;" />
+  <element name="FileError" value="Erro ao acessar arquivo de comentário compartilhado" />
+  <element name="SendToFileMenu" value="Enviar para o arquivo" />
+  <element name="DeleteCommentButtonToolTip" value="Excluir comentário selecionado" />
+  <element name="PrintThisCategory" value="Imprimir esta categoria" />
+  <element name="LoginFailureTitle" value="Autenticação" />
+  <element name="AnonymousDlgText" value="Comentários anônimos serão visíveis se forem aceitos. Deseja postar comentários anonimamente?" />
+  <element name="ProgressBarTitle" value="Aguarde..." />
+  <element name="BrowseSeqPrintProgressMsg" value="Carregando tópicos para imprimir..." />
+  <element name="ViewAcceptedComments" value="Exibição aceita" />
+  <element name="NewestOnBottomLabel" value="O mais recente na parte inferior" />
+  <element name="UpdatingCommentsForUserMessage" value="Enviando comentários" />
+  <element name="RecieveCommentFromServerStartMsg" value="Recebendo comentários..." />
+  <element name="Logo/Author" value="Oferecido por" />
+  <element name="DeleteCommentButton" value="Excluir" />
+  <element name="ForwardButtonToolTip" value="Avançar" />
+  <element name="NoUpdatePresent" value="Não há atualizações disponíveis" />
+  <element name="RSSReadLabel" value="Lido" />
+  <element name="RSSUnReadLabel" value="Não lido" />
+  <element name="GoOnline" value="ficar online" />
+  <element name="ErrorMsgTitle" value="Erro" />
+  <element name="SyncToc" value="SyncToc" />
+  <element name="Next" value="&gt;&gt;" />
+  <element name="SendToServerMenu" value="Enviar para o servidor" />
+  <element name="ShowCommentButtonToolTip" value="DO NOT TRANSLATE" />
+  <element name="SaveCommentText" value="Adicionar comentários:" />
+  <element name="PreferenceDlgShowBreadCrumb" value="Mostrar trilhas de navegação" />
+  <element name="PrintEntireHelpString" value="Deseja imprimir todos os tópicos?" />
+  <element name="FavoriteDeleteTopic" value="Excluir" />
+  <element name="NewFolderName" value="New Folder" />
+  <element name="OpenInBrowser" value="Abrir no navegador" />
+  <element name="DownloadingUpdate" value="Baixando atualizações..." />
+  <element name="RememberMe" value="Lembrar-me" />
+  <element name="PreferenceDlgAutoImportCommentsOnSignin" value="Receber comentários do servidor ao conectar" />
+  <element name="SortCommentButtonToolTip" value="DO NOT TRANSLATE" />
+  <element name="BackButtonToolTip" value="Voltar" />
+  <element name="ViewerDialogCancelButton" value="Cancelar" />
+  <element name="OpenInNewTab" value="Abrir em uma nova aba" />
+  <element name="IndexSearchText" value="digito palavras para pesquisa" />
+  <element name="ViewerDialogYesButton" value="Yes" />
+  <element name="View" value="Exibir" />
+  <element name="CurrentOfflineText" value="Trabalhando offline no momento" />
+  <element name="ViewALLComments" value="Exibir tudo" />
+  <element name="ContentCategoryList" value="Selecionar uma categoria de conteúdo" />
+  <element name="Seperate" value="|" />
+  <element name="AboutDescription" value="Descrição" />
+  <element name="SendCommentsServerMessage" value="Comentários enviados ao servidor" />
+  <element name="InvalidXML" value="Arquivo XML inválido" />
+  <element name="AddCommentButtonToolTip" value="Mostrar/ocultar caixa de adicionar comentário" />
+  <element name="AddCommentHereText" value="Adicionar comentários aqui:" />
+  <element name="SaveCommentTextToolTip" value="Gravar comentários a serem adicionados" />
+  <element name="PreferenceDlgCheckForUpdate" value="Verificar atualizações" />
+  <element name="LoadingNewTabMsg" value="Carregando..." />
+  <element name="GlossaryBoxTitle" value="Glossário" />
+  <element name="FavoriteAddFolderTopic" value="Adicionar pasta" />
+  <element name="MarkAsRead" value="Marcar como lido" />
+  <element name="CloseAppButton" value="Fechar" />
+  <element name="AuthenticateTitle" value="Autenticar" />
+  <element name="Password" value="Senha:" />
+  <element name="PreferenceDlgAutoImportCommentsOnLaunch" value="Receber comentários da pasta compartilhada" />
+  <element name="CommentsBy" value="Comentários por:" />
+  <element name="ViewPendingComments" value="Exibição pendente" />
+  <element name="RequireWritePermission" value="O mediador deve ter permissões de gravação na pasta compartilhada." />
+  <element name="Contents" value="Conteúdo" />
+  <element name="AboutButtonTitle" value="Sobre" />
+  <element name="AboutHelpID" value="ID da Ajuda:" />
+  <element name="ShowDateMenu" value="Data" />
+  <element name="AddToFavoriteMenuItem" value="Adicionar a Links" />
+  <element name="PrintSequence" value="Imprimir seqüência" />
+  <element name="PreferenceDialogCommentsDeleteMsg" value="Deseja excluir todos os comentários?" />
+  <element name="PreferenceDlgAutoUpdateContent" value="Atualizar conteúdo automaticamente" />
+  <element name="PreferenceDlgReviewerName" value="Nome do revisor" />
+  <element name="PrintAlertTitle" value="Imprimir" />
+  <element name="DeleteButtonTitle" value="Excluir" />
+  <element name="SearchTextInputToolTip" value="digito texto para pesquisa" />
+  <element name="AddNewFavoriteMenu" value="Adicionar link" />
+  <element name="StartModeration" value="Importar" />
+  <element name="For" value="DO NOT TRANSLATE" />
+  <element name="OnlyAccepted" value="Aceito" />
+  <element name="Anonymous" value="Anônimo" />
+  <element name="EnableModeration" value="Mostrar pod de mediador" />
+  <element name="Search" value="Buscar" />
+  <element name="Glossary" value="Glossário" />
+  <element name="Disabled Prev" value="&lt;&lt;" />
+  <element name="SyncMessage" value="Enviar/receber comentários concluído" />
+  <element name="PrintThisPage" value="Imprimir esta página" />
+  <element name="PreferenceDialogCommentTabTitle" value="Comentários" />
+  <element name="FavoriteBoxTitle" value="Favoritos" />
+  <element name="NewBookmarkName" value="Nome do link" />
+  <element name="Accept" value="Aceitar" />
+  <element name="SortByDate" value="Classificar por data" />
+  <element name="SyncCommentsFromServerMsg" value="Enviar/receber comentários concluído." />
+  <element name="ConnectionError" value="Não é possível acessar local compartilhado para comentários" />
+  <element name="SendRcvCommentButtonToolTip" value="Enviar e receber comentários" />
+  <element name="PreferenceDlgDeleteAllComments" value="Excluir todos os comentários" />
+  <element name="EditOption" value="Editar" />
+  <element name="FavoriteDeleteButton" value="Excluir" />
+  <element name="PreferenceDialogBrowseButtonTitle" value="Procurar" />
+  <element name="PreferenceDlgChkCommentLocation" value="Usar local padrão para sincronizar comentários" />
+  <element name="PreferenceDlgCommentSyncLocation" value="Local de pasta:" />
+  <element name="SignOut" value="Desconectar" />
+  <element name="SyncModerationFromServerMsg" value="Enviar/receber comentários concluído." />
+  <element name="ModerationPodTitle" value="Moderation" />
+  <element name="Disabled Next" value="&gt;&gt;" />
+  <element name="AboutVersionID" value="ID da versão:" />
+  <element name="PreferenceDlgOpenInNewTab" value="Abrir tópicos da Ajuda em uma nova aba" />
+  <element name="PreferenceDlgShowBrowseSequence" value="Mostrar seqüência de pesquisa" />
+  <element name="SearchResultDefaultBookmark" value="Pesquisar resultados para " />
+  <element name="FavoriteDisplayTopic" value="Exibir" />
+  <element name="FavoriteRenameTopic" value="Renomear" />
+  <element name="NewRSSFeedURL" value="URL do feed RSS:" />
+  <element name="NoUpdateLocationSpecified" value="Local de atualização indisponível" />
+  <element name="UpdateAvailable" value="Há uma atualização disponível. Deseja atualizar agora?" />
+  <element name="SelectAuthor" value="Selecionar autor" />
+  <element name="ShowReviewerMenu" value="Revisor" />
+  <element name="ShowCommentReviewerMenu" value="DO NOT TRANSLATE" />
+  <element name="TOCBoxTitle" value="Conteúdo" />
+  <element name="IndexBoxTitle" value="Índice" />
+  <element name="GlossaryDefinitionBoxTitle" value="Definição do glossário" />
+  <element name="FeedsButtonTitle" value="Feeds de RSS" />
+  <element name="FavoriteInvalidNameError" value="Nome inválido" />
+  <element name="ErrorInDownloadingUpdate" value="Erro encontrado durante o download" />
+  <element name="InstallationStarted" value="Iniciando instalação..." />
+  <element name="PreviewMode" value="Modo de visualização" />
+  <element name="Author" value="Autor" />
+  <element name="Update" value="Atualizar" />
+  <element name="ServerSyncRequiredButtonLabel" value="Sincronizar agora" />
+  <element name="PrintNotAllowedWariningMsg" value="Não é possível imprimir os tópicos a seguir. Deseja continuar?" />
+  <element name="LoginFailedErrorMsg" value="Falha de logon. Tente novamente." />
+  <element name="ConfirmDelete" value="Deseja excluir o comentário?" />
+  <element name="ViewRejectedComments" value="Exibição rejeitada" />
+  <element name="AboutDialogTitle" value="Sobre" />
+  <element name="ReceiveFromFileMenu" value="Receber do arquivo" />
+  <element name="CannotImportFileError" value="Não é possível importar de arquivo" />
+  <element name="PreferenceDlgCheckUpdateButton" value="Verificar agora" />
+  <element name="NewRSSFeedName" value="Nome do feed RSS:" />
+  <element name="NewBookmarkURL" value="URL do link" />
+  <element name="MinimizeAppButton" value="Minimizar" />
+  <element name="GenericDeleteMsg" value="Deseja excluir o item selecionado?" />
+  <element name="OnlyPending" value="Pendente" />
+  <element name="WelcomeUserOnSign" value="Bem-vindo" />
+  <element name="NewestOnTopLabel" value="O mais na parte superior" />
+  <element name="CommentDateTimeFormatter" value="DD/MM/YYYY, JJ:NN" />
+  <element name="CommentsAddEmptyError" value="Não é possível adicionar comentários vazios" />
+  <element name="ShowCommentShowAllMenuItem" value="Tudo" />
+  <element name="CommentFileMismatchError" value="O ID da Ajuda não coincide, não é possível importar comentários" />
+  <element name="CommentTitle" value="Comentários" />
+  <element name="SendRcvCommentButton" value="Enviar e receber" />
+  <element name="SaveButtonToolTip" value="Clique para adicionar comentários ao banco de dados" />
+  <element name="PreferenceDialogAllCommentsDeleted" value="Todos os comentários foram excluídos" />
+  <element name="ViewerDialogOKButton" value="OK" />
+  <element name="LinksButtonTitle" value="Links" />
+  <element name="NewRSSFeedDlgTitle" value="Adicionar novo feed RSS" />
+  <element name="MaximizeAppButton" value="Maximizar" />
+  <element name="ErrorInInstallingUpdate" value="Erro encontrado durante a instalação" />
+  <element name="ErrorWhileUpdating" value="Ocorreu um erro ao atualizar" />
+  <element name="RSSRefreshLabel" value="Atualizar" />
+  <element name="CurrentTopic" value="Comentários para o tópico atual" />
+  <element name="RejectAll" value="Rejeitar tudo" />
+  <element name="Delete" value="Excluir" />
+  <element name="Username" value="Nome de usuário:" />
+  <element name="OnlyNew" value="Novo" />
+  <element name="CurrentOnlineText" value="Trabalhando online no momento" />
+  <element name="CommentsNotFoundMsg" value="Nenhum comentário encontrado" />
+  <element name="Show" value="Mostrar" />
+  <element name="SendCommentsFileMessage" value="Comentários enviados ao local compartilhado" />
+  <element name="ShowTopicMenu" value="DO NOT TRANSLATE" />
+  <element name="ShowCommentShowCurrentMenuItem" value="DO NOT TRANSLATE" />
+  <element name="AddCommentButton" value="Adicionar" />
+  <element name="SearchButtonToolTip" value="Pressione Ctrl+Enter para abrir os resultados da pesquisa em uma nova aba" />
+  <element name="SearchButtonTitle" value="Procurar" />
+  <element name="ShowHideButtonToolTip" value="Mostrar/Ocultar" />
+  <element name="FavoritesTopMenuToolTip" value="Adicionar ou visualizar favoritos" />
+  <element name="CommentPodToggleToolTip" value="Alternar pod de comentários" />
+  <element name="PreferenceDialogContentTabTitle" value="Geral" />
+  <element name="PreferenceDlgUseOfflineHelp" value="Usar Ajuda offline" />
+  <element name="NewSearchTabTitle" value="Resultados da pesquisa" />
+  <element name="NewBookmarkDlgTitle" value="Adicionar novo link" />
+  <element name="UpdateAvailableWithVersion" value="Há uma atualização para a versão %s disponível. Deseja atualizar agora?" />
+  <element name="LoginFailure" value="Senha incorreta:" />
+  <element name="ClickHere" value="Clique aqui para" />
+  <element name="CommentsModeToolTip" value="Alternar para o modo de comentários" />
+  <element name="EntireHelpPrintProgressMsg" value="Carregando tópico %1 de %2 tópicos... " />
+  <element name="CommentDateFormatter" value="DD/MM/YYYY" />
+  <element name="ReceiveCommentsFileMessage" value="Comentários recebidos do local compartilhado" />
+  <element name="FavoriteAddRSSFeed" value="Adicionar novo feed RSS" />
+  <element name="FavoriteMessageTitle" value="Favoritos" />
+  <element name="FavoriteAlredyExists" value="existentes em Favoritos" />
+  <element name="OpenURL" value="Abrir URL" />
+  <element name="MarkAsUnread" value="Marcar como não lido" />
+  <element name="CheckingforUpdateMsg" value="Verificando atualizações..." />
+  <element name="NewUpdateAvailableMsg" value="Nova atualização" />
+  <element name="ViewerDialogNoButton" value="No" />
+  <element name="AllAuthors" value="Todos os autores" />
+  <element name="AllStatus" value="Todos os status" />
+  <element name="OnlyRejected" value="Rejeitado" />
+  <element name="GoOffline" value="ficar offline" />
+  <element name="ModerationModeToolTip" value="Alternar o modo de mediação" />
+  <element name="PreferenceDialogBrowseCommentSyncLocation" value="Selecione o local para armazenar comentários:" />
+  <element name="SendCommentToServerStartMsg" value="Enviando comentários" />
+  <element name="Index" value="Índice" />
+  <element name="ReceiveCommentsServerMessage" value="Comentários recebidos do servidor" />
+  <element name="ShowCommentButton" value="DO NOT TRANSLATE" />
+  <element name="SortCommentButton" value="DO NOT TRANSLATE" />
+  <element name="ViewFavoriteMenuItem" value="Visualizar favoritos" />
+  <element name="PrefTitle" value="Preferências" />
+  <element name="ErrorShowingHelpFile" value="Erro ao acessar o arquivo de ajuda" />
+  <element name="BrowseSequenceBoxTitle" value="Como" />
+  <element name="EditRSSFeedDlgTitle" value="Editar feed RSS" />
+  <element name="CommentImportFileDlgTitle" value="Selecionar arquivo de comentários XML para importação" />
+  <element name="PreferenceDlgHighLightSearch" value="Destacar resultados da pesquisa" />
+  <element name="CommentText" value="Comentário" />
+  <element name="Date" value="Data" />
+  <element name="Reject" value="Rejeitar" />
+  <element name="LoadingCommentsForUserMessage" value="Recebendo comentários..." />
+  <element name="PreferenceButtonTitle" value="Preferências" />
+  <element name="SaveXMLFileDlg" value="Arquivo XML Salvar comentários" />
+  <element name="SaveButton" value="Salvar" />
+  <element name="PrintEntireHelp" value="Imprimir toda a Ajuda" />
+  <element name="PreferenceDlgDeleteCommentButton" value="Excluir todos" />
+  <element name="RSSNoneLabel" value="Nenhum" />
+  <element name="AsAnonymous" value="Como anônimo" />
+  <element name="AcceptAll" value="Aceitar tudo" />
+  <element name="WrongPassword" value="Senha incorreta. Tente novamente." />
+  <element name="ErrorServerConnection" value="Erro ao conectar ao servidor. Verifique a conexão com a Internet e tente novamente." />
+  <element name="SignIn" value="Conectar" />
+  <element name="SelectStatus" value="Selecionar status" />
+  <element name="ReceiveFromServerMenu" value="Receber do servidor" />
+  <element name="PrintMenuOptionsToolTip" value="Menu Imprimir" />
+  <element name="PreferenceDialogUserNameError" value="Especifique um nome de revisor válido" />
+  <element name="PreferenceDlgUseLoginName" value="Sempre use Nome de login para Nome do revisor" />
+  <element name="ServerConnectionError" value="Não há conexão disponível para o servidor. Alternando para o modo offline" />
+  <element name="EditBookmarkDlgTitle" value="Editar link" />
+  <element name="SearchResultError" value="Nenhum resultado foi encontrado" />
+  <element name="UpdateMsgTitle" value="Atualização automática" />
+  <element name="RSSSelectLabel" value="Selecionar:" />
+  <element name="AllTopics" value="Comentários para todos os tópicos" />
+  <element name="Status" value="Status" />
+  <element name="EndModeration" value="Exportar" />
+  <element name="ShowBy" value="Mostrar por" />
+  <element name="ModerationRightsNotPresent" value="Direitos de administrador são necessários para mostrar o pod de mediador " />
+</resource>
+

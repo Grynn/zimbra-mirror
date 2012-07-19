@@ -1,0 +1,102 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<book name="入門" >
+  <item name="開始使用 ZCS 基本版網路用戶端" url="zimbra_basic_user_help.htm" />
+  <item name="使用進階版和標準版用戶端" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <item name="正在登入和登出" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+  <item name="快速鍵" url="standard/b_keyboard_shortcut_keys.htm" />
+</book>
+<book name="瀏覽郵箱" >
+  <item name="瀏覽你的郵箱" url="standard/b_navigating_around_your_mailbox.htm" />
+  <item name="怎樣瀏覽郵件" url="standard/b_how_to_navigate_with_mail.htm" />
+  <item name="偏好設定" url="standard/b_setting_your_options.htm" />
+  <item name="管理你的帳戶限額" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</book>
+<book name="管理郵件" >
+  <item name="管理郵件" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+  <item name="管理郵件的顯示方式" url="standard/b_managing_how_email_is_displayed.htm" />
+  <item name="自訂郵箱初始視窗" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+  <item name="以 HTML 格式或純文字格式顯示郵件" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <item name="移動郵件" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+  <item name="列印郵件" url="standard/b_printing_email_messages.htm" />
+  <item name="使用垃圾桶" url="standard/using_the_trash_folder.htm" />
+  <item name="還原已刪除的郵件" url="standard/recovering_deleted_mail_messages.htm" />
+  <item name="清除郵件" url="standard/b_purging_email_messages.htm" />
+  <item name="移除濫發郵件" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+  <item name="訂閱 RSS/ATOM Feed" url="standard/subscribing_to_rss_atom_feeds.htm" />
+  <item name="設定不在辦公室訊息" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</book>
+<book name="讀取郵件" >
+  <item name="讀取郵件" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <item name="使用閱讀窗格" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+  <item name="將郵件標記為未讀" url="standard/b_marking_mail_as_unread.htm" />
+  <item name="打開郵件中的附件" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+  <item name="我如何知道接收到了新郵件" url="standard/b_how_do_i_know_when_i_receive_new_messages.htm" />
+</book>
+<book name="撰寫郵件" >
+  <item name="撰寫新郵件" url="standard/b_composing_email_message.htm" />
+  <item name="寫上郵件地址" url="zwc_help_files/3_compose/addressing_a_message.htm" />
+  <item name="將檔案附加到郵件" url="standard/b_attaching_files_to_your_message.htm" />
+  <item name="自動加入署名" url="standard/b_automatically_adding_your_signature.htm" />
+  <item name="儲存郵件為草稿" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+  <item name="註明郵件的優先等級" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+</book>
+<book name="回覆和轉寄郵件" >
+  <item name="回覆郵件" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <item name="設定電郵回覆的偏好設定" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+  <item name="轉寄郵件" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+  <item name="自動轉寄你接收的郵件" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+</book>
+<book name="管理通訊錄" >
+  <item name="通訊錄" url="standard/b_your_address_books.htm" />
+  <item name="使用通訊錄" url="standard/b_using_address_books.htm" />
+  <item name="加入新聯絡人" url="standard/b_adding_new_contacts.htm" />
+  <item name="匯入聯絡人清單" url="standard/b_importing_a_contact_list.htm" />
+  <item name="匯出聯絡人清單" url="standard/exporting_a_contact_list.htm" />
+  <item name="列印聯絡人姓名" url="standard/printing_contact_names.htm" />
+</book>
+<book name="管理記事簿" >
+  <item name="關於記事簿" url="standard/b_about_calendar.htm" />
+  <item name="建立新的記事簿" url="standard/b_create_new_calendar.htm" />
+  <item name="對記事簿進行彩色編碼" url="standard/adding_background_color_to_calendars.htm" />
+  <item name="記事簿視窗" url="standard/calendar_views.htm" />
+  <item name="匯入 iCalendars" url="standard/importing_icalendars.htm" />
+  <item name="匯出 iCalenders" url="standard/b_exporting_icalenders.htm" />
+  <item name="清除記事簿" url="standard/b_cleaning_up_your_calendar.htm" />
+</book>
+<book name="預約排程" >
+  <item name="建立會議" url="standard/b_scheduling_a_meeting.htm" />
+  <item name="建立定期重複的預約" url="standard/b_creating_recurring_appointments.htm" />
+  <item name="取消會議" url="standard/b_canceling_a_meeting.htm" />
+</book>
+<book name="使用事項清單" >
+  <item name="使用事項清單" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+  <item name="改變事項" url="standard/changing_a_task.htm" />
+</book>
+<book name="在「公事包」中工作" >
+  <item name="在「公事包」中工作" url="standard/b_working_in_briefcase.htm" />
+</book>
+<book name="分享資料夾" >
+  <item name="連結至分享記事簿" url="standard/linke_to_shared_calendars.htm" />
+  <item name="連結至分享通訊錄" url="standard/link_to_shared_address_books.htm" />
+</book>
+<book name="搜尋項目" >
+  <item name="使用搜尋功能" url="standard/b_using_search.htm" />
+  <item name="建立和儲存一個搜尋條件" url="standard/b_create_and_save_a_search_query.htm" />
+  <item name="搜尋的句法" url="zwc_help_files/12_search/search_syntax.htm" />
+  <item name="在搜尋中使用 * 作為通配字元" url="zwc_help_files/12_search/using_as_a_wildcard_in_search.htm" />
+  <item name="搜尋有關非西方語言附件的問題" url="standard/search_issues_with_non-western_language_attachments.htm" />
+  <item name="搜尋傳送給或接收自一個聯絡人的郵件" url="standard/searching_for_messages_sent_to_or_received_from_a_contact_name.htm" />
+  <item name="搜尋傳送給或傳送自寄件人的郵件" url="standard/searching_for_messages_sent_to_or_from_the_sender.htm" />
+</book>
+<book name="使用標記和資料夾整理項目" >
+  <item name="為郵件和聯絡人加標記" url="standard/b_assigning_tags_to_messages_and_contacts.htm" />
+  <item name="為郵件加上旗標" url="standard/b_flagging_an_email_message.htm" />
+  <item name="刪除資料夾" url="standard/bc_deleting_folders.htm" />
+</book>
+<book name="郵件過濾器使用方法" >
+  <item name="過濾郵件" url="standard/bc_filtering_your_messages.htm" />
+  <item name="過濾條件" url="standard/b_filter_conditions.htm" />
+</book>
+
+</tocdata>

@@ -1,0 +1,134 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="réponses par mail" >
+  <topic name="Définition des préférences pour les réponses par mail" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+</key>
+<key name="retirer le partage" >
+  <topic name="Suppression de l'accès d'un utilisateur à un dossier partagé" url="zwc_help_files/13_sharing/removing_user_access_to_a_shared_folder.htm" />
+</key>
+<key name="rôle" >
+  <topic name="Partage d'un dossier depuis la page Préférences&gt;Partage" url="zwc_help_files/13_sharing/share_a_folder_from_the_preferences_sharing_page.htm" />
+</key>
+<key name="S/MIME, ajout de certificats au carnet d'adresses" >
+  <topic name="Ajout de certificats aux contacts du carnet d'adresses" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+</key>
+<key name="S/MIME, configuration" >
+  <topic name="Configuration de S/MIME pour envoyer et recevoir des mails cryptés et signés" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+</key>
+<key name="S/MIME, rédiger un message" >
+  <topic name="Rédaction et envoi d'un mail signé numériquement" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="service vocal, écouter les messages" >
+  <topic name="Écoute d'un message vocal" url="zwc_help_files/voiceservice/listening_to_a_voice_mail_message.htm" />
+</key>
+<key name="signatures" >
+  <topic name="Utilisation automatique des signatures" url="zwc_help_files/3_compose/using_signatures_automatically.htm" />
+</key>
+<key name="spam" >
+  <topic name="Suppression des spams" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="suppression" >
+  <topic name="Suppression d'un mail" url="zwc_help_files/2_manage_email/deleting_a_message.htm" />
+  <key name="mail" >
+    <topic name="Suppression d'un mail" url="zwc_help_files/2_manage_email/deleting_a_message.htm" />
+  </key>
+</key>
+<key name="suppression de contacts" >
+  <topic name="Suppression de contacts" url="zwc_help_files/6_address_book/deleting_contacts.htm" />
+</key>
+<key name="suppression en instance" >
+  <topic name="Effacement des données de votre périphérique mobile" url="zwc_help_files/11_mobile/wipe_your_mobile_device.htm" />
+</key>
+<key name="supprimer" >
+  <topic name="Suppression d'un dossier" url="zwc_help_files/5_organize_account/delete_a_folder.htm" />
+  <key name="dossier" >
+    <topic name="Suppression d'un dossier" url="zwc_help_files/5_organize_account/delete_a_folder.htm" />
+  </key>
+</key>
+<key name="supprimer les pièces jointes" >
+  <topic name="Ouverture des pièces jointes d'un mail" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</key>
+<key name="syntaxe de recherche" >
+  <topic name="Exécution d'une recherche avancée" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="tâches" >
+  <topic name="Tri des tâches à l'intérieur d'une liste de tâches" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  <topic name="Déplacement d'une tâche vers une autre liste" url="zwc_help_files/9_tasks/moving_a_task_to_another_list.htm" />
+  <key name="déplacer" >
+    <topic name="Déplacement d'une tâche vers une autre liste" url="zwc_help_files/9_tasks/moving_a_task_to_another_list.htm" />
+  </key>
+  <key name="tri" >
+    <topic name="Tri des tâches à l'intérieur d'une liste de tâches" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  </key>
+</key>
+<key name="tag" >
+  <topic name="Retrait d'un tag" url="zwc_help_files/5_organize_account/remove_a_tag.htm" />
+</key>
+<key name="thème" >
+  <topic name="Personnalisation de la vue de votre compte" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="toujours afficher la chaîne de recherche" >
+  <topic name="Exécution d'une recherche avancée" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="transférer les mails" >
+  <topic name="Transfert automatique des mails reçus" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <topic name="Transférer des mails" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+</key>
+<key name="transférer un contact" >
+  <topic name="Transférer les informations du contact" url="zwc_help_files/6_address_book/forwarding_contact_information.htm" />
+</key>
+<key name="tri" >
+  <topic name="Tri des mails dans le panneau de contenu" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
+  <topic name="Tri des tâches à l'intérieur d'une liste de tâches" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  <key name="mails" >
+    <topic name="Tri des mails dans le panneau de contenu" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
+  </key>
+  <key name="tâches" >
+    <topic name="Tri des tâches à l'intérieur d'une liste de tâches" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  </key>
+</key>
+<key name="upload de pièces jointes" >
+  <topic name="Upload de pièces jointes dans le Porte-documents" url="zwc_help_files/10_briefcase/upload_email_attachments_to_briefcase.htm" />
+  <key name="porte-documents" >
+    <topic name="Upload de pièces jointes dans le Porte-documents" url="zwc_help_files/10_briefcase/upload_email_attachments_to_briefcase.htm" />
+  </key>
+</key>
+<key name="utilisation des listes de tâches" >
+  <topic name="Utilisation des listes de tâches" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+</key>
+<key name="utilisation des zimlets" >
+  <topic name="Utilisation des zimlets" url="zwc_help_files/14_zimlets/using_zimlets.htm" />
+</key>
+<key name="vérification orthographique obligatoire" >
+  <topic name="Vérifier l'orthographe de tous les mails avant leur envoi" url="zwc_help_files/3_compose/spell_check_all_messages_before_they_are_sent.htm" />
+  <topic name="Personnalisation de vos options de rédaction de mails" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <topic name="Vérification orthographique d'un mail" url="zwc_help_files/3_compose/spell_check_a_message.htm" />
+</key>
+<key name="vérifier les nouveaux mails" >
+  <topic name="Modification de la fréquence de vérification des nouveaux mails" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+</key>
+<key name="vérifier manuellement l'arrivée de nouveaux mails" >
+  <topic name="Modification de la fréquence de vérification des nouveaux mails" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+</key>
+<key name="version" >
+  <topic name="Utilisation des clients avancés et standard" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <topic name="Extraction et enregistrement de fichiers dans le Porte-documents" url="zwc_help_files/10_briefcase/checking_out_and_checking_in_files_to_briefcase.htm" />
+</key>
+<key name="vider la corbeille" >
+  <topic name="Vider votre dossier Corbeille" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+</key>
+<key name="vider le spam" >
+  <topic name="Suppression des spams" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="vos préférences de recherche" >
+  <topic name="Configuration de vos préférences de recherche" url="zwc_help_files/12_search/setting_your_search_preferences.htm" />
+</key>
+<key name="votre quota de compte" >
+  <topic name="Gestion de votre quota de compte" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</key>
+<key name="zimlets" >
+  <topic name="Désactivation d'un zimlet" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+  <topic name="Gestion de vos zimlets" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+</key>
+
+</indexdata>

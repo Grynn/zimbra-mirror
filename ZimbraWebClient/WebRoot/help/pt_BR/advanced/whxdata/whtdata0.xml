@@ -1,0 +1,132 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<book name="Informações básicas" >
+  <item name="Cliente Web Avançado" url="advanced_web_client.htm" />
+  <item name="Usando os clientes avançado e padrão" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <item name="Entrando e saindo" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+  <item name="Alterando a senha" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+  <item name="Usando os atalhos de teclado" url="zwc_help_files/1_setting_up/using_keyboard_shortcuts.htm" />
+</book>
+<book name="Organizando a sua conta" >
+  <item name="Navegando na sua conta " url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+  <item name="Organizando a sua conta" url="zwc_help_files/5_organize_account/organizing_your_account.htm" />
+  <item name="Personalizando a visualização inicial da sua caixa de entrada" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+  <item name="Personalizando a visualização da sua conta" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+  <item name="Altere o seu fuso horário padrão" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+  <item name="Como as bolhas de endereço funcionam" url="zwc_help_files/2_manage_email/how_address_bubbles_work.htm" />
+  <item name="Gerenciando a cota da sua conta" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+  <item name="Esvaziar sua pasta Lixeira" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+  <item name="Marcando várias mensagens para a mesma ação" url="zwc_help_files/2_manage_email/marking_multiple_messages_for_the_same_action.htm" />
+  <item name="Configurando uma mensagem de resposta automática" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</book>
+<book name="Gerenciando seu e-mail" >
+  <item name="Gerenciando seu e-mail" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+  <item name="Alterando a frequência com que a sua conta verifica novos e-mails" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+  <item name="Definindo alertas de desktop para novas mensagens de e-mail" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+  <item name="Atribuindo políticas de retenção às pastas de e-mail" url="zwc_help_files/2_manage_email/assigning_retention_policies_to_email_folders.htm" />
+  <item name="Mensagens de grupos nas suas pastas" url="zwc_help_files/2_manage_email/group_messages.htm" />
+  <item name="Classificando mensagens no painel Conteúdo" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
+  <item name="Removendo e-mails menos importantes da caixa de entrada" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+  <item name="Movendo mensagens de e-mail" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+  <item name="Assinando Feeds RSS" url="zwc_help_files/2_manage_email/subscribing_to_rss_feeds.htm" />
+  <item name="Removendo spam" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+  <item name="Opções de spam" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+  <item name="Recuperar itens eliminados da lixeira" url="zwc_help_files/2_manage_email/recover_items_purged_from_trash.htm" />
+  <item name="Localizando a origem de uma mensagem de e-mail" url="zwc_help_files/2_manage_email/finding_the_origin_of_an_email_message.htm" />
+</book>
+<book name="Escrevendo mensagens de e-mail" >
+  <item name="Escrevendo e enviando um e-mail" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+  <item name="Personalizando as suas opções para escrever mensagens" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <item name="Endereçando uma mensagem" url="zwc_help_files/3_compose/addressing_a_message.htm" />
+  <item name="Usando assinaturas automaticamente" url="zwc_help_files/3_compose/using_signatures_automatically.htm" />
+  <item name="Adicionar personagens" url="zwc_help_files/3_compose/add_personas.htm" />
+  <item name="Usando outras identidades de contas quando você envia um e-mail" url="zwc_help_files/3_compose/using_other_account_identities_when_you_send_an_email.htm" />
+  <item name="Marcar o nível de prioridade de uma mensagem" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+  <item name="Solicitar uma confirmação de leitura" url="zwc_help_files/3_compose/request_a_return_receipt.htm" />
+  <item name="Adicionando anexos" url="zwc_help_files/3_compose/adding_attachments.htm" />
+  <item name="Verificar a ortografia de uma mensagem" url="zwc_help_files/3_compose/spell_check_a_message.htm" />
+  <item name="Adicionando palavras ao dicionário do verificador ortográfico" url="zwc_help_files/3_compose/adding_words_to_the_spell_dictionary.htm" />
+  <item name="Enviar uma mensagem como rascunho" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+  <item name="Excluindo uma mensagem" url="zwc_help_files/2_manage_email/deleting_a_message.htm" />
+</book>
+<book name="Lendo mensagens" >
+  <item name="Lendo um e-mail" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <item name="Usando um painel de leitura" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+  <item name="Exibindo mensagens no formato HTML ou Texto simples" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <item name="Retornando comprovações de leitura" url="zwc_help_files/2_manage_email/returning_read_receipts.htm" />
+  <item name="Imprimir uma conversação (Todas as mensagens)" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  <item name="Imprimindo uma mensagem de e-mail" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
+  <item name="Recebendo uma mensagem “Permissão negada”" url="zwc_help_files/8_scheduling/receiving_a_permission_denied_message.htm" />
+  <item name="Abrindo anexos para uma mensagem de e-mail" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</book>
+<book name="Recuperando e-mails de outras contas" >
+  <item name="Acessando suas contas externas" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+  <item name="Recebendo uma notificação de novos e-mails para outro endereço de e-mail" url="zwc_help_files/2_manage_email/receiving_new_mail_notification_to_another_email_address.htm" />
+  <item name="Configurar o comportamento POP para a sua conta" url="zwc_help_files/1_setting_up/set_up_pop_behavior_for_your_account.htm" />
+</book>
+<book name="Responder e encaminhar mensagens" >
+  <item name="Definir as preferências para respostas de e-mails" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+  <item name="Respondendo a mensagens de e-mail" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <item name="Definir as preferências para e-mails encaminhados" url="zwc_help_files/3_compose/set_preferences_for_forwarded_email.htm" />
+  <item name="Encaminhando mensagens de e-mail" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+  <item name="Encaminhando automaticamente as mensagens que você recebe" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <item name="Encaminhar uma mensagem como o Autor" url="zwc_help_files/3_compose/forward_a_message_as_the_originator.htm" />
+  <item name="Encaminhar uma mensagem como uma mensagem redirecionada" url="zwc_help_files/3_compose/forward_a_message_as_a_redirected_message.htm" />
+</book>
+<book name="Gerenciando suas listas de endereços" >
+<chunk name="Gerenciando suas listas de endereços" ref="whtdata1.xml" />
+</book>
+<book name="Gerenciando suas agendas" >
+  <item name="Trabalhando com agendas" url="zwc_help_files/7_calendars/working_with_calendars.htm" />
+  <item name="Criar uma agenda" url="zwc_help_files/7_calendars/create_a_calendar.htm" />
+  <item name="Adicionar cores a uma agenda" url="zwc_help_files/7_calendars/add_color_to_a_calendar.htm" />
+  <item name="Definindo suas preferências de agenda" url="zwc_help_files/7_calendars/setting_your_calendar_preferences.htm" />
+  <item name="Outras preferências de agenda para configurar" url="zwc_help_files/7_calendars/other_calendar_preferences_to_configure.htm" />
+  <item name="Visualizar várias agendas" url="zwc_help_files/7_calendars/view_multiple_calendars.htm" />
+  <item name="Exibindo compromissos que duram o dia todo na sua visualização Semana útil" url="zwc_help_files/7_calendars/displaying_all_day_appointments_in_your_work_week_view.htm" />
+  <item name="Exibindo atividades da agenda em uma lista" url="zwc_help_files/7_calendars/viewing_calendar_activities_in_a_list.htm" />
+  <item name="Adicionando um iCalendar a partir de uma mensagem de e-mail" url="zwc_help_files/7_calendars/adding_an_icalendar_from_an_email_message.htm" />
+  <item name="Adicionando agendas externas" url="zwc_help_files/7_calendars/adding_external_calendars.htm" />
+  <item name="Organizar suas agendas em grupos" url="zwc_help_files/7_calendars/organize_your_calendars_into_groups.htm" />
+  <item name="Imprimir uma agenda" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  <item name="Excluir uma agenda" url="zwc_help_files/7_calendars/delete_a_calendar.htm" />
+  <item name="Importar sua agenda iCal" url="zwc_help_files/7_calendars/import_your_ical_calendar.htm" />
+  <item name="Exportar sua agenda iCal" url="zwc_help_files/7_calendars/export_your_ical_calendar.htm" />
+</book>
+<book name="Agendando compromissos, reuniões e eventos" >
+<chunk name="Agendando compromissos, reuniões e eventos" ref="whtdata2.xml" />
+</book>
+<book name="Usando listas de tarefas" >
+<chunk name="Usando listas de tarefas" ref="whtdata3.xml" />
+</book>
+<book name="Trabalhando no porta-arquivos" >
+<chunk name="Trabalhando no porta-arquivos" ref="whtdata4.xml" />
+</book>
+<book name="Compartilhando pastas" >
+<chunk name="Compartilhando pastas" ref="whtdata5.xml" />
+</book>
+<book name="Buscando itens" >
+<chunk name="Buscando itens" ref="whtdata6.xml" />
+</book>
+<book name="Usando marcadores e pastas para organizar e-mail" >
+<chunk name="Usando marcadores e pastas para organizar e-mail" ref="whtdata7.xml" />
+</book>
+<book name="Usando filtros de e-mail" >
+<chunk name="Usando filtros de e-mail" ref="whtdata8.xml" />
+</book>
+<book name="Gerenciar seu dispositivo móvel (somente Network Edition)" >
+  <item name="Gerenciando seus dispositivos móveis" url="zwc_help_files/11_mobile/managing_your_mobile_devices.htm" />
+  <item name="Recursos de segurança móvel" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
+  <item name="Limpar seu dispositivo móvel" url="zwc_help_files/11_mobile/wipe_your_mobile_device.htm" />
+</book>
+<book name="Enviando mensagens de e-mail seguras (apenas edição de rede)" >
+<chunk name="Enviando mensagens de e-mail seguras (apenas edição de rede)" ref="whtdata9.xml" />
+</book>
+<book name="Serviço de voz (apenas edição de rede)" >
+<chunk name="Serviço de voz (apenas edição de rede)" ref="whtdata10.xml" />
+</book>
+<book name="Usando Zimlets" >
+<chunk name="Usando Zimlets" ref="whtdata11.xml" />
+</book>
+
+</tocdata>

@@ -1,0 +1,16 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<item name="メールフィルターを操作する" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+<item name="フィルターを作成する" url="zwc_help_files/4_filters/creating_a_filter.htm" />
+<item name="メールメッセージからフィルターを作成する" url="zwc_help_files/4_filters/creating_a_filter_from_an_email_message.htm" />
+<item name="カレンダー招待のフィルターを作成する" url="zwc_help_files/4_filters/creating_a_filter_for_calendar_invitations.htm" />
+<item name="フィルターをアクティブ/非アクティブにする" url="zwc_help_files/4_filters/making_a_filter_active_or_inactive.htm" />
+<item name="フィルターの条件" url="zwc_help_files/4_filters/filter_conditions.htm" />
+<item name="サポートされているフィルターの条件と操作" url="zwc_help_files/4_filters/filter_conditions_and_actions_supported.htm" />
+<item name="フィルター規則の操作" url="zwc_help_files/4_filters/filter_rule_actions.htm" />
+<item name="ワイルドカードを使用してフィルターする" url="zwc_help_files/4_filters/filtering_using_wildcards.htm" />
+<item name="フィルターを表示する" url="zwc_help_files/4_filters/viewing_filters.htm" />
+<item name="フィルターを編集する" url="zwc_help_files/4_filters/editing_a_filter.htm" />
+<item name="フィルターを適用する" url="zwc_help_files/4_filters/applying_a_filter.htm" />
+
+</tocdata>

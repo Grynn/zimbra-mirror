@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Поддерживаемые условия и действия фильтров</title>
+<link rel="StyleSheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Использование почтовых фильтров\nПоддерживаемые условия и действия фильтров");
+addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Домашний", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">Использование почтовых фильтров<\/a> &gt; Поддерживаемые условия и действия фильтров<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Поддерживаемые условия и действия фильтров</p>
+<p style="font-size: 11pt;">Регистр букв правил фильтра не имеет значения, т.е. в правилах не учитываются заглавные буквы.</p>
+<p class="FM_2Heading">Условия</p>
+<p>Поля сравнения включают следующие данные.</p>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">От</span>.<span  	 class="FM_attribute"> </span> Используется для указания имени в поле «От:» заголовка сообщения электронной почты.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Кому</span>. Используется аналогично параметру «От», но выполняется поиск указанных имен в заголовке «Кому»  «Копия».</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span  	 class="FM_attribute">Копия</span>. Используется аналогично параметру «От», но поиск выполняется в заголовке «Копия»  «Копия».</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Кому илиКопия</span>. Используется аналогично параметру «От», но поиск выполняется в заголовках «Кому» и «Копия».</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Тема</span>. Поиск выполняется в заголовке сообщения «Тема».</p></li>
+</ul>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Размер</span>. Этот параметр используется для выбора сообщений, размер которых больше или меньше указанного. Размер сообщения включает любые файловые вложения. Этот параметр можно использовать для удаления сообщений слишком большого размера.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Дата</span>. Этот параметр используется для указания сообщений, отправленных до или после определенной даты.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Тело письма</span>. Параметры для поиска в теле письма: «содержит» или «не содержит». С их помощью можно указать слова для поиска в теле письма. Устанавливать фильтры для слов в файловых вложениях нельзя.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Подтверждение прочтения</span>. Возможна фильтрация сообщений с подтверждением прочтения.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Вложение</span>. Фильтрация сообщений, которые содержат или не содержат файловые вложения.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Адрес в</span>. Проверка наличия адреса в контактах. В следующем поле можно указать, какой адрес.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Приглашение из ежедневника</span>. Фильтрация сообщений, относящихся к ежедневнику.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Социальные сети</span>.<span  	 class="FM_attribute"> </span>Фильтрация сообщений с сайтов социальных сетей.</p></li>
+	<li class="p"><p class="FM_Bulleted1" style="margin-left: 23px;"><span  	 class="FM_attribute">Заголовок с именем</span>. При выборе этого параметра появляется дополнительное поле ввода текста перед оператором сравнения (часть «содержит»). Этот параметр позволяет указывать любой заголовок сообщения. Можно указать не только стандартные поля «Кому:» или «От:», но также поля «Дата», «Обратный адрес» и другие специальные поля, которые могут содержаться в заголовке сообщения. Этот параметр можно использовать для фильтрации сообщений электронной почты с «неправильными» заголовками, т. е. заголовками, которые не содержат стандартную для электронных сообщений информацию. Иногда в спаме, который генерируется автоматически, отсутствует информация в таких полях, как «Отправитель» или «Обратный адрес». Для указания проверяемого заголовка используется второе текстовое поле (поле, которое находится справа от оператора сравнения).</p></li>
+</ul>
+<h3>Действия</h3>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Хранить в папке «Входящие»</span>. Сохраняет сообщения в папке «Входящие». Если почтовое сообщение не соответствует ни одному из правил фильтра, это действие выполняется по умолчанию.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Записать в папку</span>. Перемещает сообщения в указанную папку.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Отменить</span>. Удаляет сообщение, не доставляя его. Сообщения нет ни в одной папке, даже в Корзине.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Переслать</span>. Сообщения перенаправляются на указанный адрес.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Пометить</span>. Выберите вариант <span class="FM_attribute">Прочитанное</span> или <span class="FM_attribute">С флагом</span>.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Пометить меткой</span>. Соответствующие сообщения можно пометить указанным тегом.</p></li>
+</ul>
+<h3>Несколько действий</h3>
+<p>Можно создать правило фильтра, состоящее из нескольких действий. Сочетания действий в правиле трактуются следующим образом.</p>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Отменить</span>. В сочетании с другими действиями этот параметр игнорируется, и выполняются другие действия.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Записать в папку</span>. В результате нескольких действий «Записать в» несколько копий сообщения сохраняются в разных папках. Если указанная папка не существует, сообщение сохраняется в папке «Входящие».</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Метка/Пометить</span>. Эти действия применяются к сообщению, к которому применялось последнее предшествующее действие. В случае нескольких действий «Файл в» какие-то копии сообщений сохраняются с метками, какие-то — без.</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Хранить в папке «Входящие»</span>. Можно определить несколько действий «сохранить», но при этом только одна копия сообщения будет сохраняться в папке «Входящие».</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">Переслать по адресу</span>. <span style="font-weight: normal;">Сообщения будут пересылаться по указанному адресу.</span></p></li>
+</ul>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

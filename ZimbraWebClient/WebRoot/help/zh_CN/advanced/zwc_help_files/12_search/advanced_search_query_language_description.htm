@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\review docs\SearchHelpTopics.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>高级搜索查询语言说明</title>
+<link rel="stylesheet" href="../searchhelptopics.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("搜索项目\n了解高级搜索查询语言 ");
+addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "首页", "../../advanced_web_client.htm");
+document.write("<a href=\"searching_your_account.htm\">搜索项目<\/a> &gt; 了解高级搜索查询语言 <\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">了解高级搜索查询语言 </p>
+<p class="FM_Body">此高级主题详细说明了用于 @CollaborationProductShortName@ 搜索功能的搜索语法。</p>
+<p class="FM_2Heading">搜索语言结构</p>
+<p class="FM_Body">只需在搜索字段中输入一个单词即可搜索。裸词（不含搜索运算符的单词）被解释为在“content:”运算符中搜索 -- 与邮件中的任何文本相匹配。</p>
+<p class="FM_Body">更高级的搜索可通过指定一个<span  	 style="font-weight: bold;">搜索运算符</span>实现。特殊关键字后跟一个冒号即为搜索运算符，其后是适合于该运算符的其他参数。例如：</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';"></span></span><span style="font-weight: bold;">在:收件箱</span>，运算符为“在”，参数为“收件箱”- 将返回位于名为“收件箱”的文件夹中的邮件</p></li>
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';"></span></span><span style="font-weight: bold;">from:someone</span> 运算符是“from”，参数是“someone”，则会返回发件人地址中含“someone”的邮件</p></li>
+</ul>
+<p class="FM_Body">可以在任何关键字前面加上“不”前缀，以指定不符合该条件的项目，例如<span style="font-weight: bold;">不包括在:收件箱</span>。搜索不区分大小写，即“在:收件箱”与“在:收件箱”相同。减号（<span style="font-weight: bold;">-</span>）是 <span style="font-weight: bold;">NOT</span> 的同意词，因此：<span style="font-weight: bold;">not in:inbox</span> 与 <span style="font-weight: bold;">-in:inbox</span>相同</p>
+<p class="FM_Body">大多数情况下无需在搜索字符串中使用标点符号，因为会被搜索程序代码所忽略。有些情况下不是这样（例如，搜索含有时间 '9:30' 的邮件），在这种情况下您需要为搜索参数加上引号。例如：<span style="font-weight: bold;">subject:&quot;9:30&quot;</span>返回的是主题中含字符串 9:30 的邮件。</p>
+<p class="FM_Body">搜索参数中允许使用的字符：</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';"></span></span>下列字符如果不加引号就不能用于搜索参数： ~ '! # $ % ^ &amp; * ( ) _? / { }[ ];:</p></li>
+	<li><p class="FM_Bulleted1">下列字符可以用于搜索参数，但不能作为首字使用。 - + &lt; &gt;</p></li>
+</ul>
+<p class="FM_Notice"><span class="FM_Bold">注意：</span>对词建立搜索索引时，将删除词中包含的特殊字符（如商标符号）。搜索中会忽略这些字符。例如，如果搜索 Zimbra™，将找到出现的所有 Zimbra，包括不带商标符号的词。</p>
+<p class="FM_2Heading">多重搜索字</p>
+<p class="FM_Body">如果输入多个搜索词（用空格分隔），默认情况下它们之间是“AND”关系。<span style="font-weight: bold;">在:收件箱 tim</span> 表示 “为我返回位于收件箱中并且含有 tim 一词的邮件”。对于有多种条件的搜索项，您可以查找匹其中任意条件的项目，也可查找符合全部条件的项目。您可以从“高级搜索”页面执行这两种类型的搜索。</p>
+<p class="FM_Body">对于除基本搜索之外的所有搜索窗格，规则为：</p>
+<p class="FM_Bulleted1">匹配指定条件中任意条件的邮件搜索称为 <span style="font-weight: bold;">OR</span> 搜索，也就是说，如果邮件中包含 X 或 Y，就会被视为匹配项。</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1">对同时包含 X 和 Y 的邮件的搜索称为“<span style="font-weight: bold;">AND</span>”搜索，因为邮件必须满足所有指定条件才能被视为匹配项。 </p></li>
+	<li><p class="FM_Body">只有“OR”出现在查询条件中。在“高级”搜索中进行选择时，如果作为选项您选择了在“搜索”工具条显示搜索结果，则“搜索”框随即更新并显示得到的结果。对于<span style="font-weight: bold;">AND</span> 类型的搜索，'<span style="font-weight: bold;">AND'</span>一词并不会出现。</p></li>
+</ul>
+<p class="FM_Body"><span style="font-weight: bold;">提示</span>：AND 和 OR 可结合括号使用。括号中的字词视为一个单位。例如 <span style="font-weight: bold;">from:(john thomas)</span> 等同于 <span style="font-weight: bold;">来自:john AND 来自:thomas</span>。如果在括号中使用 OR，即<span style="font-weight: bold;">来自:(john or smith)</span>，则搜索结果为 <span style="font-weight: bold;">来自:john OR 来自:smith</span>。</p>
+<p class="FM_2Heading">在搜索中使用 * 作为通配符</p>
+<p class="FM_Body">在搜索中某个词的末尾，可以使用星号 (<span style="font-weight: bold;">*</span>) 作为通配符，以查找包含拼写类似的词的内容。</p>
+<p class="FM_Body">使用星号 <span style="font-weight: bold;">*</span> 作为通配符。例如，搜索字符串 <span style="font-weight: bold;">do*</span> 返回的结果是 <span style="font-style: italic;">do</span>、<span style="font-style: italic;">dog</span>、<span style="font-style: italic;">door</span> 等。</p>
+<p class="FM_Notice"><span class="FM_Bold">注意：</span>搜索查询中的双字节星号不视为通配符，在搜索运行时将被忽略。</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

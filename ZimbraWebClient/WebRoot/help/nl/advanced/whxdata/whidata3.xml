@@ -1,0 +1,101 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="uitvoeren" >
+  <key name="snel zoeken" >
+    <topic name="Een snelle zoekopdracht uitvoeren" url="zwc_help_files/12_search/performing_a_quick_search.htm" />
+  </key>
+</key>
+<key name="vakantiebericht" >
+  <topic name="Een Afwezigheidsbericht opstellen" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="van rechts naar links opstellen" >
+  <topic name="De weergave van je account personaliseren" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="verplichte spellingcontrole" >
+  <topic name="Spelling van alle berichten controleren voordat ze worden verzonden" url="zwc_help_files/3_compose/spell_check_all_messages_before_they_are_sent.htm" />
+  <topic name="Je opties voor het opstellen van berichten aanpassen" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <topic name="De spelling van een bericht controleren" url="zwc_help_files/3_compose/spell_check_a_message.htm" />
+</key>
+<key name="versie" >
+  <topic name="Geavanceerde en standaardclients gebruiken" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <topic name="Bestanden inchecken en uitchecken bij Aktetas" url="zwc_help_files/10_briefcase/checking_out_and_checking_in_files_to_briefcase.htm" />
+</key>
+<key name="versiegeschiedenis weergeven" >
+  <topic name="Versiegeschiedenis van een Aktetas-bestand weergeven" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  <key name="aktetasbestand" >
+    <topic name="Versiegeschiedenis van een Aktetas-bestand weergeven" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  </key>
+</key>
+<key name="vertrouwde adressen" >
+  <topic name="Een lijst met vertrouwde adressen onderhouden" url="zwc_help_files/2_manage_email/maintaining_a_trusted_addresses_list.htm" />
+</key>
+<key name="verwijderde items herstellen" >
+  <topic name="Items uit de Prullenbak herstellen" url="zwc_help_files/2_manage_email/recover_items_purged_from_trash.htm" />
+</key>
+<key name="verwijderen" >
+  <topic name="Een bericht verwijderen" url="zwc_help_files/2_manage_email/deleting_a_message.htm" />
+  <topic name="Een map verwijderen" url="zwc_help_files/5_organize_account/delete_a_folder.htm" />
+  <key name="bericht" >
+    <topic name="Een bericht verwijderen" url="zwc_help_files/2_manage_email/deleting_a_message.htm" />
+  </key>
+  <key name="map" >
+    <topic name="Een map verwijderen" url="zwc_help_files/5_organize_account/delete_a_folder.htm" />
+  </key>
+</key>
+<key name="Verwijderen, contacten" >
+  <topic name="Contacten verwijderen" url="zwc_help_files/6_address_book/deleting_contacts.htm" />
+</key>
+<key name="vlag" >
+  <topic name="Een bericht of conversatie van een vlag voorzien" url="zwc_help_files/5_organize_account/flag_a_message_or_conversation.htm" />
+  <topic name="Een vlag bij een bericht of conversatie verwijderen" url="zwc_help_files/5_organize_account/remove_a_flag_from_a_message_or_conversation.htm" />
+</key>
+<key name="voice-service, berichten afluisteren" >
+  <topic name="Een voicemailbericht afluisteren" url="zwc_help_files/voiceservice/listening_to_a_voice_mail_message.htm" />
+</key>
+<key name="Voorkeuren" >
+  <topic name="Een uitgebreide zoekactie uitvoeren" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="voorkeuren voor controleren op nieuwe e-mail" >
+  <topic name="Wijzigen hoe vaak er op nieuwe e-mail voor je account wordt gecontroleerd" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+</key>
+<key name="voorkeuren voor handtekeningen" >
+  <topic name="Je opties voor het opstellen van berichten aanpassen" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+</key>
+<key name="waarschuwingen" >
+  <topic name="Bureaubladwaarschuwingen voor nieuwe e-mailberichten instellen" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+</key>
+<key name="Wachtwoord" >
+  <topic name="Je wachtwoord wijzigen" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+</key>
+<key name="werkweekweergave" >
+  <topic name="Werken met agenda's" url="zwc_help_files/7_calendars/working_with_calendars.htm" />
+</key>
+<key name="wildcard" >
+  <topic name="Een uitgebreide zoekactie uitvoeren" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+  <topic name="* als wildcard bij een zoekopdracht gebruiken" url="zwc_help_files/12_search/using_as_a_wildcard_in_search.htm" />
+  <topic name="Filteren met wildcards" url="zwc_help_files/4_filters/filtering_using_wildcards.htm" />
+</key>
+<key name="woordenboek" >
+  <topic name="Woorden aan het woordenboek toevoegen" url="zwc_help_files/3_compose/adding_words_to_the_spell_dictionary.htm" />
+</key>
+<key name="zimlet-galerie" >
+  <topic name="Je Zimlets beheren" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+</key>
+<key name="zimlets" >
+  <topic name="Een Zimlet uitschakelen" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+  <topic name="Je Zimlets beheren" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+</key>
+<key name="zimlets gebruiken" >
+  <topic name="Zimlets gebruiken" url="zwc_help_files/14_zimlets/using_zimlets.htm" />
+</key>
+<key name="zoekopdracht" >
+  <topic name="Een zoekopdracht opslaan" url="zwc_help_files/12_search/saving_a_search_query.htm" />
+  <key name="opslaan" >
+    <topic name="Een zoekopdracht opslaan" url="zwc_help_files/12_search/saving_a_search_query.htm" />
+  </key>
+</key>
+<key name="zoeksyntaxis" >
+  <topic name="Een uitgebreide zoekactie uitvoeren" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+
+</indexdata>

@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\review docs\SearchHelpTopics.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Descrição da linguagem de consulta da busca avançada</title>
+<link rel="stylesheet" href="../searchhelptopics.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Buscando itens\nNoções básicas da linguagem de consulta de busca avançada ");
+addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Página&nbsp;inicial", "../../advanced_web_client.htm");
+document.write("<a href=\"searching_your_account.htm\">Buscando itens<\/a> &gt; Noções básicas da linguagem de consulta de busca avançada <\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Noções básicas da linguagem de consulta de busca avançada </p>
+<p class="FM_Body">Esse tópico avançado descreve em detalhes a gramática de busca usada no recurso de Busca do @CollaborationProductShortName@ .</p>
+<p class="FM_2Heading">Estrutura da linguagem de busca</p>
+<p class="FM_Body">As buscas simples podem ser feitas bastando apenas digitar a palavra no campo de busca. Palavras soltas (sem um operador de busca) são interpretadas como uma busca no operador "content:" - o que corresponde a qualquer texto na mensagem.</p>
+<p class="FM_Body">Buscas mais avançadas podem ser feitas ao especificar um <span  	 style="font-weight: bold;">operador de busca</span>. Um operador de busca é uma palavra-chave especial que é seguida por dois pontos, seguida de outro parâmetro específico para aquele operador. Por exemplo:</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';">&#160;</span></span><span style="font-weight: bold;">in: caixa de entrada</span>&#160; o operador é &quot;in&quot; e o parâmetro é &quot; inbox&quot; - o que retorna mensagens que estiverem na pasta de nome &quot; caixa de entrada&quot;</p></li>
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';">&#160;&#160;</span></span><span style="font-weight: bold;">from:alguém</span>&#160; o operador  é &quot;from&quot; e o parâmetro é &quot;alguém&quot; - o que retorna mensagens que tenham a palavra &quot;alguém&quot; no seu endereço de e-mail</p></li>
+</ul>
+<p class="FM_Body">Você pode usar como prefixo a palavra &quot;not&quot; para especificar itens que não tenham aqueles critérios, por exemplo <span style="font-weight: bold;">not in: inbox</span>. A busca não faz diferenciação entre maiúsculas e minúsculas, significando que &quot;in:inbox&quot; equivale a &quot;in:Inbox&quot;. O sinal de menos (<span style="font-weight: bold;">-</span>) é sinônimo de <span style="font-weight: bold;">NOT</span>&#160;   Então: <span style="font-weight: bold;">not in:caixa de entrada</span>&#160; é o mesmo que <span style="font-weight: bold;">-in:caixa de entrada</span></p>
+<p class="FM_Body">Na maioria dos casos, não é necessário incluir caracteres de pontuação na sua seqüência de busca, pois são ignorados pelo código de busca. Há vezes em que isso não é verdade (por exemplo, buscar uma hora "9:30" em uma mensagem) e nesses casos você deve incluir o parâmetro de busca entre aspas. Por exemplo: <span style="font-weight: bold;">subject:&quot;9:30&quot;</span>&#160;  retornará mensagens que tenham a seqüência 9:30 na linha de assunto.</p>
+<p class="FM_Body">Caracteres permitidos no parâmetro de busca:</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';">&#160;</span></span>Os seguintes caracteres não podem estar em nenhuma parte da busca a menos que estejam cercados por aspas: ~ '&#160;! # $ % ^ &amp; * ( ) _&#160;? / { }[ ]&#160;;&#160;:</p></li>
+	<li><p class="FM_Bulleted1">Os seguintes caracteres são permitidos em um parâmetro de busca contanto que sejam o primeiro caractere: - + &lt; &gt;</p></li>
+</ul>
+<p class="FM_Notice"><span class="FM_Bold">Observação: &#160;&#160;</span>Caracteres especiais, como símbolos de marca registrada que são parte de uma palavra, são removidos quando a palavra é indexada para busca. Eles são ignorados na busca. Por exemplo, uma busca por Zimbra™ localizará todas as referências a Zimbra, incluindo aquelas que não contêm o símbolo de marca comercial.</p>
+<p class="FM_2Heading">Vários termos de busca</p>
+<p class="FM_Body">Se forem inseridos vários termos de busca (separados por espaços), eles terão&quot;AND&quot; por padrão. <span style="font-weight: bold;">in:inbox duda</span>&#160; significa &quot;retorne mensagens que estiverem na caixa de entrada E que tenham a palavra duda&quot;. Para buscas usando vários critérios, você pode encontrar itens que atendam a um critério especificado ou a todos eles. É possível realizar ambos os tipos de busca usando a página de busca avançada.</p>
+<p class="FM_Body">Para todos os painéis de busca, com exceção da Busca básica, as regras são:</p>
+<p class="FM_Bulleted1">A busca por mensagens que correspondam a qualquer um dos critérios especificados é chamada uma busca "<span style="font-weight: bold;">OR</span>&#160;" (ou), porque se a mensagem contiver X ou Y, é considerada uma correspondência.</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1">Buscar mensagens que contêm tanto X quanto Y é chamada uma busca "<span style="font-weight: bold;">AND</span>&#160;" (e), porque a mensagem deve &#160;atender a todos os critérios especificados para que seja considerada uma correspondência. </p></li>
+	<li><p class="FM_Body">Apenas &quot;OR&quot; aparece em uma consulta. Se você selecionou mostrar a consulta da busca na barra de Busca enquanto faz seleções na Busca avançada, a caixa de texto Busca é atualizada para mostrar a consulta resultante. Com o tipo de busca "<span style="font-weight: bold;">AND"</span>&#160;, a palavra "<span style="font-weight: bold;">AND"</span> não é exibida.</p></li>
+</ul>
+<p class="FM_Body"><span style="font-weight: bold;">Dica</span>: Usando parênteses com AND e OR. As palavras dentro de parênteses são consideradas uma unidade. Por exemplo <span style="font-weight: bold;">from: (joão tomás)</span>&#160; é equivalente a <span style="font-weight: bold;">from:joão AND from: 	tomás</span>. Se você usar OR no parênteses, <span style="font-weight: bold;">from:(joão or josé)</span>, a busca é para resultados <span style="font-weight: bold;">from:joão OR from: josé</span>.</p>
+<p class="FM_2Heading">Usando * como curinga na Busca</p>
+<p class="FM_Body">O asterisco (<span style="font-weight: bold;">*</span>) pode ser usado como curinga no fim de uma palavra em uma busca para encontrar conteúdo que contenha palavras com ortografia similar.</p>
+<p class="FM_Body">Use o asterisco <span style="font-weight: bold;">*</span>&#160; como curinga. Por exemplo,  a string de busca <span style="font-weight: bold;">co*</span>&#160; retorna itens como <span style="font-style: italic;">cor</span>, <span style="font-style: italic;">cola</span>, <span style="font-style: italic;">comer</span>, etc.</p>
+<p class="FM_Notice"><span class="FM_Bold">Observação: &#160;&#160;</span>Um asterisco duplo em uma consulta não é considerado um caractere curinga e é ignorado durante a execução da busca.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="記事簿偏好設定" >
+  <topic name="設定記事簿偏好設定" url="zwc_help_files/7_calendars/setting_your_calendar_preferences.htm" />
+</key>
+<key name="記事簿至群組內" >
+  <topic name="將你的記事簿整理至群組內" url="zwc_help_files/7_calendars/organize_your_calendars_into_groups.htm" />
+</key>
+<key name="設備" >
+  <topic name="安排設備" url="zwc_help_files/8_scheduling/scheduling_equipment.htm" />
+  <key name="日程安排中" >
+    <topic name="安排設備" url="zwc_help_files/8_scheduling/scheduling_equipment.htm" />
+  </key>
+</key>
+<key name="設定" >
+  <topic name="垃圾郵件選項" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+  <topic name="使用郵件過濾器" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+  <key name="垃圾郵件選項" >
+    <topic name="垃圾郵件選項" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+  </key>
+  <key name="設定過濾規則" >
+    <topic name="使用郵件過濾器" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+  </key>
+</key>
+<key name="設定你的預設會議持續時間" >
+  <topic name="設定你的預設會議持續時間" url="zwc_help_files/8_scheduling/configure_your_default_meeting_duration.htm" />
+</key>
+<key name="設置" >
+  <topic name="流動通訊安全性" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
+  <key name="PIN" >
+    <topic name="流動通訊安全性" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
+  </key>
+</key>
+<key name="語言，更改" >
+  <topic name="正在個人化你的帳戶資訊視窗" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="語音服務，聽郵件" >
+  <topic name="聽語音郵件" url="zwc_help_files/voiceservice/listening_to_a_voice_mail_message.htm" />
+</key>
+<key name="讀信回條" >
+  <topic name="返回讀信回條" url="zwc_help_files/2_manage_email/returning_read_receipts.htm" />
+  <topic name="自訂撰寫郵件選項" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <topic name="請求回執" url="zwc_help_files/3_compose/request_a_return_receipt.htm" />
+</key>
+<key name="讀取窗格" >
+  <topic name="使用閱讀窗格" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+<key name="身份設定值" >
+  <topic name="加入身份" url="zwc_help_files/3_compose/add_personas.htm" />
+</key>
+<key name="轉寄聯絡人資料" >
+  <topic name="轉寄聯絡人資訊" url="zwc_help_files/6_address_book/forwarding_contact_information.htm" />
+</key>
+<key name="轉寄郵件" >
+  <topic name="自動轉寄你接收的郵件" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <topic name="轉寄郵件" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+</key>
+<key name="通知" >
+  <topic name="設定新郵件的桌面提醒" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+  <topic name="設定電郵和短訊提醒通知" url="zwc_help_files/8_scheduling/setting_email_and_sms_reminder_notification.htm" />
+</key>
+<key name="通訊錄" >
+  <topic name="加入會員到聯絡人群組清單" url="zwc_help_files/6_address_book/adding_members_to_a_contact_group_list.htm" />
+  <topic name="匯出通訊錄" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  <topic name="自動將聯絡人加入電郵聯絡人清單" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+  <topic name="匯入通訊錄" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  <topic name="使用通訊錄" url="zwc_help_files/6_address_book/using_address_books.htm" />
+  <key name="匯入中" >
+    <topic name="匯入通訊錄" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  </key>
+  <key name="匯出中" >
+    <topic name="匯出通訊錄" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  </key>
+</key>
+<key name="通配字元" >
+  <topic name="執行進階搜尋" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+  <topic name="在搜尋中使用 * 作為通配字元" url="zwc_help_files/12_search/using_as_a_wildcard_in_search.htm" />
+  <topic name="用通配字元進行過濾" url="zwc_help_files/4_filters/filtering_using_wildcards.htm" />
+</key>
+<key name="進階搜尋" >
+  <topic name="執行進階搜尋" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="進階搜尋條件" >
+  <topic name="進階搜尋條件" url="zwc_help_files/12_search/advanced_search_criteria.htm" />
+</key>
+<key name="進階版網絡用戶端" >
+  <topic name="使用進階版和標準版用戶端" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="過濾器" >
+  <topic name="修改過濾條件" url="zwc_help_files/4_filters/editing_a_filter.htm" />
+  <topic name="為記事簿的邀請建立過濾器" url="zwc_help_files/4_filters/creating_a_filter_for_calendar_invitations.htm" />
+  <topic name="建立過濾器" url="zwc_help_files/4_filters/creating_a_filter.htm" />
+  <key name="建立中" >
+    <topic name="建立過濾器" url="zwc_help_files/4_filters/creating_a_filter.htm" />
+  </key>
+  <key name="編輯中" >
+    <topic name="修改過濾條件" url="zwc_help_files/4_filters/editing_a_filter.htm" />
+  </key>
+</key>
+<key name="過濾器啟用" >
+  <topic name="將過濾器設為使用中或非使用中" url="zwc_help_files/4_filters/making_a_filter_active_or_inactive.htm" />
+</key>
+<key name="過濾器順序" >
+  <topic name="檢視過濾器" url="zwc_help_files/4_filters/viewing_filters.htm" />
+  <key name="檢視中" >
+    <topic name="檢視過濾器" url="zwc_help_files/4_filters/viewing_filters.htm" />
+  </key>
+</key>
+<key name="過濾條件" >
+  <topic name="過濾條件" url="zwc_help_files/4_filters/filter_conditions.htm" />
+  <topic name="支援的過濾條件與操作" url="zwc_help_files/4_filters/filter_conditions_and_actions_supported.htm" />
+</key>
+<key name="過濾規則的操作項" >
+  <topic name="過濾規則的操作項" url="zwc_help_files/4_filters/filter_rule_actions.htm" />
+</key>
+<key name="過濾記事簿的邀請" >
+  <topic name="為記事簿的邀請建立過濾器" url="zwc_help_files/4_filters/creating_a_filter_for_calendar_invitations.htm" />
+</key>
+<key name="過濾郵件" >
+  <topic name="將非重要郵件移出收件箱" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+</key>
+<key name="還原已刪除項目" >
+  <topic name="還原從垃圾桶清除的項目" url="zwc_help_files/2_manage_email/recover_items_purged_from_trash.htm" />
+</key>
+<key name="郵件" >
+  <topic name="讀取郵件" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <key name="閱讀" >
+    <topic name="讀取郵件" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  </key>
+</key>
+<key name="郵件傳送中" >
+  <topic name="撰寫和傳送郵件" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="郵件到達通知" >
+  <topic name="設定新郵件的桌面提醒" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+</key>
+<key name="郵件垃圾桶" >
+  <topic name="還原從垃圾桶清除的項目" url="zwc_help_files/2_manage_email/recover_items_purged_from_trash.htm" />
+</key>
+<key name="郵件過濾器" >
+  <topic name="使用郵件過濾器" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+</key>
+<key name="重新命名標記" >
+  <topic name="重新命名標記" url="zwc_help_files/5_organize_account/rename_a_tag.htm" />
+</key>
+<key name="重新命名資料夾" >
+  <topic name="重新命名資料夾" url="zwc_help_files/5_organize_account/rename_a_folder.htm" />
+</key>
+<key name="閱讀窗格開或關" >
+  <topic name="使用閱讀窗格" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+<key name="閱讀窗格，移動" >
+  <topic name="正在個人化你的帳戶資訊視窗" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+</key>
+<key name="附件" >
+  <topic name="打開郵件中的附件" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+  <topic name="加入附件" url="zwc_help_files/3_compose/adding_attachments.htm" />
+</key>
+<key name="雜件箱" >
+  <topic name="移除濫發郵件" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="電子簽署的郵件，撰寫" >
+  <topic name="撰寫及傳送電子簽署郵件" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="電子郵件" >
+  <topic name="回覆郵件" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <key name="回覆中" >
+    <topic name="回覆郵件" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  </key>
+</key>
+<key name="電郵回覆" >
+  <topic name="設定電郵回覆的偏好設定" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+</key>
+<key name="電郵聯絡人" >
+  <topic name="自動將聯絡人加入電郵聯絡人清單" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+</key>
+<key name="電郵聯絡人清單" >
+  <topic name="自動將聯絡人加入電郵聯絡人清單" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+  <key name="自動加入聯絡人" >
+    <topic name="自動將聯絡人加入電郵聯絡人清單" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+  </key>
+</key>
+<key name="電郵通知" >
+  <topic name="設定電郵和短訊提醒通知" url="zwc_help_files/8_scheduling/setting_email_and_sms_reminder_notification.htm" />
+</key>
+<key name="電郵，稍後傳送" >
+  <topic name="撰寫和傳送郵件" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="項偏好設定分享頁面" >
+  <topic name="透過偏好設定分享頁面分享資料" url="zwc_help_files/13_sharing/share_a_folder_from_the_preferences_sharing_page.htm" />
+</key>
+<key name="預設時區" >
+  <topic name="更改預設時區" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+<key name="預設郵件搜尋" >
+  <topic name="自訂郵箱初始視窗" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+</key>
+<key name="顯示原件" >
+  <topic name="尋找郵件來源" url="zwc_help_files/2_manage_email/finding_the_origin_of_an_email_message.htm" />
+</key>
+
+</indexdata>

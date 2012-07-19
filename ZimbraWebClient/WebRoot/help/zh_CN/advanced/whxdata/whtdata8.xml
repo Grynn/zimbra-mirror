@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<item name="设置 S/MIME 以发送和接收签名的加密电子邮件" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+<item name="设置使用 S/MIME 的安全首选项" url="zwc_help_files/15_s_mime/setting_security_preferences_for_using_s_mime.htm" />
+<item name="为地址簿中的联系人添加证书" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+<item name="编写和发送数字签名邮件" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+<item name="编写和发送加密邮件" url="zwc_help_files/15_s_mime/compose_and_send_an_encrypted_message.htm" />
+
+</tocdata>

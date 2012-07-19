@@ -1,0 +1,132 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<book name="Начало работы" >
+  <item name="Расширенная версия веб-клиента" url="advanced_web_client.htm" />
+  <item name="Использование расширенных и стандартных клиентов" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <item name="Вход и выход" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+  <item name="Изменение пароля" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+  <item name="Использование горячих клавиш" url="zwc_help_files/1_setting_up/using_keyboard_shortcuts.htm" />
+</book>
+<book name="Систематизация учетных записей" >
+  <item name="Навигация по учетной записи " url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+  <item name="Систематизация учетных записей" url="zwc_help_files/5_organize_account/organizing_your_account.htm" />
+  <item name="Настройка исходного вида почтового ящика" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+  <item name="Персонализация вида учетной записи" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+  <item name="Изменение часового пояса по умолчанию" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+  <item name="Как работают выноски с адресом" url="zwc_help_files/2_manage_email/how_address_bubbles_work.htm" />
+  <item name="Управление лимитом учетной записи" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+  <item name="Очистка корзины" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+  <item name="Применение одного и того же действия к нескольким сообщениям" url="zwc_help_files/2_manage_email/marking_multiple_messages_for_the_same_action.htm" />
+  <item name="Настройка сообщения «Нет на работе»" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</book>
+<book name="Управление почтой" >
+  <item name="Управление почтой" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+  <item name="Изменение частоты проверки новой почты" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+  <item name="Настройка уведомлений о новых сообщениях электронной почты" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+  <item name="Назначение политик сохранения для папок электронной почты" url="zwc_help_files/2_manage_email/assigning_retention_policies_to_email_folders.htm" />
+  <item name="Объединение сообщений в папках пользователя" url="zwc_help_files/2_manage_email/group_messages.htm" />
+  <item name="Сортировка сообщений в области содержимого" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
+  <item name="Перемещение менее важной почты за пределы папки «Входящие»" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+  <item name="Перемещение сообщений электронной почты" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+  <item name="Подписка на каналы RSS" url="zwc_help_files/2_manage_email/subscribing_to_rss_feeds.htm" />
+  <item name="Удаление спама" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+  <item name="Параметры спама" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+  <item name="Восстановление элементов, удаленных из папки корзина" url="zwc_help_files/2_manage_email/recover_items_purged_from_trash.htm" />
+  <item name="Поиск источника сообщения электронной почты" url="zwc_help_files/2_manage_email/finding_the_origin_of_an_email_message.htm" />
+</book>
+<book name="Составление сообщений электронной почты" >
+  <item name="Составление и отправка сообщений электронной почты" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+  <item name="Настройка параметров составления сообщений" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <item name="Адресация сообщения" url="zwc_help_files/3_compose/addressing_a_message.htm" />
+  <item name="Автоматическое использование подписей" url="zwc_help_files/3_compose/using_signatures_automatically.htm" />
+  <item name="Добавление образов" url="zwc_help_files/3_compose/add_personas.htm" />
+  <item name="Использование других личных данных учетной записи при отправке сообщения электронной почты" url="zwc_help_files/3_compose/using_other_account_identities_when_you_send_an_email.htm" />
+  <item name="Указание приоритета сообщения" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+  <item name="Запрос подтверждения прочтения" url="zwc_help_files/3_compose/request_a_return_receipt.htm" />
+  <item name="Добавление вложений" url="zwc_help_files/3_compose/adding_attachments.htm" />
+  <item name="Проверка правописания сообщения" url="zwc_help_files/3_compose/spell_check_a_message.htm" />
+  <item name="Добавление слов в орфографический словарь" url="zwc_help_files/3_compose/adding_words_to_the_spell_dictionary.htm" />
+  <item name="Сохранение сообщения как черновика" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+  <item name="Удаление сообщения" url="zwc_help_files/2_manage_email/deleting_a_message.htm" />
+</book>
+<book name="Чтение сообщений" >
+  <item name="Чтение почты" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <item name="Использование области чтения" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+  <item name="Отображение сообщений в формате HTML или обычного текста" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <item name="Получение подтверждений прочтения" url="zwc_help_files/2_manage_email/returning_read_receipts.htm" />
+  <item name="Печать разговора (все сообщения)" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  <item name="Печать сообщения электронной почты" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
+  <item name="Получение сообщения «Доступ запрещен»" url="zwc_help_files/8_scheduling/receiving_a_permission_denied_message.htm" />
+  <item name="Открытие вложений в сообщения электронной почты" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</book>
+<book name="Загрузка почты из других учетных записей" >
+  <item name="Доступ к внешним учетным записям" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+  <item name="Получение уведомления о приходе почты на другой электронный адрес" url="zwc_help_files/2_manage_email/receiving_new_mail_notification_to_another_email_address.htm" />
+  <item name="Настройка параметров POP для учетной записи" url="zwc_help_files/1_setting_up/set_up_pop_behavior_for_your_account.htm" />
+</book>
+<book name="Ответ и пересылка сообщений" >
+  <item name="Настройка параметров для отправки ответов на сообщения электронной почты" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+  <item name="Ответ на сообщения электронной почты" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <item name="Настройка параметров для пересылки сообщений электронной почты" url="zwc_help_files/3_compose/set_preferences_for_forwarded_email.htm" />
+  <item name="Пересылка сообщений электронной почты" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+  <item name="Автоматическая пересылка полученных сообщений" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <item name="Пересылка сообщения в качестве отправителя" url="zwc_help_files/3_compose/forward_a_message_as_the_originator.htm" />
+  <item name="Пересылка сообщения в качестве перенаправляемого" url="zwc_help_files/3_compose/forward_a_message_as_a_redirected_message.htm" />
+</book>
+<book name="Управление адресными книгами" >
+<chunk name="Управление адресными книгами" ref="whtdata1.xml" />
+</book>
+<book name="Управление ежедневниками" >
+  <item name="Работа с календарями" url="zwc_help_files/7_calendars/working_with_calendars.htm" />
+  <item name="Создание ежедневника" url="zwc_help_files/7_calendars/create_a_calendar.htm" />
+  <item name="Добавление цвета в ежедневник" url="zwc_help_files/7_calendars/add_color_to_a_calendar.htm" />
+  <item name="Установка настроек ежедневника" url="zwc_help_files/7_calendars/setting_your_calendar_preferences.htm" />
+  <item name="Другие настраиваемые параметры ежедневника" url="zwc_help_files/7_calendars/other_calendar_preferences_to_configure.htm" />
+  <item name="Просмотр нескольких ежедневников" url="zwc_help_files/7_calendars/view_multiple_calendars.htm" />
+  <item name="Отображение встреч на весь день в виде «Рабочая неделя»" url="zwc_help_files/7_calendars/displaying_all_day_appointments_in_your_work_week_view.htm" />
+  <item name="Просмотр мероприятий ежедневника в списке" url="zwc_help_files/7_calendars/viewing_calendar_activities_in_a_list.htm" />
+  <item name="Добавление файла iCalendar из сообщения электронной почты" url="zwc_help_files/7_calendars/adding_an_icalendar_from_an_email_message.htm" />
+  <item name="Добавление внешних ежедневников" url="zwc_help_files/7_calendars/adding_external_calendars.htm" />
+  <item name="Группирование ежедневников" url="zwc_help_files/7_calendars/organize_your_calendars_into_groups.htm" />
+  <item name="Печать ежедневника" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  <item name="Удаление ежедневника" url="zwc_help_files/7_calendars/delete_a_calendar.htm" />
+  <item name="Импорт ежедневника iCal" url="zwc_help_files/7_calendars/import_your_ical_calendar.htm" />
+  <item name="Экспорт ежедневника iCal" url="zwc_help_files/7_calendars/export_your_ical_calendar.htm" />
+</book>
+<book name="Планирование встреч, собраний и событий" >
+<chunk name="Планирование встреч, собраний и событий" ref="whtdata2.xml" />
+</book>
+<book name="Использование списков задач" >
+<chunk name="Использование списков задач" ref="whtdata3.xml" />
+</book>
+<book name="Работа в портфеле" >
+<chunk name="Работа в портфеле" ref="whtdata4.xml" />
+</book>
+<book name="Общий доступ к папкам" >
+<chunk name="Общий доступ к папкам" ref="whtdata5.xml" />
+</book>
+<book name="Поиск элементов" >
+<chunk name="Поиск элементов" ref="whtdata6.xml" />
+</book>
+<book name="Использование меток и папок для систематизации почты" >
+<chunk name="Использование меток и папок для систематизации почты" ref="whtdata7.xml" />
+</book>
+<book name="Использование почтовых фильтров" >
+<chunk name="Использование почтовых фильтров" ref="whtdata8.xml" />
+</book>
+<book name="Управление мобильным устройством (только для Network Edition)" >
+  <item name="Управление мобильными устройствами" url="zwc_help_files/11_mobile/managing_your_mobile_devices.htm" />
+  <item name="Функции безопасности мобильного устройства" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
+  <item name="Очистка мобильного устройства" url="zwc_help_files/11_mobile/wipe_your_mobile_device.htm" />
+</book>
+<book name="Отправка безопасных сообщений электронной почты (только для Network Edition)" >
+<chunk name="Отправка безопасных сообщений электронной почты (только для Network Edition)" ref="whtdata9.xml" />
+</book>
+<book name="Голосовая служба (только для Network Edition)" >
+<chunk name="Голосовая служба (только для Network Edition)" ref="whtdata10.xml" />
+</book>
+<book name="Использование модулей Zimlet" >
+<chunk name="Использование модулей Zimlet" ref="whtdata11.xml" />
+</book>
+
+</tocdata>

@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\zwcHelp\zimbra_user_help_source\4_filters.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>过滤条件</title>
+<link rel="stylesheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("使用邮件过滤器\n过滤条件");
+addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "首页", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">使用邮件过滤器<\/a> &gt; 过滤条件<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">过滤条件</p>
+<p class="FM_Body">过滤器可包含一个或多个条件。例如，如果某人从多个电子邮件地址向您发送电子邮件，且您想要将该人发来的所有邮件定向到一个文件夹中，则可创建一个包含两个条件的过滤器，一个用于每个电子邮件地址，另一个用于将电子邮件移动到同一个文件夹。 </p>
+<p class="FM_Body">条件的顺序并不重要。可选择电子邮件是必须匹配列出的所有条件还是只需匹配其中任何一个条件。还可以使用否定条件。例如，可过滤不含某个特定词的电子邮件。过滤条件不区分大小写。</p>
+<p class="FM_Body">过滤条件可基于以下内容：</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>“发件人”、“收件人”或“抄送”字段中的特定电子邮件地址</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>小于或大于特定大小的电子邮件</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>日期</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>是否有文件附件</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>邮件主题或正文中的词</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span>行事历邀请</p>
+<p class="FM_3Heading">使用<span style="font-style: italic;">任何</span>与<span style="font-style: italic;">所有</span>过滤</p>
+<p class="FM_Body">一个过滤规则中的条件可用<span class="FM_attribute">任何</span>或<span class="FM_attribute">所有</span>作为分组条件。这些词的使用类似于搜索功能下描述的“AND”与“OR”类型搜索，其中<span class="FM_attribute">任何</span>与 OR 相对应，<span class="FM_attribute">所有</span>与 AND 相对应。</p>
+<p class="FM_Body">定义一个新过滤规则的条件时，如果选择<span class="FM_attribute">任何</span>，则满足其中任何一个条件的邮件都被认作是匹配的邮件。但若选择<span  	 class="FM_attribute">所有</span>，则仅当该邮件满足过滤规则中的所有条件时方被认作是匹配的邮件。</p>
+<p class="FM_3Heading">使用<span style="font-style: italic;">包含</span>、<span style="font-style: italic;">匹配</span>和<span style="font-style: italic;">是</span>选项过滤</p>
+<p class="FM_Body">过滤条件的三种比较方法是“包含”、“模式相符”和“完全相符”。对于某些项（如主题行），会出现这些选项。</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span><span  	 class="FM_attribute">包含</span>表示指定的行必须在其内的某个地方包含指定的字符串。例如，如果指定主题行包含“bananas”，则“Cooking with bananas”和“Bananas for breakfast”都将是匹配项。</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span><span  	 class="FM_attribute">模式相符</span>表示指定的行必须匹配含有通配符的指定字符串。例如，指定“bana*”将匹配“banana”和“banana tree”，但不会匹配“free bananas”。</p>
+<p class="FM_Bulleted1"><span class="FM_bullet1">•<span style="word-spacing: normal;  														 font: 6.0pt 'Times New Roman';">      </span></span><span  	 class="FM_attribute">是</span>表示指定的行必须与指定的字符串完全匹配，不含通配符或替代字符。例如，如果指定主题行必须与“bananas”匹配，则匹配项将仅是“bananas”，而非“Banana”、“My bananas”或“Bananas?”。</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

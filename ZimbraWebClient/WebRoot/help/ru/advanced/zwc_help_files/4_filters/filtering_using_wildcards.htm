@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\zwcHelp\zimbra_user_help_source\4_filters.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>Фильтрация с использованием подстановочных знаков</title>
+<link rel="stylesheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Использование почтовых фильтров\nФильтрация с использованием подстановочных знаков");
+addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "Домашний", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">Использование почтовых фильтров<\/a> &gt; Фильтрация с использованием подстановочных знаков<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">Фильтрация с помощью подстановочных знаков</p>
+<p class="FM_Body">Подстановочные знаки используются в сравнениях, в которых применяется оператор сравнения «соответствует шаблону». Подстановочными являются два знака: «*» и «?».</p>
+<p class="FM_2Heading">Звездочка (*)</p>
+<p class="FM_Body">Звездочка (*) является подстановочным знаком для «нуля и других знаков любого типа».</p>
+<p class="FM_Body">Пример строки поиска в теме: яблок*плавает</p>
+<p class="FM_Body">Соответствия: такие строки темы, как «яблоко плавает», «яблоки», «яблоко замечательно плавает», но не «прекрасно яблоко плавает».</p>
+<p class="FM_Body">Пример строки поиска в теме: с*косынка</p>
+<p class="FM_Body">Соответствия: такие строки темы, как «серая косынка» или «стильная косынка», но не «стильная косынка вышла из моды?».</p>
+<p class="FM_2Heading">Знак вопроса (?)</p>
+<p class="FM_Body">Знак вопроса является подстановочным знаком условия «точно для одного знака».</p>
+<p class="FM_Body">Пример строки поиска в теме: яблочный?пирог.</p>
+<p class="FM_Body">Соответствия: такие строки темы, как «яблочный пирог», «яблочный-пирог», «яблочный!пирог» или «яблочный:пирог».</p>
+<p class="FM_2Heading">Знаком пропуска является косая черта: \</p>
+<p class="FM_Body">Иногда бывает необходимо указать точное соответствие в строке, содержащей знаки, которые обычно считаются подстановочными. К примеру, необходимо указать точное соответствие в строке, где главный заголовок окружен с обеих сторон звездочками, например:</p>
+<p class="FM_Body">***ЕЩЕ БОЛЬШЕ ДЕНЕГ!!!*** или</p>
+<p class="FM_Body">***БЕСПЛАТНЫЙ ПОДАРОК***</p>
+<p class="FM_Body">Чтобы указать собственно знак, а не подстановку для других знаков, непосредственно перед знаком ставится обратная косая черта (\). Например, строка сравнения «\*\*\**\*\*\*» указывает на заголовок с тремя звездочками до и после любой строки по центру (включая пробелы).</p>
+<p class="FM_Body">&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

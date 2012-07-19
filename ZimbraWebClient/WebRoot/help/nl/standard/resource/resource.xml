@@ -1,0 +1,246 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<resource>
+  <element name="Hide" value="Verbergen" />
+  <element name="Prev" value="&lt;&lt;" />
+  <element name="FileError" value="Fout tijdens het openen van het bestand met gedeelde opmerkingen" />
+  <element name="SendToFileMenu" value="Verzenden naar bestand" />
+  <element name="DeleteCommentButtonToolTip" value="Geselecteerde opmerking verwijderen" />
+  <element name="PrintThisCategory" value="Deze categorie afdrukken" />
+  <element name="LoginFailureTitle" value="Verificatie" />
+  <element name="AnonymousDlgText" value="Anonieme opmerkingen zijn zichtbaar als ze worden geaccepteerd. Wilt u opmerkingen anoniem posten?" />
+  <element name="ProgressBarTitle" value="Een ogenblik geduld…" />
+  <element name="BrowseSeqPrintProgressMsg" value="Onderwerpen laden voor afdrukken…" />
+  <element name="ViewAcceptedComments" value="Geaccepteerd weergeven" />
+  <element name="NewestOnBottomLabel" value="Nieuwste onderaan" />
+  <element name="UpdatingCommentsForUserMessage" value="Opmerkingen verzenden…" />
+  <element name="RecieveCommentFromServerStartMsg" value="Opmerkingen ontvangen…" />
+  <element name="Logo/Author" value="Gevoed door" />
+  <element name="DeleteCommentButton" value="Verwijderen" />
+  <element name="ForwardButtonToolTip" value="Volgende" />
+  <element name="NoUpdatePresent" value="Er is geen update beschikbaar" />
+  <element name="RSSReadLabel" value="Gelezen" />
+  <element name="RSSUnReadLabel" value="Ongelezen" />
+  <element name="GoOnline" value="online te gaan" />
+  <element name="ErrorMsgTitle" value="Fout" />
+  <element name="SyncToc" value="SyncToc" />
+  <element name="Next" value="&gt;&gt;" />
+  <element name="SendToServerMenu" value="Verzenden naar server" />
+  <element name="ShowCommentButtonToolTip" value="DO NOT TRANSLATE" />
+  <element name="SaveCommentText" value="Opmerkingen toevoegen:" />
+  <element name="PreferenceDlgShowBreadCrumb" value="Breadcrumbs weergeven" />
+  <element name="PrintEntireHelpString" value="Wilt u alle onderwerpen afdrukken?" />
+  <element name="FavoriteDeleteTopic" value="Verwijderen" />
+  <element name="NewFolderName" value="New Folder" />
+  <element name="OpenInBrowser" value="Openen in browser" />
+  <element name="DownloadingUpdate" value="Updates downloaden..." />
+  <element name="RememberMe" value="Onthoud mijn gegevens" />
+  <element name="PreferenceDlgAutoImportCommentsOnSignin" value="Opmerkingen van server ontvangen bij aanmelding" />
+  <element name="SortCommentButtonToolTip" value="DO NOT TRANSLATE" />
+  <element name="BackButtonToolTip" value="Vorige" />
+  <element name="ViewerDialogCancelButton" value="Annuleren" />
+  <element name="OpenInNewTab" value="In nieuw tabblad openen" />
+  <element name="IndexSearchText" value="Typ trefwoorden om te zoeken" />
+  <element name="ViewerDialogYesButton" value="Yes" />
+  <element name="View" value="Weergave" />
+  <element name="CurrentOfflineText" value="Werkt momenteel offline" />
+  <element name="ViewALLComments" value="Alles weergeven" />
+  <element name="ContentCategoryList" value="Een inhoudscategorie selecteren" />
+  <element name="Seperate" value="|" />
+  <element name="AboutDescription" value="Beschrijving:" />
+  <element name="SendCommentsServerMessage" value="Opmerkingen verzonden naar de server" />
+  <element name="InvalidXML" value="Ongeldig XML-bestand" />
+  <element name="AddCommentButtonToolTip" value="Vak Opmerking toevoegen weergeven/verbergen" />
+  <element name="AddCommentHereText" value="Opmerkingen hier toevoegen" />
+  <element name="SaveCommentTextToolTip" value="Schrijf opmerkingen die u wilt toevoegen" />
+  <element name="PreferenceDlgCheckForUpdate" value="Op updates controleren" />
+  <element name="LoadingNewTabMsg" value="Laden..." />
+  <element name="GlossaryBoxTitle" value="Woordenlijst" />
+  <element name="FavoriteAddFolderTopic" value="Map toevoegen" />
+  <element name="MarkAsRead" value="Markeren als gelezen" />
+  <element name="CloseAppButton" value="Sluiten" />
+  <element name="AuthenticateTitle" value="Verifiëren" />
+  <element name="Password" value="Wachtwoord:" />
+  <element name="PreferenceDlgAutoImportCommentsOnLaunch" value="Opmerkingen ontvangen van gedeelde map" />
+  <element name="CommentsBy" value="Opmerkingen van:" />
+  <element name="ViewPendingComments" value="In behandeling weergeven" />
+  <element name="RequireWritePermission" value="Beheerder moet schrijfrechten hebben voor de gedeelde map." />
+  <element name="Contents" value="Inhoud" />
+  <element name="AboutButtonTitle" value="Info" />
+  <element name="AboutHelpID" value="Help-id:" />
+  <element name="ShowDateMenu" value="Datum" />
+  <element name="AddToFavoriteMenuItem" value="Toevoegen aan koppelingen" />
+  <element name="PrintSequence" value="Afdrukvolgorde" />
+  <element name="PreferenceDialogCommentsDeleteMsg" value="Wilt u alle opmerkingen verwijderen?" />
+  <element name="PreferenceDlgAutoUpdateContent" value="Inhoud automatisch bijwerken" />
+  <element name="PreferenceDlgReviewerName" value="Naam van revisor" />
+  <element name="PrintAlertTitle" value="Afdrukken" />
+  <element name="DeleteButtonTitle" value="Verwijderen" />
+  <element name="SearchTextInputToolTip" value="Voer tekst in om te zoeken" />
+  <element name="AddNewFavoriteMenu" value="Koppeling toevoegen" />
+  <element name="StartModeration" value="Importeren" />
+  <element name="For" value="DO NOT TRANSLATE" />
+  <element name="OnlyAccepted" value="Geaccepteerd" />
+  <element name="Anonymous" value="Anoniem" />
+  <element name="EnableModeration" value="Beheergedeelte weergeven" />
+  <element name="Search" value="Zoeken" />
+  <element name="Glossary" value="Verklarende woordenlijst" />
+  <element name="Disabled Prev" value="&lt;&lt;" />
+  <element name="SyncMessage" value="Verzenden/ontvangen van opmerkingen voltooid" />
+  <element name="PrintThisPage" value="Deze pagina afdrukken" />
+  <element name="PreferenceDialogCommentTabTitle" value="Opmerking" />
+  <element name="FavoriteBoxTitle" value="Favorieten" />
+  <element name="NewBookmarkName" value="Naam van koppeling" />
+  <element name="Accept" value="Accepteren" />
+  <element name="SortByDate" value="Sorteren op datum" />
+  <element name="SyncCommentsFromServerMsg" value="Verzenden/ontvangen van opmerkingen voltooid." />
+  <element name="ConnectionError" value="Kan gedeelde locatie voor opmerkingen niet openen" />
+  <element name="SendRcvCommentButtonToolTip" value="Opmerkingen verzenden en ontvangen" />
+  <element name="PreferenceDlgDeleteAllComments" value="Alle opmerkingen verwijderen" />
+  <element name="EditOption" value="Bewerken" />
+  <element name="FavoriteDeleteButton" value="Verwijderen" />
+  <element name="PreferenceDialogBrowseButtonTitle" value="Bladeren" />
+  <element name="PreferenceDlgChkCommentLocation" value="Standaardlocatie gebruiken voor het synchroniseren van opmerkingen" />
+  <element name="PreferenceDlgCommentSyncLocation" value="Maplocatie:" />
+  <element name="SignOut" value="Afmelden" />
+  <element name="SyncModerationFromServerMsg" value="Verzenden/ontvangen van opmerkingen voltooid." />
+  <element name="ModerationPodTitle" value="Beheer" />
+  <element name="Disabled Next" value="&gt;&gt;" />
+  <element name="AboutVersionID" value="Versie-id:" />
+  <element name="PreferenceDlgOpenInNewTab" value="Help-onderwerpen in nieuw tabblad openen" />
+  <element name="PreferenceDlgShowBrowseSequence" value="Bladervolgorde weergeven" />
+  <element name="SearchResultDefaultBookmark" value="Zoekresultaat voor " />
+  <element name="FavoriteDisplayTopic" value="Weergeven" />
+  <element name="FavoriteRenameTopic" value="Naam wijzigen" />
+  <element name="NewRSSFeedURL" value="URL van RSS-feed:" />
+  <element name="NoUpdateLocationSpecified" value="De updatelocatie bestaat niet" />
+  <element name="UpdateAvailable" value="Er is een update beschikbaar. Wilt u nu bijwerken?" />
+  <element name="SelectAuthor" value="Auteur selecteren" />
+  <element name="ShowReviewerMenu" value="Revisor" />
+  <element name="ShowCommentReviewerMenu" value="DO NOT TRANSLATE" />
+  <element name="TOCBoxTitle" value="Inhoud" />
+  <element name="IndexBoxTitle" value="Index" />
+  <element name="GlossaryDefinitionBoxTitle" value="Glossarydefinitie" />
+  <element name="FeedsButtonTitle" value="RSS-feeds" />
+  <element name="FavoriteInvalidNameError" value="Ongeldige naam" />
+  <element name="ErrorInDownloadingUpdate" value="Fout bij het downloaden" />
+  <element name="InstallationStarted" value="Installatie starten..." />
+  <element name="PreviewMode" value="Afdrukvoorbeeld" />
+  <element name="Author" value="Auteur" />
+  <element name="Update" value="Bijwerken" />
+  <element name="ServerSyncRequiredButtonLabel" value="Nu synchroniseren" />
+  <element name="PrintNotAllowedWariningMsg" value="Kan de volgende onderwerpen niet afdrukken. Wilt u doorgaan?" />
+  <element name="LoginFailedErrorMsg" value="Aanmelden mislukt. Probeer het opnieuw." />
+  <element name="ConfirmDelete" value="Wilt u de opmerking verwijderen?" />
+  <element name="ViewRejectedComments" value="Geweigerd weergeven" />
+  <element name="AboutDialogTitle" value="Info" />
+  <element name="ReceiveFromFileMenu" value="Ontvangen van bestand" />
+  <element name="CannotImportFileError" value="Kan niet importeren uit bestand" />
+  <element name="PreferenceDlgCheckUpdateButton" value="Nu controleren" />
+  <element name="NewRSSFeedName" value="Naam van RSS-feed:" />
+  <element name="NewBookmarkURL" value="URL van koppeling" />
+  <element name="MinimizeAppButton" value="Minimaliseren" />
+  <element name="GenericDeleteMsg" value="Wilt u het geselecteerde item verwijderen?" />
+  <element name="OnlyPending" value="In behandeling" />
+  <element name="WelcomeUserOnSign" value="Welkom %1" />
+  <element name="NewestOnTopLabel" value="Nieuwste bovenaan" />
+  <element name="CommentDateTimeFormatter" value="DD-MM-YYYY, JJ:NN" />
+  <element name="CommentsAddEmptyError" value="Kan geen lege opmerkingen toevoegen" />
+  <element name="ShowCommentShowAllMenuItem" value="Alle" />
+  <element name="CommentFileMismatchError" value="Help-id komt niet overeen, kan opmerkingen niet importeren" />
+  <element name="CommentTitle" value="Opmerkingen" />
+  <element name="SendRcvCommentButton" value="Verzenden en ontvangen" />
+  <element name="SaveButtonToolTip" value="Klik om opmerkingen aan database toe te voegen" />
+  <element name="PreferenceDialogAllCommentsDeleted" value="Alle opmerkingen worden verwijderd" />
+  <element name="ViewerDialogOKButton" value="OK" />
+  <element name="LinksButtonTitle" value="Koppelingen" />
+  <element name="NewRSSFeedDlgTitle" value="Nieuwe RSS-feed toevoegen" />
+  <element name="MaximizeAppButton" value="Maximaliseren" />
+  <element name="ErrorInInstallingUpdate" value="Fout bij het installeren" />
+  <element name="ErrorWhileUpdating" value="Fout bij het bijwerken" />
+  <element name="RSSRefreshLabel" value="Vernieuwen" />
+  <element name="CurrentTopic" value="Opmerkingen voor huidig onderwerp" />
+  <element name="RejectAll" value="Alles weigeren" />
+  <element name="Delete" value="Verwijderen" />
+  <element name="Username" value="Gebruikersnaam:" />
+  <element name="OnlyNew" value="Nieuw" />
+  <element name="CurrentOnlineText" value="Werkt momenteel online" />
+  <element name="CommentsNotFoundMsg" value="Geen opmerkingen gevonden" />
+  <element name="Show" value="Weergeven" />
+  <element name="SendCommentsFileMessage" value="Opmerkingen verzonden naar de gedeelde locatie" />
+  <element name="ShowTopicMenu" value="DO NOT TRANSLATE" />
+  <element name="ShowCommentShowCurrentMenuItem" value="DO NOT TRANSLATE" />
+  <element name="AddCommentButton" value="Toevoegen" />
+  <element name="SearchButtonToolTip" value="Druk op Ctrl+Enter om de zoekresultaten te openen in een nieuw tabblad" />
+  <element name="SearchButtonTitle" value="Zoeken" />
+  <element name="ShowHideButtonToolTip" value="Weergeven/verbergen" />
+  <element name="FavoritesTopMenuToolTip" value="Favorieten toevoegen of weergeven" />
+  <element name="CommentPodToggleToolTip" value="Opmerkingen in- of uitschakelen" />
+  <element name="PreferenceDialogContentTabTitle" value="Algemeen" />
+  <element name="PreferenceDlgUseOfflineHelp" value="Offline-Help gebruiken" />
+  <element name="NewSearchTabTitle" value="Zoekresultaten" />
+  <element name="NewBookmarkDlgTitle" value="Nieuwe koppeling toevoegen" />
+  <element name="UpdateAvailableWithVersion" value="Er is een update naar versie %s beschikbaar. Wilt u nu bijwerken?" />
+  <element name="LoginFailure" value="Onjuist wachtwoord" />
+  <element name="ClickHere" value="Klik hier om" />
+  <element name="CommentsModeToolTip" value="Naar de modus Opmerkingen schakelen" />
+  <element name="EntireHelpPrintProgressMsg" value="Onderwerp %1  van %2 onderwerpen laden…" />
+  <element name="CommentDateFormatter" value="DD-MM-YYYY" />
+  <element name="ReceiveCommentsFileMessage" value="Opmerkingen ontvangen van de gedeelde locatie" />
+  <element name="FavoriteAddRSSFeed" value="RSS-feed toevoegen" />
+  <element name="FavoriteMessageTitle" value="Favorieten" />
+  <element name="FavoriteAlredyExists" value="bestaat al in Favorieten" />
+  <element name="OpenURL" value="URL openen" />
+  <element name="MarkAsUnread" value="Markeren als ongelezen" />
+  <element name="CheckingforUpdateMsg" value="Op updates controleren..." />
+  <element name="NewUpdateAvailableMsg" value="Nieuwe update" />
+  <element name="ViewerDialogNoButton" value="No" />
+  <element name="AllAuthors" value="Alle auteurs" />
+  <element name="AllStatus" value="Status alle" />
+  <element name="OnlyRejected" value="Geweigerd" />
+  <element name="GoOffline" value="offline te gaan" />
+  <element name="ModerationModeToolTip" value="Naa de modus Beheer schakelen" />
+  <element name="PreferenceDialogBrowseCommentSyncLocation" value="Selecteer de locatie om opmerkingen op te slaan:" />
+  <element name="SendCommentToServerStartMsg" value="Opmerkingen verzenden…" />
+  <element name="Index" value="Index" />
+  <element name="ReceiveCommentsServerMessage" value="Opmerkingen ontvangen van de server" />
+  <element name="ShowCommentButton" value="DO NOT TRANSLATE" />
+  <element name="SortCommentButton" value="DO NOT TRANSLATE" />
+  <element name="ViewFavoriteMenuItem" value="Favorieten weergeven" />
+  <element name="PrefTitle" value="Voorkeuren" />
+  <element name="ErrorShowingHelpFile" value="Fout bij het openen van het Help-bestand" />
+  <element name="BrowseSequenceBoxTitle" value="Hoe" />
+  <element name="EditRSSFeedDlgTitle" value="RSS-feed bewerken" />
+  <element name="CommentImportFileDlgTitle" value="Selecteer het XML-bestand met opmerkingen dat moet worden geïmporteerd" />
+  <element name="PreferenceDlgHighLightSearch" value="Zoekresultaten markeren" />
+  <element name="CommentText" value="Opmerking" />
+  <element name="Date" value="Datum" />
+  <element name="Reject" value="Weigeren" />
+  <element name="LoadingCommentsForUserMessage" value="Opmerkingen ontvangen…" />
+  <element name="PreferenceButtonTitle" value="Voorkeuren" />
+  <element name="SaveXMLFileDlg" value="Opmerkingen in XML-bestand opslaan" />
+  <element name="SaveButton" value="Opslaan" />
+  <element name="PrintEntireHelp" value="Gehele Help afdrukken" />
+  <element name="PreferenceDlgDeleteCommentButton" value="Alles verwijderen" />
+  <element name="RSSNoneLabel" value="Geen" />
+  <element name="AsAnonymous" value="Als anoniem" />
+  <element name="AcceptAll" value="Alles accepteren" />
+  <element name="WrongPassword" value="Onjuist wachtwoord. Probeer het opnieuw." />
+  <element name="ErrorServerConnection" value="Fout tijdens het verbinden met de server. Controleer de internetverbinding en probeer het opnieuw." />
+  <element name="SignIn" value="Aanmelden" />
+  <element name="SelectStatus" value="Status selecteren" />
+  <element name="ReceiveFromServerMenu" value="Ontvangen van server" />
+  <element name="PrintMenuOptionsToolTip" value="Menu Afdrukken" />
+  <element name="PreferenceDialogUserNameError" value="Geef een geldige revisornaam op" />
+  <element name="PreferenceDlgUseLoginName" value="Gebruik altijd de aanmeldnaam voor de naam van de revisor" />
+  <element name="ServerConnectionError" value="Geen verbinding met de server beschikbaar, overschakelen naar offline-modus" />
+  <element name="EditBookmarkDlgTitle" value="Koppeling bewerken" />
+  <element name="SearchResultError" value="Geen zoekresultaten gevonden" />
+  <element name="UpdateMsgTitle" value="Automatisch bijwerken" />
+  <element name="RSSSelectLabel" value="Selecteren:" />
+  <element name="AllTopics" value="Opmerkingen voor alle onderwerpen" />
+  <element name="Status" value="Status" />
+  <element name="EndModeration" value="Exporteren" />
+  <element name="ShowBy" value="Weergeven op" />
+  <element name="ModerationRightsNotPresent" value="Er zijn beheerdersrechten vereist om het beheergedeelte weer te geven" />
+</resource>
+

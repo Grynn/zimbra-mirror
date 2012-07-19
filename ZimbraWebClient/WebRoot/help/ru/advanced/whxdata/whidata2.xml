@@ -1,0 +1,223 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="печать" >
+  <topic name="Печать ежедневника" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  <topic name="Печать разговора (все сообщения)" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  <topic name="Печать сообщения электронной почты" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
+  <key name="ежедневник" >
+    <topic name="Печать ежедневника" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  </key>
+  <key name="разговор" >
+    <topic name="Печать разговора (все сообщения)" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  </key>
+  <key name="электронное сообщение" >
+    <topic name="Печать сообщения электронной почты" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
+  </key>
+</key>
+<key name="печать адресной книги" >
+  <topic name="Печать имени контакта или адресной книги" url="zwc_help_files/6_address_book/printing_a_contact_name_or_address_book.htm" />
+</key>
+<key name="печать папки задач" >
+  <topic name="Печать задачи или списка задач" url="zwc_help_files/9_tasks/printing_a_task_or_task_list.htm" />
+</key>
+<key name="планирование" >
+  <topic name="Планирование оборудования" url="zwc_help_files/8_scheduling/scheduling_equipment.htm" />
+  <key name="оборудование" >
+    <topic name="Планирование оборудования" url="zwc_help_files/8_scheduling/scheduling_equipment.htm" />
+  </key>
+</key>
+<key name="подписи" >
+  <topic name="Автоматическое использование подписей" url="zwc_help_files/3_compose/using_signatures_automatically.htm" />
+</key>
+<key name="подстановочный знак" >
+  <topic name="Выполнение расширенного поиска" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+  <topic name="Использование * (звездочки) в качестве подстановочного знака в профиле поиска" url="zwc_help_files/12_search/using_as_a_wildcard_in_search.htm" />
+  <topic name="Фильтрация с использованием подстановочных знаков" url="zwc_help_files/4_filters/filtering_using_wildcards.htm" />
+</key>
+<key name="подтверждения прочтения" >
+  <topic name="Получение подтверждений прочтения" url="zwc_help_files/2_manage_email/returning_read_receipts.htm" />
+  <topic name="Настройка параметров составления сообщений" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <topic name="Запрос подтверждения прочтения" url="zwc_help_files/3_compose/request_a_return_receipt.htm" />
+</key>
+<key name="поиск общих элементов" >
+  <topic name="Поиск ресурсов, к которым пользователю предоставлен общий доступ" url="zwc_help_files/13_sharing/finding_items_shared_with_you.htm" />
+</key>
+<key name="поиск почты по умолчанию" >
+  <topic name="Настройка исходного вида почтового ящика" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+</key>
+<key name="политики сохранения" >
+  <topic name="Назначение политик сохранения для папок электронной почты" url="zwc_help_files/2_manage_email/assigning_retention_policies_to_email_folders.htm" />
+</key>
+<key name="портфель" >
+  <topic name="Удаления документа из портфеля" url="zwc_help_files/10_briefcase/delete_a_document_from_briefcase.htm" />
+  <topic name="Перемещение файлов в портфель" url="zwc_help_files/10_briefcase/move_files_in_briefcase.htm" />
+  <topic name="Добавление файлов в папки портфеля" url="zwc_help_files/10_briefcase/adding_files_to_your_briefcase_folders.htm" />
+</key>
+<key name="порядок фильтрации" >
+  <topic name="Просмотр фильтров" url="zwc_help_files/4_filters/viewing_filters.htm" />
+  <key name="просмотр" >
+    <topic name="Просмотр фильтров" url="zwc_help_files/4_filters/viewing_filters.htm" />
+  </key>
+</key>
+<key name="поток действий" >
+  <topic name="Перемещение менее важной почты за пределы папки «Входящие»" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+  <topic name="Работа с фильтрами электронной почты" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+</key>
+<key name="почта" >
+  <topic name="Чтение почты" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <key name="чтение" >
+    <topic name="Чтение почты" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  </key>
+</key>
+<key name="права на доступ" >
+  <topic name="Права на доступ" url="zwc_help_files/13_sharing/access_privileges.htm" />
+</key>
+<key name="предоставить общий доступ к папкам списка задач" >
+  <topic name="Предоставление общего доступа к папкам списка задач" url="zwc_help_files/13_sharing/share_task_list_folders.htm" />
+</key>
+<key name="приглашение на собрание" >
+  <topic name="Ответ на приглашение на собрание" url="zwc_help_files/8_scheduling/responding_to_a_meeting_invitation.htm" />
+  <key name="ответ" >
+    <topic name="Ответ на приглашение на собрание" url="zwc_help_files/8_scheduling/responding_to_a_meeting_invitation.htm" />
+  </key>
+</key>
+<key name="принятие профиля общего доступа" >
+  <topic name="Принятие приглашения для совместного использования ресурсов" url="zwc_help_files/13_sharing/accepting_an_invitation_to_share_items.htm" />
+</key>
+<key name="проверка новой почты" >
+  <topic name="Изменение частоты проверки новой почты" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+</key>
+<key name="проверка почты вручную" >
+  <topic name="Изменение частоты проверки новой почты" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+</key>
+<key name="просмотр журнала версий" >
+  <topic name="Просмотр журнала версий в файле портфеля" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  <key name="файл портфеля" >
+    <topic name="Просмотр журнала версий в файле портфеля" url="zwc_help_files/10_briefcase/view_version_history_of_a_briefcase_file.htm" />
+  </key>
+</key>
+<key name="просмотр нескольких ежедневников" >
+  <topic name="Просмотр нескольких ежедневников" url="zwc_help_files/7_calendars/view_multiple_calendars.htm" />
+</key>
+<key name="работают выноски с адресом" >
+  <topic name="Как работают выноски с адресом" url="zwc_help_files/2_manage_email/how_address_bubbles_work.htm" />
+</key>
+<key name="разговор" >
+  <topic name="Управление почтой" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="размер, группировать по" >
+  <topic name="Объединение сообщений" url="zwc_help_files/2_manage_email/group_messages.htm" />
+</key>
+<key name="расширенная версия веб-клиента" >
+  <topic name="Использование расширенных и стандартных клиентов" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="расширенный поиск" >
+  <topic name="Выполнение расширенного поиска" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="ресурсы, к которым пользователю предоставлен общий доступ" >
+  <topic name="Поиск ресурсов, к которым пользователю предоставлен общий доступ" url="zwc_help_files/13_sharing/finding_items_shared_with_you.htm" />
+</key>
+<key name="роль" >
+  <topic name="Предоставление общего доступа к папке на странице «Настройки общего доступа»" url="zwc_help_files/13_sharing/share_a_folder_from_the_preferences_sharing_page.htm" />
+</key>
+<key name="сертификаты, добавление в адресную книгу" >
+  <topic name="Добавление сертификатов в контакты адресной книги" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+</key>
+<key name="синтаксис поиска" >
+  <topic name="Выполнение расширенного поиска" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="создание" >
+  <topic name="Работа в портфеле" url="zwc_help_files/10_briefcase/working_in_briefcase.htm" />
+  <topic name="Создание фильтра" url="zwc_help_files/4_filters/creating_a_filter.htm" />
+  <key name="папки портфеля" >
+    <topic name="Работа в портфеле" url="zwc_help_files/10_briefcase/working_in_briefcase.htm" />
+  </key>
+  <key name="фильтр" >
+    <topic name="Создание фильтра" url="zwc_help_files/4_filters/creating_a_filter.htm" />
+  </key>
+</key>
+<key name="создать" >
+  <topic name="Создание папки" url="zwc_help_files/5_organize_account/create_a_folder.htm" />
+  <key name="папка" >
+    <topic name="Создание папки" url="zwc_help_files/5_organize_account/create_a_folder.htm" />
+  </key>
+</key>
+<key name="сообщение о последующей доставке" >
+  <topic name="Составление и отправка сообщений электронной почты" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="сообщение об отсутствии" >
+  <topic name="Настройка сообщения «Нет на работе»" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="сообщение электронной почты, отправить позже" >
+  <topic name="Составление и отправка сообщений электронной почты" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="сообщения с цифровой подписью, составление" >
+  <topic name="Составление и отправка сообщения с цифровой подписью" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="сообщения электронной почты" >
+  <topic name="Ответ на сообщения электронной почты" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <key name="ответ" >
+    <topic name="Ответ на сообщения электронной почты" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  </key>
+</key>
+<key name="сортировка" >
+  <topic name="Сортировка сообщений в области содержимого" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
+  <topic name="Сортирование задач в списке задач" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  <key name="задачи" >
+    <topic name="Сортирование задач в списке задач" url="zwc_help_files/9_tasks/sorting_tasks_within_a_task_list.htm" />
+  </key>
+  <key name="сообщения" >
+    <topic name="Сортировка сообщений в области содержимого" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
+  </key>
+</key>
+<key name="составление сообщений" >
+  <topic name="Настройка параметров составления сообщений" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+</key>
+<key name="составление сообщения s/mime" >
+  <topic name="Составление и отправка сообщения с цифровой подписью" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="сохранить черновик" >
+  <topic name="Сохранение сообщения как черновика" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+</key>
+<key name="спам" >
+  <topic name="Удаление спама" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="списки задач" >
+  <topic name="Импорт списков задач" url="zwc_help_files/9_tasks/importing_a_task_lists.htm" />
+  <topic name="Экспорт списка задач" url="zwc_help_files/9_tasks/exporting_a_task_list.htm" />
+  <topic name="Создание задачи" url="zwc_help_files/9_tasks/creating_a_task.htm" />
+  <topic name="Создание подробной задачи" url="zwc_help_files/9_tasks/create_a_detailed_task.htm" />
+  <topic name="Создание списка задач" url="zwc_help_files/9_tasks/creating_a_task_list.htm" />
+  <key name="экспорт" >
+    <topic name="Экспорт списка задач" url="zwc_help_files/9_tasks/exporting_a_task_list.htm" />
+  </key>
+</key>
+<key name="список групп контактов" >
+  <topic name="Добавление участников в список групп контактов" url="zwc_help_files/6_address_book/adding_members_to_a_contact_group_list.htm" />
+</key>
+<key name="список задач ical" >
+  <topic name="Создание списка задач" url="zwc_help_files/9_tasks/creating_a_task_list.htm" />
+</key>
+<key name="список отправленных по электронной почте контактов" >
+  <topic name="Автоматическое добавление контактов в список «Отправленные по электронной почте контакты»" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+  <key name="автоматическое добавление контактов" >
+    <topic name="Автоматическое добавление контактов в список «Отправленные по электронной почте контакты»" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+  </key>
+</key>
+<key name="список рассылки" >
+  <topic name="Создание списков рассылки" url="zwc_help_files/6_address_book/create_distribution_lists.htm" />
+</key>
+<key name="список рассылки, изменение" >
+  <topic name="Изменение списка рассылки" url="zwc_help_files/6_address_book/modify_a_distribution_list.htm" />
+</key>
+<key name="список рассылки, отмена подписки" >
+  <topic name="Отмена подписки на список рассылки" url="zwc_help_files/6_address_book/unsubscribe_to_a_distribution_list.htm" />
+</key>
+<key name="список рассылки, управление" >
+  <topic name="Управление списками рассылки" url="zwc_help_files/6_address_book/managing_distribution_lists.htm" />
+</key>
+<key name="стандартный веб-клиент" >
+  <topic name="Использование расширенных и стандартных клиентов" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+
+</indexdata>

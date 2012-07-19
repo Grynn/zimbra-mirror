@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\review docs\SearchHelpTopics.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>高度な検索のクエリ言語の記述</title>
+<link rel="stylesheet" href="../searchhelptopics.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("項目を検索する\n高度な検索のクエリ言語を理解する ");
+addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "ホーム", "../../advanced_web_client.htm");
+document.write("<a href=\"searching_your_account.htm\">項目を検索する<\/a> &gt; 高度な検索のクエリ言語を理解する <\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">高度な検索のクエリ言語を理解する </p>
+<p class="FM_Body">この上級者向けのトピックでは、@CollaborationProductShortName@ の検索機能で使用される検索文法について詳しく説明します。</p>
+<p class="FM_2Heading">検索言語の構造</p>
+<p class="FM_Body">簡単な検索は、検索フィールドに語句を入力するだけで実行できます。語句のみの入力（検索演算子なし）は、「content:」演算子を使った検索として解釈されます。つまり、メッセージ内のすべてのテキストが照合されます。</p>
+<p class="FM_Body">さらに高度な検索は、<span  	 style="font-weight: bold;">検索演算子</span>を指定することによって実行できます。検索演算子は特殊なキーワードで、その後に半角コロンとそのキーワードに固有なその他のパラメータが続きます。以下にその例を挙げます。</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';"></span></span><span style="font-weight: bold;">in:inbox</span>：演算子は「in」で、パラメータは「inbox」です。この例では、[受信箱]フォルダにあるメッセージが返されます。</p></li>
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';"></span></span><span style="font-weight: bold;">from:someone</span>：演算子は「from」で、パラメータは「someone」です。この例では、メールアドレスに「someone」という語句を含むメッセージが返されます。</p></li>
+</ul>
+<p class="FM_Body">キーワードの前には、その条件を持たない項目を指定するための「not」を付けることができます。たとえば、「<span style="font-weight: bold;">not in:inbox</span>」のようになります。検索文字列では、英文字の大文字と小文字が区別されません。つまり、「in:Party」と「in:party」は同じです。また、<span style="font-weight: bold;">not</span>を表す記号としてマイナス記号（<span style="font-weight: bold;">-</span>）を使用できます。つまり、「<span style="font-weight: bold;">not in:inbox</span>」は「<span style="font-weight: bold;">-in:inbox</span>」と同じです。</p>
+<p class="FM_Body">ほとんどの場合、検索文字列に句読点を含めることはありません。句読点を含めても、それらは検索コードによって無視されます。しかし、例外もあります（メッセージ内の9:30という時間を検索する場合など）。その場合は、検索パラメータを二重引用符で囲みます。以下にその例を挙げます。「<span style="font-weight: bold;">subject: &quot;9:30&quot;</span>」と指定すると、件名に9:30という文字列を含むメッセージが返されます。</p>
+<p class="FM_Body">検索パラメータに使用できる文字または使用できない文字は以下のとおりです。</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';"></span></span>次の文字は、二重引用符で囲む場合を除き、検索パラメータに使用することはできません： ~ '! # $ % ^ &amp; * ( ) _? / { }[ ];:</p></li>
+	<li><p class="FM_Bulleted1">次の文字は、検索パラメータの先頭に使用しない限り、検索パラメータ内で使用できます： - + &lt; &gt;</p></li>
+</ul>
+<p class="FM_Notice"><span class="FM_Bold">備考：</span>単語の一部となっている商標記号などの特殊文字は、検索で単語がインデックス付けされるときに削除されます。検索では無視されます。たとえば、Zimbra™で検索すると、商標記号のないものも含め、すべてのZimbraへの参照が表示されます。</p>
+<p class="FM_2Heading">複数の検索条件</p>
+<p class="FM_Body">複数の検索条件を（スペースで区切って）入力した場合、それらはデフォルトでAND検索として扱われます。たとえば、「<span style="font-weight: bold;">in:inbox tim</span>」は、「受信箱内にあり、かつtimという語句を含むメッセージを返してください」という意味になります。複数の条件を使用する検索では、指定した条件のいずれかに一致する項目を探すことも、指定した条件のすべてに一致する項目を探すこともできます。高度な検索ページからは、両方の種類の検索を実行できます。</p>
+<p class="FM_Body">基本検索以外のすべての検索ペインでは、以下の規則が適用されます。</p>
+<p class="FM_Bulleted1">指定した条件のいずれかに一致するメッセージを検索する場合、これを<span style="font-weight: bold;">OR</span>検索と言います。なぜなら、メッセージがいずれかの項目（つまり、X OR Y）を含んでいる場合、そのメッセージは一致するとみなされるからです。</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1">XとYの両方を含むメッセージを検索する場合、これを<span style="font-weight: bold;">AND</span>検索と言います。指定したすべての条件を満たすメッセージが一致項目とみなされます。 </p></li>
+	<li><p class="FM_Body">クエリに表示されるのは「OR」だけです。検索バーで検索クエリを表示するオプションを選択した場合は、高度な検索でオプションを選択するごとに[検索]テキストボックスが更新され、新しいクエリが表示されます。<span style="font-weight: bold;">AND</span>検索を実行する場合、「<span style="font-weight: bold;">AND</span>」という単語は表示されません。</p></li>
+</ul>
+<p class="FM_Body"><span style="font-weight: bold;">ヒント</span>：括弧とともにANDやORを使用できます。括弧内の語句は構成単位とみなされます。たとえば、「<span style="font-weight: bold;">from:(tanaka sato)</span>」は「<span style="font-weight: bold;">from:tanaka AND from:sato</span>」と同じです。「<span style="font-weight: bold;">from:(tanaka or sato)</span>」のように括弧内にORを使用した場合、この検索は「<span style="font-weight: bold;">from:tanaka OR from:sato</span>」と同じ結果を返します。</p>
+<p class="FM_2Heading">検索でアスタリスクワイルドカード（*）を使用する</p>
+<p class="FM_Body">検索で単語の語尾にアスタリスク（<span style="font-weight: bold;">*</span>）をワイルドカードとして使用すると、類似した語句を含む内容を検索できます。</p>
+<p class="FM_Body">アスタリスク（<span style="font-weight: bold;">*</span>）をワイルドカードとして使用します。たとえば、「<span style="font-weight: bold;">テレ*</span>」という検索文字列は、「<span style="font-style: italic;">テレ</span>」、「<span style="font-style: italic;">テレビ</span>」、「<span style="font-style: italic;">テレフォン</span>」などの項目を返します。</p>
+<p class="FM_Notice"><span class="FM_Bold">備考：</span>検索クエリにダブルバイトのアスタリスクを使用した場合、ワイルドカード文字列としては認識されず、検索実行時には無視されます。</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

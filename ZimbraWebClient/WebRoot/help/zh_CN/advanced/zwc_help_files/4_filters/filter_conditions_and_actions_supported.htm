@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>支持的过滤条件与操作</title>
+<link rel="StyleSheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("使用邮件过滤器\n支持的过滤条件与操作");
+addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "首页", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">使用邮件过滤器<\/a> &gt; 支持的过滤条件与操作<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">支持的过滤条件与操作</p>
+<p style="font-size: 11pt;">过滤规则不区分大小写，即规则会忽略大写。</p>
+<p class="FM_2Heading">条件</p>
+<p>比较字段包括下列选项：</p>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">发件人</span>。<span  	 class="FM_attribute"></span>在电子邮件的“发件人:”标题中使用此选项来指定姓名。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">收件人</span>。与“发件人”相同，但在“收件人:”标题中查找指定的姓名。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span  	 class="FM_attribute">抄送</span>。与“发件人”相同，但在“抄送:”标题中查找指定的姓名。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">收件人或抄送</span>。与“发件人”相同，但在“收件人”和“抄送”两个标题中查找指定的姓名。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">主题</span>。在邮件的“主题”标题中查找。</p></li>
+</ul>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">大小</span>。此选项可用来选择那些大于或小于指定大小的电子邮件。电子邮件的大小包括任何文件附件。您可使用此选项滤除过大的电子邮件。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">日期</span>。此选项可用来限定在指定日期之前或之后发送的邮件。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">正文</span>。“正文”的选项有“包含”/“不包含”，您可在电子邮件正文中指定匹配词。您不能对文件附件中的词进行过滤。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">读信回条</span>。可对读信回条进行过滤。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">附件</span>。过滤包含或不包含文件附件的电子邮件。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">其中的地址</span>。测试联系人中是否存在某个地址。下一个字段用于具体指定该地址。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">行事历的邀请功能</span>。过滤与行事历相关的邮件。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">社交</span>。<span  	 class="FM_attribute"></span>过滤社交网站中的邮件。</p></li>
+	<li class="p"><p class="FM_Bulleted1" style="margin-left: 23px;"><span  	 class="FM_attribute">标有名字的标题</span>。如果选择了此选项，则比较运算符（“包含”部分）的前面将显示额外的文本输入字段。此选项用于指定电子邮件标题。您不仅可以指定“收件人:”或“发件人:”这些标准字段，还可以指定“日期”、“回复”或邮件标题中可能包括的其他自定义字段。您可以使用此选项过滤掉标题“不合规格”的邮件，也就是说，其中未能包含在一般邮件中都应当有的某些标准信息。有时，自动生成的垃圾邮件不包含“发件人”或“回复”字段等信息。使用第二个文本字段（紧跟在比较运算符右侧的字段）可指定要测试的标题。</p></li>
+</ul>
+<h3>操作</h3>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">保留在收件箱</span>。将邮件保存在收件箱。如果没有任何过滤规则匹配某个电子邮件，则默认采取此操作。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">归档到文件夹</span>。将邮件移至指定的文件夹。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">丢弃</span>。删除电子邮件，不传递。被丢弃邮件不在任何文件夹中，即使是“已删除邮件”文件夹。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">转发</span>。将邮件转发到指定的地址。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">标记</span>。选择<span class="FM_attribute">为已读</span>或<span class="FM_attribute">打标记</span>。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">标记使用</span>。可用选定的标记给匹配的邮件打标记。</p></li>
+</ul>
+<h3>多项操作</h3>
+<p>您可以创建包含多项操作的过滤规则。可如下解释规则中的操作组合：</p>
+<ul type="disc">
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">丢弃</span>。如果与其他操作组合，将忽略放弃并执行其他操作。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">归档到文件夹</span>。多次执行“归档到”操作会使邮件的多个副本被保存到不同的文件夹中。如果指定的文件夹不存在，则邮件将被保存到收件箱。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">标记/标示</span>。这些操作项适用于从最近执行的操作项返回的邮件。比如，在多重“归档到”操作项情况下，这可使某些存储的邮件副本无标记，而另一些则有标记。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">保留在收件箱</span>。可以多次指定“保留”操作，但只会将邮件的一个副本保存到收件箱中。</p></li>
+	<li class="p"><p class="FM_Bulleted1"><span class="FM_attribute">转发地址</span>。<span style="font-weight: normal;">邮件被转发到指定的地址。</span></p></li>
+</ul>
+<p></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

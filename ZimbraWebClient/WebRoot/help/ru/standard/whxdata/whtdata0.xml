@@ -1,0 +1,102 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<book name="Начало работы" >
+  <item name="Начало работы с веб-клиентом ZCS основной версии" url="zimbra_basic_user_help.htm" />
+  <item name="Использование расширенных и стандартных клиентов" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <item name="Вход и выход" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+  <item name="Горячие клавиши" url="standard/b_keyboard_shortcut_keys.htm" />
+</book>
+<book name="Навигация в почтовом ящике" >
+  <item name="Навигация в почтовом ящике" url="standard/b_navigating_around_your_mailbox.htm" />
+  <item name="Перемещение в почте" url="standard/b_how_to_navigate_with_mail.htm" />
+  <item name="Установка настроек пользователя" url="standard/b_setting_your_options.htm" />
+  <item name="Управление лимитом учетной записи" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</book>
+<book name="Управление почтой" >
+  <item name="Управление почтой" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+  <item name="Управление отображением сообщений" url="standard/b_managing_how_email_is_displayed.htm" />
+  <item name="Настройка исходного вида почтового ящика" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+  <item name="Отображение сообщений в формате HTML или обычного текста" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <item name="Перемещение сообщений электронной почты" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+  <item name="Печать сообщений" url="standard/b_printing_email_messages.htm" />
+  <item name="Использование папки «Корзина»" url="standard/using_the_trash_folder.htm" />
+  <item name="Восстановление удаленных почтовых сообщений" url="standard/recovering_deleted_mail_messages.htm" />
+  <item name="Удаление сообщений электронной почты" url="standard/b_purging_email_messages.htm" />
+  <item name="Удаление спама" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+  <item name="Подписка на RSS/ATOM-ленты" url="standard/subscribing_to_rss_atom_feeds.htm" />
+  <item name="Настройка сообщения «Нет на работе»" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</book>
+<book name="Чтение почты" >
+  <item name="Чтение почты" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <item name="Использование области чтения" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+  <item name="Пометка сообщения как непрочитанного" url="standard/b_marking_mail_as_unread.htm" />
+  <item name="Открытие вложений в сообщения электронной почты" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+  <item name="Как узнать, что получены новые сообщения" url="standard/b_how_do_i_know_when_i_receive_new_messages.htm" />
+</book>
+<book name="Создание сообщения" >
+  <item name="Составление сообщений электронной почты" url="standard/b_composing_email_message.htm" />
+  <item name="Адресация сообщения" url="zwc_help_files/3_compose/addressing_a_message.htm" />
+  <item name="Вложение файлов в сообщения" url="standard/b_attaching_files_to_your_message.htm" />
+  <item name="Автоматическое добавление подписи" url="standard/b_automatically_adding_your_signature.htm" />
+  <item name="Сохранение сообщения как черновика" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+  <item name="Указание приоритета сообщения" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+</book>
+<book name="Ответ и пересылка сообщений" >
+  <item name="Ответ на сообщения электронной почты" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <item name="Настройка параметров для отправки ответов на сообщения электронной почты" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+  <item name="Пересылка сообщений электронной почты" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+  <item name="Автоматическая пересылка полученных сообщений" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+</book>
+<book name="Управление адресными книгами" >
+  <item name="Адресные книги" url="standard/b_your_address_books.htm" />
+  <item name="Использование адресных книг" url="standard/b_using_address_books.htm" />
+  <item name="Добавление новых контактов" url="standard/b_adding_new_contacts.htm" />
+  <item name="Импорт списка контактов" url="standard/b_importing_a_contact_list.htm" />
+  <item name="Экспорт списка контактов" url="standard/exporting_a_contact_list.htm" />
+  <item name="Печать имен контактов" url="standard/printing_contact_names.htm" />
+</book>
+<book name="Управление ежедневником" >
+  <item name="О ежедневнике" url="standard/b_about_calendar.htm" />
+  <item name="Создание нового ежедневника" url="standard/b_create_new_calendar.htm" />
+  <item name="Назначение цвета ежедневникам" url="standard/adding_background_color_to_calendars.htm" />
+  <item name="Виды ежедневника" url="standard/calendar_views.htm" />
+  <item name="Импорт ежедневников iCal" url="standard/importing_icalendars.htm" />
+  <item name="Экспорт ежедневников iCal" url="standard/b_exporting_icalenders.htm" />
+  <item name="Очистка ежедневника" url="standard/b_cleaning_up_your_calendar.htm" />
+</book>
+<book name="Планирование встреч" >
+  <item name="Создание собрания" url="standard/b_scheduling_a_meeting.htm" />
+  <item name="Создание повторяющихся встреч" url="standard/b_creating_recurring_appointments.htm" />
+  <item name="Отмена собрания" url="standard/b_canceling_a_meeting.htm" />
+</book>
+<book name="Использование списков задач" >
+  <item name="Использование списков задач" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+  <item name="Изменение задачи" url="standard/changing_a_task.htm" />
+</book>
+<book name="Работа в портфеле" >
+  <item name="Работа в портфеле" url="standard/b_working_in_briefcase.htm" />
+</book>
+<book name="Общий доступ к папкам" >
+  <item name="Подключение к общим ежедневникам" url="standard/linke_to_shared_calendars.htm" />
+  <item name="Подключение к общим адресным книгам" url="standard/link_to_shared_address_books.htm" />
+</book>
+<book name="Поиск элементов" >
+  <item name="Использование поиска" url="standard/b_using_search.htm" />
+  <item name="Создание и сохранение запроса поиска" url="standard/b_create_and_save_a_search_query.htm" />
+  <item name="Синтаксис поиска" url="zwc_help_files/12_search/search_syntax.htm" />
+  <item name="Использование * (звездочки) в качестве подстановочного знака в профиле поиска" url="zwc_help_files/12_search/using_as_a_wildcard_in_search.htm" />
+  <item name="Проблемы поиска, возникающие со вложениями на незападноевропейских языках" url="standard/search_issues_with_non-western_language_attachments.htm" />
+  <item name="Поиск сообщений, отправленных контакту или полученных от него" url="standard/searching_for_messages_sent_to_or_received_from_a_contact_name.htm" />
+  <item name="Поиск сообщений, отправленных отправителю или полученных от него" url="standard/searching_for_messages_sent_to_or_from_the_sender.htm" />
+</book>
+<book name="Использование меток и папок для систематизации элементов" >
+  <item name="Назначение меток сообщениям и контактам" url="standard/b_assigning_tags_to_messages_and_contacts.htm" />
+  <item name="Установка флагов для почтовых сообщений" url="standard/b_flagging_an_email_message.htm" />
+  <item name="Удаление папок" url="standard/bc_deleting_folders.htm" />
+</book>
+<book name="Использование почтовых фильтров" >
+  <item name="Фильтрация сообщений" url="standard/bc_filtering_your_messages.htm" />
+  <item name="Условия фильтра" url="standard/b_filter_conditions.htm" />
+</book>
+
+</tocdata>

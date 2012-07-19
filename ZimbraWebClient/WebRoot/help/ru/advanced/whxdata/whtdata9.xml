@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<item name="Настройка S/MIME на отправку и получение зашифрованных сообщений электронной почты с подписью" url="zwc_help_files/15_s_mime/setting_up_smime.htm" />
+<item name="Настройка параметров безопасности для использования S/MIME" url="zwc_help_files/15_s_mime/setting_security_preferences_for_using_s_mime.htm" />
+<item name="Добавление сертификатов в контакты адресной книги" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+<item name="Составление и отправка сообщения с цифровой подписью" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+<item name="Составление и отправка зашифрованного сообщения" url="zwc_help_files/15_s_mime/compose_and_send_an_encrypted_message.htm" />
+
+</tocdata>

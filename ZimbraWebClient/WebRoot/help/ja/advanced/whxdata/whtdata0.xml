@@ -1,0 +1,149 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<book name="はじめに" >
+  <item name="アドバンストウェブクライアント" url="advanced_web_client.htm" />
+  <item name="アドバンストクライアントおよび標準のクライアントを使用する" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+  <item name="ログインとログアウト" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+  <item name="パスワードを変更する" url="zwc_help_files/1_setting_up/changing_your_password.htm" />
+  <item name="キーボードショートカットを使用する" url="zwc_help_files/1_setting_up/using_keyboard_shortcuts.htm" />
+</book>
+<book name="アカウントを整理する" >
+  <item name="アカウントを移動する " url="zwc_help_files/1_setting_up/navigating_the_zimbra_web_client.htm" />
+  <item name="アカウントを整理する" url="zwc_help_files/5_organize_account/organizing_your_account.htm" />
+  <item name="メールボックスの最初のビューをカスタマイズする" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+  <item name="アカウントのビューをパーソナライズする" url="zwc_help_files/1_setting_up/personalizing_the_view_of_your_account.htm" />
+  <item name="デフォルトのタイムゾーンを変更" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+  <item name="アドレスバブルのしくみ" url="zwc_help_files/2_manage_email/how_address_bubbles_work.htm" />
+  <item name="アカウントの割り当て容量を管理する" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+  <item name="[ゴミ箱]フォルダを空にする" url="zwc_help_files/2_manage_email/empty_your_trash_folder.htm" />
+  <item name="複数のメッセージを同じ操作にマークする" url="zwc_help_files/2_manage_email/marking_multiple_messages_for_the_same_action.htm" />
+  <item name="外出中のメッセージを設定する" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</book>
+<book name="メールを管理する" >
+  <item name="メールを管理する" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+  <item name="アカウントの新着メールを確認する頻度を変更する" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+  <item name="新着メールメッセージのデスクトップアラートを設定する" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+  <item name="メールフォルダに保持ポリシーを割り当てる" url="zwc_help_files/2_manage_email/assigning_retention_policies_to_email_folders.htm" />
+  <item name="フォルダ内のグループメッセージ" url="zwc_help_files/2_manage_email/group_messages.htm" />
+  <item name="内容ペインのメッセージを並べ替える" url="zwc_help_files/2_manage_email/sorting_messages_in_the_content_pane.htm" />
+  <item name="重要でないメールを受信箱から移動する" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+  <item name="メールメッセージを移動する" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+  <item name="RSSフィードを購読する" url="zwc_help_files/2_manage_email/subscribing_to_rss_feeds.htm" />
+  <item name="スパムを削除する" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+  <item name="迷惑メールオプション" url="zwc_help_files/2_manage_email/spam_mail_options.htm" />
+  <item name="[ゴミ箱]から完全に削除された項目を復元" url="zwc_help_files/2_manage_email/recover_items_purged_from_trash.htm" />
+  <item name="メールメッセージの起点を検索する" url="zwc_help_files/2_manage_email/finding_the_origin_of_an_email_message.htm" />
+</book>
+<book name="メールメッセージを作成する" >
+  <item name="メールを作成/送信する" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+  <item name="メッセージ作成のオプションをカスタマイズする" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+  <item name="メッセージをアドレス指定する" url="zwc_help_files/3_compose/addressing_a_message.htm" />
+  <item name="自動的に署名を使用する" url="zwc_help_files/3_compose/using_signatures_automatically.htm" />
+  <item name="パーソナを追加" url="zwc_help_files/3_compose/add_personas.htm" />
+  <item name="メールを送信するとき、別のアカウントIDを使用する" url="zwc_help_files/3_compose/using_other_account_identities_when_you_send_an_email.htm" />
+  <item name="メッセージの優先度レベルをマーク" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+  <item name="閲覧確認を要求" url="zwc_help_files/3_compose/request_a_return_receipt.htm" />
+  <item name="添付ファイルを追加する" url="zwc_help_files/3_compose/adding_attachments.htm" />
+  <item name="メッセージのスペルをチェック" url="zwc_help_files/3_compose/spell_check_a_message.htm" />
+  <item name="スペルチェック辞書に語句を追加する" url="zwc_help_files/3_compose/adding_words_to_the_spell_dictionary.htm" />
+  <item name="メッセージを下書きとして保存" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+  <item name="メッセージを削除する" url="zwc_help_files/2_manage_email/deleting_a_message.htm" />
+</book>
+<book name="メッセージを読む" >
+  <item name="メールを読む" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <item name="閲覧ペインを使用する" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+  <item name="メッセージをHTML形式または標準テキストで表示する" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <item name="閲覧確認を返す" url="zwc_help_files/2_manage_email/returning_read_receipts.htm" />
+  <item name="スレッドを印刷（すべてのメッセージ）" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  <item name="メールメッセージを印刷する" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
+  <item name="「アクセス許可が拒否された」メッセージを受信する" url="zwc_help_files/8_scheduling/receiving_a_permission_denied_message.htm" />
+  <item name="メールメッセージの添付ファイルを開く" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</book>
+<book name="他のアカウントからメールを取得する" >
+  <item name="外部アカウントにアクセスする" url="zwc_help_files/1_setting_up/accessing_your_external_accounts.htm" />
+  <item name="他のメールアドレスへの新着メール通知を受信する" url="zwc_help_files/2_manage_email/receiving_new_mail_notification_to_another_email_address.htm" />
+  <item name="アカウントのPOPの動作を設定" url="zwc_help_files/1_setting_up/set_up_pop_behavior_for_your_account.htm" />
+</book>
+<book name="メッセージに返信/メッセージを転送" >
+  <item name="メール返信のプリファレンスを設定" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+  <item name="メールメッセージに返信する" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <item name="転送メールのプリファレンスを設定" url="zwc_help_files/3_compose/set_preferences_for_forwarded_email.htm" />
+  <item name="メールメッセージを転送する" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+  <item name="受信したメッセージを自動的に転送する" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <item name="送信者としてメッセージを転送" url="zwc_help_files/3_compose/forward_a_message_as_the_originator.htm" />
+  <item name="リダイレクトされたメッセージとしてメッセージを転送" url="zwc_help_files/3_compose/forward_a_message_as_a_redirected_message.htm" />
+</book>
+<book name="アドレスブックを管理する" >
+  <item name="アドレスブックを使用する" url="zwc_help_files/6_address_book/using_address_books.htm" />
+  <item name="アドレスブックに連絡先を追加する" url="zwc_help_files/6_address_book/adding_contacts_to_an_address_book.htm" />
+  <item name="メールを送信した連絡先リストに連絡先を自動的に追加" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+  <item name="連絡先情報を編集する" url="zwc_help_files/6_address_book/editing_contact_information.htm" />
+  <item name="メールアドレスがアドレスブックにあるかどうかを確認" url="zwc_help_files/6_address_book/check_if_an_email_address_is_in_your_address_book.htm" />
+  <item name="連絡先グループを作成する" url="zwc_help_files/6_address_book/creating_a_contact_group.htm" />
+  <item name="連絡先グループリストにメンバーを追加する" url="zwc_help_files/6_address_book/adding_members_to_a_contact_group_list.htm" />
+  <item name="既存のメールメッセージから新しい連絡先を追加" url="zwc_help_files/6_address_book/add_a_new_contact_from_an_existing_email_message.htm" />
+  <item name="連絡先を別のアドレスブックに移動する" url="zwc_help_files/6_address_book/moving_a_contact_to_another_address_book.htm" />
+  <item name="連絡先情報を転送する" url="zwc_help_files/6_address_book/forwarding_contact_information.htm" />
+  <item name="信頼できるアドレスリストを管理する" url="zwc_help_files/2_manage_email/maintaining_a_trusted_addresses_list.htm" />
+  <item name="アドレスブックをインポートする" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  <item name="アドレスブックをエクスポートする" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  <item name="連絡先名またはアドレスブックを印刷する" url="zwc_help_files/6_address_book/printing_a_contact_name_or_address_book.htm" />
+  <item name="連絡先を削除する" url="zwc_help_files/6_address_book/deleting_contacts.htm" />
+  <item name="配布リストを管理する" url="zwc_help_files/6_address_book/managing_distribution_lists.htm" />
+  <item name="配布リストを作成する" url="zwc_help_files/6_address_book/create_distribution_lists.htm" />
+</book>
+<book name="カレンダーを管理する" >
+  <item name="カレンダーを操作する" url="zwc_help_files/7_calendars/working_with_calendars.htm" />
+  <item name="カレンダーを作成" url="zwc_help_files/7_calendars/create_a_calendar.htm" />
+  <item name="カレンダーに色を追加" url="zwc_help_files/7_calendars/add_color_to_a_calendar.htm" />
+  <item name="カレンダーのプリファレンスを指定する" url="zwc_help_files/7_calendars/setting_your_calendar_preferences.htm" />
+  <item name="別のカレンダーのプリファレンスの構成" url="zwc_help_files/7_calendars/other_calendar_preferences_to_configure.htm" />
+  <item name="複数のカレンダーを表示" url="zwc_help_files/7_calendars/view_multiple_calendars.htm" />
+  <item name="すべての全日予定を週平日ビューで表示する" url="zwc_help_files/7_calendars/displaying_all_day_appointments_in_your_work_week_view.htm" />
+  <item name="リスト内のカレンダーアクティビティを表示する" url="zwc_help_files/7_calendars/viewing_calendar_activities_in_a_list.htm" />
+  <item name="メールメッセージからiCalendarを追加する" url="zwc_help_files/7_calendars/adding_an_icalendar_from_an_email_message.htm" />
+  <item name="外部カレンダーを追加する" url="zwc_help_files/7_calendars/adding_external_calendars.htm" />
+  <item name="カレンダーをグループ分け" url="zwc_help_files/7_calendars/organize_your_calendars_into_groups.htm" />
+  <item name="カレンダーを印刷" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  <item name="カレンダーを削除" url="zwc_help_files/7_calendars/delete_a_calendar.htm" />
+  <item name="iCalカレンダーをインポート" url="zwc_help_files/7_calendars/import_your_ical_calendar.htm" />
+  <item name="iCalカレンダーをエクスポート" url="zwc_help_files/7_calendars/export_your_ical_calendar.htm" />
+</book>
+<book name="予約、会議、イベントを予定する" >
+<chunk name="予約、会議、イベントを予定する" ref="whtdata1.xml" />
+</book>
+<book name="タスクリストを使用する" >
+<chunk name="タスクリストを使用する" ref="whtdata2.xml" />
+</book>
+<book name="ブリーフケースで作業する" >
+<chunk name="ブリーフケースで作業する" ref="whtdata3.xml" />
+</book>
+<book name="フォルダを共有する" >
+<chunk name="フォルダを共有する" ref="whtdata4.xml" />
+</book>
+<book name="項目を検索する" >
+<chunk name="項目を検索する" ref="whtdata5.xml" />
+</book>
+<book name="タグとフォルダを使用してメールを整理する" >
+<chunk name="タグとフォルダを使用してメールを整理する" ref="whtdata6.xml" />
+</book>
+<book name="メールフィルターを使用する" >
+<chunk name="メールフィルターを使用する" ref="whtdata7.xml" />
+</book>
+<book name="携帯デバイスを管理（Network Editionのみ）" >
+  <item name="携帯デバイスを管理する" url="zwc_help_files/11_mobile/managing_your_mobile_devices.htm" />
+  <item name="携帯のセキュリティ機能" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
+  <item name="携帯デバイスをワイプ" url="zwc_help_files/11_mobile/wipe_your_mobile_device.htm" />
+</book>
+<book name="セキュリティで保護されたメールメッセージを送信する（Network Editionのみ）" >
+<chunk name="セキュリティで保護されたメールメッセージを送信する（Network Editionのみ）" ref="whtdata8.xml" />
+</book>
+<book name="ボイスサービス（Network Editionのみ）" >
+<chunk name="ボイスサービス（Network Editionのみ）" ref="whtdata9.xml" />
+</book>
+<book name="Zimletを使用する" >
+  <item name="Zimletを管理する" url="zwc_help_files/14_zimlets/managing_your_zimlets.htm" />
+  <item name="Zimletを無効化" url="zwc_help_files/14_zimlets/disable_a_zimlet.htm" />
+</book>
+
+</tocdata>

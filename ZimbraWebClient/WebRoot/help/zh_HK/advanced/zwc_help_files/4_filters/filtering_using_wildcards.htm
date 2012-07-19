@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\zwcHelp\zimbra_user_help_source\4_filters.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>用通配字元進行過濾</title>
+<link rel="stylesheet" href="../../zwc_8.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("郵件過濾器使用方法\n用通配字元進行過濾");
+addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "首頁", "../../advanced_web_client.htm");
+document.write("<a href=\"working_with_email_filters.htm\">郵件過濾器使用方法<\/a> &gt; 用通配字元進行過濾<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">用通配字元進行過濾</p>
+<p class="FM_Body">在使用&quot;款式相符&quot;比較運算子的比較中，可使用通配字元。這兩個通配字元是 * 和 ?</p>
+<p class="FM_2Heading">星號（*）</p>
+<p class="FM_Body">星號 * 是「零或任何類型的其它字元」的占位符。</p>
+<p class="FM_Body">主題行搜尋字串範例：banana*float</p>
+<p class="FM_Body">與之相符的：主題行，如 &quot;bananafloat&quot;、&quot;bananas&quot;、&quot;banana-leaf casserole float&quot;，但與 &quot;super-banana-float&quot; 並不相符</p>
+<p class="FM_Body">主題行搜尋字串範例：w*bandanna</p>
+<p class="FM_Body">與之相符的：主題行，如 white bandanna 或 whose bandanna，但 whose bandanna is this? 並不相符。</p>
+<p class="FM_2Heading">問號（?）</p>
+<p class="FM_Body">問號是「單字」的占位符。</p>
+<p class="FM_Body">主題行搜尋字串範例：banana?boat</p>
+<p class="FM_Body">與之相符的：主題行，如 &quot;bananasboat&quot;、&quot;banana-boat&quot;、&quot;banana!boat&quot; 或 &quot;banana boat&quot;</p>
+<p class="FM_2Heading">換碼符是反斜杠： \</p>
+<p class="FM_Body">可能有這樣的時候：你要指定一個針對字串的完全相符項，但其中含有通常被認為是通配的字元。例如，你要指定針對主題行的相符項，其中主標題的兩端各有三個星號，如</p>
+<p class="FM_Body">***MORE MONEY!!!*** 或</p>
+<p class="FM_Body">***FREE GIFT***</p>
+<p class="FM_Body">要將一個通配字元指定為該字元本身，而不是作為其他字元的替代，則應在該字元前放置一個反斜線 \。例如，比較字串&quot;\*\*\**\*\*\*&quot;指定一個首尾都有三個星號而中間可以是任意字串（包括空格）的主題行。</p>
+<p class="FM_Body">&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

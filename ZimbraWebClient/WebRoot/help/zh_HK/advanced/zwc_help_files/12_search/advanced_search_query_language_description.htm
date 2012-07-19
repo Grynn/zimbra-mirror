@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Originator" content="ImportMif" />
+<meta name="OriginalFile" content="C:\Users\charrison\Documents\2012_Iron-Maiden\review docs\SearchHelpTopics.fm" />
+<meta name="generator" content="Adobe RoboHelp 9" />
+<title>進階搜尋語言描述</title>
+<link rel="stylesheet" href="../searchhelptopics.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("搜尋項目\n瞭解進階搜尋語言 ");
+addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right\"> ");
+AddMasterBreadcrumbs("../../zimbra_user_help.htm", "", "&gt;", "首頁", "../../advanced_web_client.htm");
+document.write("<a href=\"searching_your_account.htm\">搜尋項目<\/a> &gt; 瞭解進階搜尋語言 <\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../../zimbra_user_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<p class="FM_1HeadingC">瞭解進階搜尋語言 </p>
+<p class="FM_Body">此節詳細說明 @CollaborationProductShortName@  搜尋功能中使用的搜尋語法。</p>
+<p class="FM_2Heading">搜尋語言結構</p>
+<p class="FM_Body">只需在搜尋欄位中輸入一個單字即可搜尋。裸詞（不含搜尋運算子的單字）被解釋為在『content』： 運算子中搜尋 -- 與郵件中的任何文字相符。</p>
+<p class="FM_Body">更進階的搜尋可透過指定一個<span  	 style="font-weight: bold;">搜尋運算子</span>實現。特殊關鍵字後跟一個冒號即為搜尋運算子，其後是適合於該運算子的其他參數。例如：</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';">&#160;</span></span><span style="font-weight: bold;">in:inbox</span>&#160; 運算子為 &quot;in&quot;，而參數為 &quot; inbox&quot;，意即回送名為 &quot; inbox&quot; 的資料夾中的郵件。</p></li>
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';">&#160;&#160;</span></span><span style="font-weight: bold;">from:someone</span>&#160; 運算子是 from，而參數是 someone，則會回送寄件人地址中含 someone 的郵件。</p></li>
+</ul>
+<p class="FM_Body">在任何關鍵字前都可加上字首 &quot;not&quot;，從而指定不符合該條件的項目，例如 <span style="font-weight: bold;">not in:inbox</span>。搜尋不區分大小寫，意即 &quot;in:inbox&quot; 與 &quot;in:Inbox&quot; 相同。減號（<span style="font-weight: bold;">-</span>）是 <span style="font-weight: bold;">NOT</span>&#160; 的同意詞，因此：<span style="font-weight: bold;">not in:inbox</span>&#160; 與 <span style="font-weight: bold;">-in:inbox</span>相同</p>
+<p class="FM_Body">大多數情況下無需在搜尋字串中使用標點符號，因為會被搜尋程式代碼所忽略。有些情況下不是這樣（例如，搜尋含有時間 '9:30' 的郵件），在這種情況下你需要為搜尋參數加上引號。例如：<span style="font-weight: bold;">subject:&quot;9:30&quot;</span>&#160;回送的是主題中含字串 9:30 的郵件。</p>
+<p class="FM_Body">搜尋參數中允許使用的字元：</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1"><span class="FM_Wingding"><span style="word-spacing: normal;  	 font: 6.0pt 'Times New Roman';">&#160;</span></span>下列字元如果不加引號就不能用於搜尋參數： ~ '&#160;! # $ % ^ &amp; * ( ) _&#160;? / { }[ ]&#160;;&#160;:</p></li>
+	<li><p class="FM_Bulleted1">下列字元可以用於搜尋參數，但不能作為首字使用。 - + &lt; &gt;</p></li>
+</ul>
+<p class="FM_Notice"><span class="FM_Bold">備註：&#160;&#160;</span>特殊字元，例如作為文字一部分的商標符號，在索引搜尋時會被移除。它們砸在搜尋中會被忽略。例如，搜尋 Zimbra™ 時，會找到所有關於 Zimbra 的資訊，包括那些沒有商標符號的內容。</p>
+<p class="FM_2Heading">多重搜尋字</p>
+<p class="FM_Body">如果輸入了多個搜尋字（用空格分開），預設情況下它們是&quot;AND&quot;（與）的關係。<span style="font-weight: bold;">in:inbox tim</span>&#160;表示 &quot;將返回位於收件箱中且（AND）含有 tim 的郵件&quot;。對於有多種條件的搜尋項，你可以尋找與其中任意條件相符的項目，也可尋找符合全部條件的項目。你可從「進階」搜尋頁面進行這兩種類型的搜尋。</p>
+<p class="FM_Body">除「基本」搜尋功能外，所有搜尋窗格的規則為：</p>
+<p class="FM_Bulleted1">與指定條件中任意條件相符的搜尋稱為 '<span style="font-weight: bold;">OR'</span>&#160;（或）搜尋，意思是如果郵件中包含 X 或 Y，則認為該郵件是相符的。</p>
+<ul type="disc">
+	<li><p class="FM_Bulleted1">同時包含 X 與 Y 的搜尋稱為 '<span style="font-weight: bold;">AND'</span>&#160;（與）搜尋，郵件必須符合&#160;所有指定的條件才是相符的。 </p></li>
+	<li><p class="FM_Body">只有 OR 出現在查詢條件中。在「進階」搜尋中進行選擇時，如果作為選項你選擇了在「搜尋」工具列顯示搜尋結果，則「搜尋」框隨即更新並顯示得到的結果。對於<span style="font-weight: bold;">AND</span>&#160; 類型的搜尋，'<span style="font-weight: bold;">AND'</span>一詞並不會出現。</p></li>
+</ul>
+<p class="FM_Body"><span style="font-weight: bold;">提示</span>：AND 和 OR 可結合括號使用。括號中的字詞視為一個單位。例如 <span style="font-weight: bold;">from:(john thomas)</span>&#160; 等同於 <span style="font-weight: bold;">from:john AND from:	thomas</span>。如果括號中有 OR，如 <span style="font-weight: bold;">from:(john or smith)</span>，則等同於 <span style="font-weight: bold;">from:john OR from:smith</span>。</p>
+<p class="FM_2Heading">在搜尋中使用 * 作為通配字元</p>
+<p class="FM_Body">星號（<span style="font-weight: bold;">*</span>）可在搜尋中的詞尾作為通配字元使用，以便找到與詞拼寫相似的內容。</p>
+<p class="FM_Body">請使用星號<span style="font-weight: bold;">*</span>&#160; 作為通配字元。例如，搜尋字串 <span style="font-weight: bold;">do*</span>&#160; 返回的結果是 <span style="font-style: italic;">do</span>、<span style="font-style: italic;">dog</span>、<span style="font-style: italic;">door</span> 等。</p>
+<p class="FM_Notice"><span class="FM_Bold">備註：&#160;&#160;</span>搜尋查詢中的雙位元星號不會視為通配字元，搜尋執行時將忽略。</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

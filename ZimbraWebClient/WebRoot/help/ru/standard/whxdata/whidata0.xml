@@ -1,0 +1,109 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="html" >
+  <topic name="Синтаксис поиска" url="zwc_help_files/12_search/search_syntax.htm" />
+  <topic name="Отображение сообщений в формате HTML или обычного текста" url="zwc_help_files/2_manage_email/displaying_messages_in_html_format_or_plain_text.htm" />
+  <topic name="Использование HTML для составления сообщений" url="zwc_help_files/3_compose/using_html_to_compose_messages.htm" />
+</key>
+<key name="версия" >
+  <topic name="Использование расширенных и стандартных клиентов" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="включение и отключение области чтения" >
+  <topic name="Использование области чтения" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+<key name="вложения" >
+  <topic name="Открытие вложений в сообщения электронной почты" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</key>
+<key name="войти" >
+  <topic name="Вход и выход" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+</key>
+<key name="выход" >
+  <topic name="Вход и выход" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+</key>
+<key name="изменения вида сообщений" >
+  <topic name="Управление почтой" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="использование списков задач" >
+  <topic name="Использование списков задач" url="zwc_help_files/9_tasks/using_task_lists.htm" />
+</key>
+<key name="лимит учетной записи" >
+  <topic name="Управление лимитом учетной записи" url="zwc_help_files/2_manage_email/managing_your_account_quota.htm" />
+</key>
+<key name="область чтения" >
+  <topic name="Использование области чтения" url="zwc_help_files/2_manage_email/using_a_reading_pane.htm" />
+</key>
+<key name="ответ об отсутствии на работе" >
+  <topic name="Настройка сообщения «Нет на работе»" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="ответы по электронной почте" >
+  <topic name="Настройка параметров для отправки ответов на сообщения электронной почты" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+</key>
+<key name="очистка спама" >
+  <topic name="Удаление спама" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="перемещение сообщения" >
+  <topic name="Перемещение сообщений электронной почты" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+</key>
+<key name="пересланное сообщение электронной почты" >
+  <topic name="Настройка параметров для пересылки сообщений электронной почты" url="zwc_help_files/3_compose/set_preferences_for_forwarded_email.htm" />
+</key>
+<key name="пересылка сообщений" >
+  <topic name="Автоматическая пересылка полученных сообщений" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <topic name="Пересылка сообщений электронной почты" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+</key>
+<key name="подстановочный знак" >
+  <topic name="Использование * (звездочки) в качестве подстановочного знака в профиле поиска" url="zwc_help_files/12_search/using_as_a_wildcard_in_search.htm" />
+</key>
+<key name="поиск почты по умолчанию" >
+  <topic name="Настройка исходного вида почтового ящика" url="zwc_help_files/2_manage_email/customizing_your_mailbox_initial_view.htm" />
+</key>
+<key name="почта" >
+  <topic name="Чтение почты" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <key name="чтение" >
+    <topic name="Чтение почты" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  </key>
+</key>
+<key name="разговор" >
+  <topic name="Управление почтой" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="расширенная версия веб-клиента" >
+  <topic name="Использование расширенных и стандартных клиентов" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="сообщение об отсутствии" >
+  <topic name="Настройка сообщения «Нет на работе»" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="сообщения электронной почты" >
+  <topic name="Ответ на сообщения электронной почты" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  <key name="ответ" >
+    <topic name="Ответ на сообщения электронной почты" url="zwc_help_files/3_compose/replying_to_email_messages.htm" />
+  </key>
+</key>
+<key name="сохранить черновик" >
+  <topic name="Сохранение сообщения как черновика" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+</key>
+<key name="спам" >
+  <topic name="Удаление спама" url="zwc_help_files/2_manage_email/removing_spam.htm" />
+</key>
+<key name="стандартный веб-клиент" >
+  <topic name="Использование расширенных и стандартных клиентов" url="zwc_help_files/1_setting_up/using_advanced_and_standard_clients.htm" />
+</key>
+<key name="удаление вложений" >
+  <topic name="Открытие вложений в сообщения электронной почты" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</key>
+<key name="уровень приоритета" >
+  <topic name="Указание приоритета сообщения" url="zwc_help_files/3_compose/mark_the_priority_level_of_a_message.htm" />
+</key>
+<key name="условия фильтра" >
+  <topic name="Условия фильтра" url="zwc_help_files/4_filters/filter_conditions.htm" />
+</key>
+<key name="часовой пояс" >
+  <topic name="Изменение часового пояса по умолчанию" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+<key name="часовой пояс по умолчанию" >
+  <topic name="Изменение часового пояса по умолчанию" url="zwc_help_files/1_setting_up/change_your_default_time_zone.htm" />
+</key>
+<key name="черновик" >
+  <topic name="Сохранение сообщения как черновика" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+</key>
+
+</indexdata>

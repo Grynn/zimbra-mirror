@@ -1,0 +1,8 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<index>
+<chunkinfo url="whidata0.xml" first="CalDAV" last="изменения вида сообщений" num="70" />
+<chunkinfo url="whidata1.xml" first="импорт" last="пересылка сообщений" num="74" />
+<chunkinfo url="whidata2.xml" first="печать" last="стандартный веб-клиент" num="68" />
+<chunkinfo url="whidata3.xml" first="страница настроек общего доступа" last="язык, изменение" num="34" />
+
+</index>

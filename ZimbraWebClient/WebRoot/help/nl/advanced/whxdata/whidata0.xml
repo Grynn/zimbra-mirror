@@ -1,0 +1,230 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="aanmelden" >
+  <topic name="Aanmelden en afmelden" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+</key>
+<key name="activiteitenstroom" >
+  <topic name="Minder belangrijke e-mail uit het Postvak IN verplaatsen" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+  <topic name="Werken met e-mailfilters" url="zwc_help_files/4_filters/working_with_email_filters.htm" />
+</key>
+<key name="activiteitenstroommap" >
+  <topic name="Minder belangrijke e-mail uit het Postvak IN verplaatsen" url="zwc_help_files/2_manage_email/moving_less_important_mail_out_of_the_inbox.htm" />
+</key>
+<key name="adresbellen" >
+  <topic name="Adresbellen" url="zwc_help_files/2_manage_email/how_address_bubbles_work.htm" />
+</key>
+<key name="adresboek" >
+  <topic name="Leden aan een contactpersonengroep toevoegen" url="zwc_help_files/6_address_book/adding_members_to_a_contact_group_list.htm" />
+  <topic name="Een adresboek exporteren" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  <topic name="Automatisch contactpersonen aan een lijst met gemailde contactpersonen toevoegen" url="zwc_help_files/6_address_book/automatically_add_contacts_to_emailed_contacts_list.htm" />
+  <topic name="Een adresboek importeren" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  <topic name="Adresboeken gebruiken" url="zwc_help_files/6_address_book/using_address_books.htm" />
+  <key name="exporteren" >
+    <topic name="Een adresboek exporteren" url="zwc_help_files/6_address_book/exporting_an_address_book.htm" />
+  </key>
+  <key name="importeren" >
+    <topic name="Een adresboek importeren" url="zwc_help_files/6_address_book/importing_an_address_book.htm" />
+  </key>
+</key>
+<key name="adresboek afdrukken" >
+  <topic name="Een naam van een contactpersoon of adresboek afdrukken" url="zwc_help_files/6_address_book/printing_a_contact_name_or_address_book.htm" />
+</key>
+<key name="adresboeken delen" >
+  <topic name="Adresboeken delen" url="zwc_help_files/13_sharing/share_address_books.htm" />
+</key>
+<key name="afdrukken" >
+  <topic name="Een agenda afdrukken" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  <topic name="Een conversatie afdrukken (alle berichten)" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  <topic name="Een e-mailbericht afdrukken" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
+  <key name="Agenda" >
+    <topic name="Een agenda afdrukken" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  </key>
+  <key name="conversatie" >
+    <topic name="Een conversatie afdrukken (alle berichten)" url="zwc_help_files/2_manage_email/print_a_conversation_all_messages.htm" />
+  </key>
+  <key name="E-mailbericht" >
+    <topic name="Een e-mailbericht afdrukken" url="zwc_help_files/2_manage_email/printing_an_email_message.htm" />
+  </key>
+</key>
+<key name="afdruktaakmap" >
+  <topic name="Een taak of takenlijst afdrukken" url="zwc_help_files/9_tasks/printing_a_task_or_task_list.htm" />
+</key>
+<key name="afmelden" >
+  <topic name="Aanmelden en afmelden" url="zwc_help_files/1_setting_up/signing_in_and_signing_out.htm" />
+</key>
+<key name="Agenda" >
+  <topic name="Andere configureerbare agendavoorkeuren" url="zwc_help_files/7_calendars/other_calendar_preferences_to_configure.htm" />
+  <topic name="Een agenda afdrukken" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  <key name="afdrukken" >
+    <topic name="Een agenda afdrukken" url="zwc_help_files/7_calendars/print_a_calendar.htm" />
+  </key>
+</key>
+<key name="agenda-uitnodigingen filteren" >
+  <topic name="Een filter voor agenda-uitnodigingen maken" url="zwc_help_files/4_filters/creating_a_filter_for_calendar_invitations.htm" />
+</key>
+<key name="agenda-voorkeuren" >
+  <topic name="Je Agenda-voorkeuren instellen" url="zwc_help_files/7_calendars/setting_your_calendar_preferences.htm" />
+</key>
+<key name="agenda's delen" >
+  <topic name="Agenda's delen" url="zwc_help_files/13_sharing/share_calendars.htm" />
+</key>
+<key name="agenda's in groepen" >
+  <topic name="Je agenda's in Groepen organiseren" url="zwc_help_files/7_calendars/organize_your_calendars_into_groups.htm" />
+</key>
+<key name="Agenda's kleurcoderen" >
+  <topic name="Kleur aan een agenda toevoegen" url="zwc_help_files/7_calendars/add_color_to_a_calendar.htm" />
+</key>
+<key name="aktetas" >
+  <topic name="Een document uit Aktetas verwijderen" url="zwc_help_files/10_briefcase/delete_a_document_from_briefcase.htm" />
+  <topic name="Bestanden in Aktetas verplaatsen" url="zwc_help_files/10_briefcase/move_files_in_briefcase.htm" />
+  <topic name="Bestanden aan je Aktetas-mappen toevoegen" url="zwc_help_files/10_briefcase/adding_files_to_your_briefcase_folders.htm" />
+</key>
+<key name="algemene adreslijst" >
+  <topic name="Een snelle zoekopdracht uitvoeren" url="zwc_help_files/12_search/performing_a_quick_search.htm" />
+</key>
+<key name="altijd zoekopdracht weergeven" >
+  <topic name="Een uitgebreide zoekactie uitvoeren" url="zwc_help_files/12_search/performing_an_advanced_search.htm" />
+</key>
+<key name="antwoord bij afwezigheid" >
+  <topic name="Een Afwezigheidsbericht opstellen" url="zwc_help_files/2_manage_email/setting_up_an_out_of_office_message.htm" />
+</key>
+<key name="antwoorden per e-mail" >
+  <topic name="Voorkeuren voor e-mailantwoorden instellen" url="zwc_help_files/3_compose/set_preferences_for_email_replies.htm" />
+</key>
+<key name="basisfilters" >
+  <topic name="Criteria voor uitgebreid zoeken" url="zwc_help_files/12_search/advanced_search_criteria.htm" />
+</key>
+<key name="beheren" >
+  <topic name="Je mobiele apparaten beheren" url="zwc_help_files/11_mobile/managing_your_mobile_devices.htm" />
+  <topic name="Je gedeelde items beheren" url="zwc_help_files/13_sharing/managing_your_shared_items.htm" />
+  <key name="je gedeelde items" >
+    <topic name="Je gedeelde items beheren" url="zwc_help_files/13_sharing/managing_your_shared_items.htm" />
+  </key>
+  <key name="je mobiele apparaten" >
+    <topic name="Je mobiele apparaten beheren" url="zwc_help_files/11_mobile/managing_your_mobile_devices.htm" />
+  </key>
+</key>
+<key name="beleid voor bewaren" >
+  <topic name="Beleid voor bewaren toewijzen aan e-mailmappen" url="zwc_help_files/2_manage_email/assigning_retention_policies_to_email_folders.htm" />
+</key>
+<key name="bericht later verzenden" >
+  <topic name="E-mail opstellen en verzenden" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="bericht verplaatsen" >
+  <topic name="E-mailberichten verplaatsen" url="zwc_help_files/2_manage_email/moving_email_messages.htm" />
+</key>
+<key name="bericht voor toekomstige verzending" >
+  <topic name="E-mail opstellen en verzenden" url="zwc_help_files/3_compose/composing_and_sending_email.htm" />
+</key>
+<key name="berichten doorsturen" >
+  <topic name="Automatisch ontvangen berichten doorsturen" url="zwc_help_files/2_manage_email/automatically_forwarding_messages_you_receive.htm" />
+  <topic name="E-mailberichten doorsturen" url="zwc_help_files/3_compose/forwarding_email_messages.htm" />
+</key>
+<key name="berichten opstellen" >
+  <topic name="Je opties voor het opstellen van berichten aanpassen" url="zwc_help_files/3_compose/customizing_your_options_for_composing_messages.htm" />
+</key>
+<key name="berichtenweergave wijzigen" >
+  <topic name="E-mail beheren" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="bestanden inchecken" >
+  <topic name="Bestanden inchecken en uitchecken bij Aktetas" url="zwc_help_files/10_briefcase/checking_out_and_checking_in_files_to_briefcase.htm" />
+  <key name="aktetas" >
+    <topic name="Bestanden inchecken en uitchecken bij Aktetas" url="zwc_help_files/10_briefcase/checking_out_and_checking_in_files_to_briefcase.htm" />
+  </key>
+</key>
+<key name="bewerken" >
+  <topic name="Contactgegevens bewerken" url="zwc_help_files/6_address_book/editing_contact_information.htm" />
+  <key name="contactinformatie" >
+    <topic name="Contactgegevens bewerken" url="zwc_help_files/6_address_book/editing_contact_information.htm" />
+  </key>
+</key>
+<key name="Bijlagen" >
+  <topic name="Bijlagen bij een e-mailbericht openen" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+  <topic name="Bijlagen toevoegen" url="zwc_help_files/3_compose/adding_attachments.htm" />
+</key>
+<key name="bijlagen met behulp van slepen" >
+  <topic name="Bijlagen toevoegen" url="zwc_help_files/3_compose/adding_attachments.htm" />
+</key>
+<key name="bijlagen verwijderen" >
+  <topic name="Bijlagen bij een e-mailbericht openen" url="zwc_help_files/2_manage_email/opening_attachments_to_an_email_message.htm" />
+</key>
+<key name="bureaubladwaarschuwingen" >
+  <topic name="Bureaubladwaarschuwingen voor nieuwe e-mailberichten instellen" url="zwc_help_files/2_manage_email/setting_desktop_alerts_for_new_email_messages.htm" />
+</key>
+<key name="CalDAV" >
+  <topic name="Externe agenda's toevoegen" url="zwc_help_files/7_calendars/adding_external_calendars.htm" />
+</key>
+<key name="certificaten, toevoegen aan adresboek" >
+  <topic name="Certificaten toevoegen aan contactpersonen in het Adresboek" url="zwc_help_files/15_s_mime/adding_certificates_to_contacts_in_address_book.htm" />
+</key>
+<key name="concept" >
+  <topic name="Een bericht als Concept opslaan" url="zwc_help_files/3_compose/save_a_message_as_a_draft.htm" />
+</key>
+<key name="configureren" >
+  <topic name="Mobiele beveiligingsfuncties" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
+  <key name="PIN" >
+    <topic name="Mobiele beveiligingsfuncties" url="zwc_help_files/11_mobile/mobile_security_features.htm" />
+  </key>
+</key>
+<key name="Contact" >
+  <topic name="Een contactpersoon naar een ander adresboek verplaatsen" url="zwc_help_files/6_address_book/moving_a_contact_to_another_address_book.htm" />
+  <key name="verplaatsen" >
+    <topic name="Een contactpersoon naar een ander adresboek verplaatsen" url="zwc_help_files/6_address_book/moving_a_contact_to_another_address_book.htm" />
+  </key>
+</key>
+<key name="contact doorsturen" >
+  <topic name="Contactgegevens doorsturen" url="zwc_help_files/6_address_book/forwarding_contact_information.htm" />
+</key>
+<key name="contactengroep" >
+  <topic name="Een contactpersonengroep maken" url="zwc_help_files/6_address_book/creating_a_contact_group.htm" />
+</key>
+<key name="contactpersonengroep" >
+  <topic name="Leden aan een contactpersonengroep toevoegen" url="zwc_help_files/6_address_book/adding_members_to_a_contact_group_list.htm" />
+</key>
+<key name="controleert op nieuwe e-mail" >
+  <topic name="Wijzigen hoe vaak er op nieuwe e-mail voor je account wordt gecontroleerd" url="zwc_help_files/2_manage_email/changing_how_often_your_account_checks_for_new_mail.htm" />
+</key>
+<key name="conversatie" >
+  <topic name="E-mail beheren" url="zwc_help_files/2_manage_email/managing_your_email.htm" />
+</key>
+<key name="criteria voor uitgebreid zoeken" >
+  <topic name="Criteria voor uitgebreid zoeken" url="zwc_help_files/12_search/advanced_search_criteria.htm" />
+</key>
+<key name="dagvullende afspraken" >
+  <topic name="Dagvullende afspraken in de weergave Werkweek weergeven" url="zwc_help_files/7_calendars/displaying_all_day_appointments_in_your_work_week_view.htm" />
+</key>
+<key name="datum, groepen op" >
+  <topic name="Groepsberichten" url="zwc_help_files/2_manage_email/group_messages.htm" />
+</key>
+<key name="delen" >
+  <topic name="Je accountmappen delen" url="zwc_help_files/13_sharing/sharing_your_account_folders.htm" />
+  <key name="je accountmappen" >
+    <topic name="Je accountmappen delen" url="zwc_help_files/13_sharing/sharing_your_account_folders.htm" />
+  </key>
+</key>
+<key name="digitaal ondertekende berichten, opstellen" >
+  <topic name="Een digitaal ondertekend bericht opstellen en verzenden" url="zwc_help_files/15_s_mime/compose_and_send_a_digitally_signed_message.htm" />
+</key>
+<key name="distributielijst" >
+  <topic name="Distributielijsten maken" url="zwc_help_files/6_address_book/create_distribution_lists.htm" />
+</key>
+<key name="distributielijst, aanpassen" >
+  <topic name="Een distributielijst aanpassen" url="zwc_help_files/6_address_book/modify_a_distribution_list.htm" />
+</key>
+<key name="distributielijst, afmelden voor" >
+  <topic name="Afmelden voor een distributielijst" url="zwc_help_files/6_address_book/unsubscribe_to_a_distribution_list.htm" />
+</key>
+<key name="distributielijst, beheren" >
+  <topic name="Distributielijsten beheren" url="zwc_help_files/6_address_book/managing_distribution_lists.htm" />
+</key>
+<key name="doorgestuurde e-mail" >
+  <topic name="Voorkeuren voor doorgestuurde e-mail instellen" url="zwc_help_files/3_compose/set_preferences_for_forwarded_email.htm" />
+</key>
+<key name="E-mail" >
+  <topic name="Mail lezen" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  <key name="lezen" >
+    <topic name="Mail lezen" url="zwc_help_files/2_manage_email/reading_mail.htm" />
+  </key>
+</key>
+
+</indexdata>
