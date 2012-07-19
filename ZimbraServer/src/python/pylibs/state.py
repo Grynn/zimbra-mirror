@@ -954,7 +954,7 @@ class State:
 		return str(val)
 
 	def transform(self, line):
-		 if(line.count('@') < 2 and line.count('%') < 2):
+		if(line.count('@') < 2 and line.count('%') < 2):
 			return line
 
 		line = re.sub(r"@@([^@]+)@@", self.xformLocalConfig, line)
