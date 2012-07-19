@@ -2192,7 +2192,7 @@ function(accountNumber, listType) {
 		var sDate = tomorrow;
 	} else if (listType == "NEXT_7_DAYS") {
 		var sHours = 0;
-		var sDate = tomorrow;
+		var sDate = today;
 	} else {
 		var sHours = today.getHours() - 1;//give 1 hour buffer
 		var sDate = today;
@@ -2227,15 +2227,18 @@ function(accountNumber, listType) {
 		"<dateScope>",startDateStr, endDateStr,"</dateScope></bodyContent>"].join("");
 
 	var request = this.newWebExRequest(requestBody);
-	var result = AjxRpc.invoke(request, this.postUri(), {"Content-Type":"text/xml"}, null, false, false);
+	AjxRpc.invoke(request, this.postUri(), {"Content-Type":"text/xml"}, new AjxCallback(this, this._handleGetMeetingsList, [listType]), false, false);	
+};
+
+WebExZimlet.prototype._handleGetMeetingsList = 
+function(listType, result) {
 	var objResult = this.xmlToObject(result);
 	if (!this._validateWebExResult(objResult, this.getMessage("WebExZimlet_unableToGetMeetingInfo"))) {
 		return;
 	}
 	this._setMeetingListView(objResult, listType);
-	this._addShowMeetingListListeners();
+	this._addShowMeetingListListeners();	
 };
-
 /**
  * Shows WebEx meeting list dialog.
  * @param {int} accountNumber WebEx Account Number
