@@ -65,5 +65,5 @@ then
   echo "Forcing execution from un-expected host:  ${zimbra_server_hostname}"
 fi
 
-exec ${zimbra_home}/bin/zmjava com.zimbra.common.soap.SoapCommandUtil -z ComputeAggregateQuotaUsageRequest
+exec ${zimbra_home}/bin/zmjava com.zimbra.soap.SoapCommandUtil -z ComputeAggregateQuotaUsageRequest
 

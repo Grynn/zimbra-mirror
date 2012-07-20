@@ -12,7 +12,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.common.soap;
+package com.zimbra.soap;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -39,9 +39,15 @@ import org.dom4j.QName;
 import com.google.common.base.Objects;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.AccountConstants;
+import com.zimbra.common.soap.AdminConstants;
+import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.Element.ElementFactory;
 import com.zimbra.common.soap.Element.JSONElement;
 import com.zimbra.common.soap.Element.XMLElement;
+import com.zimbra.common.soap.HeaderConstants;
+import com.zimbra.common.soap.SoapHttpTransport;
+import com.zimbra.common.soap.SoapTransport;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.CliUtil;
 import com.zimbra.common.util.StringUtil;
@@ -70,6 +76,8 @@ public class SoapCommandUtil implements SoapTransport.DebugListener {
     private static final String LO_NO_OP = "no-op";
     private static final String LO_SELECT = "select";
     private static final String LO_JSON = "json";
+    private static final String LO_JAXB = "jaxb";
+    private static final String LO_NO_JAXB = "no-jaxb";
     private static final String LO_FILE = "file";
     private static final String LO_TYPE = "type";
     private static final String LO_USE_SESSION = "use-session";
@@ -111,6 +119,7 @@ public class SoapCommandUtil implements SoapTransport.DebugListener {
     private boolean mNoOp = false;
     private String mSelect;
     private boolean mUseJson = false;
+    private boolean useJaxb = false;
     private String mFilePath;
     private ElementFactory mFactory;
     private PrintStream mOut;
@@ -158,9 +167,16 @@ public class SoapCommandUtil implements SoapTransport.DebugListener {
         opt = new Option(null, LO_SELECT, true, "Select an element or attribute from the response.");
         opt.setArgName("xpath");
         mOptions.addOption(opt);
-        
-        mOptions.addOption(new Option(null, LO_JSON, false, "Use JSON instead of XML."));
-        
+
+        mOptions.addOption(new Option(null, LO_JSON, false,
+                    "Use JSON instead of XML. (Switches on --jaxb option by default)."));
+
+        mOptions.addOption(new Option(null, LO_JAXB, false,
+                    "Force use of JAXB to aid building request from command line."));
+
+        mOptions.addOption(new Option(null, LO_NO_JAXB, false,
+                    "Disallow use of JAXB to aid building request from command line."));
+
         opt = new Option("f", LO_FILE, true, "Read request from file.");
         opt.setArgName("path");
         mOptions.addOption(opt);
@@ -276,6 +292,18 @@ public class SoapCommandUtil implements SoapTransport.DebugListener {
         mNoOp = CliUtil.hasOption(cl, LO_NO_OP);
         mSelect = CliUtil.getOptionValue(cl, LO_SELECT);
         mUseJson = CliUtil.hasOption(cl, LO_JSON);
+        if (CliUtil.hasOption(cl, LO_JAXB)) {
+            useJaxb = true;
+        } else if (CliUtil.hasOption(cl, LO_NO_JAXB)) {
+            useJaxb = false;
+        } else {
+            // zmsoap's command line fits reasonably well with how Zimbra XML SOAP works, so there shouldn't be much
+            // value in using JAXB to validate the request before sending it in that case.  However the fit is NOT
+            // that good with how Zimbra JSON SOAP works - for instance there isn't an obvious way to specify
+            // key value pairs.  passing the XML equivalent of the comand line spec into JAXB and getting the JSON
+            // back from the object should take care of this deficiency.
+            useJaxb = mUseJson;
+        }
         mFilePath = CliUtil.getOptionValue(cl, LO_FILE);
         mFactory = (mUseJson ? JSONElement.mFactory : XMLElement.mFactory);
         mUseSession = CliUtil.hasOption(cl, LO_USE_SESSION);
@@ -385,7 +413,22 @@ public class SoapCommandUtil implements SoapTransport.DebugListener {
         Element response = getTransport().invoke(auth, false, !mUseSession, null);
         handleAuthResponse(response);
     }
-    
+
+    private Element buildRequestFromCommandLine()
+    throws ServiceException {
+        Element element = null;
+        for (String path : mPaths) {
+            element = processPath(element, path, useJaxb ? XMLElement.mFactory : mFactory);
+        }
+        while (element.getParent() != null) {
+            element = element.getParent();
+        }
+        if (useJaxb) {
+            element = JaxbUtil.jaxbToElement(JaxbUtil.elementToJaxb(element), mFactory);
+        }
+        return element;
+    }
+
     private void run()
     throws ServiceException, IOException {
         // Assemble SOAP request.
@@ -397,10 +440,7 @@ public class SoapCommandUtil implements SoapTransport.DebugListener {
             in = new FileInputStream(mFilePath);
             location = mFilePath;
         } else if (mPaths.length > 0) {
-            // Build request from command line.
-            for (String path : mPaths) {
-                element = processPath(element, path);
-            }
+            element = buildRequestFromCommandLine();
         } else if (System.in.available() > 0) {
             // Read from stdin.
             in = System.in;
@@ -520,7 +560,7 @@ public class SoapCommandUtil implements SoapTransport.DebugListener {
      * for the root
      * @param path an XPath-like path of elements and attributes
      */
-    private Element processPath(Element start, String path) {
+    private Element processPath(Element start, String path, ElementFactory factory) {
         String value = null;
         
         // Parse out value, if it's specified.
@@ -540,7 +580,7 @@ public class SoapCommandUtil implements SoapTransport.DebugListener {
             part = parts[i];
             if (element == null) {
                 QName name = QName.get(part, mNamespace);
-                element = mFactory.createElement(name);
+                element = factory.createElement(name);
             } else if (part.equals("..")) {
                 element = element.getParent();
             } else if (!(part.startsWith("@"))) {
@@ -559,7 +599,7 @@ public class SoapCommandUtil implements SoapTransport.DebugListener {
         }
         return element;
     }
-    
+
     private static String formatServiceException(ServiceException e) {
         Throwable cause = e.getCause();
         return "ERROR: " + e.getCode() + " (" + e.getMessage() + ")" + 
