@@ -102,6 +102,7 @@
 	<classpathentry kind="lib" path="jars/jetty-util-7.6.2.z2.jar"/>
 	<classpathentry kind="lib" path="jars/jetty-rewrite-7.6.2.z2.jar"/>
 	<classpathentry kind="lib" path="jars-test/easymock-3.0/cglib-2.2.2.jar"/>
+	<classpathentry kind="lib" path="jars/icu4j-4.8.1.1.jar"/>
 	<classpathentry kind="lib" path="jars-test/easymock-3.0/easymock-3.0.jar" sourcepath="jars-test/easymock-3.0/easymock-3.0-sources.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
