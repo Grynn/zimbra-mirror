@@ -158,7 +158,7 @@ function(name, value) {
  * @return	{Element}	the node element
  */
 AjxSoapDoc.prototype.set =
-function(name, value, parent, namespace, isCdata) {
+function(name, value, parent, namespace) {
 	var	doc = this.getDoc();
 
 	var useNS = doc.createElementNS && !AjxEnv.isSafari;
@@ -186,9 +186,7 @@ function(name, value, parent, namespace, isCdata) {
 				        this.set(i, val, p);
                                 }
 			}
-		} else if (isCdata) {
-            p.appendChild(doc.createCDATASection(value));
-        } else {
+		} else {
 			p.appendChild(doc.createTextNode(value));
 		}
 	}
