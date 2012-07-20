@@ -68,7 +68,7 @@ $enable_db = 0;              # enable use of BerkeleyDB/libdb (SNMP and nanny)
 # $enable_zmq = 1;           # enable use of ZeroMQ (SNMP and nanny)
 $nanny_details_level = 2;    # nanny verbosity: 1: traditional, 2: detailed
 $enable_dkim_verification = 1;  # enable DKIM signatures verification
-$enable_dkim_signing = 1;    # load DKIM signing code, keys defined by dkim_key
+$enable_dkim_signing = 0;    # load DKIM signing code, keys defined by dkim_key
 #$enable_dkim_verification = %%binary VAR:zimbraDKIMVerificationEnabled%%;
 #$enable_dkim_signing = %%binary VAR:zimbraDKIMSigningEnabled%%;
 
