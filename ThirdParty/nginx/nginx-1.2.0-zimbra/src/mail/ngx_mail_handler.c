@@ -1813,7 +1813,6 @@ ngx_mail_session_internal_server_error(ngx_mail_session_t *s)
     cscf = ngx_mail_get_module_srv_conf(s, ngx_mail_core_module);
 
     s->out = cscf->protocol->internal_server_error;
-    s->quit = 1;
 
     ngx_mail_send(s->connection->write);
 
