@@ -540,6 +540,7 @@ function(index, realizeDeferred, forceNode) {
 
 	if (this._extraCell) {
 		AjxImg.setImage(this._extraCell, (this._extraInfo ||  "Blank_16"));
+		this._extraCell.className = this._treeItemExtraImgClass;
 	}
 
 	// initialize checkbox
@@ -713,6 +714,7 @@ DwtTreeItem.prototype._dragEnter =
 function() {
 	this._preDragClassName = this._textCell.className;
 	this._textCell.className = this._dragOverClassName;
+	this._draghovering = true;
 };
 
 DwtTreeItem.prototype._dragHover =
@@ -727,6 +729,7 @@ function(ev) {
 	if (this._preDragClassName) {
 		this._textCell.className = this._preDragClassName;
 	}
+	this._draghovering = false;
 };
 
 DwtTreeItem.prototype._drop =
@@ -734,6 +737,7 @@ function() {
 	if (this._preDragClassName) {
 		this._textCell.className = this._preDragClassName;
 	}
+	this._draghovering = false;
 };
 
 /**
@@ -837,17 +841,17 @@ function(item) {
 };
 
 DwtTreeItem.prototype._setTreeElementStyles =
-function(treeItem, img, focused){
-   if (!treeItem || !treeItem._contextEnabled) {
+function(img, focused) {
+   if (!this._contextEnabled || this._draghovering) {
         return;
    }
    var selected = focused ? "-focused" : "";
-   if (treeItem._extraCell){
-        AjxImg.setImage(treeItem._extraCell, img);
-        treeItem._extraCell.className = "DwtTreeItem-ExtraImg" + selected;
+   if (this._extraCell) {
+        AjxImg.setImage(this._extraCell, img);
+        this._extraCell.className = this._treeItemExtraImgClass + selected;
    }
-   if (treeItem._textCell)
-        treeItem._textCell.className = "DwtTreeItem-Text" + selected;
+   if (this._textCell)
+        this._textCell.className = this._treeItemTextClass + selected;
 }
 
 DwtTreeItem.prototype._setSelected =
@@ -860,13 +864,13 @@ function(selected, noFocus) {
 		if (!this._itemDiv) { return; }
 		if (selected && (this._selectionEnabled || this._forceNotifySelection || this._checkBoxVisible) /*&& this._origClassName == "DwtTreeItem"*/) {
 			this._itemDiv.className = this._selectedClassName;
-            this._setTreeElementStyles(this, "DownArrowSmall", true);
+			this._setTreeElementStyles("DownArrowSmall", true);
             if (!noFocus) {
 				this.focus();
 			}
 			return true;
 		} else {
-            this._setTreeElementStyles(this, "Blank_16", false);
+			this._setTreeElementStyles("Blank_16", false);
 			this._itemDiv.className = this._origClassName;;
 			return false;
 		}
@@ -902,7 +906,7 @@ function() {
 	if (!this._itemDiv) { return; }
 	// focused tree item should always be selected as well
 	this._itemDiv.className = this._selectedFocusedClassName;
-    this._setTreeElementStyles(this, "DownArrowSmall", true);
+	this._setTreeElementStyles("DownArrowSmall", true);
 };
 
 DwtTreeItem.prototype._blur =
@@ -910,7 +914,7 @@ function() {
 	if (!this._itemDiv) { return; }
 	this._itemDiv.className = this._selected
 		? this._selectedClassName : this._origClassName;
-    this._setTreeElementStyles(this,  this._selected ? "DownArrowSmall" : "Blank_16", this._selected);
+	this._setTreeElementStyles(this._selected ? "DownArrowSmall" : "Blank_16", this._selected);
 };
 
 DwtTreeItem._mouseDownListener =
@@ -939,7 +943,7 @@ function(ev) {
 		treeItem._textCell.className = treeItem._textClassName;
 	}
     if(!treeItem._selected){
-       treeItem._setTreeElementStyles(treeItem, "Blank_16", false);
+       treeItem._setTreeElementStyles("Blank_16", false);
     }
 
 };
@@ -954,7 +958,7 @@ function(ev) {
 		treeItem._textCell.className = treeItem._hoverClassName;
 	}
     if(!treeItem._selected){
-       treeItem._setTreeElementStyles(treeItem, "ColumnDownArrow", true);
+       treeItem._setTreeElementStyles("ColumnDownArrow", true);
     }
 };
 
