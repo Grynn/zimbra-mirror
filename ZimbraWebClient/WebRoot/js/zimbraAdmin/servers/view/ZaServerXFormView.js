@@ -662,13 +662,13 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
     if(ZaTabView.isTAB_ENABLED(entry,ZaServerXFormView.IMAP_TAB_ATTRS, ZaServerXFormView.IMAP_TAB_RIGHTS)) {
         _tab5 = ++this.TAB_INDEX;
         tabBarChoices.push ({value:_tab5, label:ZaMsg.NAD_Tab_IMAP});
-        this.helpMap[_tab5] = [location.pathname, ZaUtil.HELP_URL, "managing_servers/volume_management.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+        this.helpMap[_tab5] = [location.pathname, ZaUtil.HELP_URL, "managing_servers/configuring_imap_settings.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
 
     if(ZaTabView.isTAB_ENABLED(entry,ZaServerXFormView.POP_TAB_ATTRS, ZaServerXFormView.POP_TAB_RIGHTS)) {
         _tab6 = ++this.TAB_INDEX;
         tabBarChoices.push ({value:_tab6, label:ZaMsg.NAD_Tab_POP});
-        this.helpMap[_tab6] = [location.pathname, ZaUtil.HELP_URL, "managing_servers/volume_management.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+        this.helpMap[_tab6] = [location.pathname, ZaUtil.HELP_URL, "managing_server/configuring_pop_Settings.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }    
         
 
@@ -681,7 +681,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
     if(ZaTabView.isTAB_ENABLED(entry,ZaServerXFormView.BIND_IP_TAB_ATTRS, ZaServerXFormView.BIND_IP_TAB_RIGHTS)) {
         _tab8 = ++this.TAB_INDEX;
         tabBarChoices.push ({value:_tab8, label:ZaMsg.NAD_Tab_Bind_IP});
-        this.helpMap[_tab8] = [location.pathname, ZaUtil.HELP_URL, "managing_servers/volume_management.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+        this.helpMap[_tab8] = [location.pathname, ZaUtil.HELP_URL, "managing_servers/setting_up_ip_address_binding.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
     var switchItems = [];
 
@@ -778,6 +778,13 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						  	  label: ZaMsg.NAD_Service_MTA,
 					  	      onChange: ZaServerXFormView.onMtaServiceChanged
 						  	},
+						  	{ ref: ZaServer.A_zimbraPolicydServiceEnabled, type: _CHECKBOX_,
+							  	  enableDisableChangeEventSources:[ZaServer.A_zimbraPolicydServiceInstalled],
+							  	  enableDisableChecks:[[XForm.checkInstanceValue,ZaServer.A_zimbraPolicydServiceInstalled,true],
+							  	  [ZaItem.hasWritePermission,ZaServer.A_zimbraServiceEnabled]],
+							  	  label: ZaMsg.NAD_Service_Policyd,
+						  	      onChange: ZaServerXFormView.onMtaServiceChanged
+							 },
 						  	{ ref: ZaServer.A_zimbraSnmpServiceEnabled, type: _CHECKBOX_,
 						  	  enableDisableChangeEventSources:[ZaServer.A_zimbraSnmpServiceInstalled],
 						  	  enableDisableChecks:[[XForm.checkInstanceValue,ZaServer.A_zimbraSnmpServiceInstalled,true],
