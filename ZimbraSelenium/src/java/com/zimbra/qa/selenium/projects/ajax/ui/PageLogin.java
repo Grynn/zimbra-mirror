@@ -119,7 +119,9 @@ public class PageLogin extends AbsTab {
 		sClick(Locators.zBtnLogin);
 
 		// Wait for the app to load
-		sWaitForPageToLoad();
+		/* TODO: ... debugging to be removed */
+		//sWaitForPageToLoad();
+		
 		((AppAjaxClient)MyApplication).zPageMain.zWaitForActive();
 
 		((AppAjaxClient)MyApplication).zSetActiveAcount(account);
