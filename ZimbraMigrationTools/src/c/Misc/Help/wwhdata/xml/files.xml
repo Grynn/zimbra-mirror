@@ -39,14 +39,15 @@
   </ScoringPrefs>
   <DocumentInfo>
     <Document title="Starting the Migration" href="welcome.html" />
-    <Document title="Destination Server Configuration" href="destination_server.html" />
-    <Document title="Destination Server Configuration" href="destination_user.html" />
-    <Document title="Scheduling the Migration" href="migrate.html" />
-    <Document title="Selecting Options to Migrate" href="options.html" />
-    <Document title="Viewing Migration Results" href="results.html" />
     <Document title="Server Migration Source Information" href="source_server.html" />
     <Document title="User Migration Source Information" href="source_user.html" />
+    <Document title="Destination Server Configuration" href="destination_server.html" />
+    <Document title="Destination Server Configuration" href="destination_user.html" />
+    <Document title="Selecting Options to Migrate" href="options_server.html" />
+    <Document title="Selecting Options to Migrate" href="options_user.html" />
     <Document title="Selecting Users to Migrate" href="users.html" />
+    <Document title="Scheduling the Migration" href="migrate.html" />
+    <Document title="Viewing Migration Results" href="results.html" />
   </DocumentInfo>
   <TopicMap />
 </WebWorksHelpBook>

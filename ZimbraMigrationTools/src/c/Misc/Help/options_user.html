@@ -5,8 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <!-- MOTW-DISABLED saved from url=(0014)about:internet -->
-    <title>Scheduling the Migration</title>
-    <link rel="StyleSheet" href="css/migrate.css" type="text/css" media="all" />
+    <title>Selecting Options to Migrate</title>
+    <link rel="StyleSheet" href="css/options_user.css" type="text/css" media="all" />
     <link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" />
     <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
     <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
@@ -35,11 +35,12 @@
     </table>
     <br clear="all" />
     <br />
-    <div class="WebWorks_Breadcrumbs" style="text-align: left;">Scheduling the Migration</div>
+    <div class="WebWorks_Breadcrumbs" style="text-align: left;">Selecting Options to Migrate</div>
     <hr align="left" />
     <blockquote>
-      <div class="N1Heading_C"><a name="998338">Scheduling the Migration</a></div>
-      <div class="Body"><a name="1005305">Select when to migrate users to ZCS. You can schedule to migrate now or </a>schedule for later.</div>
+      <div class="N1Heading_C"><a name="998338">Selecting Options to Migrate</a></div>
+      <div class="Body"><a name="1005331">When you migrate account files, only email messages, calendar and contacts, </a>tasks, rules, and out of office settings are imported. You can also select to migrate your sent, deleted (trash), and junk (spam) folders. Other types of files, such as meeting requests, notes/journal, alerts, personal distribution lists, are not imported.</div>
+      <div class="Body"><a name="1005303">The Options dialog box is used to set rules about what files should be </a>imported, and setting filters such as migrating after a specified date, maximum message size, and if you want to skip folders.</div>
       <div class="Numbered1_outer" style="margin-left: 0pt">
         <table border="0" cellspacing="0" cellpadding="0" summary="" role="presentation">
           <tr style="vertical-align: baseline;">
@@ -49,7 +50,7 @@
               </div>
             </td>
             <td width="100%">
-              <div class="Numbered1_inner"><a name="1005835">In the </a><span class="attribute">Migrate</span> dialog box, select which option to use to migrate the users to ZCS. During the migration process if a user does not already have an account on the ZCS server, an account must be created after completing the provisioning fields in the dialog box.</div>
+              <div class="Numbered1_inner"><a name="1005774">In the </a><span class="attribute">Options </span>dialog box, select the account data to migrate.</div>
             </td>
           </tr>
         </table>
@@ -63,7 +64,7 @@
               </div>
             </td>
             <td width="100%">
-              <div class="Bulleted2_inner"><a name="1005836">If a user account is already provisioned on the ZCS server, the </a>username displays in the Migrate dialog box with a red icon. </div>
+              <div class="Bulleted2_inner"><span class="attribute"><a name="1005817">Items</a></span>: Select to migrate email messages and attachments, calendar data, contact lists, task lists, rules and out of office settings. </div>
             </td>
           </tr>
         </table>
@@ -77,21 +78,7 @@
               </div>
             </td>
             <td width="100%">
-              <div class="Bulleted2_inner"><a name="1005837">If a user account is not provisioned on the ZCS server, the user name </a>displays in the Migrate dialog box with a greyed-out icon. Before the user account can be migrated, it must be provisioned on the ZCS server. Complete the provisioning fields in the Migrate dialog box to assign an initial password and class of service. In the <span class="attribute">Initial Password</span> field, enter a default password for the newly provisioned accounts.</div>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="Numbered_outer" style="margin-left: 0pt">
-        <table border="0" cellspacing="0" cellpadding="0" summary="" role="presentation">
-          <tr style="vertical-align: baseline;">
-            <td>
-              <div class="Numbered_inner" style="width: 13.7448pt; white-space: nowrap;">
-                <span class="StepNumber">2.  	</span>
-              </div>
-            </td>
-            <td width="100%">
-              <div class="Numbered_inner"><a name="1005838">You can select the migration to take place now, or schedule for a later date </a>and time: </div>
+              <div class="Bulleted2_inner"><span class="attribute"><a name="1005818">Additional Folders</a></span>: Select to migrate Sent, Deleted Items (Trash), and Junk (Spam) folders. </div>
             </td>
           </tr>
         </table>
@@ -105,7 +92,49 @@
               </div>
             </td>
             <td width="100%">
-              <div class="Bulleted2_inner"><a name="1005839">Select </a><span class="attribute">Migrate Now</span> to begin the migration after you complete the Migrate dialog box. </div>
+              <div class="Bulleted2_inner"><span class="attribute"><a name="1005819">Filters</a></span>: Select how to filter the information you are migrating.</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="Bulleted3_outer" style="margin-left: 28.8pt">
+        <table border="0" cellspacing="0" cellpadding="0" summary="" role="presentation">
+          <tr style="vertical-align: baseline;">
+            <td>
+              <div class="Bulleted3_inner" style="width: 17.999999999999996pt; white-space: nowrap;">
+                <span class="Bullet3">•	</span>
+              </div>
+            </td>
+            <td width="100%">
+              <div class="Bulleted3_inner"><span class="attribute"><a name="1005820">Migrate On or After</a></span>: Enter a date to migrate your account on or after the specified date. This lets you discard old messages.</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="Bulleted3_outer" style="margin-left: 28.8pt">
+        <table border="0" cellspacing="0" cellpadding="0" summary="" role="presentation">
+          <tr style="vertical-align: baseline;">
+            <td>
+              <div class="Bulleted3_inner" style="width: 17.999999999999996pt; white-space: nowrap;">
+                <span class="Bullet3">•	</span>
+              </div>
+            </td>
+            <td width="100%">
+              <div class="Bulleted3_inner"><span class="attribute"><a name="1005821">Maximum message size</a></span>: The message size includes the message and attachments. If you do not configure a value here, the ZCS server setting for maximum message size is used. If you set a value here, this value cannot be larger than the global MTA setting for maximum size of a message. The default maximum message size is 0 (indicating no size limit). Note that this will not override the limits imposed by the ZCS server.</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="Bulleted3_outer" style="margin-left: 28.8pt">
+        <table border="0" cellspacing="0" cellpadding="0" summary="" role="presentation">
+          <tr style="vertical-align: baseline;">
+            <td>
+              <div class="Bulleted3_inner" style="width: 17.999999999999996pt; white-space: nowrap;">
+                <span class="Bullet3">•	</span>
+              </div>
+            </td>
+            <td width="100%">
+              <div class="Bulleted3_inner"><span class="attribute"><a name="1005823">Skip these folders (separate with a comma): </a></span>Enter names of folders that you do not want to migrate. </div>
             </td>
           </tr>
         </table>
@@ -119,35 +148,7 @@
               </div>
             </td>
             <td width="100%">
-              <div class="Bulleted2_inner"><a name="1005841">Select </a><span class="attribute">Schedule</span> <span class="bullet_2">to schedule the migration to take place at a later date </span><span class="bullet_2">and time. In the Schedule dialog box, enter the date and time and click </span><span class="attribute">Schedule Task</span><span class="bullet_2">. The migration will start on the selected date and time.</span></div>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="Numbered_outer" style="margin-left: 0pt">
-        <table border="0" cellspacing="0" cellpadding="0" summary="" role="presentation">
-          <tr style="vertical-align: baseline;">
-            <td>
-              <div class="Numbered_inner" style="width: 13.7448pt; white-space: nowrap;">
-                <span class="StepNumber">3.  	</span>
-              </div>
-            </td>
-            <td width="100%">
-              <div class="Numbered_inner"><a name="1005842">(Optional) In the Migrate dialog box, click </a><span class="attribute">Preview</span> to review the accounts to be migrated. The preview displays user accounts and file information that will be migrated. This is considered a test run of the migration, although a full migration does not take place to the ZCS server. You can make appropriate changes before running a complete migration.</div>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="Numbered_outer" style="margin-left: 0pt">
-        <table border="0" cellspacing="0" cellpadding="0" summary="" role="presentation">
-          <tr style="vertical-align: baseline;">
-            <td>
-              <div class="Numbered_inner" style="width: 13.7448pt; white-space: nowrap;">
-                <span class="StepNumber">4.  	</span>
-              </div>
-            </td>
-            <td width="100%">
-              <div class="Numbered_inner"><a name="1005830">When the migration is ready, click </a><span class="attribute">Migrate</span>.</div>
+              <div class="Bulleted2_inner"><span class="attribute"><a name="1005824">Verbose Logging</a></span>: This allows extra data to be logged. If a message is not migrated and this option is enabled, you can inspect the log to determine the cause of failure. Your system administrator can help you with this feature.</div>
             </td>
           </tr>
         </table>
