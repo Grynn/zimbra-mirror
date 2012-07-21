@@ -1610,7 +1610,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.INTEROP_TAB_ATTRS, ZaAccountXFormView.INTEROP_TAB_RIGHTS)) {
 		_tab8 = ++this.TAB_INDEX;
 		this.tabChoices.push({value: _tab8, label: ZaMsg.TABT_Interop}) ;
-		this.helpMap[_tab8] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/user_interface_features.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+		this.helpMap[_tab8] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/manage_account_free_busy_email_address.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	}
 		
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.SKIN_TAB_ATTRS, ZaAccountXFormView.SKIN_TAB_RIGHTS)) {

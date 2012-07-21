@@ -1103,7 +1103,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.AUTH_TAB_ATTRS, GlobalConfigXFormView.AUTH_TAB_RIGHTS)) {
     	_tab10 = ++this.TAB_INDEX;
-    	this.helpMap[_tab10] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/global_settings.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+    	this.helpMap[_tab10] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/managing_single_sign_on_as_a_global_setting.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         tabBarChoices.push ({value:_tab10, label:ZaMsg.NAD_Tab_AUTH});
         var case10 =
                 {type: _ZATABCASE_, caseKey:_tab10,         paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
@@ -1275,7 +1275,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.RETENTION_POLICY_TAB_ATTRS, GlobalConfigXFormView.RETENTION_POLICY_TAB_RIGHTS)) {
         _tab11 = ++this.TAB_INDEX;
-        this.helpMap[_tab11] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/global_settings.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+        this.helpMap[_tab11] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/retention_policies.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         tabBarChoices.push ({value:_tab11, label:ZaMsg.TABT_RetentionPolicy});
         var case11 =
         {type: _SUPER_TABCASE_, caseKey:_tab11,

@@ -1350,7 +1350,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 
 	if(ZaDomainXFormView.Feature_TAB_ATTRS && ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.Feature_TAB_ATTRS, ZaDomainXFormView.Feature_TAB_RIGHTS)) {
 		tabIx = ++this.TAB_INDEX;
-		this.helpMap[tabIx] = [location.pathname, ZaUtil.HELP_URL, "managing_domains/managing_domains.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+		this.helpMap[tabIx] = [location.pathname, ZaUtil.HELP_URL, "setting_up_sms_reminders_feature.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 		tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Features});
 		var caseFeature = {type:_ZATABCASE_, caseKey:tabIx,
                         cssStyle:"padding-left:10px;",

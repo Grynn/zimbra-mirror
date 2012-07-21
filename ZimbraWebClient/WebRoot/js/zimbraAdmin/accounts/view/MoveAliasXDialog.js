@@ -34,6 +34,7 @@ MoveAliasXDialog = function(parent,   w, h) {
 	}
 	this._containedObject = new ZaSearch();
 	this.initForm(ZaSearch.myXModel,this.getMyXForm());
+	this._helpURL = [location.pathname, ZaUtil.HELP_URL, ZaAccChangePwdXDlg.helpURL, "managing_accounts/creating_a_mail_aliases.htm?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 }
 
 MoveAliasXDialog.prototype = new ZaXDialog;

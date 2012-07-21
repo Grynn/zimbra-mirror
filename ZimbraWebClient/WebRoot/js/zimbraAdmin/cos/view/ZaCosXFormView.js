@@ -653,7 +653,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
     if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.SERVERPOOL_TAB_ATTRS, ZaCosXFormView.SERVERPOOL_TAB_RIGHTS)) {
     	_tab6 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab6, label:ZaMsg.TABT_ServerPool});
-        this.helpMap[_tab6] = [location.pathname, ZaUtil.HELP_URL, ZaCosController.helpURL, "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+        this.helpMap[_tab6] = [location.pathname, ZaUtil.HELP_URL, "cos/assigning_accounts_to_different_servers.htm?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
 
     if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.ADVANCED_TAB_ATTRS, ZaCosXFormView.ADVANCED_TAB_RIGHTS)) {
@@ -665,7 +665,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
     if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.RETENTION_POLICY_TAB_ATTRS, ZaCosXFormView.RETENTION_POLICY_TAB_RIGHTS)) {
         _tab8 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab8, label:ZaMsg.TABT_RetentionPolicy});
-        this.helpMap[_tab8] = [location.pathname, ZaUtil.HELP_URL, ZaCosController.helpURL, "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+        this.helpMap[_tab8] = [location.pathname, ZaUtil.HELP_URL, "managing_global_settings/retention_policies.htm?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
 
     var cases = [];
