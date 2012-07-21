@@ -2270,15 +2270,30 @@ YAHOO.widget.AutoComplete.prototype._updateValue = function(elListItem) {
     if(!this.suppressInputUpdate) {    
         var elTextbox = this._elTextbox;
         var sDelimChar = (this.delimChar) ? (this.delimChar[0] || this.delimChar) : null;
-        var sResultMatch = elListItem._sResultMatch;
-    
+        var sResultMatch = elListItem._sResultMatch || "";
+        var oResultData = elListItem._oResultData;
+
+        //oResultData[6] - isGroup returned by server
+        if (!sResultMatch && oResultData[6] && oResultData[4] && this.expandGroup) {
+            //it looks like group is selected
+            var params = {
+                query : oResultData[4], //id of the group
+                callback : {
+                    success : this.groupExpandSuccess,
+                    failure : this.groupExpandFailure,
+                    scope : this,
+                    argument : elListItem
+                }
+            };
+            this.expandGroup.sendRequest(params);
+        }
         // Calculate the new value
         var sNewValue = "";
-        if(sDelimChar) {
+        if (sDelimChar) {
             // Preserve selections from past queries
             sNewValue = this._sPastSelections;
             // Add new selection plus delimiter
-            sNewValue += sResultMatch + sDelimChar;
+            sNewValue += sResultMatch ? sResultMatch + sDelimChar : "";
             if(sDelimChar != " ") {
                 sNewValue += " ";
             }
@@ -2301,6 +2316,19 @@ YAHOO.widget.AutoComplete.prototype._updateValue = function(elListItem) {
     
         this._elCurListItem = elListItem;
     }
+};
+
+YAHOO.widget.AutoComplete.prototype.groupExpandSuccess = function(response) {
+    var jsonResponse = YAHOO.lang.JSON.parse(response.responseText),//["email1@example.com", "email2@example.com", "email3@example.com"],
+        elListItem = response.argument,
+        result = jsonResponse ? jsonResponse.Result : [],
+        delimChar = (this.delimChar) ? (this.delimChar[0] || this.delimChar) : ",";
+    elListItem._sResultMatch = result.join(delimChar + " ");
+    this._selectItem(elListItem);
+
+};
+
+YAHOO.widget.AutoComplete.prototype.groupExpandFailure = function(response) {
 };
 
 /**

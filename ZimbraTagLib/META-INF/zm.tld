@@ -2156,6 +2156,32 @@
 
     <tag>
         <description>
+            group contacts
+        </description>
+
+        <name>getGroupContacts</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.contact.GetGroupContactsTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>group id</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>output JSON</description>
+            <name>json</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
             Hard-delete a contact. Use trashContact if you just want to move to trash.
         </description>
 
