@@ -175,8 +175,8 @@ public class PageMain extends AbsTab {
 		
 		this.zWaitForBusyOverlay();
 
-
-		sWaitForPageToLoad();
+		/* TODO: ... debugging to be removed */
+		//sWaitForPageToLoad();
 		((AppAjaxClient)MyApplication).zPageLogin.zWaitForActive();
 
 		((AppAjaxClient)MyApplication).zSetActiveAcount(null);
