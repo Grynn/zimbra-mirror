@@ -122,7 +122,7 @@ public class PageLogin extends AbsTab {
 		/* TODO: ... debugging to be removed */
 		//sWaitForPageToLoad();
 		
-		((AppAjaxClient)MyApplication).zPageMain.zWaitForActive();
+		((AppAjaxClient)MyApplication).zPageMain.zWaitForActive(180000);
 
 		((AppAjaxClient)MyApplication).zSetActiveAcount(account);
 

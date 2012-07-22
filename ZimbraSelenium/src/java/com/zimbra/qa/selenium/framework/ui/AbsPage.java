@@ -24,7 +24,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 public abstract class AbsPage extends AbsSeleniumObject {
 	protected static Logger logger = LogManager.getLogger(AbsPage.class);
 
-	protected static final int PageLoadDelay = 180000; // wait 180 seconds for pages to load
+	protected static final int PageLoadDelay = 60000; // wait 60 seconds for pages to load
 
 	
 	@Deprecated
