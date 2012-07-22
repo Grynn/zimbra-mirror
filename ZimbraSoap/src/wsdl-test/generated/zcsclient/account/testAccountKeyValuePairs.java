@@ -34,8 +34,8 @@ import generated.zcsclient.zm.testKeyValuePair;
     "a"
 })
 @XmlSeeAlso({
-    testAccountCustomMetadata.class,
     testCreateDistributionListRequest.class,
+    testAccountCustomMetadata.class,
     testCalendarResourceInfo.class,
     testDistributionListAction.class
 })

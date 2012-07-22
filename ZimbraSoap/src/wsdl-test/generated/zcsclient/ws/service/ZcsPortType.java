@@ -91,12 +91,6 @@ import generated.zcsclient.account.testSubscribeDistributionListRequest;
 import generated.zcsclient.account.testSubscribeDistributionListResponse;
 import generated.zcsclient.account.testSyncGalRequest;
 import generated.zcsclient.account.testSyncGalResponse;
-import generated.zcsclient.account.testUpdateProfileRequest;
-import generated.zcsclient.account.testUpdateProfileResponse;
-import generated.zcsclient.appblast.testEditDocumentRequest;
-import generated.zcsclient.appblast.testEditDocumentResponse;
-import generated.zcsclient.appblast.testFinishEditDocumentRequest;
-import generated.zcsclient.appblast.testFinishEditDocumentResponse;
 import generated.zcsclient.mail.testAddAppointmentInviteRequest;
 import generated.zcsclient.mail.testAddAppointmentInviteResponse;
 import generated.zcsclient.mail.testAddCommentRequest;
@@ -426,15 +420,14 @@ import generated.zcsclient.voice.testVoiceMsgActionResponse;
 @WebService(name = "zcsPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.sync.ObjectFactory.class,
-    generated.zcsclient.replication.ObjectFactory.class,
-    generated.zcsclient.admin.ObjectFactory.class,
     generated.zcsclient.mail.ObjectFactory.class,
-    generated.zcsclient.voice.ObjectFactory.class,
     generated.zcsclient.account.ObjectFactory.class,
     generated.zcsclient.adminext.ObjectFactory.class,
-    generated.zcsclient.appblast.ObjectFactory.class,
-    generated.zcsclient.zm.ObjectFactory.class
+    generated.zcsclient.admin.ObjectFactory.class,
+    generated.zcsclient.zm.ObjectFactory.class,
+    generated.zcsclient.sync.ObjectFactory.class,
+    generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.voice.ObjectFactory.class
 })
 public interface ZcsPortType {
 
@@ -942,18 +935,6 @@ public interface ZcsPortType {
     public testSyncGalResponse syncGalRequest(
         @WebParam(name = "SyncGalRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         testSyncGalRequest parameters);
-
-    /**
-     * 
-     * @param parameters
-     * @return
-     *     returns generated.zcsclient.account.testUpdateProfileResponse
-     */
-    @WebMethod(action = "urn:zimbraAccount/UpdateProfile")
-    @WebResult(name = "UpdateProfileResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
-    public testUpdateProfileResponse updateProfileRequest(
-        @WebParam(name = "UpdateProfileRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
-        testUpdateProfileRequest parameters);
 
     /**
      * 
@@ -2706,30 +2687,6 @@ public interface ZcsPortType {
     public testSuspendDeviceResponse suspendDeviceRequest(
         @WebParam(name = "SuspendDeviceRequest", targetNamespace = "urn:zimbraSync", partName = "parameters")
         testSuspendDeviceRequest parameters);
-
-    /**
-     * 
-     * @param parameters
-     * @return
-     *     returns generated.zcsclient.appblast.testEditDocumentResponse
-     */
-    @WebMethod(action = "urn:zimbraAppblast/EditDocument")
-    @WebResult(name = "EditDocumentResponse", targetNamespace = "urn:zimbraAppblast", partName = "parameters")
-    public testEditDocumentResponse editDocumentRequest(
-        @WebParam(name = "EditDocumentRequest", targetNamespace = "urn:zimbraAppblast", partName = "parameters")
-        testEditDocumentRequest parameters);
-
-    /**
-     * 
-     * @param parameters
-     * @return
-     *     returns generated.zcsclient.appblast.testFinishEditDocumentResponse
-     */
-    @WebMethod(action = "urn:zimbraAppblast/FinishEditDocument")
-    @WebResult(name = "FinishEditDocumentResponse", targetNamespace = "urn:zimbraAppblast", partName = "parameters")
-    public testFinishEditDocumentResponse finishEditDocumentRequest(
-        @WebParam(name = "FinishEditDocumentRequest", targetNamespace = "urn:zimbraAppblast", partName = "parameters")
-        testFinishEditDocumentRequest parameters);
 
     /**
      * 

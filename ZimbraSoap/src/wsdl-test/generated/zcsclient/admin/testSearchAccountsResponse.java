@@ -46,12 +46,12 @@ import javax.xml.bind.annotation.XmlType;
 public class testSearchAccountsResponse {
 
     @XmlElements({
-        @XmlElement(name = "alias", type = testAliasInfo.class),
         @XmlElement(name = "dl", type = testDistributionListInfo.class),
-        @XmlElement(name = "account", type = testAccountInfo.class),
         @XmlElement(name = "cos", type = testCosInfo.class),
-        @XmlElement(name = "calresource", type = testCalendarResourceInfo.class),
-        @XmlElement(name = "domain", type = testDomainInfo.class)
+        @XmlElement(name = "account", type = testAccountInfo.class),
+        @XmlElement(name = "domain", type = testDomainInfo.class),
+        @XmlElement(name = "alias", type = testAliasInfo.class),
+        @XmlElement(name = "calresource", type = testCalendarResourceInfo.class)
     })
     protected List<Object> calresourceOrDlOrAlias;
     @XmlAttribute(name = "more", required = true)
@@ -77,12 +77,12 @@ public class testSearchAccountsResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testAliasInfo }
      * {@link testDistributionListInfo }
-     * {@link testAccountInfo }
      * {@link testCosInfo }
-     * {@link testCalendarResourceInfo }
+     * {@link testAccountInfo }
      * {@link testDomainInfo }
+     * {@link testAliasInfo }
+     * {@link testCalendarResourceInfo }
      * 
      * 
      */

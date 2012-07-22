@@ -44,10 +44,10 @@ public class testTzFixupRuleMatch {
 
     @XmlElements({
         @XmlElement(name = "tzid", type = testId.class),
-        @XmlElement(name = "any", type = testSimpleElement.class),
-        @XmlElement(name = "rules", type = testTzFixupRuleMatchRules.class),
         @XmlElement(name = "nonDst", type = testOffset.class),
-        @XmlElement(name = "dates", type = testTzFixupRuleMatchDates.class)
+        @XmlElement(name = "dates", type = testTzFixupRuleMatchDates.class),
+        @XmlElement(name = "rules", type = testTzFixupRuleMatchRules.class),
+        @XmlElement(name = "any", type = testSimpleElement.class)
     })
     protected List<Object> anyOrTzidOrNonDst;
 
@@ -70,10 +70,10 @@ public class testTzFixupRuleMatch {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link testId }
-     * {@link testSimpleElement }
-     * {@link testTzFixupRuleMatchRules }
      * {@link testOffset }
      * {@link testTzFixupRuleMatchDates }
+     * {@link testTzFixupRuleMatchRules }
+     * {@link testSimpleElement }
      * 
      * 
      */

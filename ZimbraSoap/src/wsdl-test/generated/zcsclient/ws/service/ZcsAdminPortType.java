@@ -335,8 +335,6 @@ import generated.zcsclient.admin.testGrantRightRequest;
 import generated.zcsclient.admin.testGrantRightResponse;
 import generated.zcsclient.admin.testHsmRequest;
 import generated.zcsclient.admin.testHsmResponse;
-import generated.zcsclient.admin.testInjectStaticFilesRequest;
-import generated.zcsclient.admin.testInjectStaticFilesResponse;
 import generated.zcsclient.admin.testInstallCertRequest;
 import generated.zcsclient.admin.testInstallCertResponse;
 import generated.zcsclient.admin.testInstallLicenseRequest;
@@ -514,15 +512,14 @@ import generated.zcsclient.adminext.testPurgeBulkIMAPImportTasksResponse;
 @WebService(name = "zcsAdminPortType", targetNamespace = "http://www.zimbra.com/wsdl/ZimbraService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    generated.zcsclient.sync.ObjectFactory.class,
-    generated.zcsclient.replication.ObjectFactory.class,
-    generated.zcsclient.admin.ObjectFactory.class,
     generated.zcsclient.mail.ObjectFactory.class,
-    generated.zcsclient.voice.ObjectFactory.class,
     generated.zcsclient.account.ObjectFactory.class,
     generated.zcsclient.adminext.ObjectFactory.class,
-    generated.zcsclient.appblast.ObjectFactory.class,
-    generated.zcsclient.zm.ObjectFactory.class
+    generated.zcsclient.admin.ObjectFactory.class,
+    generated.zcsclient.zm.ObjectFactory.class,
+    generated.zcsclient.sync.ObjectFactory.class,
+    generated.zcsclient.replication.ObjectFactory.class,
+    generated.zcsclient.voice.ObjectFactory.class
 })
 public interface ZcsAdminPortType {
 
@@ -2494,18 +2491,6 @@ public interface ZcsAdminPortType {
     public testHsmResponse hsmRequest(
         @WebParam(name = "HsmRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testHsmRequest parameters);
-
-    /**
-     * 
-     * @param parameters
-     * @return
-     *     returns generated.zcsclient.admin.testInjectStaticFilesResponse
-     */
-    @WebMethod(action = "urn:zimbraAdmin/InjectStaticFiles")
-    @WebResult(name = "InjectStaticFilesResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
-    public testInjectStaticFilesResponse injectStaticFilesRequest(
-        @WebParam(name = "InjectStaticFilesRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
-        testInjectStaticFilesRequest parameters);
 
     /**
      * 
