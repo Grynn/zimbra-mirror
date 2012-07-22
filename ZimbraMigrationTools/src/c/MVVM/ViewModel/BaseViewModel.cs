@@ -67,7 +67,8 @@ public class BaseViewModel: INotifyPropertyChanged
             DoHelp(helpFile);
             break;
         case 3:
-            DoHelp("options.html");
+            helpFile = isServer ? "options_server.html" : "options_user.html";
+            DoHelp(helpFile);
             break;
         case 4:
             helpFile = isServer ? "users.html" : "results.html";
