@@ -42,7 +42,7 @@ my $AdminEnabled="7071:9071";
 my $AdminDisabled="7071:0";
 my $storeMailMode="http";
 my $proxyMailMode="http";
-my $SSLToUp="TRUE";
+my $SSLToUp="REMAIN";
 
 our %options = ();
 our %loaded = ();
@@ -206,6 +206,9 @@ if ($options{e}) {
   if ($options{u}) {
        $SSLToUp = "FALSE";
   }
+  if ($options{U}) {
+       $SSLToUp = "TRUE";
+  }
   chomp ($ImapEnabled);
   chomp ($PopEnabled);
   chomp ($WebEnabled);
@@ -245,9 +248,12 @@ if ($options{e}) {
                "zimbraMailSSLProxyPort $w4 ".
                "zimbraMailMode $mailMode ".
                "zimbraReverseProxyMailMode $proxyMailMode ".
-               "zimbraReverseProxySSLToUpstreamEnabled $SSLToUp ".
                "zimbraReverseProxyLookupTarget TRUE ".
                "zimbraReverseProxyHttpEnabled TRUE\n";
+
+               if ($SSLToUp ne "REMAIN") {
+                   print ZMPROV "ms $hostname zimbraReverseProxySSLToUpstreamEnabled $SSLToUp\n"
+               } 
 
                if ($options{c}) {
                    print ZMPROV "ms $hostname ".
@@ -285,8 +291,11 @@ if ($options{e}) {
                "zimbraMailSSLPort $w3 ".
                "zimbraMailSSLProxyPort $w4 ".
                "zimbraReverseProxyLookupTarget TRUE ".
-               "zimbraReverseProxySSLToUpstreamEnabled $SSLToUp ".
                "zimbraMailMode $mailMode\n";
+
+               if ($SSLToUp ne "REMAIN") {
+                   print ZMPROV "ms $hostname zimbraReverseProxySSLToUpstreamEnabled $SSLToUp\n"
+               }
 
                if ($options{c}) {
                    print ZMPROV "ms $hostname ".
@@ -320,9 +329,12 @@ if ($options{e}) {
                  "zimbraMailProxyPort $w2 ".
                  "zimbraMailSSLPort $w3 ".
                  "zimbraMailSSLProxyPort $w4 ".
-                 "zimbraReverseProxySSLToUpstreamEnabled $SSLToUp ".
                  "zimbraReverseProxyMailMode $proxyMailMode ".
                  "zimbraReverseProxyHttpEnabled TRUE\n";
+
+                if ($SSLToUp ne "REMAIN") {
+                    print ZMPROV "ms $hostname zimbraReverseProxySSLToUpstreamEnabled $SSLToUp\n"
+                }
 
                if ($options{c}) {
                    print ZMPROV "ms $hostname ".
@@ -522,7 +534,7 @@ sub usage() {
   print "\t-C: Colon separated list of Admin Console ports to use. Format: ADMIN-CONSOLE-STORE:ADMIN-CONSOLE-PROXY (Ex: 7071:9071)\n";
   print "\t-x: the proxy mail mode when enable proxy, or the store mail mode when disable proxy (Both default: http).\n";
   print "\t-u: disable SSL connection from proxy to mail store.\n";
-  print "\t-U: enable SSL connection from proxy to mail store (This is default if neither -u nor -U is explictly set).\n";
+  print "\t-U: enable SSL connection from proxy to mail store.\n";
   print "hostname is the value of the zimbra_server_hostname LC key for the server being modified.\n";
   print "Required options are -f by itself, or -f with -d or -e.\n";
   print "Note that -d or -e require one or both of -m and -w.\n"; 
@@ -663,6 +675,13 @@ sub getStoreMailMode {
 
     if ($res[1] =~ /zimbraMailMode:\ (.+)/) {
         $mailMode = $1;
+    }
+
+    if ($sslToUpEnabled eq "REMAIN") {
+	my @res = `/opt/zimbra/bin/zmprov -l gs $hostname zimbraReverseProxySSLToUpstreamEnabled\n`;
+        if ($res[1] =~ /zimbraReverseProxySSLToUpstreamEnabled:\ (.+)/) {	
+        	$sslToUpEnabled = $1;
+	}
     }
 
     if ($sslToUpEnabled eq "TRUE") {
