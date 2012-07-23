@@ -262,7 +262,9 @@ class Program
                     builder += "The Migration Item Options can be specified as Mail=True Calendar=True Contacts=True Sent=True DeletedItems=True Junk=True Tasks=True Rules=True OOO=True \n";
                     builder += " By default these options are false. Unless specified in the XML or as arguments \n";
                     builder += "\n";
-                    builder += "Verbose= Debug|Info|Trace  .This option provides various levels of logging \n";
+                    builder += "Verbose= True|False  .This option turns on or off verbose logging \n";
+                    builder += "\n";
+                    builder += "LogLevel= Debug|Info|Trace  .This option provides various levels of logging \n";
                     builder += "\n";
                     builder += "IsSkipFolders= true|false  .This option provides skipping of folders \n";
                     builder += "\n";
@@ -336,7 +338,7 @@ class Program
                  bool UseSSL = false;
                  int MaxErrors =0; int MaxThreads =0;
               
-                string Verbose = CommandLineArgs.I.argAsString("Verbose");
+                string Loglevel = CommandLineArgs.I.argAsString("LogLevel");
                 bool Datefilter = false;
                 bool SkipFolder = false;
                 bool SkipPreviousMigration = false;
@@ -512,8 +514,8 @@ class Program
                     if (ZCSPort == "")
                         ZCSPort = myXmlConfig.ConfigObj.ZimbraServer.Port;
 
-                    if (Verbose == "")
-                        Verbose = myXmlConfig.ConfigObj.GeneralOptions.LogLevel;
+                    if (Loglevel == "")
+                        Loglevel = myXmlConfig.ConfigObj.GeneralOptions.LogLevel;
 
                     if (ZCSDomain == "")
                         ZCSDomain = myXmlConfig.ConfigObj.UserProvision.DestinationDomain;
@@ -720,8 +722,17 @@ class Program
                     itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.OOO;
                 }
 
+                bool verbose = false;
+                if (CommandLineArgs.I.arg("Verbose") != null)
+                {
+
+                    verbose = CommandLineArgs.I.argAsBool("Verbose");
+                }
+                else
+                    verbose = myXmlConfig.ConfigObj.GeneralOptions.Verbose;
+
                 importopts.ItemsAndFolders = itemFolderFlags;
-                switch(Verbose)
+                switch(Loglevel)
                 {
                 case"Debug":
                      importopts.VerboseOn = LogLevel.Debug;
@@ -736,6 +747,25 @@ class Program
                 default:
                     importopts.VerboseOn = LogLevel.Info;
                     break;
+                }
+                if (verbose)
+                {
+
+                    if (importopts.VerboseOn < LogLevel.Debug)
+                    {
+                        importopts.VerboseOn = LogLevel.Debug;
+                    }
+
+
+                }
+                else
+                {
+                   /* if (importopts.VerboseOn > LogLevel.Info)
+                    {
+                        importopts.VerboseOn = LogLevel.Info;
+                    }*/ //will fix this later
+
+
                 }
                 if (MigrateDate == "")
                 {
@@ -793,7 +823,7 @@ class Program
                 try
                 {
 
-                    TestObj = new CSMigrationWrapper("MAPI");
+                    TestObj = new CSMigrationWrapper("MAPI", importopts.VerboseOn);
                 }
 
                 catch (Exception e)

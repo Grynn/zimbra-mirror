@@ -127,11 +127,12 @@ public class CSMigrationWrapper
         set { m_umUser = value; }
     }
 
-    public CSMigrationWrapper(string mailClient)
+    public CSMigrationWrapper(string mailClient, LogLevel opts=LogLevel.Info)
     {
         // try
         {
-            InitLogFile("migration", Log.Level.Trace);
+            Log.Level level = (Log.Level)opts;
+            InitLogFile("migration",level);
             Log.info("Initializing migration");
 
             MailClient = mailClient;
