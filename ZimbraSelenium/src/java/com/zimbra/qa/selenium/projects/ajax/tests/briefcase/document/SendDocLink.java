@@ -85,9 +85,9 @@ public class SendDocLink extends FeatureBriefcaseTest {
 		ZAssert.assertTrue(mailform.zIsActive(), "Verify the new form opened");
 
 		// Verify link
-		ZAssert.assertTrue(mailform.zWaitForIframeText(
-				"css=iframe[id*=_content_ifr]", docName),
-				"Verify the link text");
+		boolean visible = mailform.zWaitForIframeText(
+				"css=iframe[id*=_content_ifr]", docName);
+		ZAssert.assertTrue(visible,"Verify the link text");
 
 		// Cancel the message
 		// A warning dialog should appear regarding losing changes

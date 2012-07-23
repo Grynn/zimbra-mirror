@@ -1888,7 +1888,7 @@ public abstract class AbsSeleniumObject {
 					+ text
 					+ "') >= 0;}else{x.textContent.indexOf('"
 					+ text
-					+ "') >= 0;}}else{false}","10000");
+					+ "') >= 0;}}else{false}","30000");
 			}
 			return result;
 		} catch (Exception ex) {

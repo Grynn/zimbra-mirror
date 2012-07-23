@@ -10,7 +10,7 @@ public class PageLogin extends AbsTab {
 	public static class Locators {
 
 		// Buttons
-		public static final String zBtnLogin = "css=input.ZLoginButton";
+		public static final String zBtnLogin = "css=input[class*=ZLoginButton]";
 
 
 		// Desktop-specific
