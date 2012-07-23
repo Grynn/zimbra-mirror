@@ -312,9 +312,9 @@ class Account: BackgroundWorker
                     {
                         System.Console.WriteLine();
                         System.Console.WriteLine();
-                        Currentuser.StatusMessage = "Total Errors For UserAccount " + a.AccountID.ToString() + "are" + this.NumofErrors.ToString();
+                        Currentuser.StatusMessage = "Total Errors For UserAccount " + a.AccountID.ToString() + " are " + this.NumofErrors.ToString();
                         System.Console.WriteLine(Currentuser.StatusMessage);
-                        string Messg = "Migration For UserAccount Cancelled";
+                        string Messg = "Migration For UserAccount Cancelled because MaxErrorCount has been reached";
                         /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red,
                          "Migration For UserAccount    Cancelled");*/
                         System.Console.WriteLine(Messg);
