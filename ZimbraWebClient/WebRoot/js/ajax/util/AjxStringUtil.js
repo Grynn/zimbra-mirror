@@ -1015,10 +1015,14 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor, onlyOne
 
 	if (nodeName == "h1" || nodeName == "h2" || nodeName == "h3" || nodeName == "h4"
 		|| nodeName == "h5" || nodeName == "h6" || nodeName == "div" || nodeName == "address") {
-			text[idx++] = "\n";
+        if (idx && text[idx - 1] !== "\n") {
+            text[idx++] = "\n";
+        }
 			ctxt.list = false;
 	} else if (nodeName == "pre") {
-        text[idx++] = "\n";
+        if (idx && text[idx - 1] !== "\n") {
+            text[idx++] = "\n";
+        }
 		ctxt.isPreformatted = false;
 	} else if (nodeName == "li") {
 		if (!ctxt.list) {
