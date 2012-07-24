@@ -1521,10 +1521,10 @@ AjxNumberFormat = function(pattern, skipNegFormat) {
 		this._showExponent = true;
 	}
 	
-	var dot = numPattern.indexOf(I18nMsg.numberSeparatorDecimal);
+	var dot = numPattern.indexOf(I18nMsg.numberSeparatorDecimal !='' ? I18nMsg.numberSeparatorDecimal : '.');
 	var whole = dot != -1 ? numPattern.substring(0, dot) : numPattern;
 	if (whole) {
-		var comma = whole.lastIndexOf(I18nMsg.numberSeparatorGrouping);
+		var comma = whole.lastIndexOf(I18nMsg.numberSeparatorGrouping !='' ? I18nMsg.numberSeparatorGrouping : ',');
 		if (comma != -1) {
 			this._groupingOffset = whole.length - comma - 1;
 		}
