@@ -1358,14 +1358,12 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 				{ type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_zimbraCalendarFeature,
 				  items :[
                       {ref:ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled,
-                          type:_SUPER_CHECKBOX_,
+                          type:_CHECKBOX_,labelLocation:_RIGHT_,
                           msgName:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,
-                          checkBoxLabel:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,
-                          onChange:ZaDomainXFormView.onFormFieldChanged,
-                          resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                          label:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,
                           trueValue:"TRUE", falseValue:"FALSE"
                       }
-				         ]
+		         ]
 				}
 			]
 		};

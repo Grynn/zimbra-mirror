@@ -2609,7 +2609,7 @@ ZaDomain.myXModel = {
        {id:ZaDomain.A2_isTestingGAL, ref:ZaDomain.A2_isTestingGAL, type:_NUMBER_},
        {id:ZaDomain.A2_isTestingSync, ref:ZaDomain.A2_isTestingSync, type:_NUMBER_},
        {id:ZaDomain.A2_isTestingAuth, ref:ZaDomain.A2_isTestingAuth, type:_NUMBER_},
-       {id:ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled},
+       {id:ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled},
 
        {id:ZaDomain.A_zimbraAutoProvNotificationSubject, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvNotificationSubject},
        {id:ZaDomain.A_zimbraAutoProvNotificationBody, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvNotificationBody}
