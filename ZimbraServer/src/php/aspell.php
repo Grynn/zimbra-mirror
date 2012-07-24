@@ -18,6 +18,7 @@ $filename = "";
 $text = "";
 $dictionary = "en_EN";
 $ignoreWords = array();
+$ignoreAllCaps = FALSE;
 
 // Split on anything that's not a letter, dash or quote.
 // Special-case Hindi/Devanagari because some characters
@@ -37,6 +38,9 @@ if (isset($_REQUEST["ignore"])) {
     foreach ($wordArray as $word) {
         $ignoreWords[$word] = TRUE;
     }
+}
+if (isset($_REQUEST["ignoreAllCaps"]) && $_REQUEST["ignoreAllCaps"] == "on") {
+  $ignoreAllCaps = TRUE;	
 }
    
 if (get_magic_quotes_gpc()) {
@@ -90,6 +94,13 @@ if ($text != NULL) {
             continue;
         }
         
+        //optionally skip all caps
+        if ($ignoreAllCaps) {
+        	if (!preg_match ('/[^\p{Lu}]/', $word) ){
+              continue;
+        	}
+        }
+
         // Skip duplicates
         if (array_key_exists($word, $checked_words)) {
             continue;
@@ -121,6 +132,7 @@ if ($text != NULL) {
     <textarea NAME="text" ROWS="10" COLS="80"></textarea>
     <p>Dictionary: <input type="text" name="dictionary" value="<?php print $dictionary; ?>" size="8"/></p>
     <p>Ignore: <input type="text" name="ignore" size="40"/></p>
+    <p><input type="checkbox" name="ignoreAllCaps" value="on">IgnoreAllCaps</input></p>
     <p><input type="submit" /></p>
 </form>
 
