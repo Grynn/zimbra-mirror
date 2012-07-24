@@ -542,7 +542,7 @@ function(msg, oldMsg, msgView) {
 
 Com_Zimbra_Url.prototype.renderYouTube =
 function(msg, msgView) {
-	if (!this._youtubePreview) return;
+	if (!this._youtubePreview || appCtxt.isChildWindow ) return;
 	this._youTubeHitMax = false; //reset
 	this._youTubeHash = {}; //hash of youtube links
 	this._youTubeCtrlHash = {};  //hash to keep track of video controls for conversation view
