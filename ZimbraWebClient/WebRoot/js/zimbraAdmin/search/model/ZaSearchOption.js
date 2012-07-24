@@ -437,6 +437,7 @@ function (optionId, height){
 				 {type: _DWT_LIST_, ref: ZaSearchOption.A_domainList,  width: ZaSearchOptionView.WIDTH - 2, height: height - 30 - 25,  
 					 forceUpdate: true, widgetClass: ZaOptionList, 
 					 multiselect: true, preserveSelection: true, 					 	
+					 bmolsnr:true,
 					 onSelection: ZaSearchBuilderController.filterSelectionListener
 				 }
 		 	]
@@ -669,7 +670,7 @@ function (optionId, height){
 
 				 {type: _DWT_LIST_, ref: ZaSearchOption.A_domainList,  width: ZaSearchOptionView.WIDTH - 2, height: height - 30 - 25,
 					 forceUpdate: true, widgetClass: ZaOptionList,
-					 multiselect: true, preserveSelection: true,
+					 multiselect: true, preserveSelection: false, bmolsnr:true,
 					 onSelection: ZaSearchBuilderController.filterSelectionListener
 				 }
 		 	]
@@ -877,10 +878,7 @@ function () {
 /////////////////////////////////////////////////////////////////////////////////////
 //the list view for the domain and server filter
 ZaOptionList = function(parent,className) {
-    if (appNewUI)
-	    DwtListView.call(this, parent, null, Dwt.STATIC_STYLE);
-    else
-	    DwtListView.call(this, parent, null, Dwt.ABSOLUTE_STYLE);
+    DwtListView.call(this, parent, null, Dwt.STATIC_STYLE);
 }
 
 ZaOptionList.prototype = new DwtListView;

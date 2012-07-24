@@ -282,8 +282,10 @@ function (params,resp) {
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
 			if (response.domain && response.domain.length > 0) {
 				var domains = new Array (response.domain.length);
-				for (var i =0; i < domains.length; i ++) {
-					domains[i] = response.domain[i].name ;
+				for (var i=0; i<domains.length; i++) {
+					if(response.domain[i]) {
+						domains[i] = response.domain[i].name;
+					}
 				}
 				var searchTotal = response.searchTotal;
 				
