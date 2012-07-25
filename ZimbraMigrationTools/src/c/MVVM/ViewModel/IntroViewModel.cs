@@ -120,7 +120,7 @@ public class IntroViewModel: BaseViewModel
             catch (Exception e)
             {
                 
-                string error = " Migrationwrapper cannot be initialised ,Migration dll cannot be loaded";
+                string error = "Migration cannot be initialized.  ";
                 error += e.Message;
                 MessageBox.Show(error, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;

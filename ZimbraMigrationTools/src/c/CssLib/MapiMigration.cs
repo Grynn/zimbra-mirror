@@ -130,7 +130,7 @@ namespace CssLib
                         if (InstallPath == "x86")
                         {
                             //32 bit mapi and 64 bit migration cannot continue
-                            str = " MAPI bitness is " + InstallPath + "  and Migration tool (64 bit) are not compatabile versions .Check the bit compatibility of outlook and Migration tool";
+                            str = "The 64 bit Migration wizard is not compatible with MAPI 32 bit libraries.  Please run the 32 bit Migration wizard.";
                             return str;
                         }
                         
@@ -143,7 +143,7 @@ namespace CssLib
                     if (InstallPath == "x64")
                     {
                         //64 bit mapi and 32 bit bit migration cannot continue
-                        str = " MAPI bitness is " + InstallPath + "  and Migration tool (32 bit) are not compatabile versions .Check the bit compatibility of outlook and Migration tool";
+                        str = "The 32 bit Migration wizard is not compatible with MAPI 64 bit libraries.  Please run the 64 bit Migration wizard.";
                         return str;
 
                     }
@@ -164,8 +164,8 @@ namespace CssLib
             {
                 if (bitness == true)
                 {
-                    //32 bit mapi and  64 bitmigration
-                    str = " bitness is " + InstallPath + "MAPI(32 bit) and Migration tool(64 bit) are not compatabile versions .Check the bit compatibility of outlook and Migration tool";
+                    //32 bit mapi and 64 bitmigration
+                    str = "Older versions of Outlook are not compatible with the 64 bit Migration wizard.  Please run the 32 bit Migration wizard.";
                     return str;
                 }
                 else
