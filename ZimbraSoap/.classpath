@@ -41,7 +41,7 @@
     </attributes>
   </classpathentry>
   <classpathentry kind="output" path="build/classes"/>
-  <classpathentry kind="lib" path="/ZimbraServer/soapdocs/jars/freemarker-2.2.8.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/freemarker-2.3.19.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jaxws-api-2.2.6.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jaxws-rt-2.2.6.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jaxb-api-2.2.6.jar"/>
