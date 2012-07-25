@@ -324,7 +324,12 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
             }
         }
         List<ZPhoneAccount> accounts = mailbox.getAllPhoneAccounts();
-        return (accounts.size() > 0) ? accounts.get(0) : null;
+        for(ZPhoneAccount account: accounts){
+            if(account.getHasVoiceMail()){
+                return account;
+            }
+        }
+        return null;
     }
 
 }
