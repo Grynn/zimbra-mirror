@@ -420,7 +420,8 @@ public class CSMigrationWrapper
                                 if (CheckifAlreadyMigrated(historyfile, historyid))
                                 {
                                     bSkipMessage = true;
-                                    return;
+                                    iProcessedItems++;
+                                    continue;
                                 }
                             }
                             //uncomment after more testing
