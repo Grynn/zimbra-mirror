@@ -2073,37 +2073,50 @@ function(el, ctxt) {
 	else if (nodeName == "title" && el.innerHTML == "") {
 	}
 	
-	// allowed tag - strip the forbidden attributes from it
+	// see if tag is allowed
 	else if (ctxt.tags[nodeName]) {
-		if (el.removeAttribute && el.attributes.length) {
-			// blacklisted attrs
+
+		// check for styles that force us to use iframe
+		if (ctxt.styles) {
+			var style = el.style && el.style.cssText;
+			if (style) {
+				style = style.toLowerCase();
+				for (var j = 0; j < ctxt.styles.length; j++) {
+					if (style.indexOf(ctxt.styles[j]) != -1) {
+						ctxt.fail = true;
+						break;
+					}
+				}
+			}
+		}
+
+		if (el.removeAttribute && el.attributes && el.attributes.length) {
+			// check for blacklisted attrs
 			for (var i = 0; i < ctxt.attrs.length; i++) {
 				el.removeAttribute(ctxt.attrs[i]);
 			}
-			// on* handlers (should have been removed by server, check again to be safe)
+			
+			// Note that DOM-based handling of attributes is horribly broken in IE, in all sorts of ways.
+			// In IE it is impossible to find a reliable way to get an attribute's value. The attributes
+			// collection is supposed to be attributes that were specified in the HTML, but IE fills it with every
+			// possible attribute.
 			for (var i = 0, attrs = el.attributes, l = attrs.length; i < l; i++) {
 				var attr = attrs.item(i);
 				var attrName = attr.nodeName && attr.nodeName.toLowerCase();
-				var attrValue = String(attr.nodeValue).toLowerCase();
-				// we have global CSS rules for TD that trump table properties, so bail
-				if (nodeName == "table" && (attrName == "cellpadding" || attrName == "cellspacing" ||
-						attrName == "border") && attrValue != "0") {
-					ctxt.fail = true;
-					break;
-				}
+				// on* handlers (should have been removed by server, check again to be safe)
 				if (attrName && attrName.indexOf("on") === 0) {
 					el.removeAttribute(attrName);
+					continue;
 				}
-				if (ctxt.styles && (attrName == "style") && attrValue) {
-					var value = attrValue.replace(/\s*/g, "");
-					if (value) {
-						for (var j = 0; j < ctxt.styles.length; j++) {
-							var style = ctxt.styles[j];
-							if (value.indexOf(style) != -1) {
-								ctxt.fail = true;
-								break;
-							}
-						}
+				// this might not work in IE
+				var attrValue = attr.nodeValue && String(attr.nodeValue);
+				if (attrValue) {
+					attrValue = attrValue.toLowerCase();
+					// we have global CSS rules for TD that trump table properties, so bail
+					if (nodeName == "table" && (attrName == "cellpadding" || attrName == "cellspacing" ||
+							attrName == "border") && attrValue != "0") {
+						ctxt.fail = true;
+						break;
 					}
 				}
 			}
