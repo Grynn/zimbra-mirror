@@ -12,14 +12,11 @@ MAKEARGS ?= -j2 DEFINES="-DCHECK_CSN -DSLAP_SCHEMA_EXPOSE -DMDB_DSYNC=0"
 ZIMBRA_HOME ?= /opt/zimbra
 
 PATCH	:=
-INDEX_PATCH	:= patch -g0 -N -p1 < ../patches/0001-trial.patch; patch -g0 -N -p1 < ../patches/0002-More-threading-tweaks.patch;
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7255.patch; patch -g0 -N -p1 < ../patches/mdb-leaf.patch; patch -g0 -N -p1 < ../patches/mdb-pgfree.patch; patch -g0 -N -p1 < ../patches/ITS7302.patch;
 else
 	include $(OPENLDAP_ROOT)/../versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7255.patch; patch -g0 -N -p1 < ../patches/mdb-leaf.patch; patch -g0 -N -p1 < ../patches/mdb-pgfree.patch; patch -g0 -N -p1 < ../patches/ITS7302.patch;
 endif
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
