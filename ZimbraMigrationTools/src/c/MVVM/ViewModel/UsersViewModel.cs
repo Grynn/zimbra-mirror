@@ -51,8 +51,10 @@ public class UsersViewModel: BaseViewModel
 
         CSMigrationWrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
 
-        string[] users = mw.GetListFromObjectPicker();
 
+        string[] users = mw.GetListFromObjectPicker();
+        if(users != null)
+        {
         // FBS rewrite -- bug 71646 -- 3/26/12
         for (int i = 0; i < users.Length; i++)
         {
@@ -89,6 +91,7 @@ public class UsersViewModel: BaseViewModel
             scheduleViewModel.EnablePreview = scheduleViewModel.EnableMigrate;
             EnableNext = (UsersList.Count > 0);
         }
+    }
         EnablePopButtons = true;
     }
     public ICommand UserMapCommand {
