@@ -457,7 +457,7 @@ sub displayVersion {
 		my $release = `dpkg -s zimbra-core | egrep '^Version:' | sed -e 's/Version: //'`;
 		chomp $release;
     if ( -x "/opt/vmware/bin/vamicli") {
-      my $appliance_version=`/opt/vmware/bin/vamicli version --appliance | tail -2 | head -1 | awk '{print \$3"_"\$5}' 2> /dev/null`;
+      my $appliance_version=`/opt/vmware/bin/vamicli version --appliance | tail -2 | head -1 | awk '{print \$NF}' 2> /dev/null`;
       chomp($appliance_version);
       $string = "ZCA Release $appliance_version\n";
       $string .= "ZCS Build $release";
