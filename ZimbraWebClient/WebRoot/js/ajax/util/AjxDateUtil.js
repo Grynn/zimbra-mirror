@@ -1080,7 +1080,7 @@ AjxMsg["calc.now"]	= "now";
 AjxMsg["calc.date"]	= "date";
 
 AjxMsg["calc.duration.year"]		= "year|years";
-AjxMsg["calc.duration.month"]		= "mon|mons|month|months";
+AjxMsg["calc.duration.month"]		= "mons|month|months";
 AjxMsg["calc.duration.day"]			= "day|days";
 AjxMsg["calc.duration.hour"]		= "hour|hours";
 AjxMsg["calc.duration.minute"]		= "min|mins|minute|minutes";
