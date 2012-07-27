@@ -1236,7 +1236,11 @@ public class ZMessageComposeBean {
             if(!isText) { qHdr = BeanUtils.htmlEncode(qHdr); }
             content.append(qHdr).append(CRLF);
             ZMimePartBean body = msg.getBody();
-            content.append(body == null ? "" : body.getContent());
+            String bodyContent = body.getContent();
+            if(!isText && msg.getMimeStructure().getContentType().equals("text/plain")){
+                bodyContent = BeanUtils.htmlEncode(bodyContent);
+            }
+            content.append(body == null ? "" : bodyContent);
             content.append(CRLF);
             addAttachments(msg, false);
         } else if (prefs.getReplyIncludeBodyWithPrefx()) {
