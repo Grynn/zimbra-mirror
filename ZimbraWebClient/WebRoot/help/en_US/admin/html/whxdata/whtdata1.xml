@@ -1,9 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Backing Up the Zimbra server" url="backup_feature/backing_up_the_zimbra_server.htm" />
-<item name="Starting a Backup Session" url="backup_feature/starting_a_backup_session.htm" />
-<item name="Restoring a Mailbox" url="managing_accounts/restoring_a_mailbox.htm" />
-<item name="Aborting a Backup in Progress" url="backup_feature/aborting_a_backup_in_progress.htm" />
+<item name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
+<item name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
+<item name="Quick Custom Color" url="ui_themes/how_to_customize_theme_colors_and_logos.htm" />
+<item name="How to Customize Themes from Admin Console" url="ui_themes/customizing_themes_and_logos.htm" />
+<item name="Restricting User Interface Theme Choice" url="ui_themes/restricting_user_interface_theme_choice.htm" />
+<item name="Making UI Themes Available by COS" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
+<item name="Making UI Themes Available by Account" url="ui_themes/making_ui_themes_available_by_account.htm" />
 
 </tocdata>

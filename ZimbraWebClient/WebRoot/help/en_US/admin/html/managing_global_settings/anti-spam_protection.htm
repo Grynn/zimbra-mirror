@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Anti-Spam Protection</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -82,50 +82,51 @@ else
 
 //-->
 //]]></script>
+
 <h1>Anti-Spam Protection</h1>
 <p>Mass unsolicited emails are referred to 
  as spam or junk email. The Zimbra Collaboration Server 
  installs the SpamAssassin anti-spam 
  software as the mail filter to identify spam 
- mail. When you installed the Zimbra Collaboration Server, 
- the anti-spam software is automatically enabled.</p>
-<p>You can set rules for handling spam from 
- the <span style="font-weight: bold;"><b>Global Settings&gt;Anti-Spam</b></span> 
- tab. How these rules are configured determine how aggressively spam is filtered. The following options can be changed:</p>
-<ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>Kill percent</b></span> 
-	 at 75%. Mail that is scored at 75% is considered spam and is not delivered.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Tag percent</b></span> 
-	 at 33%. Mail that is scored at 33% is considered spam and is delivered 
-	 to the Junk folder.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Subject prefix</b></span> 
-	 field is blank. The prefix entered in this field is added to the subject 
-	 line for messages tagged as spam.</p></li>
-</ul>
-<p>When ZCS 
- was installed, an automated spam training filter was enabled.</p>
-<p>Two mail accounts were created.</p>
-<ul type="disc">
-	<li class="p"><p>The Spam Training User address receives mail notification 
-	 about mail that was not marked as spam, but should have been.</p></li>
-	<li class="p"><p>The Non-Spam (HAM) 
-	 Training User address receives mail notification about mail that was 
-	 marked as spam but should not have been.</p></li>
-</ul>
-<p>For these training accounts, the mailbox quota is disabled (i.e. set 
- to 0). Disabling quotas prevents bouncing messages when the mailbox is 
- full. Attachment indexing is also disabled.</p>
-<p>Spam email messages are indexed, but you can disable indexing of spam 
- email messages from the COS Preferences tab.</p>
+ mail. At installation, the spam training filter is enabled and two feedback 
+ system mailboxes are created to receive mail notification. </p>
 <p>When a message is tagged as spam, the message is delivered to the recipient’s 
- Spam folder. Users can view the number of unread messages and can open 
- the Spam folder to review the messages marked as spam.</p>
-<ul>
-	<li class="p-note"><p class="note" 
-		 style="margin-left: 0px;">To turn RBL's 
-	 on or off refer to the Administrator Guide, Managing the Zimbra Collaboration Serverchapter.</p></li>
+ junk folder. Users can view the number of unread messages that are in 
+ their junk folder and can open the junk folder to review the messages 
+ marked as spam. </p>
+<p>You can set rules for handling spam from 
+ the <span style="font-weight: bold;"><b>Global Settings&gt;AS/AV</b></span><span> 
+ page</span>. How these rules are configured determine how aggressively 
+ spam is filtered. </p>
+<p style="font-weight: bold;">Procedure</p>
+<ol type="1">
+	<li style="font-weight: bold;"><p style="font-weight: bold;"><span 
+	 style="font-weight: normal;">To modify the default settings, go to 
+	 the</span> Configure&gt;Global Settings&gt;AS/AV<span style="font-weight: normal;"> 
+	 page.</span></p></li>
+	<li style="font-weight: bold;"><p style="font-weight: bold;"><span 
+	 style="font-weight: normal;">In the </span>Spam checking Settings<span 
+	 style="font-weight: normal;"> section change these settings. </span></p></li>
+</ol>
+<ul type="disc">
+	<ul type="disc">
+		<li class="p"><p><span class="attribute">Kill percent</span><span 
+		 style="font-weight: bold;"><b>. </b></span>The default is mail that is 
+		 scored at 75% is considered spam and is not delivered.</p></li>
+		<li class="p"><p><span class="attribute">Tag percent</span><span 
+		 style="font-weight: bold;"><b>. </b></span>&#160;The default is mail 
+		 that is scored at 33% is considered spam and is delivered to the 
+		 Junk folder.</p></li>
+	</ul>
 </ul>
-<p>&#160;</p>
+<ol start="3" type="1">
+	<li><p>&#160;In the <span class="attribute">Subject prefix</span> text 
+	 box, enter the text that should be added to the subject line for messages 
+	 tagged as spam.</p></li>
+	<li><p>Click <span class="attribute">Save</span>. </p></li>
+</ol>
+<p>See the Administration Guide for information about the spam training 
+ mailboxes.</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

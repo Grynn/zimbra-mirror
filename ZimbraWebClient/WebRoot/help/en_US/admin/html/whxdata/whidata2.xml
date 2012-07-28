@@ -1,14 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="quotas" >
-  <topic name="Viewing Mailbox Quotas" url="managing_servers/viewing_mailbox_quotas.htm" />
+<key name="redirect settings for admin console login" >
+  <topic name="Managing Domain Authentication Settings" url="managing_domains/managing_domain_authentication_settings.htm" />
 </key>
-<key name="quotas, changing" >
-  <topic name="Changing Quota Settings" url="managing_accounts/changing_quota_settings.htm" />
-</key>
-<key name="re-indexing mailbox" >
-  <topic name="Re-Indexing a Mailbox" url="managing_accounts/re-indexing_a_mailbox.htm" />
+<key name="regex" >
+  <topic name="Account Email Validation Settings" url="managing_global_settings/account_email_validation_settings.htm" />
+  <topic name="Account Email Validation" url="managing_global_settings/account_email_validation.htm" />
 </key>
 <key name="rejecting messages by extension" >
   <topic name="Blocking messages with specific extensions" url="managing_global_settings/blocking_messages_with_specific_extensions.htm" />
@@ -25,6 +23,9 @@
 <key name="reports" >
   <topic name="Daily Mail Reports" url="monitoring/daily_mail_reports.htm" />
 </key>
+<key name="resource email response, configure" >
+  <topic name="Managing a Resource Account" url="managing_accounts/managing_resource.htm" />
+</key>
 <key name="resource, out of service" >
   <topic name="Taking a Resource Out of Service" url="managing_accounts/taking_a_resource_out_of_service.htm" />
 </key>
@@ -32,10 +33,16 @@
   <topic name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
 </key>
 <key name="resources, about" >
-  <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
+  <topic name="Manage Addresses" url="managing_accounts/managing_accounts_alliases,_dl,_resources.htm" />
 </key>
 <key name="resources, number used" >
-  <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
+  <topic name="Manage Addresses" url="managing_accounts/managing_accounts_alliases,_dl,_resources.htm" />
+</key>
+<key name="retention policies" >
+  <topic name="Retention Policies" url="managing_global_settings/retention_policies.htm" />
+</key>
+<key name="retention policy, email" >
+  <topic name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
 </key>
 <key name="root" >
   <topic name="Global Administrator's Mailbox" url="basic_administration_tasks/adminisrator_s_mailbox.htm" />
@@ -54,12 +61,6 @@
 </key>
 <key name="search, advanced" >
   <topic name="Advanced Search" url="search/advanced_search.htm" />
-</key>
-<key name="secondary volumes" >
-  <topic name="Volume Management" url="managing_servers/volume_management.htm" />
-</key>
-<key name="security policy for mobile devices" >
-  <topic name="Setting Up Zimbra Mobile Device Security Policies" url="mobile/setting_up_zimbra_mobile_device_security_policies.htm" />
 </key>
 <key name="self-signed certificates" >
   <topic name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
@@ -102,13 +103,16 @@
   <topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
 </key>
 <key name="session, stopping" >
-  <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
+  <topic name="Manage Addresses" url="managing_accounts/managing_accounts_alliases,_dl,_resources.htm" />
 </key>
 <key name="setting password rules" >
   <topic name="Setting Password Rules" url="passwords/setting_password_rules.htm" />
 </key>
 <key name="setting passwords" >
   <topic name="Setting and Changing Passwords" url="passwords/setting_passwords.htm" />
+</key>
+<key name="setting URLs for SPNEGO authentication" >
+  <topic name="Managing Domain Authentication Settings" url="managing_domains/managing_domain_authentication_settings.htm" />
 </key>
 <key name="setting version to view upon login" >
   <topic name="Setting the Default ZWC Login Version" url="managing_accounts/setting_the_devault_zwc_login_version.htm" />
@@ -134,8 +138,20 @@
 <key name="spam" >
   <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
 </key>
+<key name="spam account" >
+  <topic name="Viewing System Accounts" url="managing_global_settings/viewing_system_accounts.htm" />
+</key>
 <key name="spam lifetime" >
   <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+</key>
+<key name="spam message lifetime" >
+  <topic name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
+</key>
+<key name="SPNEGO URL, setting" >
+  <topic name="Managing Domain Authentication Settings" url="managing_domains/managing_domain_authentication_settings.htm" />
+</key>
+<key name="SSO admin console URL" >
+  <topic name="Managing Domain Authentication Settings" url="managing_domains/managing_domain_authentication_settings.htm" />
 </key>
 <key name="starting services" >
   <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
@@ -150,19 +166,16 @@
   <topic name="Changing Domain Status" url="managing_domains/changing_domain_status.htm" />
 </key>
 <key name="stopping a user's session" >
-  <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
-</key>
-<key name="stopping message delivery" >
-  <topic name="Blocking Attachments to Email" url="managing_global_settings/blocking_attachments_to_email.htm" />
+  <topic name="Manage Addresses" url="managing_accounts/managing_accounts_alliases,_dl,_resources.htm" />
 </key>
 <key name="stopping services" >
   <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
 </key>
+<key name="system accounts" >
+  <topic name="Viewing System Accounts" url="managing_global_settings/viewing_system_accounts.htm" />
+</key>
 <key name="tag percent" >
   <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
-</key>
-<key name="tasks not in console" >
-  <topic name="Management Tasks not available from the Console" url="getting_started/management_tasks_not_available_from_the_console.htm" />
 </key>
 <key name="tasks, administration" >
   <topic name="About the Administration Console" url="getting_started/about_the_administration_console.htm" />
@@ -182,11 +195,17 @@
 <key name="trash lifetime" >
   <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
 </key>
+<key name="trash message lifetime" >
+  <topic name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
+</key>
 <key name="updates" >
   <topic name="Getting the Latest ZCS Software Updates" url="monitoring/getting_latest_software_updates.htm" />
 </key>
 <key name="updating the anti-virus protection" >
   <topic name="Anti-Virus Protection" url="managing_global_settings/anti-virus_configuration_options.htm" />
+</key>
+<key name="upload file size" >
+  <topic name="General Information for Global Settings" url="managing_global_settings/general_information_for_global_settings.htm" />
 </key>
 <key name="usage, disk" >
   <topic name="Checking Usage Statistics" url="monitoring/checking_usage_statistics.htm" />
@@ -203,6 +222,9 @@
 <key name="users mail" >
   <topic name="Viewing User's Mailbox Content" url="monitoring/viewing_user_s_mailbox_content.htm" />
 </key>
+<key name="validation of email address" >
+  <topic name="Account Email Validation" url="managing_global_settings/account_email_validation.htm" />
+</key>
 <key name="view accounts by domain" >
   <topic name="Viewing Accounts by Domain" url="managing_domains/viewing_accounts_by_domain.htm" />
 </key>
@@ -215,23 +237,14 @@
 <key name="virtual hosts" >
   <topic name="Configuring Virtual Hosts" url="managing_domains/configuring_virtual_hosts.htm" />
 </key>
-<key name="volume management" >
-  <topic name="Volume Management" url="managing_servers/volume_management.htm" />
-</key>
-<key name="volume, blob compression" >
-  <topic name="Volume Management" url="managing_servers/volume_management.htm" />
-</key>
-<key name="wiping mobile devices" >
-  <topic name="Mobile Device Wipe" url="mobile/mobile_device_wipe.htm" />
+<key name="viruse account" >
+  <topic name="Viewing System Accounts" url="managing_global_settings/viewing_system_accounts.htm" />
 </key>
 <key name="Zimbra Web Client Versions" >
   <topic name="Setting the Default ZWC Login Version" url="managing_accounts/setting_the_devault_zwc_login_version.htm" />
 </key>
 <key name="Zimlets, adding to COS" >
   <topic name="Adding Zimlets to COS and Accounts" url="zimlets/adding_zimlets_to_cos_and_accounts.htm" />
-</key>
-<key name="Zimlets, disabling access to" >
-  <topic name="Disable Access to Zimlets" url="zimlets/removing_zimlets.htm" />
 </key>
 <key name="zimlets, flush cache" >
   <topic name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
@@ -245,9 +258,6 @@
 </key>
 <key name="Zimlets, preconfigured for ZCS" >
   <topic name="Managing Zimlets" url="zimlets/about_zimlets.htm" />
-</key>
-<key name="Zimlets, removing from the server" >
-  <topic name="Removing Zimlets from the Zimbra Server" url="zimlets/removing_zimlets_from_the_zimbra_server.htm" />
 </key>
 <key name="Zimlets, setting up in COS and accounts" >
   <topic name="Setting Up Zimlets in ZCS" url="zimlets/setting_up_zimlets_in_zcs.htm" />

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Configuring the MTA Tab for Global Settings</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -82,92 +82,148 @@ else
 
 //-->
 //]]></script>
-<h1>Configuring the MTA Tab for Global Settings</h1>
+
+<h1>Configuring Global Settings MTA </h1>
 <p>The following global MTA settings can be configured.</p>
-<table style="vertical-align: top;" cellspacing="4" width="80%">
-	<col style="width: 37.819%;" />
-	<col style="width: 62.181%;" />
-	<tr style="vertical-align: top;">
-		<td style="border-top: Solid 1px #000000; border-right: Solid 1px #000000; 
-			 border-bottom: Solid 1px #000000; width: 37.819%; padding-right: 10px; 
-			 padding-left: 10px;"><p style="font-weight: bold;">Authentication</p></td>
-		<td style="border-top: Solid 1px #000000; border-bottom: Solid 1px #000000; 
-			 width: 62.181%; padding-right: 10px; padding-left: 10px;"><ul 
-				 type="disc">
-			<li class="p"><p style="margin-left: 0px;">Enables SMTP client 
-			 authentication so users can authenticate. Only authenticated 
-			 users or users from trusted networks are allowed to relay 
-			 mail.</p></li>
-			<li class="p"><p>When checked, forces all SMTP auth to use 
-			 Transaction Level Security (similar to SSL) to avoid passing 
-			 passwords in the clear.</p></li>
-		</ul>
-		<p>&#160;</p></td>
+<ol type="1">
+	<li><p>Go to <span class="attribute">Configure&gt;Global Settings</span>.</p></li>
+	<li><p>Click <span class="attribute">MTA</span><span style="font-weight: bold;"><b> 
+	 </b></span>in the Navigation pane.</p></li>
+	<li><p>Modify the following options</p></li>
+</ol>
+<table width="100%">
+ <tr>
+ <td>
+<table style="padding-left: 6.00pt; padding-top: 6.00pt; padding-right: 6.00pt; 
+		 padding-bottom: 4.00pt; margin-left: 36pt;" cellspacing="0" align="left">
+	<col />
+	<col width="645" />
+	<tr style="height: 32px;" bgcolor="#B2B2B2">
+		<th style="border-top: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;" bgcolor="#B2B2B2"><p class="FM_option">Option</p></th>
+		<th style="border-top: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;" bgcolor="#B2B2B2"><p class="FM_Description">Description</p></th>
 	</tr>
-	<tr style="vertical-align: top;">
-		<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; 
-			 width: 37.819%; padding-right: 10px; padding-left: 10px;"><p 
-			 style="font-weight: bold;">Network</p></td>
-		<td style="border-bottom: Solid 1px #000000; width: 62.181%; padding-right: 10px; 
-			 padding-left: 10px;"><ul type="disc">
-			<li class="p"><p>Web mail MTA Host name and Web mail MTA Port. 
-			 The MTA that the web server connects to for sending mail. 
-			 The default port number is 25.</p></li>
-			<li class="p"><p>External MTA (e.g., the ISP requires that 
-			 all mail originating from your network be relayed through 
-			 their MTA) to which the Zimbra Postfix relays non-local email. 
-			 See <a href="relay_mta_for_external_delivery.htm">Relay MTA 
-			 for external delivery</a>.</p></li>
+	<tr style="height: 57px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: normal;"><span 
+		 class="attribute">Authentication</span></p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><ul type="disc">
+			<li class="p"><p style="margin-left: 0px;"><span class="attribute">Authentication</span> 
+			 should be enabled, to support mobile SMTP authentication users 
+			 so that their email client can talk to the Zimbra MTA. </p></li>
+			<li class="p"><p><span class="attribute">TLS authentication</span> 
+			 only<span style="font-weight: bold;"><b> </b></span>forces all SMTP 
+			 auth to use Transaction Level Security 
+			 (similar to SSL) to avoid passing passwords in the clear.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="height: 59px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: normal;"><span 
+		 class="attribute">Network</span></p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><ul type="disc">
+			<li class="p"><p><span class="attribute">Web mail MTA Host 
+			 name and Web mail MTA Port</span>. The MTA that the web server 
+			 connects to for sending mail. The default port number is 25.</p></li>
+			<li class="p"><p><span class="attribute">Relay MTA for external 
+			 delivery</span>. (e.g., the ISP requires that all mail originating 
+			 from your network be relayed through their MTA) to which the 
+			 Zimbra Postfix relays non-local email. See <a href="relay_mta_for_external_delivery.htm">Relay 
+			 MTA for external delivery</a>.</p></li>
 			<li class="p"><p>If Enable DNS lookups is checked, the Zimbra 
 			 MTA makes an explicit DNS query for the MX record of the recipient 
 			 domain. If this option is disabled, set a relay host in the 
 			 Relay MTA for external delivery.</p></li>
-		</ul>
-		<p>&#160;</p></td>
+		</ul></td>
 	</tr>
-	<tr style="vertical-align: top;">
-		<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; 
-			 width: 37.819%; padding-right: 10px; padding-left: 10px;"><p 
-			 style="font-weight: bold;">Messages</p></td>
-		<td style="border-bottom: Solid 1px #000000; width: 62.181%; padding-right: 10px; 
-			 padding-left: 10px;"><ul type="disc">
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: normal;"><span 
+		 class="attribute">Milter Server</span></p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><ul type="disc">
+			<li>If Enable Milter Server is checked, the milter enforces 
+			 the rules that are set p for who can send email to a distribution 
+			 list. </li>
+		</ul></td>
+	</tr>
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: normal;"><span 
+		 class="attribute">Messages</span></p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><ul type="disc">
 			<li class="p"><p>Set the maximum messages size for a message 
-			 and &#160;attachments that can be received. <span style="font-weight: bold;"><b>Note</b></span>: 
+			 and &#160;its attachments that can be received. <span class="attribute">Note</span>: 
 			 To set the maximum size for files uploaded to Briefcase, go 
-			 to the General Information tab.</p></li>
+			 to the Global Settings&gt;General Information page.</p></li>
 			<li class="p"><p>This is enabled by default. Every email sent 
 			 directly from the server includes the X-Originating-IP in 
 			 the message header. This specifies the original sending IP 
 			 of the email message the server is forwarding.</p></li>
-		</ul>
-		<p>&#160;</p></td>
-	</tr>
-	<tr style="vertical-align: top;">
-		<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; 
-			 width: 37.819%; padding-right: 10px; padding-left: 10px;"><p 
-			 style="font-weight: bold;">Protocol checks</p></td>
-		<td style="border-bottom: Solid 1px #000000; width: 62.181%; padding-right: 10px; 
-			 padding-left: 10px;"><ul type="disc">
-			<li class="p"><p>The Protocol fields are checked to reject 
-			 unsolicited commercial email (UCE), for spam control.</p></li>
-		</ul>
-		<p>&#160;</p></td>
-	</tr>
-	<tr style="vertical-align: top;">
-		<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; 
-			 width: 37.819%; padding-right: 10px; padding-left: 10px;"><p 
-			 style="font-weight: bold;">DNS checks</p></td>
-		<td style="border-bottom: Solid 1px #000000; width: 62.181%; padding-right: 10px; 
-			 padding-left: 10px;"><ul type="disc">
-			<li class="p"><p>The DNS fields are checked to reject mail 
-			 if the client’s IP address is unknown, the hostname 
-			 in the greeting is unknown, or if the sender’s domain is unknown.</p></li>
-			<li class="p"><p>You can enter your RBLs 
-			 in the <span style="font-weight: bold;"><b>List of RBLs</b></span> field.</p></li>
 		</ul></td>
 	</tr>
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: normal;"><span 
+		 class="attribute">Policy Service Checks</span></p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><ul type="disc">
+			<li><p>Customize zimbraMtaRestriction &#160;(restrictions to 
+			 reject some suspect SMTP clients).</p></li>
+		</ul></td>
+	</tr>
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: normal;"><span 
+		 class="attribute">Protocol checks</span></p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><ul type="disc">
+			<li class="p"><p>To reject unsolicited commercial email (UCE), 
+			 for spam control.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: normal;"><span 
+		 class="attribute">DNS checks</span></p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><ul type="disc">
+			<li class="p"><p>To reject mail if the client’s IP address 
+			 is unknown, the hostname in 
+			 the greeting is unknown, or if the sender’s domain is unknown.</p></li>
+			<li class="p"><p>Add other email recipient restrictions to 
+			 the <span class="attribute">List of RBLs</span> 
+			 text box.</p></li>
+		</ul>
+		<p>&#160;</p></td>
+	</tr>
+</table>
+</td></tr>
 </table>
 <p>&#160;</p>
+<ol start="4" type="1">
+	<li>Click <span class="attribute">Save</span>. </li>
+</ol>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

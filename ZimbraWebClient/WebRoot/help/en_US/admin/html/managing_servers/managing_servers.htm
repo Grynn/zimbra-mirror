@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Managing Servers</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
@@ -82,24 +82,24 @@ else
 
 //-->
 //]]></script>
+
 <h1>Managing Servers</h1>
-<p>A server is a machine that has one or more of the Zimbra service installed. 
- During the installation, the Zimbra server is automatically registered 
- on the LDAP server. You can edit a server's records but you cannot add 
- or delete servers.</p>
+<p>A server is a machine that has one or more of the Zimbra service packages 
+ installed. During the installation, the Zimbra server is automatically 
+ registered on the LDAP server. You can edit a server's records but you 
+ cannot add or delete servers.</p>
 <ul>
 	<li class="P-note"><p class="note">To add server records, use the CLI 
 	 <span class="code">zmprov</span> command. 
 	 &#160;See the <span style="font-style: italic;"><i>Administration Guide</i></span> 
 	 for details.</p></li>
 </ul>
-<p>The following information is available from the Server tabs.</p>
-<h2>General tab</h2>
-<p>The general tab shows the following:</p>
+<p>The following information is available from the Server pages.</p>
+<h2>General Information page</h2>
+<p>The general page shows the following:</p>
 <ul class="whs1" type="disc">
-	<li class="p"><p><b style="font-weight: bold;"><span class="fieldnames" 
-														 style="font-weight: normal;">Display 
-	 name</span> for the server</b></p></li>
+	<li class="p"><p><b><span class="fieldnames" style="font-weight: normal;">Display 
+	 name</span> <span style="font-weight: normal;">for the server</span></b></p></li>
 	<li class="p"><p><span class="fieldnames" style="font-weight: normal;">Field 
 	 for</span> a one-line description of the server</p></li>
 	<li class="p"><p style="font-weight: normal;"><b><span class="fieldnames" 
@@ -116,21 +116,21 @@ else
 	<li class="p-whs2"><p class="whs2">Sleep time between subsequent mailbox 
 	 purges. The server manages the message purge schedule. You can configure 
 	 the duration of time that the server should &quot;rest&quot; between 
-	 purging messages. By default message purge is scheduled to run every 
-	 1 minute.</p></li>
+	 purging messages either as a server setting or as a global setting. 
+	 By default message purge is scheduled to run every 1 minute.</p></li>
 	<li class="p-whs2"><p class="whs2">The option to enable that the server 
-	 is a reverse proxy lookup target. If this is selected, the <span style="font-weight: bold;"><b>Enable 
-	 clear text login</b></span> is automatically checked in the server IMAP 
+	 is a reverse proxy lookup target. If this is selected, the <span class="attribute">Enable 
+	 clear text login</span> is automatically checked in the server IMAP 
 	 tab.</p></li>
-	<li class="p"><p><b style="font-weight: bold;">Notes.</b> Additional 
-	 free-form text regarding this server</p></li>
+	<li class="p"><p><span>In the Notes section, you can add </span>free-form 
+	 text &#160;information regarding this server.</p></li>
 </ul>
-<h3>Services tab</h3>
+<h3>Services page</h3>
 <p>The Services tab shows the Zimbra services. A checkmark identifies the 
  services that are enabled for the selected server. Possible services include 
  LDAP, Mailbox, IMAP and POP proxy, MTA, SNMP, Logger, Spell Checker, Anti-Virus, 
- and Anti-Spam.</p>
-<h3>MTA tab</h3>
+ Anti-Spam, and VMware HA Heartbeat.</p>
+<h3>MTA page</h3>
 <p>The <a href="configuring_the_mta_tab_for_servers.htm">MTA tab</a> shows</p>
 <ul class="whs1" type="disc">
 	<li class="p"><p>Whether authentication is enabled, including TLS authentication</p></li>
@@ -143,75 +143,64 @@ else
 	<li class="p"><p>MTA Trusted Networks</p></li>
 	<li class="p"><p>Options for DNS lookups 
 	 can be enabled</p></li>
+	<li class="p"><p>Milter Server can be enabled and the milter server 
+	 bind addresses and port can be configured.</p></li>
 </ul>
-<h3>IMAP tab</h3>
+<h3>IMAP page</h3>
 <p><span style="font-weight: bold; color: #000080;"><font color="navy" ><b>Important</b></font></span>. &#160;When 
  you make changes to IMAP or POP configurations, the server must be restarted 
- in order for the changes to take effect. </p>
+ in order for the changes to take effect.</p>
 <p>The IMAP tab shows whether the following are enabled. If the setting 
  is different from the global setting, the field is highlighted with a 
  Reset to Global link.</p>
 <ul type="disc">
-	<li class="p"><p>IMAP services</p></li>
-	<li class="p"><p>Number of threads</p></li>
-	<li class="p"><p>SSL for IMAP services</p></li>
-	<li class="p"><p>Enable clear text login</p></li>
-	<li class="p"><p>Network IMAP port number</p></li>
-	<li class="p"><p>IMAP SSL port number</p></li>
+	<li class="p"><p>Services enabled, including IMAP services, SSL for IMAP services, clear text login, and the number 
+	 of thread allowed.</p></li>
+	<li class="p"><p>Network IMAP port numbers.</p></li>
 </ul>
-<h3>POP tab</h3>
-<p>The POP tab shows:</p>
+<h3>POP page</h3>
+<p>The POP page shows:</p>
 <ul type="disc">
-	<li class="p"><p>POP3 service, address, and advertised name</p></li>
-	<li class="p"><p>Number of threads. The default is 100</p></li>
-	<li class="p"><p>SSL for POP3 services</p></li>
-	<li class="p"><p>Option for clear text login</p></li>
-	<li class="p"><p>Network options for advertised name and address</p></li>
-	<li class="p"><p>POP3 port numbers</p></li>
+	<li class="p"><p>Services enabled, including POP services, SSL for POP services, clear text login, and the number 
+	 of thread allowed.</p></li>
+	<li class="p"><p>Network POP options for advertised name and address 
+	 and POP port numbers.</p></li>
 </ul>
-<h3>Volumes tab</h3>
-<p>Multiple <a href="volume_management.htm">volumes for message store and 
- index store</a> can be defined for the Zimbra mailbox server</p>
+<h3>Volumes page</h3>
+<p>Multiple volumes for message store and 
+ index store can be defined for the Zimbra mailbox server</p>
 <ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>Volume Name</b></span>. 
-	 The name of the volume. &#160;The initial volumes are named index1 
-	 and message1.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Volume Root Path</b></span>. 
-	 The location in the file system where volume data is stored.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Volume Type</b></span>. 
-	 The volume type is either Index or Message.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Compress Blobs</b></span>. 
-	 When this box is checked, message blobs above the compression threshold 
+	<li class="p"><p><span class="attribute">Volume Name</span>. The name 
+	 of the volume. &#160;The initial volumes are named index1 and message1.</p></li>
+	<li class="p"><p><span class="attribute">Volume Root Path</span>. The 
+	 location in the file system where volume data is stored.</p></li>
+	<li class="p"><p><span class="attribute">Volume Type.</span> The volume 
+	 type is either Index or Message.</p></li>
+	<li class="p"><p><span class="attribute">Compress Blobs.</span> When 
+	 this box is checked, message blobs above the compression threshold 
 	 are compressed.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Compression Threshold</b></span>. 
+	<li class="p"><p><span class="attribute">Compression Threshold.</span> 
 	 Messages larger than the threshold are compressed. The default threshold 
 	 is 4096 bytes.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Status</b></span>. This 
-	 displays &quot;current&quot; when the volume is current.</p></li>
-	<li class="p"><p style="font-weight: bold;">Assigned Current Volumes<span 
-	 style="font-weight: normal;">. The current primary message volume, 
-	 secondary message volume, and index volume are listed.</span></p></li>
+	<li class="p"><p><span class="attribute">Status</span>. This displays 
+	 &quot;current&quot; when the volume is current.</p></li>
+	<li class="p"><p style="font-weight: bold;"><span class="attribute"><b>Assigned 
+	 Current Volumes</b></span><span style="font-weight: normal;">. The current 
+	 primary message volume, secondary message volume, and index volume 
+	 are listed.</span></p></li>
 	
 </ul>
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+<h3>IP Address Bindings Page</h3>
 <p>&#160;</p>
+<h3>Proxy page</h3>
 <p>
-<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','Stopping Mailbox Service on a Server','stopping_mailbox_service_on_a_server.htm','Volume Management','volume_management.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:normal;font-style:normal;text-decoration:none"><nobr>  Related Topics </nobr></span></a>
+
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','Stopping Mailbox Service on a Server','stopping_mailbox_service_on_a_server.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:normal;font-style:normal;text-decoration:none"><nobr>  Related Topics </nobr></span></a>
+
 
  </p>
 <p>&#160;</p>

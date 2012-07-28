@@ -81,22 +81,12 @@ else
 
 //-->
 //]]></script>
-<p>&#160;</p>
 
 <h1>Setting Email Validation Rules</h1>
 <p>You can define email validation rules to validate email addresses for 
- messages sent from the advanced Zimbra Web Client. <br />
-&#160;<br />
-1. Go to the&#160;&#160;administration console <span style="font-weight: bold;"><b>Global 
- Settings</b></span> or <span style="font-weight: bold;"><b>Domains Advanced</b></span> 
- tab <br />
-<br />
-2. In the <span style="font-weight: bold;"><b>Regular expression for invalid 
- email address</b></span> field enter a regular expression (regex) to filter 
- out email addresses that should be considered invalid. You can add multiple 
- regular expressions. </p>
-<p>If an address is invalid based on the regular expression rules, users 
- are notified that the address is invalid.</p>
+ messages sent from the advanced Zimbra Web Client. If an address is invalid 
+ based on the regular expression rules, users are notified that the address 
+ is invalid.</p>
 <p>Examples of regular expressions:</p>
 <ul type="disc">
 	<li><p><span style="font-weight: bold;"><b>test@\\d+.com</b></span>. &#160;This 
@@ -105,18 +95,26 @@ else
 	 not valid addresses.</p></li>
 	<li><p><span style="font-weight: bold;"><b>mail@donotreply.com</b></span> 
 	 (any specific address). This type of regular expression identifies 
-	 a specific email address that is invalid. <br />
-	</p></li>
+	 a specific email address that is invalid. </p></li>
 </ul>
 <ul>
 	<li class="P-note"><p class="note">Email validation does not work when 
 	 messages are sent from the standard Zimbra Web Client.</p></li>
 </ul>
 <p>&#160;</p>
-<hr style="color: #000000; background-color: #000000;" size="1" width="50%" 
-	 align="left" />
-<p>Copyright © 2012 
- VMware, Inc. All rights reserved.</p>
+<p style="font-weight: bold;">Procedure</p>
+<ol type="1">
+	<li><p>&#160;Go to the&#160;<span style="font-weight: bold;"><b>Configure&gt;Global 
+	 Settings&gt;Advanced page</b></span> or Configure&gt;<span style="font-weight: bold;"><b>Domains&gt;Advanced</b></span> 
+	 page.</p></li>
+	<li><p>In the <span style="font-weight: bold;"><b>Account Email Validation 
+	 Settings</b></span> section, <span style="font-weight: bold;"><b>Regular 
+	 expression for invalid email address</b></span> field enter a regular 
+	 expression (regex) to filter out email addresses that should be considered 
+	 invalid. You can add multiple regular expressions.</p></li>
+	<li><p>Click <span style="font-weight: bold;"><b>Save</b></span>. </p></li>
+</ol>
+<p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

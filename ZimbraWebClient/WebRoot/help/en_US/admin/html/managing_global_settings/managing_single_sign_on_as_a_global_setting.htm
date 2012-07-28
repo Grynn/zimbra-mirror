@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
+<title>Managing Single Sign On as a Global Setting</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+ <script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Global Settings\nManaging Single Sign On as a Global Setting");
+addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+
+<h1>Managing Single Sign On as a Global Setting</h1>
+<p>When ZCS is configured for single sign-on authentication to the Zimbra 
+ Web Client, the server is configured to redirect users to a URL for single 
+ sign in. You can configure the web client sign in and sign out URL and 
+ the UAs allowed for the sign in URL.</p>
+<p style="font-weight: bold;">Procedure</p>
+<ol type="1">
+	<li><p>Go to<span style="font-weight: bold;"><b> </b></span><span class="attribute">Configure 
+	 &gt; Global Settings, Authentication</span> page.</p></li>
+</ol>
+<ol start="2" type="1">
+	<li><p>In the <span class="attribute">Web client login redirect URL</span> 
+	 text box, type the URL to redirect users to when the auth token is 
+	 expired. Enter as https//example.com.</p></li>
+	<li><p>In the <span class="attribute">Web client logout redirect URL</span> 
+	 text box, type the URL to redirect users to when they click Sign out. 
+	 Enter as https//example.com.</p></li>
+	<li><p>In the <span class="attribute">Allowed user agent when login</span> 
+	 text box, type the supported platforms and browsers that are allowed. 
+	 If you do not set this, all user agents (UA) are allowed. Click <span 
+	 class="attribute">Add</span> to add more than one &#160;type.</p></li>
+	<li><p>In the <span class="attribute">Allowed user agent when logout</span> 
+	 text box, type the sign out URL and UAs allowed to redirect users 
+	 to when they sign out. Click <span class="attribute">Add</span> to 
+	 add more than one type.</p></li>
+	<li><p>In <span class="attribute">Allowed IP when login</span><span 
+	 style="font-weight: bold;"><b> </b></span>text box, type the IP addresses 
+	 that are allowed as the sign in URL. Click <span style="font-weight: bold;"><b>Add</b></span> 
+	 to add more than one &#160;type.</p></li>
+	<li><p>In <span class="attribute">Allowed IP when logout</span><span 
+	 style="font-weight: bold;"><b> </b></span>text box, type the IP addresses 
+	 that are allowed as the sign out URL. Click <span style="font-weight: bold;"><b>Add</b></span> 
+	 to add more than one &#160;type. </p></li>
+	<li><p>Click <span class="attribute">Save</span>. </p></li>
+</ol>
+<p>&#160;</p>
+<p>Example of how to enter text to describe the user agent if you wanted 
+ to limit access to only Firefox, Internet Explorer, Chrome, and Safari 
+ on computers running Windows, and Safari on Apple Mac Computers. Enter 
+ each in a separate text box.</p>
+<p>.*Windows.*Firefox/3</p>
+<p>.*MSIE.*Windows.*</p>
+<p>.*Windows.*Chrome.*</p>
+<p>.*Windows.*Safari.*</p>
+<p>.*Macintosh.*Safari.*</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

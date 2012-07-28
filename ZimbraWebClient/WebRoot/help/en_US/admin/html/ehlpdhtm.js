@@ -1117,21 +1117,20 @@ _BSPSGetBrowserInfo();
 //Get client size info
 function _BSPSGetClientSize()
 {
-	if (gbBsNS4||gbBsKonqueror3||gbBsSafari)
+	if( typeof( window.innerWidth ) == 'number' )
 	{
 		gBsClientWidth	= innerWidth;
 		gBsClientHeight = innerHeight;
 	}
-	else if (gbBsIE4 || gbBsOpera7)
+	else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) )
 	{
-		gBsClientWidth	= document.body.clientWidth;
+		gBsClientWidth = document.documentElement.clientWidth;
+		gBsClientHeight = document.documentElement.clientHeight;
+	} 
+	else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) 
+	{
+		gBsClientWidth = document.body.clientWidth;
 		gBsClientHeight = document.body.clientHeight;
-
-		if(document.documentElement.clientWidth > document.body.clientWidth) 
-			gBsClientWidth	= document.documentElement.clientWidth;
-
-		if(document.documentElement.clientHeight > document.body.clientHeight) 
-			gBsClientHeight = document.documentElement.clientHeight;
 	}
 }
 
@@ -1537,6 +1536,12 @@ function BSSCPopup_ResizeAfterLoad(nIndex, nToken, cuswidth, cusheight)
 
 	getPopupDivStyle(nIndex).visibility = gBsStyVisHide;
 	getPopupIFrameStyle(nIndex).visibility = gBsStyVisHide;
+	if(gbBsIE)
+	{
+	    //fix for Popup Blank issue
+	    getPopupIFrameStyle(nIndex).visibility = gBsStyVisShow;
+		getPopupDivStyle(nIndex).visibility = gBsStyVisShow;
+	}
 
 	// Determine the width and height for the window
 	_BSPSGetClientSize();
@@ -1557,7 +1562,11 @@ function BSSCPopup_ResizeAfterLoad(nIndex, nToken, cuswidth, cusheight)
 	// for small popup size, we should allow any size.
 	// The popup size should be ok if bigger than 0
 	if (nWidth < 0 || nHeight < 0) return; 	// there must be something terribly wrong.		
-
+	
+	//make the width and height same for all the browsers now
+	nWidth = nWidth + 22;
+	nHeight = nHeight + 30;
+	
 	getPopupDivStyle(nIndex).width = nWidth+ "px" ;
 	getPopupDivStyle(nIndex).height = nHeight+ "px" ;
 	
@@ -1571,16 +1580,6 @@ function BSSCPopup_ResizeAfterLoad(nIndex, nToken, cuswidth, cusheight)
 	getPopupIFrameStyle(nIndex).width = nWidth + "px" ;
 	getPopupIFrameStyle(nIndex).height = nHeight + "px" ;
 		
-	if (gbBsIE55 )
-	{
-	    getPopupTopicStyle(nIndex).width = nWidth + 10+ "px" ;
-		getPopupTopicStyle(nIndex).height = nHeight + 10+ "px" ;
-		getPopupIFrameStyle(nIndex).width = nWidth + 10+ "px" ;
-	    getPopupIFrameStyle(nIndex).height = nHeight + 10+ "px" ;
-		getPopupShadowStyle(nIndex).width = nWidth + 10+ "px" ;
-		getPopupShadowStyle(nIndex).height = nHeight + 10+ "px" ;
-	}	
-	
 	if (gbBsIE55 || gbBsNS6 || gbSafari3||gbAIR)
 	{
 		getPopupIFrameStyle(nIndex).top = 0;
@@ -1654,8 +1653,11 @@ function MoveDivAndShow(nIndex, nToken, cuswidth, cusheight)
 		nLeft = (getScrollLeft() + gBsClientWidth) - nWidth - 8;
 	}
 
-	if (nTop < getScrollTop()) nTop  = getScrollTop() + 1;
-	if (nLeft< getScrollLeft())  nLeft = getScrollLeft() + 1;
+	if(!gbBsIE55)
+	{
+		if (nTop < getScrollTop()) nTop  = getScrollTop() + nTop;
+		if (nLeft< getScrollLeft())  nLeft = getScrollLeft() + nLeft;
+	}
     
    	if (isNaN(nLeft))
 		getPopupDivStyle(nIndex).left = nClickX + "px";	

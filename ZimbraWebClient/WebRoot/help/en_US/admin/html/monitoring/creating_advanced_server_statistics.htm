@@ -4,8 +4,8 @@
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Creating Advanced Server Statistics</title>
 <link rel="stylesheet" href="../default.css" type="text/css" />
 <style type="text/css">
@@ -110,12 +110,13 @@ else
 
 //-->
 //]]></script>
-<h1>Creating Advanced Server Statistics</h1>
+
+<h1>Creating Advanced Server Statistics </h1>
 <p>In Monitoring&gt;Sever Statistics, the Advanced Statistics tab includes 
  advanced graphing options that lets you generate various charts based 
  on statistical information for the CPU, IO, mailboxd, MTA queue, MySQL and other components. Logs are processed into 
  a format that is readily displayed in the admin console, indicating real-time 
- service status, MTA/spam/virus traffic and performance statistics. </p>
+ service status, MTA/spam/virus traffic and performance statistics.</p>
 <p>You can specify charts by server for the following groups. Each group 
  has a list of specific counters. You can select what information you want 
  graphed.</p>
@@ -129,9 +130,8 @@ else
 	 usage on the system.</p></li>
 	<li><p><b style="font-weight: bold;">mtaqueue.csv</b>: Zimbra server and JVM 
 	 statistics. &#160;</p></li>
-	<li><p><b style="font-weight: bold;">io-x.csv<span style="font-weight: normal;"> 
-	 and </span>io.csv</b>: Store data from the iostat(1) command (io-x.csv 
-	 with iostat -x).</p></li>
+	<li><p><b style="font-weight: bold;">io-x.csv <span style="font-weight: normal;">and</span> 
+	 io.csv</b>: Store data from the iostat(1) command (io-x.csv with iostat -x).</p></li>
 	<li><p><b style="font-weight: bold;">vm.csv</b>: Linux VM statistics 
 	 (from the <i>vmstat</i> command). The output of vmstat is recorded 
 	 for reviewable statistics.</p></li>
@@ -140,8 +140,11 @@ else
  .csv files zmmtzstats.csv and zmstatuslog.csv are used to generate the 
  Server Status page and MTA stats tab.</span></b></p>
 <h3>How to Add a Chart</h3>
-<p class="note"><img src="../blue_right.gif" alt="blue_right.gif" style="border: none;" width="24" height="19" border="0" /><span style="color: #000000;"><font color="black" >To 
- generate images, Adobe Flash Player must be installed.</font></span></p>
+<ul>
+	<li class="p-note"><p class="note"><img src="../blue_right.gif" alt="blue_right.gif" style="border: none;" width="24" height="19" border="0" /><span 
+	 style="color: #000000;"><font color="black" >To generate images, Adobe Flash Player must 
+	 be installed.</font></span></p></li>
+</ul>
 <p>When you open the Advanced Statistics tab, the Add Chart fields are 
  displayed. You select a combination of server, group and counters to create 
  the chart and you set a start and end time for information you want charted.</p>

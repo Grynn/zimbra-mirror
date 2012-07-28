@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
+<title>How to Configure External LDAP Settings</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+ <script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Managing Domains\nConfigure External LDAP Settings");
+addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+
+<h1>How to Configure External LDAP Settings</h1>
+<p>You configure the following External LDAP Settings</p>
+<ul type="disc">
+	<li class="p"><p><span class="attribute">LDAP URL</span><span style="font-weight: bold;"><b> 
+	 </b></span>and whether to use <span class="attribute">SSL</span>. Two 
+	 server types can be configured, LDAP or Active Directory. For LDAP, 
+	 the port is 389. For Active Directory, the port is 3268. If you use 
+	 SSL, the port is 636. You can configure multiple external LDAP hosts, 
+	 so users can access GAL from the next available configured server 
+	 when a GAL server is down.</p></li>
+</ul>
+<ul type="disc">
+	<li class="p"><p><span class="attribute">LDAP filter</span>. The filter 
+	 defines the search rules used for directory searches. The parameters 
+	 in a filter you construct determine the thoroughness of a search. 
+	 &#160;A search filter must be specified.</p></li>
+</ul>
+<p style="margin-left: 40px;">The following is an example of the filter 
+ string. Syntax &quot;%s&quot; represents the string the user types.</p>
+<p style="margin-left: 40px;"><span class="code">(&amp;(|( cn=*%s*)( sn=*%s*)( gn=*%s*)( mail=*%s*)( 
+ zimbraMailDeliveryAddress=*%s*)<br />
+( zimbraMailAlias=*%s*)( zimbraMailAddress=*%s*))<br />
+(|( objectclass=zimbraAccount)( objectclass=zimbraDistributionList)))</span> 
+ &#160;&#160;</p>
+<p style="margin-left: 40px;">This filter example, combines the basic search 
+ filters using the Boolean operation <span style="font-weight: bold;"><b>OR</b></span> 
+ to first search the various attributes ( cn, 
+ gn, etc.), and then verifies that the entry matched 
+ is either a Zimbra account or distribution list.</p>
+<table width="100%">
+ <tr>
+ <td>
+<table style="vertical-align: top; margin-left: 60px; border-bottom-style: Solid; 
+		 border-top-style: Solid; border-top-width: 3px; border-bottom-width: 3px;" cellspacing="0" width="82.842%" align="left">
+	<col style="width: 36.214%;" />
+	<col style="width: 63.786%;" />
+	<tr style="vertical-align: top;">
+		<td style="width: 36.214%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p 
+			 style="font-weight: bold;"><span class="attribute"><b>Filter</b></span></p></td>
+		<td style="width: 63.786%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p 
+			 style="font-weight: bold;"><span class="attribute"><b>Matches</b></span></p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 36.214%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>cn=*%s*</p></td>
+		<td style="width: 63.786%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>Entries 
+		 with a common name approximately equal to user's input</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 36.214%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>sn=*%s*</p></td>
+		<td style="width: 63.786%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>Entries 
+		 with a surname approximately equal to user's input</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 36.214%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>gn=*%s*</p></td>
+		<td style="width: 63.786%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>Entries 
+		 with a given name approximately equal to user's input</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 36.214%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>mail=*%s*</p></td>
+		<td style="width: 63.786%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>Entries 
+		 with an email address.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 36.214%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>zimbraMailDeliveryAddress=*%s*</p></td>
+		<td style="width: 63.786%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>Entries 
+		 with a Zimbra email address</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 36.214%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>zimbraMailAlias=*%s*</p></td>
+		<td style="width: 63.786%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>Entry 
+		 is a Zimbra alias</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 36.214%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>zimbraMailAddress=*%s*</p></td>
+		<td style="width: 63.786%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>Entries 
+		 with a Zimbra distribution list address</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 36.214%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>objectclass=zimbraAccount</p></td>
+		<td style="width: 63.786%; padding-right: 10px; padding-left: 10px; 
+			 border-bottom-style: Solid; border-bottom-width: 1px;"><p>The 
+		 matches found exist as a Zimbra account.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 36.214%; padding-right: 10px; padding-left: 10px;"><p>objectclass=zimbraDistributionList</p></td>
+		<td style="width: 63.786%; padding-right: 10px; padding-left: 10px;"><p>The 
+		 matches found exist as a Zimbra distribution list.</p></td>
+	</tr>
+</table>
+</td></tr>
+</table>
+<p style="margin-left: 40px;">&#160;</p>
+<ul type="disc">
+	<li class="p"><p><span class="attribute">Autocomplete filter</span><span 
+	 style="font-weight: bold;"><b>.</b></span> To enable the ability to let users 
+	 use the <a href="autocomplete_on_gal.htm">Autocomplete from GAL</a> 
+	 feature, the autocomplete filter 
+	 must be configured. For LDAP, the default GAL filter setting is<span 
+	 class="attribute"> (|( cn=%s*)(</span><span style="font-weight: bold;"><b> </b></span><span class="attribute">sn=%s*)( gn=%s*)( mail=%s*))</span>. 
+	 For AD, <span style="font-weight: bold;"><b>adAutoComplete</b></span> 
+	 is the default filter.</p></li>
+</ul>
+<ul type="disc">
+	<li class="p"><p><span class="attribute">LDAP search base</span>. To 
+	 search within a specific part of your directory, enter a search base. 
+	 For example, &#160;<span style="font-size: 10pt;"><font size="2" style="font-size:10pt;">(</font></span><span class="code"> dc=server, dc=com</span><span 
+	 class="code">)</span>.</p></li>
+	<li class="p"><p><span class="attribute">Use DN Password to bind to 
+	 external server</span>. If the filter you entered cannot be run using 
+	 an anonymous bind, then enter the DN/password of a service account 
+	 on the external LDAP that has been granted access to the attributes 
+	 required to do the search.</p></li>
+</ul>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Purging Mail Messages</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -82,34 +82,90 @@ else
 
 //-->
 //]]></script>
+
 <h1>Purging Mail Messages</h1>
-<p>You can configure how many days messages can remain in users' Inbox, 
- Sent folder, personal folders, Trash, or Junk folders before they are 
- automatically deleted. Mail aging is configured as COS attributes and 
- can be overridden for individual account attributes. </p>
-<p>The date is calculated from the day the message is received for incoming 
- messages and the day the message was composed for sent messages.</p>
-<p>The attributes are set from the Advanced Features tab for either COS 
- or Accounts. You can set the following:</p>
-<ul type="disc">
-	<li class="p"><p><span class="attribute">Email Message Lifetime</span>. 
-	 The number of days that a mail message can reside in any folder, except 
-	 Trash and Junk folders, before being automatically purged. The minimum 
-	 message retention is 31 days. The default is to not delete mail.</p></li>
-	<li class="p"><p><span class="attribute">Trash Message Lifetime</span>. 
-	 The number of days that a mail message remains in the Trash folder 
-	 before being automatically purged. The default is to purge mail from 
-	 the Trash folder older than 30 days.</p></li>
-	<li class="p"><p><span class="attribute">Spam Message Lifetime</span>. 
-	 The number of days that a mail message remains in the Junk folder 
-	 before being automatically purged. The default is to purge spam older 
-	 than 30 days.</p></li>
-</ul>
-<p>The server manages the message purge schedule. The message purge schedule 
- is set in the Global Settings, General Information tab. The <span style="font-weight: bold;"><b>Sleep 
- time between subsequent mailbox purges</b></span>. default setting is to run 
- every 1 minute. If the message purge schedule is set to 0, messages are 
- not purged even if the mail, trash, and spam message lifetime is set.</p>
+<p>The email retention policy for email, trashed, and spam messages is 
+ set by COS or for individual accounts. The date is calculated from the 
+ day the message is received for incoming messages and the day the message 
+ was composed for sent messages. The server manages the message purge schedule.</p>
+<p>The duration of time that the server should &quot;rest&quot; between 
+ purging messages from mailboxes is set in the Global Settings&gt;General 
+ Information page. By default, message purge is scheduled to run every 
+ 1 minute. </p>
+<p>The attributes are set from the Cos for individual accounts.</p>
+<p style="font-weight: bold;">Procedure</p>
+<ol type="1">
+	<li><p>Go to a COS or an account's <span class="attribute">Advanced</span> 
+	 page.</p></li>
+	<li><p>In the <span class="attribute">Email Retention Policy</span> 
+	 section, set the following lifetimes</p></li>
+</ol>
+<table width="100%">
+ <tr>
+ <td>
+<table style="padding-left: 6.00pt; padding-top: 6.00pt; padding-right: 6.00pt; 
+		 padding-bottom: 4.00pt; margin-left: 36pt;" cellspacing="0" width="94.831%" align="left">
+	<col style="width: 28.954%;" />
+	<col style="width: 71.046%;" />
+	<tr style="height: 32px;" bgcolor="#B2B2B2">
+		<th style="border-top: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;" bgcolor="#B2B2B2"><p class="FM_option" 
+															 style="margin-left: 12px;">Option</p></th>
+		<th style="border-top: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;" bgcolor="#B2B2B2"><p class="FM_Description">Description</p></th>
+	</tr>
+	<tr style="height: 57px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p><span class="attribute">Email 
+		 Message Lifetime</span></p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p>Number of days a message can remain 
+		 in a folder before it is purged. This includes data in RSS folders. 
+		 The default is 0; email messages are not deleted. The minimum 
+		 configuration for email message lifetime is 30 days.</p></td>
+	</tr>
+	<tr style="height: 59px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p><span class="attribute">Trash 
+		 Message Lifetime</span></p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p>Number of days a message remains 
+		 in the Trash folder before is purged. The default is 30 days.</p></td>
+	</tr>
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p><span class="attribute">Spam Message 
+		 Lifetime</span></p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p>&#160;Number of day a message 
+		 can remain in the Junk folder before it is purged. The default 
+		 is 30 days.</p></td>
+	</tr>
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: bold;"><span 
+		 class="attribute"><b>Retention lifetime in dumpster before purging</b></span></p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p>Number of days messages in the 
+		 dumpster can viewed by the user. &#160;The default is 30 days.</p></td>
+	</tr>
+</table>
+</td></tr>
+</table>
+<p>&#160;</p>
+<ol start="3" type="1">
+	<li><p>Click <span class="attribute">Save</span>. </p></li>
+</ol>
 <p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--

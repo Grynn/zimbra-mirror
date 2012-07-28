@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Managing Global Settings</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
@@ -82,54 +82,58 @@ else
 
 //-->
 //]]></script>
+
 <h1>Managing Global Settings</h1>
 <p>Global Settings define the default global values for servers, accounts, 
  COS, and domains. These default values and parameters apply if the values 
  and parameters have not been explicitly defined in settings configured 
  elsewhere.</p>
 <p>The defaults are configured during installation. You can change the 
- settings at any time from Global Settings. &#160;Global settings include 
- tabs to configure the following:</p>
+ settings at any time from Global Settings. &#160;The Global Settings pages 
+ to configure include:</p>
 <ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>General</b></span> to 
-	 set the global ceiling for the number of results from a GAL search, 
+	<li class="p"><p><span class="attribute">General information</span> 
+	 to set the global ceiling for the number of results from a GAL search, 
 	 to define the default domain, and to configure the number of threads 
 	 that can be used to get the content from remote data sources. See 
 	 <a href="general_information_for_global_settings.htm">General Information 
 	 for Global Settings</a>.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Attachments</b></span> 
-	 to enable rules to reject messages that include attachments of a specific 
-	 extension, to disable attachments from being read See 
-	 <a href="blocking_attachments_to_email.htm">Blocking Attachments to 
-	 Email</a>.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>MTA</b></span> to enable 
-	 authentication, set maximum message size, enable or disable protocol 
-	 and DNS checks, and add X-Originating-IP 
+	<li class="p"><p><span class="attribute">Attachments</span> to enable 
+	 rules to reject messages that include attachments of a specific extension, 
+	 to disable attachments from being read See 
+	 Blocking Attachments to Email.</p></li>
+	<li class="p"><p><span class="attribute">MTA</span> to enable authentication, 
+	 set maximum message size, enable or disable protocol and DNS checks, and add X-Originating-IP 
 	 to message headers. See <a href="configuring_the_mta_tab_for_global_settings.htm">Configuring 
 	 the MTA Tab for Global Settings</a>.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>POP</b></span> to enable 
-	 POPS3 service. See <a href="configuring_pop.htm">Configuring POP</a>.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>IMAP</b></span> to enable 
-	 IMAP service. See <a href="configuring_imap.htm">Configuring IMAP</a>.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>AS/AV</b></span> to set 
-	 anti-spam and anti-virus rules. See <a href="anti-spam_protection.htm">Anti-Spam 
+	<li class="p"><p><span class="attribute">POP</span> to enable POPS3 
+	 service. See <a href="configuring_pop.htm">Configuring POP</a>.</p></li>
+	<li class="p"><p><span class="attribute">IMAP</span> to enable IMAP 
+	 service. See <a href="configuring_imap.htm">Configuring IMAP</a>.</p></li>
+	<li class="p"><p><span class="attribute">AS/AV</span> to set anti-spam 
+	 and anti-virus rules. See <a href="anti-spam_protection.htm">Anti-Spam 
 	 Protection</a> and <a href="anti-virus_configuration_options.htm">Anti-Virus 
 	 Protection</a>.</p></li>
-	<li class="p"><p style="font-weight: bold;">Free/Busy Interop<span 
-	 style="font-weight: normal;"> to set up free/busy scheduling across 
-	 a mix of Zimbra 
-	 servers and third party email server. See</span> <span style="font-weight: normal;"><a href="making_free_busy_view__available_.htm" style="font-weight: normal;">Making 
-	 Free/Busy View Available</a>.</span></p></li>
-	<li class="p"><p style="font-weight: bold;">Themes &#160;<span style="font-weight: normal;">to 
-	 customize the color scheme of existing themes</span><span style="font-weight: normal;">. 
-	 See <a href="../ui_themes/how_to_customize_themes_and_logos.htm" style="font-weight: normal;">How 
-	 to customize themes and logos</a>.</span></p></li>
-	<li class="p"><p style="font-weight: bold;">Briefcase<span style="font-weight: normal;">. 
-	 To configure the company name that is displayed in the prompt on the 
-	 <a href="../managing_domains/authentication_required_dialog.htm" style="font-weight: normal;">Authentication 
-	 Required dialog</a> used to log into Briefcase folders shared with 
-	 external guests. The default is Zimbra.</span> </p></li>
-	
+	<li class="p"><p><span class="attribute">Free/Busy Interop</span> to 
+	 set up free/busy scheduling across a mix of Zimbra 
+	 servers and third party email server. See<span style="font-weight: bold;"><b> 
+	 </b></span><a href="making_free_busy_view__available_.htm" style="font-weight: normal;">Making 
+	 Free/Busy View Available</a>.</p></li>
+	<li class="p"><p><span class="attribute">Themes</span><span style="font-weight: bold;"><b> 
+	 </b></span>to customize the color scheme of existing themes. See <a href="../ui_themes/customizing_themes_and_logos.htm" style="font-weight: normal;">How 
+	 to customize themes and logos</a>.</p></li>
+	<li class="p"><p><span class="attribute">Advanced</span><span style="font-weight: bold;"><b> 
+	 </b></span>to configure the company name that is displayed in the prompt 
+	 on the <a href="../managing_domains/authentication_required_dialog.htm" style="font-weight: normal;">Authentication Required dialog</a> 
+	 used to log into Briefcase folders shared with external guests, and 
+	 to add regular expression rules for<span style="font-weight: bold;"><b> 
+	 <a href="account_email_validation.htm" style="font-weight: bold;">Account 
+	 Email Validation</a></b></span>. </p></li>
+	<li class="p" style="font-weight: bold;"><p style="font-weight: normal;"><span 
+	 class="attribute">Retention Policy</span> to set up a retention and 
+	 deletion time threshold for items in user folders. Retention and deletion 
+	 policies can be configured as a global setting or you can configure 
+	 COS-level policies instead of inheriting from the global settings.</p></li>
 	
 	
 	
@@ -137,10 +141,12 @@ else
 </ul>
 <p>&#160;</p>
 <p>&#160;</p>
-<p>
+<p><span><span><span><span><span><span><span style="font-weight: bold;"><b>
+
 <a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Relay MTA for external delivery','relay_mta_for_external_delivery.htm','Using the Global Address List (GAL)','../managing_domains/using_the_global_address_list_(gal).htm','View Server Status','../monitoring/view_server_status.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:normal;font-style:normal;text-decoration:none"><nobr>  Related Topics </nobr></span></a>
 
- </p>
+
+ </b></span></span></span></span></span></span></span></p>
 <script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();

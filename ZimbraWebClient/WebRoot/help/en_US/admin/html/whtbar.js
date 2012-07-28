@@ -41,6 +41,7 @@ var goFts=null;
 var goGlo=null;
 var goNext=null;
 var goPrev=null;
+var goRole=null;
 
 var LAYOUT=1;
 var HLAYOUT=0;
@@ -637,6 +638,18 @@ function showBanner()
 	}
 }
 
+function showHelpSystem(id)
+{
+       var strURL = document.getElementById(id).value;
+       if(strURL != "")
+       {
+              if(top.frames.length > 0 && top.frames[0].name == "ContentFrame")
+                     top.frames[0].location = document.getElementById(id).value;
+              else
+                     top.location = document.getElementById(id).value;
+       }
+}
+
 function addButton(sType,nStyle,sTitle,sHref,sOnClick,sOnMouseOver,sOnLoad,nWidth,nHeight,sI1,sI2,sI3,sI4,sI5,sI6)
 {
 	var sButton="";
@@ -739,6 +752,36 @@ function addButton(sType,nStyle,sTitle,sHref,sOnClick,sOnMouseOver,sOnLoad,nWidt
 		sButton+=genButton(sText,sI,nStyle);
 		sButton+="</a>";
 		bState=true;
+	}
+	else if(sType=="rolesel")
+	{
+		var svTitle="Select a content category";
+		var contentListPath = "contentlist.xml";
+		var xmlreader = new XmlReadWriteHelper();
+		xmlreader.strFilePath = contentListPath;
+		xmlreader.loadFromFile(false);
+		var xmlDoc = xmlreader.getXmlDoc();
+		if(xmlDoc != null)
+		{
+			sButton="<select title=\""+svTitle+"\" style=\"background-color:"+gsBgColor+";\" id=\"selectRole\" name=\"selectRole\" class=\"btnrolesel\" size=\"1\" onchange=\"showHelpSystem(this.id)\">";
+
+			var elemNode = xmlDoc.getElementsByTagName("content");
+			for(i=0; i< elemNode.length; i++)
+			{
+				var name= elemNode[i].getAttribute("name");
+				var value = elemNode[i].getAttribute("value");
+				var selected = elemNode[i].getAttribute("selected");
+				if(selected == null)
+					sButton += "<option value=\""+ value +"\">"+ name +"</option>";
+				else
+					sButton += "<option value=\""+ value +"\" selected=\"selected\">"+ name +"</option>";
+			}
+			sButton+="</select>";
+			goRole=new button(sType,sTitle,nWidth,nHeight,sI1,sI2,sI3);
+			gaObjBtns[nBtn]=goRole;
+			bMini=true;
+		}
+		delete xmlreader;
 	}
 	else if(sType=="idx")
 	{

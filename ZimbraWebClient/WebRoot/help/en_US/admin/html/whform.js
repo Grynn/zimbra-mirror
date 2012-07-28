@@ -139,7 +139,7 @@ function lookupKeyDown(NSEvent)
 			else
 				gfunLookUp(false);
 		}	
-		else if (gbNav6)		
+		else if (gbNav6 || gbSafari)		
 		{
 		    if(NSEvent)
 		    {

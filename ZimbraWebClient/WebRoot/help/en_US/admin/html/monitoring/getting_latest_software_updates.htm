@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Adobe RoboHelp 8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
 <title>Getting the Latest ZCS Software Updates</title>
 <link rel="stylesheet" href="../default.css" type="text/css" />
 <style type="text/css">
@@ -104,21 +104,23 @@ else
 
 //-->
 //]]></script>
-<h1>Getting the Latest ZCS Software Updates</h1>
-<p>When you installed Zimbra Collaboration Server, 
- ZCS was configured to automatically check for updates and to send an email 
- notification to the configured email address when a new update is available.</p>
+
+<h1>Getting the Latest ZCS Software Updates </h1>
+<p>When ZCS is installed, the ZCS software update utility is automatically 
+ configured to check for the latest ZCS version once a day and if there 
+ is an update, to send notification to the address that is configured in 
+ the administration console’s Server Updates.</p>
 <p>The default configuration is to check for updates daily and to automatically 
  send a notification to the admin's mailbox when a new ZCS version is available. 
- You can change these settings from the <span style="font-weight: bold;"><b>Tools&gt;Software 
- Updates</b></span> page. </p>
+ You can change these settings from the <span class="attribute">Tools and 
+ Migration&gt;Software Updates</span> page.</p>
 <p>The dates and times ZCS checked for updates are saved to the Updates 
  tab. When an update becomes available, an email notification is sent out 
  daily until you update the ZCS version. If you do not want to receive 
- an email notification of updates, uncheck the box for <span style="font-weight: bold;"><b>Send 
- notification email when updates are available</b></span>.</p>
-<p>You can check for updates any time by clicking the <span style="font-weight: bold;"><b>Check 
- now</b></span> link. </p>
+ an email notification of updates, uncheck the box for <span class="attribute">Send 
+ notification email when updates are available</span>.</p>
+<p>You can check for updates any time by clicking the <span class="attribute">Check 
+ now</span> link.</p>
 <h2>Server Updates Settings</h2>
 <ul type="disc">
 	<li><p><span style="font-weight: bold;"><b>Server that checks for updates</b></span>. 
@@ -128,19 +130,18 @@ else
 	 this field. The result of the update response is stored in LDAP and 
 	 is accessible by all servers. The server that polls for updates must 
 	 be able to make outgoing HTTP requests. 
-	 Note: You may need to make special provisions in your firewall for that to happen. </p></li>
+	 Note: You may need to make special provisions in your firewall for that to happen.</p></li>
 	<li><p><span style="font-weight: bold;"><b>Check for updates every</b></span>. 
 	 The default is to check every 1 day. A job is scheduled in the crontab to check for updates. &#160;The cron job 
 	 runs every 2 hours to check if the <span style="font-weight: bold;"><b>Check 
 	 for Updates</b></span> interval has passed. &#160;If you wish to check 
 	 for updates more often than every two hours, adjust the cron task 
-	 for &quot;/opt/zimbra/libexec/zmcheckversion&quot;. </p></li>
+	 for &quot;/opt/zimbra/libexec/zmcheckversion&quot;.</p></li>
 	<li><p><span style="font-weight: bold;"><b>Updates URL</b></span>. This is 
 	 the URL that the server connects to when checking for an update. The 
 	 server transmits its ZCS version, platform and build number to this 
 	 URL. When a server polls the URL, &#160;the response is stored in 
-	 the LDAP. The Updates tab displays the times that checks were made. 
-	 </p></li>
+	 the LDAP. The Updates tab displays the times that checks were made.</p></li>
 	<li><p><span style="font-weight: bold;"><b>Send Notification Email To/From 
 	 Addresses</b></span>: &#160;The <span style="font-weight: bold;"><b>Send 
 	 notification email to</b></span> address receives an email notification 
@@ -148,7 +149,7 @@ else
 	 the admin's email address, but you can change this.</p></li>
 	<li><p><span style="font-weight: bold;"><b>Notification Subject and Message 
 	 templates</b></span>. &#160;This is the template for the notification 
-	 message that is sent. </p></li>
+	 message that is sent.</p></li>
 </ul>
 <p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[

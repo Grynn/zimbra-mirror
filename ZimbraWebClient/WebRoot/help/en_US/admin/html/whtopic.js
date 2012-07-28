@@ -3,6 +3,8 @@ var gsPPath="";
 var gaPaths=new Array();
 var gaAvenues=new Array();
 var gaSearchTerms = new Array();
+var gaSearchTermType = new Array();
+var gbPhraseTerm = false ;
 var gChildPathInMain="";
 
 var goFrame=null;
@@ -12,7 +14,8 @@ var gsSearchFormHref="";
 var gnTopicOnly=-1;
 var gnOutmostTopic=-1;
 var gsFtsBreakChars="\t\r\n\"\\ .,!@#$%^&*()~'`:;<>?/{}[]|+-=\x85\x92\x93\x94\x95\x96\x97\x99\xA9\xAE\xB7";
-var gsHiliteSearchSetting = "enable,silver,black";
+var gsHiliteSearchSetting = "enable,#b2b4bf,black";
+var gsQuote='\x22'; 
 var gsBkgndColor="";
 var gsTextColor="";
 var BTN_TEXT=1;
@@ -41,6 +44,10 @@ var gbSyncEnabled=false;
 var gaBreadcrumbsTrail = new Array();
 var gnYPos = -1;
 var gbBadUriError = false;
+
+var	EST_TERM		= 1;
+var	EST_PHRASE		= 2;
+var	EST_STEM		= 3;
 
 function AddMasterBreadcrumbs(relHomePage, styleInfo, separator, strHome, strHomePath)
 {
@@ -305,7 +312,11 @@ function DomTextNode( a_Node, a_nFrom )
 		var nEnd = this.getClosedRanges( a_aRanges, a_nStart );
 		if ( this.aClosedRanges.length == 0 )
 			return nEnd;
+			
 		var strText = this.node.data;
+		//replace newline, carriage return, tab characters with space
+		strText = strText.replace(/[\n\r\t]/g," "); 
+		
 		var strHTML = "";
 		var nLastStart = 0;
 		for ( var i = 0; i < this.aClosedRanges.length; i++ )
@@ -386,6 +397,9 @@ function DomTexts()
 			return;
 
 		var strInnerText = a_Node.data;
+		
+		//replace newline, carriage return, tab characters with space
+		strInnerText = strInnerText.replace(/[\n\r\t]/g," "); 
 		if ( strInnerText.length != 0 )
 		{
 			var nFrom = this.strText.length;
@@ -404,16 +418,24 @@ function DomTexts()
 		if(typeof(gaSearchTerms[0]) == "undefined")
 			return;
 
-		var str = gaSearchTerms[0].toLowerCase();
+		var str = escapeRegExp(gaSearchTerms[0].toLowerCase());
 		for(var j = 1; j < gaSearchTerms.length; j++)
 		{
-			str += "|" + gaSearchTerms[j].toLowerCase();
+			str += "|" + escapeRegExp(gaSearchTerms[j].toLowerCase());
 			
 		}
 
 		var regexp = new RegExp(str, "i");
 
-		var aWords = dolSegment( this.strText );
+		var aWords ;
+		if (!gbPhraseTerm)
+			aWords = dolSegment( this.strText );
+		else
+		{
+			aWords = new Array();
+			aWords[0] = new DolWord( this.strText, 1, 0 );
+		}
+		
 		for ( var i = 0; i < aWords.length; i++ )
 		{
 			var n = new Object;
@@ -610,6 +632,7 @@ function findSearchTerms(searchTerms, bSkip)
 	if(searchTerms != "")
 	{
 		var sInput=searchTerms;
+		var bPhrase = false ;
 		var sCW="";
 		var nS=-1;
 		var nSep=-1;
@@ -620,14 +643,48 @@ function findSearchTerms(searchTerms, bSkip)
 				nSep=nChar;
 			}
 		}
+		
 		if(nS==-1){
 			sCW=sInput;
 			sInput="";
 		}
 		else
 		{
-			sCW=sInput.substring(0,nS);
-			sInput=sInput.substring(nS+1);
+			if (isQuote(gsFtsBreakChars.charAt(nSep)))
+			{
+				if (nS == 0)
+				{
+					//it could be a phrase
+					sInput = sInput.substring(nS+1) ;
+					var phrLen = getLengthOfPhrase(sInput ) ;
+					if (phrLen <= 0 )
+					{
+						//invalid expression
+						return ;
+					}
+					else
+					{					
+						//phrase begins here
+						bPhrase = true ; 
+						//get the phrase							
+						sCW=sInput.substring(0,phrLen);					
+						sInput=sInput.substring(phrLen + 1);						
+					}
+				}
+				else
+				{
+					//get the token preceeding phrase
+					sCW=sInput.substring(0,nS);
+					
+					//keep the starting quote for next parse so next parse would know it's a phrase
+					sInput=sInput.substring(nS);
+				}				
+			}
+			else
+			{
+				sCW=sInput.substring(0,nS);
+				sInput=sInput.substring(nS+1);
+			}
 		}
 
 		searchTerms=sInput;
@@ -651,13 +708,43 @@ function findSearchTerms(searchTerms, bSkip)
 
 		if(bAdd && !bSkip && sCW!="" && sCW!=" " && !IsStopWord(sCW,gaFtsStop)){
 			gaSearchTerms[gaSearchTerms.length] = sCW;
-			var stemWord = GetStem(sCW);
-			if(stemWord != sCW)
-				gaSearchTerms[gaSearchTerms.length] = stemWord;
+			if (bPhrase)
+			{
+				gaSearchTermType[gaSearchTermType.length] = EST_PHRASE ;
+				gbPhraseTerm = true ;
+			}
+			else
+			{
+				gaSearchTermType[gaSearchTermType.length] = EST_TERM ;
+			}
+			
+			if (!bPhrase)
+			{
+				var stemWord = GetStem(sCW);
+				if(stemWord != sCW)
+				{
+					gaSearchTerms[gaSearchTerms.length] = stemWord;
+					gaSearchTermType[gaSearchTermType.length] = EST_STEM ;
+				}
+			}
 		}
 		findSearchTerms(searchTerms, bSkip);
 	}
 	
+}
+
+
+function getLengthOfPhrase( a_str )
+{
+	var i = 0 ;
+	var nLen = a_str.length;
+	while ( i < nLen )
+	{
+		if ( isQuote( a_str.charAt( i ) ) )
+			return i ;
+		++i;
+	}
+	return -1;
 }
 
 function GetStem(szWord)
@@ -1531,4 +1618,13 @@ function PickupDialog_Invoke()
 	}
 }
 
+function isQuote( a_ch )
+{
+	return ( a_ch == gsQuote );
+} 
 
+function escapeRegExp(str)
+{
+	var specials = new RegExp("[.*+?|()\\^\\$\\[\\]{}\\\\]", "g"); // .*+?|()^$[]{}\
+	return str.replace(specials, "\\$&");
+}

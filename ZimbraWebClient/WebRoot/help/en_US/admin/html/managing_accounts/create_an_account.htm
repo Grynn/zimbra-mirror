@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Create an Account</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
@@ -82,6 +82,7 @@ else
 
 //-->
 //]]></script>
+
 <h1>Provisioning &#160;Accounts</h1>
 <p>When you provision user accounts, the mailbox is created on the designated 
  server and a directory account is created on the LDAP server.</p>
@@ -91,109 +92,100 @@ else
  &#160;When you initially create an account, you need to consider how you 
  want to set up the account and whether the configuration should be changed 
  from the COS configuration.</p>
-<ul type="disc">
-	<li class="p"><p>What display name should appear in the user's messages?</p></li>
-	<li class="p"><p>What <a href="user_interface_features.htm">features</a> 
-	 and <a href="preferences.htm">preferences</a> should be set for the 
-	 account?</p></li>
-	<li class="p"><p>Will alias and forwarding addresses be required?</p></li>
-	<li class="p"><p>What <a href="../passwords/password_options.htm">password 
-	 restrictions</a> to set?</p></li>
-	<li class="p"><p>Can the account 
-	 receive mail attachments?</p></li>
-	<li class="p"><p>What should the account disk space <a href="../managing_servers/viewing_mailbox_quotas.htm">quota</a> 
-	 be set to?</p></li>
-	<li class="p"><p>Is there a set <a href="account_advanced_features.htm">lifetime 
-	 for messages</a>?</p></li>
-	
-	<li class="p"><p>How long should the mailbox session stay open?</p></li>
-	<li class="p"><p>Should the account name be hidden in the Global Address 
-	 List?</p></li>
-	<li class="p"><p>Do you need to set a default time zone for the account 
-	 that is different than yours?</p></li>
-</ul>
 <p><span class="Important">Important:</span> &#160;IMAP and POP client 
- users may not have the restrictions that are configured in their COS or 
- Account settings.</p>
-<h6>To create an account:</h6>
+ users might not have the restrictions that are configured in their COS 
+ or Account settings.</p>
+<p>The <span style="font-weight: bold;"><b>New Account</b></span> <span style="font-weight: bold;"><b>Wizard</b></span> 
+ steps you through a series of dialog boxes to set up contact information, 
+ features, mail aliases, forwarding information, mailbox preferences, and 
+ advanced features. The minimum account configuration requires completing 
+ the <span style="font-weight: bold;"><b>Account Name</b></span> and<span style="font-weight: bold;"><b> 
+ Last Name</b></span> fields and then click Finish. The account is created 
+ with the default settings from the default COS.</p>
+<h4>To create an account:</h4>
 <ol class="whs2" type="1">
-	<li class="p"><p>Click <span style="font-weight: bold;"><b>Accounts,</b></span> 
-	 in the Navigation pane.</p></li>
-	<li class="p"><p>In the Accounts toolbar, click <span style="font-weight: bold;"><b><b>New</b></b></span>.</p></li>
-	<li class="p"><p>The <span style="font-weight: bold;"><b>New Account</b></span> 
-	 <span style="font-weight: bold;"><b>Wizard</b></span> steps you through a 
-	 series of dialog boxes to set up contact information, features, mail 
-	 aliases, forwarding information, mailbox preferences, and advanced 
-	 features.</p>
-	<ul type="disc">
-		<li class="p"><p style="margin-left: 0px;"><span style="font-weight: bold;"><b>General 
-		 Information</b></span>. The minimum account configuration requires 
-		 completing the fields marked with an asterisk in <span style="font-weight: bold;"><b>General 
-		 Information</b></span>. You must enter the <span style="font-weight: bold;"><b>Account 
-		 name</b></span>, select the host name, and enter the <span style="font-weight: bold;"><b>Last 
-		 name</b></span>. If <span style="font-weight: bold;"><b>auto</b></span> is 
-		 checked next to the <span style="font-weight: bold;"><b>Display name</b></span> 
-		 field, the last name is automatically added as the display name. 
-		 If you do not want this account displayed in the Global Address 
-		 List (GAL), check <span style="font-weight: bold;"><b>Hide in GAL</b></span>.</p></li>
-	</ul></li>
+	<li class="p"><p style="margin-left: 0px;">In the <span class="attribute">General 
+	 Information&gt;Account Name</span><span style="font-weight: bold;"><b> 
+	 </b></span>section, enter the account name and select the host name. An 
+	 account name cannot have spaces or use symbols. You can type a period 
+	 (.) between words. Example: john.smith. This becomes the name in the 
+	 email address, i.e. john.smith@example.com</p></li>
 </ol>
-<p style="margin-left: 80px;">An account name cannot have spaces or use 
- symbols. You can type a period (.) between words. Example: john.smith. 
- This becomes the name in the email address, i.e. john.smith@example.com</p>
-<p style="margin-left: 80px;">In the <span style="font-weight: bold;"><b>Account 
- Setup</b></span> section, if the account should not be immediately available, 
- you can change the account status from Active to Pending.</p>
-<p style="margin-left: 80px;">If <span style="font-weight: bold;"><b>auto</b></span> 
- is checked next to the <span style="font-weight: bold;"><b>Class of Service</b></span> 
- field, the account is assigned the domain COS. &#160;If no domain COS 
- exists, the Zimbra default COS is automatically assigned. </p>
-<p style="margin-left: 80px;">Uncheck the 
- auto box to select a COS for the account. In the Class of Service field, 
- enter a few letters of the COS name and then select the COS name from 
- the list that displays.</p>
-<p style="margin-left: 80px;">You can select the password for this account 
- and require the user to change the password the first time he logs on.</p>
-<p style="margin-left: 80px;">The <span style="font-weight: bold;"><b>Notes</b></span> 
- section can be used to add a description of this account and to keep notes 
- about the account. The description is displayed with the account information 
- in the account content pane; notes are not displayed.</p>
-<ol>
-	<li style="list-style: none; display: inline;"><ul type="disc">
-		<li class="p"><p><span style="font-weight: bold;"><b>Contact Information</b></span>. 
-		 Phone number, company name, and address information can be added.</p></li>
-		<li class="p"><p><span style="font-weight: bold;"><b>Aliases</b></span>. 
-		 If the account should have aliases, enter email <a href="creating_a_mail_aliases.htm">aliases</a> 
-		 for this account.</p></li>
-		<li class="p"><p><span style="font-weight: bold;"><b>Forwarding</b></span>. 
-		 <a href="forwarding_mail.htm">Forwarding</a> is enabled by default.</p></li>
-		<li class="p"><p><span style="font-weight: bold;"><b>Features</b></span>, 
-		 <span style="font-weight: bold;"><b>Preferences</b></span>, <span style="font-weight: bold;"><b>Themes</b></span>, 
-		 <span style="font-weight: bold;"><b>Zimlets</b></span>, and <span style="font-weight: bold;"><b>Advanced</b></span>. 
-		 The default feature, preferences, and advanced features configuration 
-		 is based on the COS assigned to the account. &#160;You can changes 
-		 these for individual accounts. A <span style="font-weight: bold;"><b>Reset 
-		 to COS value</b></span> link is displayed when you make a change to 
-		 let you know that the account configuration overrides the COS 
-		 configuration.</p></li>
-	</ul></li>
+<ul type="disc">
+	<li style="margin-left: 40px;"><p style="margin-left: 35px;">Enter 
+	 the user's name. The &#160;<span class="attribute">Last name</span> 
+	 is required.</p></li>
+	<li style="margin-left: 40px;"><p style="margin-left: 35px;">If <span 
+	 class="attribute">auto</span> is checked next to the <span class="attribute">Display 
+	 name</span> field, the last name is automatically added as the display 
+	 name. Remove the check mark to create a specific display name.</p></li>
+	<li style="margin-left: 40px;"><p style="margin-left: 35px;">If you 
+	 do not want this account displayed in the Global Address List (GAL), 
+	 check <span class="attribute">Hide in GAL</span>.</p></li>
+</ul>
+<ol start="2" type="1">
+	<li><p style="margin-left: 0px;">In the <span class="attribute">Account 
+	 Setup</span> section, leave the <span class="attribute">Status</span> 
+	 as <span class="attribute">Active</span> if the account is going to 
+	 be immediately available. &#160;If the account is not immediately 
+	 available, change the account status from Active to Pending.</p></li>
+	<li><p style="margin-left: 0px;">If <span class="attribute">auto</span> 
+	 is checked next to the <span class="attribute">Class of Service</span> 
+	 field, the account is assigned the domain COS. &#160;If no domain 
+	 COS exists, the Zimbra default COS is automatically assigned.</p></li>
 </ol>
-<ol class="whs2" start="4" type="1">
-	<li class="p"><p>Click <span style="font-weight: bold;"><b><b>Finish</b></b></span> 
-	 to save. </p></li>
-</ol>
-<ol class="whs2" start="6" type="1">
-	<ul style="list-style: url('../blue_right.gif');">
-		<li class="p-note"><p class="note">To create large numbers of accounts 
-		 at once or to migrate accounts, see Account 
-		 Migration.</p></li>
-	</ul>
+<p style="margin-left: 40px;">Remove the check mark from &#160;the auto 
+ box to select a different COS for the account. In the Class of Service 
+ field, enter a few letters of the COS name and then select the COS name 
+ from the list that displays.</p>
+<ol start="4" type="1">
+	<li><p style="margin-left: 0px;">If using internal authentication, 
+	 in the Password section, enter a password for this account. &#160;If 
+	 the user should change the password when the first sign in, check 
+	 <span class="attribute">Must change password</span>.</p></li>
+	<li><p style="margin-left: 0px;">In the <span class="attribute">Time 
+	 Zone Setup</span> section, select the time zone for this account.</p></li>
+	<li><p style="margin-left: 0px;">The <span class="attribute">Notes</span> 
+	 section can be used to add a description of this account and to keep 
+	 notes about the account. The description is displayed with the account 
+	 information in the account content pane; notes are not displayed.</p></li>
+	<li><p style="margin-left: 0px;">If this account can use the ZCS Voice 
+	 feature, in the Voice and Chat section, type the voice username and select the service.</p></li>
+	<li><p style="margin-left: 0px;">Click <span class="attribute">Next</span> 
+	 if you want to add contact information, set up aliases, forwarding 
+	 or modify the COS settings for this account. &#160;Click <span class="attribute">Finish</span> 
+	 if you do not want to make other changes.</p></li>
+	<li><p style="margin-left: 0px;">If you click <span class="attribute">Next</span>, 
+	 in the<span class="attribute"> Contact Information</span> dialog box 
+	 enter personal information about the user, including. phone numbers, 
+	 company name, and address information.</p></li>
+	<li><p style="margin-left: 0px;">In the Aliases dialog box, enter email 
+	 <a href="creating_a_mail_aliases.htm">aliases</a> for this account.</p></li>
+	<li><p style="margin-left: 0px;">In the Member of dialog box, add distribution 
+	 lists this user should be added to.</p></li>
+	<li><p style="margin-left: 0px;">In the Forwarding dialogs box, <a href="forwarding_mail.htm">Forwarding</a> is enabled by default. If 
+	 you do not want this account to forward email messages, remove the 
+	 check mark from <span class="attribute">Allow the user to specify 
+	 a forwarding address</span>.</p></li>
+	<li><p style="margin-left: 0px;"><span class="attribute">Features</span>, 
+	 <span class="attribute">Preferences</span>, <span class="attribute">Themes</span>, 
+	 <span class="attribute">Zimlets</span>, and <span class="attribute">Advanced</span> 
+	 dialog boxes. The default feature, preferences, and advanced features 
+	 configuration is based on the COS assigned to the account. &#160;You 
+	 can changes these for individual accounts. A <span class="attribute">Reset 
+	 to COS value</span> link is displayed when you make a change to let 
+	 you know that the account configuration overrides the COS configuration</p></li>
+	<li><p style="margin-left: 0px;">Click <b><span class="attribute">Finish</span></b> 
+	 to save.</p></li>
 </ol>
 <p>&#160;</p>
-<p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+<p>
+
 <a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Account Advanced Features','account_advanced_features.htm','Creating a Mail Aliases','creating_a_mail_aliases.htm','Editing Accounts','editing_accounts.htm','Forwarding Mail','forwarding_mail.htm','Password Options','../passwords/password_options.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:normal;font-style:normal;text-decoration:none"><nobr>  Related Topics </nobr></span></a>
 
+
  </p>
+<p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</p>
 <p>&#160;</p>
 <script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")

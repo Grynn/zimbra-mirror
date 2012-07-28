@@ -26,6 +26,8 @@ var goHighLighted=null;
 var c_sEnginePath='/robo/bin/robo.dll';	// roboengine path
 var gbSearchPage=false;
 
+var gIllegalTopicNameChars = "*?\'\"<>|[];" ;
+
 function _getRelativePath(strParentPath,strCurrentPath)
 {
 	if(_isAbsPath(strCurrentPath)) return _getPath(strCurrentPath);
@@ -176,6 +178,41 @@ function _getPath(strURL)
 		return "";
 }
 
+function _isHTTPUrl(strUrl)
+{
+    strUrl = strUrl.toUpperCase();
+    str1 = strUrl.substring(0, 7);
+    str2 = strUrl.substring(0, 8);
+    if(str1 == "HTTP://" || str1 == "HTTP:\\\\" ||
+    str2 == "HTTPS://" || str2 == "HTTPS:\\\\")
+        return true;
+	else 
+	{
+	    str3 = strUrl.substring(0, 4);
+	    if(str3 == "WWW.")
+	        return true;
+	}
+	return false;
+}
+
+function _isRemoteUrl(strUrl)
+{
+    strUrl.toUpperCase();
+    if(_isHTTPUrl(strUrl)) return true;
+
+    str1 = strUrl.substring(0, 7);
+    if (str1 == "MAILTO:")	return true;
+    if (str1 == "TELNET:")	return true;
+    if (str1 == "GOPHER:")	return true;
+    str1 = strUrl.substring(0, 5);
+    if (str1 == "FTP://")	return true;
+    if (str1 == "NEWS:")	return true;
+    if (str1 == "FILE:")	return true;
+    if (str1 == "FTP:\\\\") return true;
+
+    return false;
+}
+
 function removeItemFromArray(oArray,i)
 {
 	if(oArray.length&&i>=0&&i<oArray.length)
@@ -316,7 +353,7 @@ try
 	}
 }catch(e)
 {
-    onLoadXMLError();
+    //Do nothing
 }
 }
 
@@ -609,11 +646,40 @@ function _browserStringToText(sBStr)
 
 function IsInternal(urlName)
 {
-	if(urlName.indexOf(":") == -1 && urlName.indexOf("&#58;")== -1 && urlName.indexOf("//") != 0 && 
-			urlName.indexOf("/&#47;") != 0 && urlName.indexOf("&#47;/") != 0 && urlName.indexOf("&#47;&#47;") != 0)
-		return true;
-	else
+	// first pass: check raw urlName
+	if(!IsValidInternalTopicURL(urlName))
 		return false;
+	// second pass: check unescape'd urlName
+	var unescapedUrlName = unescape(urlName);
+	if(!IsValidInternalTopicURL(unescapedUrlName))
+		return false;
+	// third pass: check decodeUri'd urlName
+	var decodedUrlName = decodeURI(urlName);
+	if(!IsValidInternalTopicURL(decodedUrlName))
+		return false;
+
+	// looks good
+	return true;
+
+}
+
+function IsValidInternalTopicURL(urlName)
+{
+	if(urlName.indexOf(":") != -1 || urlName.indexOf("//")  != -1 || urlName.indexOf("&#")  != -1 || (!IsValidTopicURL(urlName)))
+		return false;
+		
+	return true;	
+		
+}
+
+function IsValidTopicURL(topicURL)
+{
+	for (var i = 0 ; i < gIllegalTopicNameChars.length ; i++)
+	{
+		if (topicURL.indexOf(gIllegalTopicNameChars.charAt(i)) != -1 )
+			return false ;
+	}
+	return true ;
 }
 
 function IsNonAscii(szWord)

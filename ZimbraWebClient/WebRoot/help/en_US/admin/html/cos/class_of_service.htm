@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Adobe RoboHelp 8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
 <title>Class of Service Managing</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -82,75 +82,102 @@ else
 
 //-->
 //]]></script>
+
 <script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2"></script>
 <h1>Managing Classes of Service</h1>
 <p>Class of Service (COS) is a Zimbra-specific 
  object that determines what default attributes users' accounts have and 
  what features are added or denied. The COS controls mailbox quotas, message 
  lifetime, password restrictions, attachment blocking, and server pool.</p>
-<p>A default COS is automatically created when Zimbra is installed. You 
- can modify the default COS, and you can create new classes of service. 
- A COS is a global object and is not restricted to a particular domain 
- or set of domains.</p>
+<p>A default COS is created when Zimbra is installed. You can modify the 
+ default COS and create new ones. A COS is a global object and is not restricted 
+ to a particular domain or set of domains.</p>
 <p>COS is used to group accounts and define the feature levels for those 
  accounts. Each account is assigned a COS. &#160;You could, for example, 
  create an Executive COS which is configured to enable all features, have 
  unlimited mailbox quotas and never purges messages and create another 
- general-employee COS which enables only the mail feature, sets the mailbox 
+ General-Employee COS which enables only the mail feature, sets the mailbox 
  quota and purges messages every 60 days. Grouping accounts to a specific 
- COS lets you update or change account features in block. Change the COS 
- and all accounts assigned to the COS are changed.</p>
+ COS lets you update or change account features in block. When the COS 
+ is changed all accounts assigned to the COS are changed.</p>
 <p>If a COS is not explicitly set for a new account, or if the COS assigned 
  to the user no longer exists, the Zimbra default COS is automatically 
  assigned.</p>
 <p>A COS setting includes the following:</p>
 <ul type="disc">
-	<li class="p"><p><span class="attribute">General Information</span> 
-	 tab <span class="attribute" style="font-weight: normal;">showing the 
-	 COS display name and a one line description that is displayed in the 
-	 COS content pane</span><span class="attribute">.</span></p></li>
-	<li class="p"><p><span class="attribute">Features</span> tab listing 
-	 all the <a href="javascript:void(0);" id="a1" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_accounts/user_interface_features.htm',400,500);return false;">features</a>, and whether they are enabled or 
-	 not.</p></li>
-	<li class="p"><p><span class="attribute">Preferences</span> tab showing 
-	 what mail-view <a href="javascript:void(0);" id="a2" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_accounts/preferences.htm',400,500);return false;">preferences</a> are enabled and you can 
-	 select the language that displays in the Zimbra Web Client for the 
-	 accounts in this COS.</p></li>
-	<li class="p"><p style="font-weight: bold;">Themes <span style="font-weight: normal;">tab 
-	 showing the default theme, installed themes, and available themes. 
-	 See</span> <a href="../ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" style="font-weight: normal;">Defining Theme for the 
-	 Zimbra Web Client UI</a><span style="font-weight: normal;">.</span></p></li>
-	<li class="p"><p style="font-weight: bold;">Zimlets <span style="font-weight: normal;">tab 
-	 showing a list of Zimlets that are installed and available for the 
-	 user interface. See <a href="../zimlets/adding_zimlets_to_cos_and_accounts.htm" style="font-weight: normal;">Adding Zimlets 
-	 to COS and Accounts</a></span><span style="font-weight: normal;">.</span></p></li>
-	<li class="p"><p><span class="attribute">Server Pool</span> tab listing 
-	 the mailbox hosts that are available to be assigned a new mailbox. 
-	 See <a href="assigning_accounts_to_different_servers.htm" style="font-weight: normal;">Assigning 
+	<li class="p" style="font-size: 11pt;"><p style="font-size: 11pt;"><span 
+	 class="attribute" style="font-size: 11pt;"><font size="3" style="font-size:11pt;">General Information</font></span> 
+	 page <span class="attribute" style="font-weight: normal; font-size: 11pt;"><font size="3" style="font-size:11pt;">showing 
+	 the COS display name and a one line description that is displayed 
+	 in the COS content pane</font></span><span class="attribute" style="font-size: 11pt;"><font size="3" style="font-size:11pt;">.</font></span></p></li>
+	<li class="p" style="font-size: 11pt;"><p style="font-size: 11pt;"><span 
+	 class="attribute" style="font-size: 11pt;"><font size="3" style="font-size:11pt;">Features</font></span> page listing 
+	 all the <a href="javascript:void(0);" id="a1" style="font-size: 11pt;" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_accounts/user_interface_features.htm',400,500);return false;">features</a>, and whether 
+	 they are enabled or not.</p></li>
+	<li class="p" style="font-size: 11pt;"><p style="font-size: 11pt;"><span 
+	 class="attribute" style="font-size: 11pt;"><font size="3" style="font-size:11pt;">Preferences</font></span> page 
+	 showing what mail-view <a href="javascript:void(0);" id="a2" style="font-size: 11pt;" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_accounts/preferences.htm',400,500);return false;">preferences</a> 
+	 are enabled and you can select the language that displays in the Zimbra 
+	 Web Client for the accounts in this COS.</p></li>
+	<li class="p" style="font-size: 11pt;"><p style="font-size: 11pt;"><span 
+	 style="font-weight: bold;"><b>Themes</b></span> page showing the default 
+	 theme, installed themes, and available themes. See <a href="../ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" style="font-weight: normal; 
+															 font-size: 11pt;">Defining 
+	 Theme for the Zimbra Web Client UI</a>.</p></li>
+	<li class="p" style="font-size: 11pt;"><p style="font-size: 11pt;"><span 
+	 style="font-weight: bold;"><b>Zimlets</b></span> page showing a list of Zimlets 
+	 that are installed and available for the user interface. See <a href="../zimlets/adding_zimlets_to_cos_and_accounts.htm" style="font-weight: normal; font-size: 11pt;">Adding Zimlets to COS 
+	 and Accounts</a>.</p></li>
+	<li class="p" style="font-size: 11pt;"><p style="font-size: 11pt;"><span 
+	 style="font-weight: bold;"><b>Mobile Access</b></span> page to enable mobile 
+	 sync and configure mobile device settings. &#160;You can also set 
+	 the S/MIME settings or the mobile device from this page. </p></li>
+	<li class="p" style="font-size: 11pt;"><p style="font-size: 11pt;"><span 
+	 class="attribute" style="font-size: 11pt;"><font size="3" style="font-size:11pt;">Server Pool</font></span> page 
+	 listing the mailbox hosts that are available to be assigned a new 
+	 mailbox. See <a href="assigning_accounts_to_different_servers.htm" style="font-weight: normal; font-size: 11pt;">Assigning 
 	 Accounts to Different Servers</a>.</p></li>
-	<li class="p"><p><span class="attribute">Advanced</span> tab showing 
+	<li class="p" style="font-size: 11pt;"><p style="font-size: 11pt;"><span 
+	 class="attribute" style="font-size: 11pt;"><font size="3" style="font-size:11pt;">Advanced</font></span> page showing 
 	 quotas, password constraints, session length, and message lifetimes, 
-	 and attachment blocking use. See <a href="../managing_accounts/account_advanced_features.htm" style="font-weight: normal;">Account 
+	 and attachment blocking use. See <a href="../managing_accounts/account_advanced_features.htm" style="font-weight: normal; font-size: 11pt;">Account 
 	 Advanced Features</a>.</p></li>
+	<li class="p" style="font-size: 11pt;"><p style="font-size: 11pt;"><span 
+	 style="font-weight: bold;"><b>Retention Policy</b></span><span> page to configure 
+	 COS retention policies. </span>&#160;<span style="font-size: 11.0pt; 
+												 mso-font-width: 100%;"><font size="3" style="font-size:11pt;">Retention 
+	 and deletion policies configured as a global setting are displayed 
+	 on this page if &#160;retention policies are not set in the COS. See 
+	 </font></span><a href="../managing_global_settings/retention_policies.htm">Configure 
+	 Message Retention and Disposal Policies</a>.</p></li>
+	<li class="p" style="font-size: 11pt;"><p style="font-size: 11pt;"><span 
+	 style="font-weight: bold;"><b>Archiving</b></span>. Enable the archiving 
+	 feature and change the date format and the file naming template for 
+	 archive accounts.</p></li>
+	<li class="p" style="font-size: 11pt;"><p style="font-size: 11pt;"><span 
+	 style="font-weight: bold;"><b>ACL</b></span> page displays a list of Access 
+	 Control Entries (ACE) <b style="font-weight: normal;">granted</b> 
+	 ON the target you are viewing. You can add additional rights and edit 
+	 or delete an ACE that is granted to this target.</p></li>
 </ul>
 <p>Even though a COS is assigned to an account, the COS attributes can 
  be overridden by:</p>
 <ul class="whs1" type="disc">
 	<li class="p"><p>Changes end users make to their mailbox options &#160;</p></li>
-	<li class="p"><p>Global settings set to <a href="javascript:void(0);" id="a3" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_global_settings/blocking_attachments_to_email.htm',400,500);return false;">reject attachments</a></p></li>
+	<li class="p"><p>Global settings set to reject attachments</p></li>
 	<li class="p"><p>Individual accounts settings <a href="javascript:void(0);" id="a4" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('override_cos_settings.htm',400,500);return false;">changed to 
 	 override specific COS attributes</a></p></li>
 </ul>
 <p>&#160;</p>
-<p><span class="Important">Important:</span> Mailbox features are enabled 
- or restricted for Zimbra Web Client users. IMAP and POP client users may 
- not have the restrictions that are configured in their COS.</p>
+<p><span class="Important" style="font-size: 11pt;"><font size="3" style="font-size:11pt;">Important</font></span><span 
+	 class="Important">:</span> Mailbox features are enabled or restricted 
+ for Zimbra Web Client users. IMAP and POP client users may not have the 
+ restrictions that are configured in their COS.</p>
 <p>&#160;</p>
 <script type="text/javascript" language="JavaScript1.2">//<![CDATA[
 	if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();
 	FilePopupInit('a1');
 	FilePopupInit('a2');
-	FilePopupInit('a3');
 	FilePopupInit('a4');
 //]]></script>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[

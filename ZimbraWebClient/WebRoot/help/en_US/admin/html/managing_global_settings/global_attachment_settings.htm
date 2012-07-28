@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Global Attachment Settings</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -82,28 +82,79 @@ else
 
 //-->
 //]]></script>
-<h1>Global Attachment Settings</h1>
-<p>Classes of Service and accounts can be configured with rules to reject 
- mail with specific attachment types, and to disable 
- viewing files attached to mail messages.</p>
-<ul>
-	<li class="p-note"><p class="note">When attachment settings are configured 
-	 in Global Settings, the global rule takes precedence over COS and 
-	 Account settings.</p></li>
-</ul>
-<p>The attachment settings are as follows:</p>
-<ul type="disc">
+
+<h1>Global Settings to Block Email Attachments</h1>
+<p>The Attachments page can be configured with global rules for handling 
+ attachments to an email message. You can also set rules by COS and for 
+ individual accounts. When attachment settings are configured in Global 
+ Settings, the global rule takes precedence over COS and Account settings.</p>
+<p><span style="font-weight: bold;"><b>Procedure</b></span></p>
+<ol type="1">
+	<li><p>Go to <span class="attribute">Configure&gt;Global Settings</span>.</p></li>
+	<li><p>Click <span class="attribute">Attachments</span><span style="font-weight: bold;"><b> 
+	 </b></span>in the Navigation pane.</p></li>
+	<li><p>Select the attachment setting to be configured..</p></li>
+</ol>
+<p>&#160;</p>
+<table width="100%">
+ <tr>
+ <td>
+<table style="padding-left: 6.00pt; padding-top: 6.00pt; padding-right: 6.00pt; 
+		 padding-bottom: 4.00pt; margin-left: 18.00pt;" cellspacing="0" width="100%" align="left">
+	<col style="width: 30.736%;" />
+	<col style="width: 69.264%;" />
+	<tr style="height: 32px;" bgcolor="#B2B2B2">
+		<th style="border-top: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;" bgcolor="#B2B2B2"><p class="FM_option">Option</p></th>
+		<th style="border-top: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;" bgcolor="#B2B2B2"><p class="FM_Description">Description</p></th>
+	</tr>
+	<tr style="height: 57px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p class="FM_CellBodyoption" style="font-weight: normal;"><span 
+		 class="attribute">Attachments cannot be viewed regardless of COS</span></p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p class="FM_CellBody">Users cannot 
+		 view any attachments. This global setting can be set to prevent 
+		 a virus outbreak from attachments, as no mail attachment can be 
+		 opened.</p></td>
+	</tr>
 	
-	<li class="p"><p><span style="font-weight: bold;"><b>Attachments are viewed 
-	 according to COS</b></span>. The COS sets the rules for how email attachments 
-	 are viewed.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Reject messages with 
-	 attachment extension. </b></span>&#160;Select which file types are unauthorized 
-	 for all accounts. The most common extensions are listed. You can add 
-	 different extension types to the list. Messages with those type of 
-	 files attached are rejected and the sender gets a bounce notice. The 
-	 recipient does not get the mail message and is not notified.</p></li>
-</ul>
+		
+		
+	
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p class="FM_CellBodyoption" style="font-weight: normal;"><span 
+		 class="attribute">Attachments are viewed according to COS</span></p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><span style="font-size: 10pt;"><font size="2" style="font-size:10pt;">This 
+		 global setting states the COS sets the rules for how email attachments 
+		 are viewed.</font></span></td>
+	</tr>
+</table>
+</td></tr>
+</table>
+<p>&#160;</p>
+<ol start="4" type="1">
+	<li><p>In the<span class="attribute"> Common Extensions</span> list, 
+	 select the extensions to block.</p></li>
+	<li><p>Click<span style="font-weight: bold;"><b> </b></span><span class="attribute">Add 
+	 Selected</span> or<span class="attribute"> Add All</span>.</p></li>
+	<li><p>If an extension that should be blocked is not listed, in the<span 
+	 style="font-weight: bold;"><b> </b></span><span class="attribute">New extension</span> 
+	 text box, type the extension and click <span class="attribute">Add</span>.</p></li>
+	<li><p>If you do not want to send a notification to the recipient when 
+	 messages are blocked, disable this option.</p></li>
+	<li><p>Click <span class="attribute">Save</span>. </p></li>
+</ol>
+<p style="font-weight: bold;">&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

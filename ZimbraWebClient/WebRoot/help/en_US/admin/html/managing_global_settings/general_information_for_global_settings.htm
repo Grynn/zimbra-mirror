@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Adobe RoboHelp 8" />
+<meta name="generator" content="Adobe RoboHelp 9" />
 <title>General Information for Global Settings</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -54,7 +54,8 @@ if (window.gbWhTopic)
 
 	if (window.addTocInfo)
 	{
-	addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
+	addTocInfo("Global Settings\nGeneral Information for Global Settings");
+addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -81,36 +82,115 @@ else
 
 //-->
 //]]></script>
+
 <h1>General Information for Global Settings</h1>
-<p>In the General Information&#160;tab configure the following:</p>
-<ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>Most results returned 
-	 by GAL search</b></span>. This sets a global ceiling for the number of 
-	 GAL results returned from a user search. The default is 100 results 
-	 per search, This can be set by domain. The domain setting overrides 
-	 the global setting.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Default domain</b></span>. 
-	 The default domain displays. This is the domain that user logins are 
-	 authenticated against.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Maximum number of 
-	 scheduled tasks that can run simultaneously</b></span>. This controls 
-	 how many threads are used to process fetching content from remote 
-	 data sources. The default is 20. If this is set too low, users do 
-	 not get their mail from external sources pulled down often enough. 
-	 If the thread is set too high, the server may be consumed with downloading 
-	 this mail and not servicing “main” user requests.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Sleep time between 
-	 subsequent mailbox purges</b></span>. The duration of time that the server 
-	 should “rest” between purging mailboxes. By default, message purge 
-	 is scheduled to run every 1 minute. If the message purge schedule 
-	 is set to 0, messages are not purged even if the mail, trash and spam 
-	 message life time is set</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Maximum size of an 
-	 uploaded file for Briefcase (kb</b></span>). This is the maximum size 
-	 of a file that can be uploaded into Briefcase. <span style="font-weight: bold;"><b>Note</b></span>: 
-	 the maximum message size for an email message and attachments that 
-	 can be received is configured in the Global Settings MTA tab.</p></li>
-</ul>
+<p>The General Information page is configured when ZCS is installed. &#160;</p>
+<p>You can change the following from the Configure&gt;Global Settings General 
+ Information page</p>
+<p style="font-weight: bold;"><span><b><span style="font-weight: bold;"><b>Procedure</b></span></b></span></p>
+<ol type="1">
+	<li><p>Go to<span class="attribute"> Configure&gt;Global Settings</span>.</p></li>
+	<li><p>Click <span class="attribute">General Information</span><span 
+	 style="font-weight: bold;"><b> </b></span>in the Navigation pane.</p></li>
+	<li><p>Modify the following options</p></li>
+</ol>
+<table width="100%">
+ <tr>
+ <td>
+<table style="padding-left: 6.00pt; padding-top: 6.00pt; padding-right: 6.00pt; 
+		 padding-bottom: 4.00pt; margin-left: 36pt;" cellspacing="0" width="80%" align="left">
+	<col style="width: 41.149%;" />
+	<col style="width: 58.851%;" />
+	<tr style="height: 32px;" bgcolor="#B2B2B2">
+		<th style="border-top: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;" bgcolor="#B2B2B2"><p class="FM_option">Option</p></th>
+		<th style="border-top: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;" bgcolor="#B2B2B2"><p class="FM_Description">Description</p></th>
+	</tr>
+	<tr style="height: 57px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: bold;">Most 
+		 results returned by GAL search</p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p>The maximum number of GAL results 
+		 returned from a user search.. The default is 100 results per search, 
+		 This can be set by domain. The domain setting overrides the global 
+		 setting.</p></td>
+	</tr>
+	<tr style="height: 59px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: bold;">Default 
+		 domain</p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p>Domain that users' sign ins are 
+		 authenticated against. </p></td>
+	</tr>
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: bold;">Maximum 
+		 number of scheduled tasks that can run simultaneously</p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p>Number of threads used to fetch 
+		 content from remote data sources. The default is 20. If set too 
+		 low, users do not get their mail from external sources pulled 
+		 down often enough. If set too high, the server may be consumed 
+		 with downloading this mail and not servicing “main” user requests.</p></td>
+	</tr>
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: bold;">Sleep 
+		 time between subsequent mailbox purges</p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p>The duration of time that the 
+		 server should “rest” between purging mailboxes. By default, message 
+		 purge is scheduled to run every 1 minute. If the message purge 
+		 schedule is set to 0, messages are not purged even if the mail, 
+		 trash and spam message life time is set.</p></td>
+	</tr>
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: bold;">Maximum 
+		 size of an uploaded file for Briefcase (kb)</p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p>.The maximum size of a file that 
+		 can be uploaded into Briefcase. <span style="font-weight: bold;"><b>Note</b></span>: 
+		 the maximum message size for an email message and attachments 
+		 that can be received is configured in the Global Settings MTA 
+		 page, Messages section</p></td>
+	</tr>
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p style="font-weight: bold;">Admin 
+		 Help URL</p>
+		<p style="font-weight: bold;">or</p>
+		<p style="font-weight: bold;">&#160;Delegated admin Help URL</p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p>&#160;If you want an other Help 
+		 page instead of the default Help Desk Page, enter the URL for 
+		 that Help page. When admins click the Help they are directed to 
+		 that page</p></td>
+	</tr>
+</table>
+</td></tr>
+</table>
+<p>&#160;</p>
+<ol start="4" type="1">
+	<li><p>Click <span class="attribute">Save</span>. </p></li>
+</ol>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

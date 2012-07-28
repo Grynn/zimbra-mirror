@@ -4,8 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
-<title>Bulk Provisioning</title>
+ <meta name="generator" content="Adobe RoboHelp 9" />
+<title>Provisioning Multiple Accounts</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
 //<![CDATA[
@@ -81,28 +81,44 @@ else
 
 //-->
 //]]></script>
-<h1>Managing Account Migrations from the Admin Console</h1>
-<p>You can migrate accounts from an external directory, either Active Directory 
- or an LDAP server. A migration wizard guides you through importing data 
- from an external server. The wizard downloads account information from 
- your directory and provisions the accounts on &#160;Zimbra Collaboration Server.</p>
-<p>When this is complete, the wizard generates a report in a .csv format 
- with a list of new accounts. &#160;</p>
-<p>The wizard configuration details include:</p>
-<ul type="disc">
-	<li><p>Generating passwords for the accounts. You can configure the 
-	 wizard to generate a random password for each account or use one password 
-	 for all accounts and require users to change their passwords the first 
-	 time they login. If you choose to generate random passwords for each 
-	 account, make sure you download the list of provisioned accounts. 
-	 The file is deleted when you close the wizard.</p></li>
-	<li><p>Setting up the LDAP directory connection. So that the Import 
-	 Wizard can connect to the LDAP directory, information about the directory 
-	 is entered. This includes the number of accounts to import, the server 
-	 name, the base distinguished name (DN) of the server to be used as 
-	 the root of the search, password, and a LDAP search filter to identify 
-	 which mailboxes to import</p></li>
+
+<h1>Provisioning Multiple Accounts and Migrating Account Data</h1>
+<p style="margin-left: 0px;">You can provision multiple accounts at one 
+ time using the Account Migration Wizard from the administration console. 
+ You can import accounts from either a generic IMAP server or from another 
+ ZCS server.</p>
+<ul>
+	<li class="P-note"><p class="note">Only accounts on ZCS 7.2 or later 
+	 can be migrated to ZCS 8.0.</p></li>
 </ul>
+<p style="margin-left: 0px;">You can also import account names to provision 
+ from an XML file that you create. See the ZCS Administrator's Guide, Provisioning 
+ User Accounts chapter for example of XML files that can be created.</p>
+<ul>
+	<li class="P-note"><p class="note">To migrate from other types of server, 
+	 see the ZCS Migration Guides for Exchange and for Lotus Domino servers.</p></li>
+</ul>
+<p style="margin-left: 0px;">You can run the migration wizard one time 
+ to provision accounts and import data or you can run the migration wizard 
+ the first time to provision the accounts and then run the wizard again 
+ to import the provisioned accounts’ data. </p>
+<p style="margin-left: 0px;">Whether you get the account records from an 
+ LDAP directory or use an XML file, you need to set the password requirements 
+ for the newly provisioned accounts. The options are to have ZCS randomly 
+ create passwords for each account or to set the same password on each 
+ account. You have the option to force users to change the password when 
+ they sign in the first time. </p>
+<p style="margin-left: 0px;">When the provisioning is complete, the wizard 
+ generates a .csv file with a list of new accounts. This includes the passwords 
+ that are generated. You should download this file for future reference. 
+ Choose a secure location to store the file as it can contain password 
+ information for the user accounts you provisioned.</p>
+<p style="margin-left: 0px;">If you running a split domain configuration, 
+ you can set the SMTP host and port in the wizard. For more information 
+ about split domains, see the wiki article about split domains at http://wiki.zimbra.com/wiki/Split_Domain. 
+ </p>
+<p style="margin-left: 40px;">&#160;</p>
+<p style="margin-left: 40px;">&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

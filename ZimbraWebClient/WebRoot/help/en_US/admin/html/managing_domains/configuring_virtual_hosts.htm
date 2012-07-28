@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Configuring Virtual Hosts</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -82,34 +82,37 @@ else
 
 //-->
 //]]></script>
+
 <h1>Configuring Virtual Hosts</h1>
 <p>Virtual hosting allows you to host more than one domain name on a server. 
  The general domain configuration does not change. When you create a virtual 
  host, Zimbra Web Client users can log in without having to specify the 
  domain name as part of their user name.</p>
 <p>Virtual hosts are entered on the <span style="font-weight: bold;"><b>Domains&gt;Virtual 
- Hosts</b></span> tab. The virtual host requires a valid DNS configuration 
+ Hosts</b></span> page. The virtual host requires a valid DNS configuration 
  with an A record.</p>
 <p>To get to the Zimbra Web Client login, users enter the virtual host 
- name as the URL address. For example, <span style="font-weight: bold;"><b>https:// mail.company.com</b></span>.</p>
+ name as the URL address. For example, <span class="attribute">https:// mail.company.com</span>.</p>
 <p>When the Zimbra Web Client login screen displays, users enter only their 
  user name and password. The authentication request searches for a domain 
  with that virtual host name. When the virtual host is found, the authentication 
  is completed against that domain.</p>
-<h3>How to add Virtual Hosts</h3>
+<h3>Procedure</h3>
 <ul style="list-style: url('../blue_right.jpg');">
-	<li class="p-note"><p class="note">Make sure that the virtual host 
-	 has a valid DNS name and an A record.</p></li>
+	<li class="p-note"><p class="note">&#160;&#160;Make sure that the virtual 
+	 host has a valid DNS name and an A record.</p></li>
 </ul>
 <ol start="1">
-	<li class="p" type="1"><p>From the administration console, click <span 
-	 style="font-weight: bold;"><b>Domains</b></span>, select the domain name 
-	 and click <span style="font-weight: bold;"><b>Edit</b></span>.</p></li>
-	<li class="p" type="1"><p>Click the <span style="font-weight: bold;"><b>Virtual 
-	 Hosts</b></span> tab to open the page. Enter the complete Virtual Host 
-	 Name in the box on the page. To add more virtual host names, click 
-	 <span style="font-weight: bold;"><b>Add virtual host</b></span> and continue 
-	 to add a name.</p></li>
+	<li class="p" type="1"><p>Go to <span class="attribute">Configure&gt;Domains</span> 
+	 and select the domain.</p></li>
+	<li class="p"><p>In the gear icon, click <span class="attribute">Edit</span>.</p></li>
+	<li class="p" type="1"><p>In the Navigation pane, select<span class="attribute"> 
+	 Virtual Hosts.</span> </p></li>
+	<li class="p" type="1"><p>Enter the complete Virtual Host Name in the 
+	 text box. To add more virtual host names, click<span class="attribute"> 
+	 Add virtual host</span> and continue to add a name.</p></li>
+	<li class="p" type="1"><p>Click <span class="attribute">Save</span>. 
+	 </p></li>
 </ol>
 <p>You can also set up virtual hosts when you configure a new domain.</p>
 <p>&#160;</p>

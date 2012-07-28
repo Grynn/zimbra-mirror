@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Configuring Authentication Settings</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -82,22 +82,23 @@ else
 
 //-->
 //]]></script>
+
 <h1>Configuring Authentication Settings</h1>
 <p>Email authentication is the process of identifying a user to the LDAP 
  directory server and granting access to legitimate users based on user 
- name and password information provided when users log in. Zimbra Collaboration Server 
- offers the following three authentication mechanisms:</p>
+ name and password information provided when users log in. Zimbra Collaboration Serveroffers 
+ the following three authentication mechanisms:</p>
 <ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>Internal</b></span>. 
-	 The Internal authentication uses the Zimbra directory server for authentication 
+	<li class="p"><p><span class="attribute">Internal</span>. The Internal 
+	 authentication uses the Zimbra directory server for authentication 
 	 on the domain. When you select Internal, no other configuration is 
 	 required.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>External LDAP</b></span>. 
-	 The user name and password is the authentication information supplied 
+	<li class="p"><p><span class="attribute">External LDAP</span>. The 
+	 user name and password is the authentication information supplied 
 	 in the bind operation to the LDAP directory server. You must configure 
 	 the LDAP URL, LDAP filter, and whether to use DN password to bind 
 	 to the external server.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>External Active Directory</b></span>. 
+	<li class="p"><p><span class="attribute">External Active Directory.</span> 
 	 The user name and password is the authentication information supplied 
 	 to the Active Directory server. You identify the Active Directory 
 	 domain name and URL.</p></li>
@@ -114,29 +115,29 @@ else
  succeeds, the connection is closed and the password is considered valid. 
  &#160;You configure the following external LDAP settings:</p>
 <ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>LDAP URL</b></span> and 
-	 whether to use <span style="font-weight: bold;"><b>SSL</b></span> or <span 
-	 style="font-weight: bold;"><b>StartTLS</b></span>. 
-	 Enter the LDAP address. Check either to use SSL or StartTLS.<br />
+	<li class="p"><p><span class="attribute">LDAP URL</span> and whether 
+	 to use <span class="attribute">SSL</span> or <span 
+	 class="attribute">StartTLS</span>. Enter the LDAP address. Check either 
+	 to use SSL or StartTLS.<br />
 	The default port is 389. If you use SSL, the default port is 636.<br />
 	You can configure multiple external LDAP hosts.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>LDAP filter</b></span>. 
-	 The filter defines the search rules used for directory searches and 
-	 tries to map the user name to one user on the external LDAP. You should 
-	 ensure that the filter you enter results in a single entry being matched, 
+	<li class="p"><p><span class="attribute">LDAP filter.</span> The filter 
+	 defines the search rules used for directory searches and tries to 
+	 map the user name to one user on the external LDAP. You should ensure 
+	 that the filter you enter results in a single entry being matched, 
 	 otherwise an authentication error is returned to the user.</p></li>
 </ul>
 <p style="margin-left: 40px;">Example of the search filter is (<span class="code" 
 	 style="font-size: 11pt;"><font size="3" style="font-size:11pt;"> 
  mail=%u@mycompany.com)</font></span>.</p>
 <ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>LDAP search base</b></span>. 
-	 To search within a specific part of your directory, enter a search 
-	 base. &#160;It would be entered as (<span class="code"> dc=server, dc=com)</span>.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Use DN/Password to 
-	 bind to external server</b></span>. If the filter you entered cannot be 
-	 run using an anonymous bind, then enter the DN/password for a service 
-	 account on the external LDAP that has been granted access to the attributes 
+	<li class="p"><p><span class="attribute">LDAP search base</span>. To 
+	 search within a specific part of your directory, enter a search base. 
+	 &#160;It would be entered as ( <span class="code">dc=server, dc=com)</span>.</p></li>
+	<li class="p"><p><span class="attribute">Use DN/Password to bind to 
+	 external server.</span> If the filter you entered cannot be run using 
+	 an anonymous bind, then enter the DN/password for a service account 
+	 on the external LDAP that has been granted access to the attributes 
 	 required to do the search.</p></li>
 </ul>
 <h2>External Active Directory</h2>
@@ -144,13 +145,12 @@ else
  to the Active Directory server using the supplied user name and password. 
  You configure the following settings:</p>
 <ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>Active Directory 
-	 domain name</b></span>. The name of the domain for the Active Directory 
-	 server.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Active Directory 
-	 LDAP URL</b></span> and whether to use <span style="font-weight: bold;"><b>SSL</b></span>. 
-	 Enter the Active Directory LDAP address. The default port is 389. 
-	 If you use SSL, the default port is 636.</p></li>
+	<li class="p"><p><span class="attribute">Active Directory domain name.</span> 
+	 The name of the domain for the Active Directory server.</p></li>
+	<li class="p"><p><span class="attribute">Active Directory LDAP URL</span> 
+	 and whether to use <span class="attribute">SSL</span>. Enter the Active 
+	 Directory LDAP address. The default port is 389. If you use SSL, the 
+	 default port is 636.</p></li>
 </ul>
 <p style="margin-left: 40px;">You can configure multiple external Active 
  Directory hosts.</p>

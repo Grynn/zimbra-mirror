@@ -3,8 +3,8 @@
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Session Timeout</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -82,12 +82,15 @@ else
 
 //-->
 //]]></script>
-<h1>About Session Idle Timeout and Auth Token Lifetime</h1>
+
+<h1>Changing Session Idle Timeout and Auth Token Lifetime</h1>
 <p>Session Idle Timeout, Admin console auth 
  token lifetime, and Auth Token Lifetime are advance features that are 
  configured in either a COS and changed for individual accounts.</p>
-<p>The administration console auth token lifetime sets the session lifetime 
- for the administration console.</p>
+<p>The administration console auth token lifetime sets a browser cookie 
+ that contains the admin auth token. Administrators can open the administration 
+ console without having to log on again until the auth token expires. The 
+ default is 12 hours. </p>
 <p>When a user logs on to the Zimbra Web Client and checks &quot;remember 
  me&quot; on the log on page, the <span style="font-weight: bold;"><b>Auth 
  Token Lifetime</b></span> feature sets a browser cookie that contains the 
@@ -99,16 +102,26 @@ else
  Zimbra Web Client. Activity includes any clickable mouse action such as 
  viewing the contents of a folder or clicking a command button. When there 
  is no activity within the configured time, the user is logged out of the 
- Zimbra Web Client. </p>
+ Zimbra Web Client. The default is unlimited.</p>
+<p>Setting limits for auth token lifetime and session idle timeout limits 
+ the exposure of a user's information on shared computers. When a session 
+ times out, the auth token automatically expires.</p>
 <p class="note"><img src="../blue_right.gif" alt="blue_right.gif" style="border: none;" width="24" height="19" border="0" />You can select 
  an account and click <span style="font-weight: bold;"><b>Invalidate Sessions</b></span> 
  to manually expire a user's session. The user is immediately logged out 
  of the web client. If the user is logged in, the user sees the login page 
  with a notice that the session has expired.</p>
-<p>Setting limits for both of these features limits the exposure of a user's 
- information on shared computers. When a session times out, the auth token 
- automatically expires.</p>
-<p>&#160;</p>
+<h6>Procedure </h6>
+<ol type="1">
+	<li><p>Go to either <span style="font-weight: bold;"><b>Configure&gt;Class 
+	 of Service</b></span> or to<span style="font-weight: bold;"><b> Manage&gt;Accounts</b></span>.</p></li>
+	<li><p>Select the COS or individual account and in the gear icon, select 
+	 <span style="font-weight: bold;"><b>Edit</b></span>.</p></li>
+	<li><p>In the Navigation pane, click <span style="font-weight: bold;"><b>Advanced</b></span>.</p></li>
+	<li><p>In the <span style="font-weight: bold;"><b>Timeout Policy</b></span> 
+	 section modify the timeout policies.</p></li>
+	<li><p>Click <span style="font-weight: bold;"><b>Save</b></span>.</p></li>
+</ol>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Viewing Mailbox Quotas</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -82,33 +82,37 @@ else
 
 //-->
 //]]></script>
-<h1>Viewing Mailbox Quotas</h1>
-<p style="font-weight: bold;"><span style="font-weight: normal;">Account 
- quota is the storage limit allowed for an account. Email messages, address 
- books, calendars, tasks, and Briefcase files contribute to the quota. 
- When the quota is reached, the message is sent to the deferred queue to 
- be delivered when the mailbox has space. &#160;The bounce queue lifetime 
- is set for five days. The deferred queue tries to deliver a message until 
- this bounce queue lifetime is reached before bouncing the message back 
- to the sender. </span></p>
+
+<h1>Viewing Mailbox Quotas </h1>
+<p style="font-weight: normal;">Account quota is the amount of space in 
+ megabytes that an account can use. The quota includes email messages, 
+ Calendar meeting information, task lists, files in Briefcase and RSS feed 
+ folders. When the quota is reached, all email messages are rejected and 
+ users cannot add files to their account. If you set the quota to 0, accounts 
+ do not have a quota. </p>
 <p>Users will need to delete items off the server to get below their quota 
  limit, or you can <a href="../managing_accounts/changing_quota_settings.htm">increase 
  their quota</a>.</p>
-<p>You can check account mailbox quotas from Server Statistics. The Mailbox 
- Quota displays the following information for each account sorted by mailbox 
- size in descending order. &#160;You can click on the Quota, Mailbox Size, 
- or Quota Used headers to change the viewing order.</p>
+<p>You can check account mailbox quotas from a Domain's Mailbox Quota page. 
+ The Mailbox Quota displays the following information for each account 
+ sorted by mailbox size in descending order. &#160;You can click on the 
+ Quota, Mailbox Size, or Quota Used headers to change the viewing order.</p>
 <ul type="disc">
-	<li class="p"><p>The <span style="font-weight: bold;"><b>Quota</b></span> 
-	 column shows the mailbox quota allocated to the account. Quotas are 
-	 configured either in the COS or by Account.</p></li>
 	<li class="p"><p>The <span style="font-weight: bold;"><b>Mailbox Size</b></span> 
 	 column shows the disk space used.</p></li>
 	<li class="p"><p>The <span style="font-weight: bold;"><b>Quota Used</b></span> 
 	 column shows what percentage of quota is used.</p></li>
+	<li class="p"><p>The <span style="font-weight: bold;"><b>Quota</b></span> 
+	 column shows the mailbox quota allocated to the account. Quotas are 
+	 configured either in the COS or by individual accounts.</p></li>
 </ul>
-<p>If a quota is not set, the Quota column displays 00.0MB. The account 
- has unlimited use of disk space.</p>
+<p>&#160;</p>
+<ul>
+	<li class="p-note"><p>Note: From the ZCS CLI, you can configure the 
+	 <span style="font-weight: bold;"><b>zimbraMailAllowReceiveButNotSendWhenOverQuota</b></span> 
+	 attribute to TRUE. When set to TRUE, a mailbox that exceeds its quota 
+	 is still allowed to receive new mail and calendar invites.</p></li>
+</ul>
 <p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--

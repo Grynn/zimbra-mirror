@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="MS-HAID" content="Advanced Features" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Account Advanced Features</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -83,6 +83,7 @@ else
 
 //-->
 //]]></script>
+
 <h1>Account Advanced 
  Features</h1>
 <p>Advanced features can be enabled either the COS or the Account. &#160;The 
@@ -105,10 +106,11 @@ else
 	<tr style="vertical-align: top; height: 19px;">
 		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
-			 border-bottom-width: 1px;"><h6>Attachment Settings</h6></td>
+			 border-bottom-width: 1px;" bgcolor="#DBDBDB"><h6>Attachment 
+		 Settings</h6></td>
 		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
-			 border-bottom-width: 1px;"><p>&#160;</p></td>
+			 border-bottom-width: 1px;" bgcolor="#DBDBDB"><p>&#160;</p></td>
 	</tr>
 	<tr style="vertical-align: top; height: 19px;">
 		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
@@ -139,10 +141,28 @@ else
 	<tr style="vertical-align: top; height: 19px;">
 		<td colspan="2" style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
-			 border-bottom-width: 1px;"><h6>Quotas </h6>
+			 border-bottom-width: 1px;" bgcolor="#DBDBDB"><h6>Quotas</h6>
 		<p style="font-weight: bold;">For more information see <a href="changing_quota_settings.htm">Changing 
 		 Quota Settings</a></p></td>
 		
+	</tr>
+	<tr style="vertical-align: top; height: 19px;">
+		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>Limit user-specified forwarding 
+		 addresses field to (chars):</p></td>
+		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;">&#160;</td>
+	</tr>
+	<tr style="vertical-align: top; height: 19px;">
+		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>Maximum number of user-specified 
+		 forwarding addresses:</p></td>
+		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;">&#160;</td>
 	</tr>
 	<tr style="vertical-align: top; height: 19px;">
 		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
@@ -155,7 +175,7 @@ else
 		 disk space an account can use on the mailbox server. When the 
 		 mailbox reaches the assigned limit, messages cannot be delivered. 
 		 The default is 0, which means unlimited. This means users could 
-		 use all the disk space on the server. </p></td>
+		 use all the disk space on the server.</p></td>
 	</tr>
 	<tr style="vertical-align: top; height: 19px;">
 		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
@@ -195,44 +215,93 @@ else
 			 border-bottom-width: 1px;"><p>Quota warning message template</p></td>
 		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
-			 border-bottom-width: 1px;"><p>This is the text of the message 
-		 that is sent. &#160;You can add additional details.</p></td>
+			 border-bottom-width: 1px;"><p>This text box contains the text 
+		 of the message that is sent when the quota is almost reached.. 
+		 &#160;You can add additional details.</p></td>
 	</tr>
 	<tr style="vertical-align: top; height: 19px;">
 		<td colspan="2" style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
-			 border-bottom-width: 1px;"><h6>Data Source</h6>
+			 border-bottom-width: 1px;" bgcolor="#DBDBDB"><h6>Data Source</h6>
 		<p>The polling interval can be set for the following data sources. 
 		 The polling interval can be set by seconds, minutes, hours, or 
 		 days. When setting the polling interval consider the impact on 
-		 performance. &#160;</p>
-		<ul type="disc">
-			<li><p><span style="font-weight: bold;"><b>Shortest allowed duration 
-			 for any polling interval</b></span>. Default in new Zimbra Collaboration Server 
-			 installations is 1 minute.</p></li>
-			<li style="font-weight: bold;"><p>POP3 polling interval<span 
-			 style="font-weight: normal;">. This is not set.</span></p></li>
-			<li style="font-weight: bold;"><p>IMAP polling interval<span 
-			 style="font-weight: normal;">. This is not set.</span></p></li>
-			<li><p><span style="font-weight: bold;"><b>Calendar polling interval</b></span>. 
-			 Default in new ZCS 
-			 installations is 12 hours.</p></li>
-			<li style="font-weight: bold;"><p>RSS polling interval<span 
-			 style="font-weight: normal;">. Default in new ZCS 
-			 installations is 12 hours.</span></p></li>
-			<li style="font-weight: bold;"><p>CalDav polling interval<span 
-			 style="font-weight: normal;">. This is not set.</span></p></li>
-		</ul>
-		<p>&#160;</p></td>
+		 performance. &#160;</p></td>
+		
+	</tr>
+	<tr style="vertical-align: top; height: 19px;">
+		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p style="font-weight: normal;">Shortest 
+		 allowed duration for any polling interval</p></td>
+		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>Default in new Zimbra Collaboration Server 
+		 installations is 1 minute.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 19px;">
+		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p style="font-weight: normal;">POP3 
+		 polling interval</p></td>
+		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>Default in new Zimbra Collaboration Server 
+		 installations is 1 day.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 19px;">
+		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p style="font-weight: normal;">IMAP 
+		 polling interval</p></td>
+		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>Default in new Zimbra Collaboration Server 
+		 installations is 1 day.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 19px;">
+		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p style="font-weight: normal;">Calendar 
+		 polling interval</p></td>
+		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>Default in new Zimbra Collaboration Server 
+		 installations is 12 hours.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 19px;">
+		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p style="font-weight: normal;">RSS 
+		 polling interval</p></td>
+		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>Default in new Zimbra Collaboration Server 
+		 installations is 12 hours.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 19px;">
+		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p style="font-weight: normal;">CalDav 
+		 polling interval</p></td>
+		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>Default in new Zimbra Collaboration Server 
+		 installations is 1 day.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 19px;">
+		<td colspan="2" style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;" bgcolor="#DBDBDB"><h6>Proxy Allowed 
+		 Domains</h6></td>
 		
 	</tr>
 	<tr style="vertical-align: top; height: 19px;">
 		<td colspan="2" style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
-			 border-bottom-width: 1px;"><h6>Proxy Allowed Domains</h6>
-		<p>The Proxy Allowed Domains section is configured to allow access 
-		 to external domains that are accessed through a Zimlet. &#160;For 
-		 the Zimlets that are included in Zimbra Collaboration Server, 
+			 border-bottom-width: 1px;"><p>The Proxy Allowed Domains section 
+		 is configured to allow access to external domains that are accessed 
+		 through a Zimlet. &#160;For the Zimlets that are included in Zimbra Collaboration Server, 
 		 the following proxy allowed domains are configured. &#160;If you 
 		 download and deploy other Zimlets, you can add additional proxy 
 		 domain names.</p>
@@ -252,7 +321,7 @@ else
 	<tr style="vertical-align: top; height: 19px;">
 		<td colspan="2" style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
-			 border-bottom-width: 1px;"><h6>Passwords </h6>
+			 border-bottom-width: 1px;" bgcolor="#DBDBDB"><h6>Passwords</h6>
 		<p>The password settings in Advanced do not affect the passwords 
 		 set by users in domains that are configured to use external authentication.</p></td>
 		
@@ -349,13 +418,19 @@ else
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
 			 border-bottom-width: 1px;"><p>If this is enabled, users cannot 
 		 change their password. &#160;This should be enabled, if the authentication 
-		 is external.</p></td>
+		 is external. Users who try to log in and have forgotten their 
+		 password are temporarily locked out after a specified number of 
+		 consecutive failed login attempts. An account's status is automatically 
+		 changed to lockout.</p></td>
 	</tr>
 	<tr style="vertical-align: top; height: 19px;">
 		<td colspan="2" style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
-			 border-bottom-width: 1px;"><p style="font-weight: bold;">Setting 
-		 Em<span style="font-weight: bold;"><b>ail Retention Policy</b></span></p></td>
+			 border-bottom-width: 1px;" bgcolor="#DBDBDB"><p style="font-weight: bold;">Setting 
+		 Email Retention Policy</p>
+		<p style="font-weight: bold;">T<span style="font-weight: normal;">o 
+		 enable the Email Retention Policy on the account, zimbraMailPurgeSleepInterval 
+		 should be enabled in either the server or global config</span></p></td>
 		
 	</tr>
 	<tr style="vertical-align: top; height: 19px;">
@@ -390,12 +465,24 @@ else
 		 default is 30 days.</p></td>
 	</tr>
 	<tr style="vertical-align: top; height: 19px;">
+		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>Retention lifetime in dumpster 
+		 before purging</p></td>
+		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>Threshold after which items 
+		 in the dumpster are purged. &#160;This displays if the dumpster 
+		 feature is enabled.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 19px;">
 		<td colspan="2" style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
 			 border-bottom-width: 1px;"><p>The default mail purging setting 
 		 when ZCS 
 		 is installed is 1 second. </p>
-		<p>When <span style="font-weight: bold;"><b>zimbraMailPurgeSleepInterval</b></span> 
+		<p>When <span 
+		 style="font-weight: bold;"><b>zimbraMailPurgeSleepInterval</b></span> 
 		 is set to a non-zero value, a purge thread runs continuously, 
 		 purging messages from mailboxes that have reached the lifetime 
 		 threshold. When you configure this attribute, you set the sleep 
@@ -413,11 +500,11 @@ else
 		</ul></td>
 		
 	</tr>
-	<tr style="vertical-align: top; height: 19px;">
+	<tr style="vertical-align: top; height: 30px;">
 		<td colspan="2" style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
-			 border-bottom-width: 1px;"><p style="font-weight: bold;">&#160;</p>
-		<p style="font-weight: bold;">Setting Session Timeout Policy</p></td>
+			 border-bottom-width: 1px;" bgcolor="#DBDBDB"><p style="font-weight: bold;">Setting 
+		 Session Timeout Policy</p></td>
 		
 	</tr>
 	<tr style="vertical-align: top; height: 19px;">
@@ -426,9 +513,9 @@ else
 			 border-bottom-width: 1px;"><p>Admin console auth token lifetime</p></td>
 		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
-			 border-bottom-width: 1px;"><p>This feature sets how long the 
-		 admin console auth token is valid. 
-		 The default is 12 hours.</p></td>
+			 border-bottom-width: 1px;"><p>NOT IN 8 = This feature sets 
+		 how long the admin console auth token 
+		 is valid. The default is 12 hours.</p></td>
 	</tr>
 	<tr style="vertical-align: top; height: 19px;">
 		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
@@ -445,6 +532,15 @@ else
 	<tr style="vertical-align: top; height: 19px;">
 		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>Visibility lifetime in dumpster 
+		 for end user</p></td>
+		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>The default is 30 days</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 19px;">
+		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
 			 border-bottom-width: 1px;"><p>Session idle timeout</p></td>
 		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
@@ -453,12 +549,12 @@ else
 		 includes any clickable mouse action, 
 		 such as viewing contents or folder or clicking a button.</p></td>
 	</tr>
-	<tr style="vertical-align: top; height: 19px;">
+	<tr style="vertical-align: top; height: 30px;">
 		<td colspan="2" style="border-right: Solid 1px #000000; width: 31.907%; 
 			 padding-right: 10px; padding-left: 10px; border-top-style: Solid; 
-			 border-bottom-style: Solid; border-top-width: 1px; border-bottom-width: 1px;"><p 
-			 style="font-weight: bold;">&#160;</p>
-		<p style="font-weight: bold;">Failed Login Policy. See <a href="../passwords/setting_account_lockout_rules.htm">Setting 
+			 border-bottom-style: Solid; border-top-width: 1px; border-bottom-width: 1px;" 
+			 bgcolor="#DBDBDB"><p style="font-weight: bold;">Failed Login 
+		 Policy. See <a href="../passwords/setting_account_lockout_rules.htm">Setting 
 		 Account Lockout Rules</a></p></td>
 		
 	</tr>
@@ -513,21 +609,40 @@ else
 	<tr style="vertical-align: top; height: 19px;">
 		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
-			 border-bottom-width: 1px;"><p>&#160;</p></td>
+			 border-bottom-width: 1px;" bgcolor="#DBDBDB"><p style="font-weight: bold;">Free/Busy 
+		 Interop</p></td>
 		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
-			 border-bottom-width: 1px;"><p>&#160;</p></td>
+			 border-bottom-width: 1px;" bgcolor="#DBDBDB"><p>&#160;</p></td>
 	</tr>
 	<tr style="vertical-align: top; height: 19px;">
 		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
-			 border-bottom-width: 1px;"><p>Free/Busy Interop</p></td>
+			 border-bottom-width: 1px;"><p>O and OU used in legacyExchangeDN 
+		 attribute</p></td>
 		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
 			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
 			 border-bottom-width: 1px;"><p>You can make users <a href="../managing_global_settings/making_free_busy_view__available_.htm">free/busy 
 		 schedule</a> visible across a mix of Zimbraservers 
 		 and third party email servers. Here, this setting is used to set 
 		 the O and OU used in legacyExchangeDN attribute.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 19px;">
+		<td colspan="2" style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;" bgcolor="#DBDBDB"><p style="font-weight: bold;">Mail 
+		 Transport</p></td>
+		
+	</tr>
+	<tr style="vertical-align: top; height: 19px;">
+		<td style="width: 31.907%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>Mail Transport</p></td>
+		<td style="width: 68.093%; padding-right: 10px; padding-left: 10px; 
+			 border-top-style: Solid; border-bottom-style: Solid; border-top-width: 1px; 
+			 border-bottom-width: 1px;"><p>This setting should be &quot;protocol&quot;, 
+		 server&quot;, &quot;port&quot;. &#160;For example, smtp:smtp.zimbrasmtpserver.com:25 
+		 </p></td>
 	</tr>
 </table>
 <p>&#160;</p>

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>MTA SMTP Restrictions</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -54,7 +54,7 @@ if (window.gbWhTopic)
 
 	if (window.addTocInfo)
 	{
-	addTocInfo("Global Settings\nMTA Protocol and DNS Checks");
+	addTocInfo("Global Settings\nConfigure MTA Protocol and DNS Checks");
 addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 
 	}
@@ -82,28 +82,141 @@ else
 
 //-->
 //]]></script>
-<h1>MTA Protocol and DNS Checks</h1>
+
+<h1>Configure MTA Protocol and DNS Checks</h1>
 <p>You can enable restrictions so that the MTA does not accept messages 
  when non standard or other disapproved behavior is exhibited by an incoming 
  SMTP client. These restrictions provide some protection against ill-behaved 
- spam senders.</p>
-<p>By default, the following SMTP protocol violators are restricted:</p>
+ spam senders. </p>
+<p>In addition, you can enable the following DNS-based 
+ BlackHole Lists:</p>
 <ul type="disc">
-	<li class="p"><p>Hostname in greeting violates RFC</p></li>
-	<li class="p"><p>Client must greet with a fully qualified hostname</p></li>
-	<li class="p"><p>Sender address must be fully qualified</p></li>
-</ul>
-<p>The following DNS based restrictions can also be enabled:</p>
-<ul type="disc">
-	<li class="p"><p>Client's IP address</p></li>
-	<li class="p"><p>Hostname in greeting</p></li>
-	<li class="p"><p>Sender's domain</p></li>
+	<li><p>reject_rbl_client dnsbl.njabl.org</p></li>
+	<li><p>reject_rbl_client cbl.abuseat.org</p></li>
+	<li><p>reject_rbl_client bl.spamcop.net</p></li>
+	<li><p>reject_rbl_client dnsbl.sorbs.net</p></li>
+	<li><p>reject_rbl_client sbl.spamhaus.org </p></li>
+	<li><p>reject_rbl_client relays.mail-abuse.org </p></li>
 </ul>
 <p><span class="Important">Important:</span> Before setting these restrictions, 
  identify what type of mail is received outside of your mail system. If 
  a mail system that you want to receive mail from is poorly implemented, 
- you may have to compromise your restrictions to accommodate their messages.</p>
+ you might have to compromise your restrictions to accommodate their messages.</p>
+<p style="font-weight: bold;">Procedure</p>
+<p>1. &#160;Go to the <span class="attribute">Configure&gt;Global Settings&gt;MTA</span> 
+ page.</p>
+<p>2. &#160;Check the appropriate boxes in the <span class="attribute">Protocol 
+ Checks</span> section to restrict the following SMTP protocol violators.</p>
+<table width="100%">
+ <tr>
+ <td>
+<table style="padding-left: 6.00pt; padding-top: 6.00pt; padding-right: 6.00pt; 
+		 padding-bottom: 4.00pt; margin-left: 18.00pt;" cellspacing="0" width="80%" align="left">
+	<col />
+	<col style="width: 56.315%;" />
+	<tr style="height: 32px;" bgcolor="#B2B2B2">
+		<th style="border-top: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;" bgcolor="#B2B2B2"><p class="FM_option">Option</p></th>
+		<th style="border-top: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;" bgcolor="#B2B2B2"><p class="FM_Description">Description</p></th>
+	</tr>
+	<tr style="height: 57px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p class="FM_CellBodyoption" style="font-weight: bold;">Hostname 
+		 in greeting violates RFC (reject_invalid_helo_hostname)</p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p class="FM_CellBody">Reject the 
+		 request when the hostname syntax 
+		 is invalid.</p></td>
+	</tr>
+	<tr style="height: 59px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p class="FM_CellBodyoption" style="font-weight: bold;">Client 
+		 must greet with a fully qualified host name (reject_non_fqdn_helo_hostname)</p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p class="FM_CellBody">Reject the 
+		 request when the host name is not in fully-qualified domain form.</p></td>
+	</tr>
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p class="FM_CellBodyoption" style="font-weight: bold;">Sender 
+		 address must be fully qualified (reject_non_fqdn_sender)</p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><span style="font-size: 10pt;"><font size="2" style="font-size:10pt;">Reject 
+		 the request when the Mail From address is not in fully-qualified 
+		 domain form.</font></span></td>
+	</tr>
+</table>
+</td></tr>
+</table>
 <p>&#160;</p>
+<p>3. &#160;Check the appropriate boxes in the <span class="attribute">DNS 
+ checks</span> section to enable DNS based restrictions.</p>
+<table width="100%">
+ <tr>
+ <td>
+<table style="padding-left: 6.00pt; padding-top: 6.00pt; padding-right: 6.00pt; 
+		 padding-bottom: 4.00pt; margin-left: 18.00pt;" cellspacing="0" width="80%" align="left">
+	<col />
+	<col />
+	<tr style="height: 32px;" bgcolor="#B2B2B2">
+		<th style="border-top: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;" bgcolor="#B2B2B2"><p class="FM_option">Option</p></th>
+		<th style="border-top: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;" bgcolor="#B2B2B2"><p class="FM_Description">Description</p></th>
+	</tr>
+	<tr style="height: 44px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p class="FM_CellBodyoption" style="font-weight: bold;">Client's 
+		 IP address (reject_unknown_client_hostname)</p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p class="FM_CellBody">Reject the 
+		 request when the client address&gt;name mapping fails, or when 
+		 the name&gt;address mapping fails, or if the name&gt;address mapping 
+		 does not match the client IP address. </p></td>
+	</tr>
+	<tr style="height: 43px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p class="FM_CellBodyoption" style="font-weight: bold;">Hostname 
+		 in greeting (reject_unknown_helo_hostname)</p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p class="FM_CellBody">Reject the 
+		 request when the host name has no DNS A or MX record.</p></td>
+	</tr>
+	<tr style="height: 48px;">
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><p class="FM_CellBodyoption" style="font-weight: bold;">Sender's 
+		 domain (reject_unknown_sender_domain)</p></td>
+		<td style="border-bottom: solid 1px #000000; vertical-align: top; 
+			 padding-left: 6.00pt; padding-top: 3.00pt; padding-right: 6.00pt; 
+			 padding-bottom: 3.00pt;"><span style="font-size: 10pt;"><font size="2" style="font-size:10pt;">Rejects 
+		 the request when this is not the final destination for the sender 
+		 address and the Mail From domain has no DNS A or MX record, or 
+		 a malformed MX record.</font></span></td>
+	</tr>
+</table>
+</td></tr>
+</table>
+<p>&#160;</p>
+<p>4 &#160;&#160;In the <span class="attribute">&#160;List the RBLs</span> 
+ section, add specific RBL types that should 
+ be enabled. </p>
+<p>5. &#160;Click <span class="attribute">Save</span>. </p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

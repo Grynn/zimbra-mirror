@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>Making Free/Busy View Available</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -82,160 +82,113 @@ else
 
 //-->
 //]]></script>
+
 <h1>Making Free/Busy Schedule Available</h1>
-<p>When Zimbra Collaboration Server 
- is deployed in a mix of Zimbra 
- servers and other third-party email servers and Calendar is an important 
- function with your users, you may want users to be able to see the free/busy 
- scheduling across the mix so that users can efficiently schedule their 
- meetings. &#160;</p>
-<p>ZCS 
- can query the free/busy schedules of users on Microsoft Exchange 2003/2007/2010 
+<p>The Free/Busy feature allows users to view each other’s calendars for 
+ efficiently scheduling meetings. You can set up free/busy scheduling across 
+ ZCS and Microsoft Exchange servers. </p>
+<p>ZCS can query 
+ the free/busy schedules of users on Microsoft Exchange 2003/2007/2010 
  servers and also can propagate the free/busy schedules of Zimbra users to the Exchange 
- server. To set this up, configure Global Config 
- or Domain, Class of Service, and Account settings.</p>
-<p>To set Free/Busy interoperability up, configure the following</p>
+ server. </p>
+<p>To set free/busy interoperability, the Exchange systems must be set 
+ up as correctly. See the ZCS administration guide, Managing ZCS Configuration 
+ chapter for Exchange setup requirements. </p>
+<p>In addition, the global config, Domain, COS and Account settings must 
+ be configured.</p>
+<p style="font-weight: bold;">Procedure</p>
 <ol type="1">
-	<li class="p"><p>Either globally or by domain configure the Exchange 
-	 server settings in the <span style="font-weight: bold;"><b>Free/Busy 
-	 Interop</b></span> tab.</p></li>
-	<li class="p"><p>In the global settings or domain <span style="font-weight: bold;"><b>Interop</b></span> 
-	 tab or the <span style="font-weight: bold;"><b>Class of Service</b></span> 
-	 (COS) <span style="font-weight: bold;"><b>Advanced</b></span> tab, add <span 
-	 style="font-weight: bold;"><b>o</b></span> and <span style="font-weight: bold;"><b>ou</b></span> values that are in the <span style="font-weight: bold;"><b>legacyExchangeDN</b></span> 
-	 attribute for Exchange. These values correspond to the domain attribute 
-	 <span style="font-weight: bold;"><b>zimbraFreebusyExchangeUserOrg</b></span>.</p></li>
-	<li class="p"><p>In the <span style="font-weight: bold;"><b>Accounts Free/Busy 
-	 Interop</b></span> tab, configure the foreign principal for the account. 
-	 The cn value in the <span style="font-weight: bold;"><b>legacyExchangeDn</b></span> attribute corresponds 
-	 to the <span style="font-weight: bold;"><b>zimbraForeignPrincipal</b></span> 
-	 attribute. This sets up a mapping from the Zimbra 
-	 account to the corresponding object in the AD.</p></li>
+	<li><p>As a global configuration, go to <span class="attribute">Configure&gt;Global 
+	 Settings</span> or for a domain configuration go to <span class="attribute">Configure&gt;Domains</span>, 
+	 select the domain and in the gear icon, click <span class="attribute">Edit</span>. 
+	 </p></li>
+	<li><p>Click <span class="attribute">Free/Busy Interop</span><span 
+	 style="font-weight: bold;"><b> </b></span>in the Navigation pane.</p></li>
+	<li><p>In the <span class="attribute">Microsoft Exchange Server URL</span> 
+	 text box type the Web interface URL to Exchange.</p></li>
+	<li><p>In the <span class="attribute">Microsoft Exchange Authorization 
+	 Scheme</span> menu select either <span class="attribute">Basic</span> 
+	 or <span class="attribute">Form</span>.</p></li>
 </ol>
-<ul>
-	<li class="p-note"><p class="note">To find these values on the Exchange 
-	 server, you can run the Exchange ADSI Edit 
-	 tool and search the legacyExchangeDN attribute for o= , ou= , and 
-	 cn= values.</p></li>
-</ul>
-<h2>Global Config Settings</h2>
-<p>The <span style="font-weight: bold;"><b>Interop</b></span> 
- tap is used to configure the Exchange server settings.</p>
-<p>Configure the following on the tab:</p>
-<ul style="
-list-style-type:disc;
-list-style-position:outside;" type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>Microsoft Exchange 
-	 Server URL</b></span>. &#160;This is the Web interface to the Exchange.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Microsoft Exchange 
-	 Authorization Scheme,</b></span> either <span style="font-weight: bold;"><b>Basic</b></span> 
-	 or <span style="font-weight: bold;"><b>Form</b></span>.</p></li>
-	<li style="list-style: none; display: inline;"><ul type="circle">
-		<li class="p"><p>Basic is authentication to Exchange via HTTP basic authentication.</p></li>
-		<li class="p"><p>Form is authentication to Exchange as HTML form 
-		 based authentication.</p></li>
-	</ul></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Microsoft Exchange 
-	 Server Type</b></span>, either WebDAV or 
-	 ews.</p></li>
+<ul type="circle">
 	<ul type="circle">
-		<li class="p"><p>Select WebDAV to 
+		<li class="p" type="disc"><p>Basic is authentication to Exchange 
+		 via HTTP basic authentication.</p></li>
+		<li class="p" type="disc"><p>Form is authentication to Exchange 
+		 as HTML form based authentication.</p></li>
+	</ul>
+</ul>
+<ol start="5" type="1">
+	<li><p>In the <span class="attribute">Microsoft Exchange Server Type</span> 
+	 menu select either <span class="attribute">WebDAV</span> 
+	 or <span class="attribute">ews</span>.</p></li>
+</ol>
+<ul type="circle">
+	<ul type="circle">
+		<li type="disc"><p>Select WebDAV to 
 		 support free/busy with Exchange 2003 or Exchange 2007.</p></li>
-		<li class="p"><p>Select ews (Exchange 
-		 Web Service) to support free/busy with Exchange 2010.</p></li>
+		<li type="disc"><p>Select ews (Exchange 
+		 Web Service) to support free/busy with Exchange 2010, SP1.</p></li>
 	</ul>
-	<li class="p"><p><span style="font-weight: bold;"><b>Microsoft Exchange 
-	 User Name</b></span> and <span style="font-weight: bold;"><b>User Password</b></span>. 
-	 This is the name of the account in Active Directory and password that 
-	 has access to the public folders.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>O and OU used in 
-	 legacyExchangeDN attribute</b></span>. The O and OU values that are in 
-	 the legacyExchangeDN attribute for Exchange.</p></li>
 </ul>
-<p>To check that your settings are correct before you save the configuration, 
- click <span style="font-weight: bold;"><b>Check the settings</b></span>. &#160;If 
- the configuration is correct, click <span style="font-weight: bold;"><b>Save</b></span> 
- to save the Microsoft Exchange settings. &#160;If the configuration is 
- incorrect, click <span style="font-weight: bold;"><b>Clear the Settings</b></span> 
- to clear all the fields and configure the settings again.</p>
-<h2>Domain Free/Busy Interop Setting</h2>
-<p>The <span style="font-weight: bold;"><b>Free/Busy</b></span> <span style="font-weight: bold;"><b>Interop</b></span> 
- tab is used to configure the Exchange server settings. This information 
- is the basic property of the Exchange server account that has access to 
- the Exchange public folders. In order to enable the Exchange free/busy 
- interop implementation, a &#160;single AD must be in the system or the 
- Global Catalog must be available and the Zimbra 
- server must be able to access the HTTP(S) 
- port of IIS on at least one of the Exchange 
- servers.</p>
-<p>Configure the following on the tab</p>
-<ul style="
-list-style-type:disc;
-list-style-position:outside;" type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>Microsoft Exchange 
-	 Server URL</b></span>. &#160;This is the Web interface to the Exchange 
-	 public folders.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Microsoft Exchange 
-	 Authorization Schema,</b></span> either <span style="font-weight: bold;"><b>Basic</b></span> 
-	 or <span style="font-weight: bold;"><b>Form</b></span>.</p></li>
-	<ul type="circle">
-		<li class="p"><p>Basic is authentication to Exchange via HTTP basic authentication.</p></li>
-		<li class="p"><p>Form is authentication to Exchange as HTML form 
-		 based authentication.</p></li>
-	</ul>
-	<li class="p"><p><span style="font-weight: bold;"><b>Microsoft Exchange 
-	 Server Type</b></span>, either WebDAV or 
-	 ews.</p></li>
-	<ul type="circle">
-		<li class="p"><p>Select WebDAV to 
-		 support Exchange 2003 or Exchange 2007.</p></li>
-		<li class="p"><p>Select ews (Exchange 
-		 Web Service) to support free/busy with Exchange 2010.</p></li>
-	</ul>
-	<li class="p"><p><span style="font-weight: bold;"><b>Microsoft Exchange 
-	 User Name </b></span>and<span style="font-weight: bold;"><b> Password</b></span> 
-	 . This is the name of the account &#160;and password that has access 
-	 to the public folders.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>O and OU used in 
-	 legacyExchangeDN attribute</b></span>. The O and OU values that are in 
-	 the legacyExchangeDN attribute for Exchange.</p></li>
-</ul>
-<p>To check that your settings are correct before you save the configuration, 
- click <span style="font-weight: bold;"><b>Check the settings</b></span>. &#160;If 
- the configuration is correct, click <span style="font-weight: bold;"><b>Save</b></span> 
- to save the Microsoft Exchange settings. &#160;If the configuration is 
- incorrect, click <span style="font-weight: bold;"><b>Clear the Settings</b></span> 
- to clear all the fields and configure the settings again.</p>
-<ul>
-	<li class="P-note"><p class="note">&#160;Domain settings overwrite 
-	 Global settings.</p></li>
-</ul>
-<h2>COS Setting</h2>
-<p>The Free/Busy Interop section of the Advanced 
- tab is used to set the <span style="font-weight: bold;"><b>O</b></span> and <span style="font-weight: bold;"><b>OU</b></span> used in the 
- &#160;&#160;legacyExchangeDN attribute 
- (i.e. legacyExchangeDN : / o=First Organization/ 
- ou=First Administrative Group).</p>
-<h2>Account Settings</h2>
-<p>Two tabs have Free/Busy Interop configuration 
- options.</p>
-<ul style="
-list-style-type:disc;
-list-style-position:outside;" type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>Advanced tab</b></span>. 
-	 This is the same as the COS Setting configuration unless you want 
-	 to change it for a specific account.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Interop 
-	 tab</b></span>. This is the tab to configure the foreign principal for 
-	 the account. &#160;This is a mapping from the Zimbra 
-	 account to the corresponding object in the Active Directory. The Zimbra 
-	 foreign principal maps like this: <span style="font-weight: bold;"><b>legacyExchangeDN 
-	 : /o=.../ou=.../cn-Recipient/cn=&lt;Zimbra foreign principal&gt;</b></span>. 
-	 The Zimbra foreign principal is usually the user's address.</p></li>
-</ul>
-<p style="margin-left: 40px;">This is a multi-value attribute, you can 
- add more than one account address. A prefix is added to the address. &#160;For 
- Exchange the prefix is AD.</p>
+<ol start="6" type="1">
+	<li><p>In the<span style="font-weight: bold;"><b> </b></span><span class="attribute">Microsoft 
+	 Exchange User Name</span> and <span class="attribute">User Password</span>. 
+	 text boxes, type the name of the account in Active Directory and password 
+	 that has access to the public folders.</p></li>
+	<li><p>In the &#160;<span class="attribute">O and OU used in legacyExchangeDN 
+	 attribute text box</span> enter the O and OU values that are in the 
+	 legacyExchangeDN attribute for Exchange. These values correspond to 
+	 the domain attribute <span 
+	 class="attribute">zimbraFreebusyExchangeUserOrg</span>. When set at 
+	 the global level, this applies to all accounts talking to Exchange.</p></li>
+</ol>
+<p style="margin-left: 40px;">To find these values on the Exchange server, 
+ you can run the Exchange ADSI Edit tool and 
+ search the legacyExchangeDN attribute for o= , ou= , and cn= values.</p>
+<ol start="8" type="1">
+	<li><p>To check that your settings are correct before you save the 
+	 configuration, click <span class="attribute">Check the settings</span>. 
+	 </p></li>
+	<li><p>If the configuration is correct, click <span class="attribute">Save</span>. 
+	 &#160;If the configuration is incorrect, click <span class="attribute">Clear 
+	 the Settings</span> to clear all the fields and configure the settings 
+	 again.</p></li>
+</ol>
+<h2>Setting Up legacyExchangeDN attribute by COS</h2>
+<ol type="1">
+	<li><p>Go to<span class="attribute"> Configure &gt; Class of Service</span> 
+	 and select the COS to set up the free/busy legacy Exchange DN attribute.</p></li>
+	<li><p>Select the <span class="attribute">Advanced</span> page, and 
+	 in the <span class="attribute">Free/Busy Interop</span><span style="font-weight: bold;"><b> 
+	 </b></span>section</p></li>
+	<li><p>In the &#160;<span class="attribute">O and OU used in legacyExchangeDN 
+	 attribute text box</span> enter the <span class="attribute">O</span> 
+	 and <span class="attribute">OU</span> used 
+	 in the &#160;legacyExchangeDN 
+	 attribute (i.e. legacyExchangeDN 
+	 : / o=First Organization/ ou=First Administrative Group) </p></li>
+	<li><p>Click <span class="attribute">Save</span>. </p></li>
+</ol>
+<h2>Set up Individual Account's Address</h2>
+<ol type="1">
+	<li><p>Go to <span class="attribute">Manage &gt; Accounts</span> and 
+	 select the account to edit.</p></li>
+	<li><p>Select the <span class="attribute">Free/Busy Interop</span> 
+	 page.</p></li>
+	<li><p>Click <span class="attribute">Add</span>.</p></li>
+	<li><p>In the <span class="attribute">Free/Busy Interop Provider</span> 
+	 drop-down menu, select the interop provider.</p></li>
+	<li><p>In the <span class="attribute">Foreign Principal Email address</span> 
+	 text box enter the account's user's address.</p></li>
+	<li><p>Click <span class="attribute">OK</span>. The dialog box closes 
+	 and the name is added to the Foreign Principals content pane.</p></li>
+	<li><p>Select the address and click <span class="attribute">Push</span>. 
+	 &#160;This schedules the free/busy information to be pushed to the 
+	 provider and makes the account's free busy status available.</p></li>
+</ol>
+<p>In the individual Accounts&gt;Advanced page you can change the O and 
+ OU used for a specific account. &#160;Usually this COS setting is correct.</p>
 <p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--

@@ -4,8 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
-<title>Changing Locked Out Status</title>
+ <meta name="generator" content="Adobe RoboHelp 9" />
+<title>Managing Resource Conflicts</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
 //<![CDATA[
@@ -54,8 +54,7 @@ if (window.gbWhTopic)
 
 	if (window.addTocInfo)
 	{
-	addTocInfo("Managing Accounts\nSetting Password Rules\nChanging Locked Out Status");
-addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
+	addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -82,14 +81,27 @@ else
 
 //-->
 //]]></script>
-<h1>Changing Locked Out Status</h1>
-<p>When users enter the wrong password more than the allowed attempts when 
- logging in, if you have configured account lockout rules, they are temporarily 
- locked out of their accounts. To unlock the account, open the account 
- and from the <span style="font-weight: bold;"><b>General Information</b></span> 
- tab change the <a href="../managing_accounts/changing_account_status.htm">account 
- status</a> to <span style="font-weight: bold;"><b>Active</b></span>.</p>
-<p>&#160;</p>
+
+<h1>Managing Resource Conflicts</h1>
+<p style="margin-left: 1px;">For accounts that include the auto decline 
+ on conflict value, you can configure Maximum allowed number of conflicts 
+ and/or Maximum allowed percent of conflicts to allow a recurring resource 
+ to be scheduled even if it is not available for all the requested recurring 
+ appointment dates.</p>
+<p style="margin-left: 1px;">The resource accepts appointments even if 
+ there are conflicts unless either the number of conflicts reaches the 
+ maximum allowed or the maximum percentage of conflicts allowed is reached. 
+ &#160;If you try to schedule an appointment with the resource and the 
+ number of times the resource is unavailable exceeds the rule, the entire 
+ appointment is rejected.</p>
+<p style="margin-left: 0px; font-weight: normal;">For example, if the maximum 
+ allowed conflicts is 3 and you try to schedule an appointment with a resource 
+ and more than 3 conflicting dates are found, the entire recurring appointment 
+ is rejected.</p>
+<p style="margin-left: 0px; font-weight: normal;">When a resource is invited 
+ to a single-instance appointment, if the resource scheduling policy is 
+ configured to auto decline, the single instance is always declined. The 
+ conflict rules do not apply.</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

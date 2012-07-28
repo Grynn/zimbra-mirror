@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 9" />
 <title>How to Configure GAL</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -82,74 +82,90 @@ else
 
 //-->
 //]]></script>
-<h1>How to Configure GAL</h1>
+
+<h1>Configuring GAL</h1>
 <p>The Global Address List (GAL) is configured on a per-domain basis. The 
  GAL Configuration Wizard directs you through the steps to configure GAL.</p>
 <p>GAL is configured when a new <a href="creating_a_domain.htm">domain 
  is created</a> and can be edited from the <span style="font-weight: bold;"><b>Domain</b></span> 
  toolbar.</p>
-<h6>To configure the GAL setting</h6>
+<h6>Procedure</h6>
 <ol type="1">
-	<li class="p"><p>To edit the GAL for a domain, select the domain, and 
-	 on the toolbar click <span style="font-weight: bold;"><b>Configure GAL</b></span>.</p></li>
-	<li class="p"><p>Select the GAL mode, <span style="font-weight: bold;"><b>Internal, 
-	 External</b></span>, or <span style="font-weight: bold;"><b>&#160;Both</b></span>.</p></li>
-	<li class="p"><p>Enter the value for the maximum results that should 
-	 be returned from a GAL search. The default is 100.</p></li>
+	<li class="p"><p>Go to <span class="attribute">Configure&gt;Domain</span> 
+	 and select the domain to edit.</p></li>
+	<li class="p"><p>In the gear icon click<span class="attribute"> Configure 
+	 GAL</span><span style="font-weight: bold;"><b>.</b></span></p></li>
+	<li class="p"><p>Select the GAL mode, <span class="attribute">Internal</span><span 
+	 style="font-weight: bold;"><b>, </b></span><span class="attribute">External</span>, 
+	 or <span style="font-weight: bold;"><b>&#160;</b></span><span class="attribute">Both</span>.</p></li>
+	<li class="p"><p>Enter the value for most results that should be returned 
+	 from a GAL search. The default is 100.</p>
 	<ul style="list-style: url('../blue_right.jpg');">
-		<li class="P-note"><p class="note">The maximum results settings 
-		 can also be set in Global Settings. The value entered in Global 
-		 Settings becomes the default for domains if you do not set it 
-		 here.</p></li>
-	</ul>
-	<li class="p"><p>To create a GAL sync account, enter an account name 
-	 for the GAL sync account name; the recommended default is galsync. &#160;&#160;If the account does not exist, 
-	 a new account is created. &#160;This account is used only to sync 
-	 the LDAP contacts to the GAL sync account's address book.</p></li>
-	<li class="p"><p>Server type can be ether <span style="font-weight: bold;"><b>LDAP</b></span> 
-	 or <span style="font-weight: bold;"><b>Active Directory</b></span>. </p></li>
+		<li class="P-note" style="margin-left: -20px;"><p class="note">The 
+		 maximum results settings can also be set in Global Settings. The 
+		 value entered in Global Settings becomes the default for domains 
+		 if you do not set it here.</p></li>
+	</ul></li>
+	<li class="p"><p>Configure a <a href="using_gal_sync_accounts.htm">GAL 
+	 sync account</a>, </p></li>
+	<ol type="a">
+		<li class="p"><p>Enter an account name for the GAL sync account 
+		 name; the recommended default is galsyncxxx. 
+		 &#160;This account is used only to sync the LDAP contacts to the 
+		 GAL sync account's address book.</p></li>
+		<li class="p"><p>In the Datasource 
+		 name for GAL field, enter the LDAP server address where the contact 
+		 data is syncd to.</p></li>
+		<li class="p"><p>Set the polling interval. This is how often the 
+		 GAL sync account sync with the LDAP server.</p></li>
+	</ol>
+</ol>
+<p style="margin-left: 80px;">If you have multiple servers, you can add 
+ a GAL sync account for each server.</p>
+<ol start="6" type="1">
+	<li class="p"><p>Server type can be ether <span class="attribute">LDAP</span> 
+	 or<span class="attribute"> Active Directory</span>.</p>
 	<ul type="disc">
-		<li class="p"><p>If <span style="font-weight: bold;"><b>LDAP</b></span> 
-		 is selected, enter the LDAP URL and enter the port as 389.</p></li>
-		<li class="p"><p>If <span style="font-weight: bold;"><b>Active Directory</b></span> 
+		<li class="p"><p>If <span class="attribute">LDAP</span> is selected, 
+		 enter the LDAP URL and enter the port as 389.</p></li>
+		<li class="p"><p>If <span class="attribute">Active Directory</span> 
 		 is selected, enter the Active Directory LDAP URL and enter the 
 		 port as 3268.</p></li>
-	</ul>
-	<li class="p"><p>If you check <span style="font-weight: bold;"><b>Use 
-	 SSL</b></span>, the server port is 636.</p></li>
-	<li class="p"><p>To add additional LDAP servers, click <span style="font-weight: bold;"><b>Add</b></span>. 
+	</ul></li>
+</ol>
+<ol start="7" type="1">
+	<li class="p"><p>If you check <span class="attribute">Use SSL</span>, the server port is 636.</p></li>
+	<li class="p"><p>To add additional LDAP servers, click <span class="attribute">Add</span>. 
 	 A new LDAP URL field displays.</p></li>
-	<li class="p"><p>In the LDAP filter: field, enter the search expression 
-	 that is used. &#160;See <a href="using_the_global_address_list_(gal).htm" style="font-weight: bold;">Configure the 
-	 Global Address List</a><span>.</span></p></li>
+	<li class="p"><p>In the LDAP filter: field, enter the <a href="how_to_configure_external_ldap_settings.htm">search 
+	 expression</a> that is used. </p></li>
 	<li class="p"><p>The LDAP search base is configured by default. Click 
-	 <span style="font-weight: bold;"><b>Next</b></span>.</p></li>
+	 <span class="attribute">Next</span>.</p></li>
 	<li class="p"><p>To use DN to bind to the external server, check <span 
-	 style="font-weight: bold;"><b>Use DN/Password 
-	 to bind to external server.</b></span><br />
+	 class="attribute">Use DN/Password to bind 
+	 to external server</span><span style="font-weight: bold;"><b>.</b></span><br />
 	<br />
 	Enter the Bind DN and Bind Password. Click 
-	 <span style="font-weight: bold;"><b>Next</b></span>. The GAL Sync Settings 
-	 dialog displays. You can set GAL search settings and GAL sync settings 
-	 separately.</p></li>
+	 <span class="attribute">Next</span>. The GAL Sync Settings dialog 
+	 displays. You can set GAL search settings and GAL sync settings separately.</p></li>
 	<li class="p"><p>If you want to set your sync settings different from 
 	 your GAL search settings, uncheck the 
-	 box <span style="font-weight: bold;"><b>Use GAL search settings for GAL 
-	 sync</b></span>, and continue to complete the GAL sync settings in this 
-	 and the next dialog.<br />
+	 box <span class="attribute">Use GAL search settings for GAL sync</span>, 
+	 and continue to complete the GAL sync settings in this and the next 
+	 dialog.<br />
 	 <br />
 	 If the GAL Search and GAL sync settings are the same, on the Gal Sync 
-	 Settings dialog, click <span style="font-weight: bold;"><b>Next</b></span>.</p></li>
-	<li class="p"><p>The <span style="font-weight: bold;"><b>GAL Settings 
-	 Summary</b></span> page displays the information you entered. If the information 
-	 is correct, to test the GAL settings, enter a name from the directory 
-	 in the <span style="font-weight: bold;"><b>Please provide a search term</b></span> 
-	 field. Click <span style="font-weight: bold;"><b>Test</b></span>.</p></li>
+	 Settings dialog, click <span class="attribute">Next</span>.</p></li>
+	<li class="p"><p>The <span class="attribute">GAL Settings Summary</span> 
+	 page displays the information you entered. If the information is correct, 
+	 to test the GAL settings, enter a name from the directory in the <span 
+	 class="attribute">Please provide a search term</span> field. Click 
+	 <span class="attribute">Test</span>.</p></li>
 	<li class="p"><p>The GAL Test Results page displays the test results. 
-	 If the results failed, click <span style="font-weight: bold;"><b>Previous</b></span>, 
-	 to resolve the issues described in the <span style="font-weight: bold;"><b>Details</b></span> 
-	 text box. Click <span style="font-weight: bold;"><b>Finish</b></span>, if 
-	 the test past.</p></li>
+	 If the results failed, click <span class="attribute">Previous</span>, 
+	 to resolve the issues described in the <span class="attribute">Details</span> 
+	 text box. Click <span class="attribute">Finish</span>, if the test 
+	 past.</p></li>
 </ol>
 <p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
