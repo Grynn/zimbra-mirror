@@ -65,52 +65,38 @@ function () {
 }
 ZaController.initPopupMenuMethods["ZaGlobalConfigViewController"].push(ZaGlobalConfigViewController.initPopupMenuMethod);
 
-ZaGlobalConfigViewController.prototype.getAppBarAction =
-function () {
-    if (AjxUtil.isEmpty(this._appbarOperation)) {
-    	this._appbarOperation[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
-        this._appbarOperation[ZaOperation.SAVE]= new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "", "", new AjxListener(this, this.saveButtonListener));
-        this._appbarOperation[ZaOperation.CLOSE] = new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "", "", new AjxListener(this, this.closeButtonListener));
-    }
-
-    return this._appbarOperation;
-}
-
-ZaGlobalConfigViewController.prototype.getAppBarOrder =
-function () {
-    if (AjxUtil.isEmpty(this._appbarOrder)) {
-    	this._appbarOrder.push(ZaOperation.HELP);
-        this._appbarOrder.push(ZaOperation.SAVE);
-        this._appbarOrder.push(ZaOperation.CLOSE);
-    }
-
-    return this._appbarOrder;
-}
-
-ZaGlobalConfigViewController.setViewMethod = function (item) {
-    try {
-	    if ( !this._UICreated || (this._view == null) || (this._toolbar == null)) {
-            this._initPopupMenu();
-            this._contentView = this._view = new this.tabConstructor(this._container,item);
-            var elements = new Object();
-            elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-            ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
-            this._UICreated = true;
-            ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
-        }
-		//ZaApp.getInstance().pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
-		ZaApp.getInstance().pushView(this.getContentViewId());
-		item.load();
-	
-		item[ZaModel.currentTab] = "1"
-		this._view.setDirty(false);
-		this._view.setObject(item);
+ZaGlobalConfigViewController.setViewMethod = function (entry) {
+    try {    	
+    	entry.load();
 	} catch (ex) {
 		this._handleException(ex, "ZaGlobalConfigViewController.prototype.show", null, false);
 	}
-	this._currentObject = item;
+	entry[ZaModel.currentTab] = "1"
+	this._currentObject = entry;
+	this._createUI(entry);
+     
+	ZaApp.getInstance().pushView(this.getContentViewId());
+	this._view.setDirty(false);
+	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view
 }
 ZaController.setViewMethods["ZaGlobalConfigViewController"].push(ZaGlobalConfigViewController.setViewMethod) ;
+
+/**
+* @method _createUI
+**/
+ZaGlobalConfigViewController.prototype._createUI =
+function (entry) {
+	this._contentView = this._view = new this.tabConstructor(this._container, entry);
+
+    this._initPopupMenu();
+	//always add Help button at the end of the toolbar
+	
+	var elements = new Object();
+	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+    ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+	this._UICreated = true;
+	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
+}
 
 ZaGlobalConfigViewController.prototype.setEnabled = 
 function(enable) {
