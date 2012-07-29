@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose.session;
+package com.zimbra.qa.selenium.projects.ajax.tests.session;
 
 import org.testng.annotations.*;
 
