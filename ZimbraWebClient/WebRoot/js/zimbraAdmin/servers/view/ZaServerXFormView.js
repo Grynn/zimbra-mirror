@@ -1079,8 +1079,6 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						  	    },
 						  	    {ref: ZaServer.A_ImapSSLServerEnabled, type: _SUPER_CHECKBOX_,
 								  checkBoxLabel:ZaMsg.IMAP_SSLService,
-							      enableDisableChangeEventSources:[ZaServer.A_ImapServerEnabled],
-							      enableDisableChecks:[ZaServerXFormView.getIMAPEnabled, ZaItem.hasWritePermission],
 							      trueValue: "TRUE", falseValue: "FALSE",
 							      onChange: ZaServerXFormView.onFormFieldChanged,
 							      resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
@@ -1088,16 +1086,14 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						      	},
 						  	    { ref: ZaServer.A_ImapCleartextLoginEnabled, type: _SUPER_CHECKBOX_,
 						      	  checkBoxLabel:ZaMsg.IMAP_CleartextLoginEnabled,
-						      	  enableDisableChangeEventSources:[ZaServer.A_zimbraReverseProxyLookupTarget,ZaServer.A_ImapServerEnabled],
-						      	  enableDisableChecks:[ZaServerXFormView.getIMAPEnabled,[XForm.checkInstanceValue,ZaServer.A_zimbraReverseProxyLookupTarget,"FALSE"], ZaItem.hasWritePermission],
+						      	  enableDisableChangeEventSources:[ZaServer.A_zimbraReverseProxyLookupTarget],
+						      	  enableDisableChecks:[[XForm.checkInstanceValue,ZaServer.A_zimbraReverseProxyLookupTarget,"FALSE"], ZaItem.hasWritePermission],
 						      	  trueValue: "TRUE", falseValue: "FALSE",
 						      	  onChange: ZaServerXFormView.onFormFieldChanged,
 						      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 
 					      	    },
 					      	    { ref: ZaServer.A_zimbraImapNumThreads, type:_SUPER_TEXTFIELD_,
-								  enableDisableChecks:[ZaServerXFormView.getIMAPEnabled, ZaItem.hasWritePermission],
-								  enableDisableChangeEventSources:[ZaServer.A_ImapServerEnabled],
 								  txtBoxLabel: ZaMsg.IMAP_NumThreads, width: "5em",
 								  onChange: ZaServerXFormView.onFormFieldChanged,
 						      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
