@@ -5124,7 +5124,7 @@ Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 	var defaultColumnSort = this.getInheritedProperty("defaultColumnSortable") ;
 	if (itemArray && itemArray.length > 0) {	
 		//we have to compare the objects, because XForm calls this method every time an item in the list is selected
-		if ( Dwt_List_XFormItem.isItemsChanged(itemArray, existingArr)) {
+		if (this.getForceUpdate() || Dwt_List_XFormItem.isItemsChanged(itemArray, existingArr)) {
             var preserveSelection = this.getInheritedProperty("preserveSelection");
 			var selection = null;
 			if(preserveSelection) {

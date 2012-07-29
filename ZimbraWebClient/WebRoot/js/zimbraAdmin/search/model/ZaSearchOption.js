@@ -31,16 +31,13 @@ ZaSearchOption.ADVANCED_ID = ZaSearchOption.ID ++ ;
 ZaSearchOption.COS_ID = ZaSearchOption.ID ++ ;
 
 
-// New UI
-if (appNewUI) {
-    ZaSearchOption.BASIC_FILTER_ID = ZaSearchOption.ID ++ ;
-    ZaSearchOption.STATUS_FILTER_ID = ZaSearchOption.ID ++ ;
-    ZaSearchOption.LASTER_LOGIN_TIME_FILTER_ID = ZaSearchOption.ID ++ ;
-    ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID = ZaSearchOption.ID ++ ;
-    ZaSearchOption.COS_FILTER_ID = ZaSearchOption.ID ++ ;
-    ZaSearchOption.SERVER_FILTER_ID = ZaSearchOption.ID ++ ;
-    ZaSearchOption.DOMAIN_FILTER_ID = ZaSearchOption.ID ++ ;
-}
+ZaSearchOption.BASIC_FILTER_ID = ZaSearchOption.ID ++ ;
+ZaSearchOption.STATUS_FILTER_ID = ZaSearchOption.ID ++ ;
+ZaSearchOption.LASTER_LOGIN_TIME_FILTER_ID = ZaSearchOption.ID ++ ;
+ZaSearchOption.EXT_EMAIL_ADDRESS_FILTER_ID = ZaSearchOption.ID ++ ;
+ZaSearchOption.COS_FILTER_ID = ZaSearchOption.ID ++ ;
+ZaSearchOption.SERVER_FILTER_ID = ZaSearchOption.ID ++ ;
+ZaSearchOption.DOMAIN_FILTER_ID = ZaSearchOption.ID ++ ;
 
 //ZaSearchOption.REMOVE_ID = ZaSearchOption.ID ++ ;
 
@@ -436,7 +433,7 @@ function (optionId, height){
 				 
 				 {type: _DWT_LIST_, ref: ZaSearchOption.A_domainList,  width: ZaSearchOptionView.WIDTH - 2, height: height - 30 - 25,  
 					 forceUpdate: true, widgetClass: ZaOptionList, 
-					 multiselect: true, preserveSelection: true, 					 	
+					 multiselect: true, preserveSelection: false, 					 	
 					 bmolsnr:true,
 					 onSelection: ZaSearchBuilderController.filterSelectionListener
 				 }
@@ -451,7 +448,7 @@ function (optionId, height){
 		 	items :[
 				 {type: _DWT_LIST_, ref: ZaSearchOption.A_serverList,  width: ZaSearchOptionView.WIDTH - 2, height: height - 30,  	
 					 forceUpdate: true, widgetClass: ZaOptionList, 
-					 multiselect: true, preserveSelection: true, 
+					 multiselect: true, preserveSelection: false, bmolsnr:true,
 					 onSelection: ZaSearchBuilderController.filterSelectionListener
 				 }
 		 	]
@@ -488,7 +485,7 @@ function (optionId, height){
 
                                  {type: _DWT_LIST_, ref: ZaSearchOption.A_cosList,  width: ZaSearchOptionView.WIDTH - 2, height: height - 30 - 25,
                                          forceUpdate: true, widgetClass: ZaOptionList,
-                                         multiselect: true, preserveSelection: true,
+                                         multiselect: true, preserveSelection: false,bmolsnr:true,
                                          onSelection: ZaSearchBuilderController.filterSelectionListener
                                  }
                         ]
@@ -669,8 +666,8 @@ function (optionId, height){
 		 	items :[
 
 				 {type: _DWT_LIST_, ref: ZaSearchOption.A_domainList,  width: ZaSearchOptionView.WIDTH - 2, height: height - 30 - 25,
-					 forceUpdate: true, widgetClass: ZaOptionList,
-					 multiselect: true, preserveSelection: false, bmolsnr:true,
+					 forceUpdate:true, widgetClass: ZaOptionList,
+					 multiselect:true, preserveSelection:true, 
 					 onSelection: ZaSearchBuilderController.filterSelectionListener
 				 }
 		 	]
