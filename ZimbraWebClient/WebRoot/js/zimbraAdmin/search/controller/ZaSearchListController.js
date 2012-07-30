@@ -54,7 +54,7 @@ ZaSearchListController = function(appCtxt, container) {
 
 ZaSearchListController.prototype = new ZaListViewController();
 ZaSearchListController.prototype.constructor = ZaSearchListController;
-ZaSearchListController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/provisioning_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+ZaSearchListController.helpURL = location.pathname + ZaUtil.HELP_URL + "search/search.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaSearchListController.helpButtonText = ZaMsg.helpManageAccounts;
 
 ZaController.initToolbarMethods["ZaSearchListController"] = new Array();

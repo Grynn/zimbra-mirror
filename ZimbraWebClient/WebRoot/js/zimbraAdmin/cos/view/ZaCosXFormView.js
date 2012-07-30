@@ -647,7 +647,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
     if(allZimlets != null && !AjxUtil.isEmpty(allZimlets.getArray()) && ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.ZIMLET_TAB_ATTRS, ZaCosXFormView.ZIMLET_TAB_RIGHTS)) {
 		_tab5 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Zimlets});
-        this.helpMap[_tab5] = [location.pathname, ZaUtil.HELP_URL, "about_zimlets.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+        this.helpMap[_tab5] = [location.pathname, ZaUtil.HELP_URL, "zimlets/about_zimlets.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
     }
 
     if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.SERVERPOOL_TAB_ATTRS, ZaCosXFormView.SERVERPOOL_TAB_RIGHTS)) {

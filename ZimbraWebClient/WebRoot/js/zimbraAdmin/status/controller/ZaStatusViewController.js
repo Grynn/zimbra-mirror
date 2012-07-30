@@ -24,8 +24,8 @@
 **/
 ZaStatusViewController = function(appCtxt, container) {
 	ZaController.call(this, appCtxt, container,"ZaStatusViewController");
-   	this._toolbarOperations = new Array();
-   	this._toolbarOrder = new Array();
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_servers/monitoring_zimbra_collaboration_suite.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+	this._helpButtonText = ZaStatusViewController.helpButtonText;	
    	this._popupOperations = new Array();
 	this._UICreated = false;	
 }
@@ -34,12 +34,11 @@ ZaStatusViewController.prototype = new ZaController();
 ZaStatusViewController.prototype.constructor = ZaStatusViewController;
 ZaController.initToolbarMethods["ZaStatusViewController"] = new Array();
 ZaController.initPopupMenuMethods["ZaStatusViewController"] = new Array();
+ZaStatusViewController.helpButtonText = ZaMsg.helpEditDomains;
 
 ZaStatusViewController.prototype.show = function(openInNewTab) {
 	try {
-	    if (!this._UICreated) {
-			this._createUI(openInNewTab);
-		}
+		this._createUI(openInNewTab);
 		var statusObj = new ZaStatus();
 		statusObj.load();
 		var statusVector = statusObj.getStatusVector();
@@ -52,6 +51,23 @@ ZaStatusViewController.prototype.show = function(openInNewTab) {
 	}	
 };
 
+ZaStatusViewController.prototype.getAppBarAction =function () {
+    if (AjxUtil.isEmpty(this._appbarOperation)) {
+    	this._appbarOperation[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
+        this._appbarOperation[ZaOperation.CLOSE] = new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "", "", new AjxListener(this, this.closeButtonListener));
+    }
+
+    return this._appbarOperation;
+}
+
+ZaStatusViewController.prototype.getAppBarOrder = function () {
+    if (AjxUtil.isEmpty(this._appbarOrder)) {
+    	this._appbarOrder.push(ZaOperation.HELP);
+        this._appbarOrder.push(ZaOperation.CLOSE);
+    }
+
+    return this._appbarOrder;
+}
 
 ZaStatusViewController.prototype._createUI = function (openInNewTab) {
 	try {

@@ -553,11 +553,7 @@ function(viewId, show) {
 			elements[cid].zShow(true);
 		}
 		this._stickToGrid(list);
-        ////// May be need to changed to app header...
-        if (!appNewUI)
-		    this._setTitle(viewId);
-        else
-            this._setCurrentBar(viewId);
+        this._setCurrentBar(viewId);
 	} else {
 		for (var cid in elements) {
 			elements[cid].setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
