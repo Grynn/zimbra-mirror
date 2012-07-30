@@ -34,6 +34,7 @@ ZaServerXFormView = function(parent, entry) {
 ZaServerXFormView.prototype = new ZaTabView();
 ZaServerXFormView.prototype.constructor = ZaServerXFormView;
 ZaTabView.XFormModifiers["ZaServerXFormView"] = new Array();
+ZaServerXFormView.setObjectMethods = new Array();
 ZaServerXFormView.indexVolChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, ZaServer.A_VolumeId, ZaServer.A_VolumeName);
 ZaServerXFormView.messageVolChoices = new XFormChoices([], XFormChoices.OBJECT_LIST,ZaServer.A_VolumeId, ZaServer.A_VolumeName);
 ZaServerXFormView.onFormFieldChanged = 
@@ -154,6 +155,23 @@ function (entry) {
 	ZaServerXFormView.messageVolChoices.setChoices(msgArr);
 	ZaServerXFormView.messageVolChoices.dirtyChoices();	
 	
+	//Instrumentation code start
+	if(ZaServerXFormView.setObjectMethods) {
+		var methods = ZaServerXFormView.setObjectMethods;
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				try {
+					methods[i].call(this,entry);
+				} catch (ex) {
+					this._handleException(ex, "ZaServerXFormView.prototype.setObject");
+					break;
+				}
+			}
+		}
+	}
+	//Instrumentation code end	
+	
 	for(var key in ZaServer.currentkeys) {
 		if(entry[ZaServer.currentkeys[key]]) {
 			this._containedObject[ZaServer.currentkeys[key]] = entry[ZaServer.currentkeys[key]];
@@ -166,9 +184,6 @@ function (entry) {
 	this.formDirtyLsnr = new AjxListener(ZaApp.getInstance().getCurrentController(), ZaXFormViewController.prototype.handleXFormChange);
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, this.formDirtyLsnr);
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, this.formDirtyLsnr);	
-
-    if (!appNewUI)
-	    this.updateTab();
 }
 
 
