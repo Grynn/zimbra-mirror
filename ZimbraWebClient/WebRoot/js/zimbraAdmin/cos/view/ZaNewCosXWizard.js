@@ -12,6 +12,7 @@ ZaNewCosXWizard = function(parent, entry) {
 
     this._localXForm.addListener(DwtEvent.XFORMS_VALUE_CHANGED, new AjxListener(this, ZaNewCosXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaNewCosXWizard.prototype.handleXFormChange));
+	this._helpURL = ZaNewCosXWizard.helpURL;
 }
 
 ZaNewCosXWizard.prototype = new ZaXWizardDialog;
@@ -27,7 +28,7 @@ ZaNewCosXWizard.themeChoices = new XFormChoices([], XFormChoices.OBJECT_LIST);
 ZaNewCosXWizard.prototype.toString = function() {
     return "ZaNewCosXWizard";
 }
-ZaNewCosXWizard.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/create_an_account.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+ZaNewCosXWizard.helpURL = location.pathname + ZaUtil.HELP_URL + "cos/creating_classes_of_service.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
 
 ZaNewCosXWizard.prototype.handleXFormChange = function (ev) {
