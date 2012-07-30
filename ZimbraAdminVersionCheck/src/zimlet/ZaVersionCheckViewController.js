@@ -24,14 +24,18 @@ ZaVersionCheckViewController = function(appCtxt, container) {
 	ZaXFormViewController.call(this, appCtxt, container, "ZaVersionCheckViewController");
 	this._UICreated = false;
 	this.objType = ZaEvent.S_GLOBALCONFIG;
-	this.tabConstructor = ZaVersionCheckXFormView;					
+	this.tabConstructor = ZaVersionCheckXFormView;
+	this._helpURL = [location.pathname, ZaUtil.HELP_URL, ZaVersionCheckViewController.helpURL, "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+	this._helpButtonText = ZaMsg.zimbraHelpCenter;
 }
 
 ZaVersionCheckViewController.prototype = new ZaXFormViewController();
 ZaVersionCheckViewController.prototype.constructor = ZaVersionCheckViewController;
+ZaVersionCheckViewController.helpURL = "monitoring/getting_latest_software_updates.htm";
 ZaController.initPopupMenuMethods["ZaVersionCheckViewController"] = new Array();
 ZaController.setViewMethods["ZaVersionCheckViewController"] = [];
 ZaController.changeActionsStateMethods["ZaVersionCheckViewController"] = new Array();
+
 
 ZaVersionCheckViewController.initPopupMenuMethod =
 function () {
