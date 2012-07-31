@@ -34,6 +34,7 @@ class Account: BackgroundWorker
         get { return Numoferrors; }
         set { Numoferrors = value; }
     }
+    
 
     string m_AccountID;
     public string AccountID
@@ -311,6 +312,14 @@ class Account: BackgroundWorker
                     if (this.NumofErrors >= a.MaxErrorCount)
                     {
                         System.Console.WriteLine();
+                        if (a.LastProblemInfo != null)
+                        {
+                            System.Console.WriteLine();
+                            string mesg = a.LastProblemInfo.Msg;
+                            System.Console.WriteLine(mesg);
+                            System.Console.WriteLine();
+
+                        }
                         System.Console.WriteLine();
                         Currentuser.StatusMessage = "Total Errors For UserAccount " + a.AccountID.ToString() + " are " + this.NumofErrors.ToString();
                         System.Console.WriteLine(Currentuser.StatusMessage);
@@ -321,9 +330,7 @@ class Account: BackgroundWorker
                         System.Console.WriteLine();
                         System.Console.WriteLine();
                         //this.countdown.Signal();
-                         
-                         
-                       // this.CancelAsync();
+                        
                         //this.RequestCancel();
                         
                        // this.RequestStop();
@@ -331,8 +338,17 @@ class Account: BackgroundWorker
                          CancelAsync();
                         //Thread.CurrentThread.Abort();
                     }
+                    
                 }
 
+                 if (a.LastProblemInfo != null)
+                        {
+                            System.Console.WriteLine();
+                            string mesg = a.LastProblemInfo.Msg;
+                            System.Console.WriteLine(mesg);
+                            System.Console.WriteLine();
+
+                        }
                /* ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow,
                     "TotalErrors For UserAccount   " + a.AccountID.ToString() + Numoferrors.ToString());*/  //donot use progressutil we want to have consistent logging.
 
@@ -499,6 +515,7 @@ class Account: BackgroundWorker
         
 
         Account argumentTest = sender as Account;
+       
         // First, handle the case where an exception was thrown.
         if (e.Error != null)
         {
