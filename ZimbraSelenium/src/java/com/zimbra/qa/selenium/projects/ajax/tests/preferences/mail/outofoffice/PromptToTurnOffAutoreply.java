@@ -20,8 +20,8 @@ public class PromptToTurnOffAutoreply extends AjaxCommonTest {
 	public PromptToTurnOffAutoreply() {
 		logger.info("New " + PromptToTurnOffAutoreply.class.getCanonicalName());
 
-		// test starts in the Briefcase tab
-		super.startingPage = app.zPageBriefcase;
+		// test starts in the Mail tab
+		super.startingPage = app.zPageMail;
 
 		// use an account with OOO auto-reply enabled
 		super.startingAccountPreferences = new HashMap<String, String>() {
@@ -40,7 +40,7 @@ public class PromptToTurnOffAutoreply extends AjaxCommonTest {
 
 		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("8.0.")) {
 			DialogOOOAlert alert = new DialogOOOAlert(app,
-					((AppAjaxClient) app).zPageBriefcase);
+					((AppAjaxClient) app).zPageMail);
 
 			ZAssert.assertTrue(alert.zIsActive(),
 					"Verify turn off auto-reply alert dialog is displayed");
