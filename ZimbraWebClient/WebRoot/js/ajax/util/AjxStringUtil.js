@@ -892,7 +892,7 @@ AjxStringUtil.SIG_RE = /^(- ?-+)|(__+)\r?$/;
 AjxStringUtil.SPLIT_RE = /\r\n|\r|\n/;
 AjxStringUtil.HDR_RE = /^\s*\w+:/;
 AjxStringUtil.COLON_RE = /\S+:$/;
-AjxStringUtil.HTML_QUOTE_COLOR = "rgb(16, 16, 255)";
+AjxStringUtil.HTML_QUOTE_COLOR = "#1010FF";
 AjxStringUtil.HTML_QUOTE_STYLE = "color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;";
 
 
