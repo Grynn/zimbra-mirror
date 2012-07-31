@@ -422,7 +422,7 @@ function(day, month, year) {
 			fString.push(day);
 		} 
 	}
-	return fString.join("/");
+    return fString.join(ds.charAt(sArry[1].indx - 1));
 };
 
 function BirthdayReminder_sortTimeObjs(a, b) {
