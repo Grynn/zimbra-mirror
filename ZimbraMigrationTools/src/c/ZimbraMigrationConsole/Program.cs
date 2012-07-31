@@ -732,15 +732,17 @@ class Program
                     verbose = myXmlConfig.ConfigObj.GeneralOptions.Verbose;
 
                 importopts.ItemsAndFolders = itemFolderFlags;
-                switch(Loglevel)
+
+                
+                switch(Loglevel.ToLower())
                 {
-                case"Debug":
+                case"debug":
                      importopts.VerboseOn = LogLevel.Debug;
                     break;
-                case "Info":
+                case "info":
                     importopts.VerboseOn = LogLevel.Info;
                     break;
-                case "Trace":
+                case "trace":
                     importopts.VerboseOn = LogLevel.Trace;
                     break;
 
