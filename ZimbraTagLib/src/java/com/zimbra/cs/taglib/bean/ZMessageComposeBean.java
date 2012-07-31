@@ -1214,14 +1214,20 @@ public class ZMessageComposeBean {
             if(!isText) { qHdr = BeanUtils.htmlEncode(qHdr); }
             content.append(qHdr).append(CRLF);
             ZMimePartBean body = msg.getBody();
-            content.append(body == null ? "" : body.getContent());
+            String bodyContent = body == null ? "" : body.getContent();
+            if(!isText && body!=null && body.getIsTextPlain()){
+                bodyContent = BeanUtils.htmlEncode(bodyContent);
+            }
+            content.append(bodyContent);
             content.append(CRLF);
             addAttachments(msg, true);
         } else if (prefs.getForwardIncludeBodyWithPrefx()) {
             String org = getQuotedDisplay(msg);
             if(!isText) { org = BeanUtils.htmlEncode(getQuotedDisplay(msg)); }
             content.append(CRLF).append(CRLF).append(I18nUtil.getLocalizedMessage(pc, "ZM_forwardPrefix", new Object[] {org})).append(CRLF);
-            content.append(getQuotedBody(msg, prefs));
+            ZMimePartBean body = msg.getBody();
+            Boolean cookBody = !isText && body!=null && body.getIsTextPlain();
+            content.append(getQuotedBody(msg, prefs, cookBody));
             content.append(CRLF);
             addAttachments(msg, true);
         }
@@ -1236,18 +1242,20 @@ public class ZMessageComposeBean {
             if(!isText) { qHdr = BeanUtils.htmlEncode(qHdr); }
             content.append(qHdr).append(CRLF);
             ZMimePartBean body = msg.getBody();
-            String bodyContent = body.getContent();
-            if(!isText && msg.getMimeStructure().getContentType().equals("text/plain")){
+            String bodyContent = body == null ? "" : body.getContent();
+            if(!isText && body!=null && body.getIsTextPlain()){
                 bodyContent = BeanUtils.htmlEncode(bodyContent);
             }
-            content.append(body == null ? "" : bodyContent);
+            content.append(bodyContent);
             content.append(CRLF);
             addAttachments(msg, false);
         } else if (prefs.getReplyIncludeBodyWithPrefx()) {
             String org = getQuotedDisplay(msg);
             if(!isText) { org = BeanUtils.htmlEncode(getQuotedDisplay(msg)); }
             content.append(CRLF).append(CRLF).append(I18nUtil.getLocalizedMessage(pc, "ZM_replyPrefix", new Object[] {org})).append(CRLF);
-            content.append(getQuotedBody(msg, prefs));
+            ZMimePartBean body = msg.getBody();
+            Boolean cookBody = !isText && body!=null && body.getIsTextPlain();
+            content.append(getQuotedBody(msg, prefs,cookBody));
             content.append(CRLF);
             addAttachments(msg, false);
         } else if (prefs.getReplyIncludeSmart()) {
@@ -1268,12 +1276,12 @@ public class ZMessageComposeBean {
         }
     }
 
-    private String getQuotedBody(ZMessageBean msg, ZPrefs prefs) {
+    private String getQuotedBody(ZMessageBean msg, ZPrefs prefs, Boolean cookBody) {
         if (msg == null) return "";
         String prefixChar = prefs.getForwardReplyPrefixChar();
         prefixChar = (prefixChar == null) ? "> " : prefixChar + " ";
         ZMimePartBean body = msg.getBody();
-        return body == null ? "" : BeanUtils.prefixContent(body.getContent(), prefixChar);
+        return body == null ? "" : BeanUtils.prefixContent(cookBody ? BeanUtils.cook(body.getContent()) : body.getContent() , prefixChar);
     }
 
     private ZIdentity computeIdentity(ZMessageBean msg, List<ZIdentity> identities) {
