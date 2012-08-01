@@ -7747,6 +7747,12 @@
     </function>
 
     <function>
+            <name>textToHtml</name>
+            <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+            <function-signature>java.lang.String textToHtml(java.lang.String)</function-signature>
+    </function>
+
+    <function>
         <name>unCook</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String unCook(java.lang.String)</function-signature>
