@@ -119,31 +119,13 @@ public class ExecuteHarnessMain {
 		if ( !coverage.exists() )	coverage.mkdirs();
 		CodeCoverage.getInstance().setOutputFolder(coverage.getAbsolutePath());
 
-		String browser = ZimbraSeleniumProperties.getStringProperty(
-				ZimbraSeleniumProperties.getLocalHost() + ".browser",
-				ZimbraSeleniumProperties.getStringProperty("browser"));
-		
-		if (browser.charAt(0) == '*') {
-			browser = browser.substring(1);
-			if ((browser.indexOf(" ")) > 0) {
-				String str = browser.split(" ")[0];
-				int i;
-				if ((i = browser.lastIndexOf("\\")) > 0) {
-					str += "_" + browser.substring(i+1);
-				}
-				browser = str;
-			}
-		}
-		
-		// Save the browser value (for logging)
-		ZimbraSeleniumProperties.setStringProperty("CalculatedBrowser", browser);
 		
 
 		// Append the app, browser, locale
 		path += "/"
 			+ ZimbraSeleniumProperties.getAppType()
 			+ "/"
-			+	browser						
+			+ ZimbraSeleniumProperties.getCalculatedBrowser()						
 			+ "/" + ZimbraSeleniumProperties.getStringProperty("locale");
 		
 		// Make sure the path exists
@@ -401,7 +383,7 @@ public class ExecuteHarnessMain {
 		// calculate how long the tests took
 		long duration = finish.getTime() - start.getTime();
 		result.append("Duration: ").append(duration / 1000).append(" seconds\n");
-		result.append("Browser: ").append(ZimbraSeleniumProperties.getStringProperty("CalculatedBrowser", "unknown")).append('\n');
+		result.append("Browser: ").append(ZimbraSeleniumProperties.getCalculatedBrowser()).append('\n');
 		
 		return (result.toString());
 

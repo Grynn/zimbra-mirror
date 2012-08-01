@@ -247,6 +247,38 @@ public class ZimbraSeleniumProperties {
 		}
 	}
 	
+	private static final String CalculatedBrowser = "CalculatedBrowser";
+	public static String getCalculatedBrowser() {
+		
+		String browser = getStringProperty(CalculatedBrowser);
+		
+		if ( browser != null ) {
+			// Calculated browser already determined, just return it
+			return (browser);
+		}
+				
+		browser = ZimbraSeleniumProperties.getStringProperty(
+				ZimbraSeleniumProperties.getLocalHost() + ".browser",
+				ZimbraSeleniumProperties.getStringProperty("browser"));
+		
+		if (browser.charAt(0) == '*') {
+			browser = browser.substring(1);
+			if ((browser.indexOf(" ")) > 0) {
+				String str = browser.split(" ")[0];
+				int i;
+				if ((i = browser.lastIndexOf("\\")) > 0) {
+					str += "_" + browser.substring(i+1);
+				}
+				browser = str;
+			}
+		}
+		
+		// Save the browser value (for logging)
+		ZimbraSeleniumProperties.setStringProperty(CalculatedBrowser, browser);
+
+		return (browser);
+	}
+	
 	/**
 	 * Get Logout URL for selenium to sign out from the application
 	 * @return Logout URL String
