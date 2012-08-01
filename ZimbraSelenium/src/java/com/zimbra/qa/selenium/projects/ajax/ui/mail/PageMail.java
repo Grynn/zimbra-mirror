@@ -818,10 +818,18 @@ public class PageMail extends AbsTab {
 			item.gFragment = this.sGetText(locator).trim();
 
 			// Get the subject
-			locator = msglocator + " span[id$='__su']";
-			if ( this.sIsElementPresent(locator) ) {
+			locator = msglocator + " td[id$='__su']";
+			if ( this.sIsElementPresent(msglocator + " td[id$='__su']") ) {
 				
-				String subject = this.sGetText(locator).trim();
+				String subject = this.sGetText(msglocator + " td[id$='__su']").trim();
+
+				// The subject contains the fragment, e.g. "subject - fragment", so
+				// strip it off
+				item.gSubject = subject.replace(item.gFragment, "").trim();
+
+			} else if ( this.sIsElementPresent(msglocator + " span[id$='__su']") ) {
+				
+				String subject = this.sGetText(msglocator + " span[id$='__su']").trim();
 
 				// The subject contains the fragment, e.g. "subject - fragment", so
 				// strip it off
