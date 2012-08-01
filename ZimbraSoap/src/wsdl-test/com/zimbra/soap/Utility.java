@@ -82,8 +82,11 @@ import generated.zcsclient.admin.testGetDomainInfoRequest;
 import generated.zcsclient.admin.testGetDomainInfoResponse;
 import generated.zcsclient.admin.testGetDomainRequest;
 import generated.zcsclient.admin.testGetDomainResponse;
+import generated.zcsclient.admin.testGetMailboxRequest;
+import generated.zcsclient.admin.testGetMailboxResponse;
 import generated.zcsclient.admin.testGetServerRequest;
 import generated.zcsclient.admin.testGetServerResponse;
+import generated.zcsclient.admin.testMailboxByAccountIdSelector;
 import generated.zcsclient.admin.testServerBy;
 import generated.zcsclient.admin.testServerInfo;
 import generated.zcsclient.admin.testServerSelector;
@@ -113,10 +116,8 @@ public class Utility {
                 String authToken)
     throws Exception {
         // Note that am not using JAXB generated HeaderContext here
-        JAXBRIContext jaxb = (JAXBRIContext) JAXBRIContext.newInstance(
-                    com.zimbra.soap.header.HeaderContext.class);
-        com.zimbra.soap.header.HeaderContext hdrCtx =
-            new com.zimbra.soap.header.HeaderContext();
+        JAXBRIContext jaxb = (JAXBRIContext) JAXBRIContext.newInstance(com.zimbra.soap.header.HeaderContext.class);
+        com.zimbra.soap.header.HeaderContext hdrCtx = new com.zimbra.soap.header.HeaderContext();
         hdrCtx.setAuthToken(authToken);
         Header soapHdr = Headers.create(jaxb,hdrCtx);
         List <Header> soapHdrs = new ArrayList <Header>();
@@ -547,33 +548,26 @@ public class Utility {
             String calResourceName, String displayName)
     throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
-        String domainName =
-                    calResourceName.substring(calResourceName.indexOf('@') + 1);
+        String domainName = calResourceName.substring(calResourceName.indexOf('@') + 1);
         ensureDomainExists(domainName);
-        testGetCalendarResourceRequest getInfoReq =
-                    new testGetCalendarResourceRequest();
-        testCalendarResourceSelector calResourceSel =
-                    new testCalendarResourceSelector();
+        testGetCalendarResourceRequest getInfoReq = new testGetCalendarResourceRequest();
+        testCalendarResourceSelector calResourceSel = new testCalendarResourceSelector();
         calResourceSel.setBy(testCalendarResourceBy.NAME);
         calResourceSel.setValue(calResourceName);
         getInfoReq.setCalresource(calResourceSel);
         try {
-            testGetCalendarResourceResponse getResp =
-                    adminSvcEIF.getCalendarResourceRequest(getInfoReq);
+            testGetCalendarResourceResponse getResp = adminSvcEIF.getCalendarResourceRequest(getInfoReq);
             Assert.assertNotNull(getResp);
             return getResp.getCalresource().getId();
         } catch (SOAPFaultException sfe) {
-            testCreateCalendarResourceRequest createAcctReq =
-                    new testCreateCalendarResourceRequest();
+            testCreateCalendarResourceRequest createAcctReq = new testCreateCalendarResourceRequest();
             createAcctReq.setName(calResourceName);
             createAcctReq.setPassword(DEFAULT_PASS);
             createAcctReq.getA().add(Utility.mkAttr("displayName", displayName));
             createAcctReq.getA().add(Utility.mkAttr("zimbraCalResType", "Location"));
-            createAcctReq.getA().add(Utility.mkAttr(
-                "zimbraCalResLocationDisplayName", "Harare"));
+            createAcctReq.getA().add(Utility.mkAttr("zimbraCalResLocationDisplayName", "Harare"));
             Utility.addSoapAdminAuthHeader((WSBindingProvider)adminSvcEIF);
-            testCreateCalendarResourceResponse resp =
-                    adminSvcEIF.createCalendarResourceRequest(createAcctReq);
+            testCreateCalendarResourceResponse resp = adminSvcEIF.createCalendarResourceRequest(createAcctReq);
             Assert.assertNotNull(resp);
             testCalendarResourceInfo calResourceInfo = resp.getCalresource();
             return calResourceInfo.getId();
@@ -581,8 +575,7 @@ public class Utility {
     }
 
     /**
-     * Creating an account does not create the associated mailbox until first authenticated
-     * access.  This ensures that the mailbox exists by authenticating against the account.
+     * Creating an account does not create the associated mailbox until a Get is done for the mailbox.
      * 
      * @param accountName - name of account - must have password "test123" if exists already
      * @return
@@ -590,7 +583,14 @@ public class Utility {
      */
     public static String ensureMailboxExistsForAccount(String accountName) throws Exception {
         String accountId = ensureAccountExists(accountName);
-        getAccountServiceAuthToken(accountName, DEFAULT_PASS);
+        testGetMailboxRequest gmReq = new testGetMailboxRequest();
+        testMailboxByAccountIdSelector mbox = new testMailboxByAccountIdSelector();
+        mbox.setId(accountId);
+        gmReq.setMbox(mbox);
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)adminSvcEIF);
+        testGetMailboxResponse gmResp = adminSvcEIF.getMailboxRequest(gmReq);
+        Assert.assertNotNull(gmResp);
+        // getAccountServiceAuthToken(accountName, DEFAULT_PASS);
         return accountId;
     }
 

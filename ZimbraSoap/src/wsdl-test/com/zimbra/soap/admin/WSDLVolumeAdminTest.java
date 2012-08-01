@@ -79,37 +79,29 @@ public class WSDLVolumeAdminTest {
         List <testVolumeInfo> volumes = resp.getVolume();
         Assert.assertNotNull("GetAllVolumesResponse list of volumes", volumes);
         int len = volumes.size();
-        Assert.assertTrue("Number of GetAllVolumesResponse children is " +
-                len + " - should be at least 2", len >= 2);
+        Assert.assertTrue("Number of GetAllVolumesResponse children is " + len + " - should be at least 2", len >= 2);
         testVolumeInfo firstVolume = volumes.get(0);
         short id = firstVolume.getId();
-        Assert.assertTrue("First Volume id is " +
-                id + " - should be at least 1", id >= 1);
+        Assert.assertTrue("First Volume id is " + id + " - should be at least 1", id >= 1);
         Assert.assertNotNull("First Volume rootpath", firstVolume.getRootpath());
         Assert.assertEquals("First Volume rootpath 1st char", "/", firstVolume.getRootpath().substring(0, 1));
         long compressionThreshold = firstVolume.getCompressionThreshold();
-        Assert.assertTrue("First Volume compressionThreshold is " +
-                compressionThreshold + " - should be at least 256",
-                compressionThreshold >= 256);
+        Assert.assertTrue("First Volume compressionThreshold is " + compressionThreshold + " - should be at least 0",
+                compressionThreshold >= 0);
         Assert.assertNotNull("First Volume name", firstVolume.getName());
         firstVolume.isCompressBlobs();  // Just making sure it is there
         Assert.assertNotNull("First Volume isCurrent", firstVolume.isIsCurrent());
         short volType = firstVolume.getType();
         // TODO - tighter check here?
-        Assert.assertTrue("First Volume type is " +
-                volType + " - should be at least 1", volType >= 1);
+        Assert.assertTrue("First Volume type is " + volType + " - should be at least 1", volType >= 1);
         Short mgbits = firstVolume.getMgbits();
-        Assert.assertTrue("First Volume mgbits is " +
-                mgbits + " - should be at least 4", mgbits >= 4);
+        Assert.assertTrue("First Volume mgbits is " + mgbits + " - should be at least 4", mgbits >= 4);
         Short mbits = firstVolume.getMbits();
-        Assert.assertTrue("First Volume mbits is " +
-                mbits + " - should be at least 4", mbits >= 4);
+        Assert.assertTrue("First Volume mbits is " + mbits + " - should be at least 4", mbits >= 4);
         Short fgbits = firstVolume.getFgbits();
-        Assert.assertTrue("First Volume fgbits is " +
-                fgbits + " - should be at least 4", fgbits >= 4);
+        Assert.assertTrue("First Volume fgbits is " + fgbits + " - should be at least 4", fgbits >= 4);
         Short fbits = firstVolume.getFbits();
-        Assert.assertTrue("First Volume fbits is " +
-                fbits + " - should be at least 4", fbits >= 4);
+        Assert.assertTrue("First Volume fbits is " + fbits + " - should be at least 4", fbits >= 4);
     }
 
     @Test
@@ -125,8 +117,7 @@ public class WSDLVolumeAdminTest {
                 len + " - should be at least 2", len >= 2);
         testCurrentVolumeInfo firstVolume = volumes.get(0);
         short id = firstVolume.getId();
-        Assert.assertTrue("First Volume id is " +
-                id + " - should be at least 1", id >= 1);
+        Assert.assertTrue("First Volume id is " + id + " - should be at least 1", id >= 1);
         firstVolume.getType();
     }
 
