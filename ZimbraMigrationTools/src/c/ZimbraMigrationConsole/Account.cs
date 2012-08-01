@@ -252,7 +252,7 @@ class Account: BackgroundWorker
                
                 mw.StartMigration(MyAcct, argumentTest.Mailoptions, argumentTest.serverMigration, argumentTest.Mailoptions.VerboseOn);
 
-
+                argumentTest.NumofErrors = MyAcct.TotalErrors;
                 //Last item migration
                 string msg2 = "{0} of {1} for account  " + MyFolder.AccountID.ToString();
                 string msgF = String.Format(msg2, MyFolder.CurrentCountOfItems, MyFolder.TotalCountOfItems);
