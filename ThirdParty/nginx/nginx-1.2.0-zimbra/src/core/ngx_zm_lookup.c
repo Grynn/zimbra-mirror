@@ -354,7 +354,7 @@ ngx_zm_lookup_elect_handler(ngx_zm_lookup_ctx_t *ctx, ngx_zm_lookup_conf_t *zlcf
             handler = ((ngx_zm_lookup_handler_t*)zlcf->handlers.elts) + ctx->handler_index;
             if (handler->failure_time != 0) {
                 if((now < handler->failure_time ||
-                (now - handler->failure_time) > (time_t)(zlcf->retry_interval / 1000))) {
+                (now - handler->failure_time) < (time_t)(zlcf->retry_interval / 1000))) {
                     continue;
                 } else {
                     handler->failure_time = 0; // mark it as available and try to connect it
