@@ -1390,6 +1390,7 @@ function(iconURL) {
 	// (Need to remove/add to dom in order to force a redraw.)
 	if (favIcon) {
 		favIcon.href=iconURL;
+		favIcon.type = 'image/x-icon';
 		var parent = favIcon.parentNode;
 		parent.removeChild(favIcon);
 		parent.appendChild(favIcon);
@@ -1400,6 +1401,7 @@ function(iconURL) {
 		newLink.id = Dwt._favIconId = Dwt.getNextId()
 		newLink.rel = "SHORTCUT ICON";
 		newLink.href = iconURL;
+		newLink.type = "image/x-icon";
 		docHead = docHead || document.getElementsByTagName("head")[0];
 		docHead.appendChild(newLink);
 	}
