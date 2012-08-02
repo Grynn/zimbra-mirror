@@ -798,20 +798,14 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							  trueValue:"TRUE", falseValue:"FALSE"
 	  						},
 						  	{ ref: ZaGlobalConfig.A_zimbraImapSSLServerEnabled, type:_CHECKBOX_,
-						  	  enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraImapServerEnabled,ZaGlobalConfig.A_zimbraImapSSLServerEnabled],
-						  	  enableDisableChecks:[[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraImapSSLServerEnabled],[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraImapServerEnabled,'TRUE']],
 						  	  label: ZaMsg.IMAP_SSLService,
 						  	  trueValue:"TRUE", falseValue:"FALSE"
 					  	  	},
 							{ ref: ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled, type:_CHECKBOX_,
-						  	  enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraImapServerEnabled,ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled],
-						  	  enableDisableChecks:[[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled],[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraImapServerEnabled,'TRUE']],
 							  label: ZaMsg.IMAP_CleartextLoginEnabled,
 							  trueValue:"TRUE", falseValue:"FALSE"
 						  	},
 							{ ref: ZaGlobalConfig.A_zimbraImapNumThreads, type:_TEXTFIELD_,
-                              enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraImapServerEnabled, ZaGlobalConfig.A_zimbraImapNumThreads],
-                              enableDisableChecks:[[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraImapNumThreads],[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraImapServerEnabled,'TRUE']],
 							  label: ZaMsg.IMAP_NumThreads,
 							  width: "5em"
 						  	}
@@ -862,14 +856,10 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							  trueValue: "TRUE", falseValue: "FALSE"
 						  	},
 						  	{ ref: ZaGlobalConfig.A_zimbraPop3SSLServerEnabled, type: _CHECKBOX_,
-						  	  enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraPop3ServerEnabled,ZaGlobalConfig.A_zimbraPop3SSLServerEnabled],
-						  	  enableDisableChecks:[[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraPop3SSLServerEnabled],[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraPop3ServerEnabled,'TRUE']],
 							  label: ZaMsg.NAD_POP_SSL,
 							  trueValue: "TRUE", falseValue: "FALSE"
 						  	},
 						  	{ ref: ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled, type: _CHECKBOX_,
-						  	  enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraPop3ServerEnabled,ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled],
-						  	  enableDisableChecks:[[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled],[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraPop3ServerEnabled,'TRUE']],
 						  	  label: ZaMsg.NAD_POP_CleartextLoginEnabled,
 						  	  trueValue: "TRUE", falseValue: "FALSE"
 					  	  	},
