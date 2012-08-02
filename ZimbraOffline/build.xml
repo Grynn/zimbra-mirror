@@ -686,7 +686,7 @@
       </zip>
   </target>
 
-  <property name="zimlets-zdesktop" value="com_zdesktop_survey" />
+  <property name="zimlets-zdesktop" value="" />
 
   <target name="offline-build-zd-zimlets">
       <mkdir dir="${dist.data.dir}/zimlets" />
