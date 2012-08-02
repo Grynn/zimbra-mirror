@@ -818,6 +818,44 @@ public class DisplayMail extends AbsDisplay {
 		
 	}
 	
+	public AbsPage zHoverOver(Field field) throws HarnessException {
+		logger.info("zHoverOver("+ field +")");
+
+		if ( field == null ) {
+			throw new HarnessException("field cannot be null");
+		}
+		
+		AbsPage page = null;
+		String locator = null;
+		
+		if ( field == Field.From ) {
+			
+			locator = this.ContainerLocator + " td[id$='_from'] span[id$='_com_zimbra_email'] span";
+
+		} else {
+			throw new HarnessException("Logic not defined for field="+ field);
+
+		}
+		
+		if ( locator == null ) {
+			throw new HarnessException("locator was null!");
+		}
+		
+		if ( !(this.sIsElementPresent(locator)) ) {
+			throw new HarnessException("locator not present: "+ locator);
+		}
+		
+		this.sMouseOver(locator);
+		this.zWaitForBusyOverlay();
+		
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+		
+		return (page);
+
+	}
+	
 
 	/**
 	 * Wait for Zimlets to be rendered in the message

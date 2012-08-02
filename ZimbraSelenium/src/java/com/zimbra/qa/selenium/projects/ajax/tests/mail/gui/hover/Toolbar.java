@@ -16,7 +16,7 @@ public class Toolbar extends PrefGroupMailByMessageTest {
 	}
 	
 	@Test(	description = "Hover over Delete button",
-			groups = { "functional" })
+			groups = { "deprecated" })		// Toolbar tooltips are now handled in the browser, not the DOM
 	public void Toolbar_01() throws HarnessException {
 		
 		AbsTooltip tooltip = app.zPageMail.zHoverOver(Button.B_DELETE);
@@ -28,7 +28,7 @@ public class Toolbar extends PrefGroupMailByMessageTest {
 	}
 
 	@Test(	description = "Hover over Reply button",
-			groups = { "functional" })
+			groups = { "deprecated" })		// Toolbar tooltips are now handled in the browser, not the DOM
 	public void Toolbar_02() throws HarnessException {
 		
 		AbsTooltip tooltip = app.zPageMail.zHoverOver(Button.B_REPLY);
