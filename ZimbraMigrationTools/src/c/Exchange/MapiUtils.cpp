@@ -313,12 +313,12 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
 			hr = ADsOpenObject(strADServer.c_str(), lpszUser, lpszPwd,
 				ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch, (void **)&pDirSearch);
 			if (FAILED(hr)||(pDirSearch==NULL))
-				throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): ADsOpenObject Failed(With credentials).",
+				throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): ADsOpenObject Failed(With credentials):Please verify the used admin credentials.",
 				__LINE__, __FILE__);
 		}
 		else
 		{
-			throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): ADsOpenObject Failed.(W/o credentials)",
+			throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): ADsOpenObject Failed.(W/o credentials):Please verify that logged in user has admin rights.",
 				__LINE__, __FILE__);
 		}
 	}
@@ -393,7 +393,7 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
     pDirSearch->CloseSearchHandle(hSearch);
     if (wstruserdn.empty() || wstrlegacyname.empty())
     {
-        throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): S_ADS_NOMORE_ROWS.",
+        throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): S_ADS_NOMORE_ROWS:Please check the admin credentials for permissions/rights to query the directory.",
             __LINE__, __FILE__);
     }
     return S_OK;
