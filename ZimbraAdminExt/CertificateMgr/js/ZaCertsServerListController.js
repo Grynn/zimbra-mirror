@@ -85,20 +85,24 @@ function(serverList) {
 // new button was pressed
 ZaCertsServerListController.prototype._newCertListener =
 function(ev) {
-	if(window.console && window.console.log) console.log("ZaCertsServerListController.prototype._newCertListener: Launch the new certificates wizard ... ") ;
+//	if(window.console && window.console.log) console.log("ZaCertsServerListController.prototype._newCertListener: Launch the new certificates wizard ... ") ;
 	var serverId = null;
-	//TODO: the selectedItem might be from the previous selection
-	if (this._selectedItem && this._selectedItem.id) {
-		serverId = this._selectedItem.id ;
+	
+	if(this._contentView && this._contentView.getSelectionCount()==1 && this._contentView.getSelection()[0]) {
+		serverId = this._contentView.getSelection()[0].id ;
 	}
 	ZaCert.launchNewCertWizard.call (this, serverId) ;
 }
                                     
 ZaCertsServerListController.prototype.viewCertListener = function (ev) {
-	if(window.console && window.console.log) console.log("View the certificates ... ") ;
-	ZaApp.getInstance().getCertViewController().show(ZaCert.getCerts(ZaApp.getInstance(), this._selectedItem.id),this._selectedItem.id);
-    var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, com_zimbra_cert_manager.OVP_certs]);
-    ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, this._selectedItem.name, null, false, false, this._selectedItem);
+	//if(window.console && window.console.log) console.log("View the certificates ... ") ;
+	if(this._contentView && this._contentView.getSelectionCount()==1) {
+		var item = this._contentView.getSelection()[0];
+		ZaApp.getInstance().getCertViewController().show(ZaCert.getCerts(ZaApp.getInstance(), item.id),item.id);
+	    var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, com_zimbra_cert_manager.OVP_certs]);
+	    ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item);	
+	}
+	
 }
 
 /**
@@ -110,10 +114,10 @@ function(ev) {
 	if(ev.item) {
 		this._selectedItem = ev.item;
 	}
-	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED && ev.item) {
 			ZaApp.getInstance().getCertViewController().show(
-				ZaCert.getCerts(ZaApp.getInstance(), this._selectedItem.id),
-				this._selectedItem.id);
+				ZaCert.getCerts(ZaApp.getInstance(), ev.item.id),
+				ev.item.id);
             var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, com_zimbra_cert_manager.OVP_certs]);
             ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name, null, false, false, ev.item);
 	} else {
@@ -124,6 +128,9 @@ function(ev) {
 
 ZaCertsServerListController.prototype._listActionListener =
 function (ev) {
+	if(ev.item) {
+		this._selectedItem = ev.item;
+	}
 	this.changeActionsState();
 	this._actionMenu.popup(0, ev.docX, ev.docY);
 }
