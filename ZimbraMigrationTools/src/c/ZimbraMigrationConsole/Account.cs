@@ -520,7 +520,8 @@ class Account: BackgroundWorker
         if (e.Error != null)
         {
             argumentTest.AccountStatus = (e.Error.Message);
-            argumentTest.Countdown.Signal();
+            if(argumentTest.Countdown.CurrentCount != 0)
+                argumentTest.Countdown.Signal();
             
         }
         else if (e.Cancelled)
