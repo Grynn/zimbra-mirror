@@ -18,7 +18,6 @@ import com.zimbra.qa.selenium.projects.octopus.ui.PageSharing.Locators;
 public class ShareNotification extends HistoryCommonTest
 {
 	private ZimbraAccount granteeAccount = null;
-	private ZimbraAccount owner = null;
 
 	public ShareNotification(){
 		logger.info("New " + ShareNotification.class.getCanonicalName());
@@ -40,9 +39,6 @@ public class ShareNotification extends HistoryCommonTest
 		// Login with grantee's Credential's.
 		app.zPageLogin.zLogin(granteeAccount);
 
-		// If there is a busy overlay, wait for that to finish
-		app.zPageOctopus.zWaitForBusyOverlayOctopus();
-
 		//Verify sharing notification
 		ZAssert.assertTrue(app.zPageOctopus.sIsElementPresent(Locators.zNotificationCount.locator),
 				"Verify Sharing notification recived to grantee");
@@ -53,9 +49,6 @@ public class ShareNotification extends HistoryCommonTest
 		//Click on 'Add to My files' button from notification.
 		app.zPageSharing.sClickAt(Locators.zAddToMyFiles.locator,"0,0");
 
-		// If there is a busy overlay, wait for that to finish
-		//app.zPageOctopus.zWaitForBusyOverlayOctopus();
-
 		// Verify shared mount point folder gets added in My files list view by clicking on Add to My files button from the notification.
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
 				PageMyFiles.Locators.zMyFilesListViewItems.locator
@@ -64,9 +57,6 @@ public class ShareNotification extends HistoryCommonTest
 
 		// click on mount point folder
 		app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, ownerFolderName);
-
-		// If there is a busy overlay, wait for that to finish
-		//app.zPageOctopus.zWaitForBusyOverlayOctopus();
 
 		// Verify the file present in the shared folder
 		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
@@ -84,9 +74,6 @@ public class ShareNotification extends HistoryCommonTest
 		// Login with grantee's Credential's.
 		app.zPageLogin.zLogin(granteeAccount);
 
-		// If there is a busy overlay, wait for that to finish
-		app.zPageOctopus.zWaitForBusyOverlayOctopus();
-
 		//Verify sharing notification
 		ZAssert.assertTrue(app.zPageOctopus.sIsElementPresent(Locators.zNotificationCount.locator),
 				"Verify Sharing notification recived to grantee");
@@ -100,9 +87,6 @@ public class ShareNotification extends HistoryCommonTest
 		// Verify Add to My files button in share Notification.
 		ZAssert.assertTrue(app.zPageOctopus.sIsElementPresent(Locators.zAddToMyFiles.locator),
 				"Verify Add to My files button is visible.");
-
-		// If there is a busy overlay, wait for that to finish
-		//app.zPageOctopus.zWaitForBusyOverlayOctopus();
 
 		// Verify Ignore button in share Notification.
 		ZAssert.assertTrue(app.zPageOctopus.sIsElementPresent(Locators.zIgnoreShare.locator),
@@ -118,9 +102,6 @@ public class ShareNotification extends HistoryCommonTest
 		// Login with grantee's Credential's.
 		app.zPageLogin.zLogin(granteeAccount);
 
-		// If there is a busy overlay, wait for that to finish
-		app.zPageOctopus.zWaitForBusyOverlayOctopus();
-
 		//Verify sharing notification
 		ZAssert.assertTrue(app.zPageOctopus.sIsElementPresent(Locators.zNotificationCount.locator),
 				"Verify Sharing notification recived to grantee");
@@ -131,17 +112,11 @@ public class ShareNotification extends HistoryCommonTest
 		//Click on 'Ignore' button from notification.
 		app.zPageSharing.sClickAt(Locators.zIgnoreShare.locator,"0,0");
 
-		// If there is a busy overlay, wait for that to finish
-		app.zPageOctopus.zWaitForBusyOverlayOctopus();
-
 		// Verify mount point folder gets added in My files list view.
 		ZAssert.assertFalse(app.zPageMyFiles.zWaitForElementPresent(
 				PageMyFiles.Locators.zMyFilesListViewItems.locator
 				+ ":contains(" + ownerFolderName + ")", "3000"),
 				"Verify the mount point folder is not visible in the My Files list view");
-
-		// If there is a busy overlay, wait for that to finish
-		//app.zPageOctopus.zWaitForBusyOverlayOctopus();
 
 		// Verify the ignored folder doesn't appear in My Files list view
 		ZAssert.assertFalse(app.zPageOctopus.zIsItemInCurentListView(ownerFolderName),
@@ -151,8 +126,8 @@ public class ShareNotification extends HistoryCommonTest
 	@Test(description = "Revoking permission does not allow folder access.", groups = { "smoke" })
 	public void FolderNotAccesibleAfterRevoke() throws HarnessException
 	{
-		// share folder via soap
 		FolderItem folder = createFolderViaSoap(app.zGetActiveAccount());
+		uploadFileViaSoap(app.zGetActiveAccount(),PPT_FILE, folder);
 		shareFolderViaSoap(app.zGetActiveAccount(), granteeAccount, folder,SHARE_AS_READWRITE);
 
 		String mountPointFolderName = "mountFolder";
@@ -168,37 +143,68 @@ public class ShareNotification extends HistoryCommonTest
 		// revoke folder via soap
 		revokeShareFolderViaSoap(app.zGetActiveAccount(), granteeAccount, folder);
 
+		//To check revoke history browser refresh is needed
+		refresh();
+
 		// Click on History tab
 		app.zPageOctopus.zToolbarPressButton(Button.B_TAB_HISTORY);
-		app.zPageOctopus.zWaitForBusyOverlayOctopus();
 
 		// Verify revoked history for owner.
 		VerifyHistory(GetText.revoke(SHARE_PERMISSION.SHARE_AS_READWRITE,folder.getName(),granteeAccount));
 
-		// Logout grantee
+		// Logout owner
 		app.zPageOctopus.zLogout();
 
 		// Login with grantee's Credential's.
 		app.zPageLogin.zLogin(granteeAccount);
 
-		// click on Shared mount point folder
+		// click on shared mount point folder
 		app.zPageMyFiles.zListItem(Action.A_LEFTCLICK, mountPointFolderName);
-
-		// If there is a busy overlay, wait for that to finish
-		//app.zPageOctopus.zWaitForBusyOverlayOctopus();
 
 		// Verify the file present in the shared mount point folder
 		ZAssert.assertFalse(app.zPageMyFiles.zWaitForElementPresent(
 				PageMyFiles.Locators.zMyFilesListView.locator
 				+ ":contains("+ PPT_FILE + ")", "3000"),
-				"Verify the file is not availble in shared mount point folder.");
+				"Verify the file is not availble in shared mount point folder as share is revoked.");
+	}
+
+	@Test(description = "After leaving the share ,shared mount point folder should not be visible.", groups = { "smoke" })
+	public void FolderNotVisibleAfterLeaveShare() throws HarnessException
+	{
+		String ownerFolderName = "ownerFolder"+ ZimbraSeleniumProperties.getUniqueString();
+		shareFolder(ownerFolderName,JPG_FILE);
+
+		// Login with grantee's Credential's.
+		app.zPageLogin.zLogin(granteeAccount);
+
+		//Click on Notification count.
+		app.zPageSharing.sClickAt(Locators.zNotificationCount.locator,"0,0");
+
+		//Click on 'Add to My files' button from notification.
+		app.zPageSharing.sClickAt(Locators.zAddToMyFiles.locator,"0,0");
+
+		// Verify shared mount point folder gets added in My files list view.
+		ZAssert.assertTrue(app.zPageMyFiles.zWaitForElementPresent(
+				PageMyFiles.Locators.zMyFilesListViewItems.locator
+				+ ":contains(" + ownerFolderName + ")", "3000"),
+				"Verify the shared mount point folder is displayed in the My Files list view");
+
+		//Click on 'Leave this Shared Folder' menu option
+		app.zPageMyFiles.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM,
+				Button.B_LEAVE_THIS_SHARED_FOLDER, ownerFolderName);
+
+		// Verify the shared mount point folder is not present under my files tab
+		ZAssert.assertFalse(app.zPageMyFiles.zWaitForElementPresent(
+				PageMyFiles.Locators.zMyFilesListView.locator
+				+ ":contains("+ ownerFolderName+")", "3000"),
+				"Verify the shared mount-point folder is not availble.");
 	}
 
 	//Common code to share folder using Soap request
 	public void shareFolder(String ownerFolderName,String fileInFolder) throws HarnessException
 	{
 		// Get current active account as owner
-		owner = app.zGetActiveAccount();
+		ZimbraAccount owner = app.zGetActiveAccount();
 
 		// Get the root folder of Owner
 		FolderItem ownerBriefcase = FolderItem.importFromSOAP(owner, SystemFolder.Briefcase);
