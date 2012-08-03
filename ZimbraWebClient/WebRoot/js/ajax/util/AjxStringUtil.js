@@ -2149,7 +2149,7 @@ function(el, ctxt) {
 /**
  * A "... wrote:" separator is not quite as authoritative, since the user might be replying inline. If we have
  * a single UNKNOWN block before the WROTE separator, return it unless there is a mix of QUOTED and UNKNOWN
- * following the separator.
+ * following the separator, except if there's only a single unknown block after the separator and it comes last.
  * 
  * @private
  */
@@ -2176,7 +2176,9 @@ function(count, results, isHtml, ctxt) {
 			}
 		}
 
-		if (unknownBlock && (!isHtml || ctxt.sepNode) && !(afterSep[AjxStringUtil.ORIG_UNKNOWN] && afterSep[AjxStringUtil.ORIG_QUOTED])) {
+		var mixed = (afterSep[AjxStringUtil.ORIG_UNKNOWN] && afterSep[AjxStringUtil.ORIG_QUOTED]);
+		var endsWithUnknown = (count[AjxStringUtil.ORIG_UNKNOWN] == 2 && results[results.length - 1].type == AjxStringUtil.ORIG_UNKNOWN);
+		if (unknownBlock && (!isHtml || ctxt.sepNode) && (!mixed || endsWithUnknown)) {
 			if (isHtml) {
 				// In HTML mode we do DOM surgery rather than returning the original content
 				var el = ctxt.sepNode.parentNode;
