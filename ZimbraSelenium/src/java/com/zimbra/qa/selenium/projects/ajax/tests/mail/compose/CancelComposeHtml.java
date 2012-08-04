@@ -47,7 +47,7 @@ public class CancelComposeHtml extends PrefGroupMailByMessageTest {
 		// Fill out the form with the data
 		//mailform.zFillField(Field.Body, body);
 		String bodyLocator = "css=body[id=tinymce]";
-		ZAssert.assertTrue(mailform.zWaitForElementPresent(bodyLocator, "5000"),"Verify the body field is available");
+		ZAssert.assertTrue(mailform.zWaitForElementPresent(bodyLocator, "10000"),"Verify the body field is available");
 		mailform.sClickAt(bodyLocator,"");
 		mailform.zTypeFormattedText("css=iframe[id*=ifr]", body);
 		// Cancel the message
@@ -90,7 +90,7 @@ public class CancelComposeHtml extends PrefGroupMailByMessageTest {
 		mailform.zFillField(Field.Subject, Subject);
 		//mailform.zFillField(Field.Body, body);
 		String bodyLocator = "css=body[id=tinymce]";
-		ZAssert.assertTrue(mailform.zWaitForElementPresent(bodyLocator, "5000"),"Verify the body field is available");
+		ZAssert.assertTrue(mailform.zWaitForElementPresent(bodyLocator, "10000"),"Verify the body field is available");
 		mailform.sClickAt(bodyLocator,"");
 		mailform.zTypeFormattedText("css=iframe[id*=ifr]", body);
 		
