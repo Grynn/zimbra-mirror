@@ -46,7 +46,9 @@ public class CancelComposeHtml extends PrefGroupMailByMessageTest {
 		
 		// Fill out the form with the data
 		//mailform.zFillField(Field.Body, body);
-		mailform.sClickAt("css=body[id=tinymce]","");
+		String bodyLocator = "css=body[id=tinymce]";
+		mailform.zWaitForElementPresent(bodyLocator, "5000");
+		mailform.sClickAt(bodyLocator,"");
 		mailform.zTypeFormattedText("css=iframe[id*=ifr]", body);
 		// Cancel the message
 		// A warning dialog should appear regarding losing changes
@@ -87,7 +89,9 @@ public class CancelComposeHtml extends PrefGroupMailByMessageTest {
 		// Fill out the form with the data
 		mailform.zFillField(Field.Subject, Subject);
 		//mailform.zFillField(Field.Body, body);
-		mailform.sClickAt("css=body[id=tinymce]","");
+		String bodyLocator = "css=body[id=tinymce]";
+		mailform.zWaitForElementPresent(bodyLocator, "5000");
+		mailform.sClickAt(bodyLocator,"");
 		mailform.zTypeFormattedText("css=iframe[id*=ifr]", body);
 		
 		DialogWarning warning =(DialogWarning)app.zPageMail.zKeyboardShortcut(shortcut);
