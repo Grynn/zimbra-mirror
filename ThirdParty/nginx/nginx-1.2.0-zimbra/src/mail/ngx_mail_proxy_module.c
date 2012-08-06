@@ -2261,8 +2261,10 @@ ngx_mail_proxy_ssl_handshake(ngx_connection_t *c)
 
         /* server might have send the intial welcome msg */
         c->read->handler(c->read);
+    } else {
+        /* when handshake fails, we should close the session */
+        ngx_mail_proxy_upstream_error(s);
     }
-
 }
 
 /** TODO support ssl session reuse
