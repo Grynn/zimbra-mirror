@@ -304,7 +304,17 @@ namespace CssLib
 
         public override void Uninit()
         {
-             UserObj.Uninit();
+            try
+            {
+
+
+                UserObj.Uninit();
+            }
+             
+            catch(Exception e)
+             {
+                 Log.err("Exception caught in Uninit", e.Message);
+            }
         }
 
 
