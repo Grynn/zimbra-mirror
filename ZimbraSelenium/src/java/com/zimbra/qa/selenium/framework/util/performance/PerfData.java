@@ -47,6 +47,10 @@ public class PerfData {
 		
 		// The 'real-time' delta from selenium
 		String rDelta = "" + (Long.parseLong(FinishStamp) - StartStamp);
+		if (Integer.parseInt(rDelta) > PerfMetrics.MaximumDeltaMSec) {
+			return (String.format("%s, %s, %s, %s, %s, %s, %s",
+					Key, "" + StartStamp, LaunchStamp, FinishStamp, rDelta, "0", "Error: Delta too long ("+ PerfMetrics.MaximumDeltaMSec +" max)") );
+		}
 		
 		// The 'internal-time' delta from the ajax app
 		String iDelta = "0";

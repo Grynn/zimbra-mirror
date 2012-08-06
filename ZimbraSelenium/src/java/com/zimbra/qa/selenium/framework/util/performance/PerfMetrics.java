@@ -16,6 +16,11 @@ import com.zimbra.qa.selenium.framework.util.*;
 public class PerfMetrics {
 	protected static Logger logger = LogManager.getLogger(PerfMetrics.class);
 
+	// Maximum allowable delta duartion.  Anything longer is assumed to be an error
+	// Setting a limit helps with creating the charts - so the axes are not too large.
+	//
+	protected static final int MaximumDeltaMSec = 15000;
+	
 	protected static Logger traceLog = LogManager.getLogger(PerfMetrics.class.getName() + ".trace");
 	protected boolean isTraceLogInitialized = false;
 	protected void initializeTraceLog() {
@@ -103,6 +108,10 @@ public class PerfMetrics {
 		// Log the data to a text file
 		getInstance().initializeTraceLog();
 		traceLog.info(data.prettyPrint());
+		
+		if ( (Long.parseLong(data.FinishStamp) - data.StartStamp) > MaximumDeltaMSec ) {
+			throw new HarnessException("Delta duration is too long: "+ (Long.parseLong(data.FinishStamp) - data.StartStamp));
+		}
 		
 		// Log the data to the database
 		PerfDatabase.record(data);
