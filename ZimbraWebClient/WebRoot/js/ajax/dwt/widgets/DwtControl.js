@@ -2783,7 +2783,7 @@ function(ev) {
 		if (obj.__hasToolTipContent()) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
-			if (!manager.isHovering() && !obj.__tooltipClosed && !DwtMenu.menuShowing()) {
+			if (!obj.__tooltipClosed && !DwtMenu.menuShowing()) {
 				// NOTE: mouseOver already init'd other hover settings
 				// We do hoverOver() here since the mouse may have moved during
 				// the delay, and we want to use latest x,y
@@ -2963,7 +2963,7 @@ function(ev) {
 /**
  * Handles a bad DND drop operation by showing an animation of the icon flying
  * back to its origin.
- * 
+ *
  * @param obj		[DwtControl]	control that underlies drag operation
  * @param mouseEv	[DwtMouseEvent]	mouse event
  * @private
@@ -3190,7 +3190,7 @@ function() {
 	// __internalId is for back-compatibility (was side effect of Dwt.associateElementWithObject)
 	this._htmlElId = this.__internalId = this._htmlElId || Dwt.getNextId();
 	var htmlElement = this._elRef = this._createElement(this._htmlElId);
-	htmlElement.id = this._htmlElId; 
+	htmlElement.id = this._htmlElId;
 	if (DwtControl.ALL_BY_ID) {
 		if (DwtControl.ALL_BY_ID[this._htmlElId]) {
 			DBG.println(AjxDebug.DBG1, "Duplicate ID for " + this.toString() + ": " + this._htmlElId);
