@@ -195,7 +195,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 		 			"<td><input id='", ZLoginFactory.NEW_PASSWORD_ID, "' class='zLoginField' name='", ZLoginFactory.NEW_PASSWORD_ID, "' type='password' autocomplete=OFF size='40'/></td>",
 		 		"</tr>",
 		 		"<tr id=", ZLoginFactory.PASSWORD_CONFIRM_TR_ID, (params.showNewPasswordFields ? " " : " style='display:none'"), ">",
-		 			"<td><label for='", ZLoginFactory.PASSWORD_CONFIRM_ID, "'>", params.newPassword1Msg, "</label></td>",
+		 			"<td><label for='", ZLoginFactory.PASSWORD_CONFIRM_ID, "'>", params.newPassword2Msg, "</label></td>",
 		 			"<td><input id='", ZLoginFactory.PASSWORD_CONFIRM_ID, "' class='zLoginField' name='", ZLoginFactory.PASSWORD_CONFIRM_ID, "' type='password' autocomplete=OFF size='40'/></td>",
 		 		"</tr>",		 		
                 "<tr>",
