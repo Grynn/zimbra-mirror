@@ -112,7 +112,7 @@ public class FormApptNew extends AbsForm {
 
 		// Send: if there are attendees
 		// Save: If there are no attendees
-
+		
 		// If send is visible, click it
 		// Otherwise, click Save
 		String locator = "css=div[id$=_SEND_INVITE]";
@@ -670,6 +670,16 @@ public class FormApptNew extends AbsForm {
 		if (!this.zIsVisiblePerPosition(locator, 150, 75)) {
 			return (false);
 		}
+
+		// TODO: temporary workaround for
+		// main.projects.ajax.tests.calendar.appointments.views.day.allday.CreateAppointment.CreateAllDayAppointment_01
+		// REF: http://zqa-004.eng.vmware.com/testlogs/UBUNTU10_64/IRONMAIDEN-800/20120807000101_FOSS/SelNG-projects-ajax-tests/134432857672933/zqa-429.eng.vmware.com/AJAX/firefox/en_US/debug/projects/ajax/tests/calendar/appointments/views/day/allday/CreateAppointment/CreateAllDayAppointment_01ss191.png
+		// which is failing to click the save/close button.
+		// It seems that the appointment compose is taking a long time to open
+		// instead of waiting for an element to appear (which is the preferred solution), just
+		// wait 5 seconds here
+		SleepUtil.sleep(5000);
+
 
 		logger.info(myPageName() + " zIsActive() = true");
 		return (true);
