@@ -12,8 +12,8 @@ MAPIFolderException::MAPIFolderException(HRESULT hrErrCode, LPCWSTR
     //
 }
 
-MAPIFolderException::MAPIFolderException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine,
-    LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile)
+MAPIFolderException::MAPIFolderException(HRESULT hrErrCode, LPCWSTR lpszDescription, LPCWSTR lpszShortDescription,
+	int nLine, LPCSTR strFile): GenericException(hrErrCode, lpszDescription, lpszShortDescription, nLine, strFile)
 {
     //
 }
@@ -57,8 +57,8 @@ BOOL FolderIterator::GetNext(MAPIFolder &folder)
 
     if ((hr = m_pParentFolder->OpenEntry(cb, peid, NULL, MAPI_BEST_ACCESS, &objtype,
             (LPUNKNOWN *)&pFolder)) != S_OK)
-        throw GenericException(hr, L"FolderIterator::GetNext():OpenEntry Failed.", __LINE__,
-            __FILE__);
+        throw GenericException(hr, L"FolderIterator::GetNext():OpenEntry Failed.", 
+		ERR_GET_NEXT, __LINE__, __FILE__);
     folder.Initialize(pFolder, pRow->lpProps[FI_DISPLAY_NAME].Value.LPSZ,
         &(pRow->lpProps[FI_ENTRYID].Value.bin));
 
@@ -131,14 +131,14 @@ void MAPIFolder::Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary 
 	if (FAILED(hr = m_folder->GetHierarchyTable(fMapiUnicode, &m_pHierarchyTable)))
     {
         throw MAPIFolderException(E_FAIL, L"GetFolderIterator(): GetHierarchyTable Failed.",
-            __LINE__, __FILE__);
+            ERR_MAPI_FOLDER, __LINE__, __FILE__);
     }
 	
 	//get folders content tabel
 	if (FAILED(hr = m_folder->GetContentsTable(fMapiUnicode, &m_pContentsTable)))
 	{
 		throw MAPIFolderException(hr, L"Initialize(): GetContentsTable Failed.",
-            __LINE__, __FILE__);
+            ERR_MAPI_FOLDER, __LINE__, __FILE__);
 	}    
 
 	ULONG ulItemMask =ZCM_ALL;
@@ -159,7 +159,7 @@ void MAPIFolder::Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary 
 	if (FAILED(hr = m_pContentsTable->Restrict(restriction.GetRestriction(ulItemMask, tmpTime), 0)))
     {
         throw MAPIFolderException(hr, L"MAPIFolder::Initialize():Restrict Failed.",
-            __LINE__, __FILE__);
+            ERR_MAPI_FOLDER, __LINE__, __FILE__);
     }
 
     if (m_session)
@@ -329,8 +329,8 @@ HRESULT MAPIFolder::GetItemCount(ULONG &ulCount)
 {
     ulCount = 0;
     if (m_folder == NULL)
-        throw MAPIFolderException(E_FAIL, L"GetItemCount(): Folder Object is NULL.", __LINE__,
-            __FILE__);
+        throw MAPIFolderException(E_FAIL, L"GetItemCount(): Folder Object is NULL.", 
+		ERR_MAPI_FOLDER, __LINE__, __FILE__);
 
     HRESULT hr = S_OK;
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
@@ -338,7 +338,7 @@ HRESULT MAPIFolder::GetItemCount(ULONG &ulCount)
 	if (FAILED(hr = m_pContentsTable->GetRowCount(0, &ulCount)))
     {
         throw MAPIFolderException(E_FAIL, L"GetItemCount(): GetRowCount() Failed.",
-            __LINE__, __FILE__);
+           ERR_MAPI_FOLDER, __LINE__, __FILE__);
     }
     return hr;
 }
@@ -357,7 +357,7 @@ HRESULT MAPIFolder::GetMessageIterator(MessageIterator &msgIterator)
     if (m_folder == NULL)
     {
         throw MAPIFolderException(E_FAIL, L"GetMessageIterator(): Folder Object is NULL.",
-            __LINE__, __FILE__);
+            ERR_MAPI_FOLDER, __LINE__, __FILE__);
     }
 
     msgIterator.Initialize(m_pContentsTable, m_folder, *m_session);

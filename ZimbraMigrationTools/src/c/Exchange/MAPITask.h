@@ -5,7 +5,7 @@ class MAPITaskException: public GenericException
 {
 public:
     MAPITaskException(HRESULT hrErrCode, LPCWSTR lpszDescription);
-    MAPITaskException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine, LPCSTR strFile);
+    MAPITaskException(HRESULT hrErrCode, LPCWSTR lpszDescription, LPCWSTR lpszShortDescription, int nLine, LPCSTR strFile);
     virtual ~MAPITaskException() {}
 };
 

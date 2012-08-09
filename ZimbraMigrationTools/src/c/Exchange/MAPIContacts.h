@@ -5,7 +5,7 @@ class MAPIContactException: public GenericException
 {
 public:
     MAPIContactException(HRESULT hrErrCode, LPCWSTR lpszDescription);
-    MAPIContactException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine, LPCSTR strFile);
+    MAPIContactException(HRESULT hrErrCode, LPCWSTR lpszDescription, LPCWSTR lpszShortDescription, int nLine, LPCSTR strFile);
     virtual ~MAPIContactException() {}
 };
 

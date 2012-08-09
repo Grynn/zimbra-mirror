@@ -34,7 +34,7 @@ void MAPITableIterator::Initialize(LPMAPITABLE pTable, LPMAPIFOLDER pFolder,
     hr = m_pTable->SetColumns(GetProps(), 0);
     if (FAILED(hr))
     {
-        throw GenericException(hr, L"MAPITableIterator::Initialize():SetColumns Failed.",
+        throw GenericException(hr, L"MAPITableIterator::Initialize():SetColumns Failed.",ERR_SET_RESTRICTION,
             __LINE__, __FILE__);
     }
     
@@ -42,18 +42,18 @@ void MAPITableIterator::Initialize(LPMAPITABLE pTable, LPMAPIFOLDER pFolder,
     {
         if (FAILED(hr = m_pTable->SortTable(GetSortOrder(), 0)))
         {
-            throw GenericException(hr, L"MAPITableIterator::Initialize():SortTable Failed.",
+            throw GenericException(hr, L"MAPITableIterator::Initialize():SortTable Failed.",ERR_SET_RESTRICTION,
                 __LINE__, __FILE__);
         }
     }
     if (FAILED(hr = m_pTable->GetRowCount(0, &m_totalRows)))
     {
-        throw GenericException(hr, L"MAPITableIterator::Initialize():GetRowCount Failed.",
+        throw GenericException(hr, L"MAPITableIterator::Initialize():GetRowCount Failed.",ERR_SET_RESTRICTION,
             __LINE__, __FILE__);
     }
     if (FAILED(hr = m_pTable->QueryRows(m_batchSize, 0, &m_pRows)))
     {
-        throw GenericException(hr, L"MAPITableIterator::Initialize():QueryRows Failed.",
+        throw GenericException(hr, L"MAPITableIterator::Initialize():QueryRows Failed.",ERR_SET_RESTRICTION,
             __LINE__, __FILE__);
     }
 }
@@ -90,7 +90,7 @@ SRow *MAPITableIterator::GetNext()
         }
         if (FAILED(hr))
         {
-            throw GenericException(hr, L"MAPITableIterator::GetNext():QueryRows Failed.",
+            throw GenericException(hr, L"MAPITableIterator::GetNext():QueryRows Failed.",ERR_GET_NEXT,
                 __LINE__, __FILE__);
         }
         m_currRow = 0;

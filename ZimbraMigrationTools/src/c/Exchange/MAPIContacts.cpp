@@ -13,8 +13,8 @@ MAPIContactException::MAPIContactException(HRESULT hrErrCode, LPCWSTR
     //
 }
 
-MAPIContactException::MAPIContactException(HRESULT hrErrCode, LPCWSTR lpszDescription, int
-    nLine, LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile)
+MAPIContactException::MAPIContactException(HRESULT hrErrCode, LPCWSTR lpszDescription, LPCWSTR lpszShortDescription, 
+	int nLine, LPCSTR strFile): GenericException(hrErrCode, lpszDescription, lpszShortDescription, nLine, strFile)
 {
     //
 }
@@ -138,7 +138,8 @@ HRESULT MAPIContact::Init()
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValMsgClass;
 
     if (FAILED(hr = HrGetOneProp(m_pMessage, PR_MESSAGE_CLASS, pPropValMsgClass.getptr())))
-        throw MAPIContactException(hr, L"Init(): HrGetOneProp Failed.", __LINE__, __FILE__);
+        throw MAPIContactException(hr, L"Init(): HrGetOneProp Failed.", 
+		ERR_MAPI_CONTACT, __LINE__, __FILE__);
     if ((pPropValMsgClass->ulPropTag == PR_MESSAGE_CLASS_W) && (_tcsicmp(
         pPropValMsgClass->Value.LPSZ, L"ipm.distlist") == 0))
         m_bPersonalDL = true;
@@ -159,7 +160,8 @@ HRESULT MAPIContact::Init()
 
     if (FAILED(hr = m_pMessage->GetIDsFromNames(N_NUM_NAMES, ppNames, MAPI_CREATE,
             &pContactTags)))
-        throw MAPIContactException(hr, L"Init(): GetIDsFromNames Failed.", __LINE__, __FILE__);
+        throw MAPIContactException(hr, L"Init(): GetIDsFromNames Failed.", 
+		ERR_MAPI_CONTACT, __LINE__, __FILE__);
     // give the prop tag ID's a type
     pr_mail1address = SetPropType(pContactTags->aulPropTag[N_MAIL1], PT_TSTRING);
     pr_mail1entryid = SetPropType(pContactTags->aulPropTag[N_MAIL1EID], PT_BINARY);
@@ -231,7 +233,9 @@ HRESULT MAPIContact::Init()
 
     if (FAILED(hr = m_pMessage->GetProps((LPSPropTagArray) & contactProps, fMapiUnicode, &cVals,
             &m_pPropVals)))
-        throw MAPIContactException(hr, L"Init(): GetProps Failed.", __LINE__, __FILE__);
+        throw MAPIContactException(hr, L"Init(): GetProps Failed.",
+		ERR_MAPI_CONTACT, __LINE__, __FILE__);
+
 
     // see if there is a file-as id
     LONG zimbraFileAsId = 0;

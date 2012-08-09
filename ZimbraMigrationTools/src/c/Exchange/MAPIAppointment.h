@@ -9,7 +9,7 @@ class MAPIAppointmentException: public GenericException
 {
 public:
     MAPIAppointmentException(HRESULT hrErrCode, LPCWSTR lpszDescription);
-    MAPIAppointmentException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine, LPCSTR strFile);
+    MAPIAppointmentException(HRESULT hrErrCode, LPCWSTR lpszDescription, LPCWSTR lpszShortDescription, int nLine, LPCSTR strFile);
     virtual ~MAPIAppointmentException() {}
 };
 

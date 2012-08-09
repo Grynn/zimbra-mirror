@@ -2,6 +2,7 @@
 
 #define PR_IPM_OTHERSPECIALFOLDERS_ENTRYID PROP_TAG(PT_MV_BINARY, 0x36D8)
 
+//#define ERR_
 typedef struct _ObjectPickerData
 {
     wstring wstrUsername;
@@ -157,8 +158,8 @@ class MapiUtilsException: public GenericException
 public:
     MapiUtilsException(HRESULT hrErrCode, LPCWSTR lpszDescription): GenericException(hrErrCode,
         lpszDescription) {}
-    MapiUtilsException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine, LPCSTR
-        strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile) {}
+    MapiUtilsException(HRESULT hrErrCode, LPCWSTR lpszDescription, LPCWSTR lpszShortDescription, int nLine, LPCSTR
+        strFile): GenericException(hrErrCode, lpszDescription, lpszShortDescription ,nLine, strFile) {}
     virtual ~MapiUtilsException() {}
 };
 

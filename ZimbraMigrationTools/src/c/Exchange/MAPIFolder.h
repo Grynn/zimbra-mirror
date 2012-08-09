@@ -20,7 +20,7 @@ class MAPIFolderException: public GenericException
 {
 public:
     MAPIFolderException(HRESULT hrErrCode, LPCWSTR lpszDescription);
-    MAPIFolderException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine, LPCSTR strFile);
+    MAPIFolderException(HRESULT hrErrCode, LPCWSTR lpszDescription, LPCWSTR lpszShortDescription, int nLine, LPCSTR strFile);
     virtual ~MAPIFolderException() {}
 };
 

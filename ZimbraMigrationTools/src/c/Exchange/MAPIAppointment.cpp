@@ -13,8 +13,8 @@ MAPIAppointmentException::MAPIAppointmentException(HRESULT hrErrCode, LPCWSTR
     //
 }
 
-MAPIAppointmentException::MAPIAppointmentException(HRESULT hrErrCode, LPCWSTR lpszDescription, int
-    nLine, LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile)
+MAPIAppointmentException::MAPIAppointmentException(HRESULT hrErrCode, LPCWSTR lpszDescription, LPCWSTR lpszShortDescription, 
+	int nLine, LPCSTR strFile): GenericException(hrErrCode, lpszDescription, lpszShortDescription, nLine, strFile)
 {
     //
 }
@@ -97,7 +97,8 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValMsgClass;
 
     if (FAILED(hr = HrGetOneProp(m_pMessage, PR_MESSAGE_CLASS, pPropValMsgClass.getptr())))
-        throw MAPIAppointmentException(hr, L"InitNamedPropsForAppt(): HrGetOneProp Failed.", __LINE__, __FILE__);
+        throw MAPIAppointmentException(hr, L"InitNamedPropsForAppt(): HrGetOneProp Failed.", 
+		ERR_MAPI_APPOINTMENT, __LINE__, __FILE__);
 
     // initialize the MAPINAMEID structure GetIDsFromNames requires
     LPMAPINAMEID ppNames[N_NUMAPPTPROPS] = { 0 };
@@ -124,11 +125,13 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
 
     if (FAILED(hr = m_pMessage->GetIDsFromNames(N_NUMAPPTPROPS, ppNames, MAPI_CREATE,
             &pAppointmentTags)))
-        throw MAPIAppointmentException(hr, L"Init(): GetIDsFromNames on pAppointmentTags Failed.", __LINE__, __FILE__);
+        throw MAPIAppointmentException(hr, L"Init(): GetIDsFromNames on pAppointmentTags Failed.", 
+		ERR_MAPI_APPOINTMENT, __LINE__, __FILE__);
 
     if (FAILED(hr = m_pMessage->GetIDsFromNames(N_NUMCOMMONPROPS, ppNamesC, MAPI_CREATE,
             &pAppointmentTagsC)))
-        throw MAPIAppointmentException(hr, L"Init(): GetIDsFromNames on pAppointmentTagsC Failed.", __LINE__, __FILE__);
+        throw MAPIAppointmentException(hr, L"Init(): GetIDsFromNames on pAppointmentTagsC Failed.", 
+		ERR_MAPI_APPOINTMENT, __LINE__, __FILE__);
 
     // give the prop tag ID's a type
     pr_clean_global_objid = SetPropType(pAppointmentTags->aulPropTag[N_UID], PT_BINARY);
@@ -182,7 +185,8 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
 
     if (FAILED(hr = m_pMessage->GetProps((LPSPropTagArray) & appointmentProps, fMapiUnicode, &cVals,
             &m_pPropVals)))
-        throw MAPIAppointmentException(hr, L"SetMAPIAppointmentValues(): GetProps Failed.", __LINE__, __FILE__);
+        throw MAPIAppointmentException(hr, L"SetMAPIAppointmentValues(): GetProps Failed.",
+		ERR_MAPI_APPOINTMENT, __LINE__, __FILE__);
     
     if (m_pPropVals[C_MESSAGE_FLAGS].ulPropTag == appointmentProps.aulPropTag[C_MESSAGE_FLAGS])
     {

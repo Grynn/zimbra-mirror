@@ -12,8 +12,8 @@ MAPISessionException::MAPISessionException(HRESULT hrErrCode, LPCWSTR
     //
 }
 
-MAPISessionException::MAPISessionException(HRESULT hrErrCode, LPCWSTR lpszDescription, int
-    nLine, LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile)
+MAPISessionException::MAPISessionException(HRESULT hrErrCode, LPCWSTR lpszDescription, LPCWSTR lpszShortDescription, 
+	int nLine, LPCSTR strFile): GenericException(hrErrCode, lpszDescription, lpszShortDescription, nLine, strFile)
 {
     //
 }
@@ -55,8 +55,8 @@ HRESULT MAPISession::_mapiLogon(LPWSTR strProfile, DWORD dwFlags, LPMAPISESSION 
     HRESULT hr = S_OK;
 
     if (FAILED(hr = MAPILogonEx(0, strProfile, NULL, dwFlags, &session)))
-        throw MAPISessionException(hr, L"_mapiLogon(): MAPILogonEx Failed.", __LINE__,
-            __FILE__);
+        throw MAPISessionException(hr, L"_mapiLogon(): MAPILogonEx Failed.", 
+		ERR_MAPI_LOGON, __LINE__, __FILE__);
     return hr;
 }
 
@@ -87,12 +87,12 @@ HRESULT MAPISession::OpenDefaultStore(MAPIStore &Store)
     LPMDB pDefaultMDB = NULL;
 
     if (m_Session == NULL)
-        throw MAPISessionException(hr, L"OpenDefaultStore(): m_mapiSession is NULL.", __LINE__,
-            __FILE__);
+        throw MAPISessionException(hr, L"OpenDefaultStore(): m_mapiSession is NULL.", 
+		ERR_STORE_ERR, __LINE__, __FILE__);
     if (FAILED(hr = Zimbra::MAPI::Util::HrMAPIFindDefaultMsgStore(m_Session, defMsgStoreEID)))
     {
         throw MAPISessionException(hr, L"OpenDefaultStore(): HrMAPIFindDefaultMsgStore Failed.",
-            __LINE__, __FILE__);
+            ERR_STORE_ERR, __LINE__, __FILE__);
     }
 
     Zimbra::Util::ScopedBuffer<BYTE> autoDeletePtr(defMsgStoreEID.lpb);
@@ -111,8 +111,8 @@ HRESULT MAPISession::OpenDefaultStore(MAPIStore &Store)
             NULL, MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY | MDB_NO_DIALOG, &pDefaultMDB);
     }
     if (FAILED(hr))
-        throw MAPISessionException(hr, L"OpenDefaultStore(): OpenMsgStore Failed.", __LINE__,
-            __FILE__);
+        throw MAPISessionException(hr, L"OpenDefaultStore(): OpenMsgStore Failed.",
+		ERR_STORE_ERR, __LINE__, __FILE__);
     Store.Initialize(m_Session, pDefaultMDB);
     return S_OK;
 }
@@ -124,8 +124,8 @@ HRESULT MAPISession::OpenOtherStore(LPMDB OpenedStore, LPWSTR pServerDn, LPWSTR 
     HRESULT hr = E_FAIL;
 
     if (m_Session == NULL)
-        throw MAPISessionException(hr, L"OpenDefaultStore(): m_mapiSession is NULL.", __LINE__,
-            __FILE__);
+        throw MAPISessionException(hr, L"OpenDefaultStore(): m_mapiSession is NULL.", 
+		ERR_STORE_ERR, __LINE__, __FILE__);
 
     // build the dn of the store to open
     LPWSTR pszSuffix = L"/cn=Microsoft Private MDB";
@@ -139,8 +139,8 @@ HRESULT MAPISession::OpenOtherStore(LPMDB OpenedStore, LPWSTR pServerDn, LPWSTR 
     hr = Zimbra::MAPI::Util::MailboxLogon(m_Session, OpenedStore, pszStoreDN, pUserDn, &pMdb);
     delete[] pszStoreDN;
     if (FAILED(hr))
-        throw MAPISessionException(hr, L"OpenDefaultStore(): MailboxLogon Failed.", __LINE__,
-            __FILE__);
+        throw MAPISessionException(hr, L"OpenDefaultStore(): MailboxLogon Failed.", 
+		ERR_STORE_ERR, __LINE__,  __FILE__);
     OtherStore.Initialize(m_Session, pMdb);
 
     return S_OK;

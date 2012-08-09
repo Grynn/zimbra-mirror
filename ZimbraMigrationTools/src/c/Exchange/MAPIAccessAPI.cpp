@@ -111,7 +111,8 @@ LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
 
 LPCWSTR MAPIAccessAPI::_InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
 {
-    LPCWSTR lpwstrStatus = NULL;
+    LPWSTR lpwstrStatus = NULL;
+	LPWSTR lpwstrRetVal= NULL;
 	// If part of domain, get domain name
     m_bHasJoinedDomain = Zimbra::MAPI::Util::GetDomainName(m_strExchangeHostName);
 	try
@@ -150,8 +151,10 @@ LPCWSTR MAPIAccessAPI::_InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
                 lpstrMigTarget))
             {
                 SafeDelete(lpstrMigTarget);
-                lpwstrStatus = FormatExceptionInfo(E_FAIL, L"CreatePSTProfile Failed.",
+                lpwstrStatus = FormatExceptionInfo(E_FAIL, ERR_CREATE_PSTPROFILE,
                     __FILE__, __LINE__);
+				dloge(lpwstrStatus);
+				Zimbra::Util::CopyString(lpwstrRetVal,(LPWSTR)ERR_CREATE_PSTPROFILE);
                 goto CLEAN_UP;
             }
             SafeDelete(lpstrMigTarget);
@@ -180,24 +183,24 @@ LPCWSTR MAPIAccessAPI::_InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
     }
     catch (MAPISessionException &msse)
     {
-        LPCWSTR lpwstrLogMsg = FormatExceptionInfo(msse.ErrCode(), (LPWSTR)msse.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(msse.ErrCode(), (LPWSTR)msse.Description().c_str(),
             (LPSTR)msse.SrcFile().c_str(), msse.SrcLine());
-		dloge(lpwstrLogMsg);
-		lpwstrStatus = L"Initialization Exception.  Make sure to enter the proper Exchange credentials.";
+		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal,msse.ShortDescription().c_str());
     }
     catch (MAPIStoreException &mste)
     {
-        LPCWSTR lpwstrLogMsg = FormatExceptionInfo(mste.ErrCode(), (LPWSTR)mste.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(mste.ErrCode(), (LPWSTR)mste.Description().c_str(),
             (LPSTR)mste.SrcFile().c_str(), mste.SrcLine());
-		dloge(lpwstrLogMsg);
-		lpwstrStatus = L"Message Store initialization exception";
+		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal,mste.ShortDescription().c_str());
     }
     catch (Util::MapiUtilsException &muex)
     {
-        LPCWSTR lpwstrLogMsg = FormatExceptionInfo(muex.ErrCode(), (LPWSTR)muex.Description().c_str(),
+        lpwstrStatus = FormatExceptionInfo(muex.ErrCode(), (LPWSTR)muex.Description().c_str(),
             (LPSTR)muex.SrcFile().c_str(), muex.SrcLine());
-		dloge(lpwstrLogMsg);
-		lpwstrStatus = L"Mailbox Exception";
+		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal,muex.ShortDescription().c_str());
     }
 	
     // Create Temporary dir for temp files
@@ -211,8 +214,9 @@ CLEAN_UP: if (lpwstrStatus)
         if (m_defaultStore)
             delete m_defaultStore;
         m_defaultStore = NULL;
+		Zimbra::Util::FreeString(lpwstrStatus);
     }
-    return lpwstrStatus;
+	return lpwstrRetVal;
 }
 
 void MAPIAccessAPI::UnInitGlobalSessionAndStore()
@@ -251,7 +255,8 @@ wstring GetCNName(LPWSTR pstrUserDN)
 // Open MAPI sessiona and Open Stores
 LPCWSTR MAPIAccessAPI::OpenUserStore()
 {
-    LPCWSTR lpwstrStatus = NULL;
+    LPWSTR lpwstrStatus = NULL;
+	LPWSTR lpwstrRetVal=NULL;
     HRESULT hr = S_OK;
     wstring wstruserdn;
     wstring legacyName;
@@ -311,26 +316,38 @@ LPCWSTR MAPIAccessAPI::OpenUserStore()
     {
         lpwstrStatus = FormatExceptionInfo(msse.ErrCode(), (LPWSTR)msse.Description().c_str(),
             (LPSTR)msse.SrcFile().c_str(), msse.SrcLine());
+		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal, msse.ShortDescription().c_str());
     }
     catch (MAPIStoreException &mste)
     {
         lpwstrStatus = FormatExceptionInfo(mste.ErrCode(), (LPWSTR)mste.Description().c_str(),
             (LPSTR)mste.SrcFile().c_str(), mste.SrcLine());
+		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal, mste.ShortDescription().c_str());
     }
     catch (Util::MapiUtilsException &muex)
     {
         lpwstrStatus = FormatExceptionInfo(muex.ErrCode(), (LPWSTR)muex.Description().c_str(),
             (LPSTR)muex.SrcFile().c_str(), muex.SrcLine());
+		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal, muex.ShortDescription().c_str());
     }
 CLEAN_UP: SafeDelete(ExchangeServerDN);
     SafeDelete(ExchangeUserDN);
     SafeDelete(pwstrExchangeServerDN);
 	SafeDelete(pwstrExchangeHostName);
 	SafeDelete(pwstrExchangeUserDN);
-	if (hr != S_OK)
+	if ((hr != S_OK)&&(!lpwstrStatus))
+	{
         lpwstrStatus = FormatExceptionInfo(hr, L"MAPIAccessAPI::OpenSessionAndStore() Failed",
             __FILE__, __LINE__);
-    return lpwstrStatus;
+		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal,  L"MAPIAccessAPI::OpenSessionAndStore() Failed");
+	}
+	if(lpwstrStatus)
+		Zimbra::Util::FreeString(lpwstrStatus);
+    return lpwstrRetVal;
 }
 
 LPCWSTR MAPIAccessAPI::InitializeUser()
@@ -350,14 +367,15 @@ LPCWSTR MAPIAccessAPI::InitializeUser()
 // Get root folders
 LPCWSTR MAPIAccessAPI::_InitializeUser()
 {
-    LPCWSTR lpwstrStatus = NULL;
+    LPWSTR lpwstrStatus = NULL;
+	LPWSTR lpwstrRetVal=NULL;
     HRESULT hr = S_OK;
 
     try
     {
         if (!m_bSingleMailBoxMigration)
         {
-            lpwstrStatus = OpenUserStore();
+            lpwstrStatus = (LPWSTR)OpenUserStore();
             if (lpwstrStatus)
                 return lpwstrStatus;
         }
@@ -369,15 +387,22 @@ LPCWSTR MAPIAccessAPI::_InitializeUser()
         // Get root folder from user store
         m_rootFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession, *m_userStore);
         if (FAILED(hr = m_userStore->GetRootFolder(*m_rootFolder)))
+		{
             lpwstrStatus = FormatExceptionInfo(hr, L"MAPIAccessAPI::Initialize() Failed",
                 __FILE__, __LINE__);
+			Zimbra::Util::CopyString(lpwstrRetVal, L"MAPIAccessAPI::Initialize() Failed");
+		}
     }
     catch (GenericException &ge)
     {
         lpwstrStatus = FormatExceptionInfo(ge.ErrCode(), (LPWSTR)ge.Description().c_str(),
             (LPSTR)ge.SrcFile().c_str(), ge.SrcLine());
+		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal,ge.ShortDescription().c_str());
     }
-    return lpwstrStatus;
+	if(lpwstrStatus)
+		Zimbra::Util::FreeString(lpwstrStatus);
+    return lpwstrRetVal;
 }
 
 
@@ -397,7 +422,7 @@ LPCWSTR MAPIAccessAPI::GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist)
 
 LPCWSTR MAPIAccessAPI::_GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist)
 {
-    LPCWSTR lpwstrStatus = NULL;
+    LPWSTR lpwstrStatus = NULL;
     HRESULT hr = S_OK;
 
     try
@@ -408,6 +433,9 @@ LPCWSTR MAPIAccessAPI::_GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist)
     {
         lpwstrStatus = FormatExceptionInfo(ge.ErrCode(), (LPWSTR)ge.Description().c_str(),
             (LPSTR)ge.SrcFile().c_str(), ge.SrcLine());
+		dloge(lpwstrStatus);
+		Zimbra::Util::FreeString(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrStatus, ge.ShortDescription().c_str());
     }
     return lpwstrStatus;
 }
@@ -491,14 +519,15 @@ HRESULT MAPIAccessAPI::GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder
 
     if ((hr = m_userStore->OpenEntry(sbFolderEID.cb, (LPENTRYID)sbFolderEID.lpb, NULL,
             MAPI_BEST_ACCESS, &objtype, (LPUNKNOWN *)&pFolder)) != S_OK)
-        throw GenericException(hr, L"GetFolderItems OpenEntry Failed.", __LINE__, __FILE__);
+        throw GenericException(hr, L"MAPIAccessAPI::GetInternalFolder OpenEntry Failed.", ERR_OPEN_ENTRYID, 
+		__LINE__, __FILE__);
 
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
 
     // Get PR_DISPLAY_NAME
     if (FAILED(hr = HrGetOneProp(pFolder, PR_DISPLAY_NAME, pPropValues.getptr())))
-        throw GenericException(hr, L"GetFolderItems HrGetOneProp() Failed.", __LINE__,
-            __FILE__);
+        throw GenericException(hr, L"MAPIAccessAPI::GetInternalFolder HrGetOneProp() Failed.", ERR_OPEN_PROPERTY, 
+		__LINE__, __FILE__);
     folder.Initialize(pFolder, pPropValues->Value.LPSZ, &sbFolderEID);
     return hr;
 }
@@ -520,7 +549,8 @@ LPCWSTR MAPIAccessAPI::GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data>
 
 LPCWSTR MAPIAccessAPI::_GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data> &ItemList)
 {
-    LPCWSTR lpwstrStatus = NULL;
+    LPWSTR lpwstrStatus = NULL;
+	LPWSTR lpwstrRetVal=NULL;
     HRESULT hr = S_OK;
     MAPIFolder folder;
 
@@ -530,6 +560,7 @@ LPCWSTR MAPIAccessAPI::_GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data
         {
             lpwstrStatus = FormatExceptionInfo(hr,
                 L"MAPIAccessAPI::GetFolderItemsList() Failed", __FILE__, __LINE__);
+			Zimbra::Util::CopyString(lpwstrRetVal,L"MAPIAccessAPI::GetFolderItemsList() Failed");
             goto ZM_EXIT;
         }
 
@@ -573,23 +604,33 @@ LPCWSTR MAPIAccessAPI::_GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data
     {
         lpwstrStatus = FormatExceptionInfo(mssex.ErrCode(), (LPWSTR)mssex.Description().c_str(),
             (LPSTR)mssex.SrcFile().c_str(), mssex.SrcLine());
+		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal, mssex.ShortDescription().c_str());
     }
     catch (MAPIFolderException &mfex)
     {
         lpwstrStatus = FormatExceptionInfo(mfex.ErrCode(), (LPWSTR)mfex.Description().c_str(),
             (LPSTR)mfex.SrcFile().c_str(), mfex.SrcLine());
+		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal, mfex.ShortDescription().c_str());
     }
     catch (MAPIMessageException &msgex)
     {
         lpwstrStatus = FormatExceptionInfo(msgex.ErrCode(), (LPWSTR)msgex.Description().c_str(),
             (LPSTR)msgex.SrcFile().c_str(), msgex.SrcLine());
+		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal, msgex.ShortDescription().c_str());
     }
     catch (GenericException &genex)
     {
         lpwstrStatus = FormatExceptionInfo(genex.ErrCode(), (LPWSTR)genex.Description().c_str(),
             (LPSTR)genex.SrcFile().c_str(), genex.SrcLine());
+		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal, genex.ShortDescription().c_str());
     }
-ZM_EXIT: return lpwstrStatus;
+	if(lpwstrStatus)
+		Zimbra::Util::FreeString(lpwstrStatus);
+ZM_EXIT: return lpwstrRetVal;
 }
 
 LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
@@ -609,6 +650,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
 LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
 {
     LPWSTR lpwstrStatus = NULL;
+	LPWSTR lpwstrRetVal=NULL;
     HRESULT hr = S_OK;
     LPMESSAGE pMessage = NULL;
     ULONG objtype;
@@ -620,6 +662,7 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
             __LINE__);
 		dloge("MAPIAccessAPI -- User Store OpenEntry failed");
 		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal, ERR_OPEN_ENTRYID);
         goto ZM_EXIT;
     }
 
@@ -740,6 +783,7 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
                     __FILE__, __LINE__);
 				dloge("MAPIAccessAPI -- exception");
 				dloge(lpwstrStatus);
+				Zimbra::Util::CopyString(lpwstrRetVal,L"MimePP conversion Failed.");
                 goto ZM_EXIT;
 			}
 
@@ -1003,6 +1047,7 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
             (LPSTR)mex.SrcFile().c_str(), mex.SrcLine());
 		dloge("MAPIAccessAPI -- MAPIMessageException");
 		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal,mex.ShortDescription().c_str());
     }
     catch (MAPIContactException &cex)
     {
@@ -1010,8 +1055,12 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
             (LPSTR)cex.SrcFile().c_str(), cex.SrcLine());
 		dloge("MAPIAccessAPI -- MAPIMessageException");
 		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal,cex.ShortDescription().c_str());
     }
-ZM_EXIT: return lpwstrStatus;
+ZM_EXIT: 
+	if(lpwstrStatus)
+		Zimbra::Util::FreeString(lpwstrStatus);
+	return lpwstrRetVal;
 }
 
 LPWSTR MAPIAccessAPI::GetOOOStateAndMsg()

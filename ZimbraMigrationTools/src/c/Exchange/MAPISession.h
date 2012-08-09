@@ -8,7 +8,7 @@ class MAPISessionException: public GenericException
 {
 public:
     MAPISessionException(HRESULT hrErrCode, LPCWSTR lpszDescription);
-    MAPISessionException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine, LPCSTR strFile);
+    MAPISessionException(HRESULT hrErrCode, LPCWSTR lpszDescription, LPCWSTR lpszShortDescription, int nLine, LPCSTR strFile);
     virtual ~MAPISessionException() {}
 };
 

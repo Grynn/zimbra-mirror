@@ -8,7 +8,7 @@ class MAPIStoreException: public GenericException
 {
 public:
     MAPIStoreException(HRESULT hrErrCode, LPCWSTR lpszDescription);
-    MAPIStoreException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine, LPCSTR strFile);
+    MAPIStoreException(HRESULT hrErrCode, LPCWSTR lpszDescription, LPCWSTR lpszShortDescription, int nLine, LPCSTR strFile);
     virtual ~MAPIStoreException() {}
 };
 

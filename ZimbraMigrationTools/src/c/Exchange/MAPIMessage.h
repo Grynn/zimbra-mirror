@@ -29,7 +29,7 @@ class MAPIMessageException: public GenericException
 {
 public:
     MAPIMessageException(HRESULT hrErrCode, LPCWSTR lpszDescription);
-    MAPIMessageException(HRESULT hrErrCode, LPCWSTR lpszDescription, int nLine, LPCSTR strFile);
+    MAPIMessageException(HRESULT hrErrCode, LPCWSTR lpszDescription, LPCWSTR lpszShortDescription, int nLine, LPCSTR strFile);
     virtual ~MAPIMessageException() {}
 };
 

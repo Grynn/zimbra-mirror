@@ -87,31 +87,31 @@ HRESULT Zimbra::MAPI::Util::HrMAPIFindDefaultMsgStore(LPMAPISESSION lplhSession,
     if (FAILED(hr = lplhSession->GetMsgStoresTable(0, lpTable.getptr())))
     {
         throw MapiUtilsException(hr,
-            L"Util:: HrMAPIFindDefaultMsgStore(): GetMsgStoresTable Failed.", __LINE__,
-            __FILE__);
+            L"Util:: HrMAPIFindDefaultMsgStore(): GetMsgStoresTable Failed.", ERR_DEF_MSG_STORE, 
+			__LINE__,  __FILE__);
     }
     // Get the row count for the message recipient table
     if (FAILED(hr = lpTable->GetRowCount(0, &cRows)))
     {
-        throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): GetRowCount Failed.",
+        throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): GetRowCount Failed.",ERR_DEF_MSG_STORE,
             __LINE__, __FILE__);
     }
     // Set the columns to return
     if (FAILED(hr = lpTable->SetColumns((LPSPropTagArray) & rgPropTagArray, 0)))
     {
-        throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): SetColumns Failed.",
+        throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): SetColumns Failed.",ERR_DEF_MSG_STORE,
             __LINE__, __FILE__);
     }
     // Go to the beginning of the recipient table for the envelope
     if (FAILED(hr = lpTable->SeekRow(BOOKMARK_BEGINNING, 0, NULL)))
     {
-        throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): SeekRow Failed.",
+        throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): SeekRow Failed.",ERR_DEF_MSG_STORE,
             __LINE__, __FILE__);
     }
     // Read all the rows of the table
     if (FAILED(hr = lpTable->QueryRows(cRows, 0, lpRows.getptr())))
     {
-        throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): QueryRows Failed.",
+        throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): QueryRows Failed.",ERR_DEF_MSG_STORE,
             __LINE__, __FILE__);
     }
     if (lpRows->cRows == 0)
@@ -124,8 +124,8 @@ HRESULT Zimbra::MAPI::Util::HrMAPIFindDefaultMsgStore(LPMAPISESSION lplhSession,
             if (FAILED(MAPIAllocateBuffer(bin.cb, (void **)&bin.lpb)))
             {
                 throw MapiUtilsException(hr,
-                    L"Util:: HrMAPIFindDefaultMsgStore(): MAPIAllocateBuffer Failed.", __LINE__,
-                    __FILE__);
+                    L"Util:: HrMAPIFindDefaultMsgStore(): MAPIAllocateBuffer Failed.", ERR_DEF_MSG_STORE, 
+					__LINE__,  __FILE__);
             }
             // Copy entry ID of message store
             CopyMemory(bin.lpb, lpRows->aRow[i].lpProps[1].Value.bin.lpb, bin.cb);
@@ -161,8 +161,8 @@ HRESULT Zimbra::MAPI::Util::MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPW
     {
         SafeDelete(pStoreDnA);
         SafeDelete(pMailboxDnA);
-        throw MapiUtilsException(hr, L"Util:: MailboxLogon(): QueryInterface Failed.", __LINE__,
-            __FILE__);
+        throw MapiUtilsException(hr, L"Util:: MailboxLogon(): QueryInterface Failed.", ERR_MBOX_LOGON, 
+			__LINE__, __FILE__);
     }
     hr = pXManageStore->CreateStoreEntryID(pStoreDnA, pMailboxDnA, OPENSTORE_HOME_LOGON |
         OPENSTORE_USE_ADMIN_PRIVILEGE | OPENSTORE_TAKE_OWNERSHIP, &storeEID.cb,
@@ -173,7 +173,7 @@ HRESULT Zimbra::MAPI::Util::MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPW
         pXManageStore->Release();
     if (FAILED(hr))
     {
-        throw MapiUtilsException(hr, L"Util:: MailboxLogon(): CreateStoreEntryID Failed.",
+        throw MapiUtilsException(hr, L"Util:: MailboxLogon(): CreateStoreEntryID Failed.",ERR_MBOX_LOGON,
             __LINE__, __FILE__);
     }
     hr = pSession->OpenMsgStore(0, storeEID.cb, (LPENTRYID)storeEID.lpb, NULL, MDB_ONLINE |
@@ -189,8 +189,8 @@ HRESULT Zimbra::MAPI::Util::MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPW
             MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY | MDB_NO_DIALOG, ppMdb);
     }
     if (FAILED(hr))
-        throw MapiUtilsException(hr, L"Util:: MailboxLogon(): OpenMsgStore Failed.", __LINE__,
-            __FILE__);
+        throw MapiUtilsException(hr, L"Util:: MailboxLogon(): OpenMsgStore Failed.",ERR_MBOX_LOGON ,
+		__LINE__, __FILE__);
     return hr;
 }
 
@@ -217,12 +217,12 @@ HRESULT Zimbra::MAPI::Util::GetmsExchHomeServerName(LPCWSTR lpszServer, LPCWSTR 
 				ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch, (void **)&pDirSearch);
 			if (FAILED(hr)||(pDirSearch==NULL))
 				throw MapiUtilsException(hr, L"Util::GetmsExchHomeServerName(): ADsOpenObject Failed.(with credentials)",
-				 __LINE__, __FILE__);
+				 ERR_ADOBJECT_OPEN, __LINE__, __FILE__);
 		}
 		else
 		{
 			throw MapiUtilsException(hr, L"Util::GetmsExchHomeServerName(): ADsOpenObject Failed.(w/o credentials)",
-            __LINE__, __FILE__);
+            ERR_ADOBJECT_OPEN, __LINE__, __FILE__);
 		}
 	}
     
@@ -252,8 +252,8 @@ HRESULT Zimbra::MAPI::Util::GetmsExchHomeServerName(LPCWSTR lpszServer, LPCWSTR 
     hr = pDirSearch->ExecuteSearch((LPWSTR)strFilter.c_str(), pAttributes, 1, &hSearch);
     if (FAILED(hr))
     {
-        throw MapiUtilsException(hr,
-            L"Util:: GetUserDNAndLegacyName(): ExecuteSearch() Failed.", __LINE__, __FILE__);
+        throw MapiUtilsException(hr, L"Util:: GetUserDNAndLegacyName(): ExecuteSearch() Failed.", ERR_AD_SEARCH, 
+			__LINE__, __FILE__);
     }
 
     ADS_SEARCH_COLUMN dnCol;
@@ -313,13 +313,13 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
 			hr = ADsOpenObject(strADServer.c_str(), lpszUser, lpszPwd,
 				ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch, (void **)&pDirSearch);
 			if (FAILED(hr)||(pDirSearch==NULL))
-				throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): ADsOpenObject Failed(With credentials):Please verify the used admin credentials.",
-				__LINE__, __FILE__);
+				throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): ADsOpenObject Failed(With credentials).",
+				ERR_ADOBJECT_OPEN, __LINE__, __FILE__);
 		}
 		else
 		{
-			throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): ADsOpenObject Failed.(W/o credentials):Please verify that logged in user has admin rights.",
-				__LINE__, __FILE__);
+			throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): ADsOpenObject Failed.(W/o credentials)",
+				ERR_ADOBJECT_OPEN, __LINE__, __FILE__);
 		}
 	}
    
@@ -349,8 +349,8 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
     hr = pDirSearch->ExecuteSearch((LPWSTR)strFilter.c_str(), pAttributes, 2, &hSearch);
     if (FAILED(hr))
     {
-        throw MapiUtilsException(hr,
-            L"Util:: GetUserDNAndLegacyName(): ExecuteSearch() Failed.", __LINE__, __FILE__);
+        throw MapiUtilsException(hr, L"Util:: GetUserDNAndLegacyName(): ExecuteSearch() Failed.", 
+			ERR_AD_SEARCH, __LINE__, __FILE__);
     }
 
     ADS_SEARCH_COLUMN dnCol;
@@ -393,8 +393,8 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
     pDirSearch->CloseSearchHandle(hSearch);
     if (wstruserdn.empty() || wstrlegacyname.empty())
     {
-        throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): S_ADS_NOMORE_ROWS:Please check the admin credentials for permissions/rights to query the directory.",
-            __LINE__, __FILE__);
+        throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): S_ADS_NOMORE_ROWS",
+            ERR_AD_NOROWS, __LINE__, __FILE__);
     }
     return S_OK;
 }
@@ -414,31 +414,31 @@ HRESULT Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile(LPMAPISESSION pSessi
     if (FAILED(hr = pSession->AdminServices(0, pServiceAdmin.getptr())))
     {
         throw MapiUtilsException(hr, L"Util::GetUserDnAndServerDnFromProfile(): AdminServices.",
-            __LINE__, __FILE__);
+            ERR_PROFILE_DN, __LINE__, __FILE__);
     }
     if (FAILED(hr = pServiceAdmin->OpenProfileSection((LPMAPIUID)GLOBAL_PROFILE_SECTION_GUID,
             NULL, 0, pProfileSection.getptr())))
     {
         throw MapiUtilsException(hr,
-            L"Util::GetUserDnAndServerDnFromProfile(): OpenProfileSection.", __LINE__,
-            __FILE__);
+            L"Util::GetUserDnAndServerDnFromProfile(): OpenProfileSection.", ERR_PROFILE_DN, 
+			__LINE__,  __FILE__);
     }
     if (FAILED(hr = pProfileSection->GetProps((LPSPropTagArray) & profileProps, 0, &nVals,
             pPropValues.getptr())))
     {
         throw MapiUtilsException(hr, L"Util::GetUserDnAndServerDnFromProfile(): GetProps.",
-            __LINE__, __FILE__);
+            ERR_PROFILE_DN, __LINE__, __FILE__);
     }
     if (nVals != 3)
     {
         throw MapiUtilsException(hr, L"Util::GetUserDnAndServerDnFromProfile(): nVals not 3.",
-            __LINE__, __FILE__);
+            ERR_PROFILE_DN, __LINE__, __FILE__);
     }
     if ((pPropValues[0].ulPropTag != PR_PROFILE_HOME_SERVER_DN) && (pPropValues[1].ulPropTag !=
         PR_PROFILE_USER))
     {
-        throw MapiUtilsException(hr,
-            L"Util::GetUserDnAndServerDnFromProfile(): ulPropTag error.", __LINE__, __FILE__);
+        throw MapiUtilsException(hr, L"Util::GetUserDnAndServerDnFromProfile(): ulPropTag error.", 
+			ERR_PROFILE_DN,  __LINE__, __FILE__);
     }
 
     size_t len = strlen(pPropValues[0].Value.lpszA);
@@ -481,14 +481,14 @@ HRESULT Zimbra::MAPI::Util::HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin)
     if (FAILED(hr = HrGetOneProp(lpMdb, PR_IPM_SUBTREE_ENTRYID, lpEID.getptr())))
     {
         throw MapiUtilsException(hr, L"Util::HrMAPIFindIPMSubtree(): HrGetOneProp Failed.",
-            __LINE__, __FILE__);
+            ERR_IPM_SUBTREE, __LINE__, __FILE__);
     }
     bin.cb = lpEID->Value.bin.cb;
     if (FAILED(MAPIAllocateBuffer(lpEID->Value.bin.cb, (void **)&bin.lpb)))
     {
         throw MapiUtilsException(hr,
-            L"Util:: HrMAPIFindDefaultMsgStore(): MAPIAllocateBuffer Failed.", __LINE__,
-            __FILE__);
+            L"Util:: HrMAPIFindDefaultMsgStore(): MAPIAllocateBuffer Failed.", ERR_IPM_SUBTREE,
+			__LINE__,  __FILE__);
     }
     // Copy entry ID of message store
     CopyMemory(bin.lpb, lpEID->Value.bin.lpb, lpEID->Value.bin.cb);
@@ -697,9 +697,8 @@ HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(
     if (FAILED(hr))
     {
         MAPIUninitialize();
-        throw MapiUtilsException(hr,
-            L"Util::GetExchangeUsersUsingObjectPicker(): CoCreateInstance Failed.", __LINE__,
-            __FILE__);
+        throw MapiUtilsException(hr, L"Util::GetExchangeUsersUsingObjectPicker(): CoCreateInstance Failed.", 
+			ERR_OBJECT_PICKER, __LINE__,  __FILE__);
     }
 
     DSOP_SCOPE_INIT_INFO aScopeInit[1];
@@ -752,9 +751,8 @@ HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(
     if (FAILED(hr))
     {
         MAPIUninitialize();
-        throw MapiUtilsException(hr,
-            L"Util::GetExchangeUsersUsingObjectPicker(): pDsObjectPicker::Initialize Failed",
-            __LINE__, __FILE__);
+        throw MapiUtilsException(hr,L"Util::GetExchangeUsersUsingObjectPicker(): pDsObjectPicker::Initialize Failed",
+            ERR_OBJECT_PICKER, __LINE__, __FILE__);
     }
 
     // Supply a window handle to the application.
@@ -784,9 +782,8 @@ HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(
             // DestroyWindow(hwndParent);
             // }
             MAPIUninitialize();
-            throw MapiUtilsException(hr,
-                L"Util::GetExchangeUsersUsingObjectPicker(): pdo::GetData Failed", __LINE__,
-                __FILE__);
+            throw MapiUtilsException(hr, L"Util::GetExchangeUsersUsingObjectPicker(): pdo::GetData Failed", 
+				ERR_OBJECT_PICKER, __LINE__, __FILE__);
         }
         else
         {
@@ -1301,8 +1298,8 @@ mimepp::BodyPart *Zimbra::MAPI::Util::AttachPartFromIAttach(MAPISession &session
 
     if (FAILED(hr))
     {
-        throw Zimbra::MAPI::Util::MapiUtilsException(hr,
-            L"Util::AttachPartFromIAttach(): GetProps.", __LINE__, __FILE__);
+        throw Zimbra::MAPI::Util::MapiUtilsException(hr, L"Util::AttachPartFromIAttach(): GetProps.", 
+			ERR_GET_ATTCHMENT, __LINE__, __FILE__);
     }
     if (pProps[ATTACH_METHOD].ulPropTag != PR_ATTACH_METHOD)
     {
@@ -1588,8 +1585,8 @@ mimepp::BodyPart *Zimbra::MAPI::Util::AttachTooLargeAttachPart(ULONG attachSize,
 
     if (FAILED(hr))
     {
-        throw Zimbra::MAPI::Util::MapiUtilsException(hr,
-            L"Util::AttachTooLargeAttachPart(): GetProps.", __LINE__, __FILE__);
+        throw Zimbra::MAPI::Util::MapiUtilsException(hr, L"Util::AttachTooLargeAttachPart(): GetProps.",
+			ERR_GET_ATTCHMENT, __LINE__, __FILE__);
     }
     if (pProps[ATTACH_METHOD].ulPropTag != PR_ATTACH_METHOD)
     {
@@ -2446,18 +2443,18 @@ BOOL Zimbra::MAPI::Util::CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPST
     if (FAILED(hr = MAPIAdminProfiles(0, iprofadmin.getptr())))
     {
         throw MapiUtilsException(hr, L"Util:: CreatePSTProfile(): MAPIAdminProfiles Failed.",
-            __LINE__, __FILE__);
+            ERR_CREATE_PSTPROFILE, __LINE__, __FILE__);
     }
     if (FAILED(hr = iprofadmin->CreateProfile((LPTSTR)lpstrProfileName, NULL, NULL, 0)))
     {
         throw MapiUtilsException(hr, L"Util:: CreatePSTProfile(): CreateProfile Failed.",
-            __LINE__, __FILE__);
+            ERR_CREATE_PSTPROFILE, __LINE__, __FILE__);
     }
     if (FAILED(hr = iprofadmin->AdminServices((LPTSTR)lpstrProfileName, NULL, NULL, 0,
             imsadmin.getptr())))
     {
         throw MapiUtilsException(hr, L"Util:: CreatePSTProfile(): AdminServices Failed.",
-            __LINE__, __FILE__);
+            ERR_CREATE_PSTPROFILE, __LINE__, __FILE__);
     }
     // Now create the message-store-service.
     hr = imsadmin->CreateMsgService((LPTSTR)"MSUPST MS",
@@ -2470,7 +2467,7 @@ BOOL Zimbra::MAPI::Util::CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPST
     if (hr != S_OK)
     {
         throw MapiUtilsException(hr, L"Util:: CreatePSTProfile(): CreateMsgService Failed.",
-            __LINE__, __FILE__);
+            ERR_CREATE_PSTPROFILE, __LINE__, __FILE__);
     }
     // We need to get hold of the MAPIUID for this message-service. We do this
     // by enumerating the message-stores (there will be only one!) and picking it up.
@@ -2479,7 +2476,7 @@ BOOL Zimbra::MAPI::Util::CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPST
     if (FAILED(hr = imsadmin->GetMsgServiceTable(0, mstable.getptr())))
     {
         throw MapiUtilsException(hr, L"Util:: CreatePSTProfile(): CreateMsgService Failed.",
-            __LINE__, __FILE__);
+            ERR_CREATE_PSTPROFILE, __LINE__, __FILE__);
     }
     SizedSPropTagArray(2, mscols) = {
         2, { PR_SERVICE_UID, PR_DISPLAY_NAME }
@@ -2487,8 +2484,8 @@ BOOL Zimbra::MAPI::Util::CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPST
     mstable->SetColumns((SPropTagArray *)&mscols, 0);
     if (FAILED(hr = mstable->QueryRows(1, 0, msrows.getptr())))
     {
-        throw MapiUtilsException(hr, L"Util:: CreatePSTProfile(): QueryRows Failed.", __LINE__,
-            __FILE__);
+        throw MapiUtilsException(hr, L"Util:: CreatePSTProfile(): QueryRows Failed.",
+			ERR_CREATE_PSTPROFILE, __LINE__, __FILE__);
     }
 
     MAPIUID msuid = *((MAPIUID *)msrows->aRow[0].lpProps[0].Value.bin.lpb);
@@ -2502,7 +2499,7 @@ BOOL Zimbra::MAPI::Util::CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPST
             1, msprops)))
     {
         throw MapiUtilsException(hr, L"Util:: CreatePSTProfile(): ConfigureMsgService Failed.",
-            __LINE__, __FILE__);
+            ERR_CREATE_PSTPROFILE, __LINE__, __FILE__);
     }
 	//Create supporting OL profile entries else crash may happen!
 	LPWSTR lpwstrProfileName = NULL;
@@ -2511,7 +2508,7 @@ BOOL Zimbra::MAPI::Util::CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPST
 	{
 		Zimbra::Util::SafeDelete(lpwstrProfileName);
 		throw MapiUtilsException(hr, L"Util:: CreatePSTProfile()::SetOLProfileRegistryEntries Failed.",
-            __LINE__, __FILE__);
+            ERR_CREATE_PSTPROFILE, __LINE__, __FILE__);
 	}
 	Zimbra::Util::SafeDelete(lpwstrProfileName);
     return TRUE;
@@ -2579,12 +2576,12 @@ BOOL Zimbra::MAPI::Util::DeleteAlikeProfiles(LPCSTR lpstrProfileName)
     if (FAILED(hr = MAPIAdminProfiles(0, iprofadmin.getptr())))
     {
         throw MapiUtilsException(hr, L"Util:: DeleteAlikeProfiles(): MAPIAdminProfiles Failed.",
-            __LINE__, __FILE__);
+            ERR_DELETE_PROFILE, __LINE__, __FILE__);
     }
     if (FAILED(hr = iprofadmin->GetProfileTable(0, proftable.getptr())))
     {
         throw MapiUtilsException(hr, L"Util:: DeleteAlikeProfiles(): GetProfileTable Failed.",
-            __LINE__, __FILE__);
+            ERR_DELETE_PROFILE, __LINE__, __FILE__);
     }
     SizedSPropTagArray(2, proftablecols) = {
         2, { PR_DISPLAY_NAME_A, PR_DEFAULT_PROFILE }
@@ -2750,8 +2747,8 @@ bool HtmlBody(LPMESSAGE pMessage, LPSPropValue lpv, LPVOID *ppBody, unsigned int
 
         hr = pIStream->Stat(&statstg, STATFLAG_NONAME);
         if (FAILED(hr))
-            throw MAPIMessageException(E_FAIL, L"HtmlBody(): pIStream->Stat Failed.", __LINE__,
-                __FILE__);
+            throw MAPIMessageException(E_FAIL, L"HtmlBody(): pIStream->Stat Failed.", 
+			ERR_MESSAGE_BODY, __LINE__, __FILE__);
 
         unsigned bodySize = statstg.cbSize.LowPart;
 
@@ -2761,20 +2758,20 @@ bool HtmlBody(LPMESSAGE pMessage, LPSPropValue lpv, LPVOID *ppBody, unsigned int
         hr = MAPIAllocateBuffer(bodySize + 10, ppBody);
         ZeroMemory(*ppBody, bodySize + 10);
         if (FAILED(hr))
-            throw MAPIMessageException(E_FAIL, L"HtmlBody(): ZeroMemory Failed.", __LINE__,
-                __FILE__);
+            throw MAPIMessageException(E_FAIL, L"HtmlBody(): ZeroMemory Failed.",
+			ERR_MESSAGE_BODY, __LINE__, __FILE__);
 
         // download the text
         ULONG cb;
 
         hr = pIStream->Read(*ppBody, statstg.cbSize.LowPart, &cb);
         if (FAILED(hr))
-            throw MAPIMessageException(E_FAIL, L"HtmlBody(): pIStream->Read Failed.", __LINE__,
-                __FILE__);
+            throw MAPIMessageException(E_FAIL, L"HtmlBody(): pIStream->Read Failed.",
+			ERR_MESSAGE_BODY, __LINE__, __FILE__);
         if (cb != statstg.cbSize.LowPart)
         {
             throw MAPIMessageException(E_FAIL, L"HtmlBody(): statstg.cbSize.LowPart Failed.",
-                __LINE__, __FILE__);
+                ERR_MESSAGE_BODY, __LINE__, __FILE__);
         }
         // close the stream
         pIStream->Release();

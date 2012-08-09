@@ -14,8 +14,8 @@ MAPITaskException::MAPITaskException(HRESULT hrErrCode, LPCWSTR
     //
 }
 
-MAPITaskException::MAPITaskException(HRESULT hrErrCode, LPCWSTR lpszDescription, int
-    nLine, LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile)
+MAPITaskException::MAPITaskException(HRESULT hrErrCode, LPCWSTR lpszDescription, LPCWSTR lpszShortDescription, 
+	int nLine, LPCSTR strFile): GenericException(hrErrCode, lpszDescription, lpszShortDescription, nLine, strFile)
 {
     //
 }
@@ -96,7 +96,8 @@ HRESULT MAPITask::InitNamedPropsForTask()
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValMsgClass;
 
     if (FAILED(hr = HrGetOneProp(m_pMessage, PR_MESSAGE_CLASS, pPropValMsgClass.getptr())))
-        throw MAPITaskException(hr, L"InitNamedPropsForTask(): HrGetOneProp Failed.", __LINE__, __FILE__);
+        throw MAPITaskException(hr, L"InitNamedPropsForTask(): HrGetOneProp Failed.", 
+		ERR_MAPI_TASK, __LINE__, __FILE__);
 
     // initialize the MAPINAMEID structure GetIDsFromNames requires
     LPMAPINAMEID ppNames[N_NUMTASKPROPS] = { 0 };
@@ -123,11 +124,13 @@ HRESULT MAPITask::InitNamedPropsForTask()
 
     if (FAILED(hr = m_pMessage->GetIDsFromNames(N_NUMTASKPROPS, ppNames, MAPI_CREATE,
             &pTaskTags)))
-        throw MAPITaskException(hr, L"Init(): GetIDsFromNames on pTaskTags Failed.", __LINE__, __FILE__);
+        throw MAPITaskException(hr, L"Init(): GetIDsFromNames on pTaskTags Failed.", ERR_MAPI_TASK, 
+		__LINE__, __FILE__);
 
     if (FAILED(hr = m_pMessage->GetIDsFromNames(N_NUMCOMMONTPROPS, ppNamesC, MAPI_CREATE,
             &pTaskTagsC)))
-        throw MAPITaskException(hr, L"Init(): GetIDsFromNames on pAppointmentTagsC Failed.", __LINE__, __FILE__);
+        throw MAPITaskException(hr, L"Init(): GetIDsFromNames on pAppointmentTagsC Failed.", ERR_MAPI_TASK, 
+		__LINE__, __FILE__);
 
     // give the prop tag ID's a type
     pr_isrecurringt = SetPropType(pTaskTags->aulPropTag[N_ISRECURT], PT_BOOLEAN);
@@ -181,7 +184,8 @@ HRESULT MAPITask::SetMAPITaskValues()
 
     if (FAILED(hr = m_pMessage->GetProps((LPSPropTagArray) & taskProps, fMapiUnicode, &cVals,
             &m_pPropVals)))
-        throw MAPITaskException(hr, L"SetMAPITaskValues(): GetProps Failed.", __LINE__, __FILE__);
+        throw MAPITaskException(hr, L"SetMAPITaskValues(): GetProps Failed.", 
+		ERR_MAPI_TASK, __LINE__, __FILE__);
 
     if (m_pPropVals[T_MESSAGE_FLAGS].ulPropTag == taskProps.aulPropTag[T_MESSAGE_FLAGS])
     {
