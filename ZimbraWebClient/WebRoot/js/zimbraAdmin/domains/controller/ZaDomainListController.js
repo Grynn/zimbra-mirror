@@ -21,7 +21,7 @@
 ZaDomainListController = function(appCtxt, container) {
 	ZaListViewController.call(this, appCtxt, container, "ZaDomainListController");
 	this._helpURL = ZaDomainListController.helpURL;
-	this._helpButtonText = ZaDomainListController.helpButtonText;
+	this._helpButtonText = ZaMsg.helpManageDomains;
 	this._currentQuery = ""
 	this._currentPageNum = 1;
 	this._currentSortField = ZaDomain.A_domainName;
@@ -33,7 +33,6 @@ ZaDomainListController = function(appCtxt, container) {
 ZaDomainListController.prototype = new ZaListViewController();
 ZaDomainListController.prototype.constructor = ZaDomainListController;
 ZaDomainListController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_domains/managing_domains.htm?locid="+AjxEnv.DEFAULT_LOCALE;
-ZaDomainListController.helpButtonText = ZaMsg.helpManageDomains;
 ZaController.initToolbarMethods["ZaDomainListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaDomainListController"] = new Array();
 ZaController.changeActionsStateMethods["ZaDomainListController"] = new Array(); 

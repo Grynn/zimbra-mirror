@@ -22,7 +22,7 @@
 ZaSearchBuilderController = function(appCtxt, container) {
 	ZaController.call(this, appCtxt, container,"ZaSearchBuilderController");
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_servers/monitoring_zimbra_collaboration_suite.htm?locid="+AjxEnv.DEFAULT_LOCALE;
-	this._helpButtonText = ZaSearchBuilderController.helpButtonText;	
+	this._helpButtonText = ZaMsg.zimbraHelpCenter;
    	this._option_views = [];
 	this._searchBuildPanel = null;
 	this._searchBuildTBPanel = null ;
@@ -37,7 +37,6 @@ ZaSearchBuilderController = function(appCtxt, container) {
 
 ZaSearchBuilderController.prototype = new ZaController();
 ZaSearchBuilderController.prototype.constructor = ZaSearchBuilderController;
-ZaSearchBuilderController.helpButtonText = ZaMsg.zimbraHelpCenter;
 ZaSearchBuilderController.prototype.getSearchBuilderPanel =
 function () {
 	if (! this._searchBuildPanel) {

@@ -23,12 +23,11 @@ ZaMTAListController = function(appCtxt, container) {
    	this._popupOperations = new Array();			
 	this.MTAPool = [];
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/monitoring_zimbra_mta_mail_queues.htm?locid="+AjxEnv.DEFAULT_LOCALE;
-	this._helpButtonText = ZaMTAListController.helpButtonText;
+	this._helpButtonText = ZaMsg.helpManageMailQueue;
 }
 
 ZaMTAListController.prototype = new ZaController();
 ZaMTAListController.prototype.constructor = ZaMTAListController;
-ZaMTAListController.helpButtonText = ZaMsg.helpManageMailQueue;
 
 ZaController.initToolbarMethods["ZaMTAListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaMTAListController"] = new Array();

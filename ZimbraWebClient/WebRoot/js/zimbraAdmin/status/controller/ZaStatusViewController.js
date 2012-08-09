@@ -25,7 +25,7 @@
 ZaStatusViewController = function(appCtxt, container) {
 	ZaController.call(this, appCtxt, container,"ZaStatusViewController");
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_servers/monitoring_zimbra_collaboration_suite.htm?locid="+AjxEnv.DEFAULT_LOCALE;
-	this._helpButtonText = ZaStatusViewController.helpButtonText;	
+	this._helpButtonText = ZaMsg.helpEditDomains;
    	this._popupOperations = new Array();
 	this._UICreated = false;	
 }
@@ -34,7 +34,6 @@ ZaStatusViewController.prototype = new ZaController();
 ZaStatusViewController.prototype.constructor = ZaStatusViewController;
 ZaController.initToolbarMethods["ZaStatusViewController"] = new Array();
 ZaController.initPopupMenuMethods["ZaStatusViewController"] = new Array();
-ZaStatusViewController.helpButtonText = ZaMsg.helpEditDomains;
 
 ZaStatusViewController.prototype.show = function(openInNewTab) {
 	try {

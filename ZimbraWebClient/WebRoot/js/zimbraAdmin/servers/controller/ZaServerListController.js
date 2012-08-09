@@ -25,12 +25,11 @@ ZaServerListController = function(appCtxt, container) {
    	this._popupOperations = new Array();			
 	
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_servers/managing_servers.htm?locid="+AjxEnv.DEFAULT_LOCALE;
-	this._helpButtonText = ZaServerListController.helpButtonText;
+	this._helpButtonText = ZaMsg.helpManageServers;
 }
 
 ZaServerListController.prototype = new ZaListViewController();
 ZaServerListController.prototype.constructor = ZaServerListController;
-ZaServerListController.helpButtonText = ZaMsg.helpManageServers;
 
 ZaController.initToolbarMethods["ZaServerListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaServerListController"] = new Array();

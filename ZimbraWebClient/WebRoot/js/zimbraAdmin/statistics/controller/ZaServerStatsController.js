@@ -27,13 +27,12 @@ ZaServerStatsController = function(appCtxt, container) {
       	
 	ZaController.call(this, appCtxt, container,"ZaServerStatsController");
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/checking_usage_statistics.htm?locid="+AjxEnv.DEFAULT_LOCALE;
-	this._helpButtonText = ZaServerStatsController.helpButtonText;
+	this._helpButtonText = ZaMsg.helpCheckStatistics;
 	this.tabConstructor = ZaServerStatsView;
 }
 
 ZaServerStatsController.prototype = new ZaController();
 ZaServerStatsController.prototype.constructor = ZaServerStatsController;
-ZaServerStatsController.helpButtonText = ZaMsg.helpCheckStatistics
 
 ZaController.setViewMethods["ZaServerStatsController"] = [];
 //ZaServerStatsController.STATUS_VIEW = "ZaServerStatsController.STATUS_VIEW";
@@ -132,12 +131,11 @@ ZaServerStatsListController = function(appCtxt, container) {
     this._popupOperations = new Array();
 
     this._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/checking_usage_statistics.htm?locid="+AjxEnv.DEFAULT_LOCALE;
-    this._helpButtonText = ZaServerStatsListController.helpButtonText;
+    this._helpButtonText = ZaMsg.helpCheckStatistics;
 }
 
 ZaServerStatsListController.prototype = new ZaListViewController();
 ZaServerStatsListController.prototype.constructor = ZaServerStatsListController;
-ZaServerStatsListController.helpButtonText = ZaMsg.helpCheckStatistics
 
 ZaController.initPopupMenuMethods["ZaServerStatsListController"] = new Array();
 ZaController.changeActionsStateMethods["ZaServerStatsListController"] = new Array();

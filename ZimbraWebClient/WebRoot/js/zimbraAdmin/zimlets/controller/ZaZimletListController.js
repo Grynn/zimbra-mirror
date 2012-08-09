@@ -25,12 +25,11 @@ ZaZimletListController = function(appCtxt, container) {
    	this._popupOperations = new Array();			
 	this.objType = ZaEvent.S_ZIMLET;
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "zimlets/about_zimlets.htm?locid="+AjxEnv.DEFAULT_LOCALE;
-	this._helpButtonText = ZaZimletListController.helpButtonText;
+	this._helpButtonText = ZaMsg.helpManageZimlets;
 }
 
 ZaZimletListController.prototype = new ZaListViewController();
 ZaZimletListController.prototype.constructor = ZaZimletListController;
-ZaZimletListController.helpButtonText = ZaMsg.helpManageZimlets;
 
 ZaController.initPopupMenuMethods["ZaZimletListController"] = new Array();
 ZaController.changeActionsStateMethods["ZaZimletListController"] = new Array(); 
