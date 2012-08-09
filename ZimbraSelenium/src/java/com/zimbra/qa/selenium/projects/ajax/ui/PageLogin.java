@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
+import java.util.Date;
+
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.*;
@@ -112,20 +114,30 @@ public class PageLogin extends AbsTab {
 
 		zNavigateTo();
 
-		zSetLoginName(account.EmailAddress);
-		zSetLoginPassword(account.Password);
-
-		// Click the Login button
-		sClick(Locators.zBtnLogin);
-
-		// Wait for the app to load
-		/* TODO: ... debugging to be removed */
-		//sWaitForPageToLoad();
+		Date start = new Date();
 		
-		((AppAjaxClient)MyApplication).zPageMain.zWaitForActive(180000);
+		try {
+			
+			zSetLoginName(account.EmailAddress);
+			zSetLoginPassword(account.Password);
 
-		((AppAjaxClient)MyApplication).zSetActiveAcount(account);
+			// Click the Login button
+			sClick(Locators.zBtnLogin);
 
+			// Wait for the app to load
+			/* TODO: ... debugging to be removed */
+			//sWaitForPageToLoad();
+			
+			((AppAjaxClient)MyApplication).zPageMain.zWaitForActive(180000);
+
+			((AppAjaxClient)MyApplication).zSetActiveAcount(account);
+
+
+		} finally {
+			
+			SleepMetrics.RecordProcessing((new Throwable()).getStackTrace(), start, new Date());
+
+		}
 	}
 	
 	/**

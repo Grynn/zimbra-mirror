@@ -492,6 +492,8 @@ public class ExecuteHarnessMain {
 
 		logger.info("Execute tests ... completed");
 		
+		SleepMetrics.report();
+		
 		return ( listener == null ? "Done" : listener.getResults() );
 
 	}

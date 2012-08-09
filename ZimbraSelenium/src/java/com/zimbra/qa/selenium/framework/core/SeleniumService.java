@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Date;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -18,6 +19,7 @@ import org.openqa.selenium.server.SeleniumServer;
 import com.zimbra.qa.selenium.framework.util.CommandLine;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem;
+import com.zimbra.qa.selenium.framework.util.SleepMetrics;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
@@ -149,6 +151,7 @@ public class SeleniumService {
 	public void startSeleniumServer() throws HarnessException {
 		logger.info("SeleniumService.startSeleniumServer()");
 		
+		Date start = new Date();
 		
 		try
 		{
@@ -174,6 +177,10 @@ public class SeleniumService {
 			
 		} catch (Exception e) {
 			throw new HarnessException("Unable to start selenium service", e);
+		} finally {
+			
+			SleepMetrics.RecordProcessing((new Throwable()).getStackTrace(), start, new Date());
+			
 		}
 		
 	}
