@@ -21,12 +21,12 @@ public class SleepMetrics {
 	 */
 	public static void report() {
 		
-		logger.warn("SleepMetrics:");
+		logger.info("SleepMetrics:");
 		
 		Collections.sort(metrics);
 		
 		for (SleepEntry entry : metrics) {
-			logger.warn(entry.toString());
+			logger.info(entry.toString());
 		}
 		
 	}
@@ -153,6 +153,8 @@ public class SleepMetrics {
 		
 		public void addDelay(long delay) {
 			totalDelay += delay;
+			
+			logger.info("Entry: "+ className +"."+ methodName +"() - "+ delay +"/"+ totalDelay);
 		}
 		
 		public String toString() {
