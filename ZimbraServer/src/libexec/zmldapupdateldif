@@ -150,7 +150,16 @@ if ( -d "/opt/zimbra/lib/conf/" ) {
               print "Error msg: ", $ldifin->error ( ), "\n";
               print "Error lines:\n", $ldifin->error_lines ( ), "\n";
             } elsif ( $entry ) {
-              $entry->update($ldap);
+              $entry->changetype("modify");
+              foreach my $attr ($entry->attributes()) {
+                my $ref = $entry->get_value ( $attr, asref => 1 );
+                #print "Processing $attr => @$ref\n";
+                $entry->replace($attr => [@$ref]);
+              }
+              my $msg = $entry->update($ldap);
+              if ($msg->code()) {
+                print "Error msg: ", $entry->dn(), " ", $msg->error(), "\n";
+              }
             }
        }
     }
