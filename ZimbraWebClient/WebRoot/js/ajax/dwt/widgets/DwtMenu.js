@@ -348,7 +348,6 @@ function(msec, x, y, kbGenerated) {
 
 DwtMenu.prototype.popdown =
 function(msec, ev) {
-	if (this._disposed) return;
 	if (this._style == DwtMenu.BAR_STYLE) return;
 
 	if (this._popupActionId != -1) {
@@ -1147,9 +1146,6 @@ function(incScroll) {
 
 DwtMenu.prototype._doPopdown =
 function(ev) {
-
-	if (this._disposed) return;
-
 	// Notify all sub menus to pop themselves down
 	var a = this._children.getArray();
 	var s = this._children.size();
@@ -1177,7 +1173,7 @@ function(ev) {
 	this._isPoppedUp = false;
 
 	if ((this._style == DwtMenu.POPUP_STYLE || this._style == DwtMenu.DROPDOWN_STYLE) &&
-		this._table && this._table.rows.length && this._table.rows[0].cells.length)
+		this._table && this._table.rows && this._table.rows.length && this._table.rows[0].cells.length)
 	{
 		var numColumns = this._table.rows[0].cells.length;
 		var numRows = this._table.rows.length;
