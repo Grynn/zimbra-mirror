@@ -24,7 +24,7 @@ public class CancelTask extends AjaxCommonTest {
 		super.startingPage = app.zPageTasks;
 
 		super.startingAccountPreferences = new HashMap<String , String>() {{
-       // put("zimbraPrefComposeFormat", "html");
+			put("zimbraPrefComposeFormat", "text");
 			put("zimbraPrefTasksReadingPaneLocation", "bottom");
       }};
 	}

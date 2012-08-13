@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 import java.util.HashMap;
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.TaskItem;
@@ -45,10 +46,13 @@ public class CreateHtmlTask extends AjaxCommonTest {
 
 		// Click NEW button
 		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
-
 		//Pull down Options drop down and select Format As Html option
-		taskNew.zToolbarPressPulldown(Button.B_OPTIONS, Button.O_OPTION_FORMAT_AS_HTML);
-
+		//taskNew.zToolbarPressPulldown(Button.B_OPTIONS, Button.O_OPTION_FORMAT_AS_HTML);	
+			
+		//Reason:With "?dev=1&debug=0", Tinymce editor in HTML mode takes more time to load 
+		if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
+			SleepUtil.sleepVeryLong();
+		}
 		// Fill out the resulting form
 		taskNew.zFillField(Field.Subject, subject);
 		taskNew.zFillField(Field.HtmlBody, taskHtmlbody);
@@ -82,8 +86,11 @@ public class CreateHtmlTask extends AjaxCommonTest {
 		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
 
 		//Pull down Options drop down and select Format As Html option
-		taskNew.zToolbarPressPulldown(Button.B_OPTIONS, Button.O_OPTION_FORMAT_AS_HTML);
-
+		//taskNew.zToolbarPressPulldown(Button.B_OPTIONS, Button.O_OPTION_FORMAT_AS_HTML);
+		//Reason:With "?dev=1&debug=0", Tinymce editor in HTML mode takes more time to load 
+		if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
+			SleepUtil.sleepVeryLong();
+		}
 		//Fill out resulting form		
 		taskNew.zFillField(Field.Subject, subject);
 		taskNew.zFillField(Field.HtmlBody, taskHtmlbody);
@@ -114,7 +121,11 @@ public class CreateHtmlTask extends AjaxCommonTest {
 		.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_TASK);
 
 		//Pull down Options drop down and select Format As Html option
-		taskNew.zToolbarPressPulldown(Button.B_OPTIONS, Button.O_OPTION_FORMAT_AS_HTML);
+		//taskNew.zToolbarPressPulldown(Button.B_OPTIONS, Button.O_OPTION_FORMAT_AS_HTML);
+		//Reason:With "?dev=1&debug=0", Tinymce editor in HTML mode takes more time to load 
+		if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
+			SleepUtil.sleepVeryLong();
+		}
 
 		// Fill out the resulting form
 		taskNew.zFillField(Field.Subject, subject);
@@ -149,8 +160,11 @@ public class CreateHtmlTask extends AjaxCommonTest {
 		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zKeyboardShortcut(shortcut);
 
 		//Pull down Options drop down and select Format As Html option
-		taskNew.zToolbarPressPulldown(Button.B_OPTIONS, Button.O_OPTION_FORMAT_AS_HTML);
-
+		//taskNew.zToolbarPressPulldown(Button.B_OPTIONS, Button.O_OPTION_FORMAT_AS_HTML);
+		//Reason:With "?dev=1&debug=0", Tinymce editor in HTML mode takes more time to load 
+		if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
+			SleepUtil.sleepVeryLong();
+		}
 
 		// Fill out the resulting form
 		taskNew.zFillField(Field.Subject, subject);
