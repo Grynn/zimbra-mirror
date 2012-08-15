@@ -11,7 +11,7 @@
 # 
 # Software distributed under the License is distributed on an "AS IS"
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
-# ***** END LICENSE BLOCK *****
+#; ***** END LICENSE BLOCK *****
 # 
 
 if [ x`whoami` != xzimbra ]; then
@@ -23,13 +23,21 @@ zimbra_home=/opt/zimbra
 zimbra_java_home=${zimbra_home}/java
 jspc_src_dir=${zimbra_home}/mailboxd/webapps/zimbra
 jspc_build_dir=${zimbra_home}/mailboxd/work/zimbra/jsp
-jspc_class_path="${zimbra_home}/jetty/lib:${zimbra_home}/jetty/lib/jsp-2.1:${zimbra_home}/jetty/lib/ext:${zimbra_home}/jetty/lib/plus:${zimbra_home}/jetty/lib/naming:/opt/zimbra/lib/ext:${zimbra_home}/jetty/common/lib:${zimbra_home}/jetty/webapps/zimbra/WEB-INF/lib"
+jspc_class_path="${zimbra_home}/jetty/lib:${zimbra_home}/jetty/lib/jsp:${zimbra_home}/jetty/lib/ext:${zimbra_home}/jetty/lib/plus:${zimbra_home}/jetty/lib/naming:/opt/zimbra/lib/ext:${zimbra_home}/jetty/common/lib:${zimbra_home}/jetty/webapps/zimbra/WEB-INF/lib"
 
 extensions="backup clamscanner network zimbra-license zimbrahsm zimbrasync"
 ext_dir="/opt/zimbra/lib/ext-common"
 for i in $extensions; do
   if [ -d "/opt/zimbra/lib/ext/$i" ]; then
    jspc_class_path="${jspc_class_path}:${ext_dir}/$i"
+  fi
+done
+
+for i in `ls ${zimbra_home}/jetty/lib/jsp/*.jar`; do
+  if [ x"$class_path" = "x" ]; then
+    class_path="$i"
+  else 
+    class_path="${class_path}:$i"
   fi
 done
 
@@ -53,7 +61,7 @@ mkdir ${jspc_build_dir}
 
 compile_jsp() {
   file=shift
-  ${java_cmd} org.apache.jasper.JspC -v -d ${jspc_build_dir} -webapp ${jspc_src_dir} -uriroot ${jspc_src_dir} -compile
+  ${java_cmd} org.apache.jasper.JspC -v -d ${jspc_build_dir} -webapp ${jspc_src_dir} -uriroot ${jspc_src_dir} -compile -classpath ${class_path}
   return $?
 }
 
