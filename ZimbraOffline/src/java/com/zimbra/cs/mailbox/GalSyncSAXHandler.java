@@ -192,7 +192,7 @@ public class GalSyncSAXHandler implements ElementHandler {
         }
     }
 
-    private void removeUnmapped() throws ServiceException {
+    private boolean removeUnmapped() throws ServiceException {
         List<Integer> folderIds = new ArrayList<Integer>();
         folderIds.add(OfflineGal.getSyncFolder(galMbox, context, false).getId());
         QueryParams params = new QueryParams();
@@ -209,7 +209,7 @@ public class GalSyncSAXHandler implements ElementHandler {
             galMbox.lock.release();
         }
         if (galItemIds == null || galItemIds.size() == 0) {
-            return;
+            return false;
         }
 
         Collection<DataSourceItem> dsItems = DbDataSource.getAllMappings(ds);
@@ -224,13 +224,14 @@ public class GalSyncSAXHandler implements ElementHandler {
                 galItemIds.removeAll(dsItemIds);
             } catch (Exception e) {
                 OfflineLog.offline.warn("Offline GAL error in calculating set difference: " + e.getMessage());
-                return;
+                return false;
             }
 
             if (galItemIds.size() > 100) {
                 prov.setAccountAttribute(this.galAccount, OfflineConstants.A_offlineGalAccountSyncToken, "");
                 OfflineLog.offline.warn("Offline GAL too many unmapped items: " + Integer.toString(galItemIds.size())
                         + ", falling back to full sync.");
+                return true;
             } else {
                 for (Integer id : galItemIds) {
                     galMbox.delete(context, id.intValue(), MailItem.Type.CONTACT);
@@ -239,24 +240,29 @@ public class GalSyncSAXHandler implements ElementHandler {
                         + " unmapped items.");
             }
         }
+        return false;
     }
 
-    public void runMaintenance() {
+    public boolean runMaintenance() {
         long lastRefresh = galAccount.getLongAttr(OfflineConstants.A_offlineGalAccountLastRefresh, 0);
         long interval = OfflineLC.zdesktop_gal_refresh_interval_days.longValue();
         if (lastRefresh > 0 && (System.currentTimeMillis() - lastRefresh) / Constants.MILLIS_PER_DAY < interval) {
-            return;
+            return false;
         }
 
         try {
             OfflineLog.offline.debug("Offline GAL running maintenance");
-            removeUnmapped();
+            boolean needFullSync = removeUnmapped();
             galMbox.optimize(0);
-            prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastRefresh,
-                    Long.toString(System.currentTimeMillis()));
+            if (!needFullSync) {
+                prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastRefresh,
+                        Long.toString(System.currentTimeMillis()));
+            }
+            return needFullSync;
         } catch (ServiceException e) {
             OfflineLog.offline.warn("Offline GAL maintenance error: " + e.getMessage());
         }
+        return false;
     }
 
     private void saveUnparsedContact(String id, Map<String, String> map) throws ServiceException, IOException {

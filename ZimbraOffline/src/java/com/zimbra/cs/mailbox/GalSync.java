@@ -332,7 +332,12 @@ public class GalSync {
             token = handler.getToken();
         } else {
             if (!isOnRequest && !fullSync) { // don't run the potentially lengthy maintenance if it's manual or full
-                handler.runMaintenance();
+                boolean needFullSync = handler.runMaintenance();
+                //runMaintenance can reset syncToken to null
+                if (needFullSync) {
+                    resetGal(galAccount);
+                    return;
+                }
             }
 
             XMLElement req = new XMLElement(AccountConstants.SYNC_GAL_REQUEST);
