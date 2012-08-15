@@ -261,6 +261,7 @@ sAppRoot = oFso.GetParentFolderName(sScriptDir)
 sLocalAppDir = oFso.getFolder(oShellApp.Namespace(&H1c&).Self.Path).ShortPath
 
 sDataRoot = GetDataRoot()
+xmlDataRoot = Replace(sDataRoot,"&","&amp;")
 sVerFile = sDataRoot & "\conf\version"
 sTmpDir = sDataRoot & ".tmp"
 sRestoreDir = sDataRoot & ".rst"
@@ -329,12 +330,15 @@ oTokens.Add "@java.xms@", javaXms
 oTokens.Add "@java.xmx@", javaXmx
 
 FindAndReplace sDataRoot & "\bin\zdctl.vbs", oTokens
-FindAndReplace sDataRoot & "\conf\localconfig.xml", oTokens
 FindAndReplace sDataRoot & "\conf\zdesktop.conf", oTokens
-FindAndReplace sDataRoot & "\jetty\etc\jetty.xml", oTokens
 FindAndReplace sDataRoot & "\zdesktop.webapp\webapp.ini", oTokens
 FindAndReplace sDataRoot & "\profile\user.js", oTokens
 FindAndReplace sOverridePath, oTokens
+
+oTokens.Remove "@install.data.root@"
+oTokens.Add "@install.data.root@", xmlDataRoot
+FindAndReplace sDataRoot & "\conf\localconfig.xml", oTokens
+FindAndReplace sDataRoot & "\jetty\etc\jetty.xml", oTokens
 
 If bIsUpgrade Then
     RestoreData sTmpDir
