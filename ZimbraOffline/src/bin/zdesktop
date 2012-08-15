@@ -98,6 +98,7 @@ ACTION=$1
 ##################################################
 
 ZIMBRA_HOME="@install.data.root@"
+ZIMBRA_PLATFORM="@install.platform@"
 JETTY_HOME="@install.app.root@/jetty"
 CONFIGS="${ZIMBRA_HOME}/jetty/etc/jetty.xml"
 JETTY_ARGS=" --ini OPTIONS=Server,jsp,jmx,resources,websocket,ext,jta,plus,rewrite"
@@ -257,12 +258,27 @@ then
   JAVA_OPTIONS="$JAVA_OPTIONS -Djetty.port=$JETTY_PORT"
 fi
 
+#Dynamically set Xms/Xmx based on available memory
+
+JAVA_HEAP="-Xms32m -Xmx128m"
+
+if [ "$ZIMBRA_PLATFORM" = "MacOS" ]
+then 
+    MEMSIZE=$(sysctl hw.memsize | awk '/^hw.memsize:/{print $2}') 
+else
+    MEMSIZE=$[$(free | awk '/^Mem:/{print $2}')*1000]
+fi
+
+if [ $MEMSIZE > 1000000000 ]
+then
+  JAVA_HEAP="-Xms128m -Xmx512m"
+fi
 
 #####################################################
 # Add jetty properties to Java VM options.
 #####################################################
 #MAILBOXD_JAVA_OPTIONS=`/opt/zimbra/bin/zmlocalconfig -m nokey mailboxd_java_options`
-MAILBOXD_JAVA_OPTIONS="-client -d32 -Djava.awt.headless=true -Xms32m -Xmx150m -Xss150k -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -XX:NewRatio=4 -XX:TargetSurvivorRatio=70 -XX:+UseConcMarkSweepGC"
+MAILBOXD_JAVA_OPTIONS="-client -d32 -Djava.awt.headless=true $JAVA_HEAP -Xss150k -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -XX:NewRatio=4 -XX:TargetSurvivorRatio=70 -XX:+UseConcMarkSweepGC"
 JAVA_OPTIONS="$MAILBOXD_JAVA_OPTIONS $JAVA_OPTIONS -Djetty.home='$JETTY_HOME'"
 
 #####################################################

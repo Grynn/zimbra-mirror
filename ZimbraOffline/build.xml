@@ -53,6 +53,18 @@
   <property name="zdext.dir" location="../ZimbraOfflineExt"/>
   <property name="zdext.build.dir" location="${zdext.dir}/build"/>
 
+  <condition property="is-windows">
+    <os family="windows" />
+  </condition>
+  <condition property="is-unix">
+    <not>
+      <os family="windows" />
+    </not>
+  </condition>
+  <condition property="is-mac">
+    <os family="mac" />
+  </condition>
+
   <property name="offlineext.jar.file" value="offlineext.jar" />
   <property name="offlineext.dist.dir" location="${dist.dir}/ext/offline"/>
 
@@ -846,7 +858,22 @@
       </else>
     </if>
 
-    <chmod file="${dist.data.dir}/bin/zdesktop" perm="ugo+x" />
+    <if>
+        <isset property="is-mac"/>
+        <then>
+            <replace file="${dist.data.dir}/bin/zdesktop" token="@install.platform@" value="MacOS"/>
+        </then>
+        <else>
+        	<if>
+        		<isset property="is-linux"/>
+        	    <then>
+                    <replace file="${dist.data.dir}/bin/zdesktop" token="@install.platform@" value="Linux"/>
+        		</then>
+        	</if>
+        </else>
+    </if>   
+
+  	<chmod file="${dist.data.dir}/bin/zdesktop" perm="ugo+x" />
 
     <antcall target="offline-make-dist-ext"/>
     <antcall target="offline-make-dist-ext-converter" />

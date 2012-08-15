@@ -225,7 +225,9 @@ my $tokens = {
 	'@install.data.root@' => $data_root,
 	'@install.key@' => get_random_id(),
 	'@install.locale@' => 'en-US',
-	'#@install.linux.java.home@' => "JAVA_HOME=\"$app_root/linux/jre\""
+	'#@install.linux.java.home@' => "JAVA_HOME=\"$app_root/linux/jre\"",
+	'@install.platform@' => 'Linux'
+	
 };
 
 # fix data files
