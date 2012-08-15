@@ -1604,10 +1604,9 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraCalendarFeature,
                                   		  items :[
                                                   {ref:ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled,
-                                                      type:_SUPER_WIZ_CHECKBOX_,
+                                                      type:_CHECKBOX_,
                                                       msgName:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,
-                                                      checkBoxLabel:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,
-                                                      resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                                                      label:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,
                                                       trueValue:"TRUE", falseValue:"FALSE"
                                                   }
                                          	 ]
