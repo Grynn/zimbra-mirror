@@ -99,7 +99,7 @@ ZaTreeItem.prototype._getDisplayText = function (currentTextSize, allowedSize) {
  *
  * @param	{string}	text		the text
  */
-DwtTreeItem.prototype.setText =
+ZaTreeItem.prototype.setText =
 function(text) {
 	if (this._initialized) {
 		if (!text) text = "";
