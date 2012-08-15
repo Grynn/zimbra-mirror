@@ -134,7 +134,7 @@ public class PushChanges {
 
     /** The bitmask of all document changes that we propagate to the server. */
     static final int DOCUMENT_CHANGES = Change.FLAGS | Change.TAGS | Change.FOLDER | Change.COLOR | Change.CONTENT |
-            Change.NAME;
+            Change.NAME | Change.LOCK;
 
     /** A list of all the "leaf types" (i.e. non-folder types) that we synchronize with the server. */
     private static final Set<MailItem.Type> PUSH_LEAF_TYPES = EnumSet.of(MailItem.Type.TAG, MailItem.Type.CONTACT,
@@ -1148,6 +1148,27 @@ public class PushChanges {
                 }
             }
             ombx.setSyncedVersionForMailItem("" + item.getId(), resp.getSecond());
+
+            int mask = ombx.getChangeMask(sContext, id, MailItem.Type.DOCUMENT);
+            if ((mask & Change.LOCK) > 0) {
+                Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
+                Element action = request.addElement(MailConstants.E_ACTION);
+                action.addAttribute(MailConstants.A_ID, id);
+                boolean locked = ((Document) item).getLockOwner() != null;
+                action.addAttribute(MailConstants.A_OPERATION, locked ? ItemAction.OP_LOCK : ItemAction.OP_UNLOCK);
+                ombx.sendRequest(request);
+            }
+
+            if ((mask & Change.TAGS) > 0) {
+                //set tags
+                Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
+                Element action = request.addElement(MailConstants.E_ACTION);
+                action.addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE);
+                action.addAttribute(MailConstants.A_TAG_NAMES, TagUtil.encodeTags(item.getTags()));
+                action.addAttribute(MailConstants.A_TAGS, TagUtil.getTagIdString(item));
+                action.addAttribute(MailConstants.A_ID, id);
+                ombx.sendRequest(request);
+            }
         }
         //set tags
         Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);

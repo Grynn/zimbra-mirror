@@ -39,6 +39,7 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.HttpUtil;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.Provisioning;
@@ -874,6 +875,81 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             String identityId, String accountId, long autoSendTime) throws IOException, ServiceException {
         synchronized (offlineSaveDraftGuard) {
             return super.saveDraft(octxt, pm, id, origId, replyType, identityId, accountId, autoSendTime);
+        }
+    }
+
+    private Account getLockAccount(String accountId) throws ServiceException {
+        Account acct = null;
+        if (accountId == null || OfflineProvisioning.LOCAL_ACCOUNT_ID.equalsIgnoreCase(accountId)) {
+            acct = getAccount();
+        } else {
+            acct = OfflineProvisioning.getOfflineInstance().getAccount(accountId);
+        }
+        return acct;
+    }
+
+    @Override
+    Account getLockAccount() throws ServiceException {
+        //override default behavior of using auth'd account when checking lock
+        //in ZD auth'd account is always local@host.local, but we need to check if mailbox holds the lock instead
+        return getLockAccount(null);
+    }
+
+    @Override
+    public synchronized MailItem lock(OperationContext octxt, int itemId, MailItem.Type type, String accountId) throws ServiceException {
+        Account acct = getLockAccount(accountId);
+        boolean success = false;
+        try {
+            beginTransaction("lock", octxt);
+            MailItem item = getItemById(itemId, type);
+            if (acct == null && item instanceof Document) {
+                //bit of a hack here; basically we need to be able to record lock owner as a remote acct
+                //since it can be locked by a grantee that does not exist in ZD
+                //rather than setting up a fake account we'll just manually set lock owner
+                Document doc = (Document) item;
+                if (doc.lockOwner != null && !doc.lockOwner.equalsIgnoreCase(accountId)) {
+                    throw MailServiceException.CANNOT_LOCK(doc.mId, doc.lockOwner);
+                }
+                doc.lockOwner = accountId;
+                doc.lockTimestamp = System.currentTimeMillis();
+                doc.markItemModified(Change.LOCK);
+                doc.saveMetadata();
+            } else {
+                item.lock(acct);
+            }
+            success = true;
+            return item;
+        } finally {
+            endTransaction(success);
+        }
+    }
+
+    @Override
+    public synchronized void unlock(OperationContext octxt, int itemId, MailItem.Type type, String accountId) throws ServiceException {
+        Account acct = getLockAccount(accountId);
+        boolean success = false;
+        try {
+            beginTransaction("unlock", octxt);
+            MailItem item = getItemById(itemId, type);
+            if (acct == null && item instanceof Document) {
+                //if owner and accountId are the same it's ok
+                //hacky like the lock code, but this case is just when lock owned by grantee outside ZD
+                Document doc = (Document) item;
+                if (doc.lockOwner == null)
+                    return;
+                if (!doc.lockOwner.equalsIgnoreCase(accountId)) {
+                    throw MailServiceException.CANNOT_UNLOCK(doc.mId, doc.lockOwner);
+                }
+                doc.lockOwner = null;
+                doc.lockTimestamp = 0;
+                doc.markItemModified(Change.LOCK);
+                doc.saveMetadata();
+            } else {
+                item.unlock(acct);
+            }
+            success = true;
+        } finally {
+            endTransaction(success);
         }
     }
 }
