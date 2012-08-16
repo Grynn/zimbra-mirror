@@ -1295,8 +1295,9 @@ public class InitialSync {
         }
         try {
             digest = blob.getDigest();
+            //zimbraAttachmentsIndexingEnabled is not exposed in GetInfo, but its default value is TRUE.
             pm = new ParsedMessage(new ParsedMessageOptions(blob, data,
-                received * 1000L, false));
+                received * 1000L, this.getMailbox().getAccount().isAttachmentsIndexingEnabled()));
             long cutOffTime = 0l;
 
             switch (SyncMsgOptions.getOption(ombx.getOfflineAccount().getAttr(OfflineConstants.A_offlinesyncEmailDate))) {
