@@ -395,7 +395,7 @@ public class PushChanges {
                     ++totalSent;
 
                     // remove the draft from the outbox
-                    ombx.delete(sContext, id, MailItem.Type.MESSAGE);
+                    ombx.delete(null, id, MailItem.Type.MESSAGE); //use null context instead of traceless so these tombstones are tracked
                     OfflineLog.offline.debug("push: deleted pending draft (" + id + ')');
                 } catch (ServiceException x) {
                     if ((x instanceof ZClientException || x instanceof SoapFaultException) && !x.isReceiversFault() &&
