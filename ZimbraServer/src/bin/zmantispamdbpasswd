@@ -77,8 +77,8 @@ fi
 # For mysql_root_password
 #
 if [ ${password_key} = antispam_mysql_root_password ]; then
-    echo ${zimbra_home}/bin/antispammysqladmin -u root --password="${antispam_mysql_root_password}" password "${newpassword}"
-    ${zimbra_home}/bin/antispammysqladmin -u root --password="${antispam_mysql_root_password}" password "${newpassword}"
+    echo ${zimbra_home}/bin/antispam-mysqladmin -u root --password="${antispam_mysql_root_password}" password "${newpassword}"
+    ${zimbra_home}/bin/antispam-mysqladmin -u root --password="${antispam_mysql_root_password}" password "${newpassword}"
     if [ $? = 0 ]; then
         echo '*' Changed antispam mysql root user password
     else
