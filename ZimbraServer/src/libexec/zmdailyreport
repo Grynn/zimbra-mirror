@@ -19,7 +19,7 @@ zmdailyreport - report on email usage
 
 =head1 SYNOPSIS
 
-Usage: zmdailyreport [options]
+  zmdailyreport [options]
 
   Options:
     --mail                 Send report via email, default is stdout
