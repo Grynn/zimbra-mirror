@@ -3,7 +3,7 @@
 <!-- UpgradeCode must remain constant through all versions of Zimbra Desktop -->
 <?define UpgradeCode="f8836321-20a3-43c8-96e3-5df9ce908691"?>
 
-<?define version="2.0.0"?>
+<?define version="@zd.version@"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="Zimbra Desktop" Manufacturer="Zimbra" UpgradeCode="$(var.UpgradeCode)" Language="1033" Codepage="1252" Version="$(var.version)">

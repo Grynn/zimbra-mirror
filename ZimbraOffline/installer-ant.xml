@@ -163,6 +163,7 @@
 
 		<copy todir="${wxs.dir}" file="src/installer/win32/win_installer.wxs" overwrite="true" />
 		<replace file="${wxs.dir}/win_installer.wxs" token="@build.root@" value="${basedir}" />
+		<replace file="${wxs.dir}/win_installer.wxs" token="@zd.version@" value="${offline.version}.${offline.buildid}"/>
 		<exec executable="${winperl}" failonerror="true">
 			<arg value="${basedir}\src\installer\win32\wxs-get-contents.pl" />
 			<arg value="${basedir}" />
