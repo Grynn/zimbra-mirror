@@ -269,7 +269,7 @@ else
     MEMSIZE=$[$(free | awk '/^Mem:/{print $2}')*1000]
 fi
 
-if [ $MEMSIZE > 1000000000 ]
+if [ $MEMSIZE -gt 1000000000 ]
 then
   JAVA_HEAP="-Xms128m -Xmx512m"
 fi
