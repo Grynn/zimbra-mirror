@@ -263,12 +263,12 @@ sub createLdapConfig {
     exit 1;
   }
   # ADD SYNCPROV overlay to DB
-  $bdn="olcOverlay=syncprov,olcDatabase={2}mdb,cn=config";
+  $bdn="olcOverlay={0}syncprov,olcDatabase={2}mdb,cn=config";
   $mesg = $ldap->add(
     $bdn,
     attr => [
       objectClass=>['olcOverlayConfig','olcSyncProvConfig'],
-      olcOverlay=>"syncprov",
+      olcOverlay=>"{0}syncprov",
     ],
   );
   $ldap->unbind;
