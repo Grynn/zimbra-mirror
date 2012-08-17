@@ -1,0 +1,10 @@
+--- openldap-2.4.31.7z/servers/slapd/syncrepl.c.orig	2012-08-16 18:03:32.000000000 -0700
++++ openldap-2.4.31.7z/servers/slapd/syncrepl.c	2012-08-16 18:03:47.000000000 -0700
+@@ -1962,6 +1962,7 @@
+ 				}
+ 			}
+ 			slap_mods_free( newmods, 1 );
++			rx->rx_mods = oldmods;
+ 		}
+ 	}
+ 	return LDAP_SUCCESS;
