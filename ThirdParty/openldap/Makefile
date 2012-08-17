@@ -15,18 +15,15 @@ PATCH	:=
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
+	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7354.patch;
 else
 	include $(OPENLDAP_ROOT)/../versions.def
+	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7354.patch;
 endif
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	ENVMOD := env LIBS="-lresolv" 
 	CPPFLAG := "-DOPENLDAP_FD_SETSIZE=32768"
-	INDEX_PATCH :=
-endif
-
-ifeq ($(BUILD_PLATFORM), RHEL4_64)
-	INDEX_PATCH :=
 endif
 
 LDFLAGS	:=	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L$(LIBTOOL_LIB_DIR) \
@@ -51,7 +48,6 @@ build:
 	mv openldap-$(LDAP_RELEASE) openldap-$(LDAP_VERSION); \
 	cd openldap-$(LDAP_VERSION); \
 	patch -g0 -N -p1 < ../patches/ITS5037.patch; \
-	$(INDEX_PATCH) \
 	$(PATCH) \
 	patch -g0 -N -p1 < ../patches/leopard.fix; \
 	$(LDFLAGS) \
