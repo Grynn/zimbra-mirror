@@ -154,7 +154,9 @@ public class FormTaskNew extends AbsForm {
 		//
 
 		// Click it
-		this.zClick(locator);
+		this.zClickAt(locator,"0,0");
+		
+	//	sClickAt(locator, "0,0");
 
 		// if the app is busy, wait for it to become active again
 		this.zWaitForBusyOverlay();
@@ -361,9 +363,8 @@ public class FormTaskNew extends AbsForm {
 		}else if (field == Field.DueDate) {
 			locator = "css=input[id$='_endDateField']";
 			this.sFocus(locator);
-			this.zClick(locator);
+			this.zClickAt(locator,"0,0");
 			sType(locator, value);
-
 			return;
 		}else {
 

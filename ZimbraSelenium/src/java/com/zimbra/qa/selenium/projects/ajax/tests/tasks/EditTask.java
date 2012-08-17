@@ -14,6 +14,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZDate;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -154,6 +155,7 @@ public class EditTask extends AjaxCommonTest{
 		app.zPageTasks.zListItem(Action.A_LEFTCLICK, subject);
 		// Click edit
 		FormTaskNew taskedit = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_EDIT);
+		SleepUtil.sleepMedium();
 
 		//Fill due date field
 		taskedit.zFillField(Field.DueDate, dueDate.toMM_DD_YYYY());

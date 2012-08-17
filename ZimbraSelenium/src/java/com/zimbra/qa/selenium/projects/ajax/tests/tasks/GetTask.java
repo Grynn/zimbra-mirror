@@ -5,6 +5,7 @@ import java.util.*;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -52,6 +53,7 @@ public class GetTask extends AjaxCommonTest {
 		super.startingAccountPreferences = new HashMap<String , String>() {{
 			put("zimbraPrefShowSelectionCheckbox", "TRUE");
 			put("zimbraPrefTasksReadingPaneLocation", "bottom");
+			put("zimbraPrefComposeFormat", "text");
 		}};
 
 
@@ -394,6 +396,13 @@ public class GetTask extends AjaxCommonTest {
 		
 		//Create new task through GUI 
 		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
+		
+		//Reason:With "?dev=1&debug=0", Tinymce editor in HTML mode takes more time to load
+		if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
+			SleepUtil.sleepVeryLong();
+		}else{
+			SleepUtil.sleepMedium();
+		}
 		// Fill out the resulting form
 		taskNew.zFillField(com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field.Subject, newsubject);
 		taskNew.zFillField(com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field.Body, newcontent);
@@ -405,7 +414,7 @@ public class GetTask extends AjaxCommonTest {
 		 */
 		
 		//Click Save
-		app.zPageTasks.zClickAt("css=td[id='zb__TKE2__SAVE_title']", "0,0");
+		app.zPageTasks.zClickAt("css=td[id='zb__TKE-2__SAVE_title']", "0,0");
 		
 		SleepUtil.sleepMedium();
 		
