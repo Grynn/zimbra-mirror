@@ -19,7 +19,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.*;
 public class TreeBriefcase extends AbsTree {
 
 	public static class Locators {
-		public static final String briefcaseListView = "css=[id='zl__BDLV__rows']";
+		public static final String briefcaseListView = "css=[id='zl__BDLV']";
 		public static final String briefcaseTreeView = "css=[id*=zti__main_Briefcase__";
 		public static final String zNewTagTreeMenuItem = "css=td[id^=NEW_TAG__][id$=_title]";
 		public static final String zNewFolderTreeMenuItem = "//div[contains(@id,NEW_BRIEFCASE)]//tr[contains(@id,POPUP_NEW_BRIEFCASE)]//td[contains(text(),'New Folder')]";
@@ -142,10 +142,10 @@ public class TreeBriefcase extends AbsTree {
 
 		zWaitForElementPresent(treeItemLocator);
 
-		String listItemLocator = "css=div[id=zl__BDLV__rows][class=DwtListView-Rows]";
+		String listItemLocator = "css=div[id^=zl__BDLV][class=DwtListView-Rows]";
 
 		if (isRowAdded)
-			listItemLocator += ">div[id^=zli__BDLV__][class^=Row]";
+			listItemLocator += ">div[id^=zli__BDLV][class^=Row]";
 
 		zWaitForElementPresent(listItemLocator);
 

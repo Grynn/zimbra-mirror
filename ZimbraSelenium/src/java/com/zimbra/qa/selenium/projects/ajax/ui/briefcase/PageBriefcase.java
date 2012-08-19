@@ -46,7 +46,7 @@ public class PageBriefcase extends AbsTab {
 		public static final Locators zBriefcaseFolder = new Locators(
 				"id=zti__main_Briefcase__16_textCell");
 		public static final Locators briefcaseListView = new Locators(
-				"css=div[id='zl__BDLV__rows'][class='DwtListView-Rows']");
+				"css=div[id^='zl__BDLV'][class='DwtListView-Rows']");
 		public static final Locators zBriefcaseFolderIcon = new Locators(
 				"css=div[id='zti__main_Briefcase__16']");
 		public static final Locators zBriefcaseFolderIcon_Desktop = new Locators(
@@ -807,10 +807,10 @@ public class PageBriefcase extends AbsTab {
 				+ ")");
 
 		AbsPage page = null;
-		String listLocator = "//div[contains(@id,'zl__BDLV__rows')]";
-		String itemLocator = listLocator + "//div[contains(@id,'zli__BDLV__') and contains(@class,'Row')]";
+		String listLocator = "//div[contains(@id,'zl__BDLV')]";
+		String itemLocator = listLocator + "//div[contains(@id,'zli__BDLV') and contains(@class,'Row')]";
 		//String itemNameLocator = itemLocator + " div:contains(" + itemName + ")";
-		String itemNameLocator = listLocator + "//*[contains(@id,'zlif__BDLV__') and contains(text(),'" 
+		String itemNameLocator = listLocator + "//*[contains(@id,'zlif__BDLV') and contains(text(),'" 
 		+ itemName + "')]";
 		/*
 		 * listLocator =
@@ -941,8 +941,8 @@ public class PageBriefcase extends AbsTab {
 					+ listLocator);
 
 		//itemlocator = listLocator + " div:contains(" + subject + ")";
-		itemlocator = "//div[contains(@id,'zl__BDLV__rows')]" 
-				+ "//*[contains(@id,'zlif__BDLV__') and contains(text(),'" 
+		itemlocator = "//div[contains(@id,'zl__BDLV')]" 
+				+ "//*[contains(@id,'zlif__BDLV') and contains(text(),'" 
 				+ subject + "')]";
 
 		if (action == Action.A_RIGHTCLICK) {
@@ -1105,8 +1105,8 @@ public class PageBriefcase extends AbsTab {
 					+ listLocator);
 
 		//itemlocator = listLocator + " div:contains(" + rowItem + ")";
-		itemlocator = "//div[contains(@id,'zl__BDLV__rows')]" 
-				+ "//*[contains(@id,'zlif__BDLV__') and contains(text(),'" 
+		itemlocator = "//div[contains(@id,'zl__BDLV')]" 
+				+ "//*[contains(@id,'zlif__BDLV') and contains(text(),'" 
 				+ rowItem + "')]";
 
 		if (action == Action.A_RIGHTCLICK) {
@@ -1345,8 +1345,8 @@ public class PageBriefcase extends AbsTab {
 	public boolean isPresentInListView(String itemName) throws HarnessException {
 		//String itemLocator = Locators.briefcaseListView.locator
 		//		+ " div:contains(" + itemName + ")";
-		String itemLocator = "//div[contains(@id,'zl__BDLV__rows')]" 
-				+ "//*[contains(@id,'zlif__BDLV__') and contains(text(),'" 
+		String itemLocator = "//div[contains(@id,'zl__BDLV')]" 
+				+ "//*[contains(@id,'zlif__BDLV') and contains(text(),'" 
 				+ itemName + "')]";
 
 		return sIsElementPresent(itemLocator);
@@ -1356,8 +1356,8 @@ public class PageBriefcase extends AbsTab {
 			throws HarnessException {
 		//String itemLocator = Locators.briefcaseListView.locator
 		//		+ " div:contains(" + itemName + ")";
-		String itemLocator = "//div[contains(@id,'zl__BDLV__rows')]" 
-				+ "//*[contains(@id,'zlif__BDLV__') and contains(text(),'" 
+		String itemLocator = "//div[contains(@id,'zl__BDLV')]" 
+				+ "//*[contains(@id,'zlif__BDLV') and contains(text(),'" 
 				+ itemName + "')]";
 		
 		zWaitForElementPresent(itemLocator);
@@ -1374,10 +1374,10 @@ public class PageBriefcase extends AbsTab {
 
 		String listLocator = Locators.briefcaseListView.locator;
 		String itemLocator = listLocator
-				+ " div[id^='zli__BDLV__'][class^='Row']";
+				+ " div[id^='zli__BDLV'][class^='Row']";
 		//String itemNameLocator = itemLocator + " div:contains(" + itemName	+ ")";
-		String itemNameLocator = "//div[contains(@id,'zl__BDLV__rows')]" 
-				+ "//*[contains(@id,'zlif__BDLV__') and contains(text(),'" 
+		String itemNameLocator = "//div[contains(@id,'zl__BDLV')]" 
+				+ "//*[contains(@id,'zlif__BDLV') and contains(text(),'" 
 				+ itemName + "')]";
 		
 		zWaitForElementPresent(itemNameLocator);
@@ -1390,7 +1390,7 @@ public class PageBriefcase extends AbsTab {
 			if (sIsElementPresent(itemLocator + ":nth-child(" + i
 					+ "):contains(" + itemName + ")")) {
 				lockIconLocator = itemLocator + ":nth-child(" + i
-						+ ")>table>tbody>tr>td>div[id^=zlif__BDLV__][id$=__loid][class^=Img]";
+						+ ")>table>tbody>tr>td>div[id^=zlif__BDLV][id$=__loid][class^=Img]";
 				break;
 			}
 		}
@@ -1410,8 +1410,8 @@ public class PageBriefcase extends AbsTab {
 	public boolean waitForDeletedFromListView(String itemName)
 			throws HarnessException {
 		//String itemLocator = Locators.briefcaseListView.locator	+ " div:contains(" + itemName + ")";
-		String itemLocator = "//div[contains(@id,'zl__BDLV__rows')]" 
-				+ "//*[contains(@id,'zlif__BDLV__') and contains(text(),'" 
+		String itemLocator = "//div[contains(@id,'zl__BDLV')]" 
+				+ "//*[contains(@id,'zlif__BDLV') and contains(text(),'" 
 				+ itemName + "')]";
 		
 		zWaitForElementDeleted(itemLocator);
@@ -1421,8 +1421,8 @@ public class PageBriefcase extends AbsTab {
 	public String getItemNameFromListView(String itemName)
 			throws HarnessException {
 		//String itemLocator = Locators.briefcaseListView.locator div:contains(" + itemName + ")";
-		String itemLocator = "//div[contains(@id,'zl__BDLV__rows')]" 
-				+ "//*[contains(@id,'zlif__BDLV__') and contains(text(),'" 
+		String itemLocator = "//div[contains(@id,'zl__BDLV')]" 
+				+ "//*[contains(@id,'zlif__BDLV') and contains(text(),'" 
 				+ itemName + "')]";
 	
 		return sGetText(itemLocator);

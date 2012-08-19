@@ -76,7 +76,6 @@ public class CreateDocument extends FeatureBriefcaseTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on open in a separate window icon in toolbar
