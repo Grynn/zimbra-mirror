@@ -44,7 +44,7 @@ public class GetZimlets extends AjaxCommonTest {
 		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
 		    ZAssert.assertEquals(count, 4, "Verify 4 zimlets are shown in the preferences page");
 		}else{
-		    ZAssert.assertEquals(count, 8, "Verify 4 zimlets are shown in the preferences page");
+		    ZAssert.assertEquals(count, 8, "Verify 8 zimlets are shown in the preferences page");
 		}
 	}
 	
