@@ -349,7 +349,7 @@ public class PageSearch extends AbsTab {
 			rowLocator = "div[id$='__rows']";
 		} else {
 			listLocator = "css=div[id^='zv__CLV-SR-Mail-']";
-			rowLocator = "div[id$='__rows']";
+			rowLocator = "div[id*=zli__CLV-SR-Mail]";
 		}
 
 		// Make sure the button exists

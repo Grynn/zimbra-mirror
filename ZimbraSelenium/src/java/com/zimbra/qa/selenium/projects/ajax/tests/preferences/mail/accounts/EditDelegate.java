@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogDelegate;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
 
@@ -71,6 +72,7 @@ public class EditDelegate extends AjaxCommonTest {
 		dialog.zCheckRight(DialogDelegate.Rights.SendOnBehalfOf);
 		dialog.zClickButton(Button.B_OK);
 		
+		SleepUtil.sleepSmall();
 		
 		//-- Verification
 		app.zGetActiveAccount().soapSend(
@@ -126,6 +128,13 @@ public class EditDelegate extends AjaxCommonTest {
 		app.zPageLogin.zNavigateTo();
 		this.startingPage.zNavigateTo();
 
+		AbsDialog errorDialog = app.zPageMain.zGetErrorDialog(DialogErrorID.Zimbra);
+		if ( (errorDialog != null) && (errorDialog.zIsActive()) ) {
+
+		    // Dismiss the dialog and carry on
+		    errorDialog.zClickButton(Button.B_OK);
+		}
+
 		// Navigate to preferences -> notifications
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.MailAccounts);
 
@@ -145,6 +154,10 @@ public class EditDelegate extends AjaxCommonTest {
 		dialog.zWaitForActive();
 
 		dialog.zCheckRight(DialogDelegate.Rights.SendOnBehalfOf);
+		dialog.zClickButton(Button.B_OK);
+		app.zPagePreferences.zClickAt(itemLocator, "");
+		app.zPagePreferences.zClickAt(buttonLocator, "");
+		dialog.zWaitForActive();
 		dialog.zUnCheckRight(DialogDelegate.Rights.SendAs);
 		dialog.zClickButton(Button.B_OK);
 		
@@ -355,6 +368,13 @@ public class EditDelegate extends AjaxCommonTest {
 		app.zPageLogin.zNavigateTo();
 		this.startingPage.zNavigateTo();
 
+		AbsDialog errorDialog = app.zPageMain.zGetErrorDialog(DialogErrorID.Zimbra);
+		if ( (errorDialog != null) && (errorDialog.zIsActive()) ) {
+
+		    // Dismiss the dialog and carry on
+		    errorDialog.zClickButton(Button.B_OK);
+		}
+		
 		// Navigate to preferences -> notifications
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.MailAccounts);
 
@@ -373,8 +393,12 @@ public class EditDelegate extends AjaxCommonTest {
 		DialogDelegate dialog = new DialogDelegate(app, app.zPagePreferences);
 		dialog.zWaitForActive();
 
-		dialog.zUnCheckRight(DialogDelegate.Rights.SendOnBehalfOf);
 		dialog.zCheckRight(DialogDelegate.Rights.SendAs);
+		dialog.zClickButton(Button.B_OK);
+		app.zPagePreferences.zClickAt(itemLocator, "");
+		app.zPagePreferences.zClickAt(buttonLocator, "");
+		dialog.zWaitForActive();
+		dialog.zUnCheckRight(DialogDelegate.Rights.SendOnBehalfOf);
 		dialog.zClickButton(Button.B_OK);
 		
 		

@@ -3,9 +3,12 @@ package com.zimbra.qa.selenium.projects.ajax.tests.preferences.mail.accounts;
 import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.qa.selenium.framework.ui.AbsDialog;
 import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
 
@@ -47,6 +50,13 @@ public class RemoveDelegate extends AjaxCommonTest {
 		app.zPageLogin.zNavigateTo();
 		this.startingPage.zNavigateTo();
 
+		AbsDialog errorDialog = app.zPageMain.zGetErrorDialog(DialogErrorID.Zimbra);
+		if ( (errorDialog != null) && (errorDialog.zIsActive()) ) {
+
+		    // Dismiss the dialog and carry on
+		    errorDialog.zClickButton(Button.B_OK);
+		}
+		
 		// Navigate to preferences -> notifications
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.MailAccounts);
 
@@ -60,6 +70,8 @@ public class RemoveDelegate extends AjaxCommonTest {
 		String buttonLocator = "css=div[id$='_PRIMARY'] td[id$='_title']:contains('Remove')"; // TODO: I18N
 		ZAssert.assertTrue(app.zPagePreferences.sIsElementPresent(buttonLocator), "Verify the add delegate button is present");
 		app.zPagePreferences.zClickAt(buttonLocator, "");
+		
+		SleepUtil.sleepSmall();
 		
 		// Wait for the dialog to appear (?)
 //		DialogDelegate dialog = new DialogDelegate(app, app.zPagePreferences);

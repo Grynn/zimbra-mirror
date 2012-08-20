@@ -38,7 +38,8 @@ public class ZimbraPrefSkinSerenity extends AjaxCommonTest {
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.General);
 		
 		// Click on the "Theme:" pulldown
-		if ( true ) {
+		// changing condition from true to false to let test fail in natural way rather than explicitly throw an exception
+		if ( false ) {
 			throw new HarnessException("see bug 75438");
 		}
 		

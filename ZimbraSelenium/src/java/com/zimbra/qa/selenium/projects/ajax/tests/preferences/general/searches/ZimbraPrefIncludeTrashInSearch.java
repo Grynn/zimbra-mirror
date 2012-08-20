@@ -113,7 +113,7 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
 		
 		// Verify that both messages are in the list
-		List<MailItem> items = app.zPageMail.zListGetMessages();
+		List<MailItem> items = app.zPageSearch.zListGetMessages();
 		
 		boolean found1 = false;
 		boolean found2 = false;
