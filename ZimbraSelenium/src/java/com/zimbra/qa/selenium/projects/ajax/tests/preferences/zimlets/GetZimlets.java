@@ -6,6 +6,7 @@ import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
@@ -40,7 +41,11 @@ public class GetZimlets extends AjaxCommonTest {
 		
 		// IronMaiden: 5 zimlets - LinkedIn, Phone, Search Highlighter, Webex, Zimbra Social
 		// IronMaiden: Bug 50123: 3 zimlets - Phone, Search Highlighter, Webex, Y-Emoticons
-		ZAssert.assertEquals(count, 4, "Verify 4 zimlets are shown in the preferences page");
+		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
+		    ZAssert.assertEquals(count, 4, "Verify 4 zimlets are shown in the preferences page");
+		}else{
+		    ZAssert.assertEquals(count, 8, "Verify 4 zimlets are shown in the preferences page");
+		}
 	}
 	
 	// IronMaiden: Bug 50123: 3 zimlets - Phone, Search Highlighter, Webex
