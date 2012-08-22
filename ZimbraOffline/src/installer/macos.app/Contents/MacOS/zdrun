@@ -75,6 +75,7 @@ my @user_files = ("index", "store", "sqlite", "log", "zimlets-properties", "ziml
 	"conf/keystore", "profile/prefs.js", "profile/persdict.dat", "profile/localstore.json");
 
 sub launch_prism() {
+    system("\"$app_root/Zimbra Desktop.app/Contents/MacOS/reopen\" &");
 	exec("\"$app_root/Zimbra Desktop.app/Contents/MacOS/prism\"");
 }
 

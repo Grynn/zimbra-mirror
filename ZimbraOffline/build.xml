@@ -969,6 +969,7 @@
     <copy todir="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/MacOS/" file="${dist.app.dir}/macos/prism/Prism.app/Contents/MacOS/prism"/>
     <chmod file="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/MacOS/prism" perm="ugo+x"/>
     <chmod file="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/MacOS/zdrun" perm="ugo+x"/>
+    <chmod file="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/MacOS/reopen" perm="ugo+x"/>
     <replace file="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/Info.plist" token="@version@" value="${offline.version}"/>
 
     <copy todir="${dist.app.dir}/linux" overwrite="true">
