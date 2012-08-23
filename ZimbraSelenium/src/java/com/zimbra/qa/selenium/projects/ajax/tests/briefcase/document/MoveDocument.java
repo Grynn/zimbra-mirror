@@ -86,19 +86,19 @@ public class MoveDocument extends FeatureBriefcaseTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on 'Move selected item' icon in toolbar
-		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("8.0.")) {
-			// Click move -> subfolder
-			app.zPageBriefcase.zToolbarPressPulldown(Button.B_MOVE,
-					subFolderItem);
-		} else {
-			DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
-					.zToolbarPressButton(Button.B_MOVE, docItem);
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.")){
+		    DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
+			    .zToolbarPressButton(Button.B_MOVE, docItem);
 
 			// Choose folder on Confirmation dialog
 			chooseFolder.zClickTreeFolder(subFolderItem);
 			
 			// Click OK on Confirmation dialog
 			app.zPageBriefcase.zClick("//div[@id='ChooseFolderDialog_buttons']//td[contains(@id,'OK_')]//td[contains(@id,'_title')]");
+		}else{
+		    // Click move -> subfolder
+		    app.zPageBriefcase.zToolbarPressPulldown(Button.B_MOVE, subFolderItem);
+
 		}
 
 		// refresh briefcase page
