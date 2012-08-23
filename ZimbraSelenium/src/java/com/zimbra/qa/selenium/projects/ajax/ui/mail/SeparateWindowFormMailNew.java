@@ -492,5 +492,25 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 		return (page);	
 		
 	}
+	
+	/* TODO: ... debugging to be removed */
+	public boolean waitForComposeWindow() throws HarnessException {
+	    	String pageTitle = "Zimbra: Compose";
+	    	
+	    	sWaitForCondition("var x; for(var windowName in selenium.browserbot.openedWindows)"
+			+ "{var targetWindow = selenium.browserbot.openedWindows[windowName];"
+			+ "if(!selenium.browserbot._windowClosed(targetWindow)&&"
+			+ "(targetWindow.name.indexOf('"
+			+ pageTitle.split("\\.")[0]
+			+ "')!=-1||targetWindow.document.title.indexOf('"
+			+ pageTitle.split("\\.")[0]
+			+ "')!=-1)){x=windowName;}};x!=null;","60000");
+
+		sSelectWindow(pageTitle);
+
+		zWaitForElementPresent("css=textarea[id*='DWT'][class='DwtHtmlEditorTextArea']","30000");
+
+		return true;
+	}
 
 }
