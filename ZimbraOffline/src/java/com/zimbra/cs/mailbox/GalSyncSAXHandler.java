@@ -202,7 +202,7 @@ public class GalSyncSAXHandler implements ElementHandler {
         Set<Integer> galItemIds = null;
         galMbox.lock.lock();
         try {
-            conn = DbPool.getConnection();
+            conn = DbPool.getConnection(galMbox);
             galItemIds = DbMailItem.getIds(galMbox, conn, params, false);
         } finally {
             DbPool.quietClose(conn);

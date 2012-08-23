@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2006, 2007, 2008, 2009, 2010, 2012 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
@@ -154,6 +155,9 @@ public class OfflineFolderAction extends FolderAction {
         return response;
     }
 
+    private static ScheduledThreadPoolExecutor folderMoveTimer =
+        new ScheduledThreadPoolExecutor(1); //let the folder move jobs pile up
+
     /**
      * @param source sourceAcctId:folderId
      * @param target localAcctId:folderId
@@ -168,7 +172,7 @@ public class OfflineFolderAction extends FolderAction {
         final int sourceFolderId = Integer.parseInt(source.split(":")[1]);
         final int targetParentFolderId = Integer.parseInt(target.split(":")[1]);
 
-        new Thread("folder-move-" + source) {
+        folderMoveTimer.execute(new Thread("folder-move-" + source) {
 
             @Override
             public void run() {
@@ -242,10 +246,6 @@ public class OfflineFolderAction extends FolderAction {
                             }
                             throw e;
                         }
-                        // delete backup file
-                        if (backupFile != null) {
-                            FileUtil.delete(backupFile);
-                        }
                     }
 
                     // delete src folder
@@ -267,7 +267,7 @@ public class OfflineFolderAction extends FolderAction {
                             synchronized (mbox) {
                                 DbConnection conn = null;
                                 try {
-                                    conn = DbPool.getConnection();
+                                    conn = DbPool.getConnection(mbox);
                                     Set<Integer> newlyChangedItemIds = DbMailItem.getIds(mbox, conn, dbParams, false);
                                     // need to use message type even for conversation
                                     ItemActionHelper.MOVE(octxt, mbox, zsc.getResponseProtocol(), new ArrayList<Integer>(newlyChangedItemIds),
@@ -284,7 +284,10 @@ public class OfflineFolderAction extends FolderAction {
                             throw e;
                         }
                     }
-
+                    // delete backup file
+                    if (backupFile != null) {
+                        FileUtil.delete(backupFile);
+                    }
                     OfflineSyncManager.getInstance().registerDialog(
                             sourceAccount,
                             new Pair<String, String>(OfflineDialogAction.DIALOG_TYPE_FOLDER_MOVE_COMPLETE,
@@ -301,6 +304,6 @@ public class OfflineFolderAction extends FolderAction {
                     OfflineLog.offline.warn("[Folder Move] failed", e);
                 }
             }
-        }.start();
+        });
     }
 }
