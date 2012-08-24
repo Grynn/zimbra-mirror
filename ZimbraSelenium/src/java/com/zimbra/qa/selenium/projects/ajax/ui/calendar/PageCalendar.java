@@ -1019,7 +1019,7 @@ public class PageCalendar extends AbsTab {
 		} else if (button == Button.O_LISTVIEW_WORKWEEK) {
 
 			locator = "css=div[id='ztb__CLD'] div[id='zb__CLD__WORK_WEEK_VIEW'] td[id$='_title']";
-			page = null;
+			page = new ApptWorkWeekView(MyApplication);
 
 		} else if (button == Button.O_LISTVIEW_LIST) {
 

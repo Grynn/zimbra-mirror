@@ -100,7 +100,7 @@ public class MoveFile extends FeatureBriefcaseTest {
 		}
 		
 		// Click on 'Move selected item' icon in toolbar
-		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.")){
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.2.")){
 		    DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
 			    .zToolbarPressButton(Button.B_MOVE, fileItem);
 

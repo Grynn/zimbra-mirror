@@ -32,7 +32,7 @@ public class ApptView extends AbsDisplay {
 	}
 	
 	public boolean isApptExist(AppointmentItem appt) throws HarnessException {		
-		String text= sGetText("css=div[id*=__zli__CLWW__]");
+		String text= sGetText("css=div[id*=zli__CLWW__]");
 		return ( text.contains(appt.getLocation()) &&
 				 text.contains(appt.getSubject()) );	
 	}

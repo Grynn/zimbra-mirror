@@ -79,7 +79,7 @@ public class GetAppointment extends CalendarWorkWeekTest {
 		ApptWorkWeekView view = (ApptWorkWeekView) app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
 		
 		//wait for the appointment displayed in the view
-		app.zPageCalendar.zWaitForElementPresent("css=div[id*=__zli__CLWW__]");
+		app.zPageCalendar.zWaitForElementPresent("css=div[id*=zli__CLWW__]");
 		
 		ZAssert.assertTrue(view.isApptExist(appt), "Verify appt gets displayed in week view");
 	    
