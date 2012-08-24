@@ -41,6 +41,8 @@ public class CreateMailText extends PrefGroupMailByMessageTest {
 			
 			window.zSetWindowTitle("Compose");
 			window.zWaitForActive();		// Make sure the window is there
+			/* TODO: ... debugging to be removed */
+			window.waitForComposeWindow();
 			
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 			
@@ -159,6 +161,8 @@ public class CreateMailText extends PrefGroupMailByMessageTest {
 			
 			window.zSetWindowTitle("Compose");
 			window.zWaitForActive();		// Make sure the window is there
+			/* TODO: ... debugging to be removed */
+			window.waitForComposeWindow();
 			
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 			
@@ -302,6 +306,8 @@ public class CreateMailText extends PrefGroupMailByMessageTest {
 			
 			window.zSetWindowTitle("Compose");
 			window.zWaitForActive();		// Make sure the window is there
+			/* TODO: ... debugging to be removed */
+			window.waitForComposeWindow();
 			
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 			
