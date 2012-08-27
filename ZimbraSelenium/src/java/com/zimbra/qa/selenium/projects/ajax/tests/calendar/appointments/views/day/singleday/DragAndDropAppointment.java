@@ -43,6 +43,9 @@ public class DragAndDropAppointment extends AjaxCommonTest {
 					"</CreateFolderRequest>");
 		FolderItem subcalendarFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
 		
+		//Refresh view after folder creation
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+
 		// Creating objects for appointment data
 		String tz = ZTimeZone.TimeZoneEST.getID();
 		String apptSubject = ZimbraSeleniumProperties.getUniqueString();
@@ -75,7 +78,6 @@ public class DragAndDropAppointment extends AjaxCommonTest {
         
 		// Click Refresh		
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH); //Adding temporary work around because appt disappears after first clicking first refresh
 		
 		// Select the item
 		app.zPageCalendar.zDragAndDrop(
@@ -135,7 +137,9 @@ public class DragAndDropAppointment extends AjaxCommonTest {
         String s = app.zGetActiveAccount().soapSelectValue("//mail:s", "d");
         String e = app.zGetActiveAccount().soapSelectValue("//mail:e", "d");
 
-        
+        //Refresh view after Appointment creation
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+
 		String otherSubject = ZimbraSeleniumProperties.getUniqueString();
 		ZDate otherStartUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		ZDate otherEndUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 15, 0, 0);
@@ -160,7 +164,6 @@ public class DragAndDropAppointment extends AjaxCommonTest {
         
 		// Click Refresh		
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH); //Adding temporary work around because appt disappears after first clicking first refresh
 
 		
 		// drag and drop the item
