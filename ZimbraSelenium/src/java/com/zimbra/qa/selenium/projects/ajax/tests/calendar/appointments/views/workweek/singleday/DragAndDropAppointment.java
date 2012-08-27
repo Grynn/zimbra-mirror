@@ -67,7 +67,8 @@ public class DragAndDropAppointment extends CalendarWorkWeekTest {
         
 		// Click Refresh		
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-		
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH); //Adding temporary work around because appt disappears after first clicking first refresh
+
 		
 		// Select the item
 		app.zPageCalendar.zDragAndDrop(
@@ -152,7 +153,8 @@ public class DragAndDropAppointment extends CalendarWorkWeekTest {
         
 		// Click Refresh		
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-		
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH); //Adding temporary work around because appt disappears after first clicking first refresh
+
 		
 		// drag and drop the item
         	String sourceLocator = "css=div[id^='zli__CLWW__"+ apptId +"'] td.appt_name";

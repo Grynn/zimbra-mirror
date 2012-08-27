@@ -44,8 +44,8 @@ public class ModifyAppointment extends AjaxCommonTest {
 		tz = ZTimeZone.TimeZoneEST.getID();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
-		editApptSubject = ZimbraSeleniumProperties.getUniqueString();
-        editApptBody = ZimbraSeleniumProperties.getUniqueString();
+		editApptSubject = "editApptSubject_" + ZimbraSeleniumProperties.getUniqueString();
+		editApptBody = "editApptBody_" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Absolute dates in UTC zone
         Calendar now = Calendar.getInstance();
