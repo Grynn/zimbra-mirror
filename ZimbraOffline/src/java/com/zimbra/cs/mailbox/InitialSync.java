@@ -1595,6 +1595,12 @@ public class InitialSync {
                 try {
                     MailItem existingItem = ombx.getItemById(sContext, id, MailItem.Type.UNKNOWN);
                     if (ombx.getItemRevision(sContext, existingItem.getId(), MailItem.Type.UNKNOWN, doc.getVersion()) == null) {
+                        Document existingDoc = (Document) existingItem;
+                        if (existingDoc.getLockOwner() != null && !existingDoc.getLockOwner().equalsIgnoreCase(ombx.getAccountId())) {
+                            //we're syncing a new revision; even if it's locked by an external user we need to sync it down
+                            //so temporarily unlock it; it will get relocked further down
+                            ombx.unlock(sContext, existingItem.getId(), doc.getType(), existingDoc.getLockOwner());
+                        }
                         ombx.addDocumentRevision(new TracelessContext(player), id, pd);
                     }
                     if (doc.getLockOwner() == null && ((Document) existingItem).getLockOwner() != null) {
