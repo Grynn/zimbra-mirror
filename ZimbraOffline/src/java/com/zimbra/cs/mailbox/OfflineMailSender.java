@@ -88,4 +88,9 @@ public class OfflineMailSender extends MailSender {
             throw ServiceException.FAILURE("IOException", ioe);
         }
     }
+
+    @Override
+    public void checkMTAConnection() throws ServiceException {
+        //do nothing; in ZD we don't have a direct connection to MTA
+    }
 }
