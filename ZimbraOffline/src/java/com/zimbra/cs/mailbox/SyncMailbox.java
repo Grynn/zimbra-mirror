@@ -143,6 +143,11 @@ public abstract class SyncMailbox extends DesktopMailbox {
     }
 
     @Override
+    public void deleteMailbox() throws ServiceException {
+        deleteMailbox(DeleteBlobs.ALWAYS);
+    }
+
+    @Override
     public void deleteMailbox(DeleteBlobs deleteBlobs) throws ServiceException {
         if (!isDeleting.compareAndSet(false, true)) {
             return;
