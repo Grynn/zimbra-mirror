@@ -358,8 +358,11 @@ public class TentativeMeeting extends PrefGroupMailByMessageTest {
 
 		// Click Tentative > Edit Reply, modify body and send
 		FormMailNew editReply = (FormMailNew)display.zPressButtonPulldown(Button.B_TENTATIVE, Button.O_TENTATIVE_EDIT_REPLY);
-        editReply.zFillField(Field.Body, modifiedBody);
-        editReply.zSubmit();
+		/* TODO: ... debugging to be moved to mailform class*/
+	        editReply.zWaitForElementPresent("css=textarea[id*='DWT'][class='DwtHtmlEditorTextArea']","30000");
+
+		editReply.zFillField(Field.Body, modifiedBody);
+		editReply.zSubmit();
 		
 		// ---------------- Verification at organizer & invitee side both -------------------------------------       
 

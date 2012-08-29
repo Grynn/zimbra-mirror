@@ -349,6 +349,9 @@ public class AcceptMeeting extends PrefGroupMailByMessageTest {
 
         // Click Accept -> Edit Reply , which will open a new reply compose
         FormMailNew editReply = (FormMailNew)display.zPressButtonPulldown(Button.B_ACCEPT, Button.O_ACCEPT_EDIT_REPLY);
+	/* TODO: ... debugging to be moved to mailform class*/
+        editReply.zWaitForElementPresent("css=textarea[id*='DWT'][class='DwtHtmlEditorTextArea']","30000");
+
         editReply.zFillField(Field.Body, modifiedBody);
         editReply.zSubmit();
         
