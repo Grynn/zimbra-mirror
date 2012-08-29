@@ -258,6 +258,7 @@ createCAKey() {
   echo -n "** Creating CA private key ${zimbra_ca_key}..."
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
   ${openssl} req -batch -subj "${SUBJECT}" \
+    -days ${validation_days} \
     -config ${zimbra_ca_ssl_conf} \
     -new -newkey rsa:${KEYSIZE} -nodes  \
     -out ${zimbra_ca_crt} \
