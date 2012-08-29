@@ -51,8 +51,8 @@ public class PageCalendar extends AbsTab {
 		public static final String CancelMenu = "css=div#zm__Calendar div#DELETE td[id$='_title']";
 		public static final String MoveMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_MOVE']";
 		public static final String TagAppointmentMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_TAG_MENU']";
-		public static final String TagAppointmentNewTagSubMenu = "id=TAG_MENU|MENU|NEWTAG_title";
-		public static final String TagAppointmentRemoveTagSubMenu = "id=TAG_MENU|MENU|REMOVETAG_title";
+		public static final String TagAppointmentNewTagSubMenu = "id=calendar_newtag_title";
+		public static final String TagAppointmentRemoveTagSubMenu = "id=calendar_removetag_title";
 		public static final String ShowOriginalMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_SHOW_ORIG']";
 		public static final String QuickCommandsMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_QUICK_COMMANDS']";
 		
@@ -365,6 +365,15 @@ public class PageCalendar extends AbsTab {
 
 			page = null;
 			
+			// FALL THROUGH
+			
+		} else if ( action == Action.A_RIGHTCLICK) {
+			
+			this.zRightClickAt(locator, "");
+			this.zWaitForBusyOverlay();
+			
+			page = null;
+				
 			// FALL THROUGH
 			
 		} else if ( action == Action.A_DOUBLECLICK) {
@@ -1005,6 +1014,21 @@ public class PageCalendar extends AbsTab {
 
 			// No dialog
 			return (null);
+			
+		} else if (button == Button.O_LISTVIEW_TAG) {
+
+			locator = "css=[id=zb__CLD__TAG_MENU_dropdown]";
+			page = null;
+		
+		} else if (button == Button.O_LISTVIEW_NEWTAG) {
+
+			locator = "id=calendar_newtag_title";
+			page = null;
+			
+		} else if (button == Button.O_LISTVIEW_REMOVETAG) {
+
+			locator = "id=calendar_removetag_title";
+			page = null;
 
 		} else if (button == Button.O_LISTVIEW_DAY) {
 
@@ -1039,6 +1063,16 @@ public class PageCalendar extends AbsTab {
 		} else if (button == Button.B_OPEN_THE_SERIES) {
 			
 			locator = Locators.OpenTheSeriesRadioButton;
+			page = null;
+			
+		} else if (button == Button.O_TAG_APPOINTMENT_NEW_TAG_SUB_MENU) {
+			
+			locator = Locators.TagAppointmentNewTagSubMenu;
+			page = null;
+			
+		} else if (button == Button.O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU) {
+	
+			locator = Locators.TagAppointmentRemoveTagSubMenu;
 			page = null;
 			
 		} else {
@@ -1796,5 +1830,55 @@ public class PageCalendar extends AbsTab {
 			throw new HarnessException("Unknown calendar view");
 		}
 	}
+	
+	public AbsPage zTagListView(String tagName) throws HarnessException {
+		
+		if ( tagName == null )
+			throw new HarnessException("itemsLocator cannot be null");
 
+		logger.info(myPageName() + " zTagListView(" + tagName +")");
+
+		String locator = "css=div[id='zb__CLD__TAG_MENU|MENU'] td[id$='_title']:contains('" + tagName + "')";
+		AbsPage page = null;
+
+		if (!this.sIsElementPresent(locator)) {
+			throw new HarnessException("Unable to determine locator : " + locator);
+		}
+		
+		this.zClickAt(locator, "");
+		this.zWaitForBusyOverlay();
+
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+
+		return (page);
+	}
+	
+	public AbsPage zTagContextMenuListView(String tagName) throws HarnessException {
+		
+		String locator;
+		
+		if ( tagName == null )
+			throw new HarnessException("itemsLocator cannot be null");
+
+		logger.info(myPageName() + " zTagContextMenuListView(" + tagName +")");
+		
+		locator = "css=div[id='TAG_MENU|MENU'] td[id$='_title']:contains('" + tagName + "')";
+		System.out.println(locator);
+		AbsPage page = null;
+
+		if (!this.sIsElementPresent(locator)) {
+			throw new HarnessException("Unable to determine locator : " + locator);
+		}
+		
+		this.zClickAt(locator, "");
+		this.zWaitForBusyOverlay();
+
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+
+		return (page);
+	}
 }
