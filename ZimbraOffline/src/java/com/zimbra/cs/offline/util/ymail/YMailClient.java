@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -43,6 +43,7 @@ import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.PartSource;
+import org.dom4j.DocumentException;
 import org.dom4j.Namespace;
 import org.dom4j.QName;
 
@@ -55,6 +56,7 @@ import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapHttpTransport;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.SoapTransport;
+import com.zimbra.common.soap.XmlParseException;
 import com.zimbra.common.util.DateUtil;
 import com.zimbra.common.util.Log;
 import com.zimbra.cs.mime.Mime;
@@ -72,14 +74,9 @@ public class YMailClient {
     private static final String SOAP_URL = BASE_URL + "/ws/mail/v1.1/soap";
     private static final String UPLOAD_URL = BASE_URL + "/ya/upload";
 
-    // Maximum size of text attachment to include inline.
-    private static final int MAX_INLINE_DATA_SIZE = 64*1024;
-
     private static final String ENCODING_BASE64 = "base64";
-    private static final String ENCODING_BINARY = "binary";
     private static final String ENCODING_7BIT = "7bit";
     private static final String ENCODING_QUOTABLE_PRINTABLE = "quoted-printable";
-    private static final String ENCODING_8BIT = "8bit";
 
     private static final String CONTENT_TYPE_RFC822 = "message/rfc822";
 
@@ -95,10 +92,11 @@ public class YMailClient {
     private static SoapHttpTransport getTransport(Auth auth) {
         SoapHttpTransport transport =
             new SoapHttpTransport(SOAP_URL + "?" + getQueryString(auth)) {
+            @Override
             public boolean generateContextHeader() {
                 return false;
             }
-        }; 
+        };
         transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
         transport.setRequestProtocol(SoapProtocol.Soap11);
         transport.setResponseProtocol(SoapProtocol.Soap11);
@@ -127,9 +125,11 @@ public class YMailClient {
         if (enabled) {
             transport.setDebugListener(
                 new SoapTransport.DebugListener() {
+                    @Override
                     public void receiveSoapMessage(Element e) {
                         LOG.debug("Received response:\n%s", e.prettyPrint());
                     }
+                    @Override
                     public void sendSoapMessage(Element e) {
                         LOG.debug("Sending request:\n%s", e.prettyPrint());
                     }
@@ -342,25 +342,48 @@ public class YMailClient {
         if (tmpFile != null) {
             tmpFile.delete();
         }
-        if (status != 302) {
-            throw new IOException("Upload failed: " + post.getStatusText());
-        }
-        Header location = post.getResponseHeader("Location");
-        if (location == null) {
-            throw new IOException(
-                "Invalid upload response (missing redirect location");
-        }
-        Map<String, String> params = parseParams(location.getValue());
-        String id = params.get("diskfilename");
-        if (id == null) {
-            String code = params.get("errorcode");
-            if (code != null) {
-                throw new IOException("Upload failed (error = " + code + ")");
+        String id = null;
+        if (status == 302) {
+            LOG.debug("Yahoo upload returned 302, parsing Location header");
+            //old code; Yahoo seems to have changed the API, but we'll keep this in case they change it back
+            Header location = post.getResponseHeader("Location");
+            if (location == null) {
+                throw new IOException(
+                    "Invalid upload response (missing redirect location");
             }
-            throw new IOException("Upload failed (unknown error)");
+            Map<String, String> params = parseParams(location.getValue());
+            id = params.get("diskfilename");
+            if (id == null) {
+                String code = params.get("errorcode");
+                if (code != null) {
+                    throw new IOException("Upload failed (error = " + code + ")");
+                }
+                throw new IOException("Upload failed (unknown error)");
+            }
+            LOG.debug("Uploaded YMail attachment: id = %s, filesize = %s, mimetype = %s",
+                            id, params.get("filesize"), params.get("mimetype"));
+        } else if (status == 200) {
+            LOG.debug("Yahoo upload returned 200, parsing XML response");
+            try {
+                Element resp = Element.parseXML(post.getResponseBodyAsStream());
+                try {
+                    Element attachment = resp.getElement("attachment");
+                    id = getText(attachment, "id");
+                    if (id == null) {
+                        LOG.error("Upload response had no attachment ID: %s", resp);
+                        throw new IOException("Upload with no ID");
+                    }
+                    LOG.debug("Uploaded YMail attachment: id = %s, filesize = %s, mimetype = %s",
+                                    id, getText(attachment, "size"), getText(attachment, "type"));
+                } catch (ServiceException e) {
+                    throw new IOException("failed to parse upload XML response", e);
+                }
+            } catch (XmlParseException e) {
+                throw new IOException("failed to parse upload XML response", e);
+            }
+        } else {
+            throw new IOException("Unexpected response code "+ status + " from Yahoo Upload: " + post.getStatusText());
         }
-        LOG.debug("Uploaded YMail attachment: id = %s, filesize = %s, mimetype = %s",
-            id, params.get("filesize"), params.get("mimetype"));
         return id;
     }
 
@@ -387,10 +410,13 @@ public class YMailClient {
         final InputStream is = mbp.getRawInputStream();
         final String name = mbp.getFileName();
         PartSource ps = new PartSource() {
+            @Override
             public String getFileName() {
                 return name != null ? name : "attachment";
             }
+            @Override
             public long getLength() { return size; }
+            @Override
             public InputStream createInputStream() { return is; }
         };
         FilePart fp = new FilePart(
