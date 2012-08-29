@@ -46,7 +46,7 @@ public class DialogWarning extends AbsDialog {
 		public static final DialogWarningID QuickCommandConfirmDelete = new DialogWarningID("ZmQuickCommandConfirmation1");
 
 		public static final DialogWarningID PreferencesSaveChanges = new DialogWarningID("YesNoCancel");
-		public static final DialogWarningID SwitchingToTextWillDiscardHtmlFormatting = new DialogWarningID("css=div[class='DwtMsgDialog']");
+		public static final DialogWarningID SwitchingToTextWillDiscardHtmlFormatting = new DialogWarningID("css=td[id$='_formatWarning_title']");
 
 		public static final DialogWarningID SmsVerificationCodeSent = new DialogWarningID("ZmMsgDialog");
 
@@ -85,7 +85,8 @@ public class DialogWarning extends AbsDialog {
 	}
 	
 	public String zGetWarningContent() throws HarnessException {	
-		String locator = "css=div[id='YesNoCancel_content']";
+		//String locator = "css=div[id='YesNoCancel_content']";
+		String locator = "css=td[id^='MessageDialog'][class='DwtMsgArea']";
 		return (zGetDisplayedText(locator));
 	}
 	

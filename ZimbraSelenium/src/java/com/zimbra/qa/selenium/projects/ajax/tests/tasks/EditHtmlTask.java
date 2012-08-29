@@ -306,13 +306,8 @@ public class EditHtmlTask extends AjaxCommonTest{
 		}
 		DialogWarning dialogWarning = (DialogWarning)  taskedit.zToolbarPressPulldown(Button.B_OPTIONS, Button.O_OPTION_FORMAT_AS_TEXT);
 		ZAssert.assertNotNull(dialogWarning, "Verify the dialog is returned");
-		
-		logger.info(dialogWarning.zGetWarningContent());
-		//Verify title Warning and content "Do you want to save changes?"
-	   // String text="Warning";
-	   // ZAssert.assertEquals(text,dialogWarning.zGetWarningTitle()," Verify title is " + text);
-	   String text = "Switching to text will discard all HTML formatting. Continue?";
-	   ZAssert.assertEquals(text,dialogWarning.zGetWarningContent()," Verify content is " + text);	
+		String text = "Switching to text will discard all HTML formatting. Continue?";
+		ZAssert.assertEquals(text,dialogWarning.zGetWarningContent()," Verify content is " + text);	
 
 	}
 
