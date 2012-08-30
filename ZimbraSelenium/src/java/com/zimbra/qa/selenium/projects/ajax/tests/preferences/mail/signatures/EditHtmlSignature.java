@@ -4,6 +4,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.SignatureItem;
 
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -75,8 +76,13 @@ public class EditHtmlSignature extends AjaxCommonTest {
 
 		// Click on Mail/signature
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK,TreeItem.MailSignatures);
-		SleepUtil.sleepSmall();
-
+		
+		//Reason:With "?dev=1&debug=0", Tinymce editor in HTML mode takes more time to load 
+		if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
+			SleepUtil.sleepVeryLong();
+		}else{
+			SleepUtil.sleepSmall();
+		}
 		PageSignature pagesig = new PageSignature(app);
 
 		//Select created signature signature 

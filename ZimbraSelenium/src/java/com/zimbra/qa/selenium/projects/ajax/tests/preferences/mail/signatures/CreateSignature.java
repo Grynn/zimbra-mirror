@@ -3,10 +3,12 @@ package com.zimbra.qa.selenium.projects.ajax.tests.preferences.mail.signatures;
 import org.testng.annotations.Test;
 
 
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.SignatureItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -57,9 +59,13 @@ public class CreateSignature extends AjaxCommonTest {
 
 		//Click on New signature button
 		FormSignatureNew signew =(FormSignatureNew)app.zPageSignature.zToolbarPressButton(Button.B_NEW);
-
+		
 		//select html format from drop down
 		signew.zSelectFormat("html");
+		//Reason:With "?dev=1&debug=0", Tinymce editor in HTML mode takes more time to load 
+		if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
+			SleepUtil.sleepVeryLong();
+		}
 
 		// Fill Signature Name and body
 		signew.zFillField(Field.SignatureName, sigName);
