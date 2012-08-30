@@ -480,7 +480,7 @@ public class TreeCalendar extends AbsTree {
 
 	}
 
-	protected AbsPage zTreeItem(Action action, String locator) throws HarnessException {
+	public AbsPage zTreeItem(Action action, String locator) throws HarnessException {
 		AbsPage page = null;
 
 
