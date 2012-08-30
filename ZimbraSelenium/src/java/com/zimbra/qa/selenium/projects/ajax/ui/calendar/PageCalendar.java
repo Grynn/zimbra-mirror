@@ -1881,4 +1881,32 @@ public class PageCalendar extends AbsTab {
 
 		return (page);
 	}
+	
+	public void zCreateBasicAppointment(AppAjaxClient app, ZDate startUTC, ZDate endUTC, String apptSubject, String apptBody) throws HarnessException {
+				
+		String tz = ZTimeZone.TimeZoneEST.getID();
+		app.zGetActiveAccount().soapSend(
+    			"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
+    		+		"<m>"
+    		+			"<inv method='REQUEST' type='event' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"
+    		+				"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
+    		+				"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
+    		+				"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" 
+    		+			"</inv>" 
+    		+			"<mp content-type='text/plain'>" 
+    		+				"<content>" + apptBody + "</content>" 
+    		+			"</mp>"
+    		+			"<su>" + apptSubject + "</su>" 
+    		+		"</m>" 
+    		+	"</CreateAppointmentRequest>");
+	}
+	
+	public void zCreateTag(AppAjaxClient app, String tagName, int tagColor) throws HarnessException {
+		
+		app.zGetActiveAccount().soapSend(
+				"<CreateTagRequest xmlns='urn:zimbraMail'>" + 
+					"<tag name='" + tagName + "' color='" + tagColor + "'/>" + 
+				"</CreateTagRequest>");
+	}
+	
 }
