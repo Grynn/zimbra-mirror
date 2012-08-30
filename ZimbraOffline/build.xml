@@ -479,7 +479,12 @@
       <fileset file="${common.jars.dir}/slf4j*.jar"/>
     </copy>
     <copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.conf.dir}/jetty-7.6/log4j.properties.production" overwrite="true" />
-
+  	<mkdir dir="${dist.dir}/jetty/common/endorsed"/>
+  	<copy todir="${dist.dir}/jetty/common/endorsed">
+  	  <fileset file="${common.jars.dir}/jcharset.jar"/>
+      <fileset file="${common.jars.dir}/zimbra-charset.jar"/>
+  	</copy>
+        
     <!-- db schema, config and jars -->
     <antcall target="db-versions-init" />
     <copy todir="${dist.db.dir}" overwrite="true">
@@ -938,6 +943,7 @@
     <copy todir="${dist.app.dir}" overwrite="true">
       <fileset dir="src/installer" includes="README.txt" />
       <fileset dir="src/installer" includes="open_source_licenses.txt" />
+      <fileset dir="src/installer" includes="JCharset*Agreement.txt" />
     </copy>
         <copy todir="${dist.app.dir}/win32" file="src/installer/win32/zdrun.vbs" overwrite="true" />
         <copy todir="${dist.app.dir}/win32" file="src/installer/win32/zdesktop.exe" overwrite="true" />

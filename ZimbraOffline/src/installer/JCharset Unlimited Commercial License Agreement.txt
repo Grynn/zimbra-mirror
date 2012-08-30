@@ -1,0 +1,43 @@
+
+JCharset Software License Agreement
+
+
+THIS LICENSE IS PROVIDED TO YOU ONLY UPON THE CONDITION THAT YOU ACCEPT ALL OF THE TERMS CONTAINED IN THIS AGREEMENT. BY USING THE SOFTWARE, YOU INDICATE THAT YOU AGREE TO BE BOUND BY THE TERMS OF THIS AGREEMENT.
+PLEASE READ THE TERMS CAREFULLY BEFORE USING THE SOFTWARE.
+
+
+DEFINITIONS
+
+"Software" refers to the JCharset Java Charset package.
+"Author" and "Licensor" refers to Amichai Rothman, who is the author of the software, or someone explicitly assigned by him to manage the software.
+"You", "User" and "Your" refer to [company].
+"Derived Work" refers to this software, or any other software derived from, based on, or containing this software.
+"Binary Form" refers to a compiled, executable version of the software, excluding any source code.
+
+LICENSE RIGHTS
+
+Licensor grants you a nonexclusive, nontransferable, limited license to distribute, install and use the software or derived work in binary form only, only as part of a product developed directly by you, provided that you agree to be bound by all of the terms contained in this Agreement, and that a copy of this license Agreement be placed along with the software (or derived work).
+
+OWNERSHIP AND RESTRICTIONS
+
+This software is licensed, not sold, and the author retains all ownership and intellectual property rights in the software. You may distribute and use the software only as part of a product developed directly by you, and only in binary form. It may not be distributed, installed or used for any purpose other than its intended use within your product, and may not be distributed in any product which does not provide substantial additional functionality to this software's functionality. If this software is to be distributed or used for any other purpose, a separate license must be obtained from the licensor for such use. This license does not entitle you to any technical support, bug fixes or any other maintenance services from the author.
+
+UPDATES
+
+If and when the author makes available any updates or fixes to the software, you may install and use the updated software in place of the previously installed software, under the terms of this Agreement, at no additional fee.
+
+FEES
+
+The user must pay the software license fee for this license. The fee, the method of payment and additional details should be obtained by contacting the licensor.
+
+TERM AND TERMINATION
+
+This Agreement is effective from the moment the license fees are received and acknowledged by the licensor, until terminated. You may terminate this Agreement at any time by destroying all copies of the software. This Agreement will terminate immediately without notice from the licensor if you fail to comply with any provision of this Agreement. Upon termination, you must destroy all copies of the software.
+
+WARRANTY DISCLAIMER AND LIMITATION OF LIABILITY
+
+THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND. ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF INFRINGEMENT AND THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, PUNITIVE, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE DISTRIBUTION OR USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. THE AUTHOR'S TOTAL LIABILITY FOR DAMAGES ARISING FROM THIS AGREEMENT SHALL IN NO EVENT EXCEED THE LICENSE FEES PAID BY YOU FOR THE SOFTWARE. THE FOREGOING LIMITATIONS APPLY TO THE EXTENT PERMITTED BY APPLICABLE LAW IN THE SPECIFIED JURISDICTION.
+
+MISCELLANEOUS
+
+This License is the entire Agreement between you and the author, superseding any other Agreement or discussions, oral or written, and may not be changed except by a signed Agreement. This License shall be governed by and construed in accordance with the laws of the State of New York, U.S.A. This Agreement will not be governed by the conflict of law rules of any jurisdiction or the United Nations Convention on Contracts for the International Sale of Goods and any legislation implementing such Convention, if otherwise applicable. If any provision of this License is declared by a Court of competent jurisdiction to be invalid, illegal, or unenforceable, such a provision shall be modified to the extent necessary to render it enforceable without losing its intent, or severed from this Agreement if no such modification is possible, and the other provisions shall remain in full force and effect, or the licensor may at its option instead terminate this Agreement. Exclusive jurisdiction and venue for all matters relating to this License shall be in courts and fora located in the State of New York, and you consent to such jurisdiction and venue.
