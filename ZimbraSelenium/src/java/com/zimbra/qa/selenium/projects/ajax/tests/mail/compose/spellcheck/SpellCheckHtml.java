@@ -36,8 +36,15 @@ public class SpellCheckHtml extends PrefGroupMailByMessageTest {
 		// Fill out the form with the data
 		mailform.zFillField(Field.To, ZimbraAccount.AccountA().EmailAddress);
 		mailform.zFillField(Field.Subject, subject);
-		mailform.zFillField(Field.Body, "write mispeled words here");
+		//mailform.zFillField(Field.Body, "write mispeled words here");
 		
+		/* TODO: ... debugging to be removed */
+		String bodyLocator = "css=body[id=tinymce]";
+		boolean present = mailform.zWaitForElementPresent(bodyLocator, "30000");
+		ZAssert.assertTrue(present,"Verify the body field is available");
+		mailform.sClickAt(bodyLocator,"");
+		mailform.zTypeFormattedText("css=iframe[id*=ifr]", "write mispeled words here");
+
 		// Send the message
 		mailform.zToolbarPressButton(Button.B_SPELL_CHECK);
 			
