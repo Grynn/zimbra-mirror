@@ -220,7 +220,7 @@ sub exec_with_timeout($$) {
 sub HELP_MESSAGE {
     my $fd = shift;
     print $fd <<"EOF";
-Usage: zmdiaglog [-dthazj]
+Usage: zmdiaglog [-adtjzZh]
 
     -a    - Do everything: also gather JVM heapdump/coredump
     -d    - Log destination (Default $DEFAULT_DEST)
