@@ -88,8 +88,22 @@ case "$1" in
     exit $STATUS
   ;;
   restart|reload)
+    for i in $STOP_ORDER; do
+      if [ "$i" = "mysql.server" ]; then
+        flushDirtyPages
+      fi
+      ${zimbra_home}/bin/$i stop
+      R=$?
+      if [ $R -ne "0" ]; then
+        STATUS=$R
+      fi
+    done
+    if [ x$2 = "x" ]; then
+	  # Call tlsctl to get all the mailbox config files
+      ${zimbra_home}/bin/zmtlsctl >/dev/null 2>&1
+    fi
     for i in $START_ORDER; do
-      ${zimbra_home}/bin/$i $1
+      ${zimbra_home}/bin/$i start norewrite >/dev/null 2>&1
       R=$?
       if [ $R -ne "0" ]; then
         STATUS=$R
