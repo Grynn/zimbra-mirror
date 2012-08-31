@@ -83,22 +83,27 @@ public class RemoveAttachment extends PrefGroupMailByMessageTest {
 			+		"<query>subject:("+ subject +")</query>"
 			+	"</SearchRequest>");
 		id = account.soapSelectValue("//mail:m", "id");
-		Element el = null;
+		
+		
 		try{
-		    for(int i = 0; i < 10; i++){
-			el = account.soapSend(
-				"<GetMsgRequest xmlns='urn:zimbraMail' >"
-				+ "<m id='"+ id +"'/>"
-				+ "</GetMsgRequest>");
-			if(el != null && !el.toString().contains("attachment")){
-			    break;
-			}
-			SleepUtil.sleepSmall();
-		    }
+			
+			int i = 0;
+			do {
+				SleepUtil.sleepSmall();
+
+		    	account.soapSend(
+		    			  "<GetMsgRequest xmlns='urn:zimbraMail' >"
+		    			+   "<m id='"+ id +"'/>"
+		    			+ "</GetMsgRequest>");
+		    	nodes = account.soapSelectNodes("//mail:mp[@cd='attachment']");
+
+			} while ( (i++ < 10) && (nodes.length > 0) );
+			
+		    
 		}catch(Exception ex){
 		    logger.error(ex);
 		}
-		nodes = account.soapSelectNodes("//mail:mp[@cd='attachment']");
+		
 		ZAssert.assertEquals(nodes.length, 0, "Verify the message no longer has the attachment");
 		
 
