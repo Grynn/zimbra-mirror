@@ -359,7 +359,9 @@ public class TentativeMeeting extends PrefGroupMailByMessageTest {
 		// Click Tentative > Edit Reply, modify body and send
 		FormMailNew editReply = (FormMailNew)display.zPressButtonPulldown(Button.B_TENTATIVE, Button.O_TENTATIVE_EDIT_REPLY);
 		/* TODO: ... debugging to be moved to mailform class*/
-	        editReply.zWaitForElementPresent("css=textarea[id*='DWT'][class='DwtHtmlEditorTextArea']","30000");
+		String bodyLocator = "css=body[id=tinymce]";
+		boolean present = editReply.zWaitForElementPresent(bodyLocator, "30000");
+		ZAssert.assertTrue(present,"Verify the body field is available");
 
 		editReply.zFillField(Field.Body, modifiedBody);
 		editReply.zSubmit();

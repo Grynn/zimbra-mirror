@@ -137,7 +137,7 @@ public class DragAndDropAppointment extends AjaxCommonTest {
         String s = app.zGetActiveAccount().soapSelectValue("//mail:s", "d");
         String e = app.zGetActiveAccount().soapSelectValue("//mail:e", "d");
 
-        //Refresh view after Appointment creation
+        //Refresh view after first Appointment creation
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 
 		String otherSubject = ZimbraSeleniumProperties.getUniqueString();
@@ -162,7 +162,7 @@ public class DragAndDropAppointment extends AjaxCommonTest {
         
         //-- GUI actions
         
-		// Click Refresh		
+        //Click Refresh after second Appointment creation		
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 
 		
