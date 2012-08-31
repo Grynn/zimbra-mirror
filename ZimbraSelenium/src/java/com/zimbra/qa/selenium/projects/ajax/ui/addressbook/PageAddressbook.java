@@ -627,7 +627,7 @@ public class PageAddressbook extends AbsTab {
 			}
 
 			//central coordinate "x,y" 
-			String center= sGetElementWidth(pulldownLocator)/2 + "," + sGetElementHeight(pulldownLocator)/2;
+			//String center= sGetElementWidth(pulldownLocator)/2 + "," + sGetElementHeight(pulldownLocator)/2;
 			if ( this.zIsBrowserMatch(BrowserMasks.BrowserMaskIE)){
 			 				 
 				// TODO check if the following code make the test case CreateContactGroup.GroupOfNewEmail() pass in wdc			
@@ -640,7 +640,7 @@ public class PageAddressbook extends AbsTab {
 			}
 			else {
 			    //others
-			    zClickAt(pulldownLocator,center);
+			    zClickAt(pulldownLocator,"");
 			}
 			
 			zWaitForBusyOverlay();

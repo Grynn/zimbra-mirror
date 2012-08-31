@@ -9,8 +9,10 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.AbsToaster.Locators;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
 import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactGroupNew.Toolbar;
 
@@ -31,16 +33,20 @@ public class CreateContactGroup extends AjaxCommonTest  {
 	
 	private void verification(ContactGroupItem group) throws HarnessException {
 		//verify toasted message 'group created'  
-        String expectedMsg ="Group Created";
-        ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
-        		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+	    Toaster toaster = app.zPageMain.zGetToaster();
+	    toaster.zWaitForElementVisible(Locators.ToastTextLocatorCSS);
+	    SleepUtil.sleepSmall();
+	    String toastMsg = toaster.sGetText(Locators.ToastTextLocatorCSS);
+	    String expectedMsg ="Group Created";
+	        
+        ZAssert.assertStringContains(toastMsg, expectedMsg , "Verify toast message '" + expectedMsg + "'");
     
 	    
         //verify group name is displayed		        
 		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
 		boolean isFileAsEqual=false;
 		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(group.fileAs)) {
+			if (ci.fileAs.trim().equals(group.fileAs)) {
 	            isFileAsEqual = true;	
 				break;
 			}

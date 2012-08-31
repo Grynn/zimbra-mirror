@@ -781,7 +781,9 @@ public abstract class AbsSeleniumObject {
 			int n = -1;
 			if (ZimbraSeleniumProperties.isWebDriver()){
 				logger.info("...WebDriver... getSize().width");
-				n = getElement(locator).getSize().width;				
+				WebElement el = getElement(locator);
+				Dimension dim = el.getSize();
+				n = dim.width;				
 			}else{
 				n = ClientSessionFactory.session().selenium().getElementWidth(
 				locator).intValue();
@@ -1773,19 +1775,21 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void zWaitForElementVisible(String locator) throws HarnessException {
 		logger.info("zWaitForElementVisible(" + locator + ")");
+		/*
 		if (ZimbraSeleniumProperties.isWebDriver())	{
-			logger.info("...WebDriver...findElement.getLocation()");
-			if(waitForElementVisible(locator, true, 5)){
+			logger.info("...WebDriver...waitForElementVisible()");
+			if(waitForElementVisible(locator, true, 15)){
 				return;
 			}
 		}else{
-			for (int i = 0; i < 15; i++) {
+		*/
+		    for (int i = 0; i < 15; i++) {
 				if (zIsVisiblePerPosition(locator, 0, 0)) {
 					return;
 				}
 				SleepUtil.sleepSmall();
 			}
-		}
+		//}
 		throw new HarnessException(locator + " - never visibled!");		
 	}
 

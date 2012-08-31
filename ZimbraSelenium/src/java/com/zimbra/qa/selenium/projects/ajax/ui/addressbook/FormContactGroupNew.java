@@ -77,10 +77,13 @@ public class FormContactGroupNew extends AbsForm {
 	
 	public void save() throws HarnessException {
 		logger.info("FormContactNew.save()");
-		
+		String script = "window.document.getElementsByClassName('ZToolbarTable')[";
+		if(ZimbraSeleniumProperties.isWebDriver()){
+		    script = "return " + script;
+		}
 		try {				    
 		    for (int i=0; ; i++) {
-		    	String id = sGetEval("window.document.getElementsByClassName('ZToolbarTable')[" + i + "].offsetParent.id" );
+			String id = sGetEval(script + i + "].offsetParent.id" );
 		    	if (id.startsWith("ztb") && zIsVisiblePerPosition(id, 0, 0)) {
 		    		Toolbar.SAVE = id.replaceFirst("ztb","zb") + "__SAVE";		    		
 		    		logger.info("active toolbar save = " + Toolbar.SAVE);
@@ -237,9 +240,12 @@ public class FormContactGroupNew extends AbsForm {
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
-			
+		String script = "window.document.getElementById('" + Locators.zActiveEditForm + "').getAttribute('class')";
+		if(ZimbraSeleniumProperties.isWebDriver()){
+		    script = "return " + script;
+		}
 	  	if ((zIsVisiblePerPosition(Locators.zActiveEditForm, 0, 0)) && 
-	  	    (sGetEval("window.document.getElementById('" + Locators.zActiveEditForm + "').getAttribute('class')")).equals("ZmContactView"))
+	  	    (sGetEval(script)).equals("ZmContactView"))
 	  	{
     		logger.info("id = " + Locators.zActiveEditForm + " already active");
     		return true;
@@ -248,23 +254,39 @@ public class FormContactGroupNew extends AbsForm {
 		//set parameter zActiveEditForm		
 		
 		try {		
-		    int length = Integer.parseInt(sGetEval("window.document.getElementById('z_shell').children.length"))-1;
-			for (int i=length;i>=0; i--) {
-		    	String className=sGetEval("window.document.getElementById('z_shell').children[" + i + "].getAttribute('class')" );		    	
+		    int length = 0;
+		    script = "window.document.getElementById('z_shell').children.length";
+		    if(ZimbraSeleniumProperties.isWebDriver()){
+			script = "return " + script;
+		    }
+		    
+		    length = Integer.parseInt(sGetEval(script))-1;
+
+		    for (int i=length;i>=0; i--) {
+			 script = "window.document.getElementById('z_shell').children[" + i + "].getAttribute('class')" ;
+			 if(ZimbraSeleniumProperties.isWebDriver()){
+			     script = "return " + script;
+			 }
+			 String className=sGetEval(script );		    	
 		    	
-		    	if (className.equals("ZmContactView")) {
-		    		String id = sGetEval("window.document.getElementById('z_shell').children[" + i + "].id" );			    	
-		    		if (zIsVisiblePerPosition(id, 0, 0)) {		    	
-		    			Locators.zActiveEditForm = id;
-		    			logger.info("found active id = " + id);
-		    			replaceLocators();
-		    			return true;
-		    		}
-		    	}		    					    	
-	        }	
+			 if (className.equals("ZmContactView")) {
+			     script = "window.document.getElementById('z_shell').children[" + i + "].id";
+			     if(ZimbraSeleniumProperties.isWebDriver()){
+				 script = "return " + script;
+			     }
+		    	    
+			     String id = sGetEval(script);			    	
+			     if (zIsVisiblePerPosition(id, 0, 0)) {		    	
+				 Locators.zActiveEditForm = id;
+				 logger.info("found active id = " + id);
+				 replaceLocators();
+				 return true;
+			     }
+			 }    					    	
+		    }
 		}
 		catch (Exception e) {
-			logger.info(e.getMessage());
+		    logger.info(e.getMessage());
 		}
 		
 		return false;					
