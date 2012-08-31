@@ -18,7 +18,7 @@ public class CreateMeeting extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Create a basic meeting with attendee",
-			groups = { "zsanity" })
+			groups = { "sanity" })
 	public void CreateMeeting_01() throws HarnessException {
 		
 		// Create appointment data
@@ -57,7 +57,7 @@ public class CreateMeeting extends CalendarWorkWeekTest {
 	}
 
 	@Test(description = "Create simple meeting with attendee and optional",
-			groups = { "zfunctional" })
+			groups = { "functional" })
 	public void CreateMeeting_02() throws HarnessException {
 		
 		// Create appointment data
