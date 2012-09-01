@@ -103,7 +103,7 @@ case "$1" in
       ${zimbra_home}/bin/zmtlsctl >/dev/null 2>&1
     fi
     for i in $START_ORDER; do
-      ${zimbra_home}/bin/$i start norewrite >/dev/null 2>&1
+      ${zimbra_home}/bin/$i start norewrite
       R=$?
       if [ $R -ne "0" ]; then
         STATUS=$R
