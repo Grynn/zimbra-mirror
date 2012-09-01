@@ -28,7 +28,7 @@ DwtUiEvent = function(init) {
 DwtUiEvent.prototype = new DwtEvent;
 DwtUiEvent.prototype.constructor = DwtUiEvent;
 
-DwtUiEvent.prototype.isDwtUiEvent;
+DwtUiEvent.prototype.isDwtUiEvent = true;
 DwtUiEvent.prototype.toString = function() { return "DwtUiEvent"; }
 
 DwtUiEvent.prototype.reset =
