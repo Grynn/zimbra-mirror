@@ -7,15 +7,19 @@ import java.util.Calendar;
 import java.util.HashMap;
 import org.testng.annotations.Test;
 import com.zimbra.client.ZInvite.ZRole;
+import com.zimbra.qa.selenium.framework.core.Bugs;
+import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.TagItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogDeleteTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDeleteAppointment;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Locators;
 
@@ -28,7 +32,6 @@ public class TagAppointment extends AjaxCommonTest {
 		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
 
-		// Make sure we are using an account with message view
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			private static final long serialVersionUID = -2913827779459595178L;
 		{
@@ -42,19 +45,15 @@ public class TagAppointment extends AjaxCommonTest {
 	public void TagAppointment_01() throws HarnessException {
 		
 		// Create objects
-		String tz, apptSubject, apptBody, tag1, tagID;
+		String apptSubject, apptBody, tag1, tagID;
 		TagItem tag;
-		tz = ZTimeZone.TimeZoneEST.getID();
 		tag1 = ZimbraSeleniumProperties.getUniqueString();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create new appointment
-		Calendar now = Calendar.getInstance();
-		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
-		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);		
-        app.zPageCalendar.zCreateBasicAppointment(app, startUTC, endUTC, apptSubject, apptBody);
-        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
+		AppointmentItem appt = AppointmentItem.createAppointmentSingleDay(app.zGetActiveAccount(), Calendar.getInstance(), 120, null, apptSubject, apptBody, null, null);
+        String apptId = appt.dApptID;
 
         // Create new tag and get tag ID
 		app.zPageCalendar.zCreateTag(app, tag1, 1);
@@ -79,19 +78,15 @@ public class TagAppointment extends AjaxCommonTest {
 	public void UnTagAppointment_02() throws HarnessException {
 		
 		// Create objects
-		String tz, apptSubject, apptBody, tag1, tagID;
+		String apptSubject, apptBody, tag1, tagID;
 		TagItem tag;
-		tz = ZTimeZone.TimeZoneEST.getID();
 		tag1 = ZimbraSeleniumProperties.getUniqueString();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create new appointment
-		Calendar now = Calendar.getInstance();
-		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
-		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
-		app.zPageCalendar.zCreateBasicAppointment(app, startUTC, endUTC, apptSubject, apptBody);
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
+		AppointmentItem appt = AppointmentItem.createAppointmentSingleDay(app.zGetActiveAccount(), Calendar.getInstance(), 120, null, apptSubject, apptBody, null, null);
+        String apptId = appt.dApptID;
 
         // Create new tag and get tag ID   
 		app.zPageCalendar.zCreateTag(app, tag1, 2);
@@ -100,13 +95,9 @@ public class TagAppointment extends AjaxCommonTest {
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
 		tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
 		
-		// Apply tag to appointment using toolbar button		
-        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
-        app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_TAG);
-        app.zPageCalendar.zTagListView(tag1);
-        SleepUtil.sleepSmall();
-        
-        // Remove tag from appointment using toolbar button
+		// Remove tag from appointment using toolbar button		
+		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag1 +"'/>" + "</ItemActionRequest>");
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_TAG);
         app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_REMOVETAG);
@@ -126,30 +117,28 @@ public class TagAppointment extends AjaxCommonTest {
 	public void TagAppointment_03() throws HarnessException {
 		
 		// Create objects
-		String tz, apptSubject, apptBody, tag1, tagID;
-		tz = ZTimeZone.TimeZoneEST.getID();
+		String apptSubject, apptBody, tag1, tagID;
+		TagItem tag;
 		tag1 = ZimbraSeleniumProperties.getUniqueString();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create new appointment
-		Calendar now = Calendar.getInstance();
-		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
-		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
-		app.zPageCalendar.zCreateBasicAppointment(app, startUTC, endUTC, apptSubject, apptBody);
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
+		AppointmentItem appt = AppointmentItem.createAppointmentSingleDay(app.zGetActiveAccount(), Calendar.getInstance(), 120, null, apptSubject, apptBody, null, null);
+        String apptId = appt.dApptID;
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
-		// Apply tag to appointment using toolbar button
+		// Create tag using toolbar Tag -> New Tag using toolbar button
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_TAG);
         app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_NEWTAG);
         SleepUtil.sleepSmall();
         
-        // Create new tag and get tag ID
         DialogTag dialog = new DialogTag(app, startingPage);
         dialog.zSubmit(tag1);
-		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);		
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+		
+		// Get tag ID
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
 		tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
 		
@@ -164,19 +153,15 @@ public class TagAppointment extends AjaxCommonTest {
 	public void TagAppointment_04() throws HarnessException {
 		
 		// Create objects
-		String tz, apptSubject, apptBody, tag1, tagID;
+		String apptSubject, apptBody, tag1, tagID;
 		TagItem tag;
-		tz = ZTimeZone.TimeZoneEST.getID();
 		tag1 = ZimbraSeleniumProperties.getUniqueString();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create new appointment
-		Calendar now = Calendar.getInstance();
-		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
-		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
-		app.zPageCalendar.zCreateBasicAppointment(app, startUTC, endUTC, apptSubject, apptBody);
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
+		AppointmentItem appt = AppointmentItem.createAppointmentSingleDay(app.zGetActiveAccount(), Calendar.getInstance(), 120, null, apptSubject, apptBody, null, null);
+        String apptId = appt.dApptID;
 
         // Create new tag and get tag ID
 		app.zPageCalendar.zCreateTag(app, tag1, 3);
@@ -185,7 +170,7 @@ public class TagAppointment extends AjaxCommonTest {
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
 		tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
 		
-		// Apply tag to appointment using toolbar button
+		// Apply tag to appointment using context menu
         app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, apptSubject);
         app.zPageCalendar.sMouseOver(PageCalendar.Locators.TagAppointmentMenu);
         SleepUtil.sleepSmall();
@@ -202,18 +187,15 @@ public class TagAppointment extends AjaxCommonTest {
 	public void TagAppointment_05() throws HarnessException {
 		
 		// Create objects
-		String tz, apptSubject, apptBody, tag1, tagID;
-		tz = ZTimeZone.TimeZoneEST.getID();
+		String apptSubject, apptBody, tag1, tagID;
+		TagItem tag;
 		tag1 = ZimbraSeleniumProperties.getUniqueString();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create new appointment
-		Calendar now = Calendar.getInstance();
-		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
-		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
-		app.zPageCalendar.zCreateBasicAppointment(app, startUTC, endUTC, apptSubject, apptBody);
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
+		AppointmentItem appt = AppointmentItem.createAppointmentSingleDay(app.zGetActiveAccount(), Calendar.getInstance(), 120, null, apptSubject, apptBody, null, null);
+        String apptId = appt.dApptID;
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
         // Create new tag using context menu and apply it to appointment
@@ -243,19 +225,15 @@ public class TagAppointment extends AjaxCommonTest {
 	public void UnTagAppointment_06() throws HarnessException, AWTException {
 		
 		// Create objects
-		String tz, apptSubject, apptBody, tag1, tagID;
+		String apptSubject, apptBody, tag1, tagID;
 		TagItem tag;
-		tz = ZTimeZone.TimeZoneEST.getID();
 		tag1 = ZimbraSeleniumProperties.getUniqueString();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create new appointment
-		Calendar now = Calendar.getInstance();
-		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
-		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
-		app.zPageCalendar.zCreateBasicAppointment(app, startUTC, endUTC, apptSubject, apptBody);
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
+		AppointmentItem appt = AppointmentItem.createAppointmentSingleDay(app.zGetActiveAccount(), Calendar.getInstance(), 120, null, apptSubject, apptBody, null, null);
+        String apptId = appt.dApptID;
         
         // Create new tag and get tag ID      
 		app.zPageCalendar.zCreateTag(app, tag1, 4);
@@ -263,13 +241,7 @@ public class TagAppointment extends AjaxCommonTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
 		tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
-		
-		// Apply tag to appointment using context menu
-		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, apptSubject);
-        app.zPageCalendar.sMouseOver(PageCalendar.Locators.TagAppointmentMenu);
-        SleepUtil.sleepSmall();
-        app.zPageCalendar.zTagContextMenuListView(tag1);
-        SleepUtil.sleepMedium();
+		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag1 +"'/>" + "</ItemActionRequest>");
         
         // Selenium doesn't select latest sub menu and clicks to wrong hidden menu so test fails.
         // Adding work around to refresh browser (which is not ideal work around) but application is not doing anything wrong
@@ -277,7 +249,7 @@ public class TagAppointment extends AjaxCommonTest {
         // Running this test individually also works fine because it doesn't find duplicate sub menu
         Robot Robot = new Robot();
         Robot.keyPress(KeyEvent.VK_F5); Robot.keyRelease(KeyEvent.VK_F5);
-        SleepUtil.sleepLong();
+        SleepUtil.sleepVeryLong();
         Robot.keyPress(KeyEvent.VK_G); Robot.keyPress(KeyEvent.VK_C);
         Robot.keyRelease(KeyEvent.VK_G); Robot.keyRelease(KeyEvent.VK_C);
         SleepUtil.sleepLong();
@@ -287,7 +259,7 @@ public class TagAppointment extends AjaxCommonTest {
         app.zPageCalendar.sMouseOver(PageCalendar.Locators.TagAppointmentMenu);
         SleepUtil.sleepSmall();
         app.zPageCalendar.zToolbarPressButton(Button.O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU);
-        SleepUtil.sleepSmall(); // give time to soap verification because it fails
+        SleepUtil.sleepSmall(); // give time to soap verification because it runs fast and test fails
         
         // Verify appointment is not tagged
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest xmlns='urn:zimbraMail' id='" + apptId + "'/>");
@@ -309,11 +281,8 @@ public class TagAppointment extends AjaxCommonTest {
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create new appointment
-		Calendar now = Calendar.getInstance();
-		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
-		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
-		app.zPageCalendar.zCreateBasicAppointment(app, startUTC, endUTC, apptSubject, apptBody);
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
+		AppointmentItem appt = AppointmentItem.createAppointmentSingleDay(app.zGetActiveAccount(), Calendar.getInstance(), 120, null, apptSubject, apptBody, null, null);
+        String apptId = appt.dApptID;
         
         // Create new tags and get tag IDs
 		app.zPageCalendar.zCreateTag(app, tag1, 5);
@@ -325,18 +294,12 @@ public class TagAppointment extends AjaxCommonTest {
 		tagID1  = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
 		tagID2 = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag2 +"']", "id");
 		
-		// Apply tag to appointment using toolbar button
-        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
-        app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_TAG);
-        app.zPageCalendar.zTagListView(tag1);
+		// Apply multiple tags to appointment
+		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag1 +"'/>" + "</ItemActionRequest>");
+		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag2 +"'/>" + "</ItemActionRequest>");
         SleepUtil.sleepSmall();
         
-        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
-        app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_TAG);
-        app.zPageCalendar.zTagListView(tag2);
-        SleepUtil.sleepSmall();
-        
-        // Verify applied tag for appointment        
+        // Verify applied tags        
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest xmlns='urn:zimbraMail' id='" + apptId + "'/>");
         ZAssert.assertEquals(app.zGetActiveAccount().soapSelectValue("//mail:appt", "t"), tagID1 + "," + tagID2, "Verify the appointment is tagged with the correct tag");
 		
@@ -361,11 +324,8 @@ public class TagAppointment extends AjaxCommonTest {
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create new appointment
-		Calendar now = Calendar.getInstance();
-		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
-		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
-		app.zPageCalendar.zCreateBasicAppointment(app, startUTC, endUTC, apptSubject, apptBody);
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
+		AppointmentItem appt = AppointmentItem.createAppointmentSingleDay(app.zGetActiveAccount(), Calendar.getInstance(), 120, null, apptSubject, apptBody, null, null);
+        String apptId = appt.dApptID;
         
         // Create new tag and get tag ID
         app.zPageCalendar.zCreateTag(app, tag1, 7);
@@ -374,10 +334,8 @@ public class TagAppointment extends AjaxCommonTest {
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
 		tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
 		
-		// Apply tag to appointment using toolbar button
-        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
-        app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_TAG);
-        app.zPageCalendar.zTagListView(tag1);
+		// Apply tag to appointment
+		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag1 +"'/>" + "</ItemActionRequest>");
         
         // Rename the tag using the context menu
 		DialogRenameTag dialog = (DialogRenameTag) app.zTreeCalendar.zTreeItem(
@@ -392,6 +350,7 @@ public class TagAppointment extends AjaxCommonTest {
 		
 	}
 	
+	@Bugs(ids = "75711")
 	@Test(description = "Apply tag to appointment and delete same tag in day view",
 			groups = { "functional" })
 	public void DeleteTagAppointment_09() throws HarnessException {
@@ -406,11 +365,8 @@ public class TagAppointment extends AjaxCommonTest {
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create new appointment
-		Calendar now = Calendar.getInstance();
-		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
-		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
-		app.zPageCalendar.zCreateBasicAppointment(app, startUTC, endUTC, apptSubject, apptBody);
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
+		AppointmentItem appt = AppointmentItem.createAppointmentSingleDay(app.zGetActiveAccount(), Calendar.getInstance(), 120, null, apptSubject, apptBody, null, null);
+        String apptId = appt.dApptID;
 
         // Create new tag and get tag ID
         app.zPageCalendar.zCreateTag(app, tag1, 8);
@@ -419,13 +375,11 @@ public class TagAppointment extends AjaxCommonTest {
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
 		tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
 		
-		// Apply tag to appointment using toolbar button
-        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
-        app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_TAG);
-        app.zPageCalendar.zTagListView(tag1);
+		// Apply tag to appointment
+		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag1 +"'/>" + "</ItemActionRequest>");
         
         // Delete the tag using the context menu
-		DialogWarning dialog = (DialogWarning) app.zTreeCalendar.zTreeItem(
+		DialogDeleteTag dialog = (DialogDeleteTag) app.zTreeCalendar.zTreeItem(
 				Action.A_RIGHTCLICK, Button.B_DELETE, tag);
 		dialog.zClickButton(Button.B_YES);
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
@@ -433,6 +387,43 @@ public class TagAppointment extends AjaxCommonTest {
         // Verify appointment is not tagged
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest xmlns='urn:zimbraMail' id='" + apptId + "'/>");
         ZAssert.assertEquals(app.zGetActiveAccount().soapSelectValue("//mail:appt", "t"), null, "Verify appointment is not tagged");
+		
+	}
+	
+	@Test(description = "Apply tag to appointment and delete tagged appointment in day view",
+			groups = { "functional" })
+	public void DeleteTaggedAppointment_10() throws HarnessException {
+		
+		// Create objects
+		String tz, apptSubject, apptBody, tag1, renameTag1, tagID;
+		TagItem tag;
+		tz = ZTimeZone.TimeZoneEST.getID();
+		tag1 = ZimbraSeleniumProperties.getUniqueString();
+		renameTag1 = ZimbraSeleniumProperties.getUniqueString();
+		apptSubject = ZimbraSeleniumProperties.getUniqueString();
+		apptBody = ZimbraSeleniumProperties.getUniqueString();
+		
+		// Create new appointment
+		AppointmentItem appt = AppointmentItem.createAppointmentSingleDay(app.zGetActiveAccount(), Calendar.getInstance(), 120, null, apptSubject, apptBody, null, null);
+        String apptId = appt.dApptID;
+
+        // Create new tag and get tag ID
+        app.zPageCalendar.zCreateTag(app, tag1, 8);
+		tag = app.zPageCalendar.zGetTagItem(app.zGetActiveAccount(), tag1);
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
+		tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
+		
+		// Apply tag to appointment
+		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag1 +"'/>" + "</ItemActionRequest>");
+
+		// Right click to appointment and delete it
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
+        DialogConfirmDeleteAppointment dlgConfirm = (DialogConfirmDeleteAppointment)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+		dlgConfirm.zClickButton(Button.B_YES);
+		SleepUtil.sleepMedium(); //testcase fails here due to timing issue so added sleep
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify appointment is deleted");
 		
 	}
 }

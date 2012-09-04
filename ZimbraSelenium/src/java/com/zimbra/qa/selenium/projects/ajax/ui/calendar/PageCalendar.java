@@ -80,6 +80,8 @@ public class PageCalendar extends AbsTab {
 		public static final String EditMessageButton = "id=CNF_DEL_SENDEDIT_button5_title";
 		public static final String CancelButton_ConfirmDelete = "id=CNF_DEL_SENDEDIT_button1_title";
 		
+		public static final String ForwardToTextArea = "css=input[id='APPT_COMPOSE_1_to_control_input']";
+		
 		// Radio buttons
 		public static final String OpenThisInstanceRadioButton = "css=td input[id*='_defaultRadio']";
 		public static final String OpenTheSeriesRadioButton = "css=td input[id$='_openSeries']";
@@ -768,7 +770,19 @@ public class PageCalendar extends AbsTab {
 
 				this.zClickAt(optionLocator, "");
 				this.zWaitForBusyOverlay();
+				
+			} else if ( option == Button.O_FORWARD_MENU) {
+				
+				optionLocator = Locators.ForwardMenu;
+				
+				page = null;
+				waitForPostfix = true;
+				
+				this.zRightClickAt(locator, "");
+				this.zWaitForBusyOverlay();
 
+				this.zClickAt(optionLocator, "");
+				this.zWaitForBusyOverlay();
 				
 				// FALL THROUGH
 				
@@ -1880,25 +1894,6 @@ public class PageCalendar extends AbsTab {
 		}
 
 		return (page);
-	}
-	
-	public void zCreateBasicAppointment(AppAjaxClient app, ZDate startUTC, ZDate endUTC, String apptSubject, String apptBody) throws HarnessException {
-				
-		String tz = ZTimeZone.TimeZoneEST.getID();
-		app.zGetActiveAccount().soapSend(
-    			"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
-    		+		"<m>"
-    		+			"<inv method='REQUEST' type='event' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"
-    		+				"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
-    		+				"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
-    		+				"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" 
-    		+			"</inv>" 
-    		+			"<mp content-type='text/plain'>" 
-    		+				"<content>" + apptBody + "</content>" 
-    		+			"</mp>"
-    		+			"<su>" + apptSubject + "</su>" 
-    		+		"</m>" 
-    		+	"</CreateAppointmentRequest>");
 	}
 	
 	public void zCreateTag(AppAjaxClient app, String tagName, int tagColor) throws HarnessException {

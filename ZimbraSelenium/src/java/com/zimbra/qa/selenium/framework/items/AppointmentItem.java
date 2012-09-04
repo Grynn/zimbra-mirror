@@ -9,6 +9,7 @@ public class AppointmentItem implements IItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 
 	// Data values (SOAP)
+	public String dApptID = null;
 	protected String dSubject = null;
 	protected String dFragment = null;
 	protected String dAttendees = null;
@@ -94,6 +95,12 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 			
 			// Create the object
 			appt = new AppointmentItem();
+			
+			if (m != null ) {
+				
+				// Appointment id
+				appt.dApptID = m.getAttribute("id");
+			}
 						
 			String parentFolder = m.getAttribute("l");
 			if ( parentFolder != null ) {
@@ -258,6 +265,7 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 	public String prettyPrintSOAP() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SOAP Data:\n");
+		sb.append("ID: ").append(dApptID).append('\n');
 		sb.append("Subject: ").append(dSubject).append('\n');
 		sb.append("Fragment: ").append(dFragment).append('\n');
 		sb.append("Attendees: ").append(dAttendees).append('\n');
@@ -674,7 +682,7 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 				"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
 			+		"<m l='10'>"
 			+			"<inv>"
-			+				"<comp name='"+ subject +"' "+ loc + " draft='0' status='CONF' class='PUB' transp='O' fb='F'>"
+			+				"<comp name='"+ subject +"' "+ loc + " draft='0' status='CONF' class='PUB' transp='O' fb='B'>"
 			+					"<s d='"+ beginning.toTimeZone(timezoneString).toYYYYMMDDTHHMMSS() +"' tz='"+ timezoneString +"'/>"
 			+					"<e d='"+ ending.toTimeZone(timezoneString).toYYYYMMDDTHHMMSS() +"' tz='"+ timezoneString +"'/>"
 			+					"<or a='" + account.EmailAddress +"'/>"
