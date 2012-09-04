@@ -55,10 +55,12 @@ public class PageMail extends AbsTab {
 		///////
 		public static final String zMsgViewDisplayImgLink = "css=a#zv__TV__TV-main_MSG_displayImages_dispImgs";
 		public static final String zMsgViewDomainLink = "css=a#zv__TV__TV-main_MSG_displayImages_domain";
-		public static final String zMsgViewWarningIcon = "css=div#zv__TV__TV-main_MSG_displayImages.DisplayImages div div.ImgWarning";
+	//	public static final String zMsgViewWarningIcon = "css=div#zv__TV__TV-main_MSG_displayImages.DisplayImages div div.ImgWarning";
+		public static final String zMsgViewWarningIcon = "css=div#zv__TV__TV-main_MSG_displayImages.DisplayImages div.ImgWarning";
 		public static final String zConViewDisplayImgLink = "css=a[id$='_displayImages_dispImgs']";
 		public static final String zConViewDomainLink = "css=a[id$='_displayImages_domain']";
-		public static final String zConViewWarningIcon = "css=div[id$='_displayImages'] div div[class='ImgWarning']";
+		//public static final String zConViewWarningIcon = "css=div[id$='_displayImages'] div div[class='ImgWarning']";
+		public static final String zConViewWarningIcon = "css=div[id$='_displayImages']  div[class='ImgWarning']";
 
 		
 		
