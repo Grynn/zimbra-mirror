@@ -1,3 +1,4 @@
+# just a comment
 OPENLDAP_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(OPENLDAP_ROOT)/../..; pwd)
 MAKE ?= make
