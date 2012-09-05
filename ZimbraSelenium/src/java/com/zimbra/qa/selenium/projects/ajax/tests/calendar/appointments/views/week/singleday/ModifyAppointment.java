@@ -26,7 +26,7 @@ public class ModifyAppointment extends CalendarWorkWeekTest {
 		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
 
-		// Make sure we are using an account with message view
+		// Make sure we are using an account with week view
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			private static final long serialVersionUID = -2913827779459595178L;
 		{

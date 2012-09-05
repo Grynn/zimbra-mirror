@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.singleday;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
@@ -9,14 +10,24 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.*;
+import com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.allday.CreateAppointment;
 
 
 public class DragAndDropAppointment extends CalendarWorkWeekTest {
 
 	
 	public DragAndDropAppointment() {
-		logger.info("New "+ DragAndDropAppointment.class.getCanonicalName());
-		
+		logger.info("New "+ CreateAppointment.class.getCanonicalName());
+
+		// All tests start at the Calendar page
+		super.startingPage = app.zPageCalendar;
+
+		// Make sure we are using an account with work week view
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			private static final long serialVersionUID = -2913827779459595178L;
+		{
+		    put("zimbraPrefCalendarInitialView", "workWeek");
+		}};
 	}
 	
 	@Test(	description = "Drag and Drop a appointment from calendar to different calendar",

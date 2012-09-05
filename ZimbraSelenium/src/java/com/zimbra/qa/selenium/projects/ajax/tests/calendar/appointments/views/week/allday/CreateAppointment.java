@@ -19,7 +19,7 @@ public class CreateAppointment extends CalendarWorkWeekTest {
 		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
 
-		// Make sure we are using an account with message view
+		// Make sure we are using an account with week view
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			private static final long serialVersionUID = -2913827779459595178L;
 		{
@@ -59,6 +59,7 @@ public class CreateAppointment extends CalendarWorkWeekTest {
 		ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:comp", "allDay", "1"), true, "");
 		
 		// Verify in UI
+		SleepUtil.sleepMedium(); //test fails without sleep so adding it
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetAllDayApptLocator(apptSubject)), true, "Verify all-day appointment present in UI");
 
 	}

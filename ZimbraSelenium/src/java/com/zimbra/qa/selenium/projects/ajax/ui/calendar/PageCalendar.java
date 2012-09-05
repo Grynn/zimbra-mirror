@@ -190,6 +190,17 @@ public class PageCalendar extends AbsTab {
 		}	
 	}
 	
+	public boolean zGetApptLocatorFreeBusyView(String attendeeEmail, String apptSubject) throws HarnessException {
+		boolean attendeeEmailRow, apptSubjectRow;
+		attendeeEmailRow = sIsElementPresent("css=div[id='zv__CLFB'] td[id$='_NAME_'] div[class='ZmSchedulerInputDisabled']:contains('" + attendeeEmail + "')");
+		apptSubjectRow = sIsElementPresent("css=div[id^='zli__CLFB'] div[class='appt_allday_body']:contains('" + apptSubject + "')");
+		if (attendeeEmailRow == true && apptSubjectRow == true) {
+			return true;
+		} else {
+			return false;
+		}	
+	}
+	
 	public String zGetReadOnlyApptLocator(String apptSubject) throws HarnessException {
 		return "css=td.appt_new_name:contains('" + apptSubject + "')";
 	}

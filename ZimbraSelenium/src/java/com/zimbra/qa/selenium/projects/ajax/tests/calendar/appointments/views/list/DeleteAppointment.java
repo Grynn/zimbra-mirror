@@ -33,7 +33,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
 
-		// Make sure we are using an account with message view
+		// Make sure we are using an account with list view
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			private static final long serialVersionUID = -5268509108302506830L;
 		{
@@ -632,7 +632,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 
 	}
 
-	@Bugs(ids = "69132")
+	@Bugs(ids = "69132,77325")
 	@Test(	description = "Hard-delete a appt by selecting and typing 'shift-del' shortcut",
 			groups = { "functional" } )
 	public void HardDeleteAppointment_01() throws HarnessException {
@@ -708,7 +708,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 
 	}
 
-	@Bugs(ids = "69132")
+	@Bugs(ids = "69132,77325")
 	@Test(	description = "Hard-delete multiple appts (3) by selecting and typing 'shift-del' shortcut",
 			groups = { "functional" })
 	public void HardDeleteAppointment_02() throws HarnessException {

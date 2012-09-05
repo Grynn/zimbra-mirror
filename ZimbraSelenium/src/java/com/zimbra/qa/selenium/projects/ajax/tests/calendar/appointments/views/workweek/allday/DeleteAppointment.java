@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.w
 
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -28,9 +29,17 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.*;
 public class DeleteAppointment extends CalendarWorkWeekTest {
 
 	public DeleteAppointment() {
-		logger.info("New "+ DeleteAppointment.class.getCanonicalName());
-		
+		logger.info("New "+ CreateAppointment.class.getCanonicalName());
 
+		// All tests start at the Calendar page
+		super.startingPage = app.zPageCalendar;
+
+		// Make sure we are using an account with work week view
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			private static final long serialVersionUID = -2913827779459595178L;
+		{
+		    put("zimbraPrefCalendarInitialView", "workWeek");
+		}};
 	}
 	
 	@Bugs(ids = "69132")

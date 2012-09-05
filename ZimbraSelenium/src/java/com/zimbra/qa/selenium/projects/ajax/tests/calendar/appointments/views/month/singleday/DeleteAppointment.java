@@ -22,7 +22,7 @@ public class DeleteAppointment extends AjaxCommonTest {
 		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
 
-		// Make sure we are using an account with message view
+		// Make sure we are using an account with month view
 		super.startingAccountPreferences = new HashMap<String, String>() {{
 		    put("zimbraPrefCalendarInitialView", "month");
 		}};

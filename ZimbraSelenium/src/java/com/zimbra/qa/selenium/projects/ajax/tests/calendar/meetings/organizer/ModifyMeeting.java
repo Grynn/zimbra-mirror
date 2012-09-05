@@ -23,7 +23,7 @@ public class ModifyMeeting extends CalendarWorkWeekTest {
 	
 	@Bugs(ids = "69132")
 	@Test(	description = "Modify meeting by adding more attendees",
-			groups = { "smoke" })
+			groups = { "sanity" })
 	public void ModifyMeeting_01() throws HarnessException {
 		
 		// Creating object for meeting data
@@ -70,6 +70,7 @@ public class ModifyMeeting extends CalendarWorkWeekTest {
         apptForm.zFillField(Field.Attendees, editApptAttendee1);
         apptForm.zFillField(Field.Body, editApptBody);
         apptForm.zToolbarPressButton(Button.B_SEND);
+        SleepUtil.sleepVeryLong(); //client takes longer time to send request to server, without long sleep test actually fails (tried smaller sleep as well).
         
         // Use GetAppointmentRequest to verify the changes are saved
         AppointmentItem modifyAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ editApptSubject +")");
