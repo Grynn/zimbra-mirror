@@ -82,7 +82,7 @@ function () {
 }
 
 ZaXWizardDialog.prototype._correntWidth = function (w) {
-    if (appNewUI && this.supportMinimize) {
+    if (this.supportMinimize) {
         if (typeof(w) == "number") {
             return w + 100;
         } else if (typeof(w) == "string") {

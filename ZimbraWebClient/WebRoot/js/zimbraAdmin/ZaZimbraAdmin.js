@@ -535,24 +535,12 @@ function(msg, clear) {
 	if(!ZaSettings.STATUS_ENABLED) {
 		return;
 	}
-    if(!appNewUI) {
-    	Dwt.show(this._statusBox.getHTMLElId());
-    	this._statusBox.setText(msg);
-    	Dwt.show(ZaSettings.SKIN_STATUS_ID);
-    	ZaApp.getInstance().getAppViewMgr().fitAll();
-    }
 }
 
 ZaZimbraAdmin.prototype.clearStatus = 
 function() {
 	if(!ZaSettings.STATUS_ENABLED) {
 		return;
-	}
-	if(!appNewUI) {
-		Dwt.hide(this._statusBox.getHTMLElId());
-		this._statusBox.setText("");
-		Dwt.hide(ZaSettings.SKIN_STATUS_ID);
-		ZaApp.getInstance().getAppViewMgr().fitAll();
 	}
 }
 
@@ -660,19 +648,13 @@ function(ev) {
 
 ZaZimbraAdmin.prototype._createHelpLink =
 function() {
-    if (!appNewUI) {
-        this._createOldHelpLink();
-        return;
-    }
-
     var helpSkinContainer = document.getElementById(ZaSettings.SKIN_HELP_DOM_ID);
     if(!helpSkinContainer) {
         return;
     }
     var dwButton = new DwtBorderlessButton(this._shell, "", "", Dwt.RELATIVE_STYLE);
     dwButton.setText(ZaMsg.help);
-    if (appNewUI)
-        dwButton.setDropDownImages("NodeExpandedWhite");
+    dwButton.setDropDownImages("NodeExpandedWhite");
 
 	helpSkinContainer.innerHTML = "";
 	dwButton.reparentHtmlElement (ZaSettings.SKIN_HELP_DOM_ID);
@@ -759,7 +741,7 @@ function() {
     var helpEl = helpLabel.getHtmlElement();
     helpLabel.setCursor ("pointer") ;
 
-    var iconName = (appNewUI)?"":"Help";
+    var iconName = "";
     if (ZaSettings.isYahooSmbPADomainAdmin)   {
         helpLabel.getHtmlElement().innerHTML =
             this._getAppLink("SMBAccount.openHelpDesk();", iconName,  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
@@ -844,11 +826,9 @@ function () {
 
 	var dwButton = new DwtBorderlessButton(this._shell, "", "", Dwt.RELATIVE_STYLE);
 	var containerWidth = Dwt.getSize(userNameContainer).x;
-	if (appNewUI) {
-		containerWidth = containerWidth - 16; // substract drop-down icon's width
-		if(AjxEnv.isIE) {
-			containerWidth -= 12; //substract extra padding+border
-		}
+	containerWidth = containerWidth - 16; // substract drop-down icon's width
+	if(AjxEnv.isIE) {
+		containerWidth -= 12; //substract extra padding+border
 	}
 	var innerContent = null;
     var tmpName = AjxStringUtil.htmlEncode(ZaZimbraAdmin.currentUserName);
@@ -867,8 +847,7 @@ function () {
 	}
 
 	dwButton.setText(innerContent);
-    if (appNewUI)
-	    dwButton.setDropDownImages("NodeExpandedWhite");
+    dwButton.setDropDownImages("NodeExpandedWhite");
 	if(innerContent != ZaZimbraAdmin.currentUserName){
 		dwButton.setToolTipContent( tmpName );
 	}
@@ -916,10 +895,8 @@ function(ev) {
 		ZaApp.getInstance().getHelpViewController().show();
 	}
 
-    if (appNewUI) {
-        var historyObject = new ZaHistory("HelpView", undefined, undefined, false, new AjxCallback(this, this._helpListener));
-        this._historyMgr.addHistory(historyObject);
-    }
+    var historyObject = new ZaHistory("HelpView", undefined, undefined, false, new AjxCallback(this, this._helpListener));
+    this._historyMgr.addHistory(historyObject);
 }
 
 ZaZimbraAdmin.prototype._dwListener = 
@@ -1033,10 +1010,7 @@ function(staticFunc, icon, lbl, max_lbl_length) {
 	//html[i++] = "</a></td>";
 	html[i++] = "</span></td>";
 
-    if (appNewUI)
-        html[i++] = "<td width=1% align=right style='white-space:nowrap;'><span " ;
-    else
-	    html[i++] = "<td width=1% align=right style='white-space:nowrap; font-weight:bold'><span " ;
+    html[i++] = "<td width=1% align=right style='white-space:nowrap;'><span " ;
 	if (staticFunc) {
 		html[i++] = " onclick='" + staticFunc + "' " ;
 	}

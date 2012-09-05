@@ -292,9 +292,6 @@ function(entry) {
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, this.formDirtyLsnr);
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, this.formDirtyLsnr);	
 	
-	//update the tab
-    if (!appNewUI)
-	    this.updateTab();
 }
 
 ZaAccountXFormView.gotNoSkins = function() {
@@ -1634,7 +1631,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	var cases = [];
 
 		var case1 = {type:_ZATABCASE_,caseKey:_tab1,
-            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+            paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
 			numCols:1};
 		
 		var case1Items = [
@@ -1826,7 +1823,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 
 	if(_tab2) {
 		var case2={type:_ZATABCASE_, numCols:1, caseKey:_tab2,
-            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),  align:_CENTER_,
+            paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,  align:_CENTER_,
 					items: [
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.LBL_phone, id:"contact_form_phone_group",
 							width:"100%", numCols:2,colSizes: ["275px","100%"],
@@ -1870,7 +1867,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	if(_tab3) {
 		//MemberOf Tab
 		var case3={type:_ZATABCASE_, numCols:2, caseKey:_tab3, colSizes: ["390px","390px"],
-            paddingStyle:(appNewUI? "padding-left:15px;":null), cellpadding:(appNewUI?2:0),
+            paddingStyle:"padding-left:15px;", cellpadding:2,
 					items: [
 						{type:_SPACER_, height:"10"},
 						//layout rapper around the direct/indrect list						
@@ -2037,7 +2034,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	}				
 	if(_tab4) {
 		cases.push({type:_ZATABCASE_,id:"account_form_features_tab",  numCols:1, width:"100%", caseKey:_tab4,
-        paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+        paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
 				items: [
 					{ type: _DWT_ALERT_,
 					  containerCssStyle: "padding-top:20px;width:400px;",
@@ -2288,7 +2285,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaAccount.A_zimbraPrefMailInitialSearch, type:_SUPER_TEXTFIELD_,
 									msgName:ZaMsg.LBL_zimbraPrefMailInitialSearch,
 									txtBoxLabel:ZaMsg.LBL_zimbraPrefMailInitialSearch,
-									labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
+									labelCssClass:"gridGroupBodyLabel",
 									labelCssStyle:"border-right:1px solid;",
 									labelLocation:_LEFT_,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
@@ -2429,7 +2426,7 @@ textFieldCssClass:"admin_xform_number_input"}
 							items :[
 
 								{ref:ZaAccount.A_zimbraPrefMailPollingInterval, type:_SUPER_SELECT1_, 
-									labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
+									labelCssClass:"gridGroupBodyLabel",
 									msgName:ZaMsg.MSG_zimbraPrefMailPollingInterval,
 									label:ZaMsg.LBL_zimbraPrefMailPollingInterval, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
@@ -2437,7 +2434,7 @@ textFieldCssClass:"admin_xform_number_input"}
 									nowrap:false,labelWrap:true									
 								},							
 								{ref:ZaAccount.A_zimbraMailMinPollingInterval,
-                                    labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
+                                    labelCssClass:"gridGroupBodyLabel",
 									type:_SUPER_LIFETIME_,
 									msgName:ZaMsg.MSG_zimbraMailMinPollingInterval,
 									txtBoxLabel:ZaMsg.LBL_zimbraMailMinPollingInterval,
@@ -2719,7 +2716,7 @@ textFieldCssClass:"admin_xform_number_input"}
                         	],
 							items :[
 								{ref:ZaAccount.A_zimbraPrefTimeZoneId, type:_SUPER_SELECT1_,
-								    valueWidth: appNewUI?"220px":"265px",
+								    valueWidth: "220px",
 									msgName:ZaMsg.MSG_zimbraPrefTimeZoneId,label:ZaMsg.LBL_zimbraPrefTimeZoneId, labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS},
 								{ref:ZaAccount.A_zimbraPrefCalendarApptReminderWarningTime,
 									type:_SUPER_SELECT1_, msgName:ZaMsg.MSG_zimbraPrefCalendarApptReminderWarningTime,label:ZaMsg.LBL_zimbraPrefCalendarApptReminderWarningTime, labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS},
@@ -2822,7 +2819,7 @@ textFieldCssClass:"admin_xform_number_input"}
 						}						
 					];
 		cases.push({type:_ZATABCASE_, id:"account_form_prefs_tab", numCols:1,
-            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+            paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
 					 caseKey:_tab5,
 					/*colSizes:["275px","275px","150px"],*/ items :prefItems});
 	}
@@ -2830,7 +2827,7 @@ textFieldCssClass:"admin_xform_number_input"}
 
 	if(_tab6) {
 		cases.push({type:_ZATABCASE_, id:"account_form_aliases_tab", width:"100%", numCols:1,colSizes:["auto"],
-            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+            paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
 					caseKey:_tab6, 
 					items: [
 						{type:_ZA_TOP_GROUPER_, id:"account_form_aliases_group",borderCssClass:"LowPaddedTopGrouperBorder",
@@ -2871,7 +2868,7 @@ textFieldCssClass:"admin_xform_number_input"}
 	
 	if(_tab7) {
 		cases.push({type:_ZATABCASE_,id:"account_form_forwarding_tab", width:"100%", numCols:1,colSizes:["auto"],
-					caseKey:_tab7, paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+					caseKey:_tab7, paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
 					items: [
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_EditFwdTopGroupGrouper,
 							id:"account_form_user_forwarding_addr",colSizes:["275px","100%"],
@@ -2903,7 +2900,7 @@ labelCssClass:"xform_label", cssClass:"admin_xform_name_input",
 
 nowrap:false, labelWrap:true,
 										labelLocation:_LEFT_,
-                                        labelCssStyle:(appNewUI?"text-align:left;":_UNDEFINED_),
+                                        labelCssStyle:"text-align:left;",
 										align:_LEFT_,
 										visibilityChecks:[ZaItem.hasReadPermission],
 										enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureMailForwardingEnabled,"TRUE"]],
@@ -2914,8 +2911,8 @@ nowrap:false, labelWrap:true,
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource",
 									nowrap:false, labelWrap:true,
 									headerList:null,onSelection:ZaAccountXFormView.calFwdAddrSelectionListener,label:ZaMsg.zimbraPrefCalendarForwardInvitesTo,
-									labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-									labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_),
+									labelCssClass:"gridGroupBodyLabel",
+									labelCssStyle:"text-align:left;border-right:1px solid;",
 									visibilityChecks:[ZaItem.hasReadPermission]
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
@@ -2950,8 +2947,8 @@ nowrap:false, labelWrap:true,
                                 {ref:ZaAccount.A_zimbraMailForwardingAddress, type:_DWT_LIST_, height:"100", width:"350px",
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 									headerList:null,onSelection:ZaAccountXFormView.fwdAddrSelectionListener,label:ZaMsg.NAD_EditFwdGroup,
-                                    labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"), nowrap:false, labelWrap:true,
-                                    labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_),
+                                    labelCssClass:"gridGroupBodyLabel", nowrap:false, labelWrap:true,
+                                    labelCssStyle:"text-align:left;border-right:1px solid;",
 									visibilityChecks:[ZaItem.hasReadPermission]
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
@@ -2985,7 +2982,7 @@ nowrap:false, labelWrap:true,
 
 	if(_tab8) {
 		cases.push({type:_ZATABCASE_, id:"account_form_interop_tab", width:"100%", numCols:1,colSizes:["auto"],
-                    paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+                    paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
 					caseKey:_tab8, 
 					items: [
 						{type:_ZA_TOP_GROUPER_, id:"account_form_interop_group",
@@ -3093,7 +3090,7 @@ nowrap:false, labelWrap:true,
 	}
 	if(_tab11) {
 		cases.push({type:_ZATABCASE_, id:"account_form_advanced_tab", numCols:1,
-        paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+        paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
 					caseKey:_tab11, 
 					items: [
 						{type:_ZA_TOP_GROUPER_, id:"account_attachment_settings",colSizes:["auto"],numCols:1,
@@ -3461,16 +3458,16 @@ nowrap:false, labelWrap:true,
                                     txtBoxLabel:ZaMsg.LBL_zimbraMailMessageLifetime,
                                     visibilityChecks:[[ZaItem.hasReadPermission], [ZaAccount.isEmailRetentionPolicyEnabled]],
                                     visibilityChangeEventSources:[ZaAccount.A_mailHost],
-									labelCssStyle:(appNewUI?"border-right:1px solid;":_UNDEFINED_),
-                                    labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label")
+									labelCssStyle:"border-right:1px solid;",
+                                    labelCssClass:"gridGroupBodyLabel"
                                 },
                                 {ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_,
                                     resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraMailTrashLifetime,
                                     txtBoxLabel:ZaMsg.LBL_zimbraMailTrashLifetime,
                                     visibilityChecks:[[ZaItem.hasReadPermission], [ZaAccount.isEmailRetentionPolicyEnabled]],
                                     visibilityChangeEventSources:[ZaAccount.A_mailHost],
-									labelCssStyle:(appNewUI?"padding-left:10px; text-align:left; border-right:1px solid;":_UNDEFINED_),
-                                    labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label")
+									labelCssStyle:"padding-left:10px; text-align:left; border-right:1px solid;",
+                                    labelCssClass:"gridGroupBodyLabel"
                                 },
                                 {ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_,
                                     resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
@@ -3478,16 +3475,16 @@ nowrap:false, labelWrap:true,
                                     txtBoxLabel:ZaMsg.LBL_zimbraMailSpamLifetime,
                                     visibilityChecks:[[ZaItem.hasReadPermission], [ZaAccount.isEmailRetentionPolicyEnabled]],
                                     visibilityChangeEventSources:[ZaAccount.A_mailHost],
-									labelCssStyle:(appNewUI?"padding-left:10px; text-align:left; border-right:1px solid;":_UNDEFINED_),
-                                    labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label")
+									labelCssStyle:"padding-left:10px; text-align:left; border-right:1px solid;",
+                                    labelCssClass:"gridGroupBodyLabel"
                                 },
                                 {ref:ZaAccount.A_zimbraMailDumpsterLifetime,
                                     resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                     type:_SUPER_LIFETIME1_,
                                     msgName:ZaMsg.MSG_zimbraMailDumpsterLifetime,
                                     txtBoxLabel:ZaMsg.LBL_zimbraMailDumpsterLifetime,
-									labelCssStyle:(appNewUI?"padding-left:10px; text-align:left;border-right:1px solid;":_UNDEFINED_),
-                                    labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
+									labelCssStyle:"padding-left:10px; text-align:left;border-right:1px solid;",
+                                    labelCssClass:"gridGroupBodyLabel",
                                     visibilityChecks:[[ZaItem.hasReadPermission], [ZaAccount.isEmailRetentionPolicyEnabled], [XForm.checkInstanceValue, ZaAccount.A_zimbraDumpsterEnabled, "TRUE"], [XForm.checkInstanceValue, ZaAccount.A_zimbraDumpsterPurgeEnabled, "TRUE"]],
                                     visibilityChangeEventSources:[ZaAccount.A_zimbraDumpsterEnabled, ZaAccount.A_zimbraDumpsterPurgeEnabled]
                                 }
@@ -3542,7 +3539,7 @@ nowrap:false, labelWrap:true,
                         {type:_GROUP_, numCols:4, width:"100%", colSizes:["60px","*","80px","*"],items:headerItems}
                     ]
                 },
-                {type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", cssStyle:(appNewUI?"display:none;":""), id:"xform_tabbar"},
+                {type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", cssStyle:"display:none;", id:"xform_tabbar"},
                 {type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
         ];
 };

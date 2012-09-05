@@ -143,8 +143,7 @@ function(entry) {
 
 	this.modifyContainedObject () ;
 	this._localXForm.setInstance(this._containedObject);
-    if (!appNewUI)
-	    this.updateTab();
+
 }
 
 ZaCosXFormView.gotSkins = function () {
@@ -670,7 +669,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 
     var cases = [];
 	var case1 = {type:_ZATABCASE_,caseKey:_tab1,numCols:1,
-        paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0)
+        paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2
     };
 
     var case1Items = [
@@ -690,7 +689,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 
     if(_tab2) {
         var case2 = {type:_ZATABCASE_,caseKey:_tab2,numCols:1,colSizes:["auto"],
-            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+            paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
             id:"cos_form_features_tab"};
 
         var case2Items = [
@@ -872,7 +871,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 
     if(_tab3) {
         var case3 = {type:_ZATABCASE_,caseKey:_tab3, id:"cos_for_prefs_tab",
-            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+            paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
             numCols:1};
         var case3Items = [
             {type:_ZA_TOP_GROUPER_, id:"account_prefs_general", colSizes:["275px","auto"],numCols:2,
@@ -1399,7 +1398,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
     
     if(_tab7) {
         var case7 = {type:_ZATABCASE_, numCols:1, colSizes:["auto"], caseKey:_tab7,
-            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+            paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
             id:"cos_form_advanced_tab"};
         var case7Items = [
             { type: _DWT_ALERT_,
@@ -1684,7 +1683,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
     if(_tab8) {
         var case8 =
         {type: _SUPER_TABCASE_, caseKey:_tab8,
-            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+            paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
             colSizes:["100%"],numCols:1,id:"cos_retentionpolicy_tab",
             loadDataMethods: [ZaCosXFormView.prototype.loadRetentionPolicies],
             items: [
@@ -1802,7 +1801,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 					{type:_GROUP_,	numCols:4,colSizes:["32px","*","80px","*"],items:headerItems}
 				]
 			},
-			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar", cssStyle: (appNewUI? "display:none;":"")},
+			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar", cssStyle:"display:none;"},
 			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
 	];		
 };

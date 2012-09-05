@@ -27,9 +27,7 @@ ZaSearchListController = function(appCtxt, container) {
     //Account operations
 	this._toolbarOperations = new Array();
 	this._popupOperations = new Array();
-	if(appNewUI){
-		this._popupOperationsOnAppBar = new Array();
-	}
+	this._popupOperationsOnAppBar = new Array();
 
 	this._currentPageNum = 1;
 	this._currentQuery = null;
@@ -104,20 +102,16 @@ function (list, openInNewTab, openInSearchTab,hasmore,isShowBubble) {
 	this._updateUI(list, openInNewTab, openInSearchTab,hasmore);
 	//ZaApp.getInstance().pushView(ZaZimbraAdmin._SEARCH_LIST_VIEW);
     ZaApp.getInstance().pushView(this.getContentViewId());
-    if (appNewUI) {
-        if(isShowBubble) {
-            this._uiContainer.setQueryFieldVisible(true);
-        }else{
-           //this._uiContainer.removeAllBubbles(true);
-            this._uiContainer.setQueryFieldVisible(false);
-        }
-
-        var currentQueryValue = this._uiContainer.getQueryFormBubbles();
-        currentQueryValue = currentQueryValue ? currentQueryValue: "";
-        this._uiContainer.setQueryField(currentQueryValue);
+    if(isShowBubble) {
+        this._uiContainer.setQueryFieldVisible(true);
+    }else{
+       //this._uiContainer.removeAllBubbles(true);
+        this._uiContainer.setQueryFieldVisible(false);
     }
 
-
+    var currentQueryValue = this._uiContainer.getQueryFormBubbles();
+    currentQueryValue = currentQueryValue ? currentQueryValue: "";
+    this._uiContainer.setQueryField(currentQueryValue);
 }
 
 
@@ -419,12 +413,6 @@ function () {
 	this._currentSortField = ZaAccount.A_uid;
 	this._currentSortOrder = "1";
 	this.pages = new Object();
-    if(!appNewUI) {
-	    this._UICreated = false;
-	    this._toolbarOperations = new Array();
-   	    this._popupOperations = new Array();
-        this._toolbarOrder = [] ;
-    }
 	this.objType = ZaEvent.S_ACCOUNT;	
 }
 
@@ -433,12 +421,8 @@ ZaSearchListController.prototype._createUI =
 function () {
 	//create accounts list view
 	// create the menu operations/listeners first
-    if (!appNewUI)
-	    this._contentView = new ZaSearchListView(this._container);
-    else {
-        this._uiContainer =  new ZaSearchXFormView(this._container)
-        this._contentView = this._uiContainer.widget;
-    }
+    this._uiContainer =  new ZaSearchXFormView(this._container)
+    this._contentView = this._uiContainer.widget;
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	this._newDLListener = new AjxListener(this, ZaSearchListController.prototype._newDistributionListListener);
 	this._newAcctListener = new AjxListener(this, ZaSearchListController.prototype._newAccountListener);
@@ -590,11 +574,9 @@ ZaSearchListController.prototype._editItem = function (item) {
 		ZaApp.getInstance().getDomainController().show(item);
 	}else if (type==ZaItem.COS) {
                 ZaApp.getInstance().getCosController().show(item);
-        }
-    if (appNewUI) {
-        ZaZimbraAdmin.getInstance().getOverviewPanelController().addAccountItem(item);
-
     }
+    ZaZimbraAdmin.getInstance().getOverviewPanelController().addAccountItem(item);
+
 };
 
 

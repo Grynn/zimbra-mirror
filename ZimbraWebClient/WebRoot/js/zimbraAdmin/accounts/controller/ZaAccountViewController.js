@@ -309,8 +309,7 @@ ZaAccountViewController.changeActionsStateMethod = function () {
         this._popupOperations[ZaOperation.SAVE].enabled = isToEnable;
     }
 
-    if (appNewUI)
-        ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
+    ZaZimbraAdmin.getInstance().getCurrentAppBar().enableButton(ZaOperation.SAVE, false);
 }
 ZaController.changeActionsStateMethods["ZaAccountViewController"].push(ZaAccountViewController.changeActionsStateMethod);
 

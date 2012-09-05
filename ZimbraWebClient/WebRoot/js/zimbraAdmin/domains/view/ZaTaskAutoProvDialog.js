@@ -384,7 +384,7 @@ function() {
     };
     cases.push(case4);
 
-    var case5={type:_ZATABCASE_, numCols:1,width:(appNewUI? "98%":"100%"),  caseKey:_tab5,
+    var case5={type:_ZATABCASE_, numCols:1,width:"98%",  caseKey:_tab5,
         id:"auto_provision_email_setting", getCustomWidth:ZaTaskAutoProvDialog.getCustomWidth,
         getCustomHeight:ZaTaskAutoProvDialog.getCustomHeight,
         items: [

@@ -703,7 +703,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
     var case1 =  {
         type:_ZATABCASE_, numCols:1, caseKey:_tab1,
             id:"server_general_tab",
-            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+            paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
             items:[
                 //{type:_ZAGROUP_, cssStyle:"padding-left:0;padding-right:0;", width:"100%", items:[
                 {type:_ZA_TOP_GROUPER_, width:"100%", numCols:2,colSizes: ["275px","100%"],
@@ -730,7 +730,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                       onChange:ZaServerXFormView.onFormFieldChanged
                     },
                     {ref:ZaServer.A_zimbraMailPurgeSleepInterval, type:_SUPER_LIFETIME_,
-                            labelCssStyle:(appNewUI?"text-align:left;background-color:#DEE5F1 !important;padding-left:10px;border-right:1px solid;":null),
+                            labelCssStyle:"text-align:left;background-color:#DEE5F1 !important;padding-left:10px;border-right:1px solid;",
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             msgName:ZaMsg.MSG_zimbraMailPurgeSleepInterval,
                             txtBoxLabel:ZaMsg.LBL_zimbraMailPurgeSleepInterval,
@@ -923,8 +923,8 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                 txtBoxLabel:ZaMsg.NAD_MTA_MyNetworks,
                                 msgName:ZaMsg.NAD_MTA_MyNetworks,
                                 type:_SUPER_TEXTAREA_,
-                                labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-                                labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_),
+                                labelCssClass:"gridGroupBodyLabel",
+                                labelCssStyle:"text-align:left;border-right:1px solid;",
                                 colSpan: 2,
                                 resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                                 onChange: ZaServerXFormView.onFormFieldChanged,
@@ -1191,8 +1191,8 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 									{ ref: ZaServer.A_Pop3AdvertisedName, type:_TEXTFIELD_,
 									  labelLocation:_LEFT_, label: ZaMsg.NAD_POP_AdvertisedName,
 									  onChange: ZaServerXFormView.onFormFieldChanged,
-                                      labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-                                        labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_)
+                                      labelCssClass:"gridGroupBodyLabel",
+                                        labelCssStyle:"text-align:left;border-right:1px solid;"
 									}
 								]
 						  	},
@@ -1201,14 +1201,14 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						      	enableDisableChecks:[ZaServerXFormView.getPOP3Enabled],
 						  		items:[
 									{ ref: ZaServer.A_Pop3BindAddress, type:_TEXTFIELD_,
-                                      labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-                                      labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_),
+                                      labelCssClass:"gridGroupBodyLabel",
+                                      labelCssStyle:"text-align:left;border-right:1px solid;",
 									 	label:ZaMsg.NAD_POP_Address,
 									  	onChange:ZaServerXFormView.onFormFieldChanged
 								  	},
 									{type:_OUTPUT_,ref:".",label:"",
-                                         labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-                                        labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_),
+                                         labelCssClass:"gridGroupBodyLabel",
+                                        labelCssStyle:"text-align:left;border-right:1px solid;",
                                         labelLocation:_LEFT_, value: ZaMsg.NAD_POP_Address_NOTE}
 							  ]
 						  	},
@@ -1399,7 +1399,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 		{type:_TAB_BAR_, ref:ZaModel.currentTab,
 			containerCssStyle: "padding-top:0;",
 			choices: tabBarChoices ,
-            cssStyle: (appNewUI? "display:none;": ""),
+            cssStyle:"display:none;",
 			cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
 		{type:_SWITCH_, items:switchItems }

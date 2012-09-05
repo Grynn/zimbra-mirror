@@ -89,7 +89,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
     }
 	xFormObject.items = [
 	        {type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:[{type:_ZATABCASE_,id:"help_view_tab",  numCols:1, width:"100%", caseKey:1,
-	        		paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+	        		paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
 	        		visibilityChecks:[function() { return true; }],
 	        		items: [
 			{type:_OUTPUT_, label:null, value:ZabMsg.HELP_PAGE_0, colSpan:"*", cssStyle:"font-size:12pt;	font-weight: bold;"},

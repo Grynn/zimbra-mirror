@@ -75,8 +75,7 @@ function (entry) {
 	ZaMTAXFormView.tabChoices.dirtyChoices();
 	this._localXForm.setInstance(this._containedObject);	
 	ZaMTAXFormView.prototype.handleXFormChange.call(this);
-    if (!appNewUI)
-	    this.updateTab();
+
 }
 ZaMTAXFormView.prototype.handleXFormChange = function () {
 	if(this._containedObject[ZaModel.currentTab] == "1" && (this._containedObject[ZaMTA.A_DeferredQ][ZaMTA.A_Status]==ZaMTA.STATUS_IDLE)) {

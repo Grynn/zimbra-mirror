@@ -284,7 +284,7 @@ function (optionId, height){
 	
     var xform = {
 			numCols:2, width: 150, cssClass: "ZaSearchOptionOverview",
-			cssStyle: (!appNewUI ? "margin-top: " + marginTop + "px" : ""),
+			cssStyle: "",
 			items: []
 	}
 	

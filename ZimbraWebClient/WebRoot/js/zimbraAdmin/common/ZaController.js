@@ -882,15 +882,7 @@ function (event) {
 
 ZaController.prototype.selectExistingTabByItemId =
 function (itemId, tabConstructor) {
-    if(appNewUI) return false;
-	var tabGroup = ZaApp.getInstance().getTabGroup ();
-	var tab = tabGroup.getTabByItemId (itemId, tabConstructor ? tabConstructor : this.tabConstructor) ;
-	if (tab) {
-		tabGroup.selectTab (tab) ;
-		return true ;
-	}else{
-		return false ;
-	}
+    return false;
 }
 
 ZaController.prototype.changeActionsState =
@@ -1002,7 +994,7 @@ ZaController.prototype._showAccountsView = function (defaultType, ev, filterQuer
 	}
     }
 
-    if(appNewUI && filterQuery) {
+    if(filterQuery) {
         query = query + filterQuery;
     }
 

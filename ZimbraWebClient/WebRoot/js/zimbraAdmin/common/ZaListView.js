@@ -35,7 +35,7 @@ ZaListView = function(params) {
 	//Set the ListView Div DwtControl.SCROLL(overflow: auto) And the Rows Dwt.VISIBLE
     //In this way, the view of lists can be controlled by the scroll of the li st view
     // At the same time, no list row content will be hidden
-    if (appNewUI&&params.scrollLoading) {
+    if (params.scrollLoading) {
 		Dwt.setHandler(this._getScrollDiv(), DwtEvent.ONSCROLL, ZaListView.handleScroll);
 	}
 
@@ -624,12 +624,9 @@ function(params) {
 
 ZaListView.prototype.getLimit =
 function(offset) {
-    if (appNewUI) {
-		var limit = ZaSettings.RESULTSPERPAGE;
-		return offset ? limit : 2 * limit;
-	} else {
-		return ZaSettings.RESULTSPERPAGE;
-	}
+	var limit = ZaSettings.RESULTSPERPAGE;
+	return offset ? limit : 2 * limit;
+
 };
 
 ZaListView.prototype.getPagelessThreshold =

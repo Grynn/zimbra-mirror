@@ -92,16 +92,7 @@ function (list,  openInNewTab, openInSearchTab, hasMore) {
 	this._updateUI(list, openInNewTab, openInSearchTab, hasMore);
 	//ZaApp.getInstance().pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
 	ZaApp.getInstance().pushView(this.getContentViewId(), openInNewTab, openInSearchTab);
-	if (appNewUI)
-        return;
-	if (openInSearchTab) {
-		ZaApp.getInstance().updateSearchTab();
-	} else if(openInNewTab) {
-		var cTab = ZaApp.getInstance().getTabGroup().getTabById( this.getContentViewId());
-		ZaApp.getInstance().updateTab(cTab, ZaApp.getInstance()._currentViewId );
-	} else{
-		ZaApp.getInstance().updateTab(this.getMainTab(), ZaApp.getInstance()._currentViewId );
-	}
+    return;
 }
 
 
@@ -140,8 +131,7 @@ function (ev) {
                 this.show(false);
             }
 			this.changeActionsState();
-            if(appNewUI)
-                 ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTreeByEdit (ev.getDetails());
+             ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTreeByEdit (ev.getDetails());
 		}
 	}
 }
@@ -245,10 +235,8 @@ function(ev) {
             } else if ( item.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.alias) {
                 ZaApp.getInstance().getDomainAliasWizard(true).editDomainAlias (item, true) ;
             }
-            if (appNewUI) {
-                var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_domains]);
-                ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item, undefined, true);
-            }
+            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_domains]);
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item, undefined, true);
 		}
 	} else {
 		this.changeActionsState();	
@@ -281,10 +269,8 @@ function(item) {
     } else if ( item.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.alias) {
         ZaApp.getInstance().getDomainAliasWizard(true).editDomainAlias (item, true) ;
     }
-    if (appNewUI) {
-        var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_domains]);
-        ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item, undefined, true);
-    }
+    var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_domains]);
+    ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item, undefined, true);
 }
 
 ZaDomainListController.prototype._addDomainAliasListener =
@@ -344,12 +330,9 @@ function(item) {
 
     ZaApp.getInstance().dialogs["ZaGALConfigXWizard"] = new ZaGALConfigXWizard(this._container,item)
     this._galWizard = ZaApp.getInstance().dialogs["ZaGALConfigXWizard"];
-    if(appNewUI){
-        item._extid=ZaUtil.getItemUUid();
-        item._editObject = item;
-    }else{
-        this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishGalButtonListener, this, null);
-    }
+    item._extid=ZaUtil.getItemUUid();
+    item._editObject = item;
+
     this._galWizard.setObject(item);
     this._galWizard.popup();
 }
@@ -370,14 +353,9 @@ ZaDomainListController.prototype._openAuthWiz =
 function (item) {
     this._currentObject = item;
     item.load("name", item.attrs[ZaDomain.A_domainName],false,true);
-    if(appNewUI){
-        this._authWizard = ZaApp.getInstance().dialogs["ZaTaskAuthConfigWizard"] = new ZaTaskAuthConfigWizard(this._container);
-        item._extid=ZaUtil.getItemUUid();
-        item._editObject = item;
-    }else{
-        this._authWizard = ZaApp.getInstance().dialogs["ZaAuthConfigXWizard"] = new ZaAuthConfigXWizard(this._container);
-        this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishAuthButtonListener, this, null);
-    }
+    this._authWizard = ZaApp.getInstance().dialogs["ZaTaskAuthConfigWizard"] = new ZaTaskAuthConfigWizard(this._container);
+    item._extid=ZaUtil.getItemUUid();
+    item._editObject = item;
 
     this._authWizard.setObject(item);
     this._authWizard.popup();
@@ -396,13 +374,10 @@ function(ev) {
                 else
 			        this._autoProvWizard = ZaApp.getInstance().dialogs["ZaTaskAutoProvDialog"] = new ZaTaskAutoProvDialog(this._container, ZaMsg.NAD_AutoProvConfigTitle);//ZaAutoProvConfigXWizard(this._container);
             }
-            if(appNewUI){
-                item._extid=ZaUtil.getItemUUid();
-                item._editObject = item;
-                this._autoProvWizard.registerCallback(DwtDialog.OK_BUTTON, ZaTaskAutoProvDialog.prototype.finishWizard, this._autoProvWizard, null);
-            }else {
-                this._autoProvWizard.registerCallback(DwtDialog.OK_BUTTON, ZaDomainListController.prototype._finishAutoProvButtonListener, this, null);
-            }
+            item._extid=ZaUtil.getItemUUid();
+            item._editObject = item;
+            this._autoProvWizard.registerCallback(DwtDialog.OK_BUTTON, ZaTaskAutoProvDialog.prototype.finishWizard, this._autoProvWizard, null);
+
             item.currentTab = "1";
 			this._autoProvWizard.setObject(item);
 			this._autoProvWizard.popup();

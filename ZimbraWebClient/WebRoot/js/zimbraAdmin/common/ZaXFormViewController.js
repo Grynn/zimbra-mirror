@@ -136,20 +136,18 @@ function(ev, noPopView, func, obj, params, newPath) {
 
 ZaXFormViewController.prototype._setSelectionAfterCloseView =
 function(newPath) {
-	if(appNewUI) { //only work in new UI
-        var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
-        if (!newPath) {
-            var rootItem = tree.getCurrentRootItem();
-            var rootPath = tree.getABPath(rootItem.getData("dataItem"));
-            var topPath = "";
-            var lastLoc = rootPath.lastIndexOf(ZaTree.SEPERATOR);
-            if(lastLoc > 0) {
-                topPath = rootPath.substring(0,lastLoc);
-            }
-            newPath = topPath;
+    var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+    if (!newPath) {
+        var rootItem = tree.getCurrentRootItem();
+        var rootPath = tree.getABPath(rootItem.getData("dataItem"));
+        var topPath = "";
+        var lastLoc = rootPath.lastIndexOf(ZaTree.SEPERATOR);
+        if(lastLoc > 0) {
+            topPath = rootPath.substring(0,lastLoc);
         }
-		tree.setSelectionByPath(newPath, undefined, undefined, undefined, undefined, undefined, true);
-	}
+        newPath = topPath;
+    }
+	tree.setSelectionByPath(newPath, undefined, undefined, undefined, undefined, undefined, true);
 }
 
 /**
@@ -234,18 +232,15 @@ function () {
 		}
 		this.closeCnfrmDlg();	
 		ZaApp.getInstance().popView();		
-		//ZaApp.getInstance().getTabGroup().removeCurrentTab(true) ;
-        if(appNewUI) {
-            var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
-            var rootItem = tree.getCurrentRootItem();
-            var rootPath = tree.getABPath(rootItem.getData("dataItem"));
-            var topPath = "";
-            var lastLoc = rootPath.lastIndexOf(ZaTree.SEPERATOR);
-            if(lastLoc > 0) {
-                topPath = rootPath.substring(0,lastLoc);
-            }
-            tree.setSelectionByPath(topPath);
+        var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+        var rootItem = tree.getCurrentRootItem();
+        var rootPath = tree.getABPath(rootItem.getData("dataItem"));
+        var topPath = "";
+        var lastLoc = rootPath.lastIndexOf(ZaTree.SEPERATOR);
+        if(lastLoc > 0) {
+            topPath = rootPath.substring(0,lastLoc);
         }
+        tree.setSelectionByPath(topPath);
 	} catch (ex) {
 		this.closeCnfrmDlg();	
 		this._handleException(ex, "ZaXFormViewController.prototype.deleteAndGoAway", null, false);				

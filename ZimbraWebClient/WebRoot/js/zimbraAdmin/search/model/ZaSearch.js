@@ -807,7 +807,7 @@ ZaSearch.getSearchFromQuery = function (query) {
 
 ZaSearch.myXModel = {
 	items: [
-		{id:ZaSearch.A_query, type:(appNewUI? _OBJECT_ : _STRING_)},
+		{id:ZaSearch.A_query, type:_OBJECT_},
 		{id:ZaSearch.A_selected, type:_OBJECT_, items:ZaAccount.myXModel},		
 		{id:ZaSearch.A_fAliases, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaSearch.A_fdistributionlists, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},

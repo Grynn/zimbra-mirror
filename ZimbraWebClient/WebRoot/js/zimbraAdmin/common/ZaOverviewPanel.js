@@ -55,24 +55,14 @@ function() {
 
     this._treePanel.setScrollStyle(Dwt.SCROLL_Y);
 
-    if (!appNewUI){
-        this._tree = new DwtTree({
-		parent:		this._treePanel, 
-		style:		DwtTree.SINGLE_STYLE, 
-		className:	"OverviewTree" , 
-		posStyle:	DwtControl.ABSOLUTE_STYLE,
-		id:		ZaId.getTreeId(this.overviewId, DwtTree.SINGLE_STYLE)
-	});
-    }
-    else {
-        this._tree = new ZaTree({
-		parent:		this._treePanel,
-		style:		DwtTree.SINGLE_STYLE,
-		className:	"OverviewTree" ,
-		posStyle:	DwtControl.ABSOLUTE_STYLE,
-		id:		ZaId.getTreeId(this.overviewId, DwtTree.SINGLE_STYLE)
-	    });
-   }
+
+    this._tree = new ZaTree({
+	parent:		this._treePanel,
+	style:		DwtTree.SINGLE_STYLE,
+	className:	"OverviewTree" ,
+	posStyle:	DwtControl.ABSOLUTE_STYLE,
+	id:		ZaId.getTreeId(this.overviewId, DwtTree.SINGLE_STYLE)
+    });
 
 
 }

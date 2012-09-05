@@ -48,10 +48,7 @@ ZaSettings.postInit = function() {
 		}
 	}	
 
-    if (!appNewUI)
-	    appController._launchApp();
-    else
-        appController._lauchNewApp();
+    appController._lauchNewApp();
 
     if (ZaZimbraAdmin.isWarnOnExit) {
 	    ZaZimbraAdmin.setOnbeforeunload(ZaZimbraAdmin._confirmExitMethod);
@@ -403,13 +400,11 @@ ZaSettings.OVERVIEW_ADDRESSES_ITEMS = [ZaSettings.ACCOUNT_LIST_VIEW,ZaSettings.A
 ZaSettings.OVERVIEW_TOOLS_ITEMS = [ZaSettings.MAILQ_VIEW,ZaSettings.DOWNLOADS_VIEW];
 ZaSettings.OVERVIEW_MONITORING_ITEMS = [ZaSettings.GLOBAL_STATS_VIEW,ZaSettings.GLOBAL_STATUS_VIEW,ZaSettings.SERVER_STATS_VIEW];
 
-if (appNewUI) {
 ZaSettings.OVERVIEW_MANAGER_ACCOUNT_ITEMS = [ZaSettings.ACCOUNT_LIST_VIEW,ZaSettings.ALIAS_LIST_VIEW,ZaSettings.DL_LIST_VIEW,ZaSettings.RESOURCE_LIST_VIEW];
 ZaSettings.OVERVIEW_ADMIN_ITEMS = [ZaSettings.COS_LIST_VIEW,ZaSettings.ZIMLET_LIST_VIEW,ZaSettings.SERVER_LIST_VIEW,ZaSettings.ADMIN_ZIMLET_LIST_VIEW,
     ZaSettings.DOMAIN_LIST_VIEW,ZaSettings.GLOBAL_CONFIG_VIEW];
 ZaSettings.OVERVIEW_TOOLS_ITEMS = [ZaSettings.MAILQ_VIEW,ZaSettings.DOWNLOADS_VIEW];
 ZaSettings.OVERVIEW_MONITORING_ITEMS = [ZaSettings.MAILQ_VIEW, ZaSettings.GLOBAL_STATUS_VIEW,ZaSettings.SERVER_STATS_VIEW];
-}
 //Domain operations  - it might be duplicated to domain view tabs
 ZaSettings.DOMAIN_GAL_WIZ = "domainGALWizard";
 ZaSettings.DOMAIN_AUTH_WIZ = "domainAuthWizard";
@@ -542,9 +537,7 @@ ZaSettings.INIT[ZaSettings.SKIN_TREE_ID]					= [null, ZaSettings.T_CONFIG, ZaSet
 ZaSettings.INIT[ZaSettings.SKIN_LOGIN_MSG_ID]           = [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_login_msg"];
 ZaSettings.INIT[ZaSettings.SKIN_APP_TABS_ID]            = [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_app_tabs"];
 
-if (appNewUI) {
 // here new skin start.....
-
 ZaSettings.LICENSE_ENABLED = true;
 ZaSettings.ADMIN_ZIMLETS_ENABLED = true;
 ZaSettings.SAVE_SEARCH_ENABLED = true ;
@@ -619,7 +612,6 @@ ZaSettings.INIT[ZaSettings.SKIN_APP_MAIN_FOOTER_ID]	= [null, ZaSettings.T_CONFIG
 ZaSettings.INIT[ZaSettings.SKIN_TOOL_HEADER_ID]     = [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_TOOL_HEADER_DOM_ID];
 ZaSettings.INIT[ZaSettings.SKIN_TOOL_ID]            = [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_TOOL_DOM_ID];
 ZaSettings.INIT[ZaSettings.SKIN_TOOL_FOOTER_ID]     = [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_TOOL_FOOTER_DOM_ID];
-}
 //ZaSettings.timeZoneChoices = new XFormChoices(AjxTimezoneData.TIMEZONE_RULES, XFormChoices.OBJECT_LIST, "serverId", "serverId");
 //in order to add the "Not Set" label to the timezone choices, we need to normalize it to label value pair
 ZaSettings.getTimeZoneChoices = function () {

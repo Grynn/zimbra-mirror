@@ -238,8 +238,7 @@ function(entry) {
     ZaNewCosXWizard._domainList = ZaApp.getInstance().getDomainList(true).getArray();
 
 	this._localXForm.setInstance(this._containedObject);
-    if (!appNewUI)
-	    this.updateTab();
+
 }
 
 ZaNewCosXWizard.gotSkins = function () {

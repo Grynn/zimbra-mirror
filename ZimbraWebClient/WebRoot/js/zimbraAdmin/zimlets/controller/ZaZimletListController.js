@@ -180,10 +180,8 @@ function(ev) {
 			this._selectedItem = ev.item;
 			ZaApp.getInstance().getZimletController().show(ev.item);
 
-            if (appNewUI) {
-                var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_zimlets]);
-                ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name, null, false, false, ev.item);
-            }
+            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_zimlets]);
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name, null, false, false, ev.item);
 		}
 	} else {
 		this.changeActionsState();	

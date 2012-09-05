@@ -135,7 +135,6 @@ ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SASH]					= ZaSettings.SKIN_SASH_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_TABS]				= ZaSettings.SKIN_APP_TABS_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_LOGIN_MESSAGE]	        = ZaSettings.SKIN_LOGIN_MSG_ID;
 
-if (appNewUI) {
 // components
 ZaAppViewMgr.C_BANNER					= "BANNER";
 ZaAppViewMgr.C_SEARCH					= "SEARCH";
@@ -168,7 +167,6 @@ ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_FOOTER]			    = ZaSettings.SKIN_APP_
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TOOL_HEADER]			= ZaSettings.SKIN_TOOL_HEADER_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TOOL]				    = ZaSettings.SKIN_TOOL_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TOOL_FOOTER]	        = ZaSettings.SKIN_TOOL_FOOTER_ID;
-}
 
 // Public methods
 ZaAppViewMgr.prototype.toString = 
@@ -372,24 +370,22 @@ ZaAppViewMgr.prototype.fitAll = function () {
 				ZaAppViewMgr.C_TREE,ZaAppViewMgr.C_SASH,
 				/*ZaAppViewMgr.C_TREE_FOOTER,*/ ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT];
 
-    if (appNewUI) {
-       list = [
-            ZaAppViewMgr.C_BANNER,
-            ZaAppViewMgr.C_SEARCH,
-
-            ZaAppViewMgr.C_TREE_TOP	,
-            ZaAppViewMgr.C_TREE	,
-            ZaAppViewMgr.C_TREE_FOOTER ,
-
-            ZaAppViewMgr.C_APP_HEADER,
-            ZaAppViewMgr.C_APP_CONTENT,
-            ZaAppViewMgr.C_APP_FOOTER,
-
-            ZaAppViewMgr.C_TOOL_HEADER ,
-            ZaAppViewMgr.C_TOOL ,
-            ZaAppViewMgr.C_TOOL_FOOTER
-       ];
-    }
+    list = [
+	        ZaAppViewMgr.C_BANNER,
+	        ZaAppViewMgr.C_SEARCH,
+	
+	        ZaAppViewMgr.C_TREE_TOP	,
+	        ZaAppViewMgr.C_TREE	,
+	        ZaAppViewMgr.C_TREE_FOOTER ,
+	
+	        ZaAppViewMgr.C_APP_HEADER,
+	        ZaAppViewMgr.C_APP_CONTENT,
+	        ZaAppViewMgr.C_APP_FOOTER,
+	
+	        ZaAppViewMgr.C_TOOL_HEADER ,
+	        ZaAppViewMgr.C_TOOL ,
+	        ZaAppViewMgr.C_TOOL_FOOTER
+	];
 	this._stickToGrid(list);
 }
 ZaAppViewMgr.prototype._stickToGrid = 
@@ -498,21 +494,19 @@ function(ev) {
 		} else {
 			if (deltaHeight) {
 				var list = [ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_SASH, ZaAppViewMgr.C_APP_CONTENT,ZaAppViewMgr.C_TREE/*, ZaAppViewMgr.C_STATUS*/];
-			    if (appNewUI) {
-			       list = [
-			            ZaAppViewMgr.C_TREE_TOP	,
-			            ZaAppViewMgr.C_TREE	,
-			            ZaAppViewMgr.C_TREE_FOOTER ,
-			
-			            ZaAppViewMgr.C_APP_HEADER,
-			            ZaAppViewMgr.C_APP_CONTENT,
-			            ZaAppViewMgr.C_APP_FOOTER,
-			
-			            ZaAppViewMgr.C_TOOL_HEADER ,
-			            ZaAppViewMgr.C_TOOL ,
-			            ZaAppViewMgr.C_TOOL_FOOTER
-			       ];
-			    }
+				list = [
+		            ZaAppViewMgr.C_TREE_TOP	,
+		            ZaAppViewMgr.C_TREE	,
+		            ZaAppViewMgr.C_TREE_FOOTER ,
+		
+		            ZaAppViewMgr.C_APP_HEADER,
+		            ZaAppViewMgr.C_APP_CONTENT,
+		            ZaAppViewMgr.C_APP_FOOTER,
+		
+		            ZaAppViewMgr.C_TOOL_HEADER ,
+		            ZaAppViewMgr.C_TOOL ,
+		            ZaAppViewMgr.C_TOOL_FOOTER
+		            ];
 				this._stickToGrid(list);
 			}
 			if (deltaWidth) {
@@ -520,20 +514,18 @@ function(ev) {
 							ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT, 
 							ZaAppViewMgr.C_SEARCH,
 							ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR, ZaAppViewMgr.C_SEARCH_BUILDER_SASH];
-    if (appNewUI) {
-       list = [
-            ZaAppViewMgr.C_BANNER,
-            ZaAppViewMgr.C_SEARCH,
-
-            ZaAppViewMgr.C_APP_HEADER,
-            ZaAppViewMgr.C_APP_CONTENT,
-            ZaAppViewMgr.C_APP_FOOTER,
-
-            ZaAppViewMgr.C_TOOL_HEADER ,
-            ZaAppViewMgr.C_TOOL ,
-            ZaAppViewMgr.C_TOOL_FOOTER
-       ];
-    }
+				list = [
+				        ZaAppViewMgr.C_BANNER,
+				        ZaAppViewMgr.C_SEARCH,
+	
+				        ZaAppViewMgr.C_APP_HEADER,
+				        ZaAppViewMgr.C_APP_CONTENT,
+				        ZaAppViewMgr.C_APP_FOOTER,
+	
+				        ZaAppViewMgr.C_TOOL_HEADER ,
+				        ZaAppViewMgr.C_TOOL ,
+				        ZaAppViewMgr.C_TOOL_FOOTER
+				        ];
 				this._stickToGrid(list);
 			}
 		}

@@ -751,8 +751,7 @@ function (entry) {
 	}
         this.modifyContainedObject () ;
 	this._localXForm.setInstance(this._containedObject);	
-	if(!appNewUI)
-	    this.updateTab();
+
 }
 
 ZaDLXFormView.prototype.srchResWithoutSelf =
@@ -1219,7 +1218,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 		hMemberPool = 338;
 		wMemberPool = "100%";
 	}
-	wRightPanel = (appNewUI) ? "100%" : "98%";
+	wRightPanel = "100%";
 	var case1 =
 	{
 		type : _ZATABCASE_, caseKey : _tab1, numCols : 2, id : "dl_form_members",
@@ -1753,7 +1752,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 	if(_tab2) {				
 		var case2 = 
 		{type:_ZATABCASE_, caseKey:_tab2, colSizes:[10, "auto"], colSpan:"*",
-         paddingStyle:(appNewUI? "padding-left:15px;":null), cellpadding:(appNewUI?2:0),
+         paddingStyle:"padding-left:15px;", cellpadding:2,
 			items:[
 			    {type:_SPACER_, height:5},
 			    {type:_SPACER_, height:5},
@@ -2038,7 +2037,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 	if(_tab6) {
 		var case6 =
 		{type:_ZATABCASE_, caseKey:_tab6, colSpan:"*",
-			paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+			paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
 			items:[
                 {type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_MailOptionsReceiving, id:"dl_pref_replyto_group",
                     colSpan: "*", numCols: 2, colSizes:[275, "*"],
@@ -2122,7 +2121,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 			]
 		},
 		{type:_TAB_BAR_, choices:this.tabChoices,
-            cssStyle:(appNewUI?"display:none;":""),
+            cssStyle:"display:none;",
 			ref: ZaModel.currentTab, colSpan:"*",cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
 		{type:_SWITCH_,items:cases}

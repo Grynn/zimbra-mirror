@@ -401,20 +401,16 @@ Super_Textfield_XFormItem.prototype.colSizes = ["275px","275px","150px"];
 Super_Textfield_XFormItem.prototype.colSpan = 3;
 Super_Textfield_XFormItem.prototype.nowrap = false;
 Super_Textfield_XFormItem.prototype.labelWrap = true;
-if(appNewUI){
 Super_Textfield_XFormItem.prototype.colSizes = ["275px","225px","150px"];
 Super_Textfield_XFormItem.prototype.labelCssStyle = "border-right: 1px solid black;";
 Super_Textfield_XFormItem.prototype.tableCssClass = "grid_composite_table";
-}
 
 SuperWiz_Textfield_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPERWIZ_TEXTFIELD_", "superwiz_textfield", SuperWiz_Textfield_XFormItem, Super_Textfield_XFormItem);
 SuperWiz_Textfield_XFormItem.prototype.colSizes=["200px", "250px","150px"];
 SuperWiz_Textfield_XFormItem.prototype.visibilityChecks = [ZaItem.hasWritePermission];
 SuperWiz_Textfield_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
-if(appNewUI){
 SuperWiz_Textfield_XFormItem.prototype.labelCssStyle = "";
-}
 
 Super_Textfield_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
@@ -484,10 +480,8 @@ Super_Textarea_XFormItem.prototype.colSizes = ["275px","275px","150px"];
 Super_Textarea_XFormItem.prototype.colSpan = 3;
 Super_Textarea_XFormItem.prototype.nowrap = false;
 Super_Textarea_XFormItem.prototype.labelWrap = true;
-if(appNewUI){
 Super_Textarea_XFormItem.prototype.colSizes = ["275px","225px","150px"];
 Super_Textarea_XFormItem.prototype.tableCssClass = "grid_composite_table";
-}
 
 SuperWiz_Textarea_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPERWIZ_TEXTAREA_", "superwiz_textarea", SuperWiz_Textarea_XFormItem, Super_Textarea_XFormItem);
@@ -555,13 +549,11 @@ XFormItemFactory.createItemType("_SUPER_WIZ_CHECKBOX_", "super_wiz_checkbox", Su
 SuperWiz_Checkbox_XFormItem.prototype.colSizes = ["200px","300px","150px"];
 SuperWiz_Checkbox_XFormItem.prototype.visibilityChecks = [ZaItem.hasWritePermission];
 SuperWiz_Checkbox_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
-if(appNewUI){
 SuperWiz_Checkbox_XFormItem.prototype.labelCssStyle = "";
 SuperWiz_Checkbox_XFormItem.prototype.labelCssClass = "";
 SuperWiz_Checkbox_XFormItem.prototype.checkBoxLabelLocation = _RIGHT_;
 SuperWiz_Checkbox_XFormItem.prototype.checkboxSubLabel = "";
 SuperWiz_Checkbox_XFormItem.prototype.checkboxAlign = _RIGHT_;
-}
 
 Super_Checkbox_XFormItem.prototype.useParentTable = false;
 Super_Checkbox_XFormItem.prototype.numCols = 3;
@@ -569,14 +561,10 @@ Super_Checkbox_XFormItem.prototype.colSizes = ["275px","275px","*"];
 Super_Checkbox_XFormItem.prototype.nowrap = false;
 Super_Checkbox_XFormItem.prototype.labelWrap = true;
 Super_Checkbox_XFormItem.prototype.checkboxSubLabel = null;
-if(appNewUI){
 Super_Checkbox_XFormItem.prototype.labelCssStyle = "border-right: 1px solid black;";
 Super_Checkbox_XFormItem.prototype.labelCssClass = "gridGroupBodyLabel";
 Super_Checkbox_XFormItem.prototype.tableCssClass = "grid_composite_table";
 Super_Checkbox_XFormItem.prototype.colSizes = ["275px","225px","*"];
-}else{
-Super_Checkbox_XFormItem.prototype.labelCssClass = "xform_checkbox";
-}
 
 Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
@@ -989,10 +977,8 @@ SuperZimlet_Select_XFormItem.prototype.nowrap = false;
 SuperZimlet_Select_XFormItem.prototype.labelWrap = true;
 SuperZimlet_Select_XFormItem.prototype.items = [];
 SuperZimlet_Select_XFormItem.prototype.labelWidth = "275px";
-if(appNewUI){
 SuperZimlet_Select_XFormItem.prototype.colSizes=["100px","*"];
 SuperZimlet_Select_XFormItem.prototype.labelWidth = "100px";
-}
 
 SuperZimlet_Select_XFormItem.prototype.initializeItems = function() {
 	var selectRef = this.getInheritedProperty("selectRef");
@@ -1095,9 +1081,7 @@ Super_Select1_XFormItem.prototype.nowrap = false;
 Super_Select1_XFormItem.prototype.labelWrap = true;
 Super_Select1_XFormItem.prototype.trueValue = "TRUE";
 Super_Select1_XFormItem.prototype.falseValue = "FALSE";
-if(appNewUI){
 Super_Select1_XFormItem.prototype.colSizes=["225px","150px"];
-}
 Super_Select1_XFormItem.prototype.initializeItems = function() {
 	var slct = {	type:_OSELECT1_, ref:".",
 		onChange:Composite_XFormItem.onFieldChange,
@@ -1175,9 +1159,7 @@ Super_Dwt_ColorPicker_XFormItem.prototype.nowrap = false;
 Super_Dwt_ColorPicker_XFormItem.prototype.labelWrap = true;
 Super_Dwt_ColorPicker_XFormItem.prototype.useParentTable = false;
 Super_Dwt_ColorPicker_XFormItem.prototype.numCols = 2;
-if(appNewUI){
-  Super_Dwt_ColorPicker_XFormItem.prototype.colSizes=["225px","150px"];
-}
+Super_Dwt_ColorPicker_XFormItem.prototype.colSizes=["225px","150px"];
 Super_Dwt_ColorPicker_XFormItem.prototype.initializeItems = function() {
     var buttonImage = this.getInheritedProperty("buttonImage") ;
     var width = this.getInheritedProperty("width") ;
@@ -1241,11 +1223,9 @@ Super_Lifetime_XFormItem.prototype.colSizes =["275px","70px","205px","*"];
 Super_Lifetime_XFormItem.prototype.useParenttable = false;
 Super_Lifetime_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Super_Lifetime_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
-if(appNewUI){
 Super_Lifetime_XFormItem.prototype.colSizes =["275px","70px","155px","*"];
 Super_Lifetime_XFormItem.prototype.labelCssStyle = "border-right: 1px solid black;";
 Super_Lifetime_XFormItem.prototype.tableCssClass = "grid_composite_table";
-}
 Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
     var labelCssClass = this.getInheritedProperty("labelCssClass");
@@ -1344,9 +1324,7 @@ XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME_", "superwiz_lifetime", Supe
 SuperWiz_Lifetime_XFormItem.prototype.colSizes =["200px","80px","120px","150px"];
 SuperWiz_Lifetime_XFormItem.prototype.visibilityChecks = [ZaItem.hasWritePermission];
 SuperWiz_Lifetime_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
-if(appNewUI){
 SuperWiz_Lifetime_XFormItem.prototype.labelCssStyle = "";
-}
 /**
 * _SUPER_LIFETIME1_ XForm item type for displaying trash message retention and spam message retention settings
 **/
@@ -1360,9 +1338,7 @@ Super_Lifetime1_XFormItem.prototype.colSizes = ["275px", "65px'", "210px", "*"];
 Super_Lifetime1_XFormItem.prototype.useParenttable = false;
 Super_Lifetime1_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Super_Lifetime1_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
-if(appNewUI){
- Super_Lifetime1_XFormItem.prototype.colSizes = ["275px", "65px'", "160px", "*"];
-}
+Super_Lifetime1_XFormItem.prototype.colSizes = ["275px", "65px'", "160px", "*"];
 
 SuperWiz_Lifetime1_XFormItem = function() {}
 SuperWiz_Lifetime1_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
@@ -1468,9 +1444,7 @@ Super_Lifetime2_XFormItem.prototype.useParenttable = false;
 Super_Lifetime2_XFormItem.prototype._stringPart = "d";
 Super_Lifetime2_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Super_Lifetime2_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
-if(appNewUI){
 Super_Lifetime2_XFormItem.prototype.colSizes =["275px", "65px'", "160px", "*"];
-}
 
 SuperWiz_Lifetime2_XFormItem = function() {}
 XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME2_", "superwiz_lifetime2", SuperWiz_Lifetime2_XFormItem, Super_Lifetime2_XFormItem);
@@ -1685,12 +1659,7 @@ ZATopGrouper_XFormItem.isGroupVisible = function(attrsArray, rightsArray,entry) 
 }
 ZAPlainGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZA_PLAIN_GROUPER_", "za_plain_grouper", ZAPlainGrouper_XFormItem, Group_XFormItem);
-if (!appNewUI) {
-ZAPlainGrouper_XFormItem.prototype.numCols = 2;
-ZAPlainGrouper_XFormItem.prototype.colSizes = ["275px","auto"];
-ZAPlainGrouper_XFormItem.prototype.cssClass = "PlainGrouperBorder";
-ZAPlainGrouper_XFormItem.isGroupVisible = ZATopGrouper_XFormItem.isGroupVisible;
-} else {
+
 ZAPlainGrouper_XFormItem.prototype.colSizes = ["100%"];
 ZAPlainGrouper_XFormItem.prototype.numCols = 1;
 ZAPlainGrouper_XFormItem.prototype.width = "100%";
@@ -1714,13 +1683,9 @@ ZAPlainGrouper_XFormItem.prototype.initializeItems = function () {
     Group_XFormItem.prototype.initializeItems.call(this);
 }
 
-}
-
 ZAWizTopGrouper_XFormItem = function() {}
-if (appNewUI) {
 XFormItemFactory.createItemType("_ZAWIZ_TOP_GROUPER_", "zawiz_top_grouper", ZAWizTopGrouper_XFormItem, BaseTopGrouper_XFormItem);
-} else
-XFormItemFactory.createItemType("_ZAWIZ_TOP_GROUPER_", "zawiz_top_grouper", ZAWizTopGrouper_XFormItem, TopGrouper_XFormItem);
+
 ZAWizTopGrouper_XFormItem.prototype.numCols = 2;
 ZAWizTopGrouper_XFormItem.prototype.colSizes = ["200px","auto"];
 ZAWizTopGrouper_XFormItem.isGroupVisible = function(entry, attrsArray, rightsArray) {
@@ -1755,11 +1720,8 @@ ZAGroup_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZAGROUP_", "zagroup", ZAGroup_XFormItem, Group_XFormItem);
 ZAGroup_XFormItem.prototype.numCols = 2;
 ZAGroup_XFormItem.prototype.colSizes = ["275px","275px"];
-if (appNewUI) {
 ZAGroup_XFormItem.prototype.border = 1;
 ZAGroup_XFormItem.prototype.width = "100%";
-
-}
 ZAGroup_XFormItem.prototype.cssStyle = "margin-top:20px;margin-bottom:0px;padding-bottom:0px;";
 ZAGroup_XFormItem.isGroupVisible = function(entry, attrsArray, rightsArray) {
 	if(!entry)
@@ -1793,17 +1755,15 @@ ZAGroup_XFormItem.isGroupVisible = function(entry, attrsArray, rightsArray) {
 }
 
 ZAGroup_XFormItem.prototype.initializeItems = function () {
-    if(appNewUI) {
-        var gridLabelCss = this.getInheritedProperty("gridLabelCss") || "gridGroupBodyLabel";
-        var oldItems = this.getItems();
-        if(oldItems) {
-            for(var i = 0; i < oldItems.length; i++) {
-                if(oldItems[i].type == "radio")
-                    continue;  // don't deal with _RADIO_
-                if(oldItems[i].label || oldItems[i].txtBoxLabel)
-                    //oldItems[i].labelCssStyle = "text-align:left; background-color:#BBB;";
-                    oldItems[i].labelCssClass = gridLabelCss;
-            }
+    var gridLabelCss = this.getInheritedProperty("gridLabelCss") || "gridGroupBodyLabel";
+    var oldItems = this.getItems();
+    if(oldItems) {
+        for(var i = 0; i < oldItems.length; i++) {
+            if(oldItems[i].type == "radio")
+                continue;  // don't deal with _RADIO_
+            if(oldItems[i].label || oldItems[i].txtBoxLabel)
+                //oldItems[i].labelCssStyle = "text-align:left; background-color:#BBB;";
+                oldItems[i].labelCssClass = gridLabelCss;
         }
     }
 
@@ -1845,14 +1805,9 @@ ZATabCase_XFormItem.prototype.caseVarRef = ZaModel.currentTab;
 ZATabCase_XFormItem.prototype.visibilityChangeEventSources = [ZaModel.currentTab];
 ZATabCase_XFormItem.prototype.align = _LEFT_;
 ZATabCase_XFormItem.prototype.valign = _TOP_;
-if(appNewUI){
-   ZATabCase_XFormItem.prototype.paddingStyle = "padding-left:15px;";
-   ZATabCase_XFormItem.prototype.width = "98%";
-}
-else{
-   ZATabCase_XFormItem.prototype.width = "100%";
-   ZATabCase_XFormItem.prototype.cellpadding = "0";
-}
+ZATabCase_XFormItem.prototype.paddingStyle = "padding-left:15px;";
+ZATabCase_XFormItem.prototype.width = "98%";
+
 
 ZATabCase_XFormItem.prototype.getTabLevel = function () {
 	return this.getInheritedProperty("tabLevel") || 1;

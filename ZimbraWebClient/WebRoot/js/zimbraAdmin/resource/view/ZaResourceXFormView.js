@@ -136,9 +136,6 @@ function(entry) {
 	this.formDirtyLsnr = new AjxListener(ZaApp.getInstance().getCurrentController(), ZaResourceController.prototype.handleXFormChange);
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, this.formDirtyLsnr);
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, this.formDirtyLsnr);	
-
-    if(!appNewUI)
-	    this.updateTab();
 }
 
 ZaResourceXFormView.deleteCalFwdAddrButtonListener = function () {
@@ -628,7 +625,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 									headerList:null,onSelection:ZaResourceXFormView.calFwdAddrSelectionListener,label:ZaMsg.zimbraPrefCalendarForwardInvitesTo,
                                     visibilityChecks:[ZaItem.hasReadPermission],
                                     labelCssClass:"gridGroupBodyLabel",
-                                    labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_)
+                                    labelCssStyle:"text-align:left;border-right:1px solid;"
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
 									cssStyle:"margin:10px;padding-bottom:0;",
@@ -675,8 +672,8 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
              {ref:ZaResource.A2_signatureList, type:_DWT_LIST_, height:"100", width:"350px",
             forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource",
             headerList:null,label:ZaMsg.NAD_AllSignature,
-            labelCssClass:(appNewUI?"gridGroupBodyLabel":"xform_label"),
-            labelCssStyle:(appNewUI?"text-align:left;border-right:1px solid;":_UNDEFINED_),
+            labelCssClass:"gridGroupBodyLabel",
+            labelCssStyle:"text-align:left;border-right:1px solid;",
             onSelection:ZaResourceXFormView.SignatureSelectionListener,
             bmolsnr: true,
             getDisplayValue: function(value){
@@ -759,7 +756,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
     ]};
 
     var case1 = {type:_ZATABCASE_, numCols:1,  caseKey:_tab1,
-        paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+        paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
 //        height:"400px",  align:_LEFT_, valign:_TOP_,
         items:[nameGroup,setupGroup,passwordGroup,signatureGroup,notesGroup]
     };
@@ -771,7 +768,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 	if(_tab2) {
 		this.helpMap[_tab2] = [location.pathname, ZaUtil.HELP_URL, "managing_accounts/managing_resource.htm", "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
         var case2={type:_ZATABCASE_, numCols:1, caseKey:_tab2,
-             paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
+             paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
             items: [
                 {type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_ContactInfo, items:[
                     {ref:ZaResource.A_zimbraCalResContactName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactName,label:ZaMsg.NAD_ContactName, labelLocation:_LEFT_, width:defaultWidth},
@@ -838,7 +835,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 					{type:_GROUP_,	numCols:4,colSizes:["60px","*","80px","*"],items:headerItems}
 				]
 			},
-			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", cssStyle:(appNewUI?"display:none;":""), id:"xform_tabbar"},
+			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", cssStyle:"display:none;", id:"xform_tabbar"},
 			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
 	];
 };

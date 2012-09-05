@@ -90,16 +90,7 @@ ZaCosListController.prototype._show =
 function (list, openInNewTab, openInSearchTab, hasMore) {
 	this._updateUI(list, openInNewTab, openInSearchTab, hasMore);
 	ZaApp.getInstance().pushView(this.getContentViewId (), openInNewTab, openInSearchTab);
-    if (appNewUI)
-        return;
-	if (openInSearchTab) {
-		ZaApp.getInstance().updateSearchTab();
-	} else if(openInNewTab) {
-		var cTab = ZaApp.getInstance().getTabGroup().getTabById( this.getContentViewId());
-		ZaApp.getInstance().updateTab(cTab, ZaApp.getInstance()._currentViewId );
-	} else {
-		ZaApp.getInstance().updateTab(this.getMainTab(), ZaApp.getInstance()._currentViewId );
-	} 
+    return;
 }
 
 
@@ -242,10 +233,8 @@ function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
 			ZaApp.getInstance().getCosController().show(ev.item);
-            if (appNewUI) {
-                var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
-                ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name, null, false, false, ev.item, undefined, true);
-            }
+            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name, null, false, false, ev.item, undefined, true);
 		}
 	} else {
 		this.changeActionsState();	
@@ -275,10 +264,8 @@ function(ev) {
 ZaCosListController.prototype._editItem =
 function(item) {
     ZaApp.getInstance().getCosController().show(item);
-    if (appNewUI) {
-        var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
-        ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item);
-    }
+    var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_cos]);
+    ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item);
 }
 
 /**
@@ -490,13 +477,9 @@ ZaController.changeActionsStateMethods["ZaCosListController"].push(ZaCosListCont
 
 ZaCosListController.showMe = function(newCos)
 {
-    if(!appNewUI)
-        ZaApp.getInstance().getCosController().show(newCos);
-    else{
-        if(!ZaApp.getInstance().dialogs["newCosXWizard"]){
-            ZaApp.getInstance().dialogs["newCosXWizard"] = new ZaNewCosXWizard(this._container,newCos);
-        }
-        ZaApp.getInstance().dialogs["newCosXWizard"].setObject(newCos);
-        ZaApp.getInstance().dialogs["newCosXWizard"].popup();
+    if(!ZaApp.getInstance().dialogs["newCosXWizard"]){
+        ZaApp.getInstance().dialogs["newCosXWizard"] = new ZaNewCosXWizard(this._container,newCos);
     }
+    ZaApp.getInstance().dialogs["newCosXWizard"].setObject(newCos);
+    ZaApp.getInstance().dialogs["newCosXWizard"].popup();
 }

@@ -279,17 +279,15 @@ ZaServerStatsListController.prototype._switchToSubItem = function (item)
         this._selectedItem = item;
         ZaApp.getInstance().getServerStatsController().show(item);
 
-        if (appNewUI) {
-            //must switch to the individual server stats view firstly,
-            //then the ZaApp.getInstance().getAppViewMgr().getCurrentView() == server stats view,
-            //let the  addObjectItemForAll get the right view id
-            var overviewPanelController = ZaZimbraAdmin.getInstance().getOverviewPanelController();
-            var parentPath = ZaServerStatsListController._getparentPathInTree();
-            var map = ZaServerStatsListController._getMapForMappingId2handler();
+        //must switch to the individual server stats view firstly,
+        //then the ZaApp.getInstance().getAppViewMgr().getCurrentView() == server stats view,
+        //let the  addObjectItemForAll get the right view id
+        var overviewPanelController = ZaZimbraAdmin.getInstance().getOverviewPanelController();
+        var parentPath = ZaServerStatsListController._getparentPathInTree();
+        var map = ZaServerStatsListController._getMapForMappingId2handler();
 
-            overviewPanelController.addObjectItem(parentPath, item.name, null,
-                                                        false, false, item, map);
-        }
+        overviewPanelController.addObjectItem(parentPath, item.name, null,
+                                                    false, false, item, map);
     }
 }
 

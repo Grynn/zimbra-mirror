@@ -237,8 +237,7 @@ function(preParams, paramsArr) {
 
 		}
 	}
-    if(appNewUI)
-        ZaZimbraAdmin.getInstance().getOverviewPanelController().fireSearchEvent(resultStats);
+    ZaZimbraAdmin.getInstance().getOverviewPanelController().fireSearchEvent(resultStats);
 }
 
 ZaListViewController.prototype.getAppBarAction =
@@ -326,8 +325,7 @@ function(params, resp) {
 			else
 				this._updateUI(this._list, params.openInNewTab, params.openInSearchTab,response.more);
 		}
-        if(appNewUI)
-            ZaZimbraAdmin.getInstance().getOverviewPanelController().fireSearchEvent(resultStats);
+        ZaZimbraAdmin.getInstance().getOverviewPanelController().fireSearchEvent(resultStats);
 	} catch (ex) {
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
 			this._handleException(ex, "ZaListViewController.prototype.searchCallback");	
@@ -375,8 +373,7 @@ function (ev) {
 			this.show(false);			
 		}
 	}
-     if(appNewUI)
-          ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTreeByEdit (ev.getDetails())
+	ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTreeByEdit (ev.getDetails())
 }
 
 /**
@@ -390,8 +387,7 @@ function (ev) {
 			this.show(false);			
 		}
 	}
-    if(appNewUI)
-            ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTree (ev.getDetails());
+    ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTree (ev.getDetails());
 }
 
 /**
@@ -405,8 +401,7 @@ function (ev) {
 			this._currentPageNum = 1 ; //due to bug 12091, always go back to the first page after the deleting of items.
 			this.show(false);			
 		}
-        if(appNewUI)
-             ZaZimbraAdmin.getInstance().refreshHistoryTreeByDelete(ev.getDetails());
+		ZaZimbraAdmin.getInstance().refreshHistoryTreeByDelete(ev.getDetails());
 	}
 }
 

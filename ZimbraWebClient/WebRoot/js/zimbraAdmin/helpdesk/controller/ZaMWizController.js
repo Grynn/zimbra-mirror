@@ -37,17 +37,8 @@ function(openInNewTab) {
 		var elements = new Object();
 		this._contentView = new this.tabConstructor(this._container);
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-        if (!appNewUI) {
-		    var tabParams = {
-			    openInNewTab: false,
-			    tabId: this.getContentViewId(),
-			    tab: this.getMainTab()
-		    }
-		    //ZaApp.getInstance().createView(ZaZimbraAdmin._MIGRATION_WIZ_VIEW, elements);
-		    ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-        } else {
-            ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements) ;
-        }
+
+        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements) ;
 		this._UICreated = true;
 		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	}

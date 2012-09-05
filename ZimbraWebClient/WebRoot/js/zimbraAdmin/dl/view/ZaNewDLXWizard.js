@@ -758,7 +758,7 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 		hMemberPool = 338;
 		wMemberPool = 396;
 	}
-	wRightPanel = (appNewUI) ? "100%" : "98%";
+	wRightPanel = "100%";
 	var case1 =
 	{
 		type : _CASE_,  caseKey : _tab1,  numCols : 2,  id : "dl_form_members",

@@ -672,10 +672,7 @@ ZaServerSessionListView.getCustomWidth = function(){
 
 ZaServerSessionListView.getCustomHeight = function(){
 	var oriHeight = ZATabCase_XFormItem.prototype.getCustomHeight.call(this);
-	if(appNewUI) {
         // ToDo Readlly bad here, we need to caculate it ourself
-		return oriHeight - 23; //40 is a balanced value
-	} else {
-		return oriHeight;
-	}
+	return oriHeight - 23; //40 is a balanced value
+
 }

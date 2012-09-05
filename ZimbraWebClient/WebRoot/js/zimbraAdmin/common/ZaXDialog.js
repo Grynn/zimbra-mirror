@@ -35,7 +35,7 @@ ZaXDialog = function(parent,className, title, w, h,iKeyName, contextId) {
 	}
 	
 	this._contextId = contextId || Dwt.getNextId(ZaId.DLG_UNDEF);
-	if (appNewUI && this.supportMinimize) {
+	if (this.supportMinimize) {
         this._supportMinimize = true;
     }
 	DwtDialog.call(this, {
@@ -83,7 +83,6 @@ ZaXDialog.helpURL = location.pathname + ZaUtil.HELP_URL + "administration_consol
 ZaXDialog.prototype = new DwtDialog;
 ZaXDialog.prototype.constructor = ZaXDialog;
 
-if (appNewUI) {
 ZaXDialog.TEMPLATE = "admin.Widgets#ZaBaseDialog";
 ZaXDialog.prototype.supportMinimize = false;
 ZaXDialog.prototype.registerFinishMethod = false;
@@ -187,7 +186,6 @@ function () {
 }
 
 
-}
 /**
 * A map of funciton references. Functions in this map are called one after another from 
 * {@link #getMyXForm} method.

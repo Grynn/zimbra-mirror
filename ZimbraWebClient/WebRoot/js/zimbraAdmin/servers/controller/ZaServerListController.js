@@ -167,10 +167,8 @@ function(ev) {
 		if(ev.item) {
 			this._selectedItem = ev.item;
 			ZaApp.getInstance().getServerController().show(ev.item);
-            if (appNewUI) {
-                var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_servers]);
-                ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name, null, false, false, ev.item, undefined, true);
-            }
+            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_servers]);
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, ev.item.name, null, false, false, ev.item, undefined, true);
 		}
 	} else {
 		this.changeActionsState();	
@@ -192,10 +190,8 @@ function(ev) {
 	if(this._contentView.getSelectionCount() == 1) {
 		var item = this._contentView.getSelection()[0];
 		ZaApp.getInstance().getServerController().show(item);
-        if (appNewUI) {
-            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_servers]);
-            ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item);
-        }
+        var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_servers]);
+        ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name, null, false, false, item);
 	}
 }
 

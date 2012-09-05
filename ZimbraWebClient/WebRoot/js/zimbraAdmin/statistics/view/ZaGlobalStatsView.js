@@ -23,35 +23,12 @@
 ZaGlobalStatsView = function(parent) {
 
     DwtTabView.call(this, parent);
-
     this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-
-
-//    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_MSG_COUNT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-//        this._msgCountPage = new ZaGlobalMessageCountPage(this);
-//        this.addTab(ZaMsg.TABT_InMsgs, this._msgCountPage);
-//    }
-//
-//    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_MSG_VOL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-//        this._msgsVolumePage = new ZaGlobalMessageVolumePage(this);
-//        this.addTab(ZaMsg.TABT_InData, this._msgsVolumePage);
-//    }
-//
-//    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_MSG_ASAV_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]){
-//        this._spamPage = new ZaGlobalSpamActivityPage(this);
-//        this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);
-//    }
-
     if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_ADVANCED_STATS_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]){
         this._advancedPage = new ZaGlobalAdvancedStatsPage(this);
         this.addTab(ZaMsg.TABT_Advanced_Stats, this._advancedPage);
     }
-//        this._mobileSyncPage = new ZaGlobalMobileSyncPage(this);
-//        this.addTab(ZaMsg.TABT_MobileSync_Stats, this._mobileSyncPage);
-    if(appNewUI){
-        this._tabBar.setVisible(false); //new UI doesn't need to show the inner tabbar
-    }
-
+    this._tabBar.setVisible(false); 
 }
 
 ZaGlobalStatsView.prototype = new DwtTabView;
@@ -272,9 +249,7 @@ function() {
 
     this.titleCell.id = Dwt.getNextId();
     this.titleCell.align="left";
-    //if (!appNewUI){
     this.titleCell.innerHTML = AjxStringUtil.htmlEncode(ZaMsg.NAD_GlobalStatistics);
-    //}
     this.titleCell.className="AdminTitleBar";
 }
 

@@ -115,71 +115,13 @@ function(appCtxt) {
 		} else {					
 			dashBoardController.show(true);
 		}
-	} else if(appNewUI) {
+	} else  {
         var ctl = this._appCtxt.getAppController().getOverviewPanelController();
         var homePath = ZaTree.getPathByArray([ZaMsg.OVP_home]);
 		ctl.getOverviewPanel().getFolderTree().setSelectionByPath(homePath);
         var historyObject = new ZaHistory(homePath, ZaMsg.OVP_home);
         ZaZimbraAdmin.getInstance().updateHistory(historyObject, true);
     }
-    else {
-		if(ZaSettings.TREE_ENABLED) {	
-			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATUS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-				ctl.getOverviewPanel().getFolderTree().setSelection(ctl.statusTi);
-				//this.getStatusViewController().show(false);
-			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW]) {
-				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-				ctl.getOverviewPanel().getFolderTree().setSelection(ctl.accountTi);		
-				//this._appCtxt.getAppController()._showAccountsView(ZaItem.ACCOUNT,null);
-			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW]) {
-				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-				ctl.getOverviewPanel().getFolderTree().setSelection(ctl.aliasTi);				
-			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW]) {
-				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-				ctl.getOverviewPanel().getFolderTree().setSelection(ctl.dlTi);				
-			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW]) {
-				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-				ctl.getOverviewPanel().getFolderTree().setSelection(ctl.resourceTi);				
-			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_LIST_VIEW]) {
-				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-				ctl.getOverviewPanel().getFolderTree().setSelection(ctl._serversTi);				
-			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW]) {
-				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-				ctl.getOverviewPanel().getFolderTree().setSelection(ctl._domainsTi);				
-			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_LIST_VIEW]) {
-				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-				ctl.getOverviewPanel().getFolderTree().setSelection(ctl._cosTi);				
-			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_VIEW]) {
-			    var serverArray = [];
-			    var serverList = ZaApp.getInstance().getServerList();
-			    var currentServer = null;
-			    if(serverList) {
-			    	serverArray = serverList.getArray();
-			    	if(serverArray && serverArray[0]) {
-			    		serverArray[0].load();
-			    		currentServer = serverArray[0];
-			    	}
-			    }
-				var curController = ZaApp.getInstance().getServerStatsController();			
-				curController.show(currentServer,false);				
-			}
-			
-			/*if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-				this.searchDomains("");
-			}	*/	
-		} else {
-			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW]) {
-				ZaController.prototype._showAccountsView.call(ZaItem.ACCOUNT,null);
-			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW]) {
-				ZaController.prototype._showAccountsView.call(ZaItem.ALIAS,null);
-			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW]) {
-				ZaController.prototype._showAccountsView.call(ZaItem.DL,null);
-			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW]) {
-				ZaController.prototype._showAccountsView.call(ZaItem.RESOURCE,null);
-			} 
-		}
-	}
 }
 
 ZaApp.prototype.getAppCtxt = 
@@ -895,8 +837,7 @@ function (ev) {
         // result, but the overpanel will show more results. It could potentially be combined into one search.
         this.getDomainListController().show ();
 
-        if(appNewUI)
-            ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTree (ev.getDetails());
+        ZaZimbraAdmin.getInstance().getOverviewPanelController().refreshRelatedTree (ev.getDetails());
 	}
 }
 
@@ -920,8 +861,7 @@ function (ev) {
 				this._cosList.remove(ev.getDetails());
 			}
 
-            if(appNewUI)
-                ZaZimbraAdmin.getInstance().refreshHistoryTreeByDelete(ev.getDetails());
+            ZaZimbraAdmin.getInstance().refreshHistoryTreeByDelete(ev.getDetails());
 		}
 		if(this._cosListChoices == null) {
 			this._cosListChoices = new XFormChoices(this._cosList.getArray(), XFormChoices.OBJECT_LIST, "id", "name");	
@@ -1092,34 +1032,12 @@ function () {
 ZaApp.prototype.pushView =
 function(name, openInNewTab, openInSearchTab) {
 	this._currentViewId = this._appViewMgr.pushView(name);
-	//may need to select the corresponding tab, but will cause deadlock
-	/* 
-	var tabGroup = this.getTabGroup () ;
-	tabGroup.selectTab (tabGroup.getTabById(this._currentViewId)) ;
-	*/
-	//check if there is a tab associated with the view
-    if (!appNewUI) {
-	var tabGroup = this.getTabGroup () ;
-	var cTab = tabGroup.getTabById(this._currentViewId);
-	if (cTab) {
-		this.updateTab (cTab, this._currentViewId) ;
-	}else if (openInNewTab) {
-		this.createTab (this._currentViewId) ;
-	}else if (openInSearchTab) {
-		this.updateTab (tabGroup.getSearchTab(), this._currentViewId) ; 
-	}else {
-		this.updateTab (tabGroup.getMainTab(), this._currentViewId) ; 
-	}
-    }
 }
 
 ZaApp.prototype.popView =
 function() {
 	var oldCurrentViewId = this._currentViewId ;
 	this._currentViewId = this._appViewMgr.popView();
-    if (!appNewUI) {
-	this.getTabGroup().removeCurrentTab(true) ;
-    }
 	//dispose the view and remove the controller
 	this.disposeView (oldCurrentViewId);
 	
