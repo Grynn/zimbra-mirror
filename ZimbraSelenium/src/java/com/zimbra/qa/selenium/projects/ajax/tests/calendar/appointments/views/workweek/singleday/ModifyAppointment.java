@@ -86,6 +86,7 @@ public class ModifyAppointment extends CalendarWorkWeekTest {
         apptForm.zToolbarPressButton(Button.B_SAVEANDCLOSE);
         
         // Use GetAppointmentRequest to verify the changes are saved
+        SleepUtil.sleepSmall(); //test fails without sleep
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ apptId +"'/>");
         ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:comp", "name", editApptSubject), true, "");
         ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:desc", null, editApptBody), true, "");

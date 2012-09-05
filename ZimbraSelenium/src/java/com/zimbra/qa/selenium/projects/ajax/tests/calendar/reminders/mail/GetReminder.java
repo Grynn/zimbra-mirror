@@ -28,7 +28,7 @@ public class GetReminder extends AjaxCommonTest {
 	
 	@Bugs(ids = "69132")
 	@Test(	description = "Verify reminder popup when in the mail app",
-			groups = { "functional" })
+			groups = { "implement" })
 	public void GetReminder_01() throws HarnessException {
 		
 		// Create the appointment on the server

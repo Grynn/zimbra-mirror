@@ -143,7 +143,7 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
 		
 		
 		//-- Verification
-		
+		SleepUtil.sleepSmall(); //test fails without sleep
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetAllDayApptLocator(apptSubject)), false, "Verify all-day appointment is deleted");
 	}
 	

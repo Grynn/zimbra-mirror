@@ -386,6 +386,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 		//-- Verification
 		
 		// Verify the appointment does not appear in the organizers calendar
+		SleepUtil.sleepSmall(); //test fails without sleep
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify meeting is deleted from organizer's calendar");
 		
 		// Verify meeting is deleted from attendee's calendar && receive meeting cancellation message

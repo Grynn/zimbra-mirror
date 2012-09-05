@@ -101,6 +101,7 @@ public class TagAppointment extends AjaxCommonTest {
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_TAG);
         app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_REMOVETAG);
+        SleepUtil.sleepSmall();
         
         // Verify appointment is not tagged
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest xmlns='urn:zimbraMail' id='" + apptId + "'/>");
