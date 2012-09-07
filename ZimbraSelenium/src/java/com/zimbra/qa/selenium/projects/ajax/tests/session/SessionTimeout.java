@@ -47,21 +47,20 @@ public class SessionTimeout extends PrefGroupMailByMessageTest {
 		// User will automatically be logged out
 		ZimbraAccount a = app.zGetActiveAccount();
 		SleepUtil.sleep(60000);
+		
+		app.zPageLogin.zWaitForActive();
 		app.zPageLogin.zLogin(a);
 		
 		// Confirm that the mailform is still visible
-		ZAssert.assertTrue(mailform.zIsActive(), "Confirm that the mailform is still visible");
+		ZAssert.assertFalse(mailform.zIsActive(), "Confirm that the mailform is no longer visible");
 		
 		
-		// Send the message
-		mailform.zSubmit();
-
-
-		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
-
+		MailItem draft = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		ZAssert.assertNotNull(draft, "Verify the draft exists");
+		
 		// TODO: add checks for TO, Subject, Body
-		ZAssert.assertEquals(received.dSubject, subject, "Verify the subject field is correct");
-		ZAssert.assertStringContains(received.dBodyText, body, "Verify the body field is correct");
+		ZAssert.assertEquals(draft.dSubject, subject, "Verify the subject field is correct");
+		ZAssert.assertStringContains(draft.dBodyText, body, "Verify the body field is correct");
 		
 	}
 

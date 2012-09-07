@@ -51,15 +51,17 @@ public class AuthTokenTimeout extends PrefGroupMailByMessageTest {
 		mailform.zSubmit();
 
 		// User will automatically be logged out
+		app.zPageLogin.zWaitForActive();
 		app.zPageLogin.zLogin(a);
 		
 		
 
-		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
-
+		MailItem draft = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		ZAssert.assertNotNull(draft, "Verify the draft exists");
+		
 		// TODO: add checks for TO, Subject, Body
-		ZAssert.assertEquals(received.dSubject, subject, "Verify the subject field is correct");
-		ZAssert.assertStringContains(received.dBodyText, body, "Verify the body field is correct");
+		ZAssert.assertEquals(draft.dSubject, subject, "Verify the subject field is correct");
+		ZAssert.assertStringContains(draft.dBodyText, body, "Verify the body field is correct");
 		
 	}
 
