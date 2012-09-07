@@ -15,10 +15,8 @@ PATCH	:=
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7354.patch; patch -g0 -N -p1 < ../patches/ITS7356.patch; patch -g0 -N -p1 < ../patches/mdb-write.patch;
 else
 	include $(OPENLDAP_ROOT)/../versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS7354.patch; patch -g0 -N -p1 < ../patches/ITS7356.patch; patch -g0 -N -p1 < ../patches/mdb-write.patch;
 endif
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
