@@ -5,9 +5,10 @@
         <tstamp>
           <format property="current.time" pattern="yyyyMMddhhmmss"/>
         </tstamp>
-	<property name="media_win32" value="zdesktop_${offline.filever}${offline.branch}_b${offline.buildid}_${current.time}_${offline.suffix_win32}"/>
-	<property name="media_macos" value="zdesktop_${offline.filever}${offline.branch}_b${offline.buildid}_${current.time}_${offline.suffix_macos}"/>
-	<property name="media_linux" value="zdesktop_${offline.filever}${offline.branch}_b${offline.buildid}_${current.time}_${offline.suffix_linux}"/>
+	<property name="media_base" value="zdesktop_${offline.filever}${offline.branch}_b${offline.buildid}"/>
+	<property name="media_win32" value="${media_base}_${current.time}_${offline.suffix_win32}"/>
+	<property name="media_macos" value="${media_base}_${current.time}_${offline.suffix_macos}"/>
+	<property name="media_linux" value="${media_base}_${current.time}_${offline.suffix_linux}"/>
 	<property name="media_linux_dir" value="zdesktop_${offline.filever}${offline.branch}_b${offline.buildid}_linux_i686"/>
 	<property name="build.dir" location="../ZimbraBuild/i386" />
 	<property name="pmdoc.dir" location="./build/macos_installer.pmdoc" />
@@ -217,7 +218,7 @@
 		</exec>
 	</target>
 	
-	<target name="gen-update-php">
+	<target name="gen-update-php" depends="gen-filenames">
 		<copy file="src/installer/update.php" todir="${build.dir}" overwrite="true"/>
         <copy file="src/installer/zd-versions.php" todir="${build.dir}" overwrite="true"/>
         <copy file="src/installer/zd-versions-beta.template" todir="${build.dir}" overwrite="true"/>
@@ -225,12 +226,24 @@
 		<property name="channel.file" value="${build.dir}/zd-versions-${offline.channel}.template"/>
 		
         <copy file="src/installer/zd-versions-build.template" tofile="${channel.file}" overwrite="true"/>
+		<antcall target="replace-update-tokens" inheritall="true"/>
+	</target>
 		
+	<target name="replace-update-tokens">	
 		<replace file="${channel.file}" token="@version@" value="${offline.version}"/>
+		<propertyregex property="offline.version.major" input="${offline.version}" regexp="(\d*)\.(\d*)\.(\d*)" select="\1" casesensitive="false" />
+        <propertyregex property="offline.version.minor" input="${offline.version}" regexp="(\d*)\.(\d*)\.(\d*)" select="\2" casesensitive="false" />
+        <propertyregex property="offline.version.micro" input="${offline.version}" regexp="(\d*)\.(\d*)\.(\d*)" select="\3" casesensitive="false" />
+		<propertyregex property="timestamp_macos" input="${mac.installer.file}" regexp=".*(_b${offline.buildid})_(\d*)_${offline.suffix_macos}" select="\2" casesensitive="false"/>
+        <propertyregex property="timestamp_win32" input="${win.installer.file}" regexp=".*(_b${offline.buildid})_(\d*)_${offline.suffix_win32}" select="\2" casesensitive="false"/>
+        <propertyregex property="timestamp_linux" input="${linux.installer.file}" regexp=".*(_b${offline.buildid})_(\d*)_${offline.suffix_linux}" select="\2" casesensitive="false"/>
+		<replace file="${channel.file}" token="@version.major@" value="${offline.version.major}"/>
+        <replace file="${channel.file}" token="@version.minor@" value="${offline.version.minor}"/>
+        <replace file="${channel.file}" token="@version.micro@" value="${offline.version.micro}"/>
+        <replace file="${channel.file}" token="@timestamp_macos@" value="${timestamp_macos}"/>
+        <replace file="${channel.file}" token="@timestamp_win32@" value="${timestamp_win32}"/>
+        <replace file="${channel.file}" token="@timestamp_linux@" value="${timestamp_linux}"/>
 		<replace file="${channel.file}" token="@buildid@" value="${offline.buildid}"/>
-		<replace file="${channel.file}" token="@media_win32@" value="${media_win32}"/>
-		<replace file="${channel.file}" token="@media_macos@" value="${media_macos}"/>
-		<replace file="${channel.file}" token="@media_linux@" value="${media_linux}"/>
         <replace file="${channel.file}" token="@channel@" value="${offline.channel}"/>
         <replace file="${channel.file}" token="@license@" value="${offline.aus.license}"/>
         <replace file="${channel.file}" token="@details@" value="${offline.aus.details}"/>
@@ -238,26 +251,29 @@
         <replace file="${channel.file}" token="@buildtype@" value="${offline.relabel}"/>
         <replace file="${channel.file}" token="@extver@" value="${offline.aus.extver}"/>
 	
-		<if><available file="${build.dir}/${media_win32}" type="file"/><then>
-			<checksum file="${build.dir}/${media_win32}" property="hash_win32"/>
-			<length file="${build.dir}/${media_win32}" property="size_win32"/>
+		<if><available file="${build.dir}/${win.installer.file}" type="file"/><then>
+			<checksum file="${build.dir}/${win.installer.file}" property="hash_win32"/>
+			<length file="${build.dir}/${win.installer.file}" property="size_win32"/>
 			<replace file="${channel.file}" token="@hash_win32@" value="${hash_win32}"/>
 			<replace file="${channel.file}" token="@size_win32@" value="${size_win32}"/>
 		</then></if>
 	
-		<if><available file="${build.dir}/${media_macos}" type="file"/><then>
-			<checksum file="${build.dir}/${media_macos}" property="hash_macos"/>
-			<length file="${build.dir}/${media_macos}" property="size_macos"/>
+		<if><available file="${build.dir}/${mac.installer.file}" type="file"/><then>
+			<checksum file="${build.dir}/${mac.installer.file}" property="hash_macos"/>
+			<length file="${build.dir}/${mac.installer.file}" property="size_macos"/>
 			<replace file="${channel.file}" token="@hash_macos@" value="${hash_macos}"/>
 			<replace file="${channel.file}" token="@size_macos@" value="${size_macos}"/>
 		</then></if>
 	
-		<if><available file="${build.dir}/${media_linux}" type="file"/><then>
-			<checksum file="${build.dir}/${media_linux}" property="hash_linux"/>
-			<length file="${build.dir}/${media_linux}" property="size_linux"/>
+		<if><available file="${build.dir}/${linux.installer.file}" type="file"/><then>
+			<checksum file="${build.dir}/${linux.installer.file}" property="hash_linux"/>
+			<length file="${build.dir}/${linux.installer.file}" property="size_linux"/>
 			<replace file="${channel.file}" token="@hash_linux@" value="${hash_linux}"/>
 			<replace file="${channel.file}" token="@size_linux@" value="${size_linux}"/>
 		</then></if>
+        <replace file="${channel.file}" token="@media_win32@" value="${win.installer.file}"/>
+        <replace file="${channel.file}" token="@media_macos@" value="${mac.installer.file}"/>
+        <replace file="${channel.file}" token="@media_linux@" value="${linux.installer.file}"/>
 		<loadfile srcFile="${build.dir}/zd-versions-beta.template" property="zd-beta-versions"/>
         <loadfile srcFile="${build.dir}/zd-versions-release.template" property="zd-release-versions"/>
         <replace file="${build.dir}/zd-versions.php" token="@zd-beta-versions@" value="${zd-beta-versions}"/>
@@ -276,6 +292,32 @@
 		<if><available file="${build.dir}/${media_win32}" type="file"/><then>
 			<copy tofile="${build.dir}/zdesktop_win32.msi" file="${build.dir}/${media_win32}" overwrite="true"/>
 		</then></if>
+	</target>
+
+	<target name="gen-update-xml" depends="gen-filenames">
+        <property name="channel.file" value="${build.dir}/zd7.xml"/>
+        
+        <copy file="src/installer/zd7.xml.template" tofile="${channel.file}" overwrite="true"/>
+        <antcall target="replace-update-tokens" inheritall="true"/>
+	</target>
+	
+	<target name="gen-filenames">
+	  <fileset id="mac.installers" dir="${build.dir}">
+	  	<include name="${media_base}*${offline.suffix_macos}"/>
+	  </fileset>
+	  <property name="mac.installer.file" refid="mac.installers"/>
+      <fileset id="win.installers" dir="${build.dir}">
+        <include name="${media_base}*${offline.suffix_win32}"/>
+      </fileset>
+      <property name="win.installer.file" refid="win.installers"/>
+      <fileset id="linux.installers" dir="${build.dir}">
+        <include name="${media_base}*${offline.suffix_linux}"/>
+      </fileset>
+      <property name="linux.installer.file" refid="linux.installers"/>
+		
+	  <echo message="Mac installer ${mac.installer.file}"/>
+      <echo message="Windows installer ${win.installer.file}"/>
+      <echo message="Linux installer ${linux.installer.file}"/>
 	</target>
 </project>
 

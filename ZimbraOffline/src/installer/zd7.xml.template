@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<versions> 
+<version majorversion="@version.major@" minorversion="@version.minor@" microversion="@version.micro@" releasetype="@buildtype@" buildnumber="@buildid@" platform="MACOSXx86" file_media="@media_macos@" extension_version="@extver@" hash="@hash_macos@" buildtype="@buildtype@" release="@timestamp_macos@" critical="0" download_url_prefix="@download_prefix@" details_url="@details@" license_url="@license@" size="@size_macos@" description=""/>
+<version majorversion="@version.major@" minorversion="@version.minor@" microversion="@version.micro@" releasetype="@buildtype@" buildnumber="@buildid@" platform="WIN32" file_media="@media_win32@" extension_version="@extver@" hash="@hash_win32@" buildtype="@buildtype@" release="@timestamp_win32@" critical="0" download_url_prefix="@download_prefix@" details_url="@details@" license_url="@license@" size="@size_win32@" description=""/>
+<version majorversion="@version.major@" minorversion="@version.minor@" microversion="@version.micro@" releasetype="@buildtype@" buildnumber="@buildid@" platform="LINUX" file_media="@media_linux@" extension_version="@extver@" hash="@hash_linux@" buildtype="@buildtype@" release="@timestamp_linux@" critical="0" download_url_prefix="@download_prefix@" details_url="@details@" license_url="@license@" size="@size_linux@" description=""/>
+</versions>
