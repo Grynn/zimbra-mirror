@@ -12,6 +12,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
+
 /**
  * @author Matt Rhoades
  * 
@@ -52,6 +53,7 @@ public class PageTasks extends AbsTab {
 		public static final String zPrintTaskMenuItem ="css=div[id='zm__Tasks'] tr[id^='POPUP_PRINT_TASK'] td[id$='_title']";
 		public static final String zPrintTaskDropDown="css=td#zb__TKL-main__PRINT_dropdown>div";
 		public static final String zPrintTaskFolder ="css=tr[id='POPUP_PRINT_TASKFOLDER'] td[id$='_title']";
+		public static final String zCloseButton = "css=div[id='zb__TKV__CLOSE']";
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -256,7 +258,13 @@ public class PageTasks extends AbsTab {
 
 			// FALL THROUGH
 
-		} else if (action == Action.A_MAIL_UNCHECKBOX) {
+		} else if (action == Action.A_DOUBLECLICK) {
+			
+			// double-click on the item
+			this.sDoubleClick(itemLocator);
+			page = null;
+			
+			}else if (action == Action.A_MAIL_UNCHECKBOX) {
 
 			String selectlocator = itemLocator + " div[id$='__se']";
 			if (!this.sIsElementPresent(selectlocator))
@@ -515,7 +523,12 @@ public class PageTasks extends AbsTab {
 			page = null;
 			//page = new FormTaskNew(this.MyApplication);
 
-		} else if (button == Button.B_TAG) {
+		}else if (button == Button.B_CLOSE) {
+			locator = Locators.zCloseButton;
+			page = null;
+			//page = new FormTaskNew(this.MyApplication);
+
+		}else if (button == Button.B_TAG) {
 
 			// For "TAG" without a specified pulldown option, just click on the
 			// pulldown
