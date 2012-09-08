@@ -66,7 +66,7 @@ MODULE_BUILD_LIBS       := \
 	Module::Load::Conditional \
 	IPC::Cmd \
 	ExtUtils::CBuilder \
-	S/SM/SMUELLER/ExtUtils-ParseXS-3.03_03.tar.gz \
+	S/SM/SMUELLER/ExtUtils-ParseXS-3.15.tar.gz \
 	Test::Harness \
 	D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz
 
