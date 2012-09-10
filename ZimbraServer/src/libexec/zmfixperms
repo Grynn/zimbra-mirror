@@ -402,7 +402,7 @@ if [ -L ${zimbra_home}/cbpolicyd ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/cbpolicyd"
   chown -fR ${root_user}:${root_group} ${zimbra_home}/cbpolicyd*
   if [ -d ${zimbra_home}/cbpolicyd/bin ]; then
-    for i in ${zimbra_home}/cbpolicyd/bin/* ${zimbra_home}/cbpolicyd/share/database/*.tsql; do
+    for i in ${zimbra_home}/cbpolicyd/bin/* ${zimbra_home}/cbpolicyd/share/database/*tsql; do
       chmod 755 ${i}
     done
   fi
