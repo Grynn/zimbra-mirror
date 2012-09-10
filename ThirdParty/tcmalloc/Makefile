@@ -24,7 +24,7 @@ endif
 
 TCMALLOC_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/tcmalloc/tcmalloc-$(TCMALLOC_VERSION).tgz
 
-files	:= $(wildcard src/google-perftools-$(TCMALLOC_VERSION).tar.gz)
+files	:= $(wildcard src/gperftools-$(TCMALLOC_VERSION).tar.gz)
 
 all: checksrc allclean build tar
 
@@ -32,8 +32,8 @@ checksrc:
 	$(if $(files), @echo "", exit 1)
 
 build:
-	(tar xzf src/google-perftools-$(TCMALLOC_VERSION).tar.gz; \
-	cd google-perftools-$(TCMALLOC_VERSION); \
+	(tar xzf src/gperftools-$(TCMALLOC_VERSION).tar.gz; \
+	cd gperftools-$(TCMALLOC_VERSION); \
 	CFLAGS="-g -O2" \
 	CPPFLAGS="-I/usr/include" \
 	CXXFLAGS="-g -O2 -I/usr/include" \
@@ -53,7 +53,7 @@ p4edit: $(TCMALLOC_TGZ_TARGET)
 	
 
 clean:
-	/bin/rm -rf google-perftools-$(TCMALLOC_VERSION)
+	/bin/rm -rf gperftools-$(TCMALLOC_VERSION)
 
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION)
