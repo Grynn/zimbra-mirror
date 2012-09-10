@@ -9,7 +9,9 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
 import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail.PageMailView;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail.Locators;
 
 
@@ -96,6 +98,20 @@ public class GetExternalIMAP extends PrefGroupMailByMessageTest {
 		app.zPageLogin.zLogin(active);
 		startingPage.zNavigateTo();
 		
+		AbsDialog errorDialog = app.zPageMain.zGetErrorDialog(DialogErrorID.Zimbra);
+		int i = 0;
+		do {
+			if ( errorDialog.zIsActive() ) {
+				break; 
+			}
+			SleepUtil.sleep(SleepUtil.SleepGranularity);
+			i++;
+		} while (i < 5);		
+		
+		if ( (errorDialog != null) && (errorDialog.zIsActive()) ) {
+		    // Dismiss the dialog and carry on
+		    errorDialog.zClickButton(Button.B_OK);
+		}
 
 		
 		// Click on the folder and select Sync
@@ -117,9 +133,25 @@ public class GetExternalIMAP extends PrefGroupMailByMessageTest {
 		app.zGetActiveAccount().soapSend("<GetFolderRequest xmlns='urn:zimbraMail'/>");
 		String externalInbox = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='"+ foldername +"']//mail:folder[@name='INBOX']", "id");
 
-		// Click on the INBOX
-		app.zTreeMail.zClickAt("css=td[id='zti__main_Mail__" + externalInbox +"_textCell']", "");
+		String locator = "css=td[id='zti__main_Mail__" + externalInbox +"_textCell']";
+		app.zPageMail.zWaitForElementPresent(locator);
 		
+		// Click on the INBOX
+		app.zTreeMail.zClickAt(locator, "");
+		
+		String listLocator = null;
+		String rowLocator = null;
+		if (app.zPageMail.zGetPropMailView() == PageMailView.BY_MESSAGE) {
+		    	listLocator = "css=div[id='zl__TV-main__rows']";
+			rowLocator = "div[id^='zli__TV-main__']";
+		} else {
+			listLocator = "css=div[id='zl__CLV-main__rows']";
+			rowLocator = "div[id^='zli__CLV-main__']";
+		}
+
+		// Make sure the list exists
+		app.zPageMail.zWaitForElementPresent(listLocator+ " " + rowLocator);
+	
 		// Get the messages
 		List<MailItem> messages = app.zPageMail.zListGetMessages();
 		ZAssert.assertNotNull(messages, "Verify the message list exists");
@@ -203,6 +235,20 @@ public class GetExternalIMAP extends PrefGroupMailByMessageTest {
 		startingPage.zNavigateTo();
 		
 
+		AbsDialog errorDialog = app.zPageMain.zGetErrorDialog(DialogErrorID.Zimbra);
+		int i = 0;
+		do {
+			if ( errorDialog.zIsActive() ) {
+				break; 
+			}
+			SleepUtil.sleep(SleepUtil.SleepGranularity);
+			i++;
+		} while (i < 5);		
+		
+		if ( (errorDialog != null) && (errorDialog.zIsActive()) ) {
+		    // Dismiss the dialog and carry on
+		    errorDialog.zClickButton(Button.B_OK);
+		}
 		
 		// Click on the folder and select Sync
 		
@@ -246,6 +292,8 @@ public class GetExternalIMAP extends PrefGroupMailByMessageTest {
         	+		"</m>"
 			+	"</AddMsgRequest>");
 
+		SleepUtil.sleepMedium();
+		
 		// Click Refresh
 		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
 
