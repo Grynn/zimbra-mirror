@@ -98,6 +98,7 @@ public class GetExternalIMAP extends PrefGroupMailByMessageTest {
 		app.zPageLogin.zLogin(active);
 		startingPage.zNavigateTo();
 		
+		/* TODO: ... debugging to be removed */
 		AbsDialog errorDialog = app.zPageMain.zGetErrorDialog(DialogErrorID.Zimbra);
 		int i = 0;
 		do {
@@ -133,12 +134,13 @@ public class GetExternalIMAP extends PrefGroupMailByMessageTest {
 		app.zGetActiveAccount().soapSend("<GetFolderRequest xmlns='urn:zimbraMail'/>");
 		String externalInbox = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='"+ foldername +"']//mail:folder[@name='INBOX']", "id");
 
+		/* TODO: ... debugging to be removed */
 		String locator = "css=td[id='zti__main_Mail__" + externalInbox +"_textCell']";
 		app.zPageMail.zWaitForElementPresent(locator);
 		
 		// Click on the INBOX
 		app.zTreeMail.zClickAt(locator, "");
-		
+		/* TODO: ... debugging to be removed */
 		String listLocator = null;
 		String rowLocator = null;
 		if (app.zPageMail.zGetPropMailView() == PageMailView.BY_MESSAGE) {
@@ -234,7 +236,7 @@ public class GetExternalIMAP extends PrefGroupMailByMessageTest {
 		app.zPageLogin.zLogin(active);
 		startingPage.zNavigateTo();
 		
-
+		/* TODO: ... debugging to be removed */
 		AbsDialog errorDialog = app.zPageMain.zGetErrorDialog(DialogErrorID.Zimbra);
 		int i = 0;
 		do {

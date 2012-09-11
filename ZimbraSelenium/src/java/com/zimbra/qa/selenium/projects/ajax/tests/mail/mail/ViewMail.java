@@ -385,7 +385,7 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 		
 		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/Bugs/Bug67854";
 		final String subject = "subject13218526621403";
-		final String content = "The message has no content.";
+		final String content = "The message has no text content.";
 		
 		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFile));
 

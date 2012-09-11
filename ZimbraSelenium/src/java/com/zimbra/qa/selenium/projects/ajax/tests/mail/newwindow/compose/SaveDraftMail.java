@@ -43,6 +43,9 @@ public class SaveDraftMail extends PrefGroupMailByMessageTest {
 			window.zSetWindowTitle("Compose");
 			window.zWaitForActive();		// Make sure the window is there
 
+			/* TODO: ... debugging to be removed */
+			window.waitForComposeWindow();
+		
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 
 			// Fill out the form with the data
@@ -105,6 +108,9 @@ public class SaveDraftMail extends PrefGroupMailByMessageTest {
 			window.zSetWindowTitle("Compose");
 			window.zWaitForActive();		// Make sure the window is there
 
+			/* TODO: ... debugging to be removed */
+			window.waitForComposeWindow();
+		
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 
 			// Fill out the form with the data
