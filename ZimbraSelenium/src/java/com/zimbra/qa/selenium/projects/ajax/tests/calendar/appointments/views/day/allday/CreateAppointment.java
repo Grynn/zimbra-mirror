@@ -45,8 +45,6 @@ public class CreateAppointment extends AjaxCommonTest{
 		// Open the new mail form
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		ZAssert.assertNotNull(apptForm, "Verify the new form opened");
-
-		// Fill the data and submit it
 		apptForm.zFill(appt);
 		apptForm.zSubmit();
 			
@@ -57,6 +55,7 @@ public class CreateAppointment extends AjaxCommonTest{
 		ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:comp", "allDay", "1"), true, "");
 		
 		// Verify in UI
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetAllDayApptLocator(apptSubject)), true, "Verify all-day appointment present in UI");
 
 	}
