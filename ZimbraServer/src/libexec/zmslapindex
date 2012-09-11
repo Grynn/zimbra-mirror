@@ -33,8 +33,8 @@ if [ $u != ${zimbra_user} ]; then
     exit 1
 fi
 
-if [ x$1 = "x" -o x$1 = "x-h" -o x$1 = "x--help" ]; then
-	echo "USAGE: Imports LDAP databases"
+if [ x$1 = "x-h" -o x$1 = "x--help" ]; then
+	echo "USAGE: Indexes LDAP databases"
 	echo "Main database: zmslapindex <key>"
 	echo "Config database: zmslapindex -c <key>"
 	echo "Accesslog database: zmslapindex -a <key>"
