@@ -23,7 +23,7 @@ source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars \
 	zimbra_home 
 
-if [ ! -x /opt/zimbra/openldap/sbin/slapadd ]; then
+if [ ! -x /opt/zimbra/openldap/sbin/slapindex ]; then
 	exit 0
 fi
 
@@ -35,9 +35,9 @@ fi
 
 if [ x$1 = "x" -o x$1 = "x-h" -o x$1 = "x--help" ]; then
 	echo "USAGE: Imports LDAP databases"
-	echo "Main database: zmslapadd <FILE>"
-	echo "Config database: zmslapadd -c <FILE>"
-	echo "Accesslog database: zmslapadd -a <FILE>"
+	echo "Main database: zmslapindex <key>"
+	echo "Config database: zmslapindex -c <key>"
+	echo "Accesslog database: zmslapindex -a <key>"
 	exit 1
 fi
 
@@ -46,22 +46,22 @@ CONFIG=no
 ALOG=no
 if [ x$1 = "x-c" ]; then
 	CONFIG=yes
-	SRC=$2
+	KEY=$2
 elif [ x$1 = "x-a" ]; then
 	ALOG=yes
-	SRC=$2
+	KEY=$2
 else
-	SRC=$1
+	KEY=$1
 fi
 
 if [ x$CONFIG = "xyes" ]; then
-	${zimbra_home}/openldap/sbin/slapadd -q -F ${zimbra_home}/data/ldap/config -n 0 -l $SRC
+	${zimbra_home}/openldap/sbin/slapindex -q -F ${zimbra_home}/data/ldap/config -n 0 $KEY
 	RETVAL=$?
 elif [ x$ALOG = "xyes" ]; then
-	${zimbra_home}/openldap/sbin/slapadd -q -F ${zimbra_home}/data/ldap/config -b "cn=accesslog" -l $SRC
+	${zimbra_home}/openldap/sbin/slapindex -q -F ${zimbra_home}/data/ldap/config -b "cn=accesslog" $KEY
 	RETVAL=$?
 else
-	${zimbra_home}/openldap/sbin/slapadd -w -q -F ${zimbra_home}/data/ldap/config -b "" -l $SRC
+	${zimbra_home}/openldap/sbin/slapindex -q -F ${zimbra_home}/data/ldap/config -b "" $KEY
 	RETVAL=$?
 fi
 
