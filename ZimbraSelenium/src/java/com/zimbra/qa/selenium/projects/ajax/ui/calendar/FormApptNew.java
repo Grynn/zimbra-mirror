@@ -174,6 +174,13 @@ public class FormApptNew extends AbsForm {
 			page = null;
 
 			// FALL THROUGH
+		
+		} else if (button == Button.B_CLOSE) {
+
+			locator = Locators.Button_Close;
+			page = null;
+
+			// FALL THROUGH
 
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
