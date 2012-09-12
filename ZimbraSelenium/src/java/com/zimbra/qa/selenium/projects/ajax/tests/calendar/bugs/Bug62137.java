@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.util.ZDate;
 import com.zimbra.qa.selenium.framework.util.ZTimeZone;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraURI;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 
 public class Bug62137 extends CalendarWorkWeekTest {
@@ -62,8 +63,9 @@ public class Bug62137 extends CalendarWorkWeekTest {
 
         
         // Reload the application, with app=calendar query parameter
-        // TODO: need to resolve building the URL ... this test will fail, if there are existing query parameters in the URL
-        app.zPageCalendar.sOpen(ZimbraSeleniumProperties.getBaseURL() + "?app=calendar");
+        ZimbraURI uri = new ZimbraURI(ZimbraURI.getBaseURI());
+        uri.addQuery("app", "calendar");
+        app.zPageCalendar.sOpen(uri.toString());
         
         
         

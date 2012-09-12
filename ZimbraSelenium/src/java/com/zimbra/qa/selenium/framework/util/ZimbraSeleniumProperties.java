@@ -2,17 +2,14 @@
 package com.zimbra.qa.selenium.framework.util;
 
 import java.io.File;
-import java.net.*;
-import java.util.*;
-import java.util.Map.Entry;
+import java.net.InetAddress;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-import org.apache.commons.configuration.*;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.log4j.*;
-
-import com.zimbra.qa.selenium.framework.util.performance.*;;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 public class ZimbraSeleniumProperties {
 	private static final Logger logger = LogManager.getLogger(ZimbraSeleniumProperties.class);
@@ -285,75 +282,11 @@ public class ZimbraSeleniumProperties {
 	 * 
 	 */
 	public static String getLogoutURL() {
-		// get Base URL
-		String url =  getBaseURL();
-		if(url == null){
-			return "";
-		}
-		URI uri = URI.create(url);
-		StringBuilder sb = new StringBuilder();
-		sb.append(URIUtils.extractHost(uri));
-		try {		
-			Map<String, String> query = getUrlParameters(uri);
-			query.put("loginOp", "logout");	
-			String params = buildQueryFromMap(query);
-			if(params !=null && !params.isEmpty()){
-				sb.append("?");
-				sb.append(params);
-			}
-		} catch (Exception ex) {
-			 logger.info(ex);
-		}	
-		url = sb.toString();
-		return url;
-	}
-	
-	/**
-	 * Get URL parameters
-	 * @param uri
-	 * @return Map of arguments
-	 * 
-	 */
-	public static Map<String, String> getUrlParameters(URI uri) {
-		 Map<String, String> params =  new HashMap<String, String>();
-		 if (uri == null) {
-		        return params;
-		 }		
-		 try {
-			 for (NameValuePair param : URLEncodedUtils.parse(uri, "UTF-8")) {
-            	params.put(param.getName(), param.getValue());
-            }           
-        } catch (Exception ex) {
-            logger.error(ex);
-        }
-        return params;
-    }
-	
-	/**
-	 * Build Query from the map
-	 * @return String
-	 *  
-	 */
-	public static String buildQueryFromMap(Map<String, String> queryMap){
-		// Build the query from the map
-		StringBuilder sb = null;
-		for (Entry<String, String> set : queryMap.entrySet()) {
-			String q;
-			if ( set.getValue() == null ) {
-				q = set.getKey(); // If value is null, just use the key as the parameter value
-			} else {
-				q = set.getKey() +"="+ set.getValue();
-			}
-			if ( sb == null ) {
-				sb = new StringBuilder();
-				sb.append(q);
-			} else {
-				sb.append('&').append(q);
-			}
-		}
-		String query = ( sb == null ? null : sb.toString());
 		
-		return query;
+		ZimbraURI uri = new ZimbraURI(ZimbraURI.getBaseURI());
+		uri.addQuery("loginOp", "logout");
+		return (uri.toString());
+
 	}
 	
 	/**
@@ -363,143 +296,11 @@ public class ZimbraSeleniumProperties {
 	 * @throws HarnessException 
 	 */
 	public static String getBaseURL() {
-		String scheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
-		String userinfo = null;
-		String host = ZimbraSeleniumProperties.getStringProperty("server.host", "localhost");
-		String port = ZimbraSeleniumProperties.getStringProperty("server.port", "7070");
-		String path = null;
-		Map<String, String> queryMap = new HashMap<String, String>();
-		String fragment = null;
 		
-		if ( CodeCoverage.getInstance().isEnabled() ) {
-			queryMap.putAll(CodeCoverage.getInstance().getQueryMap());
-		}
+		return (ZimbraURI.getBaseURI().toString());
 		
-		if ( PerfMetrics.getInstance().Enabled ) {
-			queryMap.putAll(PerfMetrics.getInstance().getQueryMap());
-		}
-		
-		if ( appType == AppType.DESKTOP ) {
-		   logger.info("AppType is: " + appType);
-
-		      ZimbraDesktopProperties zdp = ZimbraDesktopProperties.getInstance();
-		      int maxRetry = 30;
-		      int retry = 0;
-		      while (retry < maxRetry && zdp.getSerialNumber() == null) {
-		         logger.debug("Local Config file is still not ready");
-		         SleepUtil.sleep(1000);
-		         retry ++;
-		         zdp = ZimbraDesktopProperties.getInstance();
-		      }
-
-		      port = zdp.getConnectionPort();
-		      host = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
-		      path = "/desktop/login.jsp";
-		      queryMap.put("at", zdp.getSerialNumber());
-
-		}
-
-		if ( appType == AppType.AJAX ) {
-			
-			// FALL THROUGH
-
-		}
-
-		if ( appType == AppType.HTML ) {
-			
-			path ="/h/";
-
-		}
-
-		if ( appType == AppType.MOBILE ) {
-
-			path ="/m/";
-			
-		}
-
-		if ( appType == AppType.ADMIN ) {
-		
-			scheme = "https";
-			path = "/zimbraAdmin/";
-			port = "7071";
-
-		}
-
-		if ( appType == AppType.OCTOPUS ) {
-			
-			// FALL THROUGH
-
-		}
-	
-		String query = buildQueryFromMap(queryMap);
-		
-		try {
-			URI uri = new URI(scheme, userinfo, host, Integer.parseInt(port), path, query, fragment);
-			logger.info("Base URL: "+ uri.toString());
-			return (uri.toString());
-		} catch (NumberFormatException e) {
-			logger.error("Unable to parse port into integer: "+ port, e);
-		} catch (URISyntaxException e) {
-			logger.error("Unable to build Base URL.  Use default.", e);
-		}
-
-		// Use default
-		return (scheme + "://"+ host +":"+ port);
-
 	}
 	
-	/**
-	 * Given a URL, add the necessary parameters.
-	 * This method is useful for external user registration, for example,
-	 * add the code coverage parameters to the registration URL
-	 * @return
-	 */
-	public static String getConvertedURL(URL url) {
-		
-		String scheme = url.getProtocol();
-		String userinfo = url.getUserInfo();
-		String host = url.getHost();
-		String port = ZimbraSeleniumProperties.getStringProperty("server.port", "7070");
-		if ( url.getPort() > 0 ) {
-			port = "" + url.getPort();
-		}
-		String path = url.getPath();
-		Map<String, String> queryMap = new HashMap<String, String>();
-		for (String pair : url.getQuery().split("&")) {
-			if ( pair.contains("=") ) {
-				String[] split = pair.split("=");
-				queryMap.put(split[0], split[1]);
-			}
-		}
-		String fragment = url.getRef();
-		
-		if ( CodeCoverage.getInstance().isEnabled() ) {
-			queryMap.putAll(CodeCoverage.getInstance().getQueryMap());
-		}
-		
-		if ( PerfMetrics.getInstance().Enabled ) {
-			queryMap.putAll(PerfMetrics.getInstance().getQueryMap());
-		}
-		
-	
-		String query = buildQueryFromMap(queryMap);
-		
-		try {
-			URI uri = new URI(scheme, userinfo, host, Integer.parseInt(port), path, query, fragment);
-			logger.info("Converted URL: "+ uri.toString());
-			return (uri.toString());
-		} catch (NumberFormatException e) {
-			logger.error("Unable to parse port into integer: "+ port, e);
-		} catch (URISyntaxException e) {
-			logger.error("Unable to build Base URL.  Use default.", e);
-		}
-
-		// Use default
-		return (url.toString());
-
-	}
-
-		
 	public static String zimbraGetVersionString() throws HarnessException {		
 		ZimbraAdminAccount.GlobalAdmin().soapSend("<GetVersionInfoRequest xmlns='urn:zimbraAdmin'/>");
 		String version = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:info", "version");

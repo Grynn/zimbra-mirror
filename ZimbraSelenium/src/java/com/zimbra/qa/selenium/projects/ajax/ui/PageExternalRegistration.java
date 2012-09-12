@@ -1,11 +1,18 @@
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
-import java.net.URL;
+import java.net.URI;
 
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.performance.PerfMetrics;
 
 
+/**
+ * This class extends the Login Page, but tracks the external registration URL.  
+ * example, https://zqa-062.eng.vmware.com/service/extuserprov/?p=0_46059ce585e90f5d2d5...12e636f6d3b
+ * @author Matt Rhoades
+ *
+ */
 public class PageExternalRegistration extends PageLogin {
 
 
@@ -13,7 +20,7 @@ public class PageExternalRegistration extends PageLogin {
 	 * The URL to register at.
 	 * example, https://zqa-062.eng.vmware.com/service/extuserprov/?p=0_46059ce585e90f5d2d5...12e636f6d3b
 	 */
-	protected URL MyUrl = null;
+	protected ZimbraURI MyUrl = null;
 	
 	
 
@@ -46,8 +53,19 @@ public class PageExternalRegistration extends PageLogin {
 		return (this.getClass().getName());
 	}
 	
-	public void zSetURL(URL url) throws HarnessException {
-		this.MyUrl = url;
+	public void zSetURL(URI uri) throws HarnessException {
+		
+		// Add the code coverage and perf metrics to the URI
+		this.MyUrl = new ZimbraURI(uri);
+		
+		if ( CodeCoverage.getInstance().isEnabled() ) {
+			this.MyUrl.addQuery(CodeCoverage.getInstance().getQueryMap());
+		}
+		
+		if ( PerfMetrics.getInstance().Enabled ) {
+			this.MyUrl.addQuery(PerfMetrics.getInstance().getQueryMap());
+		}
+
 	}
 
 	@Override
@@ -66,7 +84,7 @@ public class PageExternalRegistration extends PageLogin {
 		
 		// Open MyURL
 		// TODO: need to add any URL's (i.e. code coverage)
-		this.sOpen(ZimbraSeleniumProperties.getConvertedURL(this.MyUrl));
+		this.sOpen(this.MyUrl.toString());
 
 		zWaitForActive();
 

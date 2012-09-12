@@ -19,8 +19,8 @@ import com.zimbra.common.soap.Element;
 public class ZimbraExternalAccount extends ZimbraAccount {
 	private static Logger logger = LogManager.getLogger(ZimbraExternalAccount.class);
 
-	protected URL UrlRegistration = null;
-	protected URL UrlLogin = null;
+	protected URI UrlRegistration = null;
+	protected URI UrlLogin = null;
 	
 	
 	public ZimbraExternalAccount() {
@@ -55,7 +55,7 @@ public class ZimbraExternalAccount extends ZimbraAccount {
 		String content = this.soapClient.selectValue(GetMsgResponse, "//mail:mp[@ct='text/html']//mail:content", null, 1);
 		try {
 			setRegistrationURL(determineRegistrationURL(content));
-		} catch (MalformedURLException e) {
+		} catch (URISyntaxException e) {
 			throw new HarnessException("Unable to parse registration URL from ["+ content +"]", e);
 		}
 	}
@@ -64,11 +64,11 @@ public class ZimbraExternalAccount extends ZimbraAccount {
 	 * Set the external user's registration URL to the specified URL
 	 * @param url
 	 */
-	public void setRegistrationURL(URL url) {
+	public void setRegistrationURL(URI url) {
 		this.UrlRegistration = url;
 	}
 	
-	public URL getRegistrationURL() {
+	public URI getRegistrationURL() {
 		return (this.UrlRegistration);
 	}
 	
@@ -83,7 +83,7 @@ public class ZimbraExternalAccount extends ZimbraAccount {
 		String content = this.soapClient.selectValue(GetMsgResponse, "//mail:mp[@ct='text/html']//mail:content", null, 1);
 		try {
 			setLoginURL(determineLoginURL(content));
-		} catch (MalformedURLException e) {
+		} catch (URISyntaxException e) {
 			throw new HarnessException("Unable to parse registration URL from ["+ content +"]", e);
 		}		
 	}
@@ -92,11 +92,11 @@ public class ZimbraExternalAccount extends ZimbraAccount {
 	 * Set the external user's login URL to the specified URL
 	 * @param url
 	 */
-	public void setLoginURL(URL url) {
+	public void setLoginURL(URI url) {
 		this.UrlLogin = url;
 	}
 	
-	public URL getLoginURL() {
+	public URI getLoginURL() {
 		return (this.UrlLogin);
 	}
 	
@@ -111,8 +111,9 @@ public class ZimbraExternalAccount extends ZimbraAccount {
 	 * @return
 	 * @throws HarnessException
 	 * @throws MalformedURLException
+	 * @throws URISyntaxException 
 	 */
-	protected URL determineRegistrationURL(String content) throws HarnessException, MalformedURLException {
+	protected URI determineRegistrationURL(String content) throws HarnessException, URISyntaxException {
 		String registrationURL = null;
 		
 		Matcher matcherTag = patternTag.matcher(content);
@@ -136,7 +137,7 @@ public class ZimbraExternalAccount extends ZimbraAccount {
 					registrationURL = registrationURL.substring(0, registrationURL.length()-1); // Strip the ending "
 				}
 				logger.info("link: "+ registrationURL);
-				return (new URL(registrationURL));
+				return (new URI(registrationURL));
 
 			}		
 		}
@@ -150,9 +151,9 @@ public class ZimbraExternalAccount extends ZimbraAccount {
 	 * @param content
 	 * @return
 	 * @throws HarnessException
-	 * @throws MalformedURLException
+	 * @throws URISyntaxException 
 	 */
-	protected URL determineLoginURL(String content) throws HarnessException, MalformedURLException {
+	protected URI determineLoginURL(String content) throws HarnessException, URISyntaxException {
 		
 		// TODO: implement me!
 		return (determineRegistrationURL(content));
