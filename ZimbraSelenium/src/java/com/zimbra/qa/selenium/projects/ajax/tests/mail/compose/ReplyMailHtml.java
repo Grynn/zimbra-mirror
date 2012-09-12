@@ -2,7 +2,9 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
@@ -53,7 +55,12 @@ public class ReplyMailHtml extends PrefGroupMailByMessageTest {
 		
 		// Get the mail item for the new message
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+
+		SleepUtil.sleepMedium();
 		
+		// Click on Inbox folder in the tree
+		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inbox);
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
