@@ -319,12 +319,14 @@ public class FormContactNew extends AbsForm {
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("Field is not present field="+ locator +" locator="+ value);
 			
-		
-		if (zIsBrowserMatch(BrowserMasks.BrowserMaskChrome)) { 
-	        sType(locator,value);
-	        sTypeKeys(locator,value);			
-		}
-		else {
+		if(ZimbraSeleniumProperties.isWebDriver()){
+		    sType(locator,value);
+		}else{
+		    if (zIsBrowserMatch(BrowserMasks.BrowserMaskChrome)) { 
+			sType(locator,value);
+			sTypeKeys(locator,value);			
+		    }
+		    else {
 		
 			//The following code to simulate paste action from user (Ctrl-V) bug #
 			//Use "Notes" to store text which will be entered into clipboard (Ctrl-X)	 
@@ -349,8 +351,8 @@ public class FormContactNew extends AbsForm {
 			sKeyPressNative(KeyEvent.VK_V+"");				
 			sKeyUpNative(KeyEvent.VK_CONTROL+"");
 						
-		}
-			
+			}
+		}	
 
 	}
 	
@@ -410,9 +412,12 @@ public class FormContactNew extends AbsForm {
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
-
+		String script = "window.document.getElementById('" + Locators.zActiveEditForm + "').getAttribute('class')";
+		if(ZimbraSeleniumProperties.isWebDriver()){
+		    script = "return " + script;
+		}
 		if (zIsVisiblePerPosition(Locators.zActiveEditForm, 0, 0) && 
-		   (sGetEval("window.document.getElementById('" + Locators.zActiveEditForm + "').getAttribute('class')")).equals("ZmEditContactView"))		
+		   (sGetEval(script)).equals("ZmEditContactView"))		
 		{
     		logger.info("id = " + Locators.zActiveEditForm + " already active");
     		return true;
@@ -420,12 +425,28 @@ public class FormContactNew extends AbsForm {
 		
 		//set parameter zActiveEditForm				
 		try {		
-		    int length = Integer.parseInt(sGetEval("window.document.getElementById('z_shell').children.length"))-1;
+		    int length = 0;
+		    script = "window.document.getElementById('z_shell').children.length";
+		    if(ZimbraSeleniumProperties.isWebDriver()){
+			script = "return " + script;
+		    }
+		    
+		    length = Integer.parseInt(sGetEval(script))-1;
+		    
 			for (int i=length;i>=0; i--) {
-		    	String className=sGetEval("window.document.getElementById('z_shell').children[" + i + "].getAttribute('class')" );		    	
+			    script = "window.document.getElementById('z_shell').children[" + i + "].getAttribute('class')" ;
+			    if(ZimbraSeleniumProperties.isWebDriver()){
+				     script = "return " + script;
+				 }
+		    	String className=sGetEval(script);		    	
 		    	
-		    	if (className.equals("ZmEditContactView")) {				    		 
-		    		String id = sGetEval("window.document.getElementById('z_shell').children[" + i + "].id" );
+		    	if (className.equals("ZmEditContactView")) {	
+		    	    script = "window.document.getElementById('z_shell').children[" + i + "].id";
+			    if(ZimbraSeleniumProperties.isWebDriver()){
+				 script = "return " + script;
+			     }
+
+		    		String id = sGetEval(script);
 		    		if (zIsVisiblePerPosition(id, 0, 0)) {
 		    			Locators.zActiveEditForm = id;
 		    			logger.info("active id = " + id);

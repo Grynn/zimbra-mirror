@@ -137,6 +137,8 @@ public class SaveDraftMail extends PrefGroupMailByMessageTest {
 
 		FolderItem draftsFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Drafts);
 
+		SleepUtil.sleepMedium();
+		
 		// Get the message from the server
 		MailItem draft = MailItem.importFromSOAP(app.zGetActiveAccount(),"subject:(" + subject + ")");
 

@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.AbsToaster.Locators;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
@@ -41,13 +42,20 @@ public class CreateContact extends AjaxCommonTest  {
 		ZAssert.assertTrue(formContactNew.zIsActive(),"Verify new contact form is displayed");
 		
         // Fill in the form
-	    formContactNew.zFill(contactItem);
+	formContactNew.zFill(contactItem);
 	    
-		// Save the contact
+	// Save the contact
         formContactNew.zSubmit();
 		
         //verify toasted message 'contact created'  
-        ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(), "Contact Created", "Verify toast message 'Contact Created'");
+        //ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(), "Contact Created", "Verify toast message 'Contact Created'");
+        Toaster toaster = app.zPageMain.zGetToaster();
+	toaster.zWaitForElementVisible(Locators.ToastTextLocatorCSS);
+	SleepUtil.sleepSmall();
+	String toastMsg = toaster.sGetText(Locators.ToastTextLocatorCSS);
+	String expectedMsg ="Contact Created";
+	        
+	ZAssert.assertStringContains(toastMsg, expectedMsg , "Verify toast message '" + expectedMsg + "'");
 
         //verify contact "file as" is displayed
         ZAssert.assertTrue(app.zPageAddressbook.zIsContactDisplayed(contactItem), "Verify contact fileAs (" + contactItem.fileAs + ") displayed ");

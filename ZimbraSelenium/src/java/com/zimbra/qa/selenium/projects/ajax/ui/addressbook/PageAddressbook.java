@@ -212,7 +212,7 @@ public class PageAddressbook extends AbsTab {
 			logger.info("...found "+ contactType + " - " + fileAs );
 			isContactFound = ((contactType.equals(ContactGroupItem.IMAGE_CLASS) &&  contactItem instanceof ContactGroupItem) ||
 				  (contactType.equals(ContactItem.IMAGE_CLASS) &&  contactItem instanceof ContactItem)) &&
-				  (contactItem.fileAs.equals(fileAs));
+				  (contactItem.fileAs.equals(fileAs.trim()));
 			
 				    	      
 		}
