@@ -96,6 +96,7 @@ public class ZimbraAPI
         }
     }
     private Dictionary<string, string> dFolderMap;
+    
 
     private LogLevel loglevel;
 
@@ -104,6 +105,7 @@ public class ZimbraAPI
         bIsServerMigration = isServer;
         loglevel = level;
         dFolderMap = new Dictionary<string, string>();
+        
     }
 
     private string GetSpecialFolderNum(string folderPath)
@@ -2407,7 +2409,6 @@ public class ZimbraAPI
 
         parent = fullPath.Substring(0, lastSlash);
         child = fullPath.Substring(folderNameStart, (len - folderNameStart));
-        //
 
         return true;
     }
@@ -2434,12 +2435,63 @@ public class ZimbraAPI
         // if it's not there, look in the map
         string strParentNum = GetSpecialFolderNum(parentPath);
 
+        
+
         if (strParentNum.Length == 0)
         {
             if (dFolderMap.ContainsKey(parentPath))
                 strParentNum = dFolderMap[parentPath];
             else
-                return FOLDER_CREATE_FAILED_SEM;
+            {
+
+                if (strParentNum == "")
+                {
+                    string[] words = FolderPath.Split('/');
+
+                    int ind = 0;
+                    int  mnIndex = 3;
+                    int len = 0;
+                    if (words[mnIndex] != "")
+                        ind = FolderPath.IndexOf(words[mnIndex]);
+                    else
+                    {
+                        ind = FolderPath.IndexOf(words[++mnIndex]);
+                        ind = ind - 1;
+                    }
+
+                   
+                    len = FolderPath.Length;
+
+                    string newpath = FolderPath.Substring(ind, (len - ind));
+                    validatefoldernames(FolderPath, newpath, out parentPath);
+                 
+                    if (parentPath != "")
+                    {
+                        int newlen = parentPath.Length;
+                        folderName = FolderPath.Substring(newlen+1);
+                        
+                        folderName = folderName.Replace("/", "_");
+                        if (dFolderMap.ContainsKey(parentPath))
+                            strParentNum = dFolderMap[parentPath];
+                        else
+                            return FOLDER_CREATE_FAILED_SEM;
+                    }
+                    else
+                    {
+                        folderName = newpath.Replace("/", "_");
+                        string NewParentPath = FolderPath.Substring(0, (ind - 1));
+                        strParentNum = GetSpecialFolderNum(NewParentPath);
+                        if (strParentNum.Length == 0)
+                        {
+                            if (dFolderMap.ContainsKey(NewParentPath))
+                                strParentNum = dFolderMap[NewParentPath];
+                            else
+                                return FOLDER_CREATE_FAILED_SEM;
+                        }
+                    }
+                }
+               // return FOLDER_CREATE_FAILED_SEM;
+            }
         }
 
         string folderID = "";
@@ -2447,8 +2499,48 @@ public class ZimbraAPI
             Color, Flags), out folderID);
 
         if (dcfReturnVal == 0)
-            dFolderMap.Add(FolderPath, folderID);
+        { dFolderMap.Add(FolderPath, folderID);}
         return dcfReturnVal;
+    }
+
+    private void validatefoldernames(string folderpath,string newfolderpath,out string currentpath)
+    {
+        //int inds = 0;
+         int itercnt = 0;
+         int len = folderpath.Length;
+         string[] nwords = newfolderpath.Split('/');
+         string currentfoldername = "";
+         currentpath = "" ;
+         string np ="";
+
+        while (itercnt <= (nwords.Length - 1))
+        {
+
+            string temp = nwords[itercnt];
+            if (temp != "")
+            {
+
+                int i = folderpath.LastIndexOf(temp);
+                np = folderpath.Substring(0, (i - 1));
+                currentfoldername = np + '/' + nwords[itercnt];
+            }
+            else
+                currentfoldername = currentfoldername + '/' ;
+          
+             if (dFolderMap.ContainsKey(currentfoldername))
+             {
+                // foldername = nwords[itercnt];
+                 currentpath = currentfoldername;
+             }
+             else
+             {
+             }
+             itercnt = itercnt + 1;
+
+        }
+        
+        
+
     }
 
     private void CreateTagRequest(XmlWriter writer, string tag, string color, int requestId)

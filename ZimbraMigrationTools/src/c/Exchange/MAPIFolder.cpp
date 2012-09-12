@@ -127,10 +127,21 @@ void MAPIFolder::Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary 
     m_displayname = displayName;    
     
     //replace later by "/" allow "/"
+	/*
     size_t npos= m_displayname.find(L"/");
     if ((npos != std::wstring::npos) && (npos>0))
     {
         m_displayname.replace(npos,1,CONST_FORWDSLASH);
+    }
+	*/
+	//parse whole string for forward slash not just one occurence
+	std::wstring::size_type i = m_displayname.find(L"/");
+	while (i != std::wstring::npos && i < m_displayname.size())
+    {
+        m_displayname.replace(i, wcslen(L"/"),CONST_FORWDSLASH);
+        i +=  wcslen(L"/");
+
+        i = m_displayname.find( L"/", i);
     }
 
     CopyEntryID(*pEntryId, m_EntryID);
@@ -298,7 +309,18 @@ wstring MAPIFolder::FindFolderPath()
                 if (SUCCEEDED(hr = HrGetOneProp(lpMAPIFolder, PR_DISPLAY_NAME,
                         &pDisplayPropVal)))
                 {
-                    wstrPath = wstrPath + L"/" + pDisplayPropVal->Value.lpszW;
+					std::wstring tempath = pDisplayPropVal->Value.lpszW;
+					 // need to parse the parent folder names for forward slash
+					std::wstring::size_type i = tempath.find(L"/");
+					while (i != std::wstring::npos && i < tempath.size())
+					{
+						tempath.replace(i, wcslen(L"/"),CONST_FORWDSLASH);
+						i +=  wcslen(L"/");
+
+						i = tempath.find( L"/", i);
+					}
+                    //wstrPath = wstrPath + L"/" + pDisplayPropVal->Value.lpszW;
+					wstrPath = wstrPath + L"/" + tempath;
                     MAPIFreeBuffer(pDisplayPropVal);
                     pDisplayPropVal = NULL;
                 }
@@ -331,10 +353,23 @@ wstring MAPIFolder::FindFolderPath()
         }
     }
     //check for any earlier masking of "/" and restore it
-    size_t cnst_pos = wstrPath.find(CONST_FORWDSLASH);
+	
+	/*
+		size_t cnst_pos = wstrPath.find(CONST_FORWDSLASH);
     if(std::wstring::npos != cnst_pos)
     {
         wstrPath.replace(cnst_pos,wcslen(CONST_FORWDSLASH),L"/");
+    }
+	
+	*/
+	std::wstring::size_type i = wstrPath.find(CONST_FORWDSLASH);
+    while (i != std::wstring::npos && i < wstrPath.size())
+    {
+        wstrPath.replace(i, wcslen(CONST_FORWDSLASH), L"/");
+        i +=  wcslen(L"/");
+
+       
+        i = wstrPath.find( CONST_FORWDSLASH, i);
     }
     return wstrPath;
 }
