@@ -1,41 +1,36 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.bugs;
 
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.List;
+
 import org.testng.annotations.Test;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
-import com.zimbra.qa.selenium.framework.ui.Button;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
+import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZDate;
 import com.zimbra.qa.selenium.framework.util.ZTimeZone;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 
-@SuppressWarnings("deprecation")
 public class Bug62137 extends AjaxCommonTest {
 
 	public Bug62137() {
 		logger.info("New " + Bug62137.class.getCanonicalName());
 		
 		// Make sure we are using an account with day view
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			private static final long serialVersionUID = -2913827779459595178L;
-		{
-		    put("zimbraPrefCalendarInitialView", "workWeek");
-		}};
+		super.startingPage = app.zPageCalendar;
+		super.startingAccountPreferences = null;
 	}
 
+	@Bugs( ids = "62137")
 	@Test(
 			description = "Bug 62137 - 'http://<server>?app=calendar' broken with/without login to zcs", 
 			groups = { "functional" })
 	public void Bug62137_01() throws HarnessException {
 		
-		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getBaseURL() + "?app=calendar");
-		SleepUtil.sleepVeryLong();
         
 		// Creating object for appointment data
 		String tz, apptSubject, apptBody, apptAttendee;
@@ -64,11 +59,36 @@ public class Bug62137 extends AjaxCommonTest {
                                "<su>"+ apptSubject +"</su>" +
                                "</m>" +
                          "</CreateAppointmentRequest>");
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
-        // Verify current view
-        ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), true, "Verify appointment is present in current view");
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(Locators.CalendarFolder), true, "Verify Calendar folder present in left tree to verify current view");
+        
+
+
+        
+        // Reload the application, with app=calendar query parameter
+        // TODO: need to resolve building the URL ... this test will fail, if there are existing query parameters in the URL
+        app.zPageCalendar.sOpen(ZimbraSeleniumProperties.getBaseURL() + "?app=calendar");
+        
+        
+        
+        // Verify the page becomes active
+        app.zPageMain.zWaitForActive(); 
+        app.zPageCalendar.zWaitForActive();
+        ZAssert.assertTrue(app.zPageCalendar.zIsActive(), "Verify the page becomes active");
+        
+        
+        
+        // Verify the appointment appears in the view
+		boolean found = false;
+		List<AppointmentItem> items = app.zPageCalendar.zListGetAppointments();
+		for (AppointmentItem item : items ) {
+			if ( apptSubject.equals(item.getSubject()) ) {
+				found = true;
+				break;
+			}
+		}
+		
+		ZAssert.assertTrue(found, "Verify appt gets displayed in work week view");
+
 		
 	}
 }
