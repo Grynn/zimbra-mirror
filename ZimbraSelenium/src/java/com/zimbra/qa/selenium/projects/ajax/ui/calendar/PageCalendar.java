@@ -24,6 +24,7 @@ public class PageCalendar extends AbsTab {
 		public static final String NewButton = "css=td#zb__CLWW__NEW_MENU_title";
 		public static final String CloseButton = "css=td[id$='__CANCEL_title']:contains('Close')";
 		public static final String ViewButton = "id=zb__CLD__VIEW_MENU_dropdown";
+		public static final String CalendarFolder = "id=zti__main_Calendar__10_textCell";
 
 		// Menus
 		public static final String ViewDayMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_DAY_VIEW']";
