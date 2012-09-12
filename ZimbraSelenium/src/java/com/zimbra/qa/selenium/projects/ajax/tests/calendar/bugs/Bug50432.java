@@ -79,9 +79,6 @@ public class Bug50432 extends AjaxCommonTest {
                          "</CreateAppointmentRequest>");
 
         String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
-    
-        // Switch to day view
-        app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_DAY);
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 
         // Open appointment & close it
