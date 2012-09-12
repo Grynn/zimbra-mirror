@@ -159,6 +159,7 @@ public class Button {
 	public static final Button O_OPTION_FORMAT_AS_HTML = new Button("O_OPTION_FORMAT_AS_HTML");
 	public static final Button O_OPTION_FORMAT_AS_TEXT = new Button("O_OPTION_FORMAT_AS_TEXT");
 	public static final Button O_OPTION_REQUEST_READ_RECEIPT = new Button("O_OPTION_REQUEST_READ_RECEIPT");
+	public static final Button O_INCLUDE_ORIGINAL_AS_ATTACHMENT = new Button("O_INCLUDE_ORIGINAL_AS_ATTACHMENT");
 	public static final Button O_PRIORITY_HIGH = new Button("O_PRIORITY_HIGH");
 	public static final Button O_PRIORITY_NORMAL = new Button("O_PRIORITY_NORMAL");
 	public static final Button O_PRIORITY_LOW = new Button("O_PRIORITY_LOW");

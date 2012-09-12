@@ -733,13 +733,6 @@ public class PageCalendar extends AbsTab {
 				
 				optionLocator = Locators.CancelMenu;
 
-				this.zRightClickAt(locator, "");
-				this.zWaitForBusyOverlay();
-
-				this.zClickAt(optionLocator, "");
-				this.zWaitForBusyOverlay();
-
-
 				// Since we are not going to "wait for active", insert
 				// a small delay to make sure the dialog shows up
 				// before the zIsActive() method is called
@@ -775,12 +768,18 @@ public class PageCalendar extends AbsTab {
 				optionLocator = "css=div#zm__Calendar div#REINVITE_ATTENDEES td[id$='_title']";
 				page = null;
 				waitForPostfix = true;
+			
+			} else if ( option == Button.O_REPLY_MENU ) {
 				
-				this.zRightClickAt(locator, "");
-				this.zWaitForBusyOverlay();
-
-				this.zClickAt(optionLocator, "");
-				this.zWaitForBusyOverlay();
+				optionLocator = Locators.ReplyMenu;
+				page = null;
+				waitForPostfix = true;
+			
+			} else if ( option == Button.O_REPLY_TO_ALL_MENU ) {
+				
+				optionLocator = Locators.ReplyToAllMenu;
+				page = null;
+				waitForPostfix = true;
 				
 			} else if ( option == Button.O_FORWARD_MENU) {
 				
@@ -788,12 +787,6 @@ public class PageCalendar extends AbsTab {
 				
 				page = null;
 				waitForPostfix = true;
-				
-				this.zRightClickAt(locator, "");
-				this.zWaitForBusyOverlay();
-
-				this.zClickAt(optionLocator, "");
-				this.zWaitForBusyOverlay();
 				
 				// FALL THROUGH
 				
