@@ -28,20 +28,13 @@ DwtHoverMgr.prototype.toString = function() { return "DwtHoverMgr"; };
 
 // Data
 
-DwtHoverMgr.prototype._hoverObject;
 
 DwtHoverMgr.prototype._hoverOverDelay = 750;
-DwtHoverMgr.prototype._hoverOverData;
-DwtHoverMgr.prototype._hoverOverAction;
 DwtHoverMgr.prototype._hoverOverActionId = -1;
-DwtHoverMgr.prototype._hoverOverListener;
 
 DwtHoverMgr.prototype._hoverOutDelay = 50;
 DwtHoverMgr.prototype._ignoreHoverOverOnClickDelay = 750;
-DwtHoverMgr.prototype._hoverOutData;
-DwtHoverMgr.prototype._hoverOutAction;
 DwtHoverMgr.prototype._hoverOutActionId = -1;
-DwtHoverMgr.prototype._hoverOutListener;
 
 DwtHoverMgr.prototype._isHovering = false;
 

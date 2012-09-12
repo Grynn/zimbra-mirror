@@ -36,12 +36,6 @@ DwtGrouper = function(parent, className, posStyle) {
 DwtGrouper.prototype = new DwtComposite;
 DwtGrouper.prototype.constructor = DwtGrouper;
 
-// Data
-
-DwtGrouper.prototype._borderEl;
-DwtGrouper.prototype._labelEl;
-DwtGrouper.prototype._insetEl;
-
 // Public methods
 
 DwtGrouper.prototype.setLabel = function(htmlContent) {

@@ -68,7 +68,7 @@ AjxColor.color = function(r, g, b) {
 	].join("");
 };
 
-/*
+/**
  * Returns a color string that is the inverse of the given color.
  *
  * @param color [string] Color value defined as "#rrggbb".

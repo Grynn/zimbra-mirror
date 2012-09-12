@@ -1131,7 +1131,7 @@ DwtForm.__makeGetter = function(item) {
 
 	var parts = ref.split(".");
 	var body = [
-		"var context = this.model;",
+		"var context = this.model;"
 	];
 	for (var i = 0; i < parts.length; i++) {
 		var name = parts[i];
@@ -1157,7 +1157,7 @@ DwtForm.__makeSetter = function(item) {
 
 	var parts = ref.split(".");
 	var body = [
-		"var context = this.model;",
+		"var context = this.model;"
 	];
 	for (var i = 0; i < parts.length; i++) {
 		var isLast = i == parts.length - 1;

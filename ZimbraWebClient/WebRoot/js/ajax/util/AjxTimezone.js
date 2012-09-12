@@ -508,8 +508,6 @@ AjxTimezone.AUTO_DETECTED = "Auto-Detected";
  * The default timezone is set by guessing the machine timezone later
  * in this file. See the static initialization section below for details.
  */
-AjxTimezone.DEFAULT;
-AjxTimezone.DEFAULT_RULE;
 
 AjxTimezone._CLIENT2SERVER = {};
 AjxTimezone._SERVER2CLIENT = {};

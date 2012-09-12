@@ -41,7 +41,7 @@ ZLoginFactory.TAB_TYPE = [ZLoginFactory.TEXT_TYPE, ZLoginFactory.TEXT_TYPE,
 					ZLoginFactory.TEXT_TYPE, ZLoginFactory.TEXT_TYPE,
 					ZLoginFactory.CHECKBOX_TYPE, ZLoginFactory.BUTTON_TYPE];
 				
-/*
+/**
  * Creates a copy of the default login parameters.
  * 
  * @param msgs	The class where localized messages are defined. ZmMsg for example.

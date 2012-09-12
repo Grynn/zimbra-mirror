@@ -2182,7 +2182,7 @@ function(params) {
 		}
 
 		if (!win.find(params.searchstring, params.casesensitive, params.backwards, params.wrap, params.wholeword, false, false)) {
-			while (win.find(params.searchstring, params.casesensitive, true, params.wrap, params.wholeword, false, false));
+			while (win.find(params.searchstring, params.casesensitive, true, params.wrap, params.wholeword, false, false)) {}
 		}
 	}
 };

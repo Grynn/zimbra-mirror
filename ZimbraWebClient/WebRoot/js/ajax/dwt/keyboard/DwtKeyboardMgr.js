@@ -718,9 +718,9 @@ function(ev) {
 	// Sync up focus if needed
 	var focusInTGMember = DwtKeyboardMgr.__syncFocus(kbMgr, kev.target);
 	
-	if (!focusInTGMember) {
+//	if (!focusInTGMember) {
 //		DBG.println("kbnav", "Object is not in tab hierarchy");
-	}
+//	}
 			
 	/* The first thing we care about is the tab key since we want to manage
 	 * focus based on the tab groups. 

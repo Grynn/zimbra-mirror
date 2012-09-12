@@ -54,11 +54,6 @@ AjxFormat.prototype.toString = function() {
 	return s.join("");
 };
 
-// Data
-
-AjxFormat.prototype._pattern;
-AjxFormat.prototype._segments;
-
 // Static functions
 
 AjxFormat.initialize = function() {
@@ -166,10 +161,6 @@ AjxFormat.FormatException.prototype.toString = function() {
 	return this._message; 
 };
 
-// Data
-
-AjxFormat.FormatException.prototype._format;
-AjxFormat.FormatException.prototype._message;
 
 //
 // Formatting exception class
@@ -182,9 +173,6 @@ AjxFormat.FormattingException = function(format, segment, message) {
 AjxFormat.FormattingException.prototype = new AjxFormat.FormatException;
 AjxFormat.FormattingException.prototype.constructor = AjxFormat.FormattingException;
 
-// Data
-
-AjxFormat.FormattingException.prototype._segment;
 
 //
 // Parsing exception class
@@ -196,10 +184,6 @@ AjxFormat.ParsingException = function(format, segment, message) {
 };
 AjxFormat.ParsingException.prototype = new AjxFormat.FormatException;
 AjxFormat.ParsingException.prototype.constructor = AjxFormat.ParsingException;
-
-// Data
-
-AjxFormat.ParsingException.prototype._segment;
 
 //
 // Segment class
@@ -214,11 +198,6 @@ AjxFormat.Segment = function(format, s) {
 AjxFormat.Segment.prototype.toString = function() { 
 	return "segment: \""+this._s+'"'; 
 };
-
-// Data
-
-AjxFormat.Segment.prototype._parent;
-AjxFormat.Segment.prototype._s;
 
 // Public methods
 
@@ -399,10 +378,10 @@ AjxDateFormat = function(pattern) {
 					}
 				}
 			}
-			if (i == pattern.length) {
+//			if (i == pattern.length) {
 				// NOTE: try to avoid silent errors
 //				throw new FormatException(this, "unterminated string literal"); // I18n
-			}
+//			}
 			var tail = i;
 			var segment = new AjxFormat.TextSegment(this, pattern.substring(head, tail));
 			this._segments.push(segment);
@@ -1245,10 +1224,10 @@ AjxMessageFormat = function(pattern) {
 					}
 				}
 			}
-			if (i == pattern.length) {
+//			if (i == pattern.length) {
 				// NOTE: try to avoid silent errors
 //				throw new AjxFormat.FormatException(this, "unterminated string literal"); // I18n
-			}
+//)			}
 			var tail = i;
 			var segment = new AjxFormat.TextSegment(this, pattern.substring(head, tail));
 			this._segments.push(segment);
@@ -1413,12 +1392,7 @@ AjxMessageFormat.MessageSegment.prototype.toString = function() {
 
 // Data
 
-AjxMessageFormat.MessageSegment.prototype._index;
-AjxMessageFormat.MessageSegment.prototype._type;
-AjxMessageFormat.MessageSegment.prototype._style;
-
 AjxMessageFormat.MessageSegment.prototype._isList = false;
-AjxMessageFormat.MessageSegment.prototype._formatter;
 
 // Public methods
 
@@ -1600,16 +1574,11 @@ AjxNumberFormat._META_CHARS = "0#.,E";
 // Data
 
 AjxNumberFormat.prototype._groupingOffset = Number.MAX_VALUE;
-AjxNumberFormat.prototype._maxIntDigits;
 AjxNumberFormat.prototype._minIntDigits = 1;
-AjxNumberFormat.prototype._maxFracDigits;
-AjxNumberFormat.prototype._minFracDigits;
 AjxNumberFormat.prototype._isCurrency = false;
 AjxNumberFormat.prototype._isPercent = false;
 AjxNumberFormat.prototype._isPerMille = false;
 AjxNumberFormat.prototype._showExponent = false;
-
-AjxNumberFormat.prototype._negativeFormatter;
 
 // Static functions
 
@@ -1912,12 +1881,6 @@ AjxChoiceFormat.prototype.toString = function() {
 	].join("");
 };
 
-// Data
-
-AjxChoiceFormat.prototype._limits;
-AjxChoiceFormat.prototype._lessThan;
-AjxChoiceFormat.prototype._formats;
-
 // Public methods
 
 AjxChoiceFormat.prototype.getLimits = function() {
@@ -1998,12 +1961,6 @@ AjxListFormat = function(formatter, separator, lastSeparator, twoSeparator) {
 }
 AjxListFormat.prototype = new AjxFormat;
 AjxListFormat.prototype.constructor = AjxListFormat;
-
-// Data
-
-AjxListFormat.prototype._formatter;
-AjxListFormat.prototype._separator;
-AjxListFormat.prototype._lastSeparator;
 
 // Public methods
 

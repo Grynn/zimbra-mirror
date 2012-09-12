@@ -1413,8 +1413,8 @@ function(str){
 };
 
 // hidden SPANs for measuring regular and bold strings
-AjxStringUtil._testSpan;
-AjxStringUtil._testSpanBold;
+AjxStringUtil._testSpan = null;
+AjxStringUtil._testSpanBold = null;
 
 // cached string measurements
 AjxStringUtil.WIDTH			= {};		// regular strings

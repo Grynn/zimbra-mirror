@@ -52,16 +52,8 @@ DwtPropertySheet.DEFAULT = DwtPropertySheet.LEFT;
 
 // Data
 
-DwtPropertySheet.prototype._labelSide;
-
 DwtPropertySheet.prototype._labelCssClass = "Label";
 DwtPropertySheet.prototype._valueCssClass = "Field";
-
-DwtPropertySheet.prototype._tableEl;
-
-DwtPropertySheet.prototype._propertyIdCount;
-DwtPropertySheet.prototype._propertyList;
-DwtPropertySheet.prototype._propertyMap;
 
 // Public methods
 
