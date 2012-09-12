@@ -13,16 +13,13 @@ import com.zimbra.qa.selenium.framework.util.ZDate;
 import com.zimbra.qa.selenium.framework.util.ZTimeZone;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 
-public class Bug62137 extends AjaxCommonTest {
+public class Bug62137 extends CalendarWorkWeekTest {
 
 	public Bug62137() {
 		logger.info("New " + Bug62137.class.getCanonicalName());
 		
-		// Make sure we are using an account with day view
-		super.startingPage = app.zPageCalendar;
-		super.startingAccountPreferences = null;
 	}
 
 	@Bugs( ids = "62137")
@@ -40,7 +37,7 @@ public class Bug62137 extends AjaxCommonTest {
 		apptAttendee = ZimbraAccount.AccountA().EmailAddress;
 		
 		// Absolute dates in UTC zone
-        Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
