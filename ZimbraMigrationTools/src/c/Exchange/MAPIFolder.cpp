@@ -124,7 +124,15 @@ void MAPIFolder::Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary 
 		UlRelease(m_pHierarchyTable);
 
     m_folder = pFolder;
-    m_displayname = displayName;
+    m_displayname = displayName;    
+    
+    //replace later by "/" allow "/"
+    size_t npos= m_displayname.find(L"/");
+    if ((npos != std::wstring::npos) && (npos>0))
+    {
+        m_displayname.replace(npos,1,CONST_FORWDSLASH);
+    }
+
     CopyEntryID(*pEntryId, m_EntryID);
 	
 	//Get folder hierarchy table
@@ -321,6 +329,12 @@ wstring MAPIFolder::FindFolderPath()
         {
             wstrPath.replace(1, (npos-1), L"MAPIRoot");
         }
+    }
+    //check for any earlier masking of "/" and restore it
+    size_t cnst_pos = wstrPath.find(CONST_FORWDSLASH);
+    if(std::wstring::npos != cnst_pos)
+    {
+        wstrPath.replace(cnst_pos,wcslen(CONST_FORWDSLASH),L"/");
     }
     return wstrPath;
 }

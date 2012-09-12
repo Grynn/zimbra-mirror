@@ -12,6 +12,8 @@ DEFINE_OLEGUID(PSETID_COMMON, MAKELONG(0x2000 + (8), 0x0006), 0, 0);
 // completely downloaded or in header only form in case of IMAP
 #define DISPID_HEADER_ITEM      0x8578
 
+#define CONST_FORWDSLASH    L"~~~#^!"
+
 namespace Zimbra
 {
 namespace MAPI
