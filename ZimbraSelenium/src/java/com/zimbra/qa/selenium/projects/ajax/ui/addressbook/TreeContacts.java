@@ -256,12 +256,14 @@ public class TreeContacts extends AbsTree {
 					return null;
 				}
 				
-				//zClickAt("css=" + optionLocator,"0,0");				
-			
+				zClickAt("css=" + optionLocator,"0,0");				
+				
+				/*
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);				
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);	
+				*/
 				
 				zWaitForBusyOverlay();
 				
