@@ -66,5 +66,8 @@ public class Bug50479 extends AjaxCommonTest {
 		
 		String value = app.zGetActiveAccount().soapSelectValue("//acct:pref[@name='zimbraPrefCalendarWorkingHours']", null);
 		ZAssert.assertEquals(value, "1:N:0800:1700,2:Y:0800:1700,3:Y:0800:1700,4:Y:0800:1700,5:Y:0800:1700,6:Y:0800:1700,7:N:0800:1700", "Verify zimbraPrefCalendarWorkingHours value (Sunday & Saturday as non-working days)'");
+		
+		// if logout stucks then assume that browser dialog appeared
+		app.zPageMain.zLogout();
 	}
 }
