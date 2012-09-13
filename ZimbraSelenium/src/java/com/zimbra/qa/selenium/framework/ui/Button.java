@@ -425,6 +425,17 @@ public class Button {
 	public static final Button B_NEW_QUICK_COMMAND		= new Button("B_NEW_QUICK_COMMAND");
 	public static final Button B_EDIT_QUICK_COMMAND		= new Button("B_EDIT_QUICK_COMMAND");
 	public static final Button B_DELETE_QUICK_COMMAND	= new Button("B_DELETE_QUICK_COMMAND");
+	
+	// Calendar preferences
+	public static final Button R_CUSTOM_WORK_HOURS		= new Button("R_CUSTOM_WORK_HOURS");
+	public static final Button B_CUSTOMIZE				= new Button("B_CUSTOMIZE");
+	public static final Button C_SUNDAY_WORK_HOUR		= new Button("C_SUNDAY_WORK_HOUR");
+	public static final Button C_MONDAY_WORK_HOUR		= new Button("C_MONDAY_WORK_HOUR");
+	public static final Button C_TUESDAY_WORK_HOUR		= new Button("C_TUESDAY_WORK_HOUR");
+	public static final Button C_WEDNESDAY_WORK_HOUR	= new Button("C_WEDNESDAY_WORK_HOUR");
+	public static final Button C_THURSDAY_WORK_HOUR		= new Button("C_THURSDAY_WORK_HOUR");
+	public static final Button C_FRIDAY_WORK_HOUR		= new Button("C_FRIDAY_WORK_HOUR");
+	public static final Button C_SATURDAY_WORK_HOUR		= new Button("C_SATURDAY_WORK_HOUR");
 
 
 	//// Admin Console
