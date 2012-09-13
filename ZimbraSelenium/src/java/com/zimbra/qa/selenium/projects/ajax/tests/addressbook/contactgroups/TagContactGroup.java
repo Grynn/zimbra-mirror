@@ -1,8 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contactgroups;
 
-
+import java.util.HashMap;
 import org.testng.annotations.Test;
-
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -16,7 +15,13 @@ public class TagContactGroup extends AjaxCommonTest  {
 		// All tests start at the Address page
 		super.startingPage = app.zPageAddressbook;
 
-		super.startingAccountPreferences = null;		
+		super.startingAccountPreferences = new HashMap<String , String>() {
+		private static final long serialVersionUID = 1L;
+
+		{
+		    put("zimbraPrefShowSelectionCheckbox", "TRUE");		         
+		}};			
+					
 		
 	}
 	
