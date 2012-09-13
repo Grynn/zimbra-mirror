@@ -548,6 +548,18 @@ public class AjaxCommonTest {
 		String testCaseResult = String.valueOf(testResult.getStatus());
 		Repository.testCaseEnd(testCaseResult);
 
+		// If the active URL does not match the base URL, then
+		// the test case may have manually navigated somewhere.
+		//
+		// Clear the cookies and reload
+		//
+		if ( ZimbraURI.needsReload() ) {
+            logger.error("The URL does not match the base URL.  Reload app.");
+            // app.zPageLogin.sDeleteAllVisibleCookies();
+            app.zPageLogin.sOpen(ZimbraSeleniumProperties.getLogoutURL());            
+            app.zPageLogin.sOpen(ZimbraSeleniumProperties.getBaseURL());
+		}
+
 		// If neither the main page or login page are active, then
 		// The app may be in a confused state.
 		//

@@ -29,49 +29,63 @@ public class ZimbraURI {
 		setURI(uri);
 	}
 	
-	public boolean equals(Object that) {
+	/**
+	 * Check if the current URL does not match the 'default' URL.  For instance,
+	 * if the test case adds query parameters, then the URL needs to be reloaded.
+	 * @return true if a reload is required
+	 */
+	public static boolean needsReload() {
 		
-		if ( this == that) {
-			return true;
+		ZimbraURI base = new ZimbraURI(ZimbraURI.getBaseURI());
+		ZimbraURI current = new ZimbraURI(ZimbraURI.getCurrentURI());
+		
+		
+		logger.debug("base: "+ base.getURL().toString());
+		logger.debug("current: "+ current.getURL().toString());
+		
+		// If the scheme, host, and query parameters are equal, then
+		// no reload required
+		//
+		
+		
+		// Check the scheme
+		if ( !base.getURL().getScheme().equals(current.getURL().getScheme()) ) {
+			logger.info("Scheme: base("+ base.getURL().getScheme() +") != current("+ current.getURL().getScheme() +")");
+			return (true);
 		}
 		
-		if ( !(that instanceof ZimbraURI) ) {
-			return false;
+		// Check the host
+		if ( !base.getURL().getHost().equals(current.getURL().getHost()) ) {
+			logger.info("Host: base("+ base.getURL().getHost() +") != current("+ current.getURL().getHost() +")");
+			return (true);
 		}
-		
-		ZimbraURI other = (ZimbraURI)that;
-		
-		// If the scheme, host, port, and query matches, then equal
-		// We don't care about fragment
-		if ( !this.getURL().getScheme().equals(other.getURL().getScheme()) ) {
-			return (false);
+
+		// Check the query parameters
+		Map<String,String> baseMap = ZimbraURI.getQueryFromString(base.getURL().getQuery());
+		Map<String,String> currMap = ZimbraURI.getQueryFromString(current.getURL().getQuery());
+		if ( baseMap.entrySet().size() != currMap.entrySet().size() ) {
+			logger.info("Query: inequal query count");
+			return (true);
 		}
-		if ( !this.getURL().getHost().equals(other.getURL().getHost()) ) {
-			return (false);
-		}
-		if ( this.getURL().getPort() != other.getURL().getPort() ) {
-			return (false);
-		}
-		
-		Map<String,String> mMap = ZimbraURI.getQueryFromString(this.getURL().getQuery());
-		Map<String,String> oMap = ZimbraURI.getQueryFromString(other.getURL().getQuery());
-		for (Map.Entry<String, String> entry : mMap.entrySet()) {
-			if ( !oMap.containsKey(entry.getKey()) ) {
-				return (false); // Missing this key
+		for (Map.Entry<String, String> entry : baseMap.entrySet()) {
+			
+			if ( !currMap.containsKey(entry.getKey()) ) {
+				logger.info("Query: current does not contain query key: "+ entry.getKey());
+				return (true); // Missing this key
 			}
-			if ( mMap.get(entry.getKey()).equals(oMap.get(entry.getKey())) ) {
-				return (false); // Values don't match
+			
+			if ( !currMap.get(entry.getKey()).equals(baseMap.get(entry.getKey())) ) {
+				logger.debug("Query key/value pair do not match: "+ currMap.get(entry.getKey()) + " != " + baseMap.get(entry.getKey()));
+				return (true); // Values don't match
 			}
-			oMap.remove(entry.getKey()); // Remove each key as matches are found
+
 		}
+				
+		logger.debug("equal!  no reload is required");
+		return (false);
 		
-		if ( oMap.size() > 0 ) {
-			// Keys still remained in the other
-			return (false);
-		}
-		
-		return (true);
 	}
+	
 	/**
 	 * Set the URL value for this ZimbraURL (for instance, to edit later)
 	 * @param url
