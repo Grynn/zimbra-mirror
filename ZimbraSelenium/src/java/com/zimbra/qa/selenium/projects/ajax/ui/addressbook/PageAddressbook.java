@@ -1140,9 +1140,9 @@ public class PageAddressbook extends AbsTab {
 				locator="css=td[id^=SEARCH__DWT][id$=_title]:contains('Received From Contact')";
 			}
        }		
-       		if (option == Button.O_TAG_REMOVETAG) {
-       		    ExecuteHarnessMain.ResultListener.captureScreen();
-       		}
+       		//if (subOption == Button.O_TAG_REMOVETAG) {
+       		//    ExecuteHarnessMain.ResultListener.captureScreen();
+       		//}
 
     		sFocus(locator);
             sMouseOver(locator);
