@@ -27,7 +27,6 @@ public class Bug50432 extends AjaxCommonTest {
 		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
 		
-		// Make sure we are using an account with day view
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			private static final long serialVersionUID = -2913827779459595178L;
 		{
@@ -40,7 +39,7 @@ public class Bug50432 extends AjaxCommonTest {
 			groups = { "functional" })
 	public void Bug50432_01() throws HarnessException {
 		
-		// Modify the test account to disable GAL
+		// Modify the test account
 		ZimbraAdminAccount.GlobalAdmin().soapSend(
 				"<ModifyAccountRequest xmlns='urn:zimbraAdmin'>"
 			+		"<id>"+ app.zGetActiveAccount().ZimbraId +"</id>"

@@ -23,7 +23,7 @@ public class Bug68726 extends CalendarWorkWeekTest {
 		)
 	public void Bug68726_01() throws HarnessException {
 		
-		// Modify the test account to disable GAL
+		// Modify the test account
 		ZimbraAdminAccount.GlobalAdmin().soapSend(
 				"<ModifyAccountRequest xmlns='urn:zimbraAdmin'>"
 			+		"<id>"+ app.zGetActiveAccount().ZimbraId +"</id>"
