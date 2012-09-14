@@ -228,8 +228,11 @@ WebExZimlet.prototype._handleQuickMeetingMenuClick = function(controller) {
 WebExZimlet.prototype.onAppointmentDelete = function(appt) {
 	if (!(appt instanceof ZmAppt)) {
 		for (var el in appt) {
-			appt = appt[el][0];
-			break
+			var tmp = appt[el][0];
+            if (tmp) {
+                appt = tmp;
+                break;
+            }
 		}
 	}
 	this._appt = appt;//store this appt.
