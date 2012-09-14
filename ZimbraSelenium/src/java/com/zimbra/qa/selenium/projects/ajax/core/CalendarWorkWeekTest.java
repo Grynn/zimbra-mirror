@@ -22,7 +22,7 @@ public class CalendarWorkWeekTest extends AjaxCommonTest {
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			private static final long serialVersionUID = -109947857488617841L;
 		{
-		    put("zimbraPrefCalendarInitialView", "workweek");
+		    put("zimbraPrefCalendarInitialView", "workWeek");
 		}};
 		
 		calendarWeekDayUTC = Calendar.getInstance();
