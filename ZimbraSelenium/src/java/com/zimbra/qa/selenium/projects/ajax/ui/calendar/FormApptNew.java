@@ -302,8 +302,10 @@ public class FormApptNew extends AbsForm {
 		String stringFormat;
 
 		if (field == Field.StartDate || field == Field.EndDate) {
+			// TODO: need INTL
 			stringFormat = value.toMM_DD_YYYY();
 		} else if (field == Field.StartTime || field == Field.EndTime) {
+			// TODO: need INTL
 			stringFormat = value.tohh_mm_aa();
 		} else {
 			throw new HarnessException(
