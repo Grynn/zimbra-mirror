@@ -229,14 +229,24 @@ public class ZimbraAccount {
 	// Set the default account settings
 	@SuppressWarnings("serial")
 	private static final Map<String, String> accountAttrs = new HashMap<String, String>() {{
+		
+		// The following settings can be tuned from config.properties
+		//
+		
 		put("zimbraPrefLocale", ZimbraSeleniumProperties.getStringProperty("locale"));
-		put("zimbraPrefAutoAddAddressEnabled", "FALSE");
-		put("zimbraPrefCalendarInitialView", "workWeek");
-		put("zimbraPrefCalendarApptReminderWarningTime", "0");
 		put("zimbraPrefTimeZoneId", ZimbraSeleniumProperties.getStringProperty("zimbraPrefTimeZoneId", "America/Los_Angeles"));
-		put("zimbraFeatureReadReceiptsEnabled", "TRUE");
-		put("zimbraPrefCalendarAlwaysShowMiniCal", "FALSE");
-		put("zimbraPrefComposeFormat", "html");
+
+		
+		// The following settings are specific to the test harness
+		// and deviate from the default settings to work around
+		// test harness issues/limitations
+		//
+		// zimbraPrefCalendarApptReminderWarningTime=0 ... A random reminder will throw off the tests
+		// zimbraPrefAutoAddAddressEnabled=FALSE ... Adding addresses to the addressbook might break a test
+		// zimbraPrefWarnOnExit=FALSE ... A system popup will occur if this is TRUE, which will freeze the tests
+
+		put("zimbraPrefAutoAddAddressEnabled", "FALSE");
+		put("zimbraPrefCalendarApptReminderWarningTime", "0");
 		put("zimbraPrefWarnOnExit","FALSE");
 	}};
 
