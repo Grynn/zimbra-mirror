@@ -100,11 +100,14 @@ public class ZimbraAPI
 
     private LogLevel loglevel;
 
-    public ZimbraAPI(bool isServer,LogLevel level = LogLevel.Info)
+    private string ReplaceSlash;
+
+    public ZimbraAPI(bool isServer,LogLevel level = LogLevel.Info,string replaceslash = "_")
     {
         bIsServerMigration = isServer;
         loglevel = level;
         dFolderMap = new Dictionary<string, string>();
+        ReplaceSlash = replaceslash;
         
     }
 
@@ -2464,13 +2467,17 @@ public class ZimbraAPI
 
                     string newpath = FolderPath.Substring(ind, (len - ind));
                     validatefoldernames(FolderPath, newpath, out parentPath);
+                    if (ReplaceSlash == null)
+                    {
+                        ReplaceSlash = "_";
+                    }
                  
                     if (parentPath != "")
                     {
                         int newlen = parentPath.Length;
                         folderName = FolderPath.Substring(newlen+1);
-                        
-                        folderName = folderName.Replace("/", "_");
+
+                        folderName = folderName.Replace("/", ReplaceSlash);
                         if (dFolderMap.ContainsKey(parentPath))
                             strParentNum = dFolderMap[parentPath];
                         else
@@ -2478,7 +2485,7 @@ public class ZimbraAPI
                     }
                     else
                     {
-                        folderName = newpath.Replace("/", "_");
+                        folderName = newpath.Replace("/", ReplaceSlash);
                         string NewParentPath = FolderPath.Substring(0, (ind - 1));
                         strParentNum = GetSpecialFolderNum(NewParentPath);
                         if (strParentNum.Length == 0)

@@ -104,6 +104,7 @@ public class MigrationOptions
     public LogLevel VerboseOn;
     public bool SkipPrevMigrated;
     public Int32 MaxErrorCnt;
+    public string SpecialCharRep;
 }
 
 public class CSMigrationWrapper
@@ -779,7 +780,7 @@ public class CSMigrationWrapper
         }
         Log.info("Acct.TotalItems=", Acct.TotalItems.ToString());
 
-        ZimbraAPI api = new ZimbraAPI(isServer, logLevel);
+        ZimbraAPI api = new ZimbraAPI(isServer, logLevel, options.SpecialCharRep);
         api.AccountID = Acct.AccountID;
         api.AccountName = Acct.AccountName;
 

@@ -698,6 +698,8 @@ public class ScheduleViewModel: BaseViewModel
                     importOpts.VerboseOn = LogLevel.Info;
                     break;
                 }
+
+         importOpts.SpecialCharRep = ovm.SpecialCharReplace;
         
         return importOpts;
     }

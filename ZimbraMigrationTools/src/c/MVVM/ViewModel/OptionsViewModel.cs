@@ -58,6 +58,8 @@ public class OptionsViewModel: BaseViewModel
         IsMaxMessageSize = config.AdvancedImportOptions.IsMaxMessageSize;
         IsSkipFolders = config.AdvancedImportOptions.IsSkipFolders;
 
+        SpecialCharReplace = config.AdvancedImportOptions.SpecialCharReplace;
+
         if (config.GeneralOptions != null)  // so old config files will work
         {
             LoggingVerbose = config.GeneralOptions.Verbose;
@@ -401,6 +403,18 @@ public class OptionsViewModel: BaseViewModel
             m_config.AdvancedImportOptions.IsSkipPrevMigratedItems = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("IsSkipPrevMigratedItems"));
+        }
+    }
+    public string SpecialCharReplace
+    {
+        get { return m_config.AdvancedImportOptions.SpecialCharReplace; }
+        set
+        {
+            if (value == m_config.AdvancedImportOptions.SpecialCharReplace)
+                return;
+            m_config.AdvancedImportOptions.SpecialCharReplace = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("SpecialCharReplace"));
         }
     }
     private string placeholderstring;

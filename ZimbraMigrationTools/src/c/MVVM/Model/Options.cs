@@ -91,6 +91,14 @@ public class AdvancedImportOptions
         get { return m_IsSkipPrevMigratedItems; }
         set { m_IsSkipPrevMigratedItems = value; }
     }
+    private string m_SpecialCharReplace;
+
+    public string SpecialCharReplace
+    {
+        get { return m_SpecialCharReplace; }
+        set { m_SpecialCharReplace = value; }
+    }
+
 }
 
 public class Folder

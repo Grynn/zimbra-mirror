@@ -219,6 +219,7 @@ public class BaseViewModel: INotifyPropertyChanged
             (optionsModel.IsMaxMessageSize) ? optionsModel.MaxMessageSize
             : "";
 
+        m_config.AdvancedImportOptions.SpecialCharReplace = optionsModel.SpecialCharReplace;
         // deal with skip folders
         m_config.AdvancedImportOptions.IsSkipFolders = optionsModel.IsSkipFolders;
         if (optionsModel.IsSkipFolders)

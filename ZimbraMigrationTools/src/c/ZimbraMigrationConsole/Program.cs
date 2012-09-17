@@ -927,7 +927,7 @@ class Program
                         Log.info("Connecting to to Zimbra Server \n   ");
                         System.Console.WriteLine();
 
-                        ZimbraAPI zimbraAPI = new ZimbraAPI(true, importopts.VerboseOn);
+                        ZimbraAPI zimbraAPI = new ZimbraAPI(true, importopts.VerboseOn,importopts.SpecialCharRep);
                         /*int stat = zimbraAPI.Logon(
                             myXmlConfig.ConfigObj.zimbraServer.Hostname,
                             myXmlConfig.ConfigObj.zimbraServer.Port,
