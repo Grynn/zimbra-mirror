@@ -1,0 +1,11 @@
+--- openldap-2.4.33/servers/slapd/back-mdb/init.c.orig	2012-09-17 14:32:20.823668329 -0700
++++ openldap-2.4.33/servers/slapd/back-mdb/init.c	2012-09-17 14:32:33.573663010 -0700
+@@ -55,7 +55,7 @@
+ 
+ 	/* DBEnv parameters */
+ 	mdb->mi_dbenv_home = ch_strdup( SLAPD_DEFAULT_DB_DIR );
+-	mdb->mi_dbenv_flags = 0;
++	mdb->mi_dbenv_flags = MDB_WRITEMAP;
+ 	mdb->mi_dbenv_mode = SLAPD_DEFAULT_DB_MODE;
+ 
+ 	mdb->mi_search_stack_depth = DEFAULT_SEARCH_STACK_DEPTH;
