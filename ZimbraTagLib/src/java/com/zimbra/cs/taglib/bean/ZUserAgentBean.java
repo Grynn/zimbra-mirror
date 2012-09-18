@@ -208,6 +208,18 @@ public class ZUserAgentBean {
 
     public boolean getIsIE7up() { return (isIE && (browserVersion.greaterOrEqual(7, 0))); }
 
+    public boolean getIsIE8() { return (isIE && (browserVersion.equals(8, 0))); }
+
+    public boolean getIsIE8up() { return (isIE && (browserVersion.greaterOrEqual(8, 0))); }
+    
+    public boolean getIsIE9()   { return (isIE && (browserVersion.equals(9,0))); }
+
+    public boolean getIsIE9up() { return (isIE && (browserVersion.greaterOrEqual(9,0))); }
+    
+    public boolean getIsIE10() { return (isIE && (browserVersion.equals(10,0))); }
+    
+    public boolean getIsIE10up() { return (isIE && (browserVersion.getMajor() >= 10)); }
+    
     public boolean getIsMozilla() { return isMozilla; }
 
     public boolean getIsMozilla1_4up() { return (isMozilla && (mozVersion.greaterOrEqual(1,4))); }

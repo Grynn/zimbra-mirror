@@ -211,6 +211,9 @@ function() {
 	AjxEnv.isIE7up = false;
 	AjxEnv.isIE8  = false;
 	AjxEnv.isIE8up = false;
+	AjxEnv.isIE9   = false;
+	AjxEnv.isIE9up = false;
+	AjxEnv.isIE10  = false;
 	AjxEnv.isNormalResolution = false;
 	AjxEnv.ieScaleFactor = 1;
 	AjxEnv.isFirefox = false;
@@ -362,6 +365,9 @@ function() {
 		AjxEnv.isIE7up			= (AjxEnv.isIE && browserVersion >= 7.0);
 		AjxEnv.isIE8			= (AjxEnv.isIE && browserVersion >= 8.0 && browserVersion < 9.0);
 		AjxEnv.isIE8up			= (AjxEnv.isIE && browserVersion >= 8.0);
+		AjxEnv.isIE9			= (AjxEnv.isIE && browserVersion >= 9.0 && browserVersion < 10.0);
+		AjxEnv.isIE9up			= (AjxEnv.isIE && browserVersion >= 9.0);
+		AjxEnv.isIE10			= (AjxEnv.isIE && browserVersion >= 10.0 && browserVersion < 11.0);
 		AjxEnv.isMozilla		= ((AjxEnv.isNav && AjxEnv.mozVersion && AjxEnv.isGeckoBased && (AjxEnv.geckoDate != 0)));
 		AjxEnv.isMozilla1_4up	= (AjxEnv.isMozilla && (AjxEnv.mozVersion >= 1.4));
 		AjxEnv.isFirefox 		= ((AjxEnv.isMozilla && AjxEnv.isFirefox));
