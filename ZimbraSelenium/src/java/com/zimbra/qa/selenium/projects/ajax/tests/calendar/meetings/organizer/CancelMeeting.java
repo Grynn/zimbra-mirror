@@ -28,7 +28,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 	
 	
 	@Bugs(ids = "69132,77548")
-	@Test(description = "Cancel an meeting using Delete toolbar button",
+	@Test(description = "Cancel meeting using Delete toolbar button",
 			groups = { "smoke" })
 	public void CancelMeeting_01() throws HarnessException {
 		
@@ -99,7 +99,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 	}
 	
 	@Bugs(ids = "69132")
-	@Test(description = "Cancel an meeting using context menu",
+	@Test(description = "Cancel meeting using context menu",
 			groups = { "functional" })
 	public void CancelMeeting_02() throws HarnessException {
 		
@@ -177,7 +177,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 	}
 
 	@Bugs(ids = "69132")
-	@Test(description = "Cancel an meeting using keyboard shortcuts Del & Backspace",
+	@Test(description = "Cancel meeting using keyboard shortcuts Del & Backspace",
 			groups = { "functional" },
 			dataProvider = "DataProviderShortcutKeys")
 	public void CancelMeeting_03(String name, int keyEvent) throws HarnessException {
@@ -252,7 +252,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 	}
 	
 	@Bugs(ids = "69132")
-	@Test(description = "Don't cancel an meeting (press Cancel button in meeting cancellation dialog)",
+	@Test(description = "Don't cancel the meeting (press Cancel button from cancellation dialog)",
 			groups = { "functional" })
 	public void CancelMeeting_04() throws HarnessException {
 		
