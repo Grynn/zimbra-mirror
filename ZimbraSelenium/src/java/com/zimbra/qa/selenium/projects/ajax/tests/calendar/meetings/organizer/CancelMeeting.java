@@ -27,7 +27,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 	
 	
 	
-	@Bugs(ids = "69132")
+	@Bugs(ids = "69132,77548")
 	@Test(description = "Cancel an meeting using Delete toolbar button",
 			groups = { "smoke" })
 	public void CancelMeeting_01() throws HarnessException {
@@ -478,7 +478,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 		
 		// Verify meeting cancellation message with exact body content
 		ZAssert.assertNotNull(canceledApptMail, "Verify meeting cancellation message received to attendee");
-		ZAssert.assertStringContains(canceledApptMail.dBodyHtml, modifyApptBody, "Verify the body field value is correct");
+		ZAssert.assertStringContains(canceledApptMail.dBodyText, modifyApptBody, "Verify the body field value is correct");
 		
 		// Verify meeting is deleted from attendee's calendar
 //		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);

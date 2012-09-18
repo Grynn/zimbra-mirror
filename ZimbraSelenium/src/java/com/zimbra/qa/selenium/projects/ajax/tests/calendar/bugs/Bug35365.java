@@ -2,6 +2,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.bugs;
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -21,7 +23,7 @@ public class Bug35365 extends CalendarWorkWeekTest {
 		super.startingPage = app.zPageCalendar;
 	}
 
-	
+	@Bugs(ids = "77548")
 	@Test(	
 			description = "Text entered before cancellation message of a cancelled appointment ignored",
 			groups = { "functional" }	
@@ -70,7 +72,7 @@ public class Bug35365 extends CalendarWorkWeekTest {
 		// Verify meeting is deleted from attendee's calendar
 		SleepUtil.sleepLong(); //importSOAP gives wrong response without sleep
 		MailItem canceledApptMail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:(" + (char)34 + "Cancelled " + apptSubject + (char)34 + ")");
-		ZAssert.assertStringContains(canceledApptMail.dBodyHtml, editApptBody, "Verify the body field value is correct");
+		ZAssert.assertStringContains(canceledApptMail.dBodyText, editApptBody, "Verify the body field value is correct");
 		
 		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
 		ZAssert.assertNull(canceledAppt, "Verify meeting is deleted from attendee's calendar");
