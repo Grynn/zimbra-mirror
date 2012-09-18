@@ -26,7 +26,7 @@ public class DialogCreateFolder extends AbsDialog {
 	   public static final String zDialogId = "css=div.DwtTreeItemLevel1ChildDiv";
 
       // Textfields
-      public static final String zNameField = "css=input[id$='_name'][class*='Field']";
+      public static final String zNameField = "css=div[id^='CreateNewFolderDialog'] input[id$='_name']";
 
       // Buttons
       public static final String zOkButton = "css=td[id=CreateNewFolderDialog_button2_title]";
