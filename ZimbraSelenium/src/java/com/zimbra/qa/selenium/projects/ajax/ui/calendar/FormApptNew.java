@@ -608,6 +608,7 @@ public class FormApptNew extends AbsForm {
 		// Attendees
 		if (appt.getAttendees() != null) {
 			zFillField(Field.Attendees, appt.getAttendees());
+			SleepUtil.sleepSmall();
 			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 		}
 		
@@ -615,12 +616,14 @@ public class FormApptNew extends AbsForm {
 		if (appt.getOptional() != null) {
 			this.sClickAt(Locators.ShowOptionalLink, "");
 			zFillField(Field.Optional, appt.getOptional());
+			SleepUtil.sleepSmall();
 			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 		}
 		
 		// Location
 		if (appt.getLocation() != null) {
 			zFillField(Field.Location, appt.getLocation());
+			SleepUtil.sleepSmall();
 			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 		}
 		
@@ -628,6 +631,7 @@ public class FormApptNew extends AbsForm {
 		if (appt.getEquipment() != null) {
 			this.sClickAt(Locators.ShowEquipmentLink, "");
 			zFillField(Field.Equipment, appt.getEquipment());
+			SleepUtil.sleepSmall();
 			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 		}
 		
