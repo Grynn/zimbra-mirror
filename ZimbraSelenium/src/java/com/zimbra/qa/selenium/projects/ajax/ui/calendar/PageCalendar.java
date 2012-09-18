@@ -730,15 +730,20 @@ public class PageCalendar extends AbsTab {
 
 		if (action == Action.A_RIGHTCLICK) {
 			
+			this.zRightClickAt(locator, "");
+			this.zWaitForBusyOverlay();
+			SleepUtil.sleepSmall();
+			
 			if ( (option == Button.O_DELETE) || (option == Button.O_CANCEL_MENU) ) {
 				
 				optionLocator = Locators.CancelMenu;
-
-				// Since we are not going to "wait for active", insert
-				// a small delay to make sure the dialog shows up
-				// before the zIsActive() method is called
-				SleepUtil.sleepMedium();
-
+				
+				if ( optionLocator != null ) {
+					this.zClickAt(optionLocator, "");
+					SleepUtil.sleepSmall();
+					this.zWaitForBusyOverlay();
+				}
+				
 				// If the organizer deletes an appointment, you get "Send Cancellation" dialog
 				page = new DialogConfirmDeleteOrganizer(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 				if ( page.zIsActive() ) {
@@ -762,29 +767,57 @@ public class PageCalendar extends AbsTab {
 					return (page);
 				}
 
-				return (page);
+				throw new HarnessException("Dialog box not opened after performing action");
 				
 			} else if ( option == Button.O_REINVITE ) {
 				
 				optionLocator = "css=div#zm__Calendar div#REINVITE_ATTENDEES td[id$='_title']";
+				
+				if ( optionLocator != null ) {
+
+					this.zClickAt(optionLocator, "");
+					SleepUtil.sleepSmall();
+					this.zWaitForBusyOverlay();
+
+				}
 				page = null;
 				waitForPostfix = true;
 			
 			} else if ( option == Button.O_REPLY_MENU ) {
 				
 				optionLocator = Locators.ReplyMenu;
+				
+				if ( optionLocator != null ) {
+					this.zClickAt(optionLocator, "");
+					SleepUtil.sleepSmall();
+					this.zWaitForBusyOverlay();
+				}
+				
 				page = null;
 				waitForPostfix = true;
 			
 			} else if ( option == Button.O_REPLY_TO_ALL_MENU ) {
 				
 				optionLocator = Locators.ReplyToAllMenu;
+				
+				if ( optionLocator != null ) {
+					this.zClickAt(optionLocator, "");
+					SleepUtil.sleepSmall();
+					this.zWaitForBusyOverlay();
+				}
+				
 				page = null;
 				waitForPostfix = true;
 				
 			} else if ( option == Button.O_FORWARD_MENU) {
 				
 				optionLocator = Locators.ForwardMenu;
+				
+				if ( optionLocator != null ) {
+					this.zClickAt(optionLocator, "");
+					SleepUtil.sleepSmall();
+					this.zWaitForBusyOverlay();
+				}
 				
 				page = null;
 				waitForPostfix = true;
@@ -802,18 +835,6 @@ public class PageCalendar extends AbsTab {
 
 		if ( locator == null ) {
 			throw new HarnessException("Unable to determine the appointment locator");
-		}
-		
-		this.zRightClickAt(locator, "");
-		this.zWaitForBusyOverlay();
-		SleepUtil.sleepSmall();
-		
-		if ( optionLocator != null ) {
-
-			this.zClickAt(optionLocator, "");
-			SleepUtil.sleepSmall();
-			this.zWaitForBusyOverlay();
-
 		}
 		
 		if ( page != null ) {
