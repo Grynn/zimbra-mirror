@@ -17,8 +17,9 @@ public class AuthTokenTimeout extends PrefGroupMailByMessageTest {
 		logger.info("New "+ AuthTokenTimeout.class.getCanonicalName());
 		
 		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "text");
-		super.startingAccountPreferences.put("zimbraPrefAutoSaveDraftInterval", "90s");
-		super.startingAccountPreferences.put("zimbraAuthTokenLifetime", "30s");
+		super.startingAccountPreferences.put("zimbraPrefAutoSaveDraftInterval", "240s");
+		super.startingAccountPreferences.put("zimbraAuthTokenLifetime", "100s");
+
 
 	}
 	
@@ -45,7 +46,7 @@ public class AuthTokenTimeout extends PrefGroupMailByMessageTest {
 
 		// Wait for the authtoken timeout
 		ZimbraAccount a = app.zGetActiveAccount();
-		SleepUtil.sleep(60000);
+		SleepUtil.sleep(120000);
 
 		// Send the message
 		mailform.zSubmit();
