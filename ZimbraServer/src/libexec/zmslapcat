@@ -60,13 +60,17 @@ else
 fi
 
 mkdir -p $DEST
+RC=0
 if [ x$CONFIG = "xyes" ]; then
 	${zimbra_home}/openldap/sbin/slapcat -F ${zimbra_home}/data/ldap/config -n 0 -l ${DEST}/${FILE}
+	RC=$?
 elif [ x$ALOG = "xyes" ]; then
 	${zimbra_home}/openldap/sbin/slapcat -F ${zimbra_home}/data/ldap/config -b "cn=accesslog" -l ${DEST}/${FILE}
+	RC=$?
 else
 	${zimbra_home}/openldap/sbin/slapcat -F ${zimbra_home}/data/ldap/config -b "" -l ${DEST}/${FILE}
+	RC=$?
 fi
 
 cp -f ${DEST}/${FILE} ${DEST}/${NFILE}
-
+exit $RC
