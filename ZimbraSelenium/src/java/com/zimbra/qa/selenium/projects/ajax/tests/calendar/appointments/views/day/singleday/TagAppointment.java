@@ -245,7 +245,7 @@ public class TagAppointment extends AjaxCommonTest {
 		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag1 +"'/>" + "</ItemActionRequest>");
         
         // Selenium doesn't select latest sub menu and clicks to wrong hidden menu so test fails.
-        // Adding work around to refresh browser (which is not ideal work around) but application is not doing anything wrong
+        // Adding work around to refresh browser (which is not suppose to do but application is not doing anything wrong)
         // Manually everything works fine though.
         // Running this test individually also works fine because it doesn't find duplicate sub menu
         Robot Robot = new Robot();
