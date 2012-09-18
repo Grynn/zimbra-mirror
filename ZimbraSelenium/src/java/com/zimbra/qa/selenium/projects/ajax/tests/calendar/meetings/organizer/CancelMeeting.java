@@ -319,7 +319,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 	
 	
 	@Bugs(ids = "69132")
-	@Test(description = "Verify sending the editted cancelation message immediately (without changing) sends the cancellation message to attendees",
+	@Test(description = "Cancel appointment without modifying cancellation message content",
 			groups = { "functional" })
 	public void CancelMeeting_05() throws HarnessException {
 		
