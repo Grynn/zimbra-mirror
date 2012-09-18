@@ -70,7 +70,7 @@ public class Bug35365 extends CalendarWorkWeekTest {
 		// Verify meeting is deleted from attendee's calendar
 		SleepUtil.sleepLong(); //importSOAP gives wrong response without sleep
 		MailItem canceledApptMail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:(" + (char)34 + "Cancelled " + apptSubject + (char)34 + ")");
-		ZAssert.assertStringContains(canceledApptMail.dBodyText, editApptBody, "Verify the body field value is correct");
+		ZAssert.assertStringContains(canceledApptMail.dBodyHtml, editApptBody, "Verify the body field value is correct");
 		
 		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
 		ZAssert.assertNull(canceledAppt, "Verify meeting is deleted from attendee's calendar");
