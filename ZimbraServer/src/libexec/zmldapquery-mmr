@@ -67,6 +67,7 @@ if(lc($ldap_is_master) eq "true") {
   my $size = $mesg->count;
   if ($size == 0) {
     print "Error: Not a multi-master.\n";
+    $ldap->unbind();
     exit(1);
   }
   my $entry=$mesg->entry(0);
@@ -96,6 +97,7 @@ if(lc($ldap_is_master) eq "true") {
 	  $count++;
     }
   }
+  $ldap->unbind();
 } else {
   print "Not a master.\n";
   exit(0);
