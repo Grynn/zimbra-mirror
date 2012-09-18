@@ -449,7 +449,7 @@ public class TreeContacts extends AbsTree {
 		String subLocator = null;
 		if ( button == Button.B_TREE_NEWADDRESSBOOK ) {
 			
-			locator = "css=div#main_Contacts-parent-ADDRBOOK td[id$=_title][id^=DWT]";
+			locator = "css=div[id=main_Contacts-parent-ADDRBOOK] div[class*=ImgContextMenu]";
 		    subLocator ="css=div#ZmActionMenu_contacts_ADDRBOOK td#NEW_ADDRBOOK_title";
 			page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
 			
