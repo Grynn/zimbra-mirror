@@ -60,8 +60,18 @@ public class CreateContact extends AjaxCommonTest  {
         //verify contact "file as" is displayed
         ZAssert.assertTrue(app.zPageAddressbook.zIsContactDisplayed(contactItem), "Verify contact fileAs (" + contactItem.fileAs + ") displayed ");
 
-	    //verify location is System folder "Contacts"
-		ZAssert.assertEquals(app.zPageAddressbook.sGetText("css=td.companyFolder"), SystemFolder.Contacts.getName(), "Verify location (folder) is " + SystemFolder.Contacts.getName());
+	//verify location is System folder "Contacts"
+	//ZAssert.assertEquals(app.zPageAddressbook.sGetText("css=td[class=companyFolder]"), SystemFolder.Contacts.getName(), "Verify location (folder) is " + SystemFolder.Contacts.getName());
+        
+        ZimbraAccount account = app.zGetActiveAccount();
+        account.soapSend(
+		"<GetContactsRequest xmlns='urn:zimbraMail'>" +
+			"<a n='"+ contactItem.email +"'/>" +
+		"</GetContactsRequest>");
+        String folderId = account.soapSelectValue("//mail:cn", "l");
+        FolderItem contactsFolder = FolderItem.importFromSOAP(account,
+		SystemFolder.Contacts);
+        ZAssert.assertEquals(folderId, contactsFolder.getId(), "Verify the folder ID that the contact was created in");
 
 		return contactItem;
 	}
