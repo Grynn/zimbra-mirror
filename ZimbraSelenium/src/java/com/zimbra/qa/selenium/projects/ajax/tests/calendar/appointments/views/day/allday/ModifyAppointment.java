@@ -68,11 +68,13 @@ public class ModifyAppointment extends AjaxCommonTest {
 
         // Open appointment & modify subject, body and save it
         FormApptNew form = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        ZAssert.assertNotNull(form, "Verify the appointment form oopens correctly");
+        SleepUtil.sleepMedium();
+        ZAssert.assertNotNull(form, "Verify the appointment form opens correctly");
 
         form.zFillField(Field.Subject, editApptSubject);
         form.zFillField(Field.Body, editApptBody);
         form.zToolbarPressButton(Button.B_SAVEANDCLOSE);
+        SleepUtil.sleepMedium();
         
         // Use GetAppointmentRequest to verify the changes are saved
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ apptId +"'/>");

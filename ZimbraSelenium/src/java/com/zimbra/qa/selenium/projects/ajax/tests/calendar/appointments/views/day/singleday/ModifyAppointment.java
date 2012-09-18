@@ -81,6 +81,7 @@ public class ModifyAppointment extends AjaxCommonTest {
         appt.setContent(editApptBody);
         apptForm.zFill(appt);
         apptForm.zToolbarPressButton(Button.B_SAVEANDCLOSE);
+        SleepUtil.sleepMedium();
         
         // Use GetAppointmentRequest to verify the changes are saved
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ apptId +"'/>");
