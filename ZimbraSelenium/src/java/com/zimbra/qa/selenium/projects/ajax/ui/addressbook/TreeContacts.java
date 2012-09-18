@@ -456,7 +456,7 @@ public class TreeContacts extends AbsTree {
 		
 		} else if ( button == Button.B_TREE_NEWTAG ) { 			
 			//locator = zNewTagIcon;
-			locator = "css=div#main_Contacts-parent-TAG td[id$=_title][id^=DWT]"; //td#ztih__main_Contacts__TAG_optCell";
+			locator = "css=div[id=main_Contacts-parent-TAG] div[class*=ImgContextMenu]"; //td#ztih__main_Contacts__TAG_optCell";
             subLocator ="css=div#ZmActionMenu_contacts_TAG td#NEW_TAG_title";
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
 				
