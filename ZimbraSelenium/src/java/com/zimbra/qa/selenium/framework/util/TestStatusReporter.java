@@ -495,7 +495,6 @@ public class TestStatusReporter extends TestListenerAdapter {
 				//	" version:" + CommonTest.ZimbraVersion +
 				new Date().toString() + 
 				" -  Duration " + duration + " sec " +
-				" - Sleep " + (SleepUtil.TotalSleepMillis/1000) + " sec " +        		
 				"\n - " + (passed + failed + skipped ) + " run " + 
 				"\n - " +  passed + " pass  " +
 				"\n - " +  failed + " fail   - " +   confFailed + " conf fail  " + 
@@ -551,7 +550,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 		body.append("\nlocale: " + ZimbraSeleniumProperties.getStringProperty("locale")); 		
 		body.append("\nserver: " +ZimbraSeleniumProperties.getStringProperty("server.host"));
 		body.append("\nclient: " + System.getenv("COMPUTERNAME")) ;
-		body.append("\nduration: " + duration + " sec( Sleep: " + (SleepUtil.TotalSleepMillis/1000) + " sec)");
+		body.append("\nduration: " + duration + " sec");
 		body.append("\nstart at: " + startDate);
 		body.append("\nend at: " + new Date());
 

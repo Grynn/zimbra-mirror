@@ -72,10 +72,11 @@ public class SleepMetrics {
 	public static void RecordSleep(StackTraceElement e, long delay, long actual) {
 		SleepEntry entry = getEntry( e.getClassName(), e.getMethodName() );
 		if ( entry == null ) {
-			entry = new SleepEntry(e.getClassName(), e.getMethodName(), actual);
+			entry = new SleepEntry(e.getClassName(), e.getMethodName());
+			entry.addSleep(actual);
 			metrics.add(entry);
 		} else {
-			entry.addDelay(actual);
+			entry.addSleep(actual);
 		}
 		
 	}
@@ -113,10 +114,11 @@ public class SleepMetrics {
 	public static void RecordProcessing(StackTraceElement e, long actual) {
 		SleepEntry entry = getEntry( e.getClassName(), e.getMethodName() );
 		if ( entry == null ) {
-			entry = new SleepEntry(e.getClassName(), e.getMethodName(), actual);
+			entry = new SleepEntry(e.getClassName(), e.getMethodName());
+			entry.addExecution(actual);
 			metrics.add(entry);
 		} else {
-			entry.addDelay(actual);
+			entry.addExecution(actual);
 		}
 	}
 	
@@ -141,28 +143,36 @@ public class SleepMetrics {
 
 		public String className;
 		public String methodName;
-		public long totalDelay;
+		public long totalSleep;
+		public long totalExecution;
 		
-		public SleepEntry(String clazz, String method, long delay) {
+		public SleepEntry(String clazz, String method) {
 			className = clazz;
 			methodName = method;
-			totalDelay = delay;
+			totalSleep = 0;
+			totalExecution = 0;
 			
-			logger.info("Entry: "+ className +"."+ methodName +"() - "+ delay +"/"+ totalDelay);
+			logger.info("Entry: "+ className +"."+ methodName +"() - new entry");
 		}
 		
-		public void addDelay(long delay) {
-			totalDelay += delay;
-			
-			logger.info("Entry: "+ className +"."+ methodName +"() - "+ delay +"/"+ totalDelay);
+		public void addSleep(long delay) {
+			totalSleep += delay;
+			logger.info("Entry: "+ className +"."+ methodName +"() - Sleep: "+ delay +"/"+ totalSleep);
+		}
+		
+		public void addExecution(long delay) {
+			totalExecution += delay;
+			logger.info("Entry: "+ className +"."+ methodName +"() -  Exec: "+ delay +"/"+ totalExecution);
 		}
 		
 		public String toString() {
 			
 			// "Entry: com.zimbra.qa.selenium.class.method() - 1234 msec"
 			
-			StringBuilder sb = new StringBuilder("Entry: ");
-			sb.append(className).append('.').append(methodName).append("() - ").append(totalDelay).append(" msec");
+			StringBuilder sb = new StringBuilder("Report: ");
+			sb.append(className).append('.').append(methodName).append("() -");
+			sb.append(" Sleep: ").append(totalSleep).append(" msec");
+			sb.append(" Exec: ").append(totalExecution).append(" msec");
 			return (sb.toString());
 		}
 
@@ -180,11 +190,19 @@ public class SleepMetrics {
 				return (EQUAL);
 			}
 			
-			if ( this.totalDelay > that.totalDelay ) {
+			if ( this.totalSleep > that.totalSleep ) {
 				return (BEFORE);
 			}
 			
-			if ( this.totalDelay < that.totalDelay ) {
+			if ( this.totalSleep < that.totalSleep ) {
+				return (AFTER);
+			}
+			
+			if ( this.totalExecution > that.totalExecution ) {
+				return (BEFORE);
+			}
+			
+			if ( this.totalExecution < that.totalExecution ) {
 				return (AFTER);
 			}
 			

@@ -20,7 +20,6 @@ public class SleepUtil {
 	private static Logger logger = LogManager.getLogger(SleepUtil.class);
 
 	/// Public methods
-	public static int TotalSleepMillis = 0;
 	public static int SleepGranularity = 1000;
 	
 	public static void sleep(long millis) {
@@ -51,8 +50,6 @@ public class SleepUtil {
 	
 			} catch (InterruptedException e) {
 				logger.warn("Sleep was interuppted", e);
-			} finally {
-				TotalSleepMillis += total;
 			}
 			
 		} finally {
