@@ -269,7 +269,6 @@ function(listener) {
  */
 DwtHtmlEditor.prototype.clear =
 function() {
-	AjxDebug.println(AjxDebug.REPLY, "DwtHtmlEditor::clear");
 	this.setContent("");
 }
 
@@ -321,17 +320,14 @@ function(content) {
 	}
 
 	content = content || "";
-	AjxDebug.println(AjxDebug.REPLY, "DwtHtmlEditor::setContent - Content length: " + content.length);
 	if (this._mode == DwtHtmlEditor.HTML) {
 		// If the html editor is initialized then go ahead and set the content, else let
 		// _finishHtmlModeInit run before we try setting the content
 		this._pendingContent = content;
-		AjxDebug.println(AjxDebug.REPLY, "HTML mode, initialized: " + this._htmlModeInited);
 		if (this._htmlModeInited) {
 			this._setContentOnTimer();
 		} // ELSE: _finishHtmlModeInit is about to run and it'll use _pendingContent
 	} else {
-		AjxDebug.println(AjxDebug.REPLY, "Text mode, set textarea value");
 		document.getElementById(this._textAreaId).value = content;
 	}
 }
@@ -766,8 +762,6 @@ function(mode, convert, convertor) {
 		var iFrame;
 		var content = convert ? AjxStringUtil.convertToHtml(textArea.value, true) : textArea.value;
 		if (this._iFrameId) {
-			AjxDebug.println(AjxDebug.REPLY, "DwtHtmlEditor::setMode - content length = " + content.length);
-			AjxDebug.println(AjxDebug.REPLY, "Set innerHTML of iframe body");
 			idoc.body.innerHTML = content;
 			iFrame = document.getElementById(this._iFrameId);
 		} else {
@@ -1722,7 +1716,6 @@ function(iFrameDoc) {
 
 DwtHtmlEditor.prototype._onContentInitialized =
 function() {
-	AjxDebug.println(AjxDebug.REPLY, "DwtHtmlEditor::_onContentInitialized - clear pending content, length = " + this._pendingContent.length);
 	this._pendingContent = null;
 };
 
@@ -1730,20 +1723,15 @@ DwtHtmlEditor.prototype._setContentOnTimer =
 function() {
 	var iframeDoc = this._getIframeDoc();
 	try {
-		AjxDebug.println(AjxDebug.REPLY, "DwtHtmlEditor::_setContentOnTimer");
 		if (this._pendingContent != null) {
-			AjxDebug.println(AjxDebug.REPLY, "Pending content length: " + this._pendingContent.length);
-			AjxDebug.println(AjxDebug.REPLY, "Set innerHTML of iframe body");
 			iframeDoc.body.innerHTML = this._pendingContent;
 		}
 		// XXX: mozilla hack
 		if (AjxEnv.isGeckoBased || AjxEnv.isSafari) {
-			AjxDebug.println(AjxDebug.REPLY, "Turn on design mode");
 			this._enableDesignMode(iframeDoc);
 		}
 		this._onContentInitialized();
 	} catch (ex) {
-		AjxDebug.println(AjxDebug.REPLY, "_setContentOnTimer got exception, trying again - [" + ex + "]");
 		var ta = new AjxTimedAction(this, this._setContentOnTimer);
 		AjxTimedAction.scheduleAction(ta, 10);
 		return true;

@@ -236,6 +236,37 @@ function(line) {
 	return words;
 };
 
+AjxStringUtil.WRAP_LENGTH				= 72;
+AjxStringUtil.HTML_QUOTE_COLOR			= "#1010FF";
+AjxStringUtil.HTML_QUOTE_STYLE			= "color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;";
+AjxStringUtil.HTML_QUOTE_PREFIX_PRE		= '<blockquote style="border-left:2px solid ' +
+									 AjxStringUtil.HTML_QUOTE_COLOR +
+									 ';margin-left:5px;padding-left:5px;'+
+									 AjxStringUtil.HTML_QUOTE_STYLE +
+									 '">';
+AjxStringUtil.HTML_QUOTE_PREFIX_POST	= '</blockquote>';
+AjxStringUtil.HTML_QUOTE_NONPREFIX_PRE	= '<div style="' +
+									 AjxStringUtil.HTML_QUOTE_STYLE +
+									 '">';
+AjxStringUtil.HTML_QUOTE_NONPREFIX_POST	= '</div><br/>';
+
+// returns a standard set of params for wrapping text of HTML content
+AjxStringUtil.getWrapParams =
+function(htmlMode, incOptions) {
+
+	incOptions = incOptions || {};
+	var params = {};
+
+	params.htmlMode	= htmlMode;
+	params.len		= AjxStringUtil.WRAP_LENGTH;
+	params.eol		= htmlMode ? '<br/>' : '\n';
+	params.pre		= (htmlMode || !incOptions.prefix) ? "" : appCtxt.get(ZmSetting.REPLY_PREFIX) + " ";
+	params.before	= htmlMode ? (incOptions.prefix ? AjxStringUtil.HTML_QUOTE_PREFIX_PRE : AjxStringUtil.HTML_QUOTE_NONPREFIX_PRE) : "";
+	params.after	= htmlMode ? (incOptions.prefix ? AjxStringUtil.HTML_QUOTE_PREFIX_POST : AjxStringUtil.HTML_QUOTE_NONPREFIX_POST) : "";
+
+	return params;
+};
+
 /**
  * Wraps text to the given length and optionally quotes it. The level of quoting in the
  * source text is preserved based on the prefixes. Special lines such as email headers
@@ -314,7 +345,9 @@ function(params) {
 			if (wds.length) {
 				result += addPrefix + (curP || "") + wds.join("").replace(/^ +/,"") + eol;
 			}
-			result += addPrefix + p + eol;
+			if (i < words.length - 1) {		// don't add a trailing blank line
+				result += addPrefix + p + eol;
+			}
 			wds = [];
 			curLen = 0;
 			curP = null;
@@ -892,9 +925,6 @@ AjxStringUtil.SIG_RE = /^(- ?-+)|(__+)\r?$/;
 AjxStringUtil.SPLIT_RE = /\r\n|\r|\n/;
 AjxStringUtil.HDR_RE = /^\s*\w+:/;
 AjxStringUtil.COLON_RE = /\S+:$/;
-AjxStringUtil.HTML_QUOTE_COLOR = "#1010FF";
-AjxStringUtil.HTML_QUOTE_STYLE = "color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;";
-
 
 // Converts a HTML document represented by a DOM tree to text
 // XXX: There has got to be a better way of doing this!
@@ -2207,7 +2237,7 @@ function(str) {
 	if (!str) {
 		return "";
 	}
-	var m = str && str.match(/((<br>)+)((<\/\w+>)+)$/i);
+	var m = str && str.match(/((<br ?\/?>)+)((<\/\w+>)*)$/i);
 	if (m && m.length) {
 		var regex = new RegExp(m[1] + m[3] + "$", "i");
 		str = str.replace(regex, m[3]);
@@ -2248,6 +2278,4 @@ function(htmlContent) {
 			}
         }
         return content;
-
 };
-
