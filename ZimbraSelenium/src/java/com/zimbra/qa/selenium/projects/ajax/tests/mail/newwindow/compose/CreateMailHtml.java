@@ -61,6 +61,28 @@ public class CreateMailHtml extends PrefGroupMailByMessageTest {
 
 		}
 
+		// Sometimes, the harness is too fast for the client.
+		// Since we are composing in a new window, there is no
+		// busy overlay to block.
+		//
+		// Add a loop, while waiting for the message
+		//
+		for (int i = 0; i < 30; i++) {
+
+			ZimbraAccount.AccountA().soapSend(
+					"<SearchRequest types='message' xmlns='urn:zimbraMail'>"
+			+			"<query>subject:("+ mail.dSubject +")</query>"
+			+		"</SearchRequest>");
+			com.zimbra.common.soap.Element node = ZimbraAccount.AccountA().soapSelectNode("//mail:m", 1);
+			if ( node != null ) {
+				// found the message
+				break;
+			}
+			
+			SleepUtil.sleep(1000);
+
+		}
+
 		// Can't use importFromSOAP, since that only parses the text part
 		// MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")");
 
