@@ -533,7 +533,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public synchronized Set<String> getDistributionLists(Account acct) throws ServiceException {
         return null;
     }
-    
+
     @Override
     public Set<String> getDirectDistributionLists(Account acct)
             throws ServiceException {
@@ -1091,13 +1091,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                     Account account = get(AccountBy.id, LOCAL_ACCOUNT_ID);
                     if (account == null) {
                         account = createLocalAccount();
-                        String uri = "http://127.0.0.1:" + LC.zimbra_admin_service_port.value() + "/desktop/login.jsp?at=" + OfflineLC.zdesktop_installation_key.value();
-                        String webappUri = account.getAttr(A_offlineWebappUri, null);
-                        if (webappUri == null || !webappUri.equals(uri))
-                            setAccountAttribute(account, A_offlineWebappUri, uri);
-                        if (OfflineLC.zdesktop_relabel.value().equalsIgnoreCase(CHN_BETA) && !CHN_BETA.equalsIgnoreCase(account.getAttr(A_zimbraPrefOfflineUpdateChannel, null))) {
-                            setAccountAttribute(account, A_zimbraPrefOfflineUpdateChannel, CHN_BETA);
-                        }
+                    }
+                    String uri = "http://127.0.0.1:" + LC.zimbra_admin_service_port.value() + "/desktop/login.jsp?at=" + OfflineLC.zdesktop_installation_key.value();
+                    String webappUri = account.getAttr(A_offlineWebappUri, null);
+                    if (webappUri == null || !webappUri.equals(uri)) {
+                        setAccountAttribute(account, A_offlineWebappUri, uri);
+                    }
+                    if (OfflineLC.zdesktop_relabel.value().equalsIgnoreCase(CHN_BETA) && !CHN_BETA.equalsIgnoreCase(account.getAttr(A_zimbraPrefOfflineUpdateChannel, null))) {
+                        setAccountAttribute(account, A_zimbraPrefOfflineUpdateChannel, CHN_BETA);
                     }
                     localAccount = account;
                 }
