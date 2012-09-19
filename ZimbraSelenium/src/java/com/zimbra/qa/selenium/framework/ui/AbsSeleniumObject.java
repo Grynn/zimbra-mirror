@@ -290,7 +290,7 @@ public abstract class AbsSeleniumObject {
 			int topLimit) throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){
 			logger.info("...WebDriver...findElement:getLocation().x:y");
-			return elementVisible(locator);
+			return elementVisiblePerPosition(locator);
 		}else{
 			// Check if the locator is present
 			if (!sIsElementPresent(locator)) {
@@ -2781,11 +2781,27 @@ public abstract class AbsSeleniumObject {
 		WebElement el = getElementOrNull(locator);
 		return el != null;
 	}
-
+	
 	private boolean elementVisible(String locator) {
 		logger.info("...WebDriver...elementVisible()");
 		Boolean visible = false;
 		WebElement we = getElementOrNull(locator);
+		
+		if( we != null){
+			visible = we.isDisplayed();
+			logger.info("locator: " + locator
+				+  " - visible : " + (visible));						
+		}else{
+			logger.info("WebElement is null - " + locator );
+		}
+		return visible;
+	}
+
+	private boolean elementVisiblePerPosition(String locator) {
+		logger.info("...WebDriver...elementVisiblePerPosition()");
+		Boolean visible = false;
+		WebElement we = getElementOrNull(locator);
+		
 		if( we != null){
 			int left = we.getLocation().x;
 			int top = we.getLocation().y;
@@ -2833,9 +2849,9 @@ public abstract class AbsSeleniumObject {
 						.until(new ExpectedCondition<Boolean>(){
 							public Boolean apply(WebDriver d) {
 								if(flag){
-									return elementVisible(locator);
+									return elementVisiblePerPosition(locator);
 								}else{
-									return !elementVisible(locator);
+									return !elementVisiblePerPosition(locator);
 								}
 				}});
 			}catch(TimeoutException  e){
