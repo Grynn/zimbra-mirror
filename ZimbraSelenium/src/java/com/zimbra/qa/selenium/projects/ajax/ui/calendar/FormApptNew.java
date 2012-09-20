@@ -581,7 +581,10 @@ public class FormApptNew extends AbsForm {
 			this.sClickAt(locator, "");
 			zRecurringOptions(locator, value, isRepeat);
 		} else {
-			this.sType(locator, value);
+		    if(ZimbraSeleniumProperties.isWebDriver()){
+			this.clearField(locator);
+		    }
+		    this.sType(locator, value);
 		}
 		this.zWaitForBusyOverlay();
 
