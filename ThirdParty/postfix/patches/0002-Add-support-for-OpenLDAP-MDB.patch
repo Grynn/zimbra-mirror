@@ -123,7 +123,7 @@ index 0e098b3..1554217 100644
  #ifdef HAS_DB
      dict_db_cache_size = var_db_read_buf;
  #endif
-+#ifdef HAS_DB
++#ifdef HAS_MDB
 +    dict_mdb_map_size = var_mdb_map_size;
 +#endif
      inet_windowsize = var_inet_windowsize;
