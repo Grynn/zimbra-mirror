@@ -108,6 +108,8 @@ endif
 	$(BDB_PATCH) \
 	$(PATCH) \
 	patch -g0 -p1 < ../patches/postfix-main-cf-zimbra.patch; \
+	patch -g0 -p1 < ../patches/0001-Add-locking-to-dict-interface.patch; \
+	patch -g0 -p1 < ../patches/0002-Add-support-for-OpenLDAP-MDB.patch; \
 	$(MAKE) $(MAKEARGS)  makefiles \
 	OPT="-O2" \
 	DEBUG="-g" \
@@ -125,7 +127,7 @@ endif
 	-DDEF_DATA_DIR=\"/opt/zimbra/data/postfix/data\" \
 	-DUSE_SASL_AUTH \
 	-DUSE_CYRUS_SASL \
-	-DHAS_LDAP -DHAS_MYSQL -DUSE_TLS $(DBINC) $(PCRE_DEF) $(PCRE_INCLUDE) $(FD_SIZE) \
+	-DHAS_LDAP -DHAS_MDB -DHAS_MYSQL -DUSE_TLS $(DBINC) $(PCRE_DEF) $(PCRE_INCLUDE) $(FD_SIZE) \
 	$(URANDOM) \
 	-DUSE_LDAP_SASL \
 	-I/opt/zimbra/openldap-$(LDAP_VERSION)/include \
