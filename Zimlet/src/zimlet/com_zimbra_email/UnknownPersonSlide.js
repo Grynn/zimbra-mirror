@@ -379,7 +379,7 @@ function(attrs) {
 			else if (imProtocol && imProtocol == "aol") {
 				imProtocol = "aim";
 			}
-            im = "<a  id='UnknownPersonSlide_imAnchorId' href='" + imProtocol + ":" + im + "'>" + AjxStringUtil.htmlEncode(im.substring(2)) + "</a>" ;
+            im = "<a  id='UnknownPersonSlide_imAnchorId' href='" + imProtocol + ":" + AjxStringUtil.htmlEncode(im.substring(2)) + "'>" + AjxStringUtil.htmlEncode(im.substring(2)) + "</a>" ;
             this.imURI = attrs["imURI"] = im;
         }
     }
