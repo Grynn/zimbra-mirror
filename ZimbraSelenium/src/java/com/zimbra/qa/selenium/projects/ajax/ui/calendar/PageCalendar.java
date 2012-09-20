@@ -22,6 +22,7 @@ public class PageCalendar extends AbsTab {
 		
 		// Buttons
 		public static final String NewButton = "css=td#zb__CLWW__NEW_MENU_title";
+		public static final String SendButton = "css=div[id^='ztb__APPT-'] td[id$='_SEND_INVITE_title']";
 		public static final String CloseButton = "css=td[id$='__CANCEL_title']:contains('Close')";
 		public static final String ViewButton = "id=zb__CLD__VIEW_MENU_dropdown";
 		public static final String CalendarFolder = "id=zti__main_Calendar__10_textCell";
@@ -1015,7 +1016,13 @@ public class PageCalendar extends AbsTab {
 		} else if (button == Button.B_CLOSE) {
 			locator = Locators.CloseButton;
 			page = null;
-
+		
+		} else if (button == Button.B_SEND) {
+			locator = Locators.SendButton;
+			page = null;
+			
+			SleepUtil.sleepMedium();
+			
 		} else if (button == Button.B_DELETE) {
 
 			locator = "css=td[id='zb__CLD__DELETE_title']";
@@ -1126,6 +1133,10 @@ public class PageCalendar extends AbsTab {
 		// Default behavior, process the locator by clicking on it
 		//
 		this.zClickAt(locator, "");
+		
+		// Wait for the message to be delivered (if any)
+		Stafpostqueue sp = new Stafpostqueue();
+		sp.waitForPostqueue();
 
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();
