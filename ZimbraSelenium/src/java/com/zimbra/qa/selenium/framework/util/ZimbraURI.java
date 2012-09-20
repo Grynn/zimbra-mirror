@@ -192,7 +192,12 @@ public class ZimbraURI {
 	 * @throws URLSyntaxException
 	 */
 	public static URI getCurrentURI() {
-		String uri = ClientSessionFactory.session().selenium().getLocation();
+		String uri;
+		if (ZimbraSeleniumProperties.isWebDriver()){
+		    uri = ClientSessionFactory.session().webDriver().getCurrentUrl();
+		}else{
+		    uri = ClientSessionFactory.session().selenium().getLocation();
+		}
 		try {
 			return (new URI(uri));
 		} catch (URISyntaxException e) {
