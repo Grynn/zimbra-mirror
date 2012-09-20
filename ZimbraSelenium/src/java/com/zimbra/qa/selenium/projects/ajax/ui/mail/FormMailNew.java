@@ -812,14 +812,24 @@ public class FormMailNew extends AbsForm {
 		}
 		
 		if ( mail.dBodyText != null ) {
-			
+		    if(ZimbraSeleniumProperties.isWebDriver()){
+			String textBody = "css=textarea[id*=content]";
+			sType(textBody, mail.dBodyText);
+			sFireEvent(textBody, "keyup");
+		    }else{
 			zFillField(Field.Body, mail.dBodyText);
-			
+		    }
 		}
 		if ( mail.dBodyHtml != null ) {
-			
+		    if(ZimbraSeleniumProperties.isWebDriver()){
+			//String bodyLocator = "css=body[id=tinymce]";
+			String bodyLocator = "css=iframe[id*=ifr]";
+			zWaitForElementPresent(bodyLocator, "10000");
+			sClickAt(bodyLocator,"");
+			zTypeFormattedText(bodyLocator, mail.dBodyHtml);
+		    }else{
 			zFillField(Field.Body, mail.dBodyHtml);
-			
+		    }
 		}
 		
 		
