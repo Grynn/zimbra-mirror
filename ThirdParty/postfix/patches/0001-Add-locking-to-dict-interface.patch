@@ -1,0 +1,215 @@
+From 7ad5443c4f7586618e0f222c74812b80e1194a72 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@symas.com>
+Date: Thu, 20 Sep 2012 07:30:12 -0700
+Subject: [PATCH 1/2] Add locking to dict interface
+
+---
+ src/tls/tls_scache.c  |    4 +---
+ src/util/dict.c       |   22 ++++++++++++++++++++++
+ src/util/dict.h       |    4 ++++
+ src/util/dict_alloc.c |    9 +++++++++
+ src/util/dict_db.c    |    1 +
+ src/util/dict_dbm.c   |    1 +
+ src/util/dict_debug.c |   16 ++++++++++++++++
+ src/util/dict_open.c  |    2 +-
+ src/util/dict_sdbm.c  |    1 +
+ 9 files changed, 56 insertions(+), 4 deletions(-)
+
+diff --git a/src/tls/tls_scache.c b/src/tls/tls_scache.c
+index 7eefd90..52f6ebb 100644
+--- a/src/tls/tls_scache.c
++++ b/src/tls/tls_scache.c
+@@ -458,10 +458,8 @@ TLS_SCACHE *tls_scache_open(const char *dbname, const char *cache_label,
+     /*
+      * Sanity checks.
+      */
+-    if (dict->lock_fd < 0)
+-	msg_fatal("dictionary %s is not a regular file", dbname);
+ #ifdef SINGLE_UPDATER
+-    if (myflock(dict->lock_fd, INTERNAL_LOCK,
++	if (dict->lock(dict, INTERNAL_LOCK,
+ 		MYFLOCK_OP_EXCLUSIVE | MYFLOCK_OP_NOWAIT) < 0)
+ 	msg_fatal("cannot lock dictionary %s for exclusive use: %m", dbname);
+ #endif
+diff --git a/src/util/dict.c b/src/util/dict.c
+index 173544c..f1e53ed 100644
+--- a/src/util/dict.c
++++ b/src/util/dict.c
+@@ -147,6 +147,8 @@
+ /*	Each entry is stored in the dictionary named by \fIdict_name\fR.
+ /*	The result is zero if the file could not be opened.
+ /*
++/*	dict_lock_file() acquires a lock on the named dictionary.
++/*
+ /*	dict_load_fp() reads name-value entries from an open stream.
+ /*	It has the same semantics as the dict_load_file_xt() function.
+ /*
+@@ -362,6 +364,26 @@ int     dict_delete(const char *dict_name, const char *member)
+     return (dict ? dict->delete(dict, member) : DICT_STAT_FAIL);
+ }
+ 
++/* dict_lock_file - lock dictionary */
++
++int     dict_lock_file(const char *dict_name, int style, int op)
++{
++    const char *myname = "dict_lock_file";
++    DICT   *dict;
++
++    DICT_FIND_FOR_LOOKUP(dict, dict_name);
++    if (msg_verbose > 1)
++	msg_info("%s: lock_file %s", myname, dict_name);
++    return (dict ? dict->lock(dict, style, op) : DICT_STAT_FAIL);
++}
++
++/* dict_lock_default - default lock handler */
++
++int     dict_lock_default(DICT *dict, int style, int op)
++{
++	return myflock(dict->lock_fd, style, op);
++}
++
+ /* dict_sequence - traverse dictionary */
+ 
+ int     dict_sequence(const char *dict_name, const int func,
+diff --git a/src/util/dict.h b/src/util/dict.h
+index f8e91a4..d714a21 100644
+--- a/src/util/dict.h
++++ b/src/util/dict.h
+@@ -48,6 +48,7 @@ typedef struct DICT {
+     int     (*delete) (struct DICT *, const char *);
+     int     (*sequence) (struct DICT *, int, const char **, const char **);
+     void    (*close) (struct DICT *);
++    int     (*lock) (struct DICT *, int, int);
+     int     lock_fd;			/* for dict_update() lock */
+     int     stat_fd;			/* change detection */
+     time_t  mtime;			/* mod time at open */
+@@ -155,6 +156,8 @@ extern int dict_update(const char *, const char *, const char *);
+ extern const char *dict_lookup(const char *, const char *);
+ extern int dict_delete(const char *, const char *);
+ extern int dict_sequence(const char *, const int, const char **, const char **);
++extern int dict_lock_file(const char *, const int, const int);
++extern int dict_lock_default(DICT *, const int, const int);
+ extern int dict_load_file_xt(const char *, const char *);
+ extern void dict_load_fp(const char *, VSTREAM *);
+ extern const char *dict_eval(const char *, const char *, int);
+@@ -171,6 +174,7 @@ extern void dict_open_register(const char *, DICT *(*) (const char *, int, int))
+ #define dict_put(dp, key, val)	(dp)->update((dp), (key), (val))
+ #define dict_del(dp, key)	(dp)->delete((dp), (key))
+ #define dict_seq(dp, f, key, val) (dp)->sequence((dp), (f), (key), (val))
++#define dict_lock(dp, style, op)	(dp)->lock((dp), (style), (op))
+ #define dict_close(dp)		(dp)->close(dp)
+ typedef void (*DICT_WALK_ACTION) (const char *, DICT *, char *);
+ extern void dict_walk(DICT_WALK_ACTION, char *);
+diff --git a/src/util/dict_alloc.c b/src/util/dict_alloc.c
+index 03321f1..30fe450 100644
+--- a/src/util/dict_alloc.c
++++ b/src/util/dict_alloc.c
+@@ -103,6 +103,14 @@ static void dict_default_close(DICT *dict)
+ 	      dict->type, dict->name);
+ }
+ 
++/* dict_default_lock - trap unimplemented operation */
++
++static void dict_default_lock(DICT *dict, int unused_style, int unused_op)
++{
++    msg_fatal("table %s:%s: lock operation is not supported",
++	      dict->type, dict->name);
++}
++
+ /* dict_alloc - allocate dictionary object, initialize super-class */
+ 
+ DICT   *dict_alloc(const char *dict_type, const char *dict_name, ssize_t size)
+@@ -117,6 +125,7 @@ DICT   *dict_alloc(const char *dict_type, const char *dict_name, ssize_t size)
+     dict->delete = dict_default_delete;
+     dict->sequence = dict_default_sequence;
+     dict->close = dict_default_close;
++    dict->lock = dict_default_lock;
+     dict->lock_fd = -1;
+     dict->stat_fd = -1;
+     dict->mtime = 0;
+diff --git a/src/util/dict_db.c b/src/util/dict_db.c
+index 93ee480..b0a1805 100644
+--- a/src/util/dict_db.c
++++ b/src/util/dict_db.c
+@@ -719,6 +719,7 @@ static DICT *dict_db_open(const char *class, const char *path, int open_flags,
+     dict_db->dict.delete = dict_db_delete;
+     dict_db->dict.sequence = dict_db_sequence;
+     dict_db->dict.close = dict_db_close;
++    dict_db->dict.lock = dict_lock_default;
+     dict_db->dict.lock_fd = dbfd;
+     dict_db->dict.stat_fd = dbfd;
+     if (fstat(dict_db->dict.stat_fd, &st) < 0)
+diff --git a/src/util/dict_dbm.c b/src/util/dict_dbm.c
+index 37e1463..ea24dfd 100644
+--- a/src/util/dict_dbm.c
++++ b/src/util/dict_dbm.c
+@@ -452,6 +452,7 @@ DICT   *dict_dbm_open(const char *path, int open_flags, int dict_flags)
+     dict_dbm->dict.delete = dict_dbm_delete;
+     dict_dbm->dict.sequence = dict_dbm_sequence;
+     dict_dbm->dict.close = dict_dbm_close;
++    dict_dbm->dict.lock = dict_lock_default;
+     dict_dbm->dict.lock_fd = dbm_dirfno(dbm);
+     dict_dbm->dict.stat_fd = dbm_pagfno(dbm);
+     if (dict_dbm->dict.lock_fd == dict_dbm->dict.stat_fd)
+diff --git a/src/util/dict_debug.c b/src/util/dict_debug.c
+index 3d9a443..cff1129 100644
+--- a/src/util/dict_debug.c
++++ b/src/util/dict_debug.c
+@@ -123,6 +123,21 @@ static void dict_debug_close(DICT *dict)
+     dict_free(dict);
+ }
+ 
++/* dict_debug_lock - log operation */
++
++static int dict_debug_lock(DICT *dict, int style, int op)
++{
++    DICT_DEBUG *dict_debug = (DICT_DEBUG *) dict;
++    DICT   *real_dict = dict_debug->real_dict;
++    int     result;
++
++    result = dict_lock(real_dict, style, op);
++    msg_info("%s:%s lock: %s", dict->type, dict->name,
++	     result == 0 ? "success" : real_dict->error ?
++	     "error" : "failed");
++    DICT_ERR_VAL_RETURN(dict, real_dict->error, result);
++}
++
+ /* dict_debug - encapsulate dictionary object and install proxies */
+ 
+ DICT   *dict_debug(DICT *real_dict)
+@@ -137,6 +152,7 @@ DICT   *dict_debug(DICT *real_dict)
+     dict_debug->dict.delete = dict_debug_delete;
+     dict_debug->dict.sequence = dict_debug_sequence;
+     dict_debug->dict.close = dict_debug_close;
++    dict_debug->dict.lock = dict_debug_lock;
+     dict_debug->real_dict = real_dict;
+     return (&dict_debug->dict);
+ }
+diff --git a/src/util/dict_open.c b/src/util/dict_open.c
+index cd90e08..cba0f45 100644
+--- a/src/util/dict_open.c
++++ b/src/util/dict_open.c
+@@ -353,7 +353,7 @@ DICT   *dict_open3(const char *dict_type, const char *dict_name,
+ 	if (dict_flags & DICT_FLAG_LOCK)
+ 	    msg_panic("%s: attempt to open %s:%s with both \"open\" lock and \"access\" lock",
+ 		      myname, dict_type, dict_name);
+-	if (myflock(dict->lock_fd, INTERNAL_LOCK,
++	if (dict->lock(dict, INTERNAL_LOCK,
+ 		    MYFLOCK_OP_EXCLUSIVE | MYFLOCK_OP_NOWAIT) < 0)
+ 	    msg_fatal("%s:%s: unable to get exclusive lock: %m",
+ 		      dict_type, dict_name);
+diff --git a/src/util/dict_sdbm.c b/src/util/dict_sdbm.c
+index 23371dc..612ba11 100644
+--- a/src/util/dict_sdbm.c
++++ b/src/util/dict_sdbm.c
+@@ -445,6 +445,7 @@ DICT   *dict_sdbm_open(const char *path, int open_flags, int dict_flags)
+     dict_sdbm->dict.delete = dict_sdbm_delete;
+     dict_sdbm->dict.sequence = dict_sdbm_sequence;
+     dict_sdbm->dict.close = dict_sdbm_close;
++    dict_sdbm->dict.lock = dict_lock_default;
+     dict_sdbm->dict.lock_fd = sdbm_dirfno(dbm);
+     dict_sdbm->dict.stat_fd = sdbm_pagfno(dbm);
+     if (fstat(dict_sdbm->dict.stat_fd, &st) < 0)
+-- 
+1.7.9.5
+
