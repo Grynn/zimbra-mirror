@@ -2893,14 +2893,15 @@ public abstract class AbsSeleniumObject {
 	
 	protected boolean switchTo(String name) throws HarnessException {
 		logger.info("...WebDriver...switchTo() " + name);	
-		WebDriver driver = null;
+		WebDriver driver = webDriver();
 		Set<String> handles = null;
+		String defaultContent;
 		boolean found = false;
-		if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
-			driver = webDriverBackedSelenium().getWrappedDriver();
-		}else{ 
-			driver = webDriver();
-		}	
+		if(name == null){
+		    defaultContent = driver.switchTo().defaultContent().getTitle();
+		    logger.info("selecting defaultContent()" + defaultContent);
+		    sWindowFocus();
+		}
 		
 		try{	
 			logger.info("handles size" );
@@ -2932,7 +2933,7 @@ public abstract class AbsSeleniumObject {
 		}
 		finally{
 			if(!found){
-				String defaultContent = driver.switchTo().defaultContent().getTitle();
+				defaultContent = driver.switchTo().defaultContent().getTitle();
 				logger.info("back to defaultContent()" + defaultContent);
 				sWindowFocus();
 			}
