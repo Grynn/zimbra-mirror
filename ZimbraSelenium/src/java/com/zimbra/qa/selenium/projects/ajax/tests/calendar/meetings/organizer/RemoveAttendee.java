@@ -72,6 +72,7 @@ public class RemoveAttendee extends CalendarWorkWeekTest {
         DialogSendUpdatetoAttendees sendUpdateDialog = (DialogSendUpdatetoAttendees) new DialogSendUpdatetoAttendees(app, app.zPageCalendar);
         sendUpdateDialog.zClickButton(Button.B_SEND_UPDATES_ONLY_TO_ADDED_OR_REMOVED_ATTENDEES);
         sendUpdateDialog.zClickButton(Button.B_OK);
+        SleepUtil.sleepMedium();
  
         // Verify that attendee2 doesn't present in the appointment
         AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
@@ -152,6 +153,7 @@ public class RemoveAttendee extends CalendarWorkWeekTest {
         DialogSendUpdatetoAttendees sendUpdateDialog = (DialogSendUpdatetoAttendees) new DialogSendUpdatetoAttendees(app, app.zPageCalendar);
         sendUpdateDialog.zClickButton(Button.B_SEND_UPDATES_TO_ALL_ATTENDEES);
         sendUpdateDialog.zClickButton(Button.B_OK);
+        SleepUtil.sleepMedium();
         
         // Verify meeting invite appears to attendee1
 		ZimbraAccount.AccountA().soapSend(
