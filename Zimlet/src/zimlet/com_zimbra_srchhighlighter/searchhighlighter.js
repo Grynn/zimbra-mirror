@@ -135,33 +135,33 @@ function(searchStr) {
 			result2.push(word);
 		}
 	}
-	return searchWordHighlighter_unique(result2);
+	return SearchHighlighterZimlet.searchWordHighlighter_unique(result2);
 };
 
 /**
  * Utility function that returns unique elements
  * @param {array} b An Array w/ duplicate items
  */
-function searchWordHighlighter_unique(b) {
+SearchHighlighterZimlet.searchWordHighlighter_unique = function(b) {
 	var a = [], i, l = b.length;
 	for (i = 0; i < l; i++) {
-		if (!searchWordHighlighter_arrayHasEl(a, b[i])) {
+		if (!SearchHighlighterZimlet.searchWordHighlighter_arrayHasEl(a, b[i])) {
 			a.push(b[i]);
 		}
 	}
 	return a;
-}
+};
 /**
  *  A helper function
  */
-function searchWordHighlighter_arrayHasEl(array, val) {
+SearchHighlighterZimlet.searchWordHighlighter_arrayHasEl = function(array, val) {
 	for (var i = 0; i < array.length; i++) {
 		if (array[i] == val) {
 			return true;
 		}
 	}
 	return false;
-}
+};
  /**
  *  Creates list of regular expressions to match
  */

@@ -3413,15 +3413,15 @@ SocialZimlet.prototype._sortAndMergeAccountsAndSearches =
 					simpleArry.push(item);
 				}
 			}
-			simpleArry = simpleArry.sort(social_sortAccounts);
+			simpleArry = simpleArry.sort(SocialZimlet.social_sortAccounts);
 			return simpleArry;
 		};
 
-function social_sortAccounts(a, b) {
+SocialZimlet.social_sortAccounts = function(a, b) {
 	var x = parseInt(a.__pos);
 	var y = parseInt(b.__pos);
 	return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-}
+};
 
 SocialZimlet.prototype._extractJSONResponse =
 		function(tableId, errorName, response) {

@@ -70,6 +70,7 @@ public class Props2Js {
             
             printEntry(out, matcher, key, bundle.getString(key));
         }
+		printTail(out);
     }
 
     public static void convert(OutputStream ostream, Properties props,
@@ -83,6 +84,7 @@ public class Props2Js {
             
             printEntry(out, matcher, key, props.getProperty(key));
         }
+		printTail(out);
     }
 
     public static void convert(OutputStream ostream, File file,
@@ -110,6 +112,7 @@ public class Props2Js {
         printHead(out, classname);
         pp.load(in);
         in.close();
+		printTail(out);
     }
 
     private static void printHead(DataOutputStream out, String classname) throws
@@ -120,6 +123,11 @@ public class Props2Js {
         out.writeBytes("a="+classname+";\n");
     }
     
+	private static void printTail(DataOutputStream out) throws
+		IOException {
+		out.writeBytes("delete a;");
+	}
+	
     private static void printEntry(DataOutputStream out, Matcher matcher,
         String key, String val) throws IOException {
         matcher.reset(key);

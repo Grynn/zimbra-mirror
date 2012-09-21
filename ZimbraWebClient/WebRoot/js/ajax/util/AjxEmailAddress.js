@@ -97,9 +97,10 @@ AjxEmailAddress.toSoapType[AjxEmailAddress.READ_RECEIPT]= "n";
 AjxEmailAddress.SEPARATOR = "; ";				// used to join addresses
 AjxEmailAddress.DELIMS = [';', ',', '\n', ' '];	// recognized as address delimiters
 AjxEmailAddress.IS_DELIM = {};
-for (var i = 0; i < AjxEmailAddress.DELIMS.length; i++) {
+for (i = 0; i < AjxEmailAddress.DELIMS.length; i++) {
 	AjxEmailAddress.IS_DELIM[AjxEmailAddress.DELIMS[i]] = true;
 }
+delete i;
 
 // validation patterns
 

@@ -58,7 +58,7 @@ function(month, day, year) {
 	arry.push({name:"m", indx:ds.indexOf("m")});
 	arry.push({name:"yyyy", indx:ds.indexOf("yyyy")});
 	arry.push({name:"d", indx:ds.indexOf("d")});
-	var sArry = arry.sort(social_sortTimeObjs);
+	var sArry = arry.sort(com_zimbra_socialTwitter.social_sortTimeObjs);
 	for (var i = 0; i < sArry.length; i++) {
 		var name = sArry[i].name;
 		if (name == "m") {
@@ -72,11 +72,11 @@ function(month, day, year) {
 	return fString.join("/");
 };
 
-function social_sortTimeObjs(a, b) {
+com_zimbra_socialTwitter.social_sortTimeObjs = function(a, b) {
 	var x = parseInt(a.indx);
 	var y = parseInt(b.indx);
 	return ((x > y) ? 1 : ((x < y) ? -1 : 0));
-}
+};
 
 com_zimbra_socialTwitter.prototype.getTwitterTrends =
 function() {
