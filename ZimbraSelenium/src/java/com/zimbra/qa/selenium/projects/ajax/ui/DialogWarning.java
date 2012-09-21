@@ -6,6 +6,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 
@@ -152,6 +153,10 @@ public class DialogWarning extends AbsDialog {
 			page.zWaitForActive();
 
 		}
+		
+		// This dialog might send message(s), so wait for the queue
+		Stafpostqueue sp = new Stafpostqueue();
+		sp.waitForPostqueue();
 
 		return (page);
 	}
