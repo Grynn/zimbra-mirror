@@ -584,7 +584,7 @@ public class TreeMail extends AbsTree {
 			
 		} else if ( pulldown == Button.B_TREE_TAGS_OPTIONS ) {
 			
-			pulldownLocator = "css=div[id='zov__main_Mail'] td[id='ztih__main_Mail__TAG_optCell'] td[id$='_title']";
+			pulldownLocator = "css=div[id='zov__main_Mail'] td[id='ztih__main_Mail__TAG_optCell'] div[class*=ImgContextMenu]";
 			
 			if ( option == Button.B_TREE_NEWTAG ) {
 
