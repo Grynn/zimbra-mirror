@@ -28,7 +28,7 @@ public class Bug35365 extends CalendarWorkWeekTest {
 			description = "Text entered before cancellation message of a cancelled appointment ignored",
 			groups = { "functional" }	
 		)
-	public void Bug35365() throws HarnessException {
+	public void Bug35365_01() throws HarnessException {
 		
 		// Create objects
 		String tz, apptSubject, apptBody, apptAttendee1, editApptBody;
