@@ -1,7 +1,7 @@
-From b10bb6013884181c0ef00684798cd17d2017d67b Mon Sep 17 00:00:00 2001
+From fa418b46adeffb25d8928bc9060d94ed4b05d282 Mon Sep 17 00:00:00 2001
 From: Howard Chu <hyc@symas.com>
 Date: Thu, 20 Sep 2012 09:27:14 -0700
-Subject: [PATCH 2/2] Add support for OpenLDAP MDB
+Subject: [PATCH] Add support for OpenLDAP MDB
 
 ---
  makedefs                   |    7 +
@@ -10,13 +10,13 @@ Subject: [PATCH 2/2] Add support for OpenLDAP MDB
  src/global/mail_params.c   |    9 +
  src/global/mail_params.h   |    7 +
  src/global/mkmap.h         |    1 +
- src/global/mkmap_mdb.c     |  149 ++++++++++++++
+ src/global/mkmap_mdb.c     |  141 +++++++++++++
  src/global/mkmap_open.c    |    4 +
  src/util/Makefile.in       |    9 +-
- src/util/dict_mdb.c        |  484 ++++++++++++++++++++++++++++++++++++++++++++
- src/util/dict_mdb.h        |   42 ++++
+ src/util/dict_mdb.c        |  503 ++++++++++++++++++++++++++++++++++++++++++++
+ src/util/dict_mdb.h        |   40 ++++
  src/util/dict_open.c       |    4 +
- 12 files changed, 717 insertions(+), 5 deletions(-)
+ 12 files changed, 726 insertions(+), 5 deletions(-)
  create mode 100644 src/global/mkmap_mdb.c
  create mode 100644 src/util/dict_mdb.c
  create mode 100644 src/util/dict_mdb.h
@@ -82,7 +82,7 @@ index 096e58c..f914155 100644
      "sdbm", 1,				/* legacy 3rd-party TLS */
      "dbz", 1,				/* just in case */
 diff --git a/src/global/mail_params.c b/src/global/mail_params.c
-index 0e098b3..1554217 100644
+index 0e098b3..a14afe6 100644
 --- a/src/global/mail_params.c
 +++ b/src/global/mail_params.c
 @@ -96,6 +96,7 @@
@@ -161,10 +161,10 @@ index d74a912..e9f3a57 100644
  extern MKMAP *mkmap_fail_open(const char *);
 diff --git a/src/global/mkmap_mdb.c b/src/global/mkmap_mdb.c
 new file mode 100644
-index 0000000..6d6092d
+index 0000000..e79b8c4
 --- /dev/null
 +++ b/src/global/mkmap_mdb.c
-@@ -0,0 +1,149 @@
+@@ -0,0 +1,141 @@
 +/*++
 +/* NAME
 +/*	mkmap_mdb 3
@@ -191,10 +191,8 @@ index 0000000..6d6092d
 +/* .fi
 +/*	The Secure Mailer license must be distributed with this software.
 +/* AUTHOR(S)
-+/*	Wietse Venema
-+/*	IBM T.J. Watson Research
-+/*	P.O. Box 704
-+/*	Yorktown Heights, NY 10598, USA
++/*	Howard Chu
++/*	Symas Corporation
 +/*--*/
 +
 +/* System library. */
@@ -299,12 +297,6 @@ index 0000000..6d6092d
 +    /*
 +     * Get an exclusive lock - we're going to change the database so we can't
 +     * have any spectators.
-+     * 
-+     * XXX Horror. Berkeley DB 4.1 refuses to open a zero-length file. This
-+     * means that we must examine the size while the file is locked, and that
-+     * we must unlink a zero-length file while it is locked. Avoid a race
-+     * condition where two processes try to open the same zero-length file
-+     * and where the second process ends up deleting the wrong file.
 +     */
 +    else {
 +	if (myflock(mkmap->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_EXCLUSIVE) < 0)
@@ -379,10 +371,10 @@ index 48990a6..7c73679 100644
  dict_nis.o: argv.h
 diff --git a/src/util/dict_mdb.c b/src/util/dict_mdb.c
 new file mode 100644
-index 0000000..2197469
+index 0000000..55793d1
 --- /dev/null
 +++ b/src/util/dict_mdb.c
-@@ -0,0 +1,484 @@
+@@ -0,0 +1,503 @@
 +/*++
 +/* NAME
 +/*	dict_mdb 3
@@ -745,7 +737,14 @@ index 0000000..2197469
 +	msg_fatal("%s: seeking dictionary: %s", dict_mdb->dict.name, mdb_strerror(status));
 +
 +    if (status == MDB_NOTFOUND) {
-+    	status = 1;
++	/*
++	 * Caller must read to end, to ensure cursor gets closed.
++	 */
++	status = 1;
++	txn = mdb_cursor_txn(dict_mdb->cursor);
++	mdb_cursor_close(dict_mdb->cursor);
++	mdb_txn_abort(txn);
++	dict_mdb->cursor = 0;
 +    } else {
 +
 +	/*
@@ -762,10 +761,6 @@ index 0000000..2197469
 +	    status = 0;
 +	} 
 +    }
-+
-+    /*
-+     * FIXME: someone needs to close the cursor and read txn.
-+     */
 +
 +    return (status);
 +}
@@ -808,6 +803,8 @@ index 0000000..2197469
 +    DICT_MDB *dict_mdb;
 +    struct stat st;
 +    MDB_env *env;
++    MDB_txn *txn;
++    MDB_dbi dbi;
 +    char   *mdb_path;
 +    int	   env_flags, status;
 +
@@ -825,6 +822,18 @@ index 0000000..2197469
 +
 +    if ((status = mdb_env_open(env, mdb_path, env_flags, 0644)))
 +	msg_fatal("env_open %s: %s", mdb_path, mdb_strerror(status));
++
++    if ((status = mdb_txn_begin(env, NULL, 0, &txn)))
++	msg_fatal("txn_begin %s: %s", mdb_path, mdb_strerror(status));
++
++    /* mdb_open requires a txn, but since the default DB always exists
++     * in an MDB environment, we don't need to do anything else with
++     * the txn.
++     */
++    if ((status = mdb_open(txn, NULL, 0, &dbi)))
++	msg_fatal("mdb_open %s: %s", mdb_path, mdb_strerror(status));
++
++    mdb_txn_abort(txn);
 +
 +    dict_mdb = (DICT_MDB *) dict_alloc(DICT_TYPE_MDB, path, sizeof(*dict_mdb));
 +    dict_mdb->dict.lookup = dict_mdb_lookup;
@@ -858,6 +867,8 @@ index 0000000..2197469
 +    if (dict_flags & DICT_FLAG_FOLD_FIX)
 +	dict_mdb->dict.fold_buf = vstring_alloc(10);
 +    dict_mdb->env = env;
++    dict_mdb->dbi = dbi;
++    dict_mdb->cursor = 0;
 +    dict_mdb->key_buf = 0;
 +    dict_mdb->val_buf = 0;
 +
@@ -869,10 +880,10 @@ index 0000000..2197469
 +#endif
 diff --git a/src/util/dict_mdb.h b/src/util/dict_mdb.h
 new file mode 100644
-index 0000000..f57550b
+index 0000000..551d836
 --- /dev/null
 +++ b/src/util/dict_mdb.h
-@@ -0,0 +1,42 @@
+@@ -0,0 +1,40 @@
 +#ifndef _DICT_MDB_H_INCLUDED_
 +#define _DICT_MDB_H_INCLUDED_
 +
@@ -908,10 +919,8 @@ index 0000000..f57550b
 +/* .fi
 +/*	The Secure Mailer license must be distributed with this software.
 +/* AUTHOR(S)
-+/*	Wietse Venema
-+/*	IBM T.J. Watson Research
-+/*	P.O. Box 704
-+/*	Yorktown Heights, NY 10598, USA
++/*	Howard Chu
++/*	Symas Corporation
 +/*--*/
 +
 +#endif
