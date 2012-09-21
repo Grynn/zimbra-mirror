@@ -1462,7 +1462,7 @@ public class ZimbraAPI
         writer.WriteAttributeString("ct", appt["contentType1"]);
         if (appt["content1"].Length > 0)
         {
-            WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt["content1"])));
+	    WriteNVPair(writer, "content", System.Text.Encoding.Unicode.GetString(File.ReadAllBytes(appt["content1"])));
         }
     
         writer.WriteEndElement();   // mp
@@ -1678,7 +1678,7 @@ public class ZimbraAPI
         attr = "content1" + "_" + num.ToString();
         if (appt[attr].Length > 0)
         {
-            WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(appt[attr])));
+            WriteNVPair(writer, "content", System.Text.Encoding.Unicode.GetString(File.ReadAllBytes(appt[attr])));
         }        
         writer.WriteEndElement();   // mp
         writer.WriteEndElement();   // mp
@@ -2014,7 +2014,7 @@ public class ZimbraAPI
         writer.WriteAttributeString("ct", task["contentType1"]);
         if (task["content1"].Length > 0)
         {
-            WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(task["content1"])));
+            WriteNVPair(writer, "content", System.Text.Encoding.Unicode.GetString(File.ReadAllBytes(task["content1"])));
             File.Delete(task["content1"]);
         }
 

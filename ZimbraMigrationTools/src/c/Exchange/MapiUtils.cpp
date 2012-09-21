@@ -1355,19 +1355,19 @@ mimepp::BodyPart *Zimbra::MAPI::Util::AttachPartFromIAttach(MAPISession &session
     }
     else if (pProps[ATTACH_LONG_FILENAME].ulPropTag == PR_ATTACH_LONG_FILENAME_A)
     {
-        pAttachFilename = pProps[ATTACH_LONG_FILENAME].Value.lpszA;
+        Zimbra::Util::CopyString(pAttachFilename, pProps[ATTACH_LONG_FILENAME].Value.lpszA);
         pAttachPart->headers().contentDisposition().setFilename(pAttachFilename);
         pAttachPart->headers().contentDisposition().assemble();
     }
     else if (pProps[ATTACH_FILENAME].ulPropTag == PR_ATTACH_FILENAME_A)
     {
-        pAttachFilename = pProps[ATTACH_FILENAME].Value.lpszA;
+        Zimbra::Util::CopyString(pAttachFilename,pProps[ATTACH_FILENAME].Value.lpszA);
         pAttachPart->headers().contentDisposition().setFilename(pAttachFilename);
         pAttachPart->headers().contentDisposition().assemble();
     }
     else if (pProps[ATTACH_DISPLAY_NAME].ulPropTag == PR_DISPLAY_NAME_A)
     {
-        pAttachFilename = pProps[ATTACH_DISPLAY_NAME].Value.lpszA;
+        Zimbra::Util::CopyString(pAttachFilename,pProps[ATTACH_DISPLAY_NAME].Value.lpszA);
         pAttachPart->headers().contentDisposition().setFilename(pAttachFilename);
         pAttachPart->headers().contentDisposition().assemble();
     }
@@ -1548,8 +1548,11 @@ mimepp::BodyPart *Zimbra::MAPI::Util::AttachPartFromIAttach(MAPISession &session
         strContentType += ";";
         pAttachPart->headers().contentType().setString(strContentType);
         pAttachPart->headers().contentType().parse();
-		delete[] pAttachFilename;
-		pAttachFilename = NULL;
+    }
+    if(pAttachFilename)
+    {
+        delete[] pAttachFilename;
+        pAttachFilename = NULL;
     }
     MAPIFreeBuffer(pProps);
     return pAttachPart;
@@ -2875,7 +2878,6 @@ LPWSTR WriteContentsToFile(LPTSTR pBody, bool isAscii)
 {
     LPSTR pTemp = NULL;
     int nBytesToBeWritten;
-
     pTemp = (isAscii) ? (LPSTR)pBody : Zimbra::Util::UnicodeToAnsii(pBody);
     nBytesToBeWritten = (int)strlen(pTemp);
    
@@ -2951,7 +2953,20 @@ wstring Zimbra::MAPI::Util::SetHtml(LPMESSAGE pMessage, LPSPropValue lpv)
     bool bRet = HtmlBody(pMessage, lpv, &pBody, nText);
     if (bRet)
     {
-	LPWSTR lpwszTempFile = WriteContentsToFile((LPTSTR)pBody, true);
+	LONG lCPID = CP_UTF8;
+        LPSPropValue lpPropCPID = NULL;
+        HRESULT hr = HrGetOneProp(pMessage, PR_INTERNET_CPID, &lpPropCPID);
+        if (!SUCCEEDED(hr))
+            hr = HrGetOneProp(pMessage, PR_MESSAGE_CODEPAGE, &lpPropCPID);
+        if (SUCCEEDED(hr))
+            lCPID = lpPropCPID->Value.l;
+        int nChars = MultiByteToWideChar(lCPID, 0, (LPCSTR)pBody, -1, NULL, 0);
+        LPWSTR pwszStr = new WCHAR[nChars + 1];
+
+        MultiByteToWideChar(lCPID, 0, (LPCSTR)pBody, -1, pwszStr, nChars);
+        pwszStr[nChars] = L'\0';
+
+        LPWSTR lpwszTempFile = WriteUnicodeToFile(pwszStr);//WriteContentsToFile((LPTSTR)pBody, true);
 	retval = lpwszTempFile;
 	SafeDelete(lpwszTempFile);
     }
