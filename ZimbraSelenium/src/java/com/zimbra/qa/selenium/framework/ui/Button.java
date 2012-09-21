@@ -415,6 +415,9 @@ public class Button {
 	public static final Button B_EDIT_CANCELLATION = new Button("B_EDIT_CANCELLATION");
 	public static final Button B_NOTIFY_ORGANIZER = new Button("B_NOTIFY_ORGANIZER");
 	public static final Button B_DONT_NOTIFY_ORGANIZER = new Button("B_DONT_NOTIFY_ORGANIZER");
+	
+	public static final Button B_SEND_UPDATES_ONLY_TO_ADDED_OR_REMOVED_ATTENDEES = new Button("B_SEND_UPDATES_ONLY_TO_ADDED_OR_REMOVED_ATTENDEES");
+	public static final Button B_SEND_UPDATES_TO_ALL_ATTENDEES = new Button("B_SEND_UPDATES_TO_ALL_ATTENDEES");
 
 	// Calendar tree
 	public static final Button B_RELOAD = new Button("B_RELOAD");

@@ -54,6 +54,14 @@ public class FormApptNew extends AbsForm {
 		public static final String RepeatEnabled = "css=div[id$='_repeatDesc']div[class='FakeAnchor']";
 		public static final String RepeatDisabled = "css=div[id$='_repeatDesc']div[class='DisabledText']";
 		
+		public static final String DeleteZimletContextMenu = "css=div[id^='POPUP_'] td[id='DELETE_title']";
+		public static final String EditZimletContextMenu = "css=div[id^='POPUP_'] td[id='EDIT_title']";
+		public static final String ExpandZimletContextMenu = "css=div[id^='POPUP_'] td[id='EXPAND_title']";
+		public static final String AddToContactsZimletContextMenu = "css=div[id^='POPUP_'] td[id='CONTACT_title']";
+		
+		public static final String SendUpdatesToAddedRemovedRadioButton = "css=div[class='DwtDialog'] div[id$='_content'] td:contains('Send updates only to added or removed attendees')";
+		public static final String SendUpdatesToAllRadioButton = "css=div[class='DwtDialog'] div[id$='_content'] td:contains('Send updates to all attendees')";
+		
 	}
 
 	public static class Field {
@@ -124,6 +132,20 @@ public class FormApptNew extends AbsForm {
 
 		this.zWaitForBusyOverlay();
 
+	}
+	
+	public void zRemoveAttendee(String attendee) throws HarnessException {
+		SleepUtil.sleepSmall(); //let free/busy UI draw and then we take UI actions
+		this.zRightClickAt("css=td[id$='_person'] span:contains('" + attendee + "')", "");
+		SleepUtil.sleepSmall();
+		this.zClickAt(Locators.DeleteZimletContextMenu, "");
+	}
+	
+	public void zRemoveLocation(String location) throws HarnessException {
+		SleepUtil.sleepSmall(); //let free/busy UI draw and then we take UI actions
+		this.zRightClickAt("css=td[id$='_location'] span:contains('" + location + "')", "");
+		SleepUtil.sleepSmall();
+		this.zClickAt(Locators.DeleteZimletContextMenu, "");
 	}
 
 	/**
