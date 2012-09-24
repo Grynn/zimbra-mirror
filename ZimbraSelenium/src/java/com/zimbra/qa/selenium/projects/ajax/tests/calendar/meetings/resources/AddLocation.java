@@ -25,7 +25,6 @@ public class AddLocation extends CalendarWorkWeekTest {
 		
 	}
 	
-	@Bugs(ids = "77588")
 	@Test(description = "Add location to existing appointment and verify F/B",
 			groups = { "smoke" })
 	public void AddLocation_01() throws HarnessException {
