@@ -2,15 +2,17 @@ package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
 import java.awt.event.KeyEvent;
 
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactGroupNew.Locators;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 
+/**
+ * @author zimbra
+ *
+ */
 public class FormContactNew extends AbsForm {
 	
 	public static class Locators {
@@ -176,7 +178,11 @@ public class FormContactNew extends AbsForm {
 	public static class Field {
 		
 		public static final Field FirstName = new Field("FirstName");
+		public static final Field MiddleName = new Field("MiddleName");
 		public static final Field LastName = new Field("LastName");
+		public static final Field Email = new Field("Email");
+		public static final Field JobTitle = new Field("JobTitle");
+		public static final Field Company = new Field("Company");
 		
 		
 		private String field;
@@ -190,6 +196,12 @@ public class FormContactNew extends AbsForm {
 		}
 
 	}
+	
+	
+	/**
+	 * Expand all the hidden name fields
+	 * @throws HarnessException
+	 */
 	public void zDisplayHiddenName() throws HarnessException {
 		Locators.zContactDetailsIconBtn = getLocator(Locators.zContactDetailsIconBtn);
 		zClick(Locators.zContactDetailsIconBtn); 
@@ -335,7 +347,7 @@ public class FormContactNew extends AbsForm {
 
 			//highlight text
 			String id= Locators.zActiveEditForm + "_NOTES_input";
-			ClientSessionFactory.session().selenium().getEval(
+			this.sGetEval(
 					"this.browserbot.getUserWindow().document.getElementById('"
 					+ id + "')" + ".select()");
 			
@@ -356,6 +368,88 @@ public class FormContactNew extends AbsForm {
 
 	}
 	
+	public void zFillField(Field field, String value) throws HarnessException {
+		tracer.trace("Set "+ field +" to "+ value);
+
+		
+		
+		
+		String locator = null;
+		
+		if ( field == Field.FirstName ) {
+
+			locator = FormContactNew.getLocator(Locators.zFirstEditField);
+			
+		} else if ( field == Field.MiddleName ) {
+			
+			locator = FormContactNew.getLocator(Locators.zMiddleEditField);
+
+		} else if ( field == Field.LastName ) {
+			
+			locator = FormContactNew.getLocator(Locators.zLastEditField);
+
+		} else if ( field == Field.Email ) {
+			
+			
+			locator = FormContactNew.getLocator(Locators.zEmail1EditField);
+
+			// Make sure the button exists
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
+			
+			// Email is a bit different, since there is an auto-complete action
+			// 
+			// For auto-complete, some extra events must occur
+			//
+			this.sFocus(locator);
+			this.zClick(locator);
+			this.zWaitForBusyOverlay();
+
+			// Enter text
+			this.sType(locator, value);
+			this.sFireEvent(locator, "keyup");
+			
+			// Wait for any busy overlay
+			this.zWaitForBusyOverlay();
+			
+			return;
+
+		} else if ( field == Field.JobTitle ) {
+			
+			locator = FormContactNew.getLocator(Locators.zJobTitleEditField);
+
+		} else if ( field == Field.Company ) {
+			
+			locator = FormContactNew.getLocator(Locators.zCompanyEditField);
+
+		} else {
+			throw new HarnessException("not implemented for field " + field);
+		}
+		
+		if ( locator == null ) {
+			throw new HarnessException("locator was null for field "+ field);
+		}
+		
+		// Default behavior, enter value into locator field
+		//
+		
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
+		
+
+		// Enter text
+		this.sType(locator, value);
+		
+		// For some reason, contact fields need a keyup event to
+		// determine that text has been added.
+		//
+		this.sFireEvent(locator, "keyup");
+		
+		// Wait for any busy overlay
+		this.zWaitForBusyOverlay();
+
+	}
 	
 	@Override
 	public void zFill(IItem item) throws HarnessException {
@@ -371,23 +465,28 @@ public class FormContactNew extends AbsForm {
 		ContactItem contact = (ContactItem) item;
 		
 		// Fill out the form		
-		if ( contact.firstName != null ) {			
-			zFillField(getLocator(Locators.zFirstEditField), contact.firstName);
-		}		
+		if ( contact.firstName != null ) {
+			zFillField(Field.FirstName, contact.firstName);
+		}
+		
 		if ( contact.lastName != null ) {			
-			zFillField(getLocator(Locators.zLastEditField), contact.lastName);	    
+			zFillField(Field.LastName, contact.lastName);
 		}
 		
 		if ( contact.middleName != null ) {			
-			zFillField(getLocator(Locators.zMiddleEditField), contact.lastName);
+			zFillField(Field.MiddleName, contact.middleName);
 		}
 		
 		if ( contact.email != null ) {			
-			zFillField(getLocator(Locators.zEmail1EditField), contact.email);
+			zFillField(Field.Email, contact.email);
 		}
 
 		if ( contact.company != null ) {			
-			zFillField(getLocator(Locators.zCompanyEditField), contact.company);
+			zFillField(Field.Company, contact.company);
+		}
+
+		if ( contact.jobTitle != null ) {			
+			zFillField(Field.JobTitle, contact.jobTitle);
 		}
 
 		if (contact.ContactAttributes.size() >0) {
@@ -396,12 +495,6 @@ public class FormContactNew extends AbsForm {
 			}
 		}
 		
-		//TODO: need fix xpath for zEmail1EditField
-		//if ( contact.email != null ) {			
-		//	this.sType(getLocator(Locators.zEmail1EditField, contact.email);
-		//}
-		
-			
 	}
 	
 	public static String getLocator(String locator) {
@@ -460,6 +553,76 @@ public class FormContactNew extends AbsForm {
 		}
 		
 		return false;					
+	}
+
+	/**
+	 * Press the toolbar button
+	 * @param button
+	 * @return
+	 * @throws HarnessException
+	 */
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
+		
+		tracer.trace("Click button "+ button);
+
+		if ( button == null )
+			throw new HarnessException("Button cannot be null!");
+		
+		// Fallthrough objects
+		AbsPage page = null;
+		String locator = null;
+		
+		if ( button == Button.B_SAVE ) {
+			
+			// TODO
+			
+		} else if ( button == Button.B_CANCEL ) {
+
+ 	    	//String id ="dizb__CN__CANCEL";
+ 	    	locator = "css=div[id^=zb__CN][id$=__CANCEL]" ;
+		    if (zIsElementDisabled(locator)) {
+				throw new HarnessException("Tried clicking on "+ locator +" but it was disabled ");
+		    }
+		    
+			page = new DialogWarning(DialogWarning.DialogWarningID.CancelCreateContact, this.MyApplication, ((AppAjaxClient)this.MyApplication).zPageAddressbook);
+			
+		} else if ( button == Button.B_PRINT ) {
+			
+			// TODO
+			
+		} else if ( button == Button.B_DELETE ) {
+			
+			// TODO
+			
+		} else {
+			throw new HarnessException("no logic defined for button "+ button);
+		}
+
+		// Make sure a locator was set
+		if ( locator == null )
+			throw new HarnessException("locator was null for button "+ button);
+
+		
+		// Default behavior, process the locator by clicking on it
+		//
+		
+		// Click it
+		zClickAt(locator, "0,0");
+
+		// if the app is busy, wait for it to become active again
+		this.zWaitForBusyOverlay();
+		
+		if ( page != null ) {
+			
+			// Make sure the page becomes active
+			page.zWaitForActive();
+			
+		}
+		
+		// Return the page, if specified
+		return (page);
+
 	}
 
 }

@@ -364,7 +364,7 @@ public class PageAddressbook extends AbsTab {
 			// To use "NEW" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
 
 			
-			locator = "css=div#zb__NEW_MENU td#zb__NEW_MENU_title";			
+			locator = "css=div#zb__NEW_MENU td[id$='_title']";			
 			page = new FormContactNew(this.MyApplication);
 
 	

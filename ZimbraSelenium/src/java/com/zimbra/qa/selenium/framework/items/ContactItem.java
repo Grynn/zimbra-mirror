@@ -2,15 +2,11 @@ package com.zimbra.qa.selenium.framework.items;
 
 import java.util.HashMap;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew;
@@ -395,8 +391,11 @@ public class ContactItem implements IItem {
 					accountName);
 
 			Element[] results = account.soapSelectNodes("//mail:SearchResponse/mail:cn");
-			if (results.length != 1)
-				throw new HarnessException("Query should return 1 result, not "+ results.length);
+			if (results.length == 0) {
+	        	return null;
+			} else if (results.length != 1) {
+	            throw new HarnessException("Query should return 1 result, not "+ results.length);
+			}
 
 			String id = account.soapSelectValue("//mail:SearchResponse/mail:cn", "id");
 
