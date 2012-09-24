@@ -439,7 +439,13 @@ public class FormApptNew extends AbsForm {
 		// calendar folder 
 		} else if (field == Field.CalendarFolder) {
 
-			locator = "css=td[id$='_folderSelect'] input";
+			locator = "css=td[id$='_folderSelect'] td[id$='_select_container']";
+			this.sClickAt(locator, "");
+			
+			value = "css=div[id*='_Menu_'] td[id$='_title']:contains('" + value + "')";
+			this.sClickAt(value, "");			
+			
+			return;
 
 			
 		// repeat
