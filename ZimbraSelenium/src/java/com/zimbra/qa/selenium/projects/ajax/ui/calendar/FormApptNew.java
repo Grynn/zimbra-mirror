@@ -178,11 +178,6 @@ public class FormApptNew extends AbsForm {
 
 			this.zWaitForBusyOverlay();
 
-			// TODO: would be good to remove this sleep.  Not sure why
-			// it is required.  Maybe the busy overlay isn't active?
-			SleepUtil.sleepMedium(); //test fails without sleep
-
-
 			// Wait for the message to be delivered
 			Stafpostqueue sp = new Stafpostqueue();
 			sp.waitForPostqueue();
@@ -232,10 +227,6 @@ public class FormApptNew extends AbsForm {
 			page.zWaitForActive();
 
 		}
-
-		// TODO: would be good to remove this sleep.  Not sure why
-		// it is required.
-		SleepUtil.sleepMedium();
 
 		// Return the page, if specified
 		return (page);
