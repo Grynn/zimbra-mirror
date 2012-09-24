@@ -354,10 +354,12 @@ void MAPIAppointment::SetTimezoneId(LPTSTR pStr)
     if (ulDayOfWeekMask & wdmFriday)    m_pRecurWkday += L"FR";
     if (ulDayOfWeekMask & wdmSaturday)  m_pRecurWkday += L"SA";
 
-    if ((m_pRecurPattern == L"DAI") && (m_pRecurWkday.length() > 0))	// every weekday
+	//bug 77574. not sure why this condition existed .probabaly server was not handling weekday option.
+
+    /*if ((m_pRecurPattern == L"DAI") && (m_pRecurWkday.length() > 0))	// every weekday
     {
 	m_pRecurPattern = L"WEE";
-    }
+    }*/
 
     if (m_pRecurPattern == L"MON")
     {
