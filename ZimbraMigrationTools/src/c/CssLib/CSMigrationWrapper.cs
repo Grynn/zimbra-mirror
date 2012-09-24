@@ -435,12 +435,15 @@ public class CSMigrationWrapper
                         catch (Exception e)
                         {
                             Log.err("exception in ProcessItems->itemobject.GetDataForItemID", e.Message);
+			    iProcessedItems++;
                             continue;
                         }
                         //check if data is valid
-                        if (data == null)
-                            continue;
-
+			if (data == null)
+			{
+			    iProcessedItems++;
+			    continue;
+			}
                         int bound0 = data.GetUpperBound(0);
                         if (bound0 > 0)
                         {
