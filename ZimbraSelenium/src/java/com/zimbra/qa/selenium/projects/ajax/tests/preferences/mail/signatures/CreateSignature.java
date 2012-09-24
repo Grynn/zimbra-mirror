@@ -63,10 +63,9 @@ public class CreateSignature extends AjaxCommonTest {
 		//select html format from drop down
 		signew.zSelectFormat("html");
 		//Reason:With "?dev=1&debug=0", Tinymce editor in HTML mode takes more time to load 
-		if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
+		//if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
 			SleepUtil.sleepVeryLong();
-		}
-
+		//}
 		// Fill Signature Name and body
 		signew.zFillField(Field.SignatureName, sigName);
 		signew.zFillField(Field.SignatureHtmlBody, sigBody);

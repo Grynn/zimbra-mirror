@@ -154,6 +154,9 @@ public class PageLogin extends AbsTab {
 		if ( !this.sIsElementPresent(locator) ) {
 			throw new HarnessException("Login field does not exist "+ locator);
 		}
+		if (ZimbraSeleniumProperties.isWebDriver()){
+		    clearField(locator);
+		}
 		sType(locator, name);
 	}
 
@@ -169,6 +172,9 @@ public class PageLogin extends AbsTab {
 		}
 		if ( !this.sIsElementPresent(locator) ) {
 			throw new HarnessException("Password field does not exist "+ locator);
+		}
+		if (ZimbraSeleniumProperties.isWebDriver()){
+		    clearField(locator);
 		}
 		sType(locator, password);
 	}

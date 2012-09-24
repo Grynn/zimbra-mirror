@@ -11,6 +11,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.I18N;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 
@@ -157,7 +158,10 @@ public class FormSignatureNew extends AbsForm {
 
 		} else if (field == Field.SignatureHtmlBody) {
 			//locator = Locators.zHtmlBodyField;
-
+		    if(ZimbraSeleniumProperties.isWebDriver()){
+			sClickAt("//div[contains(@class,'ZmHtmlEditor')]","");
+			zTypeFormattedText("css=iframe[id*=ifr]", value);					
+		    }else{
 			locator = "css=body[id='tinymce']";
 			try{
 				sSelectFrame(Locators.zFrame);
@@ -177,7 +181,8 @@ public class FormSignatureNew extends AbsForm {
 			}finally{
 				sSelectFrame("relative=top");
 			}
-			return;
+		    }
+		return;
 
 		} else {
 
@@ -190,16 +195,21 @@ public class FormSignatureNew extends AbsForm {
 					+ " locator=" + locator);
 
 		// Enter text
-		this.sFocus(locator);
-		this.zClickAt(locator,"");
-		zKeyboard.zTypeCharacters(value);
+		if(ZimbraSeleniumProperties.isWebDriver()){
+		    this.zClickAt(locator,"");
+		    clearField(locator);
+		    sType(locator, value);
+		}else{
+		    this.sFocus(locator);
+		    this.zClickAt(locator,"");
+		    zKeyboard.zTypeCharacters(value);
 
-		if (!(sGetValue(locator).equalsIgnoreCase(value))) {
+		    if (!(sGetValue(locator).equalsIgnoreCase(value))) {
 			this.sFocus(locator);
 			this.zClickAt(locator,"");
 			sType(locator, value);
+		    }
 		}
-
 		this.zWaitForBusyOverlay();
 
 	}

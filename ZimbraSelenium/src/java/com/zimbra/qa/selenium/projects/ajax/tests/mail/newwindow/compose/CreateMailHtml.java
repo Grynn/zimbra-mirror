@@ -40,6 +40,8 @@ public class CreateMailHtml extends PrefGroupMailByMessageTest {
 			window.zSetWindowTitle("Compose");
 			window.zWaitForActive();		// Make sure the window is there
 
+			window.waitForComposeWindow();
+			
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 
 			// Fill out the form with the data
@@ -47,6 +49,8 @@ public class CreateMailHtml extends PrefGroupMailByMessageTest {
 
 			// Send the message
 			window.zToolbarPressButton(Button.B_SEND);
+			
+			window.zWaitForWindowClosed("Zimbra: Compose");
 
 			// Window closes automatically
 			window = null;
