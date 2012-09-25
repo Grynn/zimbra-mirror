@@ -5,6 +5,8 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import java.util.HashMap;
 import java.util.List;
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.TaskItem;
 import com.zimbra.qa.selenium.framework.ui.AbsDialog;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -15,6 +17,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field;
+import com.zimbra.qa.selenium.projects.ajax.ui.tasks.PageTasks.Locators;
 
 public class CancelTask extends AjaxCommonTest {
 	@SuppressWarnings("serial")
@@ -107,5 +110,38 @@ public class CancelTask extends AjaxCommonTest {
 
 		ZAssert.assertNull(found, "Verify the task is no longer present in task list");
 
+	}
+	/*
+	 * @steps
+	 * 1.Login to Web client
+	 * 2.Go to Task
+	 * 3.Click New Task
+	 * 4.Click Attach button from toolbar
+	 * 5.Click Cancel
+	 * 6.Again click New Task
+	 * 7.Click Attach button from toolbar
+	 * 8.Hit Cancel
+	 * Expected:
+	 * Compose task with empty attachment should get cancelled every time whenever
+	 * user click on cancel 
+	 */
+	@Bugs(ids = "74670")
+	@Test(description = "cancelling empty attachment task in 2nd attempt", groups = { "functional" })
+	public void Bug_74670() throws HarnessException {
+
+		//1st attempt
+		//Click NEW button
+		app.zPageTasks.zClickAt(Locators.zNewTask,"");
+		app.zPageTasks.zClickAt(Locators.zAttachButton, "");		 
+		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zAttachmentInputBox),"Verify Attachment input box ");		 
+		app.zPageTasks.zClickAt(FormTaskNew.Locators.zCancelTask,"");
+		ZAssert.assertTrue(app.zPageTasks.sGetEval("window.appCtxt.getCurrentViewType()").equalsIgnoreCase("TKL"),"Verify List view is open");
+
+		//2nd attempt
+		app.zPageTasks.zClickAt(Locators.zNewTask,"");
+		app.zPageTasks.zClickAt(Locators.zAttachButton, "");		 
+		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zAttachmentInputBox),"Verify Attachment input box ");		 
+		app.zPageTasks.zClickAt(FormTaskNew.Locators.zCancelTask,"");
+		ZAssert.assertTrue(app.zPageTasks.sGetEval("window.appCtxt.getCurrentViewType()").equalsIgnoreCase("TKL"),"Verify List view is open");		 
 	}
 }
