@@ -127,7 +127,7 @@ server
 
     # For NoOpRequest
     location /service/soap/NoOpRequest {
-        include             ${core.includes}/${core.cprefix}.web.http.mode-${web.mailmode};
+        include             ${core.includes}/${core.cprefix}.web.https.mode-${web.mailmode};
     
         # Begin stray redirect hack
         #
@@ -177,7 +177,7 @@ server
 
     # For WaitSetRequest
     location /service/soap/WaitSetRequest {
-        include             ${core.includes}/${core.cprefix}.web.http.mode-${web.mailmode};
+        include             ${core.includes}/${core.cprefix}.web.https.mode-${web.mailmode};
 
         # Begin stray redirect hack
         #
