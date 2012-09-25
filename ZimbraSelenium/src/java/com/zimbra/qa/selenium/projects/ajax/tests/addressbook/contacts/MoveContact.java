@@ -10,8 +10,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactGroupNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew;
 
 
@@ -183,6 +182,60 @@ public class MoveContact extends AjaxCommonTest  {
         
    	}
 	
+	
+	@Test(	description = "Move a contact item to trash folder by expand Move dropdown on toolbar, then select Trash",
+			groups = { "functional" })
+	public void MoveToTrashFromMoveDropdownOnToolbar() throws HarnessException {
+	
+
+		//-- Data
+		
+        // The trash folder
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+
+		// Create a contact item
+		ContactItem contact = new ContactItem();
+		contact.firstName = "First" + ZimbraSeleniumProperties.getUniqueString();
+		contact.lastName = "Last" + ZimbraSeleniumProperties.getUniqueString();
+		contact.email = "email" + ZimbraSeleniumProperties.getUniqueString() + "@domain.com";
+		contact.fileAs = contact.lastName + ", " + contact.firstName;
+
+		app.zGetActiveAccount().soapSend(
+	                "<CreateContactRequest xmlns='urn:zimbraMail'>" +
+	                		"<cn >" +
+	                			"<a n='firstName'>" + contact.firstName +"</a>" +
+	                			"<a n='lastName'>" + contact.lastName +"</a>" +
+	                			"<a n='email'>" + contact.email + "</a>" +
+                			"</cn>" +
+	                "</CreateContactRequest>");
+
+
+		//-- GUI
+		
+		// Refresh to get the contact into the client
+		app.zPageAddressbook.zRefresh();
+		
+		// Click on Contacts
+        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts));
+
+		// Select the contact
+		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contact.firstName);
+
+		//select move option
+        app.zPageAddressbook.zToolbarPressPulldown(Button.B_MOVE,folder);
+       
+        
+        //-- Verification
+        
+        //verify contact deleted
+        ContactItem actual = ContactItem.importFromSOAP(app.zGetActiveAccount(), "is:anywhere #firstname:"+ contact.firstName);
+        ZAssert.assertNotNull(actual, "Verify the contact exists in the trash folder");
+        ZAssert.assertEquals(actual.getFolderId(), folder.getId(), "Verify the contact is in the trash folder");
+        
+
+
+
+   	}
 	
 
 }

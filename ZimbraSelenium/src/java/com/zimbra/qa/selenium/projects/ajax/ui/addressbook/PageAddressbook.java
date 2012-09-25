@@ -2,34 +2,19 @@ package  com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
 
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.*;
+import java.util.*;
 
 import org.apache.log4j.LogManager;
 
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
-import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogAssistant;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
-import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
-
 import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.items.*;
-
 import com.zimbra.qa.selenium.framework.ui.*;
-
-
 import com.zimbra.qa.selenium.framework.util.*;
-
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-
-
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
 
 public class PageAddressbook extends AbsTab {
 
@@ -145,6 +130,15 @@ public class PageAddressbook extends AbsTab {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsTab#zRefresh()
+	 */
+	public void zRefresh() throws HarnessException {
+		
+		// Click refresh on the main app
+		((AppAjaxClient)this.MyApplication).zPageMain.zToolbarPressButton(Button.B_REFRESH);
+		
+	}
 	
 	//get subFolders
 	public List<FolderItem> zListGetFolders(ZimbraAccount account, FolderItem parentFolder) throws HarnessException {
@@ -910,10 +904,14 @@ public class PageAddressbook extends AbsTab {
 			// Log this item to the debug output
 			LogManager.getLogger("projects").info("zListItem: found contact "+ displayAs);
 
-			if ( contact.equals(displayAs) ) {
-			   contactLocator = itemLocator;
-			   break;
-			}     		
+			if ( displayAs != null ) {
+				if ( displayAs.toLowerCase().contains(contact.toLowerCase()) ) {
+					// Found the item!
+				   contactLocator = itemLocator;
+				   break;
+				}
+			}
+
 		} 
 	
 		
@@ -1413,6 +1411,9 @@ public class PageAddressbook extends AbsTab {
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsTab#zListItem(com.zimbra.qa.selenium.framework.ui.Action, java.lang.String)
+	 */
 	@Override
 	public AbsPage zListItem(Action action, String contact) throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ contact +")");
