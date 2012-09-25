@@ -54,6 +54,8 @@ public class PageTasks extends AbsTab {
 		public static final String zPrintTaskDropDown="css=td#zb__TKL-main__PRINT_dropdown>div";
 		public static final String zPrintTaskFolder ="css=tr[id='POPUP_PRINT_TASKFOLDER'] td[id$='_title']";
 		public static final String zCloseButton = "css=div[id='zb__TKV__CLOSE']";
+		public static final String zAttachButton = "css=div[id^='zb__TKE'] td[id$='__ATTACHMENT_left_icon']>div";
+		public static final String zAttachmentInputBox = "css=input[name='__calAttUpload__']";
 	}
 
 	public PageTasks(AbsApplication application) {
