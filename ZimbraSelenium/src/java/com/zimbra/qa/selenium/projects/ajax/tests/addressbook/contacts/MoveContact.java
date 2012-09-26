@@ -1,11 +1,10 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contacts;
 
 
-import java.util.List;
-
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -24,168 +23,153 @@ public class MoveContact extends AjaxCommonTest  {
 		super.startingAccountPreferences = null;		
 		
 	}
-	private void  Verify(FolderItem folder, ContactItem contactItem) throws HarnessException {
-		
-	   
-        //verify toasted message 1 contact moved to target folder
-        String toastMessage = app.zPageMain.zGetToaster().zGetToastMessage();
-        String expectedMsg = "1 contact moved to";
-        ZAssert.assertStringContains(toastMessage, expectedMsg , "Verify toast message '" + expectedMsg + "'");
-        ZAssert.assertStringContains(toastMessage,folder.getName() , "Verify toast message '" + folder.getName() + "'");
 
-        
-        //verify moved contact not displayed in folder Contacts
-        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
- 	           
-		boolean isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(contactItem.fileAs)) {
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") not displayed in folder Contacts");
-        
+	@Test(	description = "Move a contact item to sub addressbook by click tool bar Move",
+			groups = { "smoke" })
+	public void MoveContact_01() throws HarnessException {
  
-        //verify moved contact displayed in target folder
-        // refresh target folder
-        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, folder);
-   	 
-        contacts = app.zPageAddressbook.zListGetContacts(); 
-         
-		isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(contactItem.fileAs)) {
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") displayed in folder Emailed Contacts");
-                		
-	}
 
-	@Test(	description = "Move a contact item to folder Emailed Contacts by click shortcut m",
+		//-- Data
+		
+		// Create the sub addressbook
+		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
+		String foldername = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+		app.zGetActiveAccount().soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+					"<folder name='" + foldername +"' l='"+ root.getId() +"' view='contact'/>" +
+				"</CreateFolderRequest>");
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
+
+		 // Create a contact
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		
+	
+		//-- GUI
+	
+		// Refresh
+		app.zPageAddressbook.zRefresh();
+		
+		// Select the contact
+		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contact.firstName);
+		
+		 // Click Move -> addressbook
+        app.zPageAddressbook.zToolbarPressPulldown(Button.B_MOVE, folder);
+      
+        
+        
+        //-- Verification
+        
+        // Verify
+        ContactItem actual = ContactItem.importFromSOAP(app.zGetActiveAccount(), "#firstname:"+ contact.firstName);
+        ZAssert.assertNotNull(actual, "Verify the contact still exists");
+        ZAssert.assertEquals(actual.getFolderId(), folder.getId(), "Verify the contact exists in the addressbook folder");
+        
+        
+
+   	}
+	
+
+
+	@Test(	description = "Move a contact item to sub addressbook by click shortcut m",
 			groups = { "functional" })
-	public void MoveToEmailedContactsClickShortcutm() throws HarnessException {
-		
-		 // Create a contact via Soap then select
-		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
-	
-	
-		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
+	public void MoveContact_02() throws HarnessException {
 
+		//-- Data
+		
+		// Create the sub addressbook
+		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
+		String foldername = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+		app.zGetActiveAccount().soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+					"<folder name='" + foldername +"' l='"+ root.getId() +"' view='contact'/>" +
+				"</CreateFolderRequest>");
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
+
+		 // Create a contact
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		
+	
+		//-- GUI
+	
+		// Refresh
+		app.zPageAddressbook.zRefresh();
+		
+		// Select the contact
+		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contact.firstName);
 		
 		 //click shortcut m
 	    DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zKeyboardShortcut(Shortcut.S_MOVE);
       
 	    //enter the moved folder
-        dialogContactMove.zClickTreeFolder(emailedContacts);
+        dialogContactMove.zClickTreeFolder(folder);
         dialogContactMove.zClickButton(Button.B_OK);
      
-        //Verify
-        Verify(emailedContacts,contactItem);
+        
+        
+        //-- Verification
+        
+        // Verify
+        ContactItem actual = ContactItem.importFromSOAP(app.zGetActiveAccount(), "#firstname:"+ contact.firstName);
+        ZAssert.assertNotNull(actual, "Verify the contact still exists");
+        ZAssert.assertEquals(actual.getFolderId(), folder.getId(), "Verify the contact exists in the addressbook folder");
+        
         
    	}
 
-	@Test(	description = "Move a contact item to folder Emailed Contacts  by click Move on context menu",
+	@Test(	description = "Move a contact item to sub addressbook by click Move on context menu",
 			groups = { "functional" })
-	public void MoveToEmailedContactsClickMoveOnContextmenu() throws HarnessException {
+	public void MoveContact_03() throws HarnessException {
 		
-		 // Create a contact via Soap then select
-		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
-	
-	
-		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
-
-		
-	    //click Move icon on context menu
-	    DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, contactItem.fileAs);
-	 
-	    //enter the moved folder
-        dialogContactMove.zClickTreeFolder(emailedContacts);
-        dialogContactMove.zClickButton(Button.B_OK);
-     
-        //Verify
-        Verify(emailedContacts,contactItem);
-        
-   	}
-
-	@Test(	description = "Move a contact item to folder Emailed Contacts by click tool bar Move",
-			groups = { "smoke" })
-	public void MoveToEmailedContactsClickMoveOnToolbar() throws HarnessException {
-		
-		 // Create a contact via Soap then select
-		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
-	
-	
-		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
-		
-       //click Move dropdown on toolbar
-        app.zPageAddressbook.zToolbarPressPulldown(Button.B_MOVE,emailedContacts);
-    
-   
-        //Verify
-        Verify(emailedContacts,contactItem);
-        
-   	}
-	
 
 
-	@Test(	description = "Move a contact item to folder Emailed Contacts by drag and drop",
-			groups = { "functional" })
-	public void DnDToEmailedContacts() throws HarnessException {
+		//-- Data
 		
-		 // Create a contact via Soap then select
-		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
-	
-	
-		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
+		// Create the sub addressbook
+		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
+		String foldername = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+		app.zGetActiveAccount().soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+					"<folder name='" + foldername +"' l='"+ root.getId() +"' view='contact'/>" +
+				"</CreateFolderRequest>");
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
+
+		 // Create a contact
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
 		
-    
-		app.zPageAddressbook.zDragAndDrop(
-				"css=td#zlif__CNS-main__" + contactItem.getId() + "__fileas:contains("+ contactItem.fileAs + ")",
-				"css=td#zti__main_Contacts__" + emailedContacts.getId() + "_textCell:contains("+ emailedContacts.getName() + ")");
-			
 	
-        //verify
-        Verify(emailedContacts,contactItem);
-        
-   	}
+		//-- GUI
 	
-	@Test(	description = "Move a contact item to folder Emailed Contacts by click toolbar Edit then Location",
-			groups = { "functional" })
-	public void MoveToEmailedContactsClickToolbarEditThenLocation() throws HarnessException {
+		// Refresh
+		app.zPageAddressbook.zRefresh();
 		
-		 // Create a contact via Soap then select
-		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
-	
-	
-		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
-		
-		//Click Edit contact	
-        FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
-	  
-        //Click Location
-        DialogMove dialogContactMove = (DialogMove) formContactNew.zClick(Button.B_MOVE, app.zPageAddressbook);
-        
-        //enter the moved folder
-        dialogContactMove.zClickTreeFolder(emailedContacts);
-        dialogContactMove.zClickButton(Button.B_OK);
+		// Select the contact
+		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contact.firstName);
+
+		 //click shortcut m
+	    DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, contact.fileAs);
       
-        //Click Save
-        formContactNew.zSubmit();
+	    //enter the moved folder
+        dialogContactMove.zClickTreeFolder(folder);
+        dialogContactMove.zClickButton(Button.B_OK);
+     
         
-        //Verify
-        Verify(emailedContacts,contactItem);
         
+        //-- Verification
+        
+        // Verify
+        ContactItem actual = ContactItem.importFromSOAP(app.zGetActiveAccount(), "#firstname:"+ contact.firstName);
+        ZAssert.assertNotNull(actual, "Verify the contact still exists");
+        ZAssert.assertEquals(actual.getFolderId(), folder.getId(), "Verify the contact exists in the addressbook folder");
+        
+
    	}
+
+
 	
 	
 	@Test(	description = "Move a contact item to trash folder by expand Move dropdown on toolbar, then select Trash",
 			groups = { "functional" })
-	public void MoveToTrashFromMoveDropdownOnToolbar() throws HarnessException {
+	public void MoveContact_04() throws HarnessException {
 	
 
 		//-- Data
@@ -193,21 +177,8 @@ public class MoveContact extends AjaxCommonTest  {
         // The trash folder
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 
-		// Create a contact item
-		ContactItem contact = new ContactItem();
-		contact.firstName = "First" + ZimbraSeleniumProperties.getUniqueString();
-		contact.lastName = "Last" + ZimbraSeleniumProperties.getUniqueString();
-		contact.email = "email" + ZimbraSeleniumProperties.getUniqueString() + "@domain.com";
-		contact.fileAs = contact.lastName + ", " + contact.firstName;
-
-		app.zGetActiveAccount().soapSend(
-	                "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-	                		"<cn >" +
-	                			"<a n='firstName'>" + contact.firstName +"</a>" +
-	                			"<a n='lastName'>" + contact.lastName +"</a>" +
-	                			"<a n='email'>" + contact.email + "</a>" +
-                			"</cn>" +
-	                "</CreateContactRequest>");
+		 // Create a contact
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
 
 
 		//-- GUI
@@ -215,9 +186,6 @@ public class MoveContact extends AjaxCommonTest  {
 		// Refresh to get the contact into the client
 		app.zPageAddressbook.zRefresh();
 		
-		// Click on Contacts
-        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts));
-
 		// Select the contact
 		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contact.firstName);
 
@@ -237,6 +205,98 @@ public class MoveContact extends AjaxCommonTest  {
 
    	}
 	
+	@Test(	description = "Move a contact item to Emailed Contacts by expand Move dropdown on toolbar, then select Trash",
+			groups = { "functional" })
+	public void MoveContact_05() throws HarnessException {
+	
+
+		//-- Data
+		
+        // The Emailed Contacts folder
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
+
+		 // Create a contact
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+
+
+		//-- GUI
+		
+		// Refresh to get the contact into the client
+		app.zPageAddressbook.zRefresh();
+		
+		// Select the contact
+		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contact.firstName);
+
+		//select move option
+        app.zPageAddressbook.zToolbarPressPulldown(Button.B_MOVE,folder);
+       
+        
+        //-- Verification
+        
+        //verify contact deleted
+        ContactItem actual = ContactItem.importFromSOAP(app.zGetActiveAccount(), "is:anywhere #firstname:"+ contact.firstName);
+        ZAssert.assertNotNull(actual, "Verify the contact exists in the trash folder");
+        ZAssert.assertEquals(actual.getFolderId(), folder.getId(), "Verify the contact is in the trash folder");
+        
+
+
+
+   	}
+	
+
+	
+	@Test(	
+		description = "Move a contact item to sub addressbook.  Click toolbar Edit then Location",
+		groups = { "functional" })
+	public void MoveContact_06() throws HarnessException {
+		
+	
+		//-- Data
+		
+		// Create the sub addressbook
+		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
+		String foldername = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+		app.zGetActiveAccount().soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+					"<folder name='" + foldername +"' l='"+ root.getId() +"' view='contact'/>" +
+				"</CreateFolderRequest>");
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
+		
+		 // Create a contact via Soap then select
+		ContactItem contact = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+	
+		
+		//-- GUI
+		
+		// Refresh to get the contact into the client
+		app.zPageAddressbook.zRefresh();
+		
+		// Select the contact
+		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contact.firstName);
+
+		//Click Edit contact	
+        FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
+	  
+        // Click Location
+        DialogMove dialogContactMove = (DialogMove) formContactNew.zClick(Button.B_MOVE, app.zPageAddressbook);
+        
+        //enter the moved folder
+        dialogContactMove.zClickTreeFolder(folder);
+        dialogContactMove.zClickButton(Button.B_OK);
+      
+        //Click Save
+        formContactNew.zSubmit();
+        
+        
+        
+        //-- Verification
+        
+        // Verify
+        ContactItem actual = ContactItem.importFromSOAP(app.zGetActiveAccount(), "#firstname:"+ contact.firstName);
+        ZAssert.assertNotNull(actual, "Verify the contact still exists");
+        ZAssert.assertEquals(actual.getFolderId(), folder.getId(), "Verify the contact exists in the addressbook folder");
+        
+   	}
 
 }
 

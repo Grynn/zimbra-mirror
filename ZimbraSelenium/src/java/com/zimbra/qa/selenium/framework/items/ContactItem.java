@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.framework.items;
 
-import java.util.HashMap;
+import java.util.*;
+import java.util.Map.Entry;
 
 import org.apache.log4j.*;
 
@@ -200,7 +201,9 @@ public class ContactItem implements IItem {
 	 * @param tagIdArray
 	 * @return
 	 * @throws HarnessException
+	 * @deprecated Use createConctactItem() instead
 	 */
+	@Deprecated
 	public static ContactItem createUsingSOAP(AbsApplication app, String ... tagIdArray ) throws HarnessException {
 
 		String tagParam ="";
@@ -236,7 +239,9 @@ public class ContactItem implements IItem {
 	 * @param tagIdArray
 	 * @return
 	 * @throws HarnessException
+	 * @deprecated Use createConctactItem() instead
 	 */
+	@Deprecated
 	public static ContactItem createLocalUsingSOAP(AbsApplication app, String accountName, String ... tagIdArray ) throws HarnessException {
 		String tagParam ="";
 		if (tagIdArray.length == 1) {
@@ -274,7 +279,9 @@ public class ContactItem implements IItem {
 	 * @param type The type of ContactItem to create
 	 * @return the new ContactItem
 	 * @throws HarnessException
+	 * @deprecated Use createConctactItem() instead
 	 */
+	@Deprecated
 	public static ContactItem generateContactItem(GenerateItemType type) throws HarnessException {
 		ContactItem c = new ContactItem();
 		c.firstName = "first" + ZimbraSeleniumProperties.getUniqueString();
@@ -331,6 +338,42 @@ public class ContactItem implements IItem {
 		// Default:
 		// Return empty Item
 		return (new ContactItem());
+	}
+	
+	public static ContactItem createContactItem(ZimbraAccount account, GenerateItemType Type) throws HarnessException {
+		
+		// Create a contact item
+		ContactItem c = ContactItem.generateContactItem(GenerateItemType.Basic);
+
+		StringBuilder attrs = new StringBuilder();
+		for (Map.Entry<String, String> entry : c.ContactAttributes.entrySet()) {
+			// <a n='email'>email@foo.com</a>
+			attrs.append("<a n='").append(entry.getKey()).append("'>").append(entry.getValue()).append("</a>");
+		}
+		
+		if ( c.firstName != null ) {
+			attrs.append("<a n='firstName'>").append(c.firstName).append("</a>");
+		}
+		
+		if ( c.lastName != null ) {
+			attrs.append("<a n='lastName'>").append(c.lastName).append("</a>");
+		}
+		
+		if ( c.email != null ) {
+			attrs.append("<a n='email'>").append(c.email).append("</a>");
+		}
+		
+				
+		account.soapSend(
+				"<CreateContactRequest xmlns='urn:zimbraMail'>" +
+						"<cn >" +
+							attrs.toString() +
+						"</cn>" +
+				"</CreateContactRequest>");
+		String id = account.soapSelectValue("//mail:cn", "id");
+		
+		return (ContactItem.importFromSOAP(account, "item:"+ id));
+
 	}
 
 	public static ContactItem importFromSOAP(Element GetContactsResponse) throws HarnessException {
