@@ -435,7 +435,7 @@ function() {
 	}
 
     //HTML5
-    AjxEnv.supportsHTML5File = ( window.FileReader/*Firefox*/ || AjxEnv.isChrome || AjxEnv.isSafari4up );
+    AjxEnv.supportsHTML5File = !!( window.FileReader/*Firefox*/ || AjxEnv.isChrome || AjxEnv.isSafari4up );
 	AjxEnv.supportsPlaceholder 	= !(AjxEnv.isIE || (AjxEnv.isFirefox && !AjxEnv.isFirefox4up));
 };
 
