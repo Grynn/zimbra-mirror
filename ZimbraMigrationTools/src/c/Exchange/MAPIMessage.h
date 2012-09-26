@@ -109,7 +109,7 @@ private:
 public:
     MAPIMessage();
     ~MAPIMessage();
-    void Initialize(LPMESSAGE pMessage, MAPISession &session);
+    void Initialize(LPMESSAGE pMessage, MAPISession &session, bool bPartial=false);
     void InternalFree();
 
     LPMESSAGE InternalMessageObject() { return m_pMessage; }

@@ -76,7 +76,7 @@ MAPIMessage::~MAPIMessage()
     InternalFree();
 }
 
-void MAPIMessage::Initialize(LPMESSAGE pMessage, MAPISession &session)
+void MAPIMessage::Initialize(LPMESSAGE pMessage, MAPISession &session, bool bPartial)
 {
     m_session = &session;
 
@@ -92,29 +92,33 @@ void MAPIMessage::Initialize(LPMESSAGE pMessage, MAPISession &session)
                 fMapiUnicode, &cVals, &m_pMessagePropVals)))
             throw MAPIMessageException(E_FAIL, L"Initialize(): GetProps Failed.", 
 			ERR_MAPI_MESSAGE, __LINE__, __FILE__);
-        if (FAILED(hr = m_pMessage->GetRecipientTable(fMapiUnicode, &pRecipTable)))
-        {
-            throw MAPIMessageException(E_FAIL, L"Initialize(): GetRecipientTable Failed.",
-                ERR_MAPI_MESSAGE, __LINE__, __FILE__);
-        }
 
-        ULONG ulRecips = 0;
+		if(!bPartial)
+		{
+			if (FAILED(hr = m_pMessage->GetRecipientTable(fMapiUnicode, &pRecipTable)))
+			{
+				throw MAPIMessageException(E_FAIL, L"Initialize(): GetRecipientTable Failed.",
+					ERR_MAPI_MESSAGE, __LINE__, __FILE__);
+			}
 
-        if (FAILED(hr = pRecipTable->GetRowCount(0, &ulRecips)))
-            throw MAPIMessageException(E_FAIL, L"Initialize(): GetRowCount Failed.", 
-			ERR_MAPI_MESSAGE, __LINE__,  __FILE__);
-        if (ulRecips > 0)
-        {
-            if (FAILED(hr = pRecipTable->SetColumns((LPSPropTagArray) & m_recipientPropTags,
-                    0)))
-            {
-                throw MAPIMessageException(E_FAIL, L"Initialize(): SetColumns Failed.",
-                    ERR_MAPI_MESSAGE, __LINE__, __FILE__);
-            }
-            if (FAILED(hr = pRecipTable->QueryRows(ulRecips, 0, &m_pRecipientRows)))
-                throw MAPIMessageException(E_FAIL, L"Initialize(): QueryRows Failed.", 
-				ERR_MAPI_MESSAGE, __LINE__, __FILE__);
-        }
+			ULONG ulRecips = 0;
+
+			if (FAILED(hr = pRecipTable->GetRowCount(0, &ulRecips)))
+				throw MAPIMessageException(E_FAIL, L"Initialize(): GetRowCount Failed.", 
+				ERR_MAPI_MESSAGE, __LINE__,  __FILE__);
+			if (ulRecips > 0)
+			{
+				if (FAILED(hr = pRecipTable->SetColumns((LPSPropTagArray) & m_recipientPropTags,
+						0)))
+				{
+					throw MAPIMessageException(E_FAIL, L"Initialize(): SetColumns Failed.",
+						ERR_MAPI_MESSAGE, __LINE__, __FILE__);
+				}
+				if (FAILED(hr = pRecipTable->QueryRows(ulRecips, 0, &m_pRecipientRows)))
+					throw MAPIMessageException(E_FAIL, L"Initialize(): QueryRows Failed.", 
+					ERR_MAPI_MESSAGE, __LINE__, __FILE__);
+			}
+		}
     }
     __finally
     {
@@ -1671,7 +1675,7 @@ BOOL MessageIterator::GetNext(MAPIMessage &msg)
             (LPUNKNOWN *)&pMessage)))
         throw GenericException(hr, L"MessageIterator::GetNext():OpenEntry Failed.",
 		ERR_GET_NEXT, __LINE__, __FILE__);
-    msg.Initialize(pMessage, *m_session);
+    msg.Initialize(pMessage, *m_session, true);
 
     return TRUE;
 }
