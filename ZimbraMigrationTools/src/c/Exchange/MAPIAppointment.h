@@ -39,7 +39,7 @@ private:
     enum
     {
         C_MESSAGE_FLAGS, C_SUBJECT, C_BODY, C_HTMLBODY, C_UID, C_START, C_END, C_LOCATION, C_BUSYSTATUS, C_ALLDAY, C_ISRECUR, C_RECURSTREAM,
-	C_TIMEZONEID, C_RESPONSESTATUS, C_EXCEPTIONREPLACETIME, C_REMINDERMINUTES, C_PRIVATE, C_NUMALLAPPTPROPS
+	C_TIMEZONEID, C_RESPONSESTATUS,C_RESPONSEREQUESTED, C_EXCEPTIONREPLACETIME, C_REMINDERMINUTES, C_PRIVATE, C_NUMALLAPPTPROPS
 	//org stuff later
     };
 
@@ -66,6 +66,7 @@ private:
     vector<Attendee*> m_vAttendees;
     wstring m_pReminderMinutes;
     wstring m_pPrivate;
+	wstring m_pResponseRequested;
     wstring m_pPlainTextFile;
     wstring m_pHtmlFile;
     vector<MAPIAppointment*> m_vExceptions;
@@ -93,6 +94,7 @@ public:
     HRESULT SetOrganizerAndAttendees();
     void SetReminderMinutes(long reminderminutes);
     void SetPrivate(unsigned short usPrivate);
+	void SetResponseRequested(unsigned short usPrivate);
     void SetPlainTextFileAndContent();
     void SetHtmlFileAndContent();
     void SetTimezoneId(LPTSTR pStr);
@@ -114,6 +116,7 @@ public:
     wstring GetTransparency();
     wstring GetReminderMinutes();
     wstring GetResponseStatus();
+	wstring GetResponseRequested();
     wstring GetOrganizerName();
     wstring GetOrganizerAddr();
     wstring GetPrivate();

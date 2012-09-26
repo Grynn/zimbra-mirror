@@ -560,6 +560,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                     int numAttendees = (int)apptData.vAttendees.size();     // cast it because in delete loop, we'll go negative
                     wstring attendeeData = L"";
 
+					pIt[L"rsvp"] =  SysAllocString((apptData.RSVP).c_str());
                     pIt[L"ptst"] = SysAllocString((apptData.PartStat).c_str());
                     pIt[L"fb"] = SysAllocString((apptData.FreeBusy).c_str());
                     pIt[L"allDay"] = SysAllocString((apptData.AllDay).c_str());

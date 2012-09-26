@@ -43,6 +43,7 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MA
 	pr_timezoneid = 0;
 	pr_reminderminutes = 0;
         pr_private = 0;
+		
 	pr_responsestatus = 0;
         pr_exceptionreplacetime = 0;
 	InitNamedPropsForAppt();
@@ -62,6 +63,7 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MA
     m_pOrganizerName = L"";
     m_pOrganizerAddr = L"";
     m_pPrivate = L"";
+	m_pResponseRequested = L"";
 
     SetMAPIAppointmentValues();
 }
@@ -146,6 +148,7 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
     pr_responsestatus = SetPropType(pAppointmentTags->aulPropTag[N_RESPONSESTATUS], PT_LONG);
     pr_exceptionreplacetime = SetPropType(pAppointmentTags->aulPropTag[N_EXCEPTIONREPLACETIME], PT_SYSTIME);
     pr_reminderminutes = SetPropType(pAppointmentTagsC->aulPropTag[N_REMINDERMINUTES], PT_LONG);
+	
     pr_private = SetPropType(pAppointmentTagsC->aulPropTag[N_PRIVATE], PT_BOOLEAN);
 
     // free the memory we allocated on the head
@@ -172,7 +175,7 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
 	    PR_MESSAGE_FLAGS, PR_SUBJECT, PR_BODY, PR_HTML, pr_clean_global_objid,
 	    pr_appt_start, pr_appt_end, pr_location, pr_busystatus, pr_allday,
 	    pr_isrecurring, pr_recurstream, pr_timezoneid, pr_responsestatus,
-            pr_exceptionreplacetime,
+            PR_RESPONSE_REQUESTED,pr_exceptionreplacetime,
 	    pr_reminderminutes, pr_private
 	}
     };
@@ -228,6 +231,10 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     if (m_pPropVals[C_RESPONSESTATUS].ulPropTag == appointmentProps.aulPropTag[C_RESPONSESTATUS])
     {
 	SetResponseStatus(m_pPropVals[C_RESPONSESTATUS].Value.l);
+    }
+	 if (m_pPropVals[C_RESPONSEREQUESTED].ulPropTag == appointmentProps.aulPropTag[C_RESPONSEREQUESTED])
+    {
+	SetResponseRequested(m_pPropVals[C_RESPONSEREQUESTED].Value.b);
     }
     if (m_pPropVals[C_REMINDERMINUTES].ulPropTag == appointmentProps.aulPropTag[C_REMINDERMINUTES])
     {
@@ -573,6 +580,10 @@ void MAPIAppointment::FillInExceptionAppt(MAPIAppointment* pEx, Zimbra::Mapi::CO
     {
         pEx->m_pPrivate = m_pPrivate;
     }
+	if (pEx->m_pResponseRequested.length() == 0)
+    {
+        pEx->m_pResponseRequested = m_pResponseRequested;
+    }
     if (pEx->m_pPlainTextFile.length() == 0)
     {
         pEx->m_pPlainTextFile = m_pPlainTextFile;
@@ -596,6 +607,7 @@ void MAPIAppointment::FillInCancelException(MAPIAppointment* pEx, Zimbra::Mapi::
     pEx->m_pOrganizerAddr = m_pOrganizerAddr;
     pEx->m_pReminderMinutes = m_pReminderMinutes;
     pEx->m_pPrivate = m_pPrivate;
+	pEx->m_pResponseRequested = m_pResponseRequested;
     pEx->m_pPlainTextFile = m_pPlainTextFile;
     pEx->m_pHtmlFile = m_pHtmlFile;
 }
@@ -783,6 +795,10 @@ void MAPIAppointment::SetPrivate(unsigned short usPrivate)
     m_pPrivate = (usPrivate == 1) ? L"1" : L"0";
 }
 
+void MAPIAppointment::SetResponseRequested(unsigned short usPrivate)
+{
+    m_pResponseRequested = (usPrivate == 1) ? L"1" : L"0";
+}
 void MAPIAppointment::SetPlainTextFileAndContent()
 {
     m_pPlainTextFile = Zimbra::MAPI::Util::SetPlainText(m_pMessage, &m_pPropVals[C_BODY]);
@@ -903,6 +919,7 @@ wstring MAPIAppointment::GetAllday() { return m_pAllday; }
 wstring MAPIAppointment::GetTransparency() { return m_pTransparency; }
 wstring MAPIAppointment::GetReminderMinutes() { return m_pReminderMinutes; }
 wstring MAPIAppointment::GetResponseStatus() { return m_pResponseStatus; }
+wstring MAPIAppointment::GetResponseRequested() { return m_pResponseRequested; }
 wstring MAPIAppointment::GetOrganizerName() { return m_pOrganizerName; }
 wstring MAPIAppointment::GetOrganizerAddr() { return m_pOrganizerAddr; }
 wstring MAPIAppointment::GetPrivate() { return m_pPrivate; }
