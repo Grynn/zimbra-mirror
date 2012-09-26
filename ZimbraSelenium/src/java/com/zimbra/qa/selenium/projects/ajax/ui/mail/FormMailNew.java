@@ -918,13 +918,39 @@ public class FormMailNew extends AbsForm {
 		return (true);
 	}
 	
+	public boolean zHasAttachment() throws HarnessException {
+	
+		String locator = "css=span[id$='_attachments_div'] div.attBubbleContainer";
+		
+		boolean hasBubble = this.sIsElementPresent(locator);
+		
+		return (hasBubble);
+		
+	}
+	
 	public boolean zHasAttachment(String name)  throws HarnessException {
 	    
-	    //verify clipper image existed, checkbox is checked, and  attachment file name
+	    // Is the bubble there?
+		if ( !zHasAttachment() ) {
+			return (false);
+		}
+		
+		// Find the attachment name
+		String locator = "css=span[id$='_attachments_div'] div.attBubbleContainer a.AttLink";
+		
+		if ( !this.sIsElementPresent(locator) ) {
+			return (false);
+		}
+		
+		
+		String filename = this.sGetText(locator);
+		
+		if ( filename == null || filename.trim().length() == 0 ) {
+			return (false);
+		}
 	    
-	    return  sIsElementPresent(Locators.zAttachmentImage) &&
-	            sIsChecked(Locators.zAttachmentCheckbox) &&
-	            sIsElementPresent(Locators.zAttachmentText + "'" + name + "'" + ")");	    		   
+		return (filename.contains(name));
+		
 	}
 
 	/**

@@ -450,9 +450,7 @@ public class PageAddressbook extends AbsTab {
 		
 		if ( page != null ) {
 			//sWaitForPageToLoad();			
-			  ExecuteHarnessMain.ResultListener.captureScreen();
 			page.zWaitForActive();
-			  ExecuteHarnessMain.ResultListener.captureScreen();
 		}
 		return (page);
 	}
