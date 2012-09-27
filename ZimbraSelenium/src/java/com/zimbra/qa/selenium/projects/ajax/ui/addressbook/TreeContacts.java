@@ -3,9 +3,6 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
-import java.awt.Robot;
-import java.awt.event.*;
-
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -323,64 +320,76 @@ public class TreeContacts extends AbsTree {
 			throw new HarnessException(
 			"Must define an action, option, and addressbook");
 		}
-	
 		AbsPage page = null;
 		String actionLocator = null;
-		String optionLocator = null;
+		String optionLocator = "css=div[id^='ZmActionMenu_contacts_TAG'] ";
 
-		
 		tracer.trace("processing " + t.getName());
 
 		if (action == Action.A_LEFTCLICK) {
 
-			throw new HarnessException("Action Left click not yet implemented");
+			throw new HarnessException("implement me!");
 
-		 } else if (action == Action.A_RIGHTCLICK) {
-			 						 
-			actionLocator = "css=div[id=ztih__main_Contacts__TAG] td[id=^zti__main_Contacts__tag][id$=_textCell]:contains('" + t.getName() + "')";				
-			zWaitForElementPresent(actionLocator);
-			zRightClickAt(actionLocator,"0,0");
-			zWaitForBusyOverlay();
+		} else if (action == Action.A_RIGHTCLICK) {
+
+			actionLocator = "css=td[id^='zti__main_Contacts__']:contains('"+ t.getName() +"')";
+			this.zRightClickAt(actionLocator,"");
 			
+			this.zWaitForBusyOverlay();
 
-         } else {
+
+
+		} else {
 			throw new HarnessException("Action " + action
 					+ " not yet implemented");
-		 }
+		}
 		
+
 		if (option == Button.B_TREE_NEWTAG) {
-			optionLocator = "css=tr#POPUP_NEW_TAG";
+
+			// optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
+			// optionLocator="//div[contains(@id,'POPUP_DWT') and contains(@class,'ZHasSubMenu')]//tbody/tr[@id='POPUP_NEW_TAG']";
+			// optionLocator = css=div[id='ZmActionMenu_conversationList_TAG'] div[id='NEW_TAG'] td[id$='_title']
+			optionLocator += " div[id^='NEW_TAG'] td[id$='_title']";
+
 			page = new DialogTag(MyApplication,
-					((AppAjaxClient) MyApplication).zPageAddressbook);
-		    zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-		} 
-		else if (option == Button.B_DELETE) {
-			optionLocator = "css=tr#POPUP_DELETE";			
+					((AppAjaxClient) MyApplication).zPageMail);
+						
+		} else if (option == Button.B_DELETE) {
+
+			// optionLocator = Locators.zDeleteTreeMenuItem;
+			optionLocator += " div[id^='DELETE_WITHOUT_SHORTCUT'] td[id$='_title']";
+
 			page = new DialogWarning(
 					DialogWarning.DialogWarningID.DeleteTagWarningMessage,
-					MyApplication, ((AppAjaxClient) MyApplication).zPageAddressbook);        
-			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);		
-		}
-	    else if (option == Button.B_RENAME) {
-	    	optionLocator= "css=tr#POPUP_RENAME_TAG";
-			page = new DialogRenameTag(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
-			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+					MyApplication, ((AppAjaxClient) MyApplication).zPageAddressbook);
 
-		} 		
-		else {
+		} else if (option == Button.B_RENAME) {
+
+			// optionLocator = Locators.zRenameTreeMenuItem;
+			optionLocator += " div[id^='RENAME_TAG'] td[id$='_title']";
+
+			page = new DialogRenameTag(MyApplication,
+					((AppAjaxClient) MyApplication).zPageAddressbook);
+
+		} else {
 			throw new HarnessException("button " + option
 					+ " not yet implemented");
 		}
 		
-		zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
-		
-			// If there is a busy overlay, wait for that to finish
-		zWaitForBusyOverlay();
+		if (actionLocator == null)
+			throw new HarnessException("locator is null for action " + action);
+		if (optionLocator == null)
+			throw new HarnessException("locator is null for option " + option);
+
+		// Default behavior. Click the locator
+		zClickAt(optionLocator,"");
+
+		// If there is a busy overlay, wait for that to finish
+		this.zWaitForBusyOverlay();
 
 		if (page != null) {
+
 			// Wait for the page to become active, if it was specified
 			page.zWaitForActive();
 		}
