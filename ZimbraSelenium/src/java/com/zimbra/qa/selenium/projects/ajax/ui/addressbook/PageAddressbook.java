@@ -1161,97 +1161,43 @@ public class PageAddressbook extends AbsTab {
 
   
 	public AbsPage zListItem(Action action, Button option ,Button subOption, String tagName, String contact) throws HarnessException {
-		String locator = null;			// If set, this will be clicked
-		AbsPage page = null;	// If set, this page will be returned
-		
-		String parentLocator = null;
-		String extraLocator="";
-		
+
+		AbsPage page = null;	// If set, this page will be returned		
+		String contactLocator = getContactLocator(contact);
+		String locator = null;
+	
+
 		tracer.trace(action +" then "+ option +" then "+ subOption + " and tag " + tagName + " on contact = "+ contact);
 
         if ( action == Action.A_RIGHTCLICK ) {
-			ContextMenuItem cmi=null;
-		    ContextMenuItem sub_cmi = null;
-		
-		    zRightClickAt(getContactLocator(contact),"0,0");
-		      
-		    
-			if (option == Button.B_TAG) {		        
-				cmi=CONTEXT_MENU.CONTACT_TAG;
-						
+        		    
+			if (option == Button.B_TAG) {
+			
 				if (subOption == Button.O_TAG_REMOVETAG) {
-					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_REMOVE_TAG;					
-					parentLocator= "div[id=TAG_MENU|MENU]";					//id = cmi.locator;
-					locator = "css=div#zm__Contacts tr#"+ cmi.locator;
-									
-					//  Make sure the context menu exists
-					zWaitForElementPresent(locator) ;
-			
-					ExecuteHarnessMain.ResultListener.captureScreen();
-					// Mouse over the option
-					sFocus(locator);
-					sMouseOver(locator);		    			 
-					zWaitForBusyOverlay();
-	
-					locator = "css=" + parentLocator + " " + sub_cmi.locator + extraLocator;		        			
-					zWaitForElementPresent(locator) ;
-			
-			
-						
-					// mouse over the sub menu
-					sFocus(locator);
-					sMouseOver(locator);
-					SleepUtil.sleepSmall();
+					
+					String tagContactLocator = "css=div[id^='zm__Contacts'] div[id^='TAG_MENU'] td[id$='_title']";
+					String removeTagLocator = "css=div[id^='TAG_MENU|MENU'] div[id^='contacts_removetag'] td[id$='_title']";
+					locator = "css=div[id='REMOVE_TAG_MENU_TAG_MENU|MENU'] td[id=^Remove_tag_][id$=_title]:contains('" +  tagName + "')";														    							
 
-					//the above sMouseOver not work on my ff browser for some unknown reason, work around steps need here					
-					int count= Integer.parseInt(sGetEval("window.document.getElementById('TAG_MENU|MENU').children[0].children[0].children.length"));
-					
-					
-					for (int i=0; i<count -1 ; i++) {
-						zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);					
-						SleepUtil.sleepSmall();
-					}
-					zKeyboard.zTypeKeyEvent(KeyEvent.VK_RIGHT);		
-																
+				    // Right click on contact
+				    zRightClickAt(contactLocator,"0,0");
 					zWaitForBusyOverlay();
-					
-				    							
-				    if (tagName.equals("All Tags")) {					
-				    	locator = "css=div[id=REMOVE_ALL_TAGS]";
-				    }
-				    else {
-				    	locator = "css=td[id=^Remove_tag_][id$=_title]:contains('" + tagName + "')";														    
-				    }
-						
-				    
-				    //  Make sure the sub context menu exists			
-				    zWaitForElementPresent(locator) ;
-			
-				    // 	make sure the sub context menu enabled			
-				    zWaitForElementEnabled(locator);
-					
-				   //sClick not work on my ff browser for some unknown reason, work around  here					
-				    sClick(locator);
 
-					count= Integer.parseInt(sGetEval("window.document.getElementById('REMOVE_TAG_MENU_TAG_MENU|MENU').children[0].children[0].children.length"));
-					
-					
-					for (int i=1; i<count ; i++) {
-												
-						if (sGetText("css=div[id='REMOVE_TAG_MENU_TAG_MENU|MENU'] tr:nth-child(" + i + ")").contains(tagName)){
-							break;
-						}
-								   	
-				        zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);					
-						SleepUtil.sleepSmall();
-						
-					}
-			
-					zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);														
-			     	
-				    zWaitForBusyOverlay();
-				    //ExecuteHarnessMain.ResultListener.captureScreen();
-				    	
+				    // Left Click "Tag"
+					this.sMouseOver(tagContactLocator);
+					zClickAt(tagContactLocator, "");
+					zWaitForBusyOverlay();
+
+				    // Left Click "Remove Tag"
+					this.sMouseOver(removeTagLocator);
+					zClickAt(removeTagLocator, "");
+					zWaitForBusyOverlay();
+
+				    // Left Click "<tag name>"
+					zClickAt(locator, "");
+					zWaitForBusyOverlay();
+
+					return (page);
 				}
 			}     		       		
 	    }

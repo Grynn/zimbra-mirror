@@ -2,16 +2,11 @@ package com.zimbra.qa.selenium.framework.items;
 
 import java.util.ArrayList;
 
-
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
@@ -27,11 +22,24 @@ public class ContactGroupItem extends ContactItem implements IItem {
 	 */
 	public String groupName = null;
 
+	// TODO: Remove dlist in favor of the new "members" list
 	/**
 	 * The list of contacts within this group
 	 */
 	public ArrayList<ContactItem> dlist = null;
 
+	/**
+	 * The list of members within this group
+	 */
+	public ArrayList<MemberItem> groupMembers = new ArrayList<MemberItem>();
+
+	/**
+	 * Create a new contact group item+
+	 */
+	public ContactGroupItem() {
+		dlist = new ArrayList<ContactItem>();
+	}
+	
 	/**
 	 * Create a new contact group item+
 	 */
@@ -81,7 +89,7 @@ public class ContactGroupItem extends ContactItem implements IItem {
 				sb.append(',').append(s);
 			}
 		}
-		return (sb.toString());
+		return (sb == null ? "" : sb.toString());
 	}
 
 	/**
@@ -142,7 +150,57 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		if ( GetContactsResponse == null )
 			throw new HarnessException("GetContactsResponse cannot be null");
 
-		throw new HarnessException("implement me!");
+		ContactGroupItem group = null;
+
+		try {
+
+			// Make sure we only have the GetMsgResponse part
+			Element getContactsResponse = ZimbraAccount.SoapClient.selectNode(GetContactsResponse, "//mail:GetContactsResponse");
+			if ( getContactsResponse == null )
+				throw new HarnessException("Element does not contain GetContactsResponse: " + GetContactsResponse.prettyPrint());
+
+			Element cn = ZimbraAccount.SoapClient.selectNode(getContactsResponse, "//mail:cn");
+			if ( cn == null )
+				throw new HarnessException("Element does not contain a cn element: "+ getContactsResponse.prettyPrint());
+
+			// Create the object
+			group = new ContactGroupItem();
+
+			// Set the ID
+			group.setId(cn.getAttribute("id", null));
+			group.fileAs=cn.getAttribute("fileAsStr",null);
+			group.setFolderId(cn.getAttribute("l", null));
+
+
+			// Iterate the attributes
+			Element[] attributes = ZimbraAccount.SoapClient.selectNodes(cn, "//mail:a");
+			for (Element a : attributes) {
+				String key = a.getAttribute("n", "foo");
+				String value = a.getText();
+				
+				if ( key.equalsIgnoreCase("nickname") ) {
+					group.fileAs = value;
+				}
+
+				group.setAttribute(key, value);
+			}
+
+			// Iterate the members
+			Element[] members = ZimbraAccount.SoapClient.selectNodes(cn, "//mail:a");
+			for (Element m : members) {
+				String value = m.getAttribute("value", null);
+				String type = m.getAttribute("type", null);
+				
+				// TODO: members do not need to be contacts
+				group.groupMembers.add(new MemberItem(value, type));
+
+			}
+
+			return (group);
+
+		} finally {
+			if ( group != null )	logger.info(group.prettyPrint());
+		}
 	}
 
 	/**
@@ -219,19 +277,83 @@ public class ContactGroupItem extends ContactItem implements IItem {
 
       return group;
    }
+	
+	public static ContactGroupItem createContactGroupItem(ZimbraAccount account, GenerateItemType Type) throws HarnessException {
+		
+	       // Create a contact group
+	 	   ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
+
+	       StringBuilder sb= new StringBuilder("");
+	       for (ContactItem contactItem: group.dlist) {
+	          String e= contactItem.email;
+	          sb.append("<m type='I' value='" + e + "' />");
+	       }
+
+	       account.soapSend(
+	    		   "<CreateContactRequest xmlns='urn:zimbraMail'>" +
+	    				   "<cn >" +
+	    				   "<a n='type'>group</a>" +
+	    				   "<a n='nickname'>" + group.groupName +"</a>" +
+	    				   "<a n='fileAs'>8:" +  group.fileAs +"</a>" +
+	    				   sb.toString() +
+	    				   "</cn>" +
+	    		   "</CreateContactRequest>");
+		   String id = account.soapSelectValue("//mail:CreateContactResponse/mail:cn", "id");
+		   
+		   return (ContactGroupItem.importFromSOAP(account, "item:"+ id));
+
+	}
 
 	public static ContactGroupItem importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
-		throw new HarnessException("implement me!");
+		return ContactGroupItem.importFromSOAP(
+				account,
+				query,
+				SOAP_DESTINATION_HOST_TYPE.SERVER,
+				null);
+	}
+
+	public static ContactGroupItem importFromSOAP(ZimbraAccount account,
+			String query, SOAP_DESTINATION_HOST_TYPE destType, String accountName) throws HarnessException {
+
+		try
+		{
+
+			account.soapSend(
+					"<SearchRequest xmlns='urn:zimbraMail' types='contact'>" +
+							"<query>"+ query +"</query>" +
+							"</SearchRequest>",
+							destType,
+							accountName);
+
+			Element[] results = account.soapSelectNodes("//mail:SearchResponse/mail:cn");
+			if (results.length == 0) {
+				return null;
+			} else if (results.length != 1) {
+				throw new HarnessException("Query should return 1 result, not "+ results.length);
+			}
+
+			String id = account.soapSelectValue("//mail:SearchResponse/mail:cn", "id");
+
+			account.soapSend(
+					"<GetContactsRequest xmlns='urn:zimbraMail' >" +
+							"<cn id='"+ id +"'/>" +
+							"</GetContactsRequest>",
+							destType,
+							accountName);
+			Element getContactsResponse = account.soapSelectNode("//mail:GetContactsResponse", 1);
+
+			// Using the response, create this item
+			return (importFromSOAP(getContactsResponse));
+
+		} catch (Exception e) {
+			throw new HarnessException("Unable to import using SOAP query("+ query +") and account("+ account.EmailAddress +")", e);
+		}
+
 	}
 
 
 	public static String getId(ZimbraAccount account) {
 		return account.soapSelectValue("//mail:CreateContactResponse/mail:cn", "id");
-	}
-
-	public static String[] getDList(ZimbraAccount account) {
-		String[] dlist = null; //account.so .soapSelectNodes("//mail:CreateContactResponse/mail:cn/mail:m");
-		return dlist;
 	}
 
 	@Override
@@ -243,10 +365,40 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		sb.append("dlist: ").append(getDList()).append('\n');
 		for (String key : ContactAttributes.keySet())
 			sb.append(String.format("Attribute: key(%s) value(%s)", key, ContactAttributes.get(key))).append('\n');
+		sb.append("members:\n");
+		for (MemberItem m : groupMembers) {
+			sb.append(m.toString());
+		}
+		for (String key : ContactAttributes.keySet())
+			sb.append(String.format("Attribute: key(%s) value(%s)", key, ContactAttributes.get(key))).append('\n');
 		return (sb.toString());
 	}
 
 
+	public static class MemberItem {
+		protected String value;
+		protected String type;
+		
+		public MemberItem() {
+			
+		}
+		
+		public MemberItem(String value, String type) {
+			this.value = value;
+			this.type = type;
+		}
+		
+		public String prettyPrint() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("value: ").append(value).append("\n");
+			sb.append("type: ").append(type).append("\n");
+			return (sb.toString());
+		}
+		
+		public String toString() {
+			return (String.format("value(%s) type(%s)", value, type));
+		}
+	}
 }
 
 

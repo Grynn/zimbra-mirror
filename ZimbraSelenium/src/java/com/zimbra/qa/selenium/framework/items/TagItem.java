@@ -90,33 +90,22 @@ public class TagItem implements IItem {
 
 	//Create a new tag via soap
 	//return TagItem object
-	public static TagItem CreateUsingSoap(AbsApplication app) throws HarnessException{
+	public static TagItem CreateUsingSoap(ZimbraAccount account) throws HarnessException {
+		
+		
 		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();	
-		// Create the object
-		TagItem tagItem = new TagItem();
-
-	
+		
+		
 		//TODO color attribute 
 	   // Create a tag via soap
-		app.zGetActiveAccount().soapSend(
+		account.soapSend(
 				"<CreateTagRequest xmlns='urn:zimbraMail'>" +
-               	"<tag name='"+ tagName +"' color='1' />" +
-               "</CreateTagRequest>");
-		String tagId = app.zGetActiveAccount().soapSelectValue("//mail:CreateTagResponse/mail:tag", "id");
+						"<tag name='"+ tagName +"' color='1' />" +
+				"</CreateTagRequest>");
 
-		// Set the ID
-		tagItem.setId(tagId);
-		//Set tag name
-		tagItem.setName(tagName);			
 
-		// Refresh addressbook
-		if ( !(app instanceof AppAjaxClient) ) {
-			throw new HarnessException("Unknown app type: "+ app.getClass().getCanonicalName());
-		}
-		
-		((AppAjaxClient)app).zPageMain.zToolbarPressButton(Button.B_REFRESH);
+		return (TagItem.importFromSOAP(account, tagName));
 
-		return tagItem;
 	}
 
 	
