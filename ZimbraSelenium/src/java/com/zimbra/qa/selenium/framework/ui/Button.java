@@ -343,6 +343,7 @@ public class Button {
 	public static final Button B_QUICK_REPLY_MORE = new Button("B_QUICK_REPLY_MORE");
 
 	// Calendar
+	public static final Button B_SHOW = new Button("B_SHOW");
 	public static final Button B_SAVEANDCLOSE = new Button("B_SAVEANDCLOSE");
 	public static final Button B_REFRESH = new Button("B_REFRESH");
 	

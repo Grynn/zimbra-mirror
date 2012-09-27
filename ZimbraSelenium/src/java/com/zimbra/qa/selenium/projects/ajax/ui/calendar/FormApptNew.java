@@ -134,6 +134,56 @@ public class FormApptNew extends AbsForm {
 
 	}
 	
+	public void zAddRequiredAttendeeFromScheduler(String attendee) throws HarnessException {
+		zToolbarPressButton(Button.B_SHOW);
+		SleepUtil.sleepSmall();
+		this.zType("css=td[id$='_scheduler'] td[id$='_NAME_'] input", attendee);
+		SleepUtil.sleepSmall();
+	}
+	
+	public void zAddOptionalAttendeeFromScheduler(String attendee) throws HarnessException {
+		zToolbarPressButton(Button.B_SHOW);
+		SleepUtil.sleepSmall();
+		this.zClickAt("css=td[id$='_scheduler'] td[id$='_SELECT_'] td[id$='_dropdown']", "");
+		this.zClickAt("css=div[class='DwtMenu ZHasIcon'] td[id$='_title']:contains('Optional Attendee')", "");		
+		this.zType("css=td[id$='_scheduler'] td[id$='_NAME_'] input", attendee);
+		SleepUtil.sleepSmall();
+	}
+	
+	public void zAddLocationFromScheduler(String location) throws HarnessException {
+		zToolbarPressButton(Button.B_SHOW);
+		SleepUtil.sleepSmall();
+		this.zClickAt("css=td[id$='_scheduler'] td[id$='_SELECT_'] td[id$='_dropdown']", "");
+		this.zClickAt("css=div[class='DwtMenu ZHasIcon'] td[id$='_title']:contains('Location')", "");
+		this.zType("css=td[id$='_scheduler'] td[id$='_NAME_'] input", location);
+		SleepUtil.sleepSmall();
+	}
+	
+	public void zAddEquipmentFromScheduler(String equipment) throws HarnessException {
+		zToolbarPressButton(Button.B_SHOW);
+		SleepUtil.sleepSmall();
+		this.zClickAt("css=td[id$='_scheduler'] td[id$='_SELECT_'] td[id$='_dropdown']", "");
+		this.zClickAt("css=div[class='DwtMenu ZHasIcon'] td[id$='_title']:contains('Equipment')", "");
+		this.zType("css=td[id$='_scheduler'] td[id$='_NAME_'] input", equipment);
+		SleepUtil.sleepSmall();
+	}
+	
+	public Boolean zVerifyRequiredAttendee(String attendee) throws HarnessException {
+		return sIsElementPresent("css=td[id$='_person'] span:contains('" + attendee + "')");
+	}
+	
+	public Boolean zVerifyOptionalAttendee(String attendee) throws HarnessException {
+		return sIsElementPresent("css=td[id$='_optional'] span:contains('" + attendee + "')");
+	}
+	
+	public Boolean zVerifyLocation(String location) throws HarnessException {
+		return sIsElementPresent("css=td[id$='_location'] span:contains('" + location + "')");
+	}
+	
+	public Boolean zVerifyEquipment(String equipment) throws HarnessException {
+		return sIsElementPresent("css=td[id$='_resourcesData'] span:contains('" + equipment + "')");
+	}
+	
 	public void zRemoveAttendee(String attendee) throws HarnessException {
 		SleepUtil.sleepSmall(); //let free/busy UI draw and then we take UI actions
 		this.zRightClickAt("css=td[id$='_person'] span:contains('" + attendee + "')", "");
@@ -201,6 +251,19 @@ public class FormApptNew extends AbsForm {
 
 			locator = Locators.Button_Close;
 			page = null;
+
+			// FALL THROUGH
+			
+		} else if (button == Button.B_SHOW) {
+
+			locator = Locators.ShowSchedulerLink;
+			page = null;
+			
+			this.sClick(locator);
+
+			this.zWaitForBusyOverlay();
+		
+			return (page);
 
 			// FALL THROUGH
 

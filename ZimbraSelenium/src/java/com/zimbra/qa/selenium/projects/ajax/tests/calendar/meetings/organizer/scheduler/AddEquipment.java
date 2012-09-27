@@ -1,8 +1,7 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.resources;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.scheduler;
 
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
-
 import org.testng.annotations.*;
 
 import com.zimbra.common.soap.Element;
@@ -13,30 +12,41 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDeleteOrganizer;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogSendUpdatetoAttendees;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 
 @SuppressWarnings("unused")
-public class AddLocation extends CalendarWorkWeekTest {	
+public class AddEquipment extends CalendarWorkWeekTest {	
 	
-	public AddLocation() {
-		logger.info("New "+ AddLocation.class.getCanonicalName());
+	public AddEquipment() {
+		logger.info("New "+ AddEquipment.class.getCanonicalName());
 		
 	}
 	
-	@Test(description = "Add location to existing appointment and verify F/B",
-			groups = { "smoke" })
-	public void AddLocation_01() throws HarnessException {
+	@Bugs(ids = "77711")
+	@DataProvider(name = "DataProviderShortcutKeys")
+	public Object[][] DataProviderShortcutKeys() {
+		return new Object[][] {
+				new Object[] { "VK_ENTER", KeyEvent.VK_ENTER },
+	//			new Object[] { "VK_TAB", KeyEvent.VK_TAB },
+		};
+	}
+	@Test(description = "Add equipment from scheduler pane using keyboard Enter and Tab key",
+			groups = { "sanity" },
+			dataProvider = "DataProviderShortcutKeys")
+	public void AddEquipment_01(String name, int keyEvent) throws HarnessException {
 		
 		// Create a meeting
 		AppointmentItem appt = new AppointmentItem();
-		ZimbraResource location = new ZimbraResource(ZimbraResource.Type.LOCATION);
-		
+		ZimbraResource equipment = new ZimbraResource(ZimbraResource.Type.EQUIPMENT);
+			
 		String tz = ZTimeZone.TimeZoneEST.getID();
 		String apptSubject = ZimbraSeleniumProperties.getUniqueString();
-		String apptAttendee = ZimbraAccount.AccountA().EmailAddress;
-		String apptLocation = location.EmailAddress;
+		String apptEquipment = equipment.EmailAddress;
 		
 		// Absolute dates in UTC zone
 		Calendar now = this.calendarWeekDayUTC;
@@ -50,7 +60,6 @@ public class AddLocation extends CalendarWorkWeekTest {
                      		"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
                      		"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
                      		"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-                     		"<at role='REQ' ptst='AC' rsvp='1' a='" + apptAttendee + "' d='2'/>" +
                      	"</inv>" +
                      	"<e a='"+ ZimbraAccount.AccountA().EmailAddress +"' t='t'/>" +
                      	"<mp content-type='text/plain'>" +
@@ -61,20 +70,21 @@ public class AddLocation extends CalendarWorkWeekTest {
                "</CreateAppointmentRequest>");
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
-        // Add location and resend the appointment
+        // Add equipment using scheduler and send the appointment
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        apptForm.zFillField(Field.Location, apptLocation);
+        apptForm.zAddEquipmentFromScheduler(apptEquipment);
+		app.zPageCalendar.zKeyboard.zTypeKeyEvent(keyEvent);
+        ZAssert.assertTrue(apptForm.zVerifyEquipment(apptEquipment), "Verify equipment bubble after adding equipment from scheduler");
         apptForm.zToolbarPressButton(Button.B_SEND);
-
-        // Verify location in the appointment
-		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
+ 
+        // Verify that equipment present in the appointment
+        AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
 		ZAssert.assertEquals(actual.getSubject(), apptSubject, "Subject: Verify the appointment data");
-		ZAssert.assertEquals(actual.getAttendees(), apptAttendee, "Attendees: Verify the appointment data");
-		ZAssert.assertEquals(actual.getLocation(), apptLocation, "Location: Verify the appointment data");
+		ZAssert.assertStringContains(actual.getEquipment(), apptEquipment, "Equipment: Verify the appointment data");
 		
-		// Verify location free/busy status
-		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation +"']", "ptst");
-		ZAssert.assertEquals(locationStatus, "AC", "Verify location status shows accepted");
+		// Verify equipment free/busy status
+		String equipmentStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptEquipment +"']", "ptst");
+		ZAssert.assertEquals(equipmentStatus, "AC", "Verify equipment free/busy status");
 		
 	}
 	

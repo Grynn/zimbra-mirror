@@ -46,7 +46,7 @@ public abstract class AbsPage extends AbsSeleniumObject {
 	/**
 	 * A Keyboard object to send keyboard input to the screen
 	 */
-	protected Keyboard zKeyboard = new Keyboard();
+	public Keyboard zKeyboard = new Keyboard();
 
 	/**
 	 * Create this page object that exists in the specified application
