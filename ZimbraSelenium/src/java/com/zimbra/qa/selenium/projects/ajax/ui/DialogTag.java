@@ -135,6 +135,10 @@ public class DialogTag extends AbsDialog {
 	      throw new HarnessException("The tag is never created after submit");
 	   }
 	}
+	
+	public void zSubmit() throws HarnessException {
+		   zClickButton(Button.B_OK);
+	}
 
 	@Override
 	public String zGetDisplayedText(String locator) throws HarnessException {

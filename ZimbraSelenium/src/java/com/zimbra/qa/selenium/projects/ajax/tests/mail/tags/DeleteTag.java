@@ -26,14 +26,7 @@ public class DeleteTag extends PrefGroupMailByMessageTest {
 
 		
 		// Create the tag to delete
-		String name = "tag" + ZimbraSeleniumProperties.getUniqueString();
-		
-		app.zGetActiveAccount().soapSend(
-				"<CreateTagRequest xmlns='urn:zimbraMail'>" +
-                	"<tag name='"+ name +"' color='1' />" +
-                "</CreateTagRequest>");
-
-		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), name);
+		TagItem tag = TagItem.CreateUsingSoap(app.zGetActiveAccount());
 		ZAssert.assertNotNull(tag, "Verify the tag was created");
 		
 		
@@ -48,12 +41,11 @@ public class DeleteTag extends PrefGroupMailByMessageTest {
 		// Click "Yes" to confirm
 		dialog.zClickButton(Button.B_YES);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// To check whether deleted tag is exist
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");
 
-		String tagname = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='" + name + "']","name");
+		String tagname = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='" + tag.getName() + "']","name");
 		ZAssert.assertNull(tagname, "Verify the tag is deleted");
 
 
