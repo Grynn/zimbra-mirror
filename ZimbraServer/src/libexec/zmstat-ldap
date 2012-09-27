@@ -131,7 +131,7 @@ waitUntilNiceRoundSecond($interval);
 while (1) {
     my @out;
 
-    my $ldap = Net::LDAP->new($hostname);
+    my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/');
     unless (defined $ldap) {
         $SEEN_ERROR or logError("Could not connect to LDAP server: $hostname");
 	sleep($interval);
