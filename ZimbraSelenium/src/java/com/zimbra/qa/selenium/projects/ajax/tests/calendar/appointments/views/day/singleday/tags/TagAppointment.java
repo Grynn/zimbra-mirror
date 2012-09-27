@@ -24,10 +24,10 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Locators;
 
 @SuppressWarnings("unused")
-public class CreateTag extends AjaxCommonTest {
+public class TagAppointment extends AjaxCommonTest {
 
-	public CreateTag() {
-		logger.info("New "+ CreateTag.class.getCanonicalName());
+	public TagAppointment() {
+		logger.info("New "+ TagAppointment.class.getCanonicalName());
 
 		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
@@ -42,7 +42,7 @@ public class CreateTag extends AjaxCommonTest {
 	
 	@Test(description = "Tag an appointment using toolbar button in day view",
 			groups = { "smoke" })
-	public void CreateTag_01() throws HarnessException {
+	public void TagAppointment_01() throws HarnessException {
 		
 		// Create objects
 		String apptSubject, apptBody, tag1, tagID;
@@ -75,7 +75,7 @@ public class CreateTag extends AjaxCommonTest {
 	
 	@Test(description = "Create new tag using toolbar button and apply same tag to appointment using toolbar in day view",
 			groups = { "functional" })
-	public void CreateTag_02() throws HarnessException {
+	public void TagAppointment_02() throws HarnessException {
 		
 		// Create objects
 		String apptSubject, apptBody, tag1, tagID;
@@ -111,7 +111,7 @@ public class CreateTag extends AjaxCommonTest {
 	
 	@Test(description = "Apply existing tag to appointment using context menu in day view",
 			groups = { "functional" })
-	public void CreateTag_03() throws HarnessException {
+	public void TagAppointment_03() throws HarnessException {
 		
 		// Create objects
 		String apptSubject, apptBody, tag1, tagID;
@@ -145,7 +145,7 @@ public class CreateTag extends AjaxCommonTest {
 	
 	@Test(description = "Create new tag using context menu and apply same tag to appointment using context menu in day view",
 			groups = { "functional" })
-	public void CreateTag_04() throws HarnessException {
+	public void TagAppointment_04() throws HarnessException {
 		
 		// Create objects
 		String apptSubject, apptBody, tag1, tagID;

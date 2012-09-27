@@ -24,10 +24,10 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Locators;
 
 @SuppressWarnings("unused")
-public class UnTag extends AjaxCommonTest {
+public class DeleteTagAppointment extends AjaxCommonTest {
 
-	public UnTag() {
-		logger.info("New "+ UnTag.class.getCanonicalName());
+	public DeleteTagAppointment() {
+		logger.info("New "+ DeleteTagAppointment.class.getCanonicalName());
 
 		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
@@ -39,15 +39,17 @@ public class UnTag extends AjaxCommonTest {
 		}};
 	}
 
-	
-	@Test(description = "Untag an appointment using toolbar button in day view",
-			groups = { "sanity" })
-	public void UnTag_01() throws HarnessException {
+	@Bugs(ids = "75711")
+	@Test(description = "Apply tag to appointment and delete same tag in day view",
+			groups = { "functional" })
+	public void DeleteTagAppointment_01() throws HarnessException {
 		
 		// Create objects
-		String apptSubject, apptBody, tag1, tagID;
+		String tz, apptSubject, apptBody, tag1, renameTag1, tagID;
 		TagItem tag;
+		tz = ZTimeZone.TimeZoneEST.getID();
 		tag1 = ZimbraSeleniumProperties.getUniqueString();
+		renameTag1 = ZimbraSeleniumProperties.getUniqueString();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
@@ -55,75 +57,62 @@ public class UnTag extends AjaxCommonTest {
 		AppointmentItem appt = AppointmentItem.createAppointmentSingleDay(app.zGetActiveAccount(), Calendar.getInstance(), 120, null, apptSubject, apptBody, null, null);
         String apptId = appt.dApptID;
 
-        // Create new tag and get tag ID   
-		app.zPageCalendar.zCreateTag(app, tag1, 2);
+        // Create new tag and get tag ID
+        app.zPageCalendar.zCreateTag(app, tag1, 8);
 		tag = app.zPageCalendar.zGetTagItem(app.zGetActiveAccount(), tag1);
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
 		tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
 		
-		// Remove tag from appointment using toolbar button		
+		// Apply tag to appointment
 		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag1 +"'/>" + "</ItemActionRequest>");
-		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
-        app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_TAG);
-        app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_REMOVETAG);
-        SleepUtil.sleepSmall();
+        
+        // Delete the tag using the context menu
+		DialogDeleteTag dialog = (DialogDeleteTag) app.zTreeCalendar.zTreeItem(
+				Action.A_RIGHTCLICK, Button.B_DELETE, tag);
+		dialog.zClickButton(Button.B_YES);
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
         // Verify appointment is not tagged
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest xmlns='urn:zimbraMail' id='" + apptId + "'/>");
         ZAssert.assertEquals(app.zGetActiveAccount().soapSelectValue("//mail:appt", "t"), null, "Verify appointment is not tagged");
 		
-		// Verify search result from UI
-		app.zTreeCalendar.zTreeItem(Action.A_LEFTCLICK, tag1);
-		SleepUtil.sleepMedium();
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify search result after clicking tag");
 	}
 	
-	@Test(description = "Untag tagged appointment using context menu in day view",
+	@Test(description = "Apply tag to appointment and delete tagged appointment in day view",
 			groups = { "functional" })
-	public void UnTag_02() throws HarnessException, AWTException {
+	public void DeleteTagAppointment_2() throws HarnessException {
 		
 		// Create objects
-		String apptSubject, apptBody, tag1, tagID;
+		String tz, apptSubject, apptBody, tag1, renameTag1, tagID;
 		TagItem tag;
+		tz = ZTimeZone.TimeZoneEST.getID();
 		tag1 = ZimbraSeleniumProperties.getUniqueString();
+		renameTag1 = ZimbraSeleniumProperties.getUniqueString();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create new appointment
 		AppointmentItem appt = AppointmentItem.createAppointmentSingleDay(app.zGetActiveAccount(), Calendar.getInstance(), 120, null, apptSubject, apptBody, null, null);
         String apptId = appt.dApptID;
-        
-        // Create new tag and get tag ID      
-		app.zPageCalendar.zCreateTag(app, tag1, 4);
+
+        // Create new tag and get tag ID
+        app.zPageCalendar.zCreateTag(app, tag1, 8);
 		tag = app.zPageCalendar.zGetTagItem(app.zGetActiveAccount(), tag1);
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
 		tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
+		
+		// Apply tag to appointment
 		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag1 +"'/>" + "</ItemActionRequest>");
-        
-        // Selenium doesn't select latest sub menu and clicks to wrong hidden menu so test fails.
-        // Adding work around to refresh browser (which is not suppose to do but application is not doing anything wrong)
-        // Manually everything works fine though.
-        // Running this test individually also works fine because it doesn't find duplicate sub menu
-        //Robot Robot = new Robot();
-        //Robot.keyPress(KeyEvent.VK_F5); Robot.keyRelease(KeyEvent.VK_F5);
-        //SleepUtil.sleepVeryLong();
-        //Robot.keyPress(KeyEvent.VK_G); Robot.keyPress(KeyEvent.VK_C);
-        //Robot.keyRelease(KeyEvent.VK_G); Robot.keyRelease(KeyEvent.VK_C);
-        //SleepUtil.sleepLong();
-        
-		// Remove tag from appointment using context menu
-        app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, apptSubject);
-        app.zPageCalendar.sMouseOver(PageCalendar.Locators.TagAppointmentMenu);
-        SleepUtil.sleepSmall();
-        app.zPageCalendar.zToolbarPressButton(Button.O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU);
-        SleepUtil.sleepSmall(); // give time to soap verification because it runs fast and test fails
-        
-        // Verify appointment is not tagged
-        app.zGetActiveAccount().soapSend("<GetAppointmentRequest xmlns='urn:zimbraMail' id='" + apptId + "'/>");
-        ZAssert.assertEquals(app.zGetActiveAccount().soapSelectValue("//mail:appt", "t"), null, "Verify appointment is not tagged");
-        
+
+		// Right click to appointment and delete it
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
+        DialogConfirmDeleteAppointment dlgConfirm = (DialogConfirmDeleteAppointment)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
+		dlgConfirm.zClickButton(Button.B_YES);
+		SleepUtil.sleepMedium(); //testcase fails here due to timing issue so added sleep
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify appointment is deleted");
+		
 	}
 }

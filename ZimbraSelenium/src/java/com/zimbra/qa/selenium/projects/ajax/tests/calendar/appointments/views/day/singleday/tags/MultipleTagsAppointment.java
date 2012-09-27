@@ -24,10 +24,10 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Locators;
 
 @SuppressWarnings("unused")
-public class RenameTag extends AjaxCommonTest {
+public class MultipleTagsAppointment extends AjaxCommonTest {
 
-	public RenameTag() {
-		logger.info("New "+ RenameTag.class.getCanonicalName());
+	public MultipleTagsAppointment() {
+		logger.info("New "+ MultipleTagsAppointment.class.getCanonicalName());
 
 		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
@@ -38,17 +38,17 @@ public class RenameTag extends AjaxCommonTest {
 		    put("zimbraPrefCalendarInitialView", "day");
 		}};
 	}
-	
-	@Test(description = "Apply tag to appointment and rename tag name in day view",
+
+	@Test(description = "Apply multiple tags to appointment using toolbar button in day view and remove all tags in day view",
 			groups = { "functional" })
-	public void RenameTag_01() throws HarnessException {
+	public void MultipleTagsAppointment_01() throws HarnessException {
 		
 		// Create objects
-		String tz, apptSubject, apptBody, tag1, renameTag1, tagID, renameTagID;
-		TagItem tag;
+		String tz, apptSubject, apptBody, tag1, tag2, tagID1, tagID2;
+		TagItem getTag1, getTag2;
 		tz = ZTimeZone.TimeZoneEST.getID();
 		tag1 = ZimbraSeleniumProperties.getUniqueString();
-		renameTag1 = ZimbraSeleniumProperties.getUniqueString();
+		tag2 = ZimbraSeleniumProperties.getUniqueString();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
@@ -56,27 +56,30 @@ public class RenameTag extends AjaxCommonTest {
 		AppointmentItem appt = AppointmentItem.createAppointmentSingleDay(app.zGetActiveAccount(), Calendar.getInstance(), 120, null, apptSubject, apptBody, null, null);
         String apptId = appt.dApptID;
         
-        // Create new tag and get tag ID
-        app.zPageCalendar.zCreateTag(app, tag1, 7);
-		tag = app.zPageCalendar.zGetTagItem(app.zGetActiveAccount(), tag1);
+        // Create new tags and get tag IDs
+		app.zPageCalendar.zCreateTag(app, tag1, 5);
+		app.zPageCalendar.zCreateTag(app, tag2, 6);
+		getTag1 = app.zPageCalendar.zGetTagItem(app.zGetActiveAccount(), tag1);
+		getTag2 = app.zPageCalendar.zGetTagItem(app.zGetActiveAccount(), tag2);
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
-		tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
+		tagID1  = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
+		tagID2 = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag2 +"']", "id");
 		
-		// Apply tag to appointment
+		// Apply multiple tags to appointment
 		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag1 +"'/>" + "</ItemActionRequest>");
+		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag2 +"'/>" + "</ItemActionRequest>");
+        SleepUtil.sleepSmall();
         
-        // Rename the tag using the context menu
-		DialogRenameTag dialog = (DialogRenameTag) app.zTreeCalendar.zTreeItem(
-				Action.A_RIGHTCLICK, Button.B_RENAME, tag);
-		dialog.zSetNewName(renameTag1);
-		dialog.zClickButton(Button.B_OK);
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        
-        // Verify applied tag for appointment
+        // Verify applied tags        
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest xmlns='urn:zimbraMail' id='" + apptId + "'/>");
-        ZAssert.assertEquals(app.zGetActiveAccount().soapSelectValue("//mail:appt", "t"), tagID, "Verify the appointment is tagged with the correct tag");
+        ZAssert.assertEquals(app.zGetActiveAccount().soapSelectValue("//mail:appt", "t"), tagID1 + "," + tagID2, "Verify the appointment is tagged with the correct tag");
 		
+		// Verify search result from UI
+		app.zTreeCalendar.zTreeItem(Action.A_LEFTCLICK, tag1);
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), true, "Verify search result after clicking to tag1");
+		app.zTreeCalendar.zTreeItem(Action.A_LEFTCLICK, tag2);
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), true, "Verify search result after clicking to tag2");
 	}
 	
 }
