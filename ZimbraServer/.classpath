@@ -53,7 +53,7 @@
 			<attribute name="javadoc_location" value="http://www.json.org/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jzlib.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jzlib-1.0.7.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/libidn-1.24.jar" sourcepath="/ZimbraCommon/jars-src/libidn-1.24-src.zip"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/log4j-1.2.16.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/apache-log4j-extras-1.0.jar"/>
