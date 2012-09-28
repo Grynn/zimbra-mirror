@@ -80,7 +80,7 @@ public class FormApptNew extends AbsForm {
 		public static final Field Display = new Field("Display");
 		public static final Field CalendarFolder = new Field("CalendarFolder");
 		public static final Field Private = new Field("Private");
-		public static final Field Remdinder = new Field("Remdinder");
+		public static final Field Reminder = new Field("Reminder");
 		public static final Field Body = new Field("Body");
 
 		private String field;
@@ -131,7 +131,10 @@ public class FormApptNew extends AbsForm {
 		}
 
 		this.zWaitForBusyOverlay();
-
+		
+		// Wait for the message to be delivered
+		Stafpostqueue sp = new Stafpostqueue();
+		sp.waitForPostqueue();
 	}
 	
 	public void zAddRequiredAttendeeFromScheduler(String attendee) throws HarnessException {
