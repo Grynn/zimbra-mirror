@@ -1442,28 +1442,29 @@ public abstract class AbsSeleniumObject {
 		//
 
 		try {
+		    logger.info("getAttribute(" + locator + ")");
 
-			logger.info("getAttribute(" + locator + ")");
-			
-			String attrs = "";
-			if (ZimbraSeleniumProperties.isWebDriver()) {
-				logger.info("...WebDriver...findElement.getAttribute()");
-				String [] elements = locator.split("@");
-				if(elements != null && elements.length > 1){
-					try {
-						WebElement we = getElement(elements[0]);
-						attrs = we.getAttribute(elements[1]);
-					} catch (Exception ex) {
-						logger.error(ex);
-					}								
-				}
-			} else{
-				attrs = ClientSessionFactory.session().selenium()
-					.getAttribute(locator);
+		    String attrs = "";
+		    if (ZimbraSeleniumProperties.isWebDriver()) {
+			logger.info("...WebDriver...findElement.getAttribute()");
+			if(locator!=null && locator.lastIndexOf("@") + 1 < locator.length()){
+			    String elementLocator = locator.substring(0, locator.lastIndexOf("@"));
+			    if(elementLocator.length() > 1){
+				try {
+				    WebElement we = getElement(elementLocator);
+				    attrs = we.getAttribute(locator.substring(locator.lastIndexOf("@")+1));
+				} catch (Exception ex) {
+				    logger.error(ex);
+				}								
+			    }
 			}
+		    } else{
+			attrs = ClientSessionFactory.session().selenium()
+				.getAttribute(locator);
+		    }
 			
-			logger.info("getAttribute(" + locator + ") = " + attrs);
-			return (attrs);
+		    logger.info("getAttribute(" + locator + ") = " + attrs);
+		    return (attrs);
 
 		} catch (SeleniumException e) {
 			logger.error(e.getMessage(), e); // SeleniumExceptions don't use
