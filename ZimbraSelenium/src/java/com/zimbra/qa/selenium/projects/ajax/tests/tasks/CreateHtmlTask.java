@@ -3,7 +3,9 @@ package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 import java.util.HashMap;
 import org.testng.annotations.Test;
 
+import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.TaskItem;
@@ -21,6 +23,7 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field;
+import com.zimbra.qa.selenium.projects.ajax.ui.tasks.PageTasks.Locators;
 
 public class CreateHtmlTask extends AjaxCommonTest {
 
@@ -236,5 +239,113 @@ public class CreateHtmlTask extends AjaxCommonTest {
 		ZAssert.assertEquals(task.getName(), subject, "Verify task subject");
 		ZAssert.assertStringContains(task.getHtmlTaskBody().trim().toLowerCase(), taskHtmlbody.trim(), "Verify the html content of task body");
 	}
+	
+	@Test(description = "Create Html task with attachment through RestUtil - verify through GUI", groups = { "smoke" })
+	public void CreateTask_06() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+		FolderItem taskFolder = FolderItem.importFromSOAP(account, SystemFolder.Tasks);
+
+		String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();
+		String taskHtmlbody = "task<b>bold"+ ZimbraSeleniumProperties.getUniqueString()+"</b>task";
+		String contentHTML = XmlStringUtil.escapeXml("<html>"+"<body>"+"<div>"+taskHtmlbody+"</div>"+"</body>"+"</html>");		
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/Files/Basic01/BasicExcel2007.xlsx";
+		
+		// Upload file to server through RestUtil
+		String attachmentId = account.uploadFile(filePath);	
+		
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+				"<m >" +
+				"<inv>" +
+				"<comp name='"+ subject +"'>" +
+				"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+				"</comp>" +
+				"</inv>" +
+				"<su>"+ subject +"</su>" +
+				"<mp ct='multipart/alternative'>" +
+				"<mp ct='text/plain'>" +
+				"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+				"</mp>" +
+				"<mp ct='text/html'>" +
+				"<content>"+contentHTML+"</content>" +
+				"</mp>" +
+				"</mp>" +
+				"<attach aid='"+attachmentId+"'>"+
+				"</attach>" +
+				"</m>" +
+		"</CreateTaskRequest>");
+
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertStringContains(task.getHtmlTaskBody().trim().toLowerCase(), taskHtmlbody.trim(), "Verify the html content of task body");
+
+		// Refresh the tasks view
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+
+		// Select the item
+		app.zPageTasks.zListItem(Action.A_LEFTCLICK, subject);
+		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zAttachmentsLabel),"Verify Attachments: label");
+		
+
+	}
+	
+	@Test(description = "Create Html task with attachment through RestUtil - verify through Soap", groups = { "smoke" })
+	public void CreateTask_07() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+		FolderItem taskFolder = FolderItem.importFromSOAP(account, SystemFolder.Tasks);
+
+		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
+		String taskHtmlbody = "task<b>bold"	+ ZimbraSeleniumProperties.getUniqueString() + "</b>task";
+		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
+				+ "<div>" + taskHtmlbody + "</div>" + "</body>" + "</html>");
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+		+ "/data/public/Files/Basic01/BasicExcel2007.xlsx";
+		FileItem file = new FileItem(filePath);
+		String fileName = file.getName();
+
+		// Upload file to server through RestUtil
+		String attachmentId = account.uploadFile(filePath);	
+
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+				"<m >" +
+				"<inv>" +
+				"<comp name='"+ subject +"'>" +
+				"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+				"</comp>" +
+				"</inv>" +
+				"<su>"+ subject +"</su>" +
+				"<mp ct='multipart/alternative'>" +
+				"<mp ct='text/plain'>" +
+				"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+				"</mp>" +
+				"<mp ct='text/html'>" +
+				"<content>"+contentHTML+"</content>" +
+				"</mp>" +
+				"</mp>" +
+				"<attach aid='"+attachmentId+"'>"+
+				"</attach>" +
+				"</m>" +
+		"</CreateTaskRequest>");
+
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertStringContains(task.getHtmlTaskBody().trim().toLowerCase(), taskHtmlbody.trim(), "Verify the html content of task body");
+
+		// Refresh the tasks view
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+
+		account.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='task' >"
+				+ "<query>" + subject + "</query>" + "</SearchRequest>");
+
+		String invId = account.soapSelectValue("//mail:SearchResponse/mail:task", "invId");
+		account.soapSend("<GetMsgRequest xmlns='urn:zimbraMail'>" + "<m id='"
+				+ invId + "' />" + "</GetMsgRequest>");
+
+		Element getMsgResponse = account.soapSelectNode("//mail:GetMsgResponse", 1);
+		Element m = ZimbraAccount.SoapClient.selectNode(getMsgResponse,"//mail:mp[@s='9055']");
+		
+		ZAssert.assertEquals(m.getAttribute("filename", null), fileName, "Verify file name through SOAP");
+
+	}
+
 
 }
