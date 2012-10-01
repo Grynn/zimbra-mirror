@@ -7,6 +7,7 @@
 #               (yes)   (yes)   (yes)   (never) (100)
 # ==========================================================================
 smtp      inet  n       -       n       -       -       smtpd
+	-o content_filter=%%zimbraLocalBindAddress%%:10029
 465    inet  n       -       n       -       -       smtpd
   -o smtpd_tls_wrappermode=yes 
   -o smtpd_sasl_auth_enable=yes
@@ -108,3 +109,5 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o smtpd_client_connection_rate_limit=0
 	-o receive_override_options=no_header_body_checks,no_unknown_recipient_checks,no_address_mappings
 	-o local_header_rewrite_clients=
+%%zimbraLocalBindAddress%%:10029 inet n - n - - smtpd
+	-o smtpd_milters=inet:localhost:8465
