@@ -2,12 +2,10 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.folders;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
-import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 
 
 public class MoveFolder extends AjaxCommonTest {
@@ -24,32 +22,46 @@ public class MoveFolder extends AjaxCommonTest {
 	@Test(	description = "Drag one folder from top level and Drop into sub folder", groups = { "smoke" })
 	public void DnDFromTopLevelToSubFolder() throws HarnessException {
 
-		FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
-		ZAssert.assertNotNull(userRoot, "Verify can get the userRoot ");
-	
-		FolderItem folderItemSrc = CreateFolder.createNewFolderViaSoap(userRoot,app);
-	
+		//-- Data
 		
-		FolderItem contact= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
-		ZAssert.assertNotNull(contact, "Verify can get the contact ");
+		// Root folder
+		FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
+		
+		// Subfolders in root
+		String name1 = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+		app.zGetActiveAccount().soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+						"<folder name='"+ name1 + "' view='contact' l='"+ userRoot.getId() +"'/>" +
+				"</CreateFolderRequest>");
+		FolderItem addressbook1 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name1);
 
+		String name2 = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+		app.zGetActiveAccount().soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+						"<folder name='"+ name2 + "' view='contact' l='"+ userRoot.getId() +"'/>" +
+				"</CreateFolderRequest>");
+		FolderItem addressbook2 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name2);
+
+
+		//-- GUI
+		
+		// Refresh to get new addressbooks
+		app.zPageAddressbook.zRefresh();
 	
-		FolderItem folderItemDest = CreateFolder.createNewFolderViaSoap(contact,app);
-        
-	
-		// Expand parent node to show up sub folder
-		app.zTreeContacts.zExpand(contact);
-	
+
 		
 		app.zPageAddressbook.zDragAndDrop(
-				"css=div#zov__main_Contacts td#zti__main_Contacts__" + folderItemSrc.getId() + "_textCell:contains("+ folderItemSrc.getName() + ")",
-				"css=div#zov__main_Contacts td#zti__main_Contacts__" + folderItemDest.getId() + "_textCell:contains("+ folderItemDest.getName() + ")");
+				"css=div#zov__main_Contacts td#zti__main_Contacts__" + addressbook1.getId() + "_textCell:contains("+ addressbook1.getName() + ")",
+				"css=div#zov__main_Contacts td#zti__main_Contacts__" + addressbook2.getId() + "_textCell:contains("+ addressbook2.getName() + ")");
 			
 
+		
+		//-- Verification
+		
 		// Verify the folder is now in the other subfolder
-		folderItemSrc = FolderItem.importFromSOAP(app.zGetActiveAccount(), folderItemSrc.getName());
-		ZAssert.assertNotNull(folderItemSrc, "Verify the subfolder is again available");
-		ZAssert.assertEquals(folderItemDest.getId(), folderItemSrc.getParentId(), "Verify the subfolder's parent is now the other subfolder");
+		FolderItem actual = FolderItem.importFromSOAP(app.zGetActiveAccount(), addressbook1.getName());
+		ZAssert.assertNotNull(actual, "Verify the subfolder is again available");
+		ZAssert.assertEquals(actual.getParentId(), addressbook2.getId(), "Verify the subfolder's parent is now the other subfolder");
 
 
 	}

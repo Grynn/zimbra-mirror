@@ -6,6 +6,7 @@ public abstract class AFolderItem extends AItem {
 
 	private String _ParentId = null;
 	private String _Name = null;
+	private String _Color = null;
 	private List<AFolderItem> _Subfolders = null;
 	
 	public void setParentId(String id) {
@@ -23,6 +24,14 @@ public abstract class AFolderItem extends AItem {
 	
 	public String getName() {
 		return (_Name);
+	}
+	
+	public void setColor(String color) {
+		_Color = color;
+	}
+	
+	public String getColor() {
+		return (_Color);
 	}
 
 	public List<AFolderItem> getSubfolders() {

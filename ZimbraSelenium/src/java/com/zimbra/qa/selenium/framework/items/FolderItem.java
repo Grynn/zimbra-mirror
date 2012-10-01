@@ -213,8 +213,6 @@ public class FolderItem extends AFolderItem implements IItem, IOctListViewItem {
 		//	      <folder id="7" rev="1" s="0" i4next="258" i4ms="2" name="Contacts" ms="1" n="1" l="1" view="contact"/>
 		//	    </GetFolderResponse>
 
-		if ( response == null )
-			throw new HarnessException("response was null");
 		logger.debug("importFromSOAP("+ response.prettyPrint() +")");
 		
 		Element fElement = ZimbraAccount.SoapClient.selectNode(response, "//mail:folder");
@@ -255,7 +253,8 @@ public class FolderItem extends AFolderItem implements IItem, IOctListViewItem {
 		item.setId(e.getAttribute("id"));
 		item.setName(e.getAttribute("name"));
 		item.setParentId(e.getAttribute("l"));
-
+		item.setColor(e.getAttribute("color", null)); // color is optional
+		
 		// sub folders
 		List<AFolderItem> subFolders = new ArrayList<AFolderItem>();
 		for (Element child : e.listElements(MailConstants.E_FOLDER))

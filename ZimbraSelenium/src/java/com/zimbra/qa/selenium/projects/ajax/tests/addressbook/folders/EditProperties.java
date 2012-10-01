@@ -1,16 +1,13 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.folders;
 
-import java.util.List;
-
 import org.testng.annotations.Test;
 
-
-import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.DialogEditFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder.FolderColor;
 
 
@@ -18,222 +15,326 @@ public class EditProperties extends AjaxCommonTest {
 
 	public EditProperties() {
 		logger.info("New "+ EditProperties.class.getCanonicalName());
-		
+
 		// All tests start at the login page
 		super.startingPage = app.zPageAddressbook;
 		super.startingAccountPreferences = null;
-		
-	}
-	
-	private void RenameAndVerify(FolderItem folderItem, DialogEditFolder dialog, FolderItem parent)
-	    throws HarnessException {
-		// Set the name, click OK
-		String oldName = folderItem.getName();
-		String name    = "folder" + ZimbraSeleniumProperties.getUniqueString();
-		dialog.zSetNewName(name);
-		dialog.zClickButton(Button.B_OK);
 
-		// Verify folder names created on the server
-		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),oldName);
-		ZAssert.assertNull(folder, "Verify the old folder name not found on the server");
-		
-		folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),name);
-		ZAssert.assertNotNull(folder, "Verify the new folder name found on the server");		
-	
 	}
 
-	private void ChangeColorAndVerify(FolderItem folderItem, DialogEditFolder dialog) 
-	  throws HarnessException {
-		// Change the color, click OK 
-		dialog.zSetNewColor(FolderColor.Gray);
-		dialog.zClickButton(Button.B_OK);
 
-		// Check the color
+	@Test(
+			description = "Edit a folder, change the color (Context menu -> Edit)", 
+			groups = { "functional" }
+			)
+	public void ChangeColorOfTopLevelFolder() throws HarnessException {
+
+		//-- Data
+
+		FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
+
+		// Create a folder
+		String name = "ab"+ ZimbraSeleniumProperties.getUniqueString();
 		app.zGetActiveAccount().soapSend(
-				"<GetFolderRequest xmlns='urn:zimbraMail'>"
-			+		"<folder id='" + folderItem.getId() + "'/>"
-			+	"</GetFolderRequest>");
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+						"<folder name='"+ name + "' view='contact' l='"+ userRoot.getId() +"'/>" +
+				"</CreateFolderRequest>");
+		FolderItem folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
 
-		String color = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='" + folderItem.getName() + "']", "color");
-		ZAssert.assertEquals(color, "8", "Verify the color of the folder is set to gray (8)");
 
-	}
-	
-	private void RenameChangeColorAndVerify(FolderItem folderOldName, DialogEditFolder dialog, FolderItem parent)
-    throws HarnessException {
-	 	// Set the name, click OK
-		String oldName = folderOldName.getName();
-		String name    = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		//-- GUI
 
-		dialog.zSetNewName(name);
-		// Change the color, click OK 
-		dialog.zSetNewColor(FolderColor.Gray);
-		
+		// Refresh
+		app.zPageAddressbook.zRefresh();
+
+		// Change the folder's color using context menu
+		DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folderItem);
+		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
+
+		dialog.zSetNewColor(FolderColor.Blue);
 		dialog.zClickButton(Button.B_OK);
-	
-		// Verify folder names created on the server
-		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),oldName);
-		ZAssert.assertNull(folder, "Verify the old folder name not found on the server");
-		
-		folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),name);
-		ZAssert.assertNotNull(folder, "Verify the new folder name found on the server");		
-	
-		
-		//Verify color changed
+
+
+
+		//-- Verification
+
+		// Get the folder again
+		FolderItem actual = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+
+		ZAssert.assertEquals(actual.getColor(), "1", "Verify the color of the folder is set to blue (1)");
+
+	}
+
+	@Test(
+			description = "Edit a folder, change the color (Context menu -> Edit)",
+			groups = { "functional" }
+			)
+	public void ChangeColorOfSystemFolders() throws HarnessException {
+
+		//-- Data
+
+		FolderItem contacts= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
+
+
+
+		//-- GUI
+
+		// Refresh
+		app.zPageAddressbook.zRefresh();
+
+		// Change the folder's color using context menu
+		DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, contacts);
+		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
+
+		dialog.zSetNewColor(FolderColor.Green);
+		dialog.zClickButton(Button.B_OK);
+
+
+
+		//-- Verification
+
+		// Get the folder again
+		FolderItem actual = FolderItem.importFromSOAP(app.zGetActiveAccount(), contacts.getName());
+
+		ZAssert.assertEquals(actual.getColor(), "3", "Verify the color of the folder is set to green (3)");
+
+	}
+
+	@Test(
+			description = "Edit a folder, change the color (Context menu -> Edit)", 
+			groups = { "functional" })
+	public void ChangeColorOfSubFolder() throws HarnessException {
+
+		//-- Data
+
+		FolderItem contacts= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
+
+		// Create a folder
+		String name = "ab"+ ZimbraSeleniumProperties.getUniqueString();
 		app.zGetActiveAccount().soapSend(
-				"<GetFolderRequest xmlns='urn:zimbraMail'>"
-			+		"<folder id='" + folder.getId() + "'/>"
-			+	"</GetFolderRequest>");
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+						"<folder name='"+ name + "' view='contact' l='"+ contacts.getId() +"'/>" +
+				"</CreateFolderRequest>");
+		FolderItem folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
 
-		String color = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='" + folder.getName() + "']", "color");
-		ZAssert.assertEquals(color, "8", "Verify the color of the folder is set to gray (8)");
-    }
-	
-	@Test(description = "Edit a folder, change the color (Context menu -> Edit)", groups = { "functional" })
-    public void ChangeColorOfTopLevelFolder() throws HarnessException {
-	
-		FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
-		ZAssert.assertNotNull(userRoot, "Verify can get the userRoot ");
-	
-		FolderItem folderItem = CreateFolder.createNewFolderViaSoap(userRoot,app);
-			
+
+		//-- GUI
+
+		// Refresh
+		app.zPageAddressbook.zRefresh();
+
 		// Change the folder's color using context menu
 		DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folderItem);
 		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
-		
-		ChangeColorAndVerify(folderItem,dialog);
-	    	
+
+		dialog.zSetNewColor(FolderColor.Red);
+		dialog.zClickButton(Button.B_OK);
+
+
+
+		//-- Verification
+
+		// Get the folder again
+		FolderItem actual = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+
+		ZAssert.assertEquals(actual.getColor(), "5", "Verify the color of the folder is set to red (5)");
 	}
 
-	@Test(description = "Edit a folder, change the color (Context menu -> Edit)", groups = { "functional" })
-    public void ChangeColorOfSystemFolders() throws HarnessException {
-	
+
+	@Test(
+			description = "Edit a folder, change name(Context menu -> Edit)", 
+			groups = { "smoke" }
+			)
+	public void ChangeNameOfTopLevelFolder() throws HarnessException {
+
+		//-- Data
+
 		FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
-		ZAssert.assertNotNull(userRoot, "Verify can get the userRoot ");
-	
-		FolderItem folderItem = CreateFolder.createNewFolderViaSoap(userRoot,app);
-			
+
+		// Create a folder
+		String name = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+		String newname = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+
+		app.zGetActiveAccount().soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+						"<folder name='"+ name + "' view='contact' l='"+ userRoot.getId() +"'/>" +
+				"</CreateFolderRequest>");
+		FolderItem folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+
+
+		//-- GUI
+
+		// Refresh
+		app.zPageAddressbook.zRefresh();
+
 		// Change the folder's color using context menu
 		DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folderItem);
 		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
-		
-		ChangeColorAndVerify(folderItem,dialog);	
+
+		dialog.zSetNewName(newname);
+		dialog.zClickButton(Button.B_OK);
+
+
+
+		//-- Verification
+
+		// Get the folder again
+		FolderItem actual = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+		ZAssert.assertNull(actual, "Verify the old addressbook does not exist");
+
+		actual = FolderItem.importFromSOAP(app.zGetActiveAccount(), newname);
+		ZAssert.assertNotNull(actual, "Verify the new addressbook exists");
+
+
 	}
-	
-	@Test(description = "Edit a folder, change the color (Context menu -> Edit)", groups = { "functional" })
-    public void ChangeColorOfSubFolder() throws HarnessException {
-	
-		FolderItem contact= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
-		ZAssert.assertNotNull(contact, "Verify can get the contact folder ");
-	
-		FolderItem folderItem = CreateFolder.createNewFolderViaSoap(contact,app);
-		
-		// Expand parent node to show up sub folder
-		app.zTreeContacts.zExpand(contact);
-		
+
+
+	@Test(
+			description = "Edit a folder, change name(Context menu -> Edit)", 
+			groups = { "smoke" }
+			)
+	public void ChangeNameOfSubFolder() throws HarnessException {
+
+
+		//-- Data
+
+		FolderItem contacts= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
+
+		// Create a folder
+		String name = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+		String newname = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+
+		app.zGetActiveAccount().soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+						"<folder name='"+ name + "' view='contact' l='"+ contacts.getId() +"'/>" +
+				"</CreateFolderRequest>");
+		FolderItem folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+
+
+		//-- GUI
+
+		// Refresh
+		app.zPageAddressbook.zRefresh();
+
 		// Change the folder's color using context menu
 		DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folderItem);
 		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
-		
-		ChangeColorAndVerify(folderItem,dialog);	
+
+		dialog.zSetNewName(newname);
+		dialog.zClickButton(Button.B_OK);
+
+
+
+		//-- Verification
+
+		// Get the folder again
+		FolderItem actual = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+		ZAssert.assertNull(actual, "Verify the old addressbook does not exist");
+
+		actual = FolderItem.importFromSOAP(app.zGetActiveAccount(), newname);
+		ZAssert.assertNotNull(actual, "Verify the new addressbook exists");
+
 	}
-	
-	
-	@Test(description = "Edit a folder, change name(Context menu -> Edit)", groups = { "smoke" })
-    public void ChangeNameOfTopLevelFolder() throws HarnessException {
-	
-		FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
-		ZAssert.assertNotNull(userRoot, "Verify can get the userRoot ");
-	
-		FolderItem folderItem = CreateFolder.createNewFolderViaSoap(userRoot,app);
-			
-		// Rename the folder 
+
+
+
+
+
+	@Test(
+			description = "Edit a top level folder, change name and color Context menu -> Edit)", 
+			groups = { "functional" })
+	public void ChangeNameColorOfTopLevelFolder() throws HarnessException {
+
+
+		//-- Data
+
+		FolderItem userRoot = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
+
+		// Create a folder
+		String name = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+		String newname = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+
+		app.zGetActiveAccount().soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+						"<folder name='"+ name + "' view='contact' l='"+ userRoot.getId() +"'/>" +
+				"</CreateFolderRequest>");
+		FolderItem folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+
+
+		//-- GUI
+
+		// Refresh
+		app.zPageAddressbook.zRefresh();
+
+		// Change the folder's color using context menu
 		DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folderItem);
 		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
-		
-	
-	    RenameAndVerify(folderItem, dialog, userRoot);		
+
+		dialog.zSetNewColor(FolderColor.Yellow);
+		dialog.zSetNewName(newname);
+		dialog.zClickButton(Button.B_OK);
+
+
+
+		//-- Verification
+
+		// Get the folder again
+		FolderItem actual = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+		ZAssert.assertNull(actual, "Verify the old addressbook does not exist");
+
+		actual = FolderItem.importFromSOAP(app.zGetActiveAccount(), newname);
+		ZAssert.assertNotNull(actual, "Verify the new addressbook exists");
+		ZAssert.assertEquals(actual.getColor(), "6", "Verify the color of the folder is set to yellow (6)");
+
 	}
 
-	
-	 @Test(description = "Edit a folder, change name(Context menu -> Edit)", groups = { "smoke" })
-	 public void ChangeNameOfSubFolder() throws HarnessException {
-	
-		FolderItem contact= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
-		ZAssert.assertNotNull(contact, "Verify can get the userRoot ");
-	
-		FolderItem folderItem = CreateFolder.createNewFolderViaSoap(contact,app);
-			
-		// Expand parent node to show up sub folder
-		app.zTreeContacts.zExpand(contact);
-	
-		// Rename the folder 
+
+	@Test(
+			description = "Edit a subfolder, change name and color Context menu -> Edit)", 
+			groups = { "functional", "matt" })
+	public void ChangeNameColorOfSubFolder() throws HarnessException {
+
+
+		//-- Data
+
+		FolderItem contacts= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
+
+		// Create a folder
+		String name = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+		String newname = "ab"+ ZimbraSeleniumProperties.getUniqueString();
+
+		app.zGetActiveAccount().soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+						"<folder name='"+ name + "' view='contact' l='"+ contacts.getId() +"'/>" +
+				"</CreateFolderRequest>");
+		FolderItem folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+
+
+		//-- GUI
+
+		// Refresh
+		app.zPageAddressbook.zRefresh();
+
+		// Change the folder's color using context menu
 		DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folderItem);
 		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
-			
-	    RenameAndVerify(folderItem, dialog, contact);		
+
+		dialog.zSetNewColor(FolderColor.Orange);
+		dialog.zSetNewName(newname);
+		dialog.zClickButton(Button.B_OK);
+
+
+
+		//-- Verification
+
+		// Get the folder again
+		FolderItem actual = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+		ZAssert.assertNull(actual, "Verify the old addressbook does not exist");
+
+		actual = FolderItem.importFromSOAP(app.zGetActiveAccount(), newname);
+		ZAssert.assertNotNull(actual, "Verify the new addressbook exists");
+		ZAssert.assertEquals(actual.getColor(), "9", "Verify the color of the folder is set to orange (9)");
+
 	}
-		
-	 
-	 @Test(	description = "Cannot rename an addressbook system folder- Right Click - Edit Properties - verify input name not displayed",
-				groups = { "functional" })
-     public void CannotRenameSystemFolders() throws HarnessException {
-		 String newName = "folder" + ZimbraSeleniumProperties.getUniqueString();
-
-		 FolderItem folder= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
-		 ZAssert.assertNotNull(folder, "Verify can get the Contacts ");								
-		 // Rename the folder 
-		 DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folder);
-		 dialog.zClickButton(Button.B_OK);
-		 
-         folder= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
-	     ZAssert.assertNotNull(folder, "Verify can get the EmailedContacts ");												  
-  	     // Rename the folder 
-		 dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folder);
-		 dialog.zClickButton(Button.B_OK);
-		 
-	     folder= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
-	     ZAssert.assertNotNull(folder, "Verify can get the Trash ");	
-	     
-	     // Rename the folder 
-		 dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folder);
-		 ZAssert.assertNull(dialog, "Verify Edit Properties not enabled for Trash folder ");		
-	 }	
-
-	 
-	
-	
-	 @Test(description = "Edit a folder, change name and color Context menu -> Edit)", groups = { "functional" })
-	 public void ChangeNameColorOfTopLevelFolder() throws HarnessException {
-		
-		 FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
-		 ZAssert.assertNotNull(userRoot, "Verify can get the userRoot ");
-		
-		 FolderItem folderItem = CreateFolder.createNewFolderViaSoap(userRoot,app);
-				
-		 DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folderItem);
-		 ZAssert.assertNotNull(dialog, "Verify the dialog opened");
-			
-		 RenameChangeColorAndVerify(folderItem, dialog, userRoot);		
-	 }
-
-		
-    @Test(description = "Edit a folder, change name(Context menu -> Edit)", groups = { "functional" })
-    public void ChangeNameColorOfSubFolder() throws HarnessException {
-		
-		 FolderItem contact= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
-		 ZAssert.assertNotNull(contact, "Verify can get the userRoot ");
-		
-		 FolderItem folderItem = CreateFolder.createNewFolderViaSoap(contact,app);
-				
-		 // Expand parent node to show up sub folder
-		 app.zTreeContacts.zExpand(contact);
-		
-		 DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folderItem);
-		 ZAssert.assertNotNull(dialog, "Verify the dialog opened");
-				
-		 RenameChangeColorAndVerify(folderItem, dialog, contact);		
-		
-    }
 
 }
