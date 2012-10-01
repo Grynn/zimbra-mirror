@@ -167,11 +167,11 @@ public class TestXsync extends TestCase {
         String rawmessage = TestUtil.getTestMessage("MSGSRCH1");
         String msgId = TestUtil.addRawMessage(remoteMailbox, rawmessage);
         remoteMailbox.markMessageRead(msgId, false);
-        ZSearchFolder sf1 = remoteMailbox.createSearchFolder("" + Mailbox.ID_FOLDER_USER_ROOT, "SRCHF1", "is:unread", null, SearchSortBy.dateDesc, ZFolder.Color.rgbColor.setRgbColor("#00CCCC"));
+        ZSearchFolder sf1 = remoteMailbox.createSearchFolder("" + Mailbox.ID_FOLDER_USER_ROOT, "SRCHF1", "is:unread", null, SearchSortBy.dateDesc, ZFolder.Color.getRgbColorObj("#00CCCC"));
         sync();
         ZSearchFolder cf1 = localMailbox.getSearchFolderById(sf1.getId());
         assertNotNull("local /SRCHF1", cf1);
-        assertEquals("Folder SRCHF1 color", "#00CCCC", cf1.getColor().getRgbColor());
+        assertEquals("Folder SRCHF1 color", "#00CCCC", cf1.getColor().getRgbColorValue());
         assertEquals(1, TestUtil.search(cf1.getMailbox(), "is:unread").size());
 
         //change the search query and check the searchfolder for unread message
@@ -251,7 +251,7 @@ public class TestXsync extends TestCase {
 
         //create remote F2, move MSG1 to F2, and mark MSG1 read
         ZimbraLog.test.info("syncEmail TEST 4");
-        ZFolder sf2 = remoteMailbox.createFolder(sf1.getId(), "F2", null, ZFolder.Color.rgbColor.setRgbColor("#00CCCC"), null, null);
+        ZFolder sf2 = remoteMailbox.createFolder(sf1.getId(), "F2", null, ZFolder.Color.getRgbColorObj("#00CCCC"), null, null);
         remoteMailbox.moveMessage(sm1Id, sf2.getId());
         remoteMailbox.markMessageRead(sm1Id, true);
         sync();
@@ -259,19 +259,19 @@ public class TestXsync extends TestCase {
         assertNotNull("local /F1/F2", cf2);
         checkMsgCount(localMailbox, "in:F1", 0);
         checkMsgCount(localMailbox, "in:F1/F2", 1);
-        assertEquals("F2 color", "#00CCCC", cf2.getColor().getRgbColor());
+        assertEquals("F2 color", "#00CCCC", cf2.getColor().getRgbColorValue());
         ZMessage cm1 = TestUtil.search(localMailbox, "in:F1/F2").get(0);
         assertFalse("MSG1 unread", cm1.isUnread());
 
         //create local F3 and move MSG1 into it, and mark MSG1 unread
         ZimbraLog.test.info("syncEmail TEST 5");
-        ZFolder cf3 = localMailbox.createFolder(cf2.getId(), "F3", null, ZFolder.Color.rgbColor.setRgbColor("#1A1A1A"), null, null);
+        ZFolder cf3 = localMailbox.createFolder(cf2.getId(), "F3", null, ZFolder.Color.getRgbColorObj("#1A1A1A"), null, null);
         localMailbox.moveMessage(cm1.getId(), cf3.getId());
         localMailbox.markMessageRead(cm1.getId(), false);
         sync();
         ZFolder sf3 = remoteMailbox.getFolderByPath("/F1/F2/F3");
         assertNotNull("remote /F1/F2/F3", sf3);
-        assertEquals("F3 color", "#1A1A1A", cf2.getColor().getRgbColor());
+        assertEquals("F3 color", "#1A1A1A", cf2.getColor().getRgbColorValue());
         checkMsgCount(remoteMailbox, "in:F1/F2", 0);
         checkMsgCount(remoteMailbox, "in:F1/F2/F3", 1);
         ZMessage sm1 = TestUtil.search(remoteMailbox, "in:F1/F2/F3").get(0);
@@ -281,14 +281,14 @@ public class TestXsync extends TestCase {
         ZimbraLog.test.info("syncEmail TEST 6");
         ZFolder cf4 = TestUtil.createFolder(localMailbox, "" + Mailbox.ID_FOLDER_USER_ROOT, "F4");
         localMailbox.moveFolder(cf3.getId(), cf4.getId());
-        localMailbox.modifyFolderColor(cf3.getId(), ZFolder.Color.red);
+        localMailbox.modifyFolderColor(cf3.getId(), ZFolder.Color.RED);
         sync();
         checkMsgCount(remoteMailbox, "in:F4/F3", 1);
         ZFolder sf4 = remoteMailbox.getFolderByPath("/F4");
         assertNotNull("remote /F4", sf4);
         assertNull("remote /F1/F2/F3", remoteMailbox.getFolderByPath("/F1/F2/F3"));
         sf3 = remoteMailbox.getFolderByPath("/F4/F3");
-        assertEquals("F3 color", ZFolder.Color.red.getValue(), sf3.getColor().getValue());
+        assertEquals("F3 color", ZFolder.Color.RED.getValue(), sf3.getColor().getValue());
         assertNotNull("remote /F4/F3", sf3);
 
         //add remote F5 into F2, but delete local F2. F5 should be /F5 on both local and remote
