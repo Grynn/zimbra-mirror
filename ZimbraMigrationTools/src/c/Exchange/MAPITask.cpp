@@ -347,10 +347,10 @@ void MAPITask::SetRecurValues()
     if (ulDayOfWeekMask & wdmFriday)    m_pRecurWkday += L"FR";
     if (ulDayOfWeekMask & wdmSaturday)  m_pRecurWkday += L"SA";
 
-    if ((m_pRecurPattern == L"DAI") && (m_pRecurWkday.length() > 0))	// every weekday
+    /*if ((m_pRecurPattern == L"DAI") && (m_pRecurWkday.length() > 0))	// every weekday
     {
 	m_pRecurPattern = L"WEE";
-    }
+    }*/
 
     if (m_pRecurPattern == L"MON")
     {
