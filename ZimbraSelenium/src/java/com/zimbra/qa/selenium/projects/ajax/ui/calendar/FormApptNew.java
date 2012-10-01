@@ -528,18 +528,22 @@ public class FormApptNew extends AbsForm {
 			logger.info("Body: # of frames: " + frames);
 			String browser = SeleniumService.getInstance().getSeleniumBrowser();
 
-			if (browser.equalsIgnoreCase("iexplore")) {
+			if (browser.contains("iexplore")) {
 				if (frames == 1) {
 					// //
 					// Text compose
 					// //
 
-					locator = "css=textarea[id*='textarea_']";
+					locator = "css=textarea[id*=_content]";
 
 					if (!this.sIsElementPresent(locator))
 						throw new HarnessException(
 								"Unable to locate compose body");
-
+					if(ZimbraSeleniumProperties.isWebDriver()){
+					    this.sClickAt(locator, "");
+					    this.clearField(locator);
+					    this.sClickAt(locator, "");
+					}
 					this.sFocus(locator);
 					this.zClick(locator);
 					this.zWaitForBusyOverlay();
@@ -667,7 +671,9 @@ public class FormApptNew extends AbsForm {
 			zRecurringOptions(locator, value, isRepeat);
 		} else {
 		    if(ZimbraSeleniumProperties.isWebDriver()){
+			this.sClickAt(locator, "");
 			this.clearField(locator);
+			this.sClickAt(locator, "");
 		    }
 		    this.sType(locator, value);
 		}
