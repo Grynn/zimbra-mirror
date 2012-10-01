@@ -126,7 +126,7 @@ public class EditResource extends AdminCommonTest {
 				+		"</GetCalendarResourceRequest>");
 		
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetCalendarResourceResponse/admin:calresource", 1); 
-		ZAssert.assertNotNull(response, "Verify the Resource is edited successfully");
+		ZAssert.assertNotNull(response, "https://bugzilla.zimbra.com/show_bug.cgi?id=74487");
 	}
 
 	
@@ -180,7 +180,7 @@ public class EditResource extends AdminCommonTest {
 				+		"</GetCalendarResourceRequest>");
 		
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetCalendarResourceResponse/admin:calresource", 1); 
-		ZAssert.assertNotNull(response, "Verify the Resource is edited successfully");
+		ZAssert.assertNotNull(response, "https://bugzilla.zimbra.com/show_bug.cgi?id=74487");
 	}
 	
 	/**
@@ -233,7 +233,7 @@ public class EditResource extends AdminCommonTest {
 				+		"</GetCalendarResourceRequest>");
 		
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetCalendarResourceResponse/admin:calresource", 1); 
-		ZAssert.assertNotNull(response, "Verify the Resource is edited successfully");
+		ZAssert.assertNotNull(response, "https://bugzilla.zimbra.com/show_bug.cgi?id=74487");
 	}
 
 
