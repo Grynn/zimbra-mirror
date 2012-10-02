@@ -340,7 +340,11 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 			locator = container + " div[id$='__SEND'] td[id$='_title']";
 			page = null;
 			
-			this.zClickAt(locator,"0,0");
+			if(zIsBrowserMatch(BrowserMasks.BrowserMaskIE)){
+			    this.sDoubleClick(locator);	 
+			}else{
+			    this.zClickAt(locator,"0,0");
+			}
 			
 			Stafpostqueue postqueue = new Stafpostqueue();
 			postqueue.waitForPostqueue();

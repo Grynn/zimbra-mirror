@@ -653,4 +653,24 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 
 		return (page);
 	}
+	
+	/* TODO: ... debugging to be removed */
+	public boolean waitForWindowDisplay( String pageTitle) throws HarnessException {
+	    		    	
+	    	sWaitForCondition("var x; for(var windowName in selenium.browserbot.openedWindows)"
+			+ "{var targetWindow = selenium.browserbot.openedWindows[windowName];"
+			+ "if(!selenium.browserbot._windowClosed(targetWindow)&&"
+			+ "(targetWindow.name.indexOf('"
+			+ pageTitle.split("\\.")[0]
+			+ "')!=-1||targetWindow.document.title.indexOf('"
+			+ pageTitle.split("\\.")[0]
+			+ "')!=-1)){x=windowName;}};x!=null;","60000");
+
+		sSelectWindow(pageTitle);
+
+		zWaitForElementPresent("css=html>body[class*='MsgBody']","30000");
+
+		return true;
+	}
+
 }

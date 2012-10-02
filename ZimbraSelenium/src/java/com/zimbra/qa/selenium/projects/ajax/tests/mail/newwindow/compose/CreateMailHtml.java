@@ -50,11 +50,10 @@ public class CreateMailHtml extends PrefGroupMailByMessageTest {
 			// Send the message
 			window.zToolbarPressButton(Button.B_SEND);
 			
-			window.zWaitForWindowClosed("Zimbra: Compose");
-
-			// Window closes automatically
-			window = null;
-
+			if(window.zWaitForWindowClosed("Zimbra: Compose")){
+			    // Window closes automatically
+			    window = null;
+			}
 		} finally {
 
 			// Make sure to close the window
