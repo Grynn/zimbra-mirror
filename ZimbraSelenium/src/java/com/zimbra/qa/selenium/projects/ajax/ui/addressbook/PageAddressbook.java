@@ -1160,14 +1160,25 @@ public class PageAddressbook extends AbsTab {
 	
 
   
-	public AbsPage zListItem(Action action, Button option ,Button subOption, String tagName, String contact) throws HarnessException {
+	/**
+	 * Action -> Option -> suboption -> object on contact.  For example,
+	 * Right click -> Tag -> Remove Tag -> tagname on ContactA
+	 * @param action e.g. A_RIGHTCLICK
+	 * @param option e.g B_TAG
+	 * @param subOption e.g O_TAG_REMOVETAG
+	 * @param choice e.g. String tagname
+	 * @param contact The contact to take the action on
+	 * @return
+	 * @throws HarnessException
+	 */
+	public AbsPage zListItem(Action action, Button option, Button subOption, Object choice, String contact) throws HarnessException {
 
 		AbsPage page = null;	// If set, this page will be returned		
 		String contactLocator = getContactLocator(contact);
 		String locator = null;
 	
 
-		tracer.trace(action +" then "+ option +" then "+ subOption + " and tag " + tagName + " on contact = "+ contact);
+		tracer.trace(action +" then "+ option +" then "+ subOption + " and choose " + choice + " on contact = "+ contact);
 
         if ( action == Action.A_RIGHTCLICK ) {
         		    
@@ -1175,6 +1186,13 @@ public class PageAddressbook extends AbsTab {
 			
 				if (subOption == Button.O_TAG_REMOVETAG) {
 					
+					if ( !(choice instanceof String) ) {
+						throw new HarnessException("choice must be a string of the tag name! "+ choice);
+					}
+					
+					String tagName = (String)choice;
+					
+
 					String tagContactLocator = "css=div[id^='zm__Contacts'] div[id^='TAG_MENU'] td[id$='_title']";
 					String removeTagLocator = "css=div[id^='TAG_MENU|MENU'] div[id^='contacts_removetag'] td[id$='_title']";
 					locator = "css=div[id='REMOVE_TAG_MENU_TAG_MENU|MENU'] td[id=^Remove_tag_][id$=_title]:contains('" +  tagName + "')";														    							
@@ -1188,14 +1206,37 @@ public class PageAddressbook extends AbsTab {
 					zClickAt(tagContactLocator, "");
 					zWaitForBusyOverlay();
 
-				    // Left Click "Remove Tag"
-					this.sMouseOver(removeTagLocator);
-					zClickAt(removeTagLocator, "");
-					zWaitForBusyOverlay();
+					/*
+					 The context menu has two different looks, depending on how
+					 many tags are on the item.
+					 
+					 If 0 tags, then the "remove tag" option is disabled.
+					 If 1 tag, then the "remove tag" option appears without a sub menu.
+					 If 1+ tags, then the "remove tag" option appears with a sub menu, where
+					   a specific tag may be chosen.
+					   
+					 */
 
-				    // Left Click "<tag name>"
-					zClickAt(locator, "");
-					zWaitForBusyOverlay();
+					if ( this.sIsElementPresent("css=div[id^='TAG_MENU|MENU'] div[id^='contacts_removetag'].ZHasDropDown") ) {
+						
+					    // Has sub menu
+						// Mouse over "remove tag", then Left Click "<tag name>"
+						this.sMouseOver(removeTagLocator);
+						zWaitForBusyOverlay();
+
+					    // Left Click "<tag name>"
+						zClickAt(locator, "");
+						zWaitForBusyOverlay();
+
+
+					} else {
+						
+					    // No sub menu, just Left Click "Remove Tag"
+						zClickAt(removeTagLocator, "");
+						zWaitForBusyOverlay();
+
+
+					}
 
 					return (page);
 				}
