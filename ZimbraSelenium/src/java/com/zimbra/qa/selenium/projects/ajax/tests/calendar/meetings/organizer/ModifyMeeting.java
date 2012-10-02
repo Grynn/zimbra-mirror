@@ -132,7 +132,18 @@ public class ModifyMeeting extends CalendarWorkWeekTest {
         // Open appointment and modify calendar folder
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);       
-        apptForm.zFillField(Field.CalendarFolder, apptCalendar);
+        if(ZimbraSeleniumProperties.isWebDriver()){
+            String locator = "css=td[id$='_folderSelect'] td[id$='_select_container']";
+            apptForm.sClickAt(locator, "");            
+            apptForm.sClick("css=div[parentid=" 
+        	    + apptForm.sGetAttribute("div[id*='_Menu_']" 
+        		    + "[class*='DwtMenu']" 
+        		    + "[style*=width]"
+        		    + "@id")
+        		    + "]:contains(" + apptCalendar + ")");
+        }else{
+            apptForm.zFillField(Field.CalendarFolder, apptCalendar);
+        }
         apptForm.zToolbarPressButton(Button.B_SEND);
         
         // Verify calendar value
