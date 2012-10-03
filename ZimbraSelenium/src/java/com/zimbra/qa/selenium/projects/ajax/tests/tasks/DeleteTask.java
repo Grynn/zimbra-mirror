@@ -13,6 +13,8 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.tasks.PageTasks.Locators;
 
 
 public class DeleteTask extends AjaxCommonTest {
@@ -648,6 +650,64 @@ public class DeleteTask extends AjaxCommonTest {
 		}
 		ZAssert.assertNull(found, "Verify the task is no longer present");
 	
+	}
+	
+	@Test(description = "Delete Attachment from edit window and - verify through GUI", groups = { "smoke" })
+	public void DeleteAttachment_10() throws HarnessException {
+
+		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
+
+
+		ZimbraAccount account = app.zGetActiveAccount();
+		FolderItem taskFolder = FolderItem.importFromSOAP(account,SystemFolder.Tasks);
+
+		// Create file item
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/Files/Basic01/BasicExcel2007.xlsx";
+		// Upload file to server through RestUtil
+		String attachmentId = account.uploadFile(filePath);		
+
+
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+				"<m >" +
+				"<inv>" +
+				"<comp name='"+ subject +"'>" +
+				"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+				"</comp>" +
+				"</inv>" +
+				"<su>"+ subject +"</su>" +
+				"<mp ct='text/plain'>" +
+				"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+				"</mp>" +
+				"<attach aid='"+attachmentId+"'>"+
+				"</attach>"+
+				"</m>" +
+		"</CreateTaskRequest>");
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertNotNull(task, "Verify the task is created");
+
+		// Refresh the tasks view
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+
+		// Select the item
+		app.zPageTasks.zListItem(Action.A_LEFTCLICK, subject);
+		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zAttachmentsLabel),"Verify Attachments: label");
+		//app.zPageTasks.zClickAt(Locators.zEditButton, "0,0");
+		//Press Edit tool bar button
+		FormTaskNew taskedit = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_EDIT);
+		SleepUtil.sleepMedium();
+
+		//Uncheck Attachment		
+		app.zPageTasks.sUncheck(Locators.zEditAttachmentCheckbox);
+		taskedit.zSubmit();
+		SleepUtil.sleepMedium();
+		//Verify Attachment exist or not (Expected: should not exist)
+		ZAssert.assertFalse(app.zPageTasks.sIsElementPresent(Locators.zAttachmentsLabel),"Verify Attachments: label");
+
+
 	}
 
 

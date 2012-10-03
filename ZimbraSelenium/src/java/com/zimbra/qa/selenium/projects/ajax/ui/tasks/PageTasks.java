@@ -57,6 +57,8 @@ public class PageTasks extends AbsTab {
 		public static final String zAttachButton = "css=div[id^='zb__TKE'] td[id$='__ATTACHMENT_left_icon']>div";
 		public static final String zAttachmentInputBox = "css=input[name='__calAttUpload__']";		
 		public static final String zAttachmentsLabel = "css=div[id='zv__TKL-main'] div[class='ZmMailMsgView'] td[class='LabelColName']:contains('Attachments')";
+		public static final String zEditButton= "css=td[id='zb__TKL-main__EDIT_left_icon']";
+		public static final String zEditAttachmentCheckbox="css=div[class='ZmTaskEditView'] tr[id$='_attachment_container'] input[type='checkbox']";
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -476,7 +478,7 @@ public class PageTasks extends AbsTab {
 
 		} else if (button == Button.B_EDIT) {
 
-			locator = "zb__TKL-main__EDIT_left_icon";
+			locator = Locators.zEditButton;
 
 			// Check if the button is enabled
 			if (this.sIsElementPresent("css=td#" + locator + " div[class*=ZDisabledImage]")){ 
