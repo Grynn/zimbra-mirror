@@ -1618,7 +1618,7 @@ ngx_mail_send(ngx_event_t *wev)
         }
 
         if (s->quit) {
-            ngx_mail_close_connection(c);
+            ngx_mail_end_session(s);
             return;
         }
 
