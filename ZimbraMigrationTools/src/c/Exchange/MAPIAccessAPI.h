@@ -144,6 +144,7 @@ typedef struct _ApptItemData: BaseItemData
     wstring Location;
     wstring Uid;
     wstring PartStat;
+	wstring CurrStat;
     wstring FreeBusy;
     wstring Transparency;
     wstring AllDay;

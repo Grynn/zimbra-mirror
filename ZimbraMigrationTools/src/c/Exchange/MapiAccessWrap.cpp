@@ -562,6 +562,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
 
 					pIt[L"rsvp"] =  SysAllocString((apptData.RSVP).c_str());
                     pIt[L"ptst"] = SysAllocString((apptData.PartStat).c_str());
+					pIt[L"currst"]= SysAllocString((apptData.CurrStat).c_str());
                     pIt[L"fb"] = SysAllocString((apptData.FreeBusy).c_str());
                     pIt[L"allDay"] = SysAllocString((apptData.AllDay).c_str());
                     pIt[L"transp"] = SysAllocString((apptData.Transparency).c_str());

@@ -930,6 +930,7 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
             ad->EndDate = mapiappointment.GetEndDate();
             ad->Location = mapiappointment.GetLocation();
             ad->PartStat = mapiappointment.GetResponseStatus();
+			ad->CurrStat = mapiappointment.GetCurrentStatus();
 			ad->RSVP = mapiappointment.GetResponseRequested();
             ad->FreeBusy = mapiappointment.GetBusyStatus();
             ad->AllDay = mapiappointment.GetAllday();

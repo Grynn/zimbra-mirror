@@ -59,7 +59,8 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MA
     m_pAllday = L"";
     m_pTransparency = L"";
     m_pReminderMinutes = L"";
-    m_pResponseStatus = L"";
+    m_pCurrentStatus = L"";
+	m_pResponseStatus = L"";
     m_pOrganizerName = L"";
     m_pOrganizerAddr = L"";
     m_pPrivate = L"";
@@ -563,7 +564,11 @@ void MAPIAppointment::FillInExceptionAppt(MAPIAppointment* pEx, Zimbra::Mapi::CO
     {
         pEx->m_pResponseStatus = m_pResponseStatus;
     }
-    if (pEx->m_pOrganizerName.length() == 0)
+	if (pEx->m_pCurrentStatus.length() == 0)
+    {
+        pEx->m_pCurrentStatus = m_pCurrentStatus;
+    }
+	if (pEx->m_pOrganizerName.length() == 0)
     {
         pEx->m_pOrganizerName = m_pOrganizerName;
     }
@@ -603,6 +608,7 @@ void MAPIAppointment::FillInCancelException(MAPIAppointment* pEx, Zimbra::Mapi::
     pEx->m_pBusyStatus = m_pBusyStatus;
     pEx->m_pAllday = m_pAllday;
     pEx->m_pResponseStatus = m_pResponseStatus;
+	pEx->m_pCurrentStatus = m_pCurrentStatus;
     pEx->m_pOrganizerName = m_pOrganizerName;
     pEx->m_pOrganizerAddr = m_pOrganizerAddr;
     pEx->m_pReminderMinutes = m_pReminderMinutes;
@@ -781,6 +787,7 @@ void MAPIAppointment::SetResponseStatus(long responsestatus)
 	case oResponseNotResponded:	m_pResponseStatus = L"NE";	break;
 	default:			m_pResponseStatus = L"NE";
     }
+	m_pCurrentStatus = m_pResponseStatus;
 }
 
 void MAPIAppointment::SetReminderMinutes(long reminderminutes)
@@ -896,9 +903,9 @@ HRESULT MAPIAppointment::SetOrganizerAndAttendees()
 				    pAttendee->addr = pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].Value.lpszW;
 			    if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TYPE].ulPropTag) != PT_ERROR)
 				    pAttendee->role = ConvertValueToRole(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TYPE].Value.l);
-			    if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TRACKSTATUS].ulPropTag) != PT_ERROR)
+				if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TRACKSTATUS].ulPropTag) != PT_ERROR)
 				    pAttendee->partstat = ConvertValueToPartStat(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TRACKSTATUS].Value.l);
-		        m_vAttendees.push_back(pAttendee);
+				m_vAttendees.push_back(pAttendee);
                     }
 		}
 	    }
@@ -919,6 +926,7 @@ wstring MAPIAppointment::GetAllday() { return m_pAllday; }
 wstring MAPIAppointment::GetTransparency() { return m_pTransparency; }
 wstring MAPIAppointment::GetReminderMinutes() { return m_pReminderMinutes; }
 wstring MAPIAppointment::GetResponseStatus() { return m_pResponseStatus; }
+wstring MAPIAppointment::GetCurrentStatus() { return m_pCurrentStatus; }
 wstring MAPIAppointment::GetResponseRequested() { return m_pResponseRequested; }
 wstring MAPIAppointment::GetOrganizerName() { return m_pOrganizerName; }
 wstring MAPIAppointment::GetOrganizerAddr() { return m_pOrganizerAddr; }

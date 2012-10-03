@@ -1362,14 +1362,23 @@ public class ZimbraAPI
                 writer.WriteAttributeString("a",    tokens.GetValue(i + 1).ToString());
                 writer.WriteAttributeString("role", tokens.GetValue(i + 2).ToString());
                 writer.WriteAttributeString("rsvp", appt["rsvp"]);
-                if (tokens.GetValue(i + 3).ToString().Length > 0)   // FBS bug 75686 -- 6/27/12
+                if(appt["currst"] == "OR")
                 {
-                    writer.WriteAttributeString("ptst", tokens.GetValue(i + 3).ToString());
+                    if (tokens.GetValue(i + 3).ToString().Length > 0)   // FBS bug 75686 -- 6/27/12
+                    {
+                        writer.WriteAttributeString("ptst", tokens.GetValue(i + 3).ToString());
+                    }
+                    else
+                    {
+                        writer.WriteAttributeString("ptst", "NE");
+                    }
                 }
                 else
                 {
-                    writer.WriteAttributeString("ptst", "NE");
+                    if(appt["orAddr"] != tokens.GetValue(i + 1).ToString())
+                    writer.WriteAttributeString("ptst", appt["currst"]);
                 }
+
                 writer.WriteEndElement();
             }
         }

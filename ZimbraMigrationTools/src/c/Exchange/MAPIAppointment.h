@@ -61,6 +61,7 @@ private:
     wstring m_pAllday;
     wstring m_pTransparency;
     wstring m_pResponseStatus;
+	wstring m_pCurrentStatus;
     wstring m_pOrganizerName;
     wstring m_pOrganizerAddr;
     vector<Attendee*> m_vAttendees;
@@ -116,6 +117,7 @@ public:
     wstring GetTransparency();
     wstring GetReminderMinutes();
     wstring GetResponseStatus();
+	wstring GetCurrentStatus();
 	wstring GetResponseRequested();
     wstring GetOrganizerName();
     wstring GetOrganizerAddr();
