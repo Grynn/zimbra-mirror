@@ -1,35 +1,46 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.quickadd;
 
 import java.util.HashMap;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.QuickAddAppointment;
 
-public class QuickAddDayView extends CalendarWorkWeekTest {
+public class MonthView extends CalendarWorkWeekTest {
 
-	public QuickAddDayView() {
-		logger.info("New "+ QuickAddDayView.class.getCanonicalName());
+	public MonthView() {
+		logger.info("New "+ MonthView.class.getCanonicalName());
 
 		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
 
-		// Make sure we are using an account with day view
+		// Make sure we are using an account with month view
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			private static final long serialVersionUID = -2913827779459595178L;
 		{
-		    put("zimbraPrefCalendarInitialView", "day");
+		    put("zimbraPrefCalendarInitialView", "month");
 		}};
 	}
 	
-	@Test( description = "Verify quick add dialog opens after hitting new appointment in day view",
-			groups = { "sanity" } )
+	@DataProvider(name = "DataProviderQuickAdd")
+	public Object[][] DataProviderQuickAdd() {
+		return new Object[][] {
+				new Object[] { Action.A_RIGHTCLICK },
+				new Object[] { Action.A_DOUBLECLICK },
+		};
+	}
 	
-	public void QuickAddDayView_01() throws HarnessException {
-			
+	@Test(	description = "Verify quick add dialog opens after double/right clicking to any date slot in month view",
+			groups = { "sanity" },
+			dataProvider = "DataProviderQuickAdd")
+	
+	public void MonthView_01(Action option) throws HarnessException {
+		
 		// Verify quick add dialog opened
 		QuickAddAppointment quickAddAppt = new QuickAddAppointment(app) ;
-		quickAddAppt.zNewAppointment();
+		quickAddAppt.zNewAppointmentMonthView(option);
 		quickAddAppt.zVerifyQuickAddDialog(true);
 		
 		/* Meeting invite full verification is already covered by meetings.organizer.minicalendar testcases so

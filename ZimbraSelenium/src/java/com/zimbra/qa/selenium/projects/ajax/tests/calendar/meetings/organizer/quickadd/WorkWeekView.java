@@ -6,26 +6,26 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.QuickAddAppointment;
 
-public class QuickAddWeekView extends CalendarWorkWeekTest {
+public class WorkWeekView extends CalendarWorkWeekTest {
 
-	public QuickAddWeekView() {
-		logger.info("New "+ QuickAddWeekView.class.getCanonicalName());
+	public WorkWeekView() {
+		logger.info("New "+ WorkWeekView.class.getCanonicalName());
 
 		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
 
-		// Make sure we are using an account with week view
+		// Make sure we are using an account with work week view
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			private static final long serialVersionUID = -2913827779459595178L;
 		{
-		    put("zimbraPrefCalendarInitialView", "week");
+		    put("zimbraPrefCalendarInitialView", "workWeek");
 		}};
 	}
 	
-	@Test( description = "Verify quick add dialog opens after hitting new appointment in week view",
+	@Test( description = "Verify quick add dialog opens after hitting new appointment in work week view",
 			groups = { "sanity" } )
 	
-	public void QuickAddWeekView_01() throws HarnessException {
+	public void WorkWeekView_01() throws HarnessException {
 			
 		// Verify quick add dialog opened
 		QuickAddAppointment quickAddAppt = new QuickAddAppointment(app) ;
