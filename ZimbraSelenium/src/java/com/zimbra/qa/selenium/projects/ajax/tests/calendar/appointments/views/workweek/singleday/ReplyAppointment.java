@@ -25,10 +25,10 @@ public class ReplyAppointment extends CalendarWorkWeekTest {
 		};
 	}
 	
-	
-	@Test(description = "Check context option for Reply & ReplyAll to an appt",
+	@Test(description = "Verify Reply & ReplyAll context menu option for saved appt",
 			groups = { "functional" },
 			dataProvider = "DataProviderReply")
+			
 	public void ReplyAppointment_01(String menuName) throws HarnessException {
 		
 		// Creating object for meeting data
@@ -36,6 +36,7 @@ public class ReplyAppointment extends CalendarWorkWeekTest {
 		tz = ZTimeZone.TimeZoneEST.getID();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
+		
 		// Absolute dates in UTC zone
 		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
@@ -54,20 +55,17 @@ public class ReplyAppointment extends CalendarWorkWeekTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-        	
-		//-- GUI actions	
+
         // Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
         // Select the appointment
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         
-        // Right Click -> check ReplyAll context menu       
+        // Right Click to appt -> check Reply and ReplyAll context menu       
         app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, apptSubject);
-        // zIsElementDisabled by default returns TRUE if element is Enabled
-        ZAssert.assertEquals(app.zPageMail.zIsElementDisabled(menuName), false, "Verify Reply and ReplyAll menu remains disabled");
+        ZAssert.assertEquals(app.zPageCalendar.zIsElementDisabled(menuName), false, "Verify Reply and ReplyAll menu remains disabled");
 
-        
 	}
 	
 	
