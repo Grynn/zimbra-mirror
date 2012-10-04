@@ -49,6 +49,8 @@ public class QuickAddAppointment extends AbsTab {
 		public static final String RepeatEnabled = "css=div[id$='_repeatDesc']div[class='FakeAnchor']";
 		public static final String RepeatDisabled = "css=div[id$='_repeatDesc']div[class='DisabledText']";
 		
+		public static final String QuickAddDialog = "css=div[class='DwtDialog'] td[class='DwtDialogTitle']:contains('QuickAdd Appointment')";
+		
 	}
 	
 	public static class Field {
@@ -208,6 +210,17 @@ public class QuickAddAppointment extends AbsTab {
 		this.zClickAt("css=div[id^='POPUP_'] td[id='NEW_APPT_title']", "");
 	}
 	
+	public void zNewAppointmentMonthView(Action action) throws HarnessException {
+		if (action.equals(Action.A_DOUBLECLICK)) {
+			this.sDoubleClick("css=td[class='calendar_month_cells_td-Selected']");
+		} else if (action.equals(Action.A_RIGHTCLICK)) {
+			this.zRightClickAt("css=td[class='calendar_month_cells_td-Selected']", "");
+			SleepUtil.sleepSmall();
+			this.zClickAt("css=div[id^='POPUP_'] td[id='NEW_APPT_title']", "");
+		}	
+		SleepUtil.sleepSmall();
+	}
+	
 	public void zNewAppointmentUsingMiniCal() throws HarnessException {
 		zWaitForMiniCalToLoad();
 		this.zRightClickAt("css=td[class='DwtCalendarDay']:contains('15')", "");
@@ -226,6 +239,10 @@ public class QuickAddAppointment extends AbsTab {
 		this.zRightClickAt("css=td[class='DwtCalendarDay']:contains('15')", "");
 		SleepUtil.sleepSmall();
 		this.zClickAt("css=div[id^='POPUP_'] td[id='NEW_ALLDAY_APPT_title']", "");
+	}
+	
+	public void zVerifyQuickAddDialog(Boolean status) throws HarnessException {
+		ZAssert.assertEquals(this.sIsElementPresent(Locators.QuickAddDialog), status, "Verify quick add appt dialog status");
 	}
 	
 	public void zWaitForMiniCalToLoad() throws HarnessException {

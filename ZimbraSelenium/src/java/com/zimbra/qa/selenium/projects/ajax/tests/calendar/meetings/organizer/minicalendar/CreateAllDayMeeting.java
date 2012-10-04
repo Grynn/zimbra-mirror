@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.minicalendar;
 
 import java.util.Calendar;
-import java.util.HashMap;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
@@ -14,17 +13,10 @@ public class CreateAllDayMeeting extends CalendarWorkWeekTest {
 
 	public CreateAllDayMeeting() {
 		logger.info("New "+ CreateMeeting.class.getCanonicalName());
-
-		// Make sure we are using an account with work week view
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			private static final long serialVersionUID = -2913827779459595178L;
-		{
-		    put("zimbraPrefCalendarInitialView", "workWeek");
-		}};
 	}
 	
 	@Test(	description = "Create all day meeting invite from mini-calendar's date using quick add dialog",
-			groups = { "sanity" }
+			groups = { "smoke" }
 	)
 	public void CreateAllDayMeeting_01() throws HarnessException {
 		
