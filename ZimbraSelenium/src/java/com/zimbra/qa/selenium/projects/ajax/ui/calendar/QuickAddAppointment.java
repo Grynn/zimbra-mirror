@@ -208,10 +208,31 @@ public class QuickAddAppointment extends AbsTab {
 		this.zClickAt("css=div[id^='POPUP_'] td[id='NEW_APPT_title']", "");
 	}
 	
+	public void zNewAppointmentUsingMiniCal() throws HarnessException {
+		zWaitForMiniCalToLoad();
+		this.zRightClickAt("css=td[class='DwtCalendarDay']:contains('15')", "");
+		SleepUtil.sleepSmall();
+		this.zClickAt("css=div[id^='POPUP_'] td[id='NEW_APPT_title']", "");
+	}
+	
 	public void zNewAllDayAppointment() throws HarnessException {
 		this.zRightClickAt("css=div[class='calendar_hour_scroll'] td[class='calendar_grid_body_time_td'] div[id$='_10']", "");
 		SleepUtil.sleepSmall();
 		this.zClickAt("css=div[id^='POPUP_'] td[id='NEW_ALLDAY_APPT_title']", "");
+	}
+	
+	public void zNewAllDayAppointmentUsingMiniCal() throws HarnessException {
+		zWaitForMiniCalToLoad();
+		this.zRightClickAt("css=td[class='DwtCalendarDay']:contains('15')", "");
+		SleepUtil.sleepSmall();
+		this.zClickAt("css=div[id^='POPUP_'] td[id='NEW_ALLDAY_APPT_title']", "");
+	}
+	
+	public void zWaitForMiniCalToLoad() throws HarnessException {
+		Boolean isElementPresent = this.sIsElementPresent("css=td[class='DwtCalendarTitlebar']");
+		while (isElementPresent == false) {
+			SleepUtil.sleepSmall();
+		}
 	}
 	
 	public void zMoreDetails() throws HarnessException {
