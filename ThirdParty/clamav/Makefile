@@ -28,10 +28,6 @@ CONFIG_OPT	:= --enable-milter
 CLAMAV_TGZ_TARGET := \
 $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/clamav/clamav-$(CLAMAV_VERSION).tgz
 
-ifeq ($(BUILD_PLATFORM), MACOSXx86)
-	LDFLAGS	:=	LDFLAGS="-L/opt/zimbra/sendmail-$(SENDMAIL_VERSION)/lib -Xcompiler -fexceptions"
-endif
-
 files	:= $(wildcard src/clamav-$(CLAMAV_VERSION).tar.gz)
 
 all: checksrc allclean build check tar

@@ -21,14 +21,6 @@ DEST_DIR		:= $(PERL_ROOT)/zimbramon
 DEST_LIB_DIR	:= $(DEST_DIR)/lib
 DEST_BIN_DIR	:= $(DEST_DIR)/bin
 
-ifeq ($(BUILD_PLATFORM), MACOSX)
-	DEST_BIN_DIR  :=	$(DEST_DIR)/usr/bin
-endif
-
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
-	DEST_BIN_DIR  :=	$(DEST_DIR)/bin
-endif
-
 MODULE_UPLEVEL	:= Sub::Uplevel
 MODULE_WWW	:= LWP::Protocol::https
 MODULE_NETADDR_IP	:= NetAddr::IP
@@ -134,13 +126,6 @@ BDB_INCLUDE	:= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
 MYSQL_INCLUDE	:= $(ZIMBRA_HOME)/mysql/include/mysql
 LDAP_INCLUDE 	:= $(ZIMBRA_HOME)/openldap/include
 SASL_INCLUDE	:= $(ZIMBRA_HOME)/cyrus-sasl/include
-
-ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
-	EXPAT_INCLUDE := EXPATINCPATH=$(ZIMBRA_HOME)/include
-	EXPAT_LIB := EXPATLIBPATH=$(ZIMBRA_HOME)/lib
-endif
-
-# DESTINATIONS
 
 # Order is important here
 PRE_PERL_LIBS	:= \

@@ -21,6 +21,17 @@ MAKEARGS ?= -j5
 
 ZIMBRA_HOME ?= /opt/zimbra
 
+ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
+DIRS	:= openssl \
+	libxml2 \
+	heimdal \
+	curl \
+	cyrus-sasl \
+	libtool \
+	openldap \
+	rsync \
+	tcmalloc
+else
 DIRS := openssl \
 	mysql \
 	bdb \
@@ -33,11 +44,8 @@ DIRS := openssl \
 	aspell \
 	sendmail \
 	clamav \
-	pcre \
 	apache-httpd \
 	php \
-	expat \
-	popt \
 	postfix \
 	dspam \
 	rrdtool \
@@ -50,6 +58,7 @@ DIRS := openssl \
 	opendkim \
 	altermime \
 	zeromq
+endif
 
 LOGFILE := ThirdParty.make.log
 
@@ -64,9 +73,11 @@ build:
 		$(MAKE) -C $$dir >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  $(ECHO) "FAILED.";  else  $(ECHO) "SUCCEEDED.";  fi ; \
 	done)
+ifneq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	@($(MAKE) -C apache-httpd tar >> $(LOGFILE) 2>&1)
 	@($(MAKE) -C pcre binrm >> $(LOGFILE) 2>&1)
 	@($(ECHO) -n "*** Building in Perl "; $(MAKE) -C Perl ) 
+endif
 
 clean:
 	for dir in $(DIRS); do \

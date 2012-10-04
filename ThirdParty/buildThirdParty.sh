@@ -182,7 +182,7 @@ eval `/usr/bin/perl -V:archname`
 export PERLLIB="${PATHDIR}/Perl/zimbramon/lib:${PATHDIR}/Perl/zimbramon/lib/$archname"
 export PERL5LIB=${PERLLIB}
 
-if [ x$PLAT = "xSLES10_64" -o x$PLAT = "xSLES11_64" -o x$PLAT = "xRHEL4_64" -o x$PLAT = "xRHEL5_64" -o x$PLAT = "xRHEL6_64" -o x$PLAT = "xF10_64" -o x$PLAT = "xF11_64" ]; then
+if [ x$PLAT = "xSLES11_64" -o x$PLAT = "xRHEL6_64" ]; then
 	LIBDIR="/usr/lib64"
 else
 	LIBDIR="/usr/lib"
@@ -291,20 +291,6 @@ if [[ $PLAT != "MACOSX"* ]]; then
 			exit 1;
 		fi
 	done
-fi
-
-if [ x$PLAT = "xRHEL4" -o x$PLAT = "xRHEL4_64" -o x$PLAT = "xCentOS4" -o x$PLAT = "xCentOS4_64" ]; then
-	PCREH="pcre/pcre.h"
-else
-	PCREH="pcre.h"
-fi
-
-if [[ $PLAT != "MACOSX"* ]]; then
-	echo "	Checking pcre.h"
-	if [ ! -f "/usr/include/$PCREH" ]; then
-		echo "Error: /usr/include/$PCREH not found"
-		exit 1;
-	fi
 fi
 
 if [ x"$ZIMBRA" = x"no" ]; then

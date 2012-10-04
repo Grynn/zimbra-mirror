@@ -21,22 +21,6 @@ CURL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/curl/curl-$(CUR
 
 LIB_DIR := /usr/lib
 
-ifeq ($(BUILD_PLATFORM), RHEL4_64)
-	LIB_DIR := /usr/lib64
-endif
-
-ifeq ($(BUILD_PLATFORM), CentOS4_64)
-	LIB_DIR := /usr/lib64
-endif
-
-ifeq ($(BUILD_PLATFORM), RHEL5_64)
-	LIB_DIR := /usr/lib64
-endif
-
-ifeq ($(BUILD_PLATFORM), CentOS5_64)
-	LIB_DIR := /usr/lib64
-endif
-
 ifeq ($(BUILD_PLATFORM), RHEL6_64)
 	LIB_DIR := /usr/lib64
 endif
@@ -45,19 +29,7 @@ ifeq ($(BUILD_PLATFORM), CentOS6_64)
 	LIB_DIR := /usr/lib64
 endif
 
-ifeq ($(BUILD_PLATFORM), SLES10_64)
-	LIB_DIR := /usr/lib64
-endif
-
 ifeq ($(BUILD_PLATFORM), SLES11_64)
-	LIB_DIR := /usr/lib64
-endif
-
-ifeq ($(BUILD_PLATFORM), F11_64)
-	LIB_DIR := /usr/lib64
-endif
-
-ifeq ($(BUILD_PLATFORM), F13_64)
 	LIB_DIR := /usr/lib64
 endif
 

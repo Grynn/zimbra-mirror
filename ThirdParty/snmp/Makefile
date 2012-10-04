@@ -24,40 +24,10 @@ PATCH	:=
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
-ifeq ($(BUILD_PLATFORM), MACOSXx86)
-	ENVMOD := env LIBS="-lresolv" 
-endif
-ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))
-	ENVMOD := env LIBS="-lresolv" CPPFLAGS="-DHAVE_SSIZE_T" MACOSX_DEPLOYMENT_TARGET=10.5
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.7)
-	PATCH   := patch -g0 -N -p1 < ../patches/mac-osx-107.patch;
-endif
-endif
-ifeq ($(BUILD_PLATFORM), MACOSX)
-	ENVMOD := env LIBS="-lresolv" 
-endif
-ifeq ($(BUILD_PLATFORM), RHEL4_64)
-	ENVMOD := env LIBS="-L/usr/lib64"
-endif
-ifeq ($(BUILD_PLATFORM), CentOS4_64)
-	ENVMOD := env LIBS="-L/usr/lib64"
-endif
-ifeq ($(BUILD_PLATFORM), RHEL5_64)
-	ENVMOD := env LIBS="-L/usr/lib64"
-endif
-ifeq ($(BUILD_PLATFORM), CentOS5_64)
-	ENVMOD := env LIBS="-L/usr/lib64"
-endif
 ifeq ($(BUILD_PLATFORM), RHEL6_64)
 	ENVMOD := env LIBS="-L/usr/lib64"
 endif
 ifeq ($(BUILD_PLATFORM), CentOS6_64)
-	ENVMOD := env LIBS="-L/usr/lib64"
-endif
-ifeq ($(BUILD_PLATFORM), F11_64)
-	ENVMOD := env LIBS="-L/usr/lib64"
-endif
-ifeq ($(BUILD_PLATFORM), F13_64)
 	ENVMOD := env LIBS="-L/usr/lib64"
 endif
 
@@ -74,29 +44,6 @@ checksrc:
 	$(if $(files), @echo "", exit 1)
 
 build: $(SNMP_NAME)-$(SNMP_VERSION)
-ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))
-	@echo MAC $(BUILD_PLATFORM)
-	(cd $(SNMP_NAME)-$(SNMP_VERSION); \
-	$(PATCH) \
-	$(ENVMOD) CFLAGS="-g -O2" \
-	$(LDFLAGS) \
-	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR) \
-	./configure --prefix=$(INSTALL_PREFIX) \
-	--with-default-snmp-version=3 --with-sys-contact="admin" \
-	--with-sys-location="unknown" --with-logfile="$(ZIMBRA_HOME)/log/snmpd.log" \
-	--with-openssl=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) \
-	--disable-embedded-perl \
-	--without-perl-modules \
-	--enable-ipv6 \
-	--with-persistent-directory="$(INSTALL_PREFIX)/var"; \
-	sed -i .bak -e 's/-arch ppc//g' config.status; \
-	./config.status; \
-	$(MAKE) ; $(MAKE) install)
-	(cp -f $(SNMP_NAME)-$(SNMP_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
-	(mkdir -p $(INSTALL_PREFIX)/var)
-	(cd $(ZIMBRA_HOME); ln -s $(SNMP_NAME)-$(SNMP_VERSION) $(SNMP_NAME))
-else
-	echo NON_MAC $(BUILD_PLATFORM)
 	(cd $(SNMP_NAME)-$(SNMP_VERSION); \
 	$(ENVMOD) CFLAGS="-g -O2" \
 	$(LDFLAGS) \
@@ -112,7 +59,6 @@ else
 	(cp -f $(SNMP_NAME)-$(SNMP_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
 	(mkdir -p $(INSTALL_PREFIX)/var)
 	(cd $(ZIMBRA_HOME); ln -s $(SNMP_NAME)-$(SNMP_VERSION) $(SNMP_NAME))
-endif
 
 $(SNMP_NAME)-$(SNMP_VERSION): 
 	tar xzf src/$(SNMP_NAME)-$(SNMP_VERSION).tar.gz

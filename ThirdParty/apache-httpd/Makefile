@@ -15,14 +15,6 @@ endif
 HTTPD_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/apache-httpd/httpd-$(HTTPD_VERSION).tgz
 
-ifeq ($(BUILD_PLATFORM), RHEL5_64)
-	ENVMOD := env LIBS="-L/usr/lib64"
-endif
-
-ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	PCRE	:= --with-pcre=/opt/zimbra/bin/pcre-config
-endif
-
 files	:= $(wildcard src/httpd-$(HTTPD_VERSION).tar.bz2)
 aprsrc	:= $(wildcard src/apr-$(APR_VERSION).tar.bz2)
 aprutilsrc	:= $(wildcard src/apr-util-$(APR_UTIL_VERSION).tar.bz2)
@@ -49,7 +41,7 @@ build:
 	mv apr-$(APR_VERSION) apr;)
 	(cd httpd-$(HTTPD_VERSION)/srclib; tar xfj ../../src/apr-util-$(APR_UTIL_VERSION).tar.bz2; \
 	mv apr-util-$(APR_UTIL_VERSION) apr-util;)
-	(cd httpd-$(HTTPD_VERSION); $(ENVMOD) $(LDFLAGS) CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/httpd-$(HTTPD_VERSION) --enable-so $(PCRE) --with-included-apr -with-mpm=event --enable-mpms-shared="all" --enable-ssl --with-ssl=/opt/zimbra/openssl-$(OPENSSL_VERSION); $(MAKE) $(MAKEARGS); $(MAKE) install)
+	(cd httpd-$(HTTPD_VERSION); $(ENVMOD) $(LDFLAGS) CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/httpd-$(HTTPD_VERSION) --enable-so --with-included-apr -with-mpm=event --enable-mpms-shared="all" --enable-ssl --with-ssl=/opt/zimbra/openssl-$(OPENSSL_VERSION); $(MAKE) $(MAKEARGS); $(MAKE) install)
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/apache-httpd

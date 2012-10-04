@@ -15,28 +15,12 @@ PATCH	:=
 ifdef BETA
 	include $(PHP_ROOT)/../beta_versions.def
 	PATCH	:= 
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
-	PATCH	:= patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
-endif
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.7)
-	PATCH	:= patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
-endif
 else
 	include $(PHP_ROOT)/../versions.def
 	PATCH	:= 
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
-	PATCH	:= patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
-endif
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.7)
-	PATCH	:= patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
-endif
 endif
 
 SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(XML_VERSION)\/lib\/libxml2.a/g' Makefile
-
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
-	ACEXE := ac_cv_exeext=
-endif
 
 PHP_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php/php-$(PHP_VERSION).tgz

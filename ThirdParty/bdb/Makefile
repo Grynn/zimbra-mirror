@@ -22,11 +22,6 @@ BDB_TGZ_TARGET	:= $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/bdb/bdb-$(BDB_VE
 CONFIG_FLAG := --enable-posixmutexes --with-mutex=POSIX/pthreads
 LIB_EXT := so
 
-ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
-	CONFIG_FLAG := 
-	LIB_EXT := dylib
-endif
-
 files	:= $(wildcard src/db-$(BDB_VERSION).tar.gz)
 
 all: checksrc allclean build check tar

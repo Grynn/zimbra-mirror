@@ -20,10 +20,6 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.7)
-	MYCC	:= CC=gcc
-endif
-
 files	:= $(wildcard src/$(ALTMIME_NAME)-$(ALTMIME_VERSION).tar.gz)
 
 all: checksrc allclean build check tar
