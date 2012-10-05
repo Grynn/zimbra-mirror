@@ -1340,12 +1340,21 @@ public class ZimbraAPI
         writer.WriteAttributeString("d", appt["orName"]);
 
         // always convert -- not like old tool that gives you a choice
-        string theOrganizer = AccountName;
+        //string theOrganizer = AccountName;
+        string theOrganizer = "";
         if (appt["orAddr"].Length > 0)
         {
+            theOrganizer = AccountName;
             if (!IAmTheOrganizer(appt["orAddr"]))
             {
                 theOrganizer = appt["orAddr"];
+            }
+        }
+        else
+        {
+            if (appt["orName"].Length > 0)
+            {
+                theOrganizer = appt["orName"];
             }
         }
         writer.WriteAttributeString("a", theOrganizer);
@@ -1613,12 +1622,29 @@ public class ZimbraAPI
         attr = "orName" + "_" + num.ToString();
         writer.WriteAttributeString("d", appt[attr]);
         attr = "orAddr" + "_" + num.ToString();
+        /*
         string theOrganizer = AccountName;
         if (appt[attr].Length > 0)
         {
             if (!IAmTheOrganizer(appt[attr]))
             {
                 theOrganizer = appt[attr];
+            }
+        }*/
+        string theOrganizer = "";
+        if (appt["orAddr"].Length > 0)
+        {
+            theOrganizer = AccountName;
+            if (!IAmTheOrganizer(appt["orAddr"]))
+            {
+                theOrganizer = appt["orAddr"];
+            }
+        }
+        else
+        {
+            if (appt["orName"].Length > 0)
+            {
+                theOrganizer = appt["orName"];
             }
         }
         writer.WriteAttributeString("a", theOrganizer);
