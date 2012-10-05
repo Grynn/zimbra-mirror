@@ -13,10 +13,8 @@ PATCH   :=
 
 ifdef BETA
 	include $(SENDMAIL_ROOT)/../beta_versions.def
-	PATCH   := patch -g0 -N -p1 < ../patches/mac-osx-107.patch; patch -g0 -N -p1 < ../patches/ipv6.patch;
 else
 	include $(SENDMAIL_ROOT)/../versions.def
-	PATCH   := patch -g0 -N -p1 < ../patches/mac-osx-107.patch; patch -g0 -N -p1 < ../patches/ipv6.patch;
 endif
 
 SENDMAIL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/sendmail/sendmail-$(SENDMAIL_VERSION).tgz
@@ -30,7 +28,6 @@ checksrc:
 
 build:
 	(tar xzf src/sendmail.$(SENDMAIL_VERSION).tar.gz; \
-	cp sendmail-$(SENDMAIL_VERSION)/devtools/OS/Darwin.9.x sendmail-$(SENDMAIL_VERSION)/devtools/OS/Darwin.10.x; \
 	cd sendmail-$(SENDMAIL_VERSION); \
 	$(PATCH) \
 	cd libmilter; \
