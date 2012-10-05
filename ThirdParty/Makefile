@@ -75,7 +75,6 @@ build:
 	done)
 ifneq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	@($(MAKE) -C apache-httpd tar >> $(LOGFILE) 2>&1)
-	@($(MAKE) -C pcre binrm >> $(LOGFILE) 2>&1)
 	@($(ECHO) -n "*** Building in Perl "; $(MAKE) -C Perl ) 
 endif
 
