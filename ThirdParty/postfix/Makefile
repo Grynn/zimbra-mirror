@@ -52,8 +52,6 @@ build:
 	$(BDB_PATCH) \
 	$(PATCH) \
 	patch -g0 -p1 < ../patches/postfix-main-cf-zimbra.patch; \
-	patch -g0 -p1 < ../patches/0001-Add-locking-to-dict-interface.patch; \
-	patch -g0 -p1 < ../patches/0002-Add-support-for-OpenLDAP-MDB.patch; \
 	$(MAKE) $(MAKEARGS)  makefiles \
 	OPT="-O2" \
 	DEBUG="-g" \
