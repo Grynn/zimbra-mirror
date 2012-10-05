@@ -451,14 +451,14 @@ function(attrs) {
 UnknownPersonSlide.prototype._setProfileImage =
 function(imgUrl) {
 	var div = document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID);
-	div.width = 65;
-	div.height = 80;
-	div.style.width = 65;
-	div.style.height = 80;
-	if (this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN) == -1 || !imgUrl) {
+	if (this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN) == -1 || !imgUrl || !div) {
 		this._handleImgLoadFailure();
 		return;
 	}
+    div.width = 65;
+	div.height = 80;
+	div.style.width = 65;
+	div.style.height = 80;
 
 	var img = new Image();
     img.src = imgUrl;
