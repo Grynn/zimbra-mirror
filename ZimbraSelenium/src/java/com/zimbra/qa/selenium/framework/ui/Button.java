@@ -253,7 +253,17 @@ public class Button {
 	public static final Button B_FILEAS = new Button("td$=_FILE_AS_select_container");
 	
 	public static final Button B_CONTACTGROUP = new Button("zmi__Contacts__CONTACTGROUP_MENU");
-  
+	
+	// Addressbook - Contact Group form
+	public static final Button B_CONTACTGROUP_ADD_ADDRESS = new Button("B_CONTACTGROUP_ADD_ADDRESS");
+	public static final Button B_CONTACTGROUP_ADD_SEARCH_RESULT = new Button("B_CONTACTGROUP_ADD_SEARCH_RESULT");
+	public static final Button B_CONTACTGROUP_ADD_ALL_SEARCH_RESULT = new Button("B_CONTACTGROUP_ADD_ALL_SEARCH_RESULT");
+	public static final Button B_CONTACTGROUP_SEARCH_TYPE = new Button("O_CONTACTGROUP_SEARCH_TYPE");
+	public static final Button O_CONTACTGROUP_SEARCH_CONTACTS = new Button("O_CONTACTGROUP_SEARCH_CONTACTS");
+	public static final Button O_CONTACTGROUP_SEARCH_GAL = new Button("O_CONTACTGROUP_SEARCH_GAL");
+	public static final Button O_CONTACTGROUP_SEARCH_PERSONAL_AND_SHARED = new Button("O_CONTACTGROUP_SEARCH_PERSONAL_AND_SHARED");
+	public static final Button B_CHOOSE_ADDRESSBOOK = new Button("B_CHOOSE_ADDRESSBOOK");
+	
 	public static final Button O_SEARCH_MAIL_SENT_TO_CONTACT = new Button("O_SEARCH_MAIL_SENT_TO_CONTACT");
 	public static final Button O_SEARCH_MAIL_RECEIVED_FROM_CONTACT = new Button("O_SEARCH_MAIL_RECEIVED_FROM_CONTACT");
 	 

@@ -1,6 +1,6 @@
 package com.zimbra.qa.selenium.framework.items;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import org.apache.log4j.*;
 
@@ -77,6 +77,7 @@ public class ContactGroupItem extends ContactItem implements IItem {
 
 	/**
 	 * Get the dlist member emails as a comma separated String
+	 * @deprecated Use getMemberList() instead
 	 * @return
 	 */
 	public String getDList() {
@@ -92,6 +93,11 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		return (sb == null ? "" : sb.toString());
 	}
 
+	public List<MemberItem> getMemberList() {
+		return(groupMembers);
+	}
+	
+	
 	/**
 	 * Add a contact item to the dlist
 	 * @param ContactItem
@@ -179,20 +185,27 @@ public class ContactGroupItem extends ContactItem implements IItem {
 				String value = a.getText();
 				
 				if ( key.equalsIgnoreCase("nickname") ) {
-					group.fileAs = value;
+					group.groupName = value;
 				}
 
 				group.setAttribute(key, value);
 			}
 
 			// Iterate the members
-			Element[] members = ZimbraAccount.SoapClient.selectNodes(cn, "//mail:a");
+			Element[] members = ZimbraAccount.SoapClient.selectNodes(cn, "//mail:m");
 			for (Element m : members) {
 				String value = m.getAttribute("value", null);
 				String type = m.getAttribute("type", null);
 				
-				// TODO: members do not need to be contacts
-				group.groupMembers.add(new MemberItem(value, type));
+				if ( type.equalsIgnoreCase(MemberItemGAL.MyType) ) {
+					group.groupMembers.add(new MemberItemGAL(value, type));
+				} else if ( type.equalsIgnoreCase(MemberItemContact.MyType) ) {
+					group.groupMembers.add(new MemberItemContact(value, type));
+				} else if ( type.equalsIgnoreCase(MemberItemAddress.MyType) ) {
+					group.groupMembers.add(new MemberItemAddress(value, type));
+				} else {
+					group.groupMembers.add(new MemberItem(value, type));
+				}
 
 			}
 
@@ -374,7 +387,113 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		return (sb.toString());
 	}
 
+	public static class MemberItemAddress extends MemberItem {
+		public static final String MyType = "I";
+		
+		public MemberItemAddress(String value, String type) {
+			super(value, type);
+		}
+		
+		public MemberItemAddress(String address) {
+			super(address, MyType);
+		}
+		
+	}
+	
 
+	public static class MemberItemContact extends MemberItem {
+		public static final String MyType = "C";
+		
+		protected String id = null;
+
+		public MemberItemContact(String value, String type) {
+			super(value, type);
+			id = value;
+		}
+		
+		public MemberItemContact(ContactItem c) {
+			super(c.email, MyType);
+			id = c.getId();
+		}
+		
+		protected String getNormalized() {
+			return (id);
+		}
+	}
+	
+	public static class MemberItemGroup extends MemberItem {
+		public static final String MyType = "C";
+		
+		protected String id = null;
+
+		public MemberItemGroup(String value, String type) {
+			super(value, type);
+			id = value;
+		}
+		
+		public MemberItemGroup(ContactGroupItem g) {
+			super(g.email, MyType);
+			id = g.getId();
+		}
+		
+		protected String getNormalized() {
+			return (id);
+		}
+	}
+	
+	public static class MemberItemGAL extends MemberItem {
+		public static final String MyType = "G";
+
+		public MemberItemGAL(String value, String type) {
+			super(value, type);
+		}
+		
+		public MemberItemGAL(ZimbraAccount a) {
+			super(a.EmailAddress, MyType);
+		}
+		
+		protected String getNormalized() {
+		
+			// Member values may look like:
+			// <m value="uid=address,ou=people,dc=testdomain,dc=com" type="G"/>
+			// convert those to an 'email address' format
+			//
+			
+			if ( !value.contains("uid") ) {
+				// Not an LDAP format value
+				return (value);
+			}
+			
+			String email = null;
+			StringBuilder domain = null;
+			for (String pair : value.split(",")) {
+				
+				if ( !pair.contains("=") ) {
+					return (value); // Error?
+				}
+				
+				String key = pair.split("=")[0];
+				String value = pair.split("=")[1];
+				
+				if ( key.equals("uid") ) {
+					email = value;
+					continue;
+				}
+				
+				if ( key.equals("dc") ) {
+					if ( domain == null ) {
+						domain = new StringBuilder(value);
+					} else {
+						domain.append(".").append(value);
+					}
+				}
+			}
+
+			return (email + "@" + domain.toString());
+
+		}
+	}
+	
 	public static class MemberItem {
 		protected String value;
 		protected String type;
@@ -388,6 +507,23 @@ public class ContactGroupItem extends ContactItem implements IItem {
 			this.type = type;
 		}
 		
+		public String getValue() {
+			return (value);
+		}
+		
+		public String getType() {
+			return (type);
+		}
+		
+		/**
+		 * This method is used to compare two MemberItems.
+		 * All classes should return a String such as "email@domain.com".
+		 * @return
+		 */
+		protected String getNormalized() {
+			return (getValue());
+		}
+		
 		public String prettyPrint() {
 			StringBuilder sb = new StringBuilder();
 			sb.append("value: ").append(value).append("\n");
@@ -398,6 +534,52 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		public String toString() {
 			return (String.format("value(%s) type(%s)", value, type));
 		}
+		
+		/* (non-Javadoc)
+		 * @see java.lang.Object#hashCode()
+		 */
+		public int hashCode() {
+			return (getNormalized().hashCode());
+		}
+		
+		/* (non-Javadoc)
+		 * @see java.lang.Object#equals(java.lang.Object)
+		 */
+		public boolean equals (Object o) {
+			
+			if ( o == null ) {
+				return (false);
+			}
+			
+			if ( o == this ) {
+				return (true);
+			}
+			
+			if( !(o instanceof MemberItem) ) {
+				return (false);
+			}
+			
+			MemberItem other = (MemberItem) o;
+			
+			if ( !(other.getType().equals(getType())) ) {
+				return (false);
+			}
+			
+			/**
+			Sometimes, the server returns contacts with the Account ID, such as:
+			        <m value="f7042cb6-9fed-477c-ade1-20da53822ce3:257" type="C"/>
+			Eventually, it would be good to verify the Account ID part, but it
+			is difficult to track that information at the moment.
+			
+			For now, just do a String Contains using the ID.
+			 */
+			return (
+					other.getNormalized().contains(getNormalized()) || 
+					getNormalized().contains((other.getNormalized())));
+
+		}
+		
+
 	}
 }
 

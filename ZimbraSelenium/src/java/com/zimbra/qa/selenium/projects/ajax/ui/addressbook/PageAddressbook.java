@@ -6,7 +6,6 @@ import java.util.*;
 
 import org.apache.log4j.LogManager;
 
-import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -440,7 +439,6 @@ public class PageAddressbook extends AbsTab {
 
 		// Click it
 		zClickAt(locator,"0,0");
-		  ExecuteHarnessMain.ResultListener.captureScreen();
 		if (isAlphabetButton(button)) {
  		  //for addressbook alphabet button only
 		  sClick(locator);
@@ -1001,7 +999,7 @@ public class PageAddressbook extends AbsTab {
 				if (subOption == Button.O_NEW_CONTACTGROUP) {
 					cmi= CONTEXT_MENU.CONTACT_GROUP;
 					sub_cmi= CONTEXT_SUB_MENU.CONTACT_SUB_NEW_CONTACT_GROUP;
-					page = new SimpleFormContactGroupNew(MyApplication);
+					page = new DialogNewContactGroup(MyApplication, this);
 				}				
 			}
 			else if (option == Button.B_SEARCH) {
@@ -1245,67 +1243,76 @@ public class PageAddressbook extends AbsTab {
 		return (page);    
 	}
 	
-	public void zListItem(Action action, Button option ,IItem item, String contact) throws HarnessException {
-		String locator = null;			// If set, this will be clicked
-	
+	public AbsPage zListItem(Action action, Button option, IItem item, String contact) throws HarnessException {
+		
+		AbsPage page = null;
+		String contactLocator = getContactLocator(contact);
+		String locator = null;
 		String itemLocator = null;
 
         
 		tracer.trace(action +" then "+ option +" then "+ item +" on contact = "+ contact);
+		
+		
         if ( action == Action.A_RIGHTCLICK ) {
-			ContextMenuItem cmi=null;
-		    
-			zRightClickAt(getContactLocator(contact),"0,0");
 
 			
 			if (option == Button.B_TAG) {		        
-				cmi=CONTEXT_MENU.CONTACT_TAG;
-													
+						
+				// Hover over the context menu "tags" item
+				locator = "css=div#zm__Contacts div#TAG_MENU td[id$='_title']";
+
 				if (item instanceof TagItem) {
-					TagItem ti = (TagItem) item;
-					itemLocator = "css=td[id$=title]:contains('" + ti.getName() + "')";
 					
-				}				
+					// Left click the existing tag
+					itemLocator = "css=td[id$=title]:contains('" + item.getName() + "')";
+					
+				}
 			
-				locator = "css=div#zm__Contacts tr#"+ cmi.locator;
-				
 			}
 			else if (option == Button.B_CONTACTGROUP) {
+				
+				locator = "css=div#zm__Contacts div[id^='CONTACTGROUP_MENU'] td[id$='_title']";
+
 				if ( item instanceof ContactGroupItem) {
-					ContactGroupItem cgi= (ContactGroupItem) item;
-					cmi= CONTEXT_MENU.CONTACT_GROUP;
-				    itemLocator = "css=td[id$=title]:contains('" + cgi.fileAs + "')";
+					itemLocator = "css=div[id^='CONTACTGROUP_MENU'] td[id$='_title']:contains('"+ item.getName() +"')";
 				}				
 
-				locator = "css=div#zm__Contacts tr[id^="+ cmi.locator + "]";
 			}
 			
+			if ( !this.sIsElementPresent(contactLocator) ) {
+				throw new HarnessException("Unable to right click on contact");
+			}
 			
-			//  Make sure the context menu exists
-			zWaitForElementPresent(locator) ;
-			
-			// Check if the item is enabled
-			//if (sIsElementPresent("css=div[id=" + id + "][class*=ZDisabled]")) {
-			//	throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled ");
-			//}
+        	// Right click on contact
+			zRightClickAt(contactLocator,"0,0");
+			this.zWaitForBusyOverlay();
+
+			if ( !this.sIsElementPresent(locator) ) {
+				throw new HarnessException("Unable to hover over context menu");
+			}
 			
 			// Mouse over the option
-			sFocus(locator);
 			sMouseOver(locator);
-							
-			//  Make sure the sub context menu exists			
-			zWaitForElementPresent(itemLocator) ;
+			this.zWaitForBusyOverlay();
 			
-			// make sure the sub context menu enabled			
-			zWaitForElementEnabled("div#" + itemLocator);
+
+			if ( !this.sIsElementPresent(itemLocator) ) {
+				throw new HarnessException("Unable to click on sub-menu");
+			}
+			
+			// Left click the sub-option
+			this.zClickAt(itemLocator, "");
+			this.zWaitForBusyOverlay();
 			
         } 
 
              
-        zClickAt(itemLocator,"0,0");		
-        zWaitForBusyOverlay();
-       
+        if ( page != null ) {
+        	page.zWaitForActive();
+        }
         
+        return (page);
     
 	}
 	
