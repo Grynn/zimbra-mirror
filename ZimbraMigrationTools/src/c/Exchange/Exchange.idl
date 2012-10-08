@@ -35,6 +35,8 @@ interface IMapiWrapper: IDispatch {
     HRESULT SelectExchangeUsers([out] VARIANT *Users, [out, retval] BSTR *pErrorText);
     [id(7), helpstring("disconnect from the mail server")] 
     HRESULT GlobalUninit([out, retval] BSTR *pErrorText);
+    [id(8), helpstring("errors not to display")] 
+    HRESULT AvoidInternalErrors([in]BSTR lpToCmp,[out, retval]LONG *lRetval);
 };
 
 [

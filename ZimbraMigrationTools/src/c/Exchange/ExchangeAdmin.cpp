@@ -1052,3 +1052,11 @@ LPCWSTR ExchangeOps::SelectExchangeUsers(vector<ObjectPickerData> &vUserList)
     }
     return lpwstrStatus;
 }
+
+BOOL ExchangeOps::AvoidInternalErrors(LPCWSTR lpToCmp)
+{
+    if(wcscmp(lpToCmp, ERR_ADOBJECT_OPEN)==0)
+        return TRUE;
+    else
+        return FALSE;
+}

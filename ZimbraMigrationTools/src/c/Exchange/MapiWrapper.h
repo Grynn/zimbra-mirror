@@ -46,7 +46,7 @@ public:
 
     STDMETHOD(GlobalUninit) (BSTR *pErrorText);
     STDMETHOD(SelectExchangeUsers) (VARIANT * Users, BSTR *pErrorText);
-
+    STDMETHOD(AvoidInternalErrors)(BSTR lpToCmp, LONG *lRetval);
 protected:
     /*HRESULT SequenceByElement(long start, long length, SAFEARRAY *SequenceArr);
      * HRESULT SequenceByData(long start, long length, SAFEARRAY *SequenceArr);

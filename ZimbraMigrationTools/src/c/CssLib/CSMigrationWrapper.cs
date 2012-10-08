@@ -177,6 +177,11 @@ public class CSMigrationWrapper
         }
     }
 
+    public bool AvoidInternalErrors(string strErr)
+    {
+	return MailWrapper.AvoidInternalErrors(strErr);
+    }
+
     public string[] GetListofMapiProfiles()
     {
         object var = new object();

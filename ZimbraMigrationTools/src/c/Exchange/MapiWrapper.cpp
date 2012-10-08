@@ -226,6 +226,12 @@ STDMETHODIMP CMapiWrapper::GlobalUninit(BSTR *pErrorText)
     return S_OK;
 }
 
+STDMETHODIMP CMapiWrapper::AvoidInternalErrors(BSTR lpToCmp, LONG *lRetval)
+{
+    *lRetval=(LONG)ExchangeOps::AvoidInternalErrors((LPCWSTR)lpToCmp);
+    return S_OK;
+}
+
 STDMETHODIMP CMapiWrapper::SelectExchangeUsers(VARIANT *Users, BSTR *pErrorText)
 {
     dlog.trace(L"Begin Mapiwrapper::SelectExchangeUsers");

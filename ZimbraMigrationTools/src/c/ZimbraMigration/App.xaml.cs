@@ -18,9 +18,15 @@ public partial class App: Application
             }
             string s = mw.GlobalUninit();
 
-            if (s.Length > 0)
-                MessageBox.Show(s, "Shutdown error", MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+	    if (s.Length > 0)
+	    {
+		bool retval = mw.AvoidInternalErrors(s);
+		if (!retval)
+		{
+		    MessageBox.Show(s, "Shutdown error", MessageBoxButton.OK,
+			MessageBoxImage.Error);
+		}
+	    }
         }
     }
 }

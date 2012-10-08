@@ -13,6 +13,7 @@ namespace CssLib
 
        public abstract string GetProfilelist(out object var);
        public abstract string SelectExchangeUsers(out object var);
+       public abstract bool AvoidInternalErrors(string strErr);
     }
 
    public abstract class MigrationUser

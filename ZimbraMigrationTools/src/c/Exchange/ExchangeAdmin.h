@@ -72,6 +72,7 @@ public:
         lpAdminPassword = NULL);
     static LPCWSTR GlobalUninit();
     static LPCWSTR SelectExchangeUsers(vector<ObjectPickerData> &vUserList);
+    static BOOL AvoidInternalErrors(LPCWSTR lpToCmp);
 };
 
 const LPCWSTR DEFAULT_ADMIN_PROFILE_NAME = L"zmprof";

@@ -236,6 +236,11 @@ namespace CssLib
 
         }
 
+	public override bool AvoidInternalErrors(string strErr)
+	{
+	    return (MapiWrapper.AvoidInternalErrors(strErr)!=0);
+	}
+
         public override string GetProfilelist(out object  var)
         {
             
