@@ -159,7 +159,7 @@ static const ngx_str_t ERRMSG[] = {
         ngx_string("timeout occurs when reading lookup response from handler"),
         ngx_string("no valid lookup handlers"),
         ngx_string("invalid route is returned"),
-        ngx_string("login failed"),
+        ngx_string("LOGIN failed"),
         ngx_string("invalid response from lookup handler"),
         ngx_string("client connection is closed"),
         ngx_string("dummy")

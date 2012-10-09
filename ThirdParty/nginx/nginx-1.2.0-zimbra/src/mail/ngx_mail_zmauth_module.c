@@ -87,7 +87,8 @@ static ngx_str_t ngx_mail_zmauth_method[] = {
         ngx_string("gssapi")    /* NGX_MAIL_AUTH_GSSAPI_IR */
 };
 
-static ngx_str_t LOGIN_FAILED = ngx_string("login failed");
+static ngx_str_t LOGIN_FAILED = ngx_string("LOGIN failed");
+static ngx_str_t AUTHENTICATE_FAILED = ngx_string("AUTHENTICATE failed")
 
 void
 ngx_mail_zmauth_init(ngx_mail_session_t *s) {
@@ -414,6 +415,9 @@ ngx_mail_zmauth_lookup_result_handler(ngx_zm_lookup_work_t * work) {
             break;
 
         case NGX_MAIL_IMAP_PROTOCOL:
+            if (s->command == NGX_IMAP_AUTHENTICATE) {
+                errmsg = AUTHENTICATE_FAILED;
+            }
             size = s->tag.len + 1 /*for space*/+ sizeof("NO ") - 1 + errmsg.len
                    + sizeof(CRLF) - 1;
             break;
