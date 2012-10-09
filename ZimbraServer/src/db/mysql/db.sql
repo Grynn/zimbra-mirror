@@ -47,6 +47,7 @@ CREATE TABLE volume (
    mailbox_group_bits     SMALLINT NOT NULL,
    compress_blobs         BOOLEAN NOT NULL,
    compression_threshold  BIGINT NOT NULL,
+   metadata               MEDIUMTEXT,
 
    UNIQUE INDEX i_name (name),
    UNIQUE INDEX i_path (path(255))   -- Index prefix length of 255 is the max prior to MySQL 4.1.2.  Should be good enough.
