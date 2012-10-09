@@ -1680,7 +1680,7 @@ function(text, isHtml) {
 		// WROTE can stretch over two lines; if so, join them into one line
 		var nextLine = lines[i + 1];
 		var isMerged = false;
-		if ((type == AjxStringUtil.ORIG_UNKNOWN) && AjxStringUtil.ORIG_INTRO_RE.test(testLine) && nextLine.match(/\w+:$/)) {
+		if (nextLine && (type == AjxStringUtil.ORIG_UNKNOWN) && AjxStringUtil.ORIG_INTRO_RE.test(testLine) && nextLine.match(/\w+:$/)) {
 			testLine = [testLine, nextLine].join(" ");
 			type = AjxStringUtil._getLineType(testLine);
 			isMerged = true;
