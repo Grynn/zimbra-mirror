@@ -222,7 +222,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 	}
 
 	@Test(	description = "Cancel an edited contact by click Close, then click Cancel",
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void EditContactGroup_06() throws HarnessException {
 
 		//--  Data
@@ -269,7 +269,7 @@ public class EditContactGroup extends AjaxCommonTest  {
      }
 
 	@Test(	description = "Cancel an edited contact by click Close, then click Yes",
-			groups = { "functional", "matt"})
+			groups = { "functional"})
 	public void EditContactGroup_07() throws HarnessException {
 
 		//--  Data

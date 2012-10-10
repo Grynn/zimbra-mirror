@@ -77,7 +77,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 	}
 
 	@Test(	description = "D1 Enhancement : Add a contact to an existing group",
-			groups = { "smoke", "matt" })
+			groups = { "smoke" })
 	public void Add1ContactToExistingGroup() throws HarnessException {			
 		
 		//-- Data
@@ -123,7 +123,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 	}
 
 	@Test(	description = "D1 Enhancement : Add 3 contacts to an existing group",
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void Add3ContactsToExistingGroup() throws HarnessException {
 		
 		//-- Data

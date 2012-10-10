@@ -29,7 +29,7 @@ public class TagContactGroup extends AjaxCommonTest  {
 	}
 	
 	@Test(	description = "Tag a contact group, click pulldown menu Tag->New Tag",
-			groups = { "smoke", "matt" })
+			groups = { "smoke" })
 	public void  ClickPulldownMenuTagNewTag() throws HarnessException {
 	
 		//-- Data

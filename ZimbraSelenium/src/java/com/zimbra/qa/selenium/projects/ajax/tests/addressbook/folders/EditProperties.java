@@ -291,7 +291,7 @@ public class EditProperties extends AjaxCommonTest {
 
 	@Test(
 			description = "Edit a subfolder, change name and color Context menu -> Edit)", 
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void ChangeNameColorOfSubFolder() throws HarnessException {
 
 

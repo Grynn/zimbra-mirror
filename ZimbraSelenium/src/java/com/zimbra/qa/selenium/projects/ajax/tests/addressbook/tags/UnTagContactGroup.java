@@ -171,7 +171,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 
 
 	@Test(	description = "Untag a double-tagged-contact group by right click on group, click Tag ->Remove tag->tag name on context menu ",
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void UnTagContactGroup_04() throws HarnessException {			
 		
 		
