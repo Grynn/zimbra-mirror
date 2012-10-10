@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.PageAddressbook;
 
 
 
@@ -23,39 +24,6 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
  */
 public class GetContactGroup extends AjaxCommonTest  {
 	
-	private static final HashMap<Character, Button> buttons = new HashMap<Character, Button>() {
-		private static final long serialVersionUID = -8341258587369022596L;
-
-	{
-    	put(Character.valueOf('A'), Button.B_AB_A);		         
-    	put(Character.valueOf('B'), Button.B_AB_B);		         
-    	put(Character.valueOf('C'), Button.B_AB_C);		         
-    	put(Character.valueOf('D'), Button.B_AB_D);		         
-    	put(Character.valueOf('E'), Button.B_AB_E);		         
-    	put(Character.valueOf('F'), Button.B_AB_F);		         
-    	put(Character.valueOf('G'), Button.B_AB_G);		         
-    	put(Character.valueOf('H'), Button.B_AB_H);		         
-    	put(Character.valueOf('I'), Button.B_AB_I);		         
-    	put(Character.valueOf('J'), Button.B_AB_J);		         
-    	put(Character.valueOf('K'), Button.B_AB_K);		         
-    	put(Character.valueOf('L'), Button.B_AB_L);		         
-    	put(Character.valueOf('M'), Button.B_AB_M);		         
-    	put(Character.valueOf('N'), Button.B_AB_N);		         
-    	put(Character.valueOf('O'), Button.B_AB_O);		         
-    	put(Character.valueOf('P'), Button.B_AB_P);		         
-    	put(Character.valueOf('Q'), Button.B_AB_Q);		         
-    	put(Character.valueOf('R'), Button.B_AB_R);		         
-    	put(Character.valueOf('S'), Button.B_AB_S);		         
-    	put(Character.valueOf('T'), Button.B_AB_T);		         
-    	put(Character.valueOf('U'), Button.B_AB_U);		         
-    	put(Character.valueOf('V'), Button.B_AB_V);		         
-    	put(Character.valueOf('W'), Button.B_AB_W);		         
-    	put(Character.valueOf('X'), Button.B_AB_X);		         
-    	put(Character.valueOf('Y'), Button.B_AB_Y);		         
-    	put(Character.valueOf('Z'), Button.B_AB_Z);		         
-
-	}};
-
 
 	public GetContactGroup() {
 		logger.info("New "+ GetContactGroup.class.getCanonicalName());
@@ -350,7 +318,7 @@ public class GetContactGroup extends AjaxCommonTest  {
 
 		// Create contact groups with each letter
 
-		for ( Entry<Character, Button> entry : buttons.entrySet() ) {
+		for ( Entry<Character, Button> entry : PageAddressbook.buttons.entrySet() ) {
 			
 			Character c = entry.getKey();
 			Button b = entry.getValue();

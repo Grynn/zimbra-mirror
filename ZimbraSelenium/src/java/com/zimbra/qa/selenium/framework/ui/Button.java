@@ -267,6 +267,27 @@ public class Button {
 	public static final Button O_SEARCH_MAIL_SENT_TO_CONTACT = new Button("O_SEARCH_MAIL_SENT_TO_CONTACT");
 	public static final Button O_SEARCH_MAIL_RECEIVED_FROM_CONTACT = new Button("O_SEARCH_MAIL_RECEIVED_FROM_CONTACT");
 	 
+	// Expand pulldown
+	public static final Button O_PREFIX = new Button("O_PREFIX");
+	public static final Button O_FIRST = new Button("O_FIRST");
+	public static final Button O_MIDDLE = new Button("O_MIDDLE");
+	public static final Button O_MAIDEN = new Button("O_MAIDEN");
+	public static final Button O_LAST = new Button("O_LAST");
+	public static final Button O_SUFFIX = new Button("O_SUFFIX");
+	public static final Button O_NICKNAME = new Button("O_NICKNAME");
+	public static final Button O_JOB_TITLE = new Button("O_JOB_TITLE");
+	public static final Button O_DEPARTMENT = new Button("O_DEPARTMENT");
+	public static final Button O_COMPANY = new Button("O_COMPANY");
+
+	// File As pulldown
+	public static final Button O_FILEAS_FIRSTLAST = new Button("O_FILEAS_FIRSTLAST");
+	public static final Button O_FILEAS_LASTFIRST = new Button("O_FILEAS_LASTFIRST");
+	public static final Button O_FILEAS_COMPANY = new Button("O_FILEAS_COMPANY");
+	public static final Button O_FILEAS_FIRSTLASTCOMPANY = new Button("O_FILEAS_FIRSTLASTCOMPANY");
+	public static final Button O_FILEAS_LASTFIRSTCOMPANY = new Button("O_FILEAS_LASTFIRSTCOMPANY");
+	public static final Button O_FILEAS_COMPANYFIRSTLAST = new Button("O_FILEAS_COMPANYFIRSTLAST");
+	public static final Button O_FILEAS_COMPANYLASTFIRST = new Button("O_FILEAS_COMPANYLASTFIRST");
+
 	//Addressbook alphabet bar buttons
 	public static final Button B_AB_ALL = new Button("0"); //_idx="0"
 	public static final Button B_AB_123 = new Button("1");

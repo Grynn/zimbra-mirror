@@ -4,17 +4,12 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-
-import com.zimbra.qa.selenium.framework.items.ContactItem;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.ui.Shortcut;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogAssistant;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.DisplayContact;
 
 
 public class CreateContact extends AjaxCommonTest {
@@ -36,7 +31,7 @@ public class CreateContact extends AjaxCommonTest {
 	public void CreateContact_01() throws HarnessException {
 		
 		// Create a contact item
-		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
+		ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
 	
 		String command = "contact " + contactItem.firstName + " " + contactItem.lastName + " " + contactItem.email;
 

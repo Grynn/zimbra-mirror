@@ -1,10 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
-import java.awt.event.KeyEvent;
-
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
@@ -86,7 +84,11 @@ public class FormContactNew extends AbsForm {
 
 	}
 		
-	private String activeMenuId="";
+	/**
+		There are a lot of 'duplicate' divs involved with the Contact Group New/Edit forms
+		We need to determine which div is active to make the code work correctly
+	 */
+	protected String MyDivID = null;
 	
 	public FormContactNew(AbsApplication application) {
 		super(application);
@@ -103,80 +105,13 @@ public class FormContactNew extends AbsForm {
 	@Override
 	public void zSubmit() throws HarnessException {
 		logger.info("FormContactNew.submit()");
-		save();
+		zToolbarPressButton(Button.B_SAVE);
 	}
 	
-	//click on a button such as Locations/File As
-	public AbsPage zClick(Button button, AbsTab tab) throws HarnessException {
-		logger.info("FormContactNew.zClick(" + button.toString() + ",...)");
-		AbsPage page=null;
-		String locator="";
-		
-		if (button == Button.B_MOVE) {
-			page = new DialogMove(MyApplication, tab);
-			locator=getLocator(Locators.zLocation);
-		}
-		//
-		else if (button == Button.B_FILEAS) {			
-			locator=getLocator(Locators.zFileAsDropdown);			
-		}
-		
-		zClick(locator);
-		zWaitForBusyOverlay();		
-		
-		findActiveMenuId();
-		
-		if (page != null) {
-			page.zWaitForActive();
-		}
-		return page;
-	}
-	
-	protected void save() throws HarnessException {
-		logger.info("FormContactNew.save()");
-				
-		//TODO: implement code for IE
-		try {		
-		    for (int i=0; ; i++) {
-		    	String id = sGetEval("window.document.getElementsByClassName('ZToolbarTable')[" + i + "].offsetParent.id" );
-		    	if (id.startsWith("ztb") && zIsVisiblePerPosition(id, 0, 0)) {
-		    		Toolbar.SAVE = id.replaceFirst("ztb","zb") + "__SAVE";		    		
-		    		logger.info("active toolbar save = " + Toolbar.SAVE);
-		    		break;
-		    	}		    					    	
-	        }	
-		}
-		catch (Exception e) {
-			logger.info(e.getMessage());
-		}
 
-		// Look for "Save"		
-		// Check if the item is enabled
-		if (zIsElementDisabled(Toolbar.SAVE )) {
-			throw new HarnessException("Tried clicking on "+ Toolbar.SAVE +" but it was disabled ");
-		}
-
-		// Click on it
-		zClick(Toolbar.SAVE);
-		
-		// Need to wait for the contact save
-		zWaitForBusyOverlay();		
-	}
-
-	// reset the form
-	public void zReset() throws HarnessException {
-		logger.info("FormMailNew.zReset()");
-		String[] fieldList = {getLocator(Locators.zFirstEditField), 
-				              getLocator(Locators.zLastEditField) };
-		                      //TODO: ,getLocators(Locators.zEmail1EditField};
-		
-		for (int i=0; i < fieldList.length; i++) {
-		  this.sType(fieldList[i], "");
-		}
-	}
-	
 	public static class Field {
 		
+		public static final Field FullName = new Field("FullName");
 		public static final Field FirstName = new Field("FirstName");
 		public static final Field MiddleName = new Field("MiddleName");
 		public static final Field LastName = new Field("LastName");
@@ -203,170 +138,135 @@ public class FormContactNew extends AbsForm {
 	 * @throws HarnessException
 	 */
 	public void zDisplayHiddenName() throws HarnessException {
-		Locators.zContactDetailsIconBtn = getLocator(Locators.zContactDetailsIconBtn);
-		zClick(Locators.zContactDetailsIconBtn); 
-		SleepUtil.sleepVerySmall();
 		
-		String prefix="css=div#";
-		try {		
-		    for (int i=0; ; i++) {				    
-		    	String id = sGetEval("window.document.getElementsByClassName('DwtMenu ZHasCheck')[" + i + "].id" );
-		    	if (zIsVisiblePerPosition(id, 0, 0)) {
-		    		prefix = prefix + id + " ";		    		
-		    		logger.info("active menu id = " + id);
-		    		break;
-		    	}		    					    	
-	        }	
-		}
-		catch (Exception e) {
-			logger.info(e.getMessage());
-		}
-				
-
-		zClick(prefix + Locators.zPrefixCheckbox);
-		zWaitForBusyOverlay();
-		zClick(Locators.zContactDetailsIconBtn);
-		SleepUtil.sleepVerySmall();
-		zClick(prefix + Locators.zMiddleCheckbox);
-		zWaitForBusyOverlay();
-		zClick(Locators.zContactDetailsIconBtn); 
-		SleepUtil.sleepVerySmall();
-		zClick(prefix + Locators.zMaidenCheckbox);
-		zWaitForBusyOverlay();
-		zClick(Locators.zContactDetailsIconBtn); 
-		SleepUtil.sleepVerySmall();
-		zClick(prefix + Locators.zSuffixCheckbox);
-		zWaitForBusyOverlay();
-		zClick(Locators.zContactDetailsIconBtn); 
-		SleepUtil.sleepVerySmall();
-		zClick(prefix + Locators.zNicknameCheckbox);
-		zWaitForBusyOverlay();
-		zClick(Locators.zContactDetailsIconBtn); 
-		SleepUtil.sleepVerySmall();
-		zClick(prefix + Locators.zDepartmentCheckbox);
-		zWaitForBusyOverlay();
+		/*
+		 * Commented rows are expanded by default
+		 */
+		zToolbarPressPulldown(Button.B_EXPAND, Button.O_PREFIX);
+//		zToolbarPressPulldown(Button.B_EXPAND, Button.O_FIRST);
+		zToolbarPressPulldown(Button.B_EXPAND, Button.O_MIDDLE);
+		zToolbarPressPulldown(Button.B_EXPAND, Button.O_MAIDEN);
+//		zToolbarPressPulldown(Button.B_EXPAND, Button.O_LAST);
+		zToolbarPressPulldown(Button.B_EXPAND, Button.O_SUFFIX);
+		zToolbarPressPulldown(Button.B_EXPAND, Button.O_NICKNAME);
+//		zToolbarPressPulldown(Button.B_EXPAND, Button.O_JOB_TITLE);
+		zToolbarPressPulldown(Button.B_EXPAND, Button.O_DEPARTMENT);
+//		zToolbarPressPulldown(Button.B_EXPAND, Button.O_COMPANY);
+	
 	}
 	
-	private void findActiveMenuId() {
-		try {		
-		    for (int i=0; ; i++) {				    
-		    	String id = sGetEval("window.document.getElementsByClassName('DwtMenu')[" + i + "].id" );
-		    	if (zIsVisiblePerPosition(id, 0, 0)) {
-		    		logger.info("active menu id = " + id);
-		    		activeMenuId=id;
-		    		break;
-		    	}		    					    	
-	        }	
+	private String MyToolbarID = null;
+	/**
+	 * Determine the z-shell <div/> that contains the Search Contacts, GAL, Personal and Shared
+	 * menu.
+	 * 
+	 * See https://bugzilla.zimbra.com/show_bug.cgi?id=77791
+	 * @return The z_shell Child ID
+	 * @throws HarnessException 
+	 */
+	protected String getToolbarID() throws HarnessException {
+		logger.info("getToolbarID()");
+		
+		if ( MyToolbarID != null ) {
+			logger.info("getToolbarID() - Re-using "+ MyToolbarID);
+			return (MyToolbarID);
 		}
-		catch (Exception e) {
-			logger.info(e.getMessage());
-		}		
-	}
-	
-    public void selectFileAs(String fileAsOption) throws HarnessException {
-    	if (sIsVisible("css=" + fileAsOption)) {
-    		if (!zIsVisiblePerPosition(activeMenuId, 0, 0)) {	    			    				
-    			findActiveMenuId();
-    		}
-    		zClick("css=div#" + activeMenuId + " " + fileAsOption);
-    		zWaitForBusyOverlay();
-    	}
-    	else {
-    		throw new HarnessException(fileAsOption + " is not visible" );
-    	}
-    }
-	
-    public String contactFullName(ContactItem contactItem, String fileAsOption) throws HarnessException{
-    	String fullName=null;
-    	
-        //Last, First
-    	if (fileAsOption == Locators.zFileAsLastCommaFirst) {
-    		fullName = contactItem.lastName + ", " + contactItem.firstName;
-    	} 
-    	//First Last
-    	else if (fileAsOption == Locators.zFileAsFirstLast) {
-    		fullName = contactItem.firstName + " " + contactItem.lastName;
-    	}     	     	
-    	//Company
-    	else if (fileAsOption == Locators.zFileAsCompany) {
-    		fullName = contactItem.company;
-    	}
-    	//Last, First (Company)
-    	else if (fileAsOption == Locators.zFileAsLastCommaFirstCompany) {
-    		fullName = contactItem.lastName + ", " + contactItem.firstName + " ("
-    		+ contactItem.company + ")";
-    	}
-    	//First Last (Company)
-    	else if (fileAsOption == Locators.zFileAsFirstLastCompany) {
-    		fullName = contactItem.firstName + " " + contactItem.lastName + " ("
-    		+ contactItem.company + ")";
-    	} 
-       	//Company (Last, First)
-    	else if (fileAsOption == Locators.zFileAsCompanyLastCommaFirst) {
-    		fullName = contactItem.company + " (" 
-    		         + contactItem.lastName + ", " + contactItem.firstName + ")";
-    	} 
-    	//Company (First Last)
-    	else if (fileAsOption == Locators.zFileAsCompanyFirstLast) {
-    		fullName = contactItem.company + " (" 
-    		         + contactItem.firstName + " " + contactItem.lastName + ")";
-    	}
-    	else {
-    		throw new HarnessException(fileAsOption + " not supported");
-    	}
-    	return fullName;
-    }
-    
-    
-	public String getDisplayedContactHeader() throws HarnessException {
-		return sGetText(getLocator(Locators.zFullnameField));
-	}
-	
-	
-	public void zFillField(String locator, String value) throws HarnessException {
-		tracer.trace("Set "+ locator +" to "+ value);
-	
 		
-		// Make sure the button exists
-		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("Field is not present field="+ locator +" locator="+ value);
-			
-		if(ZimbraSeleniumProperties.isWebDriver()){
-		    sType(locator,value);
-		}else{
-		    if (zIsBrowserMatch(BrowserMasks.BrowserMaskChrome)) { 
-			sType(locator,value);
-			sTypeKeys(locator,value);			
-		    }
-		    else {
+		String locator = "//div[@id='z_shell']/div[contains(@id, 'ztb__CN-')]";
+		int count = this.sGetXpathCount(locator);
 		
-			//The following code to simulate paste action from user (Ctrl-V) bug #
-			//Use "Notes" to store text which will be entered into clipboard (Ctrl-X)	 
-			sFocus(getLocator(Locators.zNotesEditField));
-			sType(getLocator(Locators.zNotesEditField) ,value); //
-
-			//highlight text
-			String id= Locators.zActiveEditForm + "_NOTES_input";
-			this.sGetEval(
-					"this.browserbot.getUserWindow().document.getElementById('"
-					+ id + "')" + ".select()");
-			
-			//cut text and put into clipboard
-			sKeyDownNative(KeyEvent.VK_CONTROL+"");
-			sKeyPressNative(KeyEvent.VK_X+"");				
-			sKeyUpNative(KeyEvent.VK_CONTROL+"");
-
-			//paste text to the target locator
-			sFocus(locator);	
-			SleepUtil.sleepVerySmall();
-			sKeyDownNative(KeyEvent.VK_CONTROL+"");
-			sKeyPressNative(KeyEvent.VK_V+"");				
-			sKeyUpNative(KeyEvent.VK_CONTROL+"");
-						
+		for (int i = 1; i <= count; i++) {
+			String id = this.sGetAttribute(locator + "["+ i +"]@id");
+			if ( this.zIsVisiblePerPosition("css=div#"+ id, 0, 0) ) {
+				MyToolbarID = id;
+				return (id);
 			}
-		}	
+		}
 
+		throw new HarnessException("Unable to determine the Toolbar ID "+ this.sGetHtmlSource());
 	}
+
+	private String MyExpandHiddenID = null;
+	/**
+	 * Determine the z-shell <div/> that contains the hidden name menu.
+	 * 
+	 * See https://bugzilla.zimbra.com/show_bug.cgi?id=77791
+	 * @return The z_shell Child ID
+	 * @throws HarnessException 
+	 */
+	protected String getExpandHiddenID() throws HarnessException {
+		logger.info("getExpandHiddenID()");
+		
+		if ( MyExpandHiddenID != null ) {
+			logger.info("getExpandHiddenID() - Re-using "+ MyExpandHiddenID);
+			return (MyExpandHiddenID);
+		}
+		
+		String locator = "//div[@id='z_shell']/div.DwtMenu.ZHasCheck";
+		int count = this.sGetXpathCount(locator);
+		
+		for (int i = 1; i <= count; i++) {
+			String id = this.sGetAttribute(locator + "["+ i +"]@id");
+			if ( this.zIsVisiblePerPosition("css=div#"+ id, 0, 0) ) {
+				MyExpandHiddenID = id;
+				return (id);
+			}
+		}
+
+		throw new HarnessException("Unable to determine the Hidden ID "+ this.sGetHtmlSource());
+	}
+
+	private String MyFileAsMenuID = null;
+	/**
+	 * Determine the z-shell <div/> that contains the hidden FileAs menu.
+	 * 
+	 * See https://bugzilla.zimbra.com/show_bug.cgi?id=77791
+	 * @return The z_shell Child ID
+	 * @throws HarnessException 
+	 */
+	protected String getFileAsMenuID() throws HarnessException {
+		logger.info("getFileAsMenuID()");
+		
+		if ( MyFileAsMenuID != null ) {
+			logger.info("getFileAsMenuID() - Re-using "+ MyFileAsMenuID);
+			return (MyFileAsMenuID);
+		}
+		
+		String locator = "//div[@id='z_shell']/div[contains(@id, '_FILE_AS_Menu')]";
+		int count = this.sGetXpathCount(locator);
+		
+		for (int i = 1; i <= count; i++) {
+			String id = this.sGetAttribute(locator + "["+ i +"]@id");
+			if ( this.zIsVisiblePerPosition("css=div#"+ id, 0, 0) ) {
+				MyFileAsMenuID = id;
+				return (id);
+			}
+		}
+
+		throw new HarnessException("Unable to determine the File As ID "+ this.sGetHtmlSource());
+	}
+
+	
+    
+    public String zGetFieldText(Field field) throws HarnessException {
+		String locator = null;
+		
+		if ( field == Field.FullName ) {
+
+			locator = "css=div#"+ MyDivID + " div[id$='_FULLNAME']";
+			
+		} else {
+			
+			throw new HarnessException("implement zGetFieldText("+ field +")");
+			
+		}
+		
+		if ( !this.sIsElementPresent(locator) ) 
+			throw new HarnessException("Unable to locate field "+ field);
+
+		return (this.sGetText(locator));
+			
+    }
 	
 	public void zFillField(Field field, String value) throws HarnessException {
 		tracer.trace("Set "+ field +" to "+ value);
@@ -378,20 +278,19 @@ public class FormContactNew extends AbsForm {
 		
 		if ( field == Field.FirstName ) {
 
-			locator = FormContactNew.getLocator(Locators.zFirstEditField);
+			locator = "css=div#"+ MyDivID + " input[id$='_FIRST_input']";
 			
 		} else if ( field == Field.MiddleName ) {
 			
-			locator = FormContactNew.getLocator(Locators.zMiddleEditField);
+			locator = "css=div#"+ MyDivID + " input[id$='_MIDDLE_input']";
 
 		} else if ( field == Field.LastName ) {
 			
-			locator = FormContactNew.getLocator(Locators.zLastEditField);
+			locator = "css=div#"+ MyDivID + " input[id$='_MAIDEN_input']";
 
 		} else if ( field == Field.Email ) {
 			
-			
-			locator = FormContactNew.getLocator(Locators.zEmail1EditField);
+			locator = "css=div#"+ MyDivID + " input[id*='_EMAIL_']";
 
 			// Make sure the button exists
 			if ( !this.sIsElementPresent(locator) )
@@ -416,11 +315,11 @@ public class FormContactNew extends AbsForm {
 
 		} else if ( field == Field.JobTitle ) {
 			
-			locator = FormContactNew.getLocator(Locators.zJobTitleEditField);
+			locator = "css=div#"+ MyDivID + " input[id$='_TITLE_input']";
 
 		} else if ( field == Field.Company ) {
 			
-			locator = FormContactNew.getLocator(Locators.zCompanyEditField);
+			locator = "css=div#"+ MyDivID + " input[id$='_COMPANY_input']";
 
 		} else {
 			throw new HarnessException("not implemented for field " + field);
@@ -489,74 +388,251 @@ public class FormContactNew extends AbsForm {
 			zFillField(Field.JobTitle, contact.jobTitle);
 		}
 
-		if (contact.ContactAttributes.size() >0) {
-			for ( String key:contact.ContactAttributes.keySet()) {
-				zFillField(getLocator(key), contact.ContactAttributes.get(key));
-			}
-		}
+		// TODO: handle all attributes
+//		if (contact.ContactAttributes.size() >0) {
+//			for ( String key:contact.ContactAttributes.keySet()) {
+//				zFillField(getLocator(key), contact.ContactAttributes.get(key));
+//			}
+//		}
 		
 	}
 	
-	public static String getLocator(String locator) {
-         
-		return locator.replaceAll("EDITCONTACTFORM", Locators.zActiveEditForm);
-	}
-
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
-		String script = "window.document.getElementById('" + Locators.zActiveEditForm + "').getAttribute('class')";
-		if(ZimbraSeleniumProperties.isWebDriver()){
-		    script = "return " + script;
-		}
-		if (zIsVisiblePerPosition(Locators.zActiveEditForm, 0, 0) && 
-		   (sGetEval(script)).equals("ZmEditContactView"))		
-		{
-    		logger.info("id = " + Locators.zActiveEditForm + " already active");
-    		return true;
-    	}		    
 		
-		//set parameter zActiveEditForm				
-		try {		
-		    int length = 0;
-		    script = "window.document.getElementById('z_shell').children.length";
-		    if(ZimbraSeleniumProperties.isWebDriver()){
-			script = "return " + script;
-		    }
-		    
-		    length = Integer.parseInt(sGetEval(script))-1;
-		    
-			for (int i=length;i>=0; i--) {
-			    script = "window.document.getElementById('z_shell').children[" + i + "].getAttribute('class')" ;
-			    if(ZimbraSeleniumProperties.isWebDriver()){
-				     script = "return " + script;
-				 }
-		    	String className=sGetEval(script);		    	
-		    	
-		    	if (className.equals("ZmEditContactView")) {	
-		    	    script = "window.document.getElementById('z_shell').children[" + i + "].id";
-			    if(ZimbraSeleniumProperties.isWebDriver()){
-				 script = "return " + script;
-			     }
+		
+		if ( MyDivID == null ) {
 
-		    		String id = sGetEval(script);
-		    		if (zIsVisiblePerPosition(id, 0, 0)) {
-		    			Locators.zActiveEditForm = id;
-		    			logger.info("active id = " + id);
-		    			return true;
-		    		}
-		    	}
-	        }	
+			// Determine which ZmContactView div is visible (if any)
+			String locator = "//div[@id='z_shell']/div[contains(@class, 'ZmEditContactView')]";
+			int count = this.sGetXpathCount(locator);
+
+			for (int i = 1; i <= count; i++) {
+				String id = this.sGetAttribute(locator + "["+ i +"]@id");
+				if ( this.zIsVisiblePerPosition("css=div#"+ id, 0, 0) ) {
+					MyDivID = id;
+					return (true);
+				}
+			}
+
+			// No ZmContactView is active
+			return (false);
 		}
-		catch (Exception e) {
-			logger.info(e.getMessage());
+
+		// Div ID is set, check it.
+
+		String locator = "css=div#" + MyDivID;
+
+		boolean present = this.sIsElementPresent(locator);
+		if ( !present ) {
+			return (false);
 		}
+
+		boolean visible = this.zIsVisiblePerPosition(locator, 0, 0);
+		if ( !visible ) {
+			return (false);
+		}
+
+		logger.info(myPageName() + " zIsActive() = true");
+		return (true);
+
+	}
+
+	
+	
+	/**
+	 * Press the toolbar button
+	 * @param button
+	 * @return
+	 * @throws HarnessException
+	 */
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButton("+ pulldown +", "+ option +")");
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
 		
-		return false;					
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null!");
+
+		
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+		
+
+		if (pulldown == Button.B_EXPAND) {
+			
+			pulldownLocator = "css=div#"+ MyDivID + " div[id$='_DETAILS'] span[id$='_title']";
+			this.zClickAt(pulldownLocator, "0,0");
+			zWaitForBusyOverlay();
+
+			if (option == Button.O_PREFIX) {
+
+				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Prefix')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_FIRST) {
+
+				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('First')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_MIDDLE) {
+
+				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Middle')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_MAIDEN) {
+
+				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Maiden')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_LAST) {
+
+				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Last')";
+				page = null;
+
+				// FALL THROUGH
+				
+
+			} else if (option == Button.O_SUFFIX) {
+
+				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Suffix')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_NICKNAME) {
+
+				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Nickname')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_JOB_TITLE) {
+
+				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Job Title')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_DEPARTMENT) {
+
+				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Department')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_COMPANY) {
+
+				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Company')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else {
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+			}
+			
+			this.zClickAt(optionLocator, "0,0");
+			zWaitForBusyOverlay();
+			
+			return (null);
+
+		} else if (pulldown == Button.B_FILEAS) {
+
+			pulldownLocator = "css=div#"+ MyDivID + " div[id$='_FILE_AS'] td[id$='_title']";
+			this.zClickAt(pulldownLocator, "0,0");
+			zWaitForBusyOverlay();
+
+			if (option == Button.O_FILEAS_COMPANY) {
+
+				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('Company')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_FILEAS_FIRSTLAST) {
+
+				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('First Last')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_FILEAS_LASTFIRST) {
+
+				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('Last, First')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_FILEAS_FIRSTLASTCOMPANY) {
+
+				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('First Last (Company)')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_FILEAS_LASTFIRSTCOMPANY) {
+
+				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('Last, First (Company)')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_FILEAS_COMPANYFIRSTLAST) {
+
+				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('Company (First Last)')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_FILEAS_COMPANYLASTFIRST) {
+
+				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('Company (Last, First)')";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else {
+				
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+				
+			}
+			
+			if ( !this.sIsVisible(optionLocator) ) {
+				throw new HarnessException("menu is not visible: "+ optionLocator);
+			}
+			
+			this.sMouseOver(optionLocator);
+			this.zClick(optionLocator);
+			zWaitForBusyOverlay();
+			
+			return (page);
+
+		} else {
+			throw new HarnessException("no logic defined for pulldown/option "
+					+ pulldown + "/" + option);
+		}
+
+
 	}
 
 	/**
-	 * Press the toolbar button
+	 * Press the toolbar button.  For B_CLOSE and B_CANCEL, the
+	 * test case must check for dialog active, based on the contact
+	 * being dirty or not.
 	 * @param button
 	 * @return
 	 * @throws HarnessException
@@ -575,26 +651,43 @@ public class FormContactNew extends AbsForm {
 		
 		if ( button == Button.B_SAVE ) {
 			
-			// TODO
+ 	    	locator = "css=div#"+ getToolbarID() + " div[id$='__SAVE'] td[id$='_title']";
+ 	    	page = null;
 			
-		} else if ( button == Button.B_CANCEL ) {
+		} else if ( button == Button.B_CANCEL || button == Button.B_CLOSE ) {
 
- 	    	//String id ="dizb__CN__CANCEL";
- 	    	locator = "css=div[id^=zb__CN][id$=__CANCEL]" ;
+ 	    	locator = "css=div#"+ getToolbarID() + " div[id$='__CANCEL'] td[id$='_title']";
 		    if (zIsElementDisabled(locator)) {
 				throw new HarnessException("Tried clicking on "+ locator +" but it was disabled ");
 		    }
 		    
 			page = new DialogWarning(DialogWarning.DialogWarningID.CancelCreateContact, this.MyApplication, ((AppAjaxClient)this.MyApplication).zPageAddressbook);
 			
+			// The dialog will only appear if the contact is dirty.
+			// so, don't check for active here - instead check in the
+			// test case
+			
+			zClickAt(locator, "0,0");
+			this.zWaitForBusyOverlay();
+			
+			return (page);
+
+			
 		} else if ( button == Button.B_PRINT ) {
 			
-			// TODO
+ 	    	locator = "css=div#"+ getToolbarID() + " div[id$='__PRINT'] td[id$='_title']";
+			page = null;  // TODO
 			
 		} else if ( button == Button.B_DELETE ) {
 			
-			// TODO
+ 	    	locator = "css=div#"+ getToolbarID() + " div[id$='__DELETE'] td[id$='_title']";
+			page = null;  // TODO
+
+		} else if ( button == Button.B_MOVE ) {
 			
+ 	    	locator = "css=div#"+ MyDivID+ " div[id$='_FOLDER'] td[id$='_title']";
+			page = new DialogMove(this.MyApplication, ((AppAjaxClient)this.MyApplication).zPageAddressbook);
+
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}

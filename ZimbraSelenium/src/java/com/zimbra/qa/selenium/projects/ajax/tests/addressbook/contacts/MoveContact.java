@@ -278,7 +278,7 @@ public class MoveContact extends AjaxCommonTest  {
         FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
 	  
         // Click Location
-        DialogMove dialogContactMove = (DialogMove) formContactNew.zClick(Button.B_MOVE, app.zPageAddressbook);
+        DialogMove dialogContactMove = (DialogMove) formContactNew.zToolbarPressButton(Button.B_MOVE);
         
         //enter the moved folder
         dialogContactMove.zClickTreeFolder(folder);
