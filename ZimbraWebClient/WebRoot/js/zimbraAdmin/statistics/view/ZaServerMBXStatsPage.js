@@ -160,10 +160,9 @@ ZaServerMBXStatsPage.prototype.getMbxes = function ( targetServer, offset, sortB
 					quotaLimit = 1 ;
 				}
 				percentage = ((diskUsed * 100) / quotaLimit).toFixed() ;
-			}
-							    
+			}		    
 			accountArr [i] = { 	account : accounts[i].name,
-								diskUsage :  AjxMessageFormat.format (ZaMsg.MBXStats_DISK_MSB, [diskUsed]),
+								diskUsage :  AjxMessageFormat.format (ZaMsg.MBXStats_DISK_MSB, [AjxUtil.formatSizeForUnits(accounts[i].used, AjxUtil.SIZE_MEGABYTES, false, 1)]),
 								quotaUsage : percentage + "\%" ,
 								quota: quotaLimit + " MB"				 
 								};
@@ -495,8 +494,8 @@ ZaServerMbxListView.prototype._loadMsg = function(params) {
 ZaServerMbxListView.prototype.updateMoreItems = function(resp) {
     if (resp && !resp.isException()) {
         resp = resp.getResponse().Body.GetQuotaUsageResponse;
-
-        if ((resp.account && resp.account.length > 0) && (resp.searchTotal && resp.searchTotal > 0)){
+	    var numFormatter = AjxNumberFormat.getInstance();
+	    if ((resp.account && resp.account.length > 0) && (resp.searchTotal && resp.searchTotal > 0)){
             var hasMore = resp.more ;
             var totalMbxes = resp.searchTotal;
 
