@@ -522,7 +522,7 @@ ZaServerMbxListView.prototype.updateMoreItems = function(resp) {
                 }
 
                 accountArr[i] = { 	account : accounts[i].name,
-                                    diskUsage :  AjxMessageFormat.format (ZaMsg.MBXStats_DISK_MSB, [diskUsed]),
+                                    diskUsage :  AjxMessageFormat.format(ZaMsg.MBXStats_DISK_MSB, [AjxUtil.formatSizeForUnits(accounts[i].used, AjxUtil.SIZE_MEGABYTES, false, 1)]),
                                     quotaUsage : percentage + "\%" ,
                                     quota: quotaLimit + " MB"
                                     };
