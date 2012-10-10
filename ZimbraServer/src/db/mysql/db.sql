@@ -89,8 +89,9 @@ create table volume_blobs (
   blob_digest VARCHAR(44),
   processed BOOLEAN default false,
   
-  INDEX i_blob_digest (blob_digest)
+  INDEX i_blob_digest (blob_digest),
   
+  CONSTRAINT uc_blobinfo UNIQUE (volume_id,mailbox_id,item_id,revision)
   -- FK constraints disabled for now; maybe enable them in 9.0 when we have time to deal with delete cases
   -- CONSTRAINT fk_volume_blobs_volume_id FOREIGN KEY (volume_id) REFERENCES volume(id),
   -- CONSTRAINT fk_volume_blobs_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id)
