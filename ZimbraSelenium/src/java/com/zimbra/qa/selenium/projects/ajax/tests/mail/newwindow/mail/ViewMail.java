@@ -424,7 +424,7 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 //	}
 
 	@Test(	description = "Verify multipart/alternative with text and html parts",
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void ViewMail_14() throws HarnessException {
 		
 		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/Bugs/Bug72233";

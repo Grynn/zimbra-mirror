@@ -380,7 +380,7 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 
 	@Bugs(ids = "67854")
 	@Test(	description = "Verify empty message shows 'no content'",
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void ViewMail_12() throws HarnessException {
 		
 		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/Bugs/Bug67854";

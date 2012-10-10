@@ -116,7 +116,7 @@ public class RenameFolder extends PrefGroupMailByMessageTest {
 
 	@Test(
 			description = "Get a folder with non-ASCII special characters", 
-			groups = { "functional", "matt" },
+			groups = { "functional" },
 			dataProvider = "DataProviderFilenames")
 	public void RenameFolder_03(ZCharset charset, String foldername) throws HarnessException {
 		

@@ -23,7 +23,7 @@ public class OpenAttachment extends PrefGroupMailByMessageTest {
 	
 	
 	@Test(	description = "Open a text attachment",
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void OpenTextAttachment_01() throws HarnessException {
 		
 		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email05/mime01.txt";
