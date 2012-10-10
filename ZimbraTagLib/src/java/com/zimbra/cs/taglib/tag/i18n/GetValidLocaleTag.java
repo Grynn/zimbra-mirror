@@ -40,16 +40,18 @@ public class GetValidLocaleTag extends ZimbraSimpleTag {
 
     public void doTag() throws JspException, IOException {
         JspContext ctxt = getJspContext();
+        if (this.mLocale == null) {
+            ctxt.setAttribute(mVar, false,  PageContext.REQUEST_SCOPE);
+            return;
+        }
         ZMailbox mbox = getMailbox();
         try {
             boolean isValid = false;
             List<String> locales = mbox.getAvailableLocales();
             for(String s : locales) {
-                if (s.equalsIgnoreCase(this.mLocale)) {
+                if (this.mLocale.toLowerCase().startsWith(s.toLowerCase())) {
                     isValid = true;
-                }
-                if (isValid) {
-                    continue;
+                    break;
                 }
             }
             ctxt.setAttribute(mVar, isValid,  PageContext.REQUEST_SCOPE);
