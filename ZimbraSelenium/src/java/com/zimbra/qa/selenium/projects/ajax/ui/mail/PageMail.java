@@ -61,7 +61,10 @@ public class PageMail extends AbsTab {
 		public static final String zConViewDomainLink = "css=a[id$='_displayImages_domain']";
 		//public static final String zConViewWarningIcon = "css=div[id$='_displayImages'] div div[class='ImgWarning']";
 		public static final String zConViewWarningIcon = "css=div[id$='_displayImages']  div[class='ImgWarning']";
-
+		public static final String zReplyToolbarButton ="css=div[id$='__REPLY']";
+		public static final String zReplyAllToolbarButton ="css=div[id$='__REPLY_ALL']";
+		public static final String zForwardToolbarButton ="css=div[id$='__FORWARD']";
+		//public static final String zCancelIconBtn		= "css=[id^=zb__COMPOSE][id$=__CANCEL_title]";
 		
 		
 		public static class CONTEXT_MENU {
@@ -271,7 +274,7 @@ public class PageMail extends AbsTab {
 		} else if ( button == Button.B_REPLY ) {
 
 			page = new FormMailNew(this.MyApplication);;
-			locator = "css=div[id$='__REPLY']";
+			locator = Locators.zReplyToolbarButton;
 
 			if ( !this.sIsElementPresent(locator) ) {
 				throw new HarnessException("Reply icon not present "+ button);
@@ -286,7 +289,7 @@ public class PageMail extends AbsTab {
 		} else if ( button == Button.B_REPLYALL ) {
 
 			page = new FormMailNew(this.MyApplication);;
-			locator = "css=div[id$='__REPLY_ALL']";
+			locator = Locators.zReplyAllToolbarButton;
 
 			if ( !this.sIsElementPresent(locator) ) {
 				throw new HarnessException("Reply All icon not present "+ button);
@@ -301,7 +304,7 @@ public class PageMail extends AbsTab {
 		} else if ( button == Button.B_FORWARD ) {
 
 			page = new FormMailNew(this.MyApplication);
-			locator = "css=div[id$='__FORWARD']";
+			locator = Locators.zForwardToolbarButton;
 
 			if ( !this.sIsElementPresent(locator) ) {
 				throw new HarnessException("Forward icon not present "+ button);
@@ -1439,6 +1442,31 @@ public class PageMail extends AbsTab {
 			//pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
 			pulldownLocator="css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_dropdown]";
 			optionLocator="css=div[id='ADD_SIGNATURE'] tr[id='POPUP_ADD_SIGNATURE']> td[id='ADD_SIGNATURE_dropdown']>div[class='ImgCascade']";
+			dynamicLocator ="css=td[id*='_title']td:contains('"+ name + "')";
+			page = null;
+
+		}else if ((pulldown == Button.B_OPTIONS)&& (option == Button.O_ADD_FWD_SIGNATURE)) {
+
+			if ( !(dynamic instanceof String) ) 
+				throw new HarnessException("dynamic must be a string!  "+ dynamic.getClass().getCanonicalName());
+
+			String name = (String)dynamic;
+			logger.info("Click on Signature: "+ name);
+			
+			//pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
+			pulldownLocator="css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_dropdown]";
+			optionLocator="css=div[id$='_FORWARD_ATT'] div[id^='ADD_SIGNATURE'] tr[id^='POPUP_ADD_SIGNATURE']>td[id$='_dropdown']>div[class='ImgCascade']";
+			dynamicLocator ="css=td[id*='_title']td:contains('"+ name + "')";
+			page = null;
+
+		}else if ((pulldown == Button.B_OPTIONS)&& (option == Button.O_ADD_Reply_SIGNATURE)||(option==Button.O_ADD_ReplyAll_SIGNATURE)) {
+
+			if ( !(dynamic instanceof String) ) 
+				throw new HarnessException("dynamic must be a string!  "+ dynamic.getClass().getCanonicalName());
+
+			String name = (String)dynamic;
+			pulldownLocator="css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_dropdown]";
+			optionLocator="css=div[id$='_REPLY'] div[id^='ADD_SIGNATURE'] tr[id^='POPUP_ADD_SIGNATURE']>td[id$='_dropdown']>div[class='ImgCascade']";
 			dynamicLocator ="css=td[id*='_title']td:contains('"+ name + "')";
 			page = null;
 

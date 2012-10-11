@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.testng.Assert;
+
 
 import com.zimbra.qa.selenium.framework.items.AttachmentItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Locators;
 
 /**
  * The <code>DisplayMail<code> object defines a read-only view of a message
@@ -66,6 +70,7 @@ public class DisplayMail extends AbsDisplay {
 		public static final String DeclineDontNotifyOrganizerMenu = "id=REPLY_DECLINE_IGNORE_title";
 		
 		public static final String ProposeNewTimeButton = "css=td[id$='__Inv__PROPOSE_NEW_TIME_title']";
+		public static final String zSubjectField = "css=div[id^=zv__COMPOSE] input[id$=_subject_control]";
 	}
 
 	/**
@@ -670,8 +675,69 @@ public class DisplayMail extends AbsDisplay {
 
 
 	}
+	public String zGetMailPropertyAsText(Field field) throws HarnessException {
 
+		//String source = null;
+
+		if ( field == Field.Body) {
+
+			try {
+				String bodyLocator= "css=div[class='ZmComposeView'] textarea[id$='_content']";
+				this.sFocus(bodyLocator);
+				this.zClick(bodyLocator);
+				logger.info(this.sGetValue(bodyLocator));
+				String BodyText=this.sGetValue(bodyLocator);
+				return (BodyText);
+				
+			
+				
+			} finally {
+				// Make sure to go back to the original iframe
+				//this.sSelectFrame("relative=top");
+			}
+
+		} else if ( field == Field.Subject ) {
+			
+			String locator = Locators.zSubjectField;
+			this.sFocus(locator);
+			this.zClick(locator);
+			logger.info(this.sGetValue(locator));
+			String Subject=this.sGetValue(locator);
+			return (Subject);
+			
+			// FALL THROUGH
+			
+		} else {
+			throw new HarnessException("not implemented for field "+ field);
+		}
+	}
 	
+	public void zVerifySignaturePlaceInText(String placeOfSignature,
+			String signatureBody, String mode) throws HarnessException {
+		int indexOfSignature;
+		int indexOfOrignalMsg;
+		mode = mode.toLowerCase();
+		String displayedBody = this.zGetMailPropertyAsText(Field.Body);// obj.zEditor.zGetInnerText("");
+		indexOfSignature = displayedBody.indexOf(signatureBody);
+		if (mode.equals("forward")) {
+			indexOfOrignalMsg = displayedBody.indexOf("Forwarded Message");
+		} else {
+			indexOfOrignalMsg = displayedBody.indexOf("Original Message");
+		}
+
+		if (placeOfSignature.equals("AboveIncludedMsg")) {
+			Assert.assertTrue(indexOfSignature <= indexOfOrignalMsg,
+					"The signature body " + signatureBody
+							+ " is  displayed above the Mail body");
+
+		} else if (placeOfSignature.equals("BelowIncludedMsg")) {
+			Assert.assertTrue(indexOfSignature > indexOfOrignalMsg,
+					"The signature body " + signatureBody
+							+ " is  displayed above the Mail body");
+		}
+	}
+
+		
 	/**
 	 * Get the string value of the specified field
 	 * @return the displayed string value
