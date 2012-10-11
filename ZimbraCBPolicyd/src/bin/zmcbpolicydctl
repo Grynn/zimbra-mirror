@@ -96,6 +96,7 @@ case "$1" in
       done
       if [ "x$PID" = "x" ]; then
         echo "failed."
+        exit 1
       else 
         echo "done."
       fi 
