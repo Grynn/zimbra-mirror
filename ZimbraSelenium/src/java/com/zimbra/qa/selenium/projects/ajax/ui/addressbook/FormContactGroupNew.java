@@ -322,17 +322,15 @@ public class FormContactGroupNew extends AbsForm {
 			    sType(locator, value);
 			}else{
 				
-				this.sFocus(locator);
-				this.sClickAt(locator,"");
+//				this.sFocus(locator);
+//				this.sClickAt(locator,"");
 				this.sType(locator, ""); // clear the contents
-				this.zKeyboard.zTypeCharacters(value);
+				this.sType(locator, value);
 				this.zWaitForBusyOverlay();
 
 			}
 					
-
-
-			// FALL THROUGH
+			return;
 			
 		
 		} else if ( field == Field.SearchField ) {
@@ -345,17 +343,14 @@ public class FormContactGroupNew extends AbsForm {
 			
 			locator += " table.ZPropertySheet textarea[id$='_addNewField']";
 			
-			// Click at the field
-			this.sClickAt(locator, "");
-			this.zWaitForBusyOverlay();
-
-			// Type the value
+			this.sType(locator, ""); // clear the contents
 			this.sType(locator, value);
 			this.zWaitForBusyOverlay();
 
 			// Click Add
 			this.zToolbarPressButton(Button.B_CONTACTGROUP_ADD_ADDRESS);
-			
+			this.zWaitForBusyOverlay();
+
 			return;
 			
 			
