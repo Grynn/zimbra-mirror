@@ -944,7 +944,9 @@ public class ZimbraAPI
                 {
                     string uploadToken = "";
                     string tmp = "";
-                    if (UploadFile(val, tmp, "", "", CONTACT_MODE, out uploadToken) == 0)
+                    //if (UploadFile(val, tmp, "", "", CONTACT_MODE, out uploadToken) == 0)
+
+                    if (UploadFile(val, tmp, contact["imageContentDisp"], contact["imageContentType"], CONTACT_MODE, out uploadToken) == 0)
                     {
                         writer.WriteStartElement("a");
                         writer.WriteAttributeString("n", nam);
@@ -956,7 +958,11 @@ public class ZimbraAPI
             }
             else
             {
-                WriteAttrNVPair(writer, "a", "n", nam, val);
+                if ((nam.CompareTo("imageContentDisp")== 0) || (nam.CompareTo("imageContentType")==0))
+                { }
+                else
+                    WriteAttrNVPair(writer, "a", "n", nam, val);
+
             }
         }
         writer.WriteEndElement();               // cn

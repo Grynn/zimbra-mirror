@@ -913,6 +913,8 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
             cd->WorkStreet = mapicontact.WorkStreet();
             cd->WorkURL = mapicontact.WorkURL();
             cd->ContactImagePath = mapicontact.ContactImagePath();
+			cd->ImageContenttype = mapicontact.ContactImageType();
+			cd->ImageContentdisp = mapicontact.ContactImageDisp();
             cd->vTags = pKeywords;
             cd->Anniversary = mapicontact.Anniversary();
 			vector<ContactUDFields>::iterator it;

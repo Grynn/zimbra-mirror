@@ -133,6 +133,8 @@ private:
     wstring m_pIMAddress1;
     wstring m_anniversary;
     wstring m_contact_image_path;
+	wstring m_content_type;
+	wstring m_content_disposition;
 	vector<ContactUDFields> m_vud_Fields;
     HRESULT Init();
 
@@ -140,7 +142,7 @@ public:
     MAPIContact(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIMessage &mMessage);
     ~MAPIContact();
     bool IsPersonalDL() { return m_bPersonalDL; }
-    HRESULT GetContactImage(wstring &wstrImagePath);
+    HRESULT GetContactImage(wstring &wstrImagePath,wstring &wstrContentType,wstring &wstrContentDisposition);
 
 	void AddUserDefinedField(ContactUDFields &cudf)
 	{
@@ -457,6 +459,14 @@ public:
     {
         m_contact_image_path = pStr;
     }
+	void ContactImageType(LPTSTR pStr)
+    {
+        m_content_type = pStr;
+    }
+	void ContactImageDisp(LPTSTR pStr)
+    {
+        m_content_disposition = pStr;
+    }
 
     wstring CallbackPhone() { return m_pCallbackPhone; }
     wstring CarPhone() { return m_pCarPhone; }
@@ -511,6 +521,9 @@ public:
     wstring IMAddress1() { return m_pIMAddress1; }
     size_t Size() { return m_size; }
     wstring ContactImagePath() { return m_contact_image_path; }
+	wstring ContactImageType() { return m_content_type; }
+	wstring ContactImageDisp() { return m_content_disposition; }
+
     wstring Picture() { return m_pPictureID; }
     wstring Anniverssary() { return m_anniversary; }
 	vector<ContactUDFields>* UserDefinedFields() {return &m_vud_Fields;}

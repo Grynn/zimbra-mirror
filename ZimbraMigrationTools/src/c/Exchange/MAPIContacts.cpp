@@ -777,26 +777,33 @@ HRESULT MAPIContact::Init()
 	}
 
     // Save image path
-    wstring wstrImagePath;
+    wstring wstrImagePath,wstrContentType,wstrContentDisp;
 
     if (m_mapiMessage->HasAttach())
     {
-        if (!FAILED(hr = GetContactImage(wstrImagePath)))
+        if (!FAILED(hr = GetContactImage(wstrImagePath,wstrContentType,wstrContentDisp)))
+		{
+			
             ContactImagePath((LPTSTR)wstrImagePath.c_str());
+			ContactImageType((LPTSTR)wstrContentType.c_str());
+			ContactImageDisp((LPTSTR)wstrContentDisp.c_str());
+			
+		}
     }
     return S_OK;
 }
 
-HRESULT MAPIContact::GetContactImage(wstring &wstrImagePath)
+HRESULT MAPIContact::GetContactImage(wstring &wstrImagePath,wstring &wstrContentType,wstring &wstrContentDisposition)
 {
     HRESULT hr = S_OK;
+	LPSTR strExtension=".jpg";
     Zimbra::Util::ScopedInterface<IStream> pSrcStream;
     {
         Zimbra::Util::ScopedRowSet pAttachRows;
         Zimbra::Util::ScopedInterface<IMAPITable> pAttachTable;
 
-        SizedSPropTagArray(3, attachProps) = {
-            3, { PR_ATTACH_NUM, PR_ATTACH_SIZE, PR_ATTACH_LONG_FILENAME }
+        SizedSPropTagArray(4, attachProps) = {
+            4, { PR_ATTACH_NUM, PR_ATTACH_SIZE, PR_ATTACH_LONG_FILENAME,PR_ATTACH_EXTENSION }
         };
 
         hr = m_pMessage->GetAttachmentTable(MAPI_UNICODE, pAttachTable.getptr());
@@ -831,6 +838,29 @@ HRESULT MAPIContact::GetContactImage(wstring &wstrImagePath)
                     if (FAILED(hr = pAttach->OpenProperty(PR_ATTACH_DATA_BIN, &IID_IStream,
                             STGM_READ, 0, (LPUNKNOWN FAR *)pSrcStream.getptr())))
                         return hr;
+
+					
+//    LPSPropValue pProps = NULL;
+  //  ULONG cProps = 0;
+
+   // hr = pAttach->GetProps((LPSPropTagArray) & attachProps, 0, &cProps, &pProps);
+
+	if(pAttachRows->aRow[i].lpProps[3].ulPropTag == PR_ATTACH_EXTENSION_A)
+	//if (pProps[PR_ATTACH_EXTENSION].ulPropTag == PR_ATTACH_EXTENSION_A)
+    {
+        // add a custom header for content location to support rfc2557
+		LPSTR pContentType = NULL;
+		   strExtension = pAttachRows->aRow[i].lpProps[3].Value.lpszA;
+            Zimbra::MAPI::Util::GetContentTypeFromExtension(pAttachRows->aRow[i].lpProps[3].Value.lpszA, pContentType);
+	LPWSTR lpwstrContentType = NULL;
+
+    AtoW((LPSTR)pContentType, lpwstrContentType);
+	wstrContentType = lpwstrContentType;
+
+        
+    }
+
+
                     break;
                 }
             }
@@ -855,7 +885,8 @@ HRESULT MAPIContact::GetContactImage(wstring &wstrImagePath)
     WtoA((LPWSTR)Zimbra::MAPI::Util::GetUniqueName().c_str(), lpszUniqueName);
     strFQFileName += "\\ZmContact_";
     strFQFileName += lpszUniqueName;
-    strFQFileName += ".jpg";
+    //strFQFileName += ".jpg";
+	strFQFileName += strExtension;
     SafeDelete(lpszDirName);
     SafeDelete(lpszUniqueName);
     // Open stream on file
@@ -877,6 +908,34 @@ HRESULT MAPIContact::GetContactImage(wstring &wstrImagePath)
 
     AtoW((LPSTR)strFQFileName.c_str(), lpwstrFQFileName);
     wstrImagePath = lpwstrFQFileName;
+	
+            LPSTR ppszCD;
+	mimepp::String theCD;
+    theCD.append("Content-Disposition: form-data; name=\"");
+    theCD.append(strFQFileName.c_str());
+    theCD.append("\"; filename=\"");
+    theCD.append(strFQFileName.c_str());
+    theCD.append("\"");
+
+    const char *pFinal = theCD.c_str();
+
+	
+    Zimbra::Util::CopyString(ppszCD, (LPSTR)pFinal);
+
+
+	LPWSTR lpwstrContentDisp = NULL;
+
+    AtoW((LPSTR)theCD.c_str(), lpwstrContentDisp);
+	wstrContentDisposition = lpwstrContentDisp;
+
+	/* LPSTR pContentType = NULL;
+	Zimbra::MAPI::Util::GetContentTypeFromExtension(".jpg", pContentType);
+
+	LPWSTR lpwstrContentType = NULL;
+
+    AtoW((LPSTR)pContentType, lpwstrContentType);
+	wstrContentType = lpwstrContentType;*/
+
     SafeDelete(lpwstrFQFileName);
     return hr;
 }

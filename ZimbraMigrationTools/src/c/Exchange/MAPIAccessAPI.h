@@ -101,6 +101,8 @@ typedef struct _ContactItemData: BaseItemData
     wstring IMAddress1;
     wstring Anniversary;
     wstring ContactImagePath;
+	wstring ImageContenttype;
+	wstring ImageContentdisp;
     vector<ContactUDFields> UserDefinedFields;
     vector<LPWSTR>* vTags;
 } ContactItemData;
