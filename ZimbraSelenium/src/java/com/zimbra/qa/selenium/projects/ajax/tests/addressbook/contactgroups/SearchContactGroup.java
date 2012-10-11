@@ -30,7 +30,7 @@ public class SearchContactGroup extends AjaxCommonTest {
 			groups = { "deprecated" })
 	public void searchGroupName() throws HarnessException {
 		// Create a contact group via Soap 
-		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 	  
 		// search for group name
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_CONTACTS);	 		
@@ -48,9 +48,9 @@ public class SearchContactGroup extends AjaxCommonTest {
 			groups = { "deprecated" })
 	public void searchGroupsWithSameNamePrefix() throws HarnessException {
 		// Create a contact group via Soap
-		ContactGroupItem group1 = ContactGroupItem.createUsingSOAP(app);
+		ContactGroupItem group1 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		// Create a contact group via Soap
-		ContactGroupItem group2 = ContactGroupItem.createUsingSOAP(app);
+		ContactGroupItem group2 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 	
 		// search for group names
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_CONTACTS);	 		
@@ -68,7 +68,7 @@ public class SearchContactGroup extends AjaxCommonTest {
 			groups = { "deprecated" })
 	public void searchNonExistedGroupName() throws HarnessException {
 		// Create a contact group via Soap 
-		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		  
 		// search for group name
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_CONTACTS);	 		
@@ -83,7 +83,7 @@ public class SearchContactGroup extends AjaxCommonTest {
 			groups = { "deprecated" })
 	public void searchGroupMember() throws HarnessException {
 		// Create a contact group via Soap 
-		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 	  		
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_CONTACTS);	 		
 

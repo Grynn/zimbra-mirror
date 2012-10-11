@@ -1,8 +1,11 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
+import java.util.*;
+import java.util.Map.Entry;
+
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
@@ -111,18 +114,44 @@ public class FormContactNew extends AbsForm {
 
 	public static class Field {
 		
-		public static final Field FullName = new Field("FullName");
-		public static final Field FirstName = new Field("FirstName");
-		public static final Field MiddleName = new Field("MiddleName");
-		public static final Field LastName = new Field("LastName");
-		public static final Field Email = new Field("Email");
-		public static final Field JobTitle = new Field("JobTitle");
-		public static final Field Company = new Field("Company");
+		public static final Field FullName		= new Field("fullName", null);
+		public static final Field NamePrefix	= new Field("namePrefix", "input[id$='_PREFIX_input']");
+		public static final Field FirstName		= new Field("firstName", "input[id$='_FIRST_input']");
+		public static final Field MiddleName	= new Field("middleName", "input[id$='_MIDDLE_input']");
+		public static final Field MaidenName	= new Field("maidenName", "input[id$='_MAIDEN_input']");
+		public static final Field LastName		= new Field("lastName", "input[id$='_LAST_input']");
+		public static final Field NameSuffix	= new Field("nameSuffix", "input[id$='_SUFFIX_input']");
+		public static final Field Nickname		= new Field("nickname", "input[id$='_NICKNAME_input']");
+		public static final Field JobTitle		= new Field("jobTitle", "input[id$='_TITLE_input']");
+		public static final Field Company		= new Field("company", "input[id$='_COMPANY_input']");
+		public static final Field Department	= new Field("department", "input[id$='_DEPARTMENT_input']");
+		public static final Field Email			= new Field("email", "input[id*='_EMAIL_']");
+		public static final Field PhoneNumber	= new Field("phone", "input[id*='_PHONE_']");
+		public static final Field MobilePhone	= new Field("mobilePhone", "input[id*='_PHONE_']");
+		public static final Field IM			= new Field("imAddress1", "input[id*='_IM_']");
+		public static final Field HomeStreet	= new Field("homeStreet", "textarea[id$='_STREET_input']");
+		public static final Field HomeCity		= new Field("homeCity", "input[id$='_CITY_input']");
+		public static final Field HomePostalCode = new Field("homePostalCode", "input[id$='_ZIP_input']");
+		public static final Field HomeCountry	= new Field("homeCountry", "input[id$='_COUNTRY_input']");
+		public static final Field HomeURL		= new Field("homeURL", "input[id*='_URL_']");
+		public static final Field Birthday		= new Field("birthday", "input[id*='_OTHER_']");
+		public static final Field Notes			= new Field("notes", "textarea[id$='_NOTES_input']");
 		
+
 		
 		private String field;
-		private Field(String name) {
+		private String partialLocator;
+		private Field(String name, String locator) {
 			field = name;
+			partialLocator = locator;
+		}
+		
+		/**
+		 * Prepend "css=div#<ID>" to this locator to find the field in the new contact form
+		 * @return
+		 */
+		public String getLocator() {
+			return (partialLocator);
 		}
 		
 		@Override
@@ -130,6 +159,39 @@ public class FormContactNew extends AbsForm {
 			return (field);
 		}
 
+		private static List<Field> fields = null;
+		public static Field fromString(String key) throws HarnessException {
+			if ( fields == null ) {
+				fields = new ArrayList<Field>();
+				fields.add(NamePrefix);
+				fields.add(FirstName);
+				fields.add(MiddleName);
+				fields.add(MaidenName);
+				fields.add(LastName);
+				fields.add(NameSuffix);
+				fields.add(Nickname);
+				fields.add(JobTitle);
+				fields.add(Company);
+				fields.add(Department);
+				fields.add(Email);
+				fields.add(PhoneNumber);
+				fields.add(MobilePhone);
+				fields.add(IM);
+				fields.add(HomeStreet);
+				fields.add(HomeCity);
+				fields.add(HomePostalCode);
+				fields.add(HomeCountry);
+				fields.add(HomeURL);
+				fields.add(Birthday);
+				fields.add(Notes);
+			}
+			for(Field f : fields) {
+				if (f.field.equals(key)) {
+					return (f);
+				}
+			}
+			throw new HarnessException("Unknown field key: "+ key);
+		}
 	}
 	
 	
@@ -202,7 +264,7 @@ public class FormContactNew extends AbsForm {
 			return (MyExpandHiddenID);
 		}
 		
-		String locator = "//div[@id='z_shell']/div.DwtMenu.ZHasCheck";
+		String locator = "//div[@id='z_shell']/div[contains(@class,'DwtMenu')][contains(@class,'ZHasCheck')]";
 		int count = this.sGetXpathCount(locator);
 		
 		for (int i = 1; i <= count; i++) {
@@ -273,25 +335,13 @@ public class FormContactNew extends AbsForm {
 
 		
 		
+		// The field contains the locator, for example:
+		//     css=div#editcontactform_DWT98 inpput[id$='_NICKNAME_input']
+		//
+		String locator = String.format("css=div#%s %s", MyDivID, field.getLocator());
 		
-		String locator = null;
-		
-		if ( field == Field.FirstName ) {
-
-			locator = "css=div#"+ MyDivID + " input[id$='_FIRST_input']";
+		if ( field == Field.Email || field == Field.IM || field == Field.HomeURL ) {
 			
-		} else if ( field == Field.MiddleName ) {
-			
-			locator = "css=div#"+ MyDivID + " input[id$='_MIDDLE_input']";
-
-		} else if ( field == Field.LastName ) {
-			
-			locator = "css=div#"+ MyDivID + " input[id$='_MAIDEN_input']";
-
-		} else if ( field == Field.Email ) {
-			
-			locator = "css=div#"+ MyDivID + " input[id*='_EMAIL_']";
-
 			// Make sure the button exists
 			if ( !this.sIsElementPresent(locator) )
 				throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
@@ -313,20 +363,11 @@ public class FormContactNew extends AbsForm {
 			
 			return;
 
-		} else if ( field == Field.JobTitle ) {
+		} else if ( field == Field.PhoneNumber ) {
 			
-			locator = "css=div#"+ MyDivID + " input[id$='_TITLE_input']";
-
-		} else if ( field == Field.Company ) {
+			// TODO: Can't seem to make the phone number work
+			throw new HarnessException("implement field: " + field);
 			
-			locator = "css=div#"+ MyDivID + " input[id$='_COMPANY_input']";
-
-		} else {
-			throw new HarnessException("not implemented for field " + field);
-		}
-		
-		if ( locator == null ) {
-			throw new HarnessException("locator was null for field "+ field);
 		}
 		
 		// Default behavior, enter value into locator field
@@ -363,37 +404,9 @@ public class FormContactNew extends AbsForm {
 		// Convert object to ContactItem
 		ContactItem contact = (ContactItem) item;
 		
-		// Fill out the form		
-		if ( contact.firstName != null ) {
-			zFillField(Field.FirstName, contact.firstName);
+		for ( Entry<String, String> entry : contact.ContactAttributes.entrySet() ) {
+			zFillField(Field.fromString(entry.getKey()), entry.getValue());			
 		}
-		
-		if ( contact.lastName != null ) {			
-			zFillField(Field.LastName, contact.lastName);
-		}
-		
-		if ( contact.middleName != null ) {			
-			zFillField(Field.MiddleName, contact.middleName);
-		}
-		
-		if ( contact.email != null ) {			
-			zFillField(Field.Email, contact.email);
-		}
-
-		if ( contact.company != null ) {			
-			zFillField(Field.Company, contact.company);
-		}
-
-		if ( contact.jobTitle != null ) {			
-			zFillField(Field.JobTitle, contact.jobTitle);
-		}
-
-		// TODO: handle all attributes
-//		if (contact.ContactAttributes.size() >0) {
-//			for ( String key:contact.ContactAttributes.keySet()) {
-//				zFillField(getLocator(key), contact.ContactAttributes.get(key));
-//			}
-//		}
 		
 	}
 	
@@ -469,6 +482,8 @@ public class FormContactNew extends AbsForm {
 			pulldownLocator = "css=div#"+ MyDivID + " div[id$='_DETAILS'] span[id$='_title']";
 			this.zClickAt(pulldownLocator, "0,0");
 			zWaitForBusyOverlay();
+			
+			SleepUtil.sleepMedium();
 
 			if (option == Button.O_PREFIX) {
 

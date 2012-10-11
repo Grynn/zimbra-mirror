@@ -3,12 +3,12 @@ package com.zimbra.qa.selenium.projects.desktop.tests.addressbook.contactgroups;
 import java.util.List;
 
 import org.testng.annotations.Test;
+
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.*;
+import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.DisplayContactGroup;
 
 
 public class ViewContactGroup extends AjaxCommonTest  {
@@ -22,21 +22,20 @@ public class ViewContactGroup extends AjaxCommonTest  {
 	}
 
    private ContactGroupItem _createContactGroup(String firstLetterOfGroupName) throws HarnessException {
-      ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
-       group.groupName = firstLetterOfGroupName + group.groupName;
-       group.fileAs    = group.groupName;
-
+	   
+	   ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
+	   
+	  
        app.zGetActiveAccount().soapSend(
-            "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-            "<cn >" +
-            "<a n='type'>group</a>" +
-            "<a n='nickname'>" + group.groupName +"</a>" +
-            "<a n='dlist'>" + group.getDList() + "</a>" +
-            "<a n='fileAs'>8:" +  group.fileAs +"</a>" +
-            "</cn>" +
-            "</CreateContactRequest>");
+    		   "<ModifyContactRequest xmlns = 'urn:zimbraMail' replace = '0' force = '1'>" +
+                "<cn id = '"+ group.getId() +"'>" +
+                "<a n = 'fileAs'>8:"+ firstLetterOfGroupName + group.getName() +"</a>" +
+                "<a n = 'fullName'>"+ firstLetterOfGroupName + group.getName() +"</a>" +
+                "<a n = 'nickname'>"+ firstLetterOfGroupName + group.getName() +"</a>" +
+                "</cn>" +
+            "</ModifyContactRequest>");
 
-       return group;
+		return (ContactGroupItem.importFromSOAP(app.zGetActiveAccount(), "item:"+ group.getId()));
    }
 
    @Test(   description = "View a contact group created via soap",

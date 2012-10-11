@@ -6,7 +6,6 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -56,7 +55,7 @@ public class CreateContactGroup extends AjaxCommonTest  {
    public void GroupOfNewEmail() throws HarnessException {        
 
       //Create random contact group data 
-      ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
+       ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
       //open contact group form
       FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
@@ -75,7 +74,7 @@ public class CreateContactGroup extends AjaxCommonTest  {
          groups = { "functional" })
    public void GroupOfExistingContact() throws HarnessException {       
       //Create random contact group data 
-      ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
+       ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
       //open contact group form
       FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
@@ -84,7 +83,7 @@ public class CreateContactGroup extends AjaxCommonTest  {
       formGroup.sType(FormContactGroupNew.Locators.zGroupnameField, group.groupName);     
 
       //create contacts
-      ContactItem contact = ContactItem.createUsingSOAP(app);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
       app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
 
@@ -115,7 +114,7 @@ public class CreateContactGroup extends AjaxCommonTest  {
          groups = { "functional" })
    public void GroupOfGAL_ExistingContact_sNewEmail() throws HarnessException {        
       //Create random contact group data 
-      ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
+       ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
       //open contact group form
       FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
@@ -137,7 +136,7 @@ public class CreateContactGroup extends AjaxCommonTest  {
       formGroup.zClick(FormContactGroupNew.Locators.zAddAllButton);
 
       //create contacts
-      ContactItem contact = ContactItem.createUsingSOAP(app);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
       app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
 

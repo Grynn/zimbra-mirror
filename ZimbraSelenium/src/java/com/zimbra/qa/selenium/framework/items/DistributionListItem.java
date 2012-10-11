@@ -1,20 +1,13 @@
 package com.zimbra.qa.selenium.framework.items;
 
-import java.util.ArrayList;
+import java.util.*;
+import java.util.Map.Entry;
 
-
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 /**
@@ -37,6 +30,30 @@ public class DistributionListItem extends ContactItem implements IItem {
 	private ArrayList<String> emailList = null;
 
 	/**
+	 * The name of the list
+	 */
+	public String name = null;
+	
+	/**
+	 * The owner(s) of the list
+	 */
+	public List<String> owners = new ArrayList<String>();
+	
+	/**
+	 * The list's members email addresses
+	 */
+	public List<String> members = new ArrayList<String>();
+	
+	/**
+	 * The list's attributes
+	 */
+	public Map<String, String> attributes = new HashMap<String, String>();
+	
+	
+	public DistributionListItem() {	
+	}
+	
+	/**
 	 * Create a new dlist item 
 	 */
 	public DistributionListItem(String displayName) {
@@ -55,31 +72,42 @@ public class DistributionListItem extends ContactItem implements IItem {
 		emailList = new ArrayList<String>();
 	}
 	
-	public static DistributionListItem generateDListItem(GenerateItemType type) throws HarnessException {
-	
-		DistributionListItem list =  null;
-		if ( type.equals(GenerateItemType.Default) || type.equals(GenerateItemType.Basic) ) {
+	public static DistributionListItem createDistributionListItem(ZimbraAccount owner) throws HarnessException {
+		
+		// Set the name
+		String unique = ZimbraSeleniumProperties.getUniqueString(); // group name is max 20 chars
+		String listname = "dlist"+ unique.substring(unique.length() - 10) + "@" + ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
 
-			String email =  "dlist_" + ZimbraSeleniumProperties.getUniqueString();
-			// name with length > 20 is automatically shorten
-			email = email.substring(0,20);
-			
-	        // Create a new dlist
-			list = new DistributionListItem(email, "name " + email);
-		    
-			list.addDListMember(ZimbraSeleniumProperties.getUniqueString());
-			list.addDListMember(ZimbraSeleniumProperties.getUniqueString());
-			list.addDListMember(ZimbraSeleniumProperties.getUniqueString());
-		
-		}
-		
-		if ( type.equals(GenerateItemType.AllAttributes) ) {
-			throw new HarnessException("Implement me!");
-		}
-		
-		return list;
+		// Create the new list
+		ZimbraAdminAccount.GlobalAdmin().soapSend(
+				"<CreateDistributionListRequest xmlns='urn:zimbraAdmin'>" +
+						"<name>" + listname +"</name>" +
+						"<a n='zimbraMailStatus'>enabled</a>" +
+						"<a n='displayName'>" +  listname +"</a>" +
+				"</CreateDistributionListRequest>");
+		String id = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:CreateDistributionListResponse/admin:dl", "id");
+
+		// Set the owner
+		ZimbraAdminAccount.GlobalAdmin().soapSend(
+				"<DistributionListActionRequest xmlns='urn:zimbraAccount'>" +
+						"<dl by='id'>"+ id +"</dl>" +
+						"<action op='addOwners'>" +
+							"<owner by='name' type='usr'>"+ owner.EmailAddress +"</owner>" +
+						"</action>" +
+				"</DistributionListActionRequest>");
+
+		// Add two accounts
+		ZimbraAdminAccount.GlobalAdmin().soapSend(
+				"<AddDistributionListMemberRequest xmlns='urn:zimbraAdmin'>" +
+						"<id>"+ id +"</id>" +
+						"<dlm>" + ZimbraAccount.AccountA().EmailAddress + "</dlm>" +
+						"<dlm>" + ZimbraAccount.AccountB().EmailAddress + "</dlm>" +
+				"</AddDistributionListMemberRequest>");
+
+		return (DistributionListItem.importFromSOAP("id", id));
+
 	}
-
+	
 	public ArrayList<String> getEmailList() {
 		return emailList;
 	}
@@ -118,29 +146,15 @@ public class DistributionListItem extends ContactItem implements IItem {
 	}
 	
 	
-	//TODO:????
-    // key=dlist; value="email1, email2,..."
 	public String setAttribute(String key, String value) {
 		
-		// Process any special attributes here
-		// FIXME:
-		//if ( key.equals("dlist") ) {			
-		//	dlist = new ArrayList<String>(Arrays.asList(value.split(",")));
-		//}
-		if (!key.equals("dlist")) {
-			super.setAttribute(key, value);				
-		}
-		return (ContactAttributes.get(key));
-	}
-	
-	
-	
-	public static DistributionListItem importFromSOAP(Element GetContactsResponse) throws HarnessException {
-		if ( GetContactsResponse == null )
-			throw new HarnessException("GetContactsResponse cannot be null");
+		attributes.put(key, value);
 		
-		throw new HarnessException("implement me!");
+		return (value);
 	}
+	
+	
+	
 
 	public static void grantRightRequest(ZimbraAccount account)throws HarnessException {
 
@@ -196,9 +210,99 @@ public class DistributionListItem extends ContactItem implements IItem {
         return dlist;
 	}
 	
+	public static DistributionListItem importFromSOAP(Element GetDistributionListResponse) throws HarnessException {
+		if ( GetDistributionListResponse == null )
+			throw new HarnessException("GetDistributionListResponse cannot be null");
+		
+		/**
+		 *     <GetDistributionListResponse total="2" more="0" xmlns="urn:zimbraAdmin">
+		 *           <dl id="bdd639dd-81db-44ba-b7ee-06beb9e8b762" dynamic="0" name="dlist9873588964@testdomain.com">
+		 *             <a n="uid">dlist9873588964</a>
+		 *             <a n="mail">dlist9873588964@testdomain.com</a>
+		 *             <a n="zimbraMailStatus">enabled</a>
+		 *             <a n="cn">dlist9873588964@testdomain.com</a>
+		 *             <a n="zimbraMailHost">zqa-062.eng.vmware.com</a>
+		 *             <a n="zimbraId">bdd639dd-81db-44ba-b7ee-06beb9e8b762</a>
+		 *             <a n="zimbraCreateTimestamp">20121011201749Z</a>
+		 *             <a n="objectClass">zimbraDistributionList</a>
+		 *     		   <a n="objectClass">zimbraMailRecipient</a>
+ 		 *             <a n="displayName">dlist9873588964@testdomain.com</a>
+		 *             <a n="zimbraACE">672d7f71-3629-4bab-9318-35f35f949e4a usr ownDistList</a>
+		 *             <a n="zimbraMailAlias">dlist9873588964@testdomain.com</a>
+		 *             <owners>
+		 *               <owner id="672d7f71-3629-4bab-9318-35f35f949e4a" name="enus13499873466623@testdomain.com" type="usr"/>
+		 *             </owners>
+ 		 *            <dlm>enus13499873592055@testdomain.com</dlm>
+		 *             <dlm>enus13499873610526@testdomain.com</dlm>
+		 *           </dl>
+		 *         </GetDistributionListResponse>
+		 */
 
-	public static DistributionListItem importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
-		throw new HarnessException("implement me!");
+		DistributionListItem dlist = null;
+
+		try {
+
+			// Make sure we only have the GetMsgResponse part
+			Element getDistributionListResponse = ZimbraAccount.SoapClient.selectNode(GetDistributionListResponse, "//admin:GetDistributionListResponse");
+			if ( getDistributionListResponse == null )
+				throw new HarnessException("Element does not contain GetDistributionListResponse: " + GetDistributionListResponse.prettyPrint());
+
+			Element dl = ZimbraAccount.SoapClient.selectNode(getDistributionListResponse, "//admin:dl");
+			if ( dl == null )
+				throw new HarnessException("Element does not contain a dl element: "+ getDistributionListResponse.prettyPrint());
+
+			// Create the object
+			dlist = new DistributionListItem();
+
+			// Set the ID
+			dlist.setId(dl.getAttribute("id", null));
+			dlist.name = dl.getAttribute("name", null);
+			
+			// Iterate the owners
+			Element[] owners = ZimbraAccount.SoapClient.selectNodes(dl, "//admin:owner");
+			for (Element owner : owners) {
+				String id = owner.getAttribute("id", null);
+				String name = owner.getAttribute("name", null);
+				String type = owner.getAttribute("type", null);
+				
+				dlist.owners.add(name);
+				
+			}
+
+			// Iterate the members
+			Element[] members = ZimbraAccount.SoapClient.selectNodes(dl, "//admin:dlm");
+			for (Element dlm : members) {
+				String name = dlm.getText();
+				
+				dlist.members.add(name);
+
+			}
+
+			// Iterate the attributes
+			Element[] attributes = ZimbraAccount.SoapClient.selectNodes(dl, "//admin:a");
+			for (Element a : attributes) {
+				String key = a.getAttribute("n", "foo");
+				String value = a.getText();
+				
+				dlist.setAttribute(key, value);
+			}
+
+			return (dlist);
+
+		} finally {
+			if ( dlist != null )	logger.info(dlist.prettyPrint());
+		}
+
+	}
+
+	public static DistributionListItem importFromSOAP(String by, String value) throws HarnessException {
+
+		Element response = ZimbraAdminAccount.GlobalAdmin().soapSend(
+				"<GetDistributionListRequest xmlns='urn:zimbraAdmin'>" +
+						"<dl by='"+ by +"'>" + value +"</dl>" +
+				"</GetDistributionListRequest>");
+		
+		return (importFromSOAP(response));
 	}
 
 	
@@ -214,12 +318,17 @@ public class DistributionListItem extends ContactItem implements IItem {
 	@Override
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(super.prettyPrint());
 		sb.append(DistributionListItem.class.getSimpleName()).append('\n');
 		sb.append("Name: ").append(email).append('\n');
-		sb.append("dlist: ").append(getDList()).append('\n');
-		for (String key : ContactAttributes.keySet())
-			sb.append(String.format("Attribute: key(%s) value(%s)", key, ContactAttributes.get(key))).append('\n');
+		for(String owner : owners) {
+			sb.append("Owner: ").append(owner).append('\n');
+		}
+		for(String member : members) {
+			sb.append("Member: ").append(member).append('\n');
+		}
+		for(Entry<String, String> entry : attributes.entrySet()) {
+			sb.append(String.format("Attribute: key(%s) value(%s)\n", entry.getKey(), entry.getValue()));
+		}
 		return (sb.toString());
 	}
 	

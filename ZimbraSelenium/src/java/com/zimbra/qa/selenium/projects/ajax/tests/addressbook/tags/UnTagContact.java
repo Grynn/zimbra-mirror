@@ -4,7 +4,6 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.tags;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -33,7 +32,7 @@ public class UnTagContact extends AjaxCommonTest  {
 		TagItem tagItem = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact via Soap then select
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 
 		// Tag the contact
 		app.zGetActiveAccount().soapSend(
@@ -80,7 +79,7 @@ public class UnTagContact extends AjaxCommonTest  {
 		TagItem tagItem = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact via Soap then select
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 
 		// Tag the contact
 		app.zGetActiveAccount().soapSend(

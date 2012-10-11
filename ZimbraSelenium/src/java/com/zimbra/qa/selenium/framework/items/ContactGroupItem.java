@@ -5,10 +5,8 @@ import java.util.*;
 import org.apache.log4j.*;
 
 import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 /**
  * The <code>ContactGroupItem</code> defines a Zimbra Contact Group
@@ -48,31 +46,6 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		fileAs = groupName;
 		type = "group";
 		dlist = new ArrayList<ContactItem>();
-	}
-
-	public static ContactGroupItem generateContactItem(GenerateItemType type) throws HarnessException {
-
-		ContactGroupItem group =  null;
-		if ( type.equals(GenerateItemType.Default) || type.equals(GenerateItemType.Basic) ) {
-
-			String groupName =  "group_" + ZimbraSeleniumProperties.getUniqueString();
-			//group name with length > 20 is automatically shorten
-			groupName = groupName.substring(0,20);
-
-	        // Create a contact group
-			group = new ContactGroupItem(groupName);
-
-			group.addDListMember(ContactItem.generateContactItem(GenerateItemType.Basic));
-			group.addDListMember(ContactItem.generateContactItem(GenerateItemType.Basic));
-			group.addDListMember(ContactItem.generateContactItem(GenerateItemType.Basic));
-
-		}
-
-		if ( type.equals(GenerateItemType.AllAttributes) ) {
-			throw new HarnessException("Implement me!");
-		}
-
-		return group;
 	}
 
 	/**
@@ -174,7 +147,7 @@ public class ContactGroupItem extends ContactItem implements IItem {
 
 			// Set the ID
 			group.setId(cn.getAttribute("id", null));
-			group.fileAs=cn.getAttribute("fileAsStr",null);
+			group.fileAs = cn.getAttribute("fileAsStr", null);
 			group.setFolderId(cn.getAttribute("l", null));
 
 
@@ -216,104 +189,40 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		}
 	}
 
-	/**
-	 * Create contact group item using SOAP
-	 * @param app
-	 * @param tagIdArray
-	 * @return
-	 * @throws HarnessException
-	 */
-	public static ContactGroupItem createUsingSOAP(AbsApplication app, String ... tagIdArray ) throws HarnessException {
 
-	   String tagParam ="";
-	   if (tagIdArray.length == 1) {
-	      tagParam = " t='" + tagIdArray[0] + "'";
-	   }
-
-       // Create a contact group
- 	   ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
-
-       StringBuilder sb= new StringBuilder("");
-       for (ContactItem contactItem: group.dlist) {
-          String e= contactItem.email;
-          sb.append("<m type='I' value='" + e + "' />");
-       }
-
-	   app.zGetActiveAccount().soapSend(
-	         "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-	         "<cn " + tagParam + " >" +
-	         "<a n='type'>group</a>" +
-	         "<a n='nickname'>" + group.groupName +"</a>" +
-	         "<a n='fileAs'>8:" +  group.fileAs +"</a>" +
-             sb.toString() +
-             //"<a n='dlist'>" + group.getDList() + "</a>" +
-	         "</cn>" +
-	   "</CreateContactRequest>");
-
-	   group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-
-	   // Refresh addressbook
-       ((AppAjaxClient)app).zPageMain.zToolbarPressButton(Button.B_REFRESH);
-
-	   return group;
-	}
-
-	/**
-	 * Create local contact group item using SOAP - for ZD
-	 * @param app
-	 * @param accountName
-	 * @param tagIdArray
-	 * @return
-	 * @throws HarnessException
-	 */
-	public static ContactGroupItem createLocalUsingSOAP(AbsApplication app, String accountName, String ... tagIdArray ) throws HarnessException {
-
-      String tagParam ="";
-      if (tagIdArray.length == 1) {
-         tagParam = " t='" + tagIdArray[0] + "'";
-      }
-
-      // Create a contact group
-      ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
-
-      app.zGetActiveAccount().soapSend(
-            "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-            "<cn " + tagParam + " >" +
-            "<a n='type'>group</a>" +
-            "<a n='nickname'>" + group.groupName +"</a>" +
-            "<a n='dlist'>" + group.getDList() + "</a>" +
-            "<a n='fileAs'>8:" +  group.fileAs +"</a>" +
-            "</cn>" +
-            "</CreateContactRequest>",
-            SOAP_DESTINATION_HOST_TYPE.CLIENT,
-            accountName);
-
-      return group;
-   }
 	
-	public static ContactGroupItem createContactGroupItem(ZimbraAccount account, GenerateItemType Type) throws HarnessException {
-		
-	       // Create a contact group
-	 	   ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
+	/**
+	 * Create a contact group with 2 email address members
+	 * @param account
+	 * @return
+	 * @throws HarnessException
+	 */
+	public static ContactGroupItem createContactGroupItem(ZimbraAccount account) throws HarnessException {
 
-	       StringBuilder sb= new StringBuilder("");
-	       for (ContactItem contactItem: group.dlist) {
-	          String e= contactItem.email;
-	          sb.append("<m type='I' value='" + e + "' />");
-	       }
+		// Create a contact group
+		String unique = ZimbraSeleniumProperties.getUniqueString(); // group name is max 20 chars
+		String groupname = "group"+ unique.substring(unique.length() - 10);
 
-	       account.soapSend(
-	    		   "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-	    				   "<cn >" +
-	    				   "<a n='type'>group</a>" +
-	    				   "<a n='nickname'>" + group.groupName +"</a>" +
-	    				   "<a n='fileAs'>8:" +  group.fileAs +"</a>" +
-	    				   sb.toString() +
-	    				   "</cn>" +
-	    		   "</CreateContactRequest>");
-		   String id = account.soapSelectValue("//mail:CreateContactResponse/mail:cn", "id");
-		   
-		   return (ContactGroupItem.importFromSOAP(account, "item:"+ id));
+		// Create 2 members
+		String member1 = "member"+ ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
+		String member2 = "member"+ ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("<m type='I' value='").append(member1).append("'/>");
+		sb.append("<m type='I' value='").append(member2).append("'/>");
+
+		account.soapSend(
+				"<CreateContactRequest xmlns='urn:zimbraMail'>" +
+						"<cn >" +
+						"<a n='type'>group</a>" +
+						"<a n='nickname'>" + groupname +"</a>" +
+						"<a n='fileAs'>8:" +  groupname +"</a>" +
+						sb.toString() +
+						"</cn>" +
+				"</CreateContactRequest>");
+		String id = account.soapSelectValue("//mail:CreateContactResponse/mail:cn", "id");
+
+		return (ContactGroupItem.importFromSOAP(account, "item:"+ id));
 
 	}
 

@@ -140,7 +140,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
    public void DeleteMultipleContactGroups() throws HarnessException {
 
       // Create a contact group via Soap
-      ContactGroupItem group1 = ContactGroupItem.createUsingSOAP(app);
+       ContactGroupItem group1 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
       group1.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
       String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
@@ -149,7 +149,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
       }
 
       // Create a contact group via Soap
-      ContactGroupItem group2 = ContactGroupItem.createUsingSOAP(app);
+      ContactGroupItem group2 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
       group2.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
       String[] dlist2 = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
@@ -158,7 +158,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
       }
 
       // Create a contact group via Soap
-      ContactGroupItem group3 = ContactGroupItem.createUsingSOAP(app);
+      ContactGroupItem group3 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
       group3.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
       String[] dlist3 = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
@@ -207,7 +207,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
    public void DeleteMixOfContactAndGroup() throws HarnessException {
 
       // Create a contact group via Soap
-      ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
+       ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
       group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
       String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
@@ -216,7 +216,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
       }
 
       // Create a contact via Soap
-      ContactItem contactItem = ContactItem.createUsingSOAP(app);
+		ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
       contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
 
       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());

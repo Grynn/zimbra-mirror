@@ -533,43 +533,7 @@ public class PageAddressbook extends AbsTab {
 	      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);	    		
 	}
 	
-	public ContactGroupItem createUsingSOAPSelectContactGroup(AppAjaxClient app, Action action, String ... tagIDArray)  throws HarnessException {	
-	  // Create a contact group via Soap
-	  ContactGroupItem group = ContactGroupItem.createUsingSOAP(app, tagIDArray);
-		             
-	  group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-	  //String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
-	  //for (int i=0; i<dlist.length; i++) {
-	  //	  group.addDListMember(dlist[i]);
-	  //}
-	  
-	  
-      // Refresh the view, to pick up the new contact
-      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
-    
-      // Select the item
-      zListItem(action, group.fileAs);
-      
-      return group;
-    }
 
-	public ContactItem createUsingSOAPSelectContact(AppAjaxClient app, Action action, String ... tagIDArray)  throws HarnessException {	
-		  // Create a contact via Soap
-		  ContactItem contactItem = ContactItem.createUsingSOAP(app, tagIDArray);			             
-		  contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-		  		  
-		  
-	      // Refresh the view, to pick up the new contact
-	      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-	      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-	      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
-	    
-	      // Select the item
-	      zListItem(action, contactItem.fileAs);
-	      
-	      return contactItem;
-	    }
 		
 
 	@Override

@@ -1,9 +1,11 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contacts;
 
+import java.util.*;
+import java.util.Map.Entry;
+
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
+import com.zimbra.qa.selenium.framework.items.ContactItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -242,10 +244,35 @@ public class CreateContact extends AjaxCommonTest  {
 		
 		//-- Data
 		
-		// Create a contact Item
-		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.AllAttributes);
+		String firstname = "first" + ZimbraSeleniumProperties.getUniqueString();
 
+		// Create a contact Item
+		HashMap<String, String> attributes = new HashMap<String, String>();
+		attributes.put("firstName", firstname);
+		attributes.put("lastName", "lastname" + ZimbraSeleniumProperties.getUniqueString());
+		attributes.put("email", "email" + ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com");
+		attributes.put("company", "company" + ZimbraSeleniumProperties.getUniqueString());
+		attributes.put("middleName", "middleName" + ZimbraSeleniumProperties.getUniqueString());
+		attributes.put("nickname", "nickname" + ZimbraSeleniumProperties.getUniqueString());
+		attributes.put("nameSuffix", "Sr");
+		attributes.put("namePrefix", "Mr");
+		attributes.put("department", "department" + ZimbraSeleniumProperties.getUniqueString());
+		attributes.put("jobTitle", "jobTitle" + ZimbraSeleniumProperties.getUniqueString());
+		attributes.put("homeStreet", "123 Main St.");
+		attributes.put("homeCity", "Anytown");
+		attributes.put("homeCountry", "USA");
+		attributes.put("homePostalCode", "95124");
+		attributes.put("birthday", "1985-05-24");
+		attributes.put("notes", "notes" + ZimbraSeleniumProperties.getUniqueString());
+		attributes.put("maidenName", "maidenName" + ZimbraSeleniumProperties.getUniqueString());
+//		attributes.put("mobilePhone", "1-408-555-1212");
+		attributes.put("imAddress1", "free2rhyme@yahoo.com");
+		attributes.put("homeURL", "http://www.zimbra.com");
 		
+		
+
+
+
 		//-- GUI
 		FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
 				
@@ -253,7 +280,11 @@ public class CreateContact extends AjaxCommonTest  {
 		formContactNew.zDisplayHiddenName();
 		
 		// fill items
-		formContactNew.zFill(contact);
+		for (Entry<String, String> entry : attributes.entrySet()) {
+			String key = entry.getKey();
+			String value = entry.getValue();
+			formContactNew.zFillField(Field.fromString(key), value);
+		}
 		
 		// Save the contact
         formContactNew.zSubmit();
@@ -267,11 +298,23 @@ public class CreateContact extends AjaxCommonTest  {
         
 		//-- Data Verification
 		
-		ContactItem actual = ContactItem.importFromSOAP(app.zGetActiveAccount(), "#firstname:"+ contact.firstName);
-		
-		ZAssert.assertEquals(actual.lastName, contact.lastName, "Verify the last name was saved correctly");
-		ZAssert.assertEquals(actual.firstName, contact.firstName, "Verify the last name was saved correctly");
-		ZAssert.assertEquals(actual.email, contact.email, "Verify the last name was saved correctly");
+		ContactItem contact = ContactItem.importFromSOAP(app.zGetActiveAccount(), "#firstname:"+ firstname);
+		ZAssert.assertNotNull(contact, "Verify the contact was saved correctly");
+
+		for (Entry<String,String> entry : attributes.entrySet()) {
+			
+			// Verify each attribute was saved correctly
+			String key = entry.getKey();
+			String expected = attributes.get(key);
+			String actual = contact.ContactAttributes.get(key);
+			
+			if ( key.equals("imAddress1") ) {
+				// IM address will be prepended with xmpp:// (for example), so just make sure the address is there
+				ZAssert.assertStringContains(actual, expected, "Verify the attribute "+ key +" was saved correctly");
+			} else {
+				ZAssert.assertEquals(actual, expected, "Verify the attribute "+ key +" was saved correctly");
+			}
+		}
 
 	}
 

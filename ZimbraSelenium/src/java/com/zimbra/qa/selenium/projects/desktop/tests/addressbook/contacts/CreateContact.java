@@ -5,17 +5,13 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
-import com.zimbra.qa.selenium.projects.desktop.ui.DialogWarning;
-import com.zimbra.qa.selenium.projects.desktop.ui.Toaster;
-import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.FormContactNew;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.*;
+import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.FormContactNew;
 
 
 //TODO: add more in ContactItem.java
@@ -57,7 +53,7 @@ public class CreateContact extends AjaxCommonTest  {
 	public static ContactItem createBasicContact(AppAjaxClient app, FormContactNew formContactNew)throws HarnessException {
 							
 		// Create a contact Item
-		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
+		ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
 	
 		//verify form contact new page is displayed
 		ZAssert.assertTrue(formContactNew.zIsActive(),"Verify new contact form is displayed");
@@ -138,7 +134,7 @@ public class CreateContact extends AjaxCommonTest  {
 	      FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
 	      
 	      // Create a contact Item
-	      ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
+			ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
 	   
 	      DialogWarning dialogWarning = _clickCancel(contactItem,formContactNew);
 	            
@@ -170,7 +166,7 @@ public class CreateContact extends AjaxCommonTest  {
 	      FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
 	      
 	      // Create a contact Item
-	      ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
+			ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
 	   
 	      DialogWarning dialogWarning = _clickCancel(contactItem,formContactNew);
 	       
@@ -197,7 +193,7 @@ public class CreateContact extends AjaxCommonTest  {
 	      FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
 	      
 	      // Create a contact Item
-	      ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
+			ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
 	   
 	      DialogWarning dialogWarning = _clickCancel(contactItem,formContactNew);
 	    
@@ -221,7 +217,7 @@ public class CreateContact extends AjaxCommonTest  {
 	      FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
 	      
 	      // Create a contact Item
-	      ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.AllAttributes);
+			ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
 	   
 	      // or form contact new page is displayed
 	      ZAssert.assertTrue(formContactNew.zIsActive(),"Verify new contact form is displayed");
@@ -365,7 +361,7 @@ public class CreateContact extends AjaxCommonTest  {
          FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
 
          // Create a contact Item
-         ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.AllAttributes);
+ 		ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
       
          // or form contact new page is displayed
          ZAssert.assertTrue(formContactNew.zIsActive(),"Verify new contact form is displayed");

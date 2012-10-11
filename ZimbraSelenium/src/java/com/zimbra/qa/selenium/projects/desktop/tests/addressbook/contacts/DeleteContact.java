@@ -122,16 +122,13 @@ public class DeleteContact extends AjaxCommonTest  {
       //ContactItem contactItem3 = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_CHECKBOX);
       
       // Create a contact via Soap
-      ContactItem contactItem1 = ContactItem.createUsingSOAP(app);                      
-      contactItem1.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+      ContactItem contactItem1 = ContactItem.createContactItem(app.zGetActiveAccount());
               
       // Create a contact via Soap
-      ContactItem contactItem2 = ContactItem.createUsingSOAP(app);                      
-      contactItem2.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+      ContactItem contactItem2 = ContactItem.createContactItem(app.zGetActiveAccount());
       
       // Create a contact via Soap
-      ContactItem contactItem3 = ContactItem.createUsingSOAP(app);                      
-      contactItem3.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+      ContactItem contactItem3 = ContactItem.createContactItem(app.zGetActiveAccount());
       
       // Refresh the view, to pick up the new contact
       FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
@@ -358,105 +355,105 @@ public class DeleteContact extends AjaxCommonTest  {
          groups = { "functional" })
    public void DeleteMultipleLocalContacts() throws HarnessException {
 
-      // Create a contact via Soap
-      ContactItem contactItem1 = ContactItem.createLocalUsingSOAP(app, ZimbraAccount.clientAccountName);                      
-      contactItem1.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-
-      // Create a contact via Soap
-      ContactItem contactItem2 = ContactItem.createLocalUsingSOAP(app, ZimbraAccount.clientAccountName);                      
-      contactItem2.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-
-      // Create a contact via Soap
-      ContactItem contactItem3 = ContactItem.createLocalUsingSOAP(app, ZimbraAccount.clientAccountName);                      
-      contactItem3.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-
-      // Refresh the view, to pick up the new contact
-      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),
-            SystemFolder.Contacts,
-            SOAP_DESTINATION_HOST_TYPE.CLIENT,
-            ZimbraAccount.clientAccountName);
-
-      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
-
-      // Select the item
-      app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem1.fileAs);
-      app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem2.fileAs);
-      app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem3.fileAs);
-
-      //delete 3 contacts
-      app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
-
-      //verify toasted message 3 contact moved to Trash
-      String expectedMsg = "3 contacts moved to Trash";
-      ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
-            expectedMsg , "Verify toast message '" + expectedMsg + "'");
-
-      //verify deleted contact not displayed
-      List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
-
-      int count=0;
-      for (ContactItem ci : contacts) {
-         if (ci.fileAs.equals(contactItem1.fileAs) ||
-               ci.fileAs.equals(contactItem2.fileAs) ||
-               ci.fileAs.equals(contactItem3.fileAs)
-         ) {
-            count++;
-         }
-      }
-
-      ZAssert.assertTrue(count==0, "Verify contact fileAs (" + contactItem1.fileAs + "," + contactItem2.fileAs + "," + contactItem3.fileAs + ") deleted");
-
-      SOAP_DESTINATION_HOST_TYPE destType = SOAP_DESTINATION_HOST_TYPE.CLIENT;
-      String accountName = ZimbraAccount.clientAccountName;
-
-      FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(),
-            SystemFolder.Trash,
-            destType,
-            accountName);
-
-      // Verify document moved to Trash
-      app.zGetActiveAccount()
-            .soapSend("<SearchRequest xmlns='urn:zimbraMail' types='contact'>"
-                  + "<query>in:"
-                  + trash.getName()
-                  + " "
-                  + contactItem1.fileAs
-                  + "</query>" + "</SearchRequest>",
-                  destType,
-                  accountName);
-
-      String parentId = app.zGetActiveAccount().soapSelectValue("//mail:SearchResponse//mail:cn",
-            "l");
-      ZAssert.assertEquals(trash.getId(), parentId, "New parent ID of the contact item 1 matches");
-
-      app.zGetActiveAccount()
-      .soapSend("<SearchRequest xmlns='urn:zimbraMail' types='contact'>"
-            + "<query>in:"
-            + trash.getName()
-            + " "
-            + contactItem2.fileAs
-            + "</query>" + "</SearchRequest>",
-            destType,
-            accountName);
-
-      parentId = app.zGetActiveAccount().soapSelectValue("//mail:SearchResponse//mail:cn",
-            "l");
-      ZAssert.assertEquals(trash.getId(), parentId, "New parent ID of the contact item 2 matches");
-
-      app.zGetActiveAccount()
-      .soapSend("<SearchRequest xmlns='urn:zimbraMail' types='contact'>"
-            + "<query>in:"
-            + trash.getName()
-            + " "
-            + contactItem3.fileAs
-            + "</query>" + "</SearchRequest>",
-            destType,
-            accountName);
-
-      parentId = app.zGetActiveAccount().soapSelectValue("//mail:SearchResponse//mail:cn",
-            "l");
-      ZAssert.assertEquals(trash.getId(), parentId, "New parent ID of the contact item 3 matches");
+////      // Create a contact via Soap
+////      ContactItem contactItem1 = ContactItem.createLocalUsingSOAP(app, ZimbraAccount.clientAccountName);                      
+////      contactItem1.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+////
+////      // Create a contact via Soap
+////      ContactItem contactItem2 = ContactItem.createLocalUsingSOAP(app, ZimbraAccount.clientAccountName);                      
+////      contactItem2.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+////
+////      // Create a contact via Soap
+////      ContactItem contactItem3 = ContactItem.createLocalUsingSOAP(app, ZimbraAccount.clientAccountName);                      
+////      contactItem3.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+//
+//      // Refresh the view, to pick up the new contact
+//      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),
+//            SystemFolder.Contacts,
+//            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+//            ZimbraAccount.clientAccountName);
+//
+//      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+//      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
+//
+//      // Select the item
+//      app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem1.fileAs);
+//      app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem2.fileAs);
+//      app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem3.fileAs);
+//
+//      //delete 3 contacts
+//      app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
+//
+//      //verify toasted message 3 contact moved to Trash
+//      String expectedMsg = "3 contacts moved to Trash";
+//      ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+//            expectedMsg , "Verify toast message '" + expectedMsg + "'");
+//
+//      //verify deleted contact not displayed
+//      List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
+//
+//      int count=0;
+//      for (ContactItem ci : contacts) {
+//         if (ci.fileAs.equals(contactItem1.fileAs) ||
+//               ci.fileAs.equals(contactItem2.fileAs) ||
+//               ci.fileAs.equals(contactItem3.fileAs)
+//         ) {
+//            count++;
+//         }
+//      }
+//
+//      ZAssert.assertTrue(count==0, "Verify contact fileAs (" + contactItem1.fileAs + "," + contactItem2.fileAs + "," + contactItem3.fileAs + ") deleted");
+//
+//      SOAP_DESTINATION_HOST_TYPE destType = SOAP_DESTINATION_HOST_TYPE.CLIENT;
+//      String accountName = ZimbraAccount.clientAccountName;
+//
+//      FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(),
+//            SystemFolder.Trash,
+//            destType,
+//            accountName);
+//
+//      // Verify document moved to Trash
+//      app.zGetActiveAccount()
+//            .soapSend("<SearchRequest xmlns='urn:zimbraMail' types='contact'>"
+//                  + "<query>in:"
+//                  + trash.getName()
+//                  + " "
+//                  + contactItem1.fileAs
+//                  + "</query>" + "</SearchRequest>",
+//                  destType,
+//                  accountName);
+//
+//      String parentId = app.zGetActiveAccount().soapSelectValue("//mail:SearchResponse//mail:cn",
+//            "l");
+//      ZAssert.assertEquals(trash.getId(), parentId, "New parent ID of the contact item 1 matches");
+//
+//      app.zGetActiveAccount()
+//      .soapSend("<SearchRequest xmlns='urn:zimbraMail' types='contact'>"
+//            + "<query>in:"
+//            + trash.getName()
+//            + " "
+//            + contactItem2.fileAs
+//            + "</query>" + "</SearchRequest>",
+//            destType,
+//            accountName);
+//
+//      parentId = app.zGetActiveAccount().soapSelectValue("//mail:SearchResponse//mail:cn",
+//            "l");
+//      ZAssert.assertEquals(trash.getId(), parentId, "New parent ID of the contact item 2 matches");
+//
+//      app.zGetActiveAccount()
+//      .soapSend("<SearchRequest xmlns='urn:zimbraMail' types='contact'>"
+//            + "<query>in:"
+//            + trash.getName()
+//            + " "
+//            + contactItem3.fileAs
+//            + "</query>" + "</SearchRequest>",
+//            destType,
+//            accountName);
+//
+//      parentId = app.zGetActiveAccount().soapSelectValue("//mail:SearchResponse//mail:cn",
+//            "l");
+//      ZAssert.assertEquals(trash.getId(), parentId, "New parent ID of the contact item 3 matches");
    }
 
 }

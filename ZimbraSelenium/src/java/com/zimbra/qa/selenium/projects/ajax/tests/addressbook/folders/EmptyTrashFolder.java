@@ -3,7 +3,6 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.folders;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -35,7 +34,7 @@ public class EmptyTrashFolder extends AjaxCommonTest {
 		
 		
 		// Create a contact group via Soap
-		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		// Move to trash
 		app.zGetActiveAccount().soapSend(
@@ -45,7 +44,7 @@ public class EmptyTrashFolder extends AjaxCommonTest {
 		  
 		
 		// Create a contact via Soap
-	    ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+	    ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 	    
 	    // Move to trash
 		app.zGetActiveAccount().soapSend(
@@ -108,7 +107,7 @@ public class EmptyTrashFolder extends AjaxCommonTest {
 		
 		
 		// Create a contact group via Soap
-		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		// Move to trash
 		app.zGetActiveAccount().soapSend(
@@ -118,7 +117,7 @@ public class EmptyTrashFolder extends AjaxCommonTest {
 		  
 		
 		// Create a contact via Soap
-	    ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+	    ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 	    
 	    // Move to trash
 		app.zGetActiveAccount().soapSend(

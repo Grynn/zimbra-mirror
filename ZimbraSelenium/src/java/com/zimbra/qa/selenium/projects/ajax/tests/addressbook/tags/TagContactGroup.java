@@ -1,13 +1,14 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.tags;
 
 import java.util.HashMap;
+
 import org.testng.annotations.Test;
+
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 
 public class TagContactGroup extends AjaxCommonTest  {
 	
@@ -38,7 +39,7 @@ public class TagContactGroup extends AjaxCommonTest  {
 		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 
 		//-- GUI
@@ -83,7 +84,7 @@ public class TagContactGroup extends AjaxCommonTest  {
 		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 
 		//-- GUI
@@ -122,7 +123,7 @@ public class TagContactGroup extends AjaxCommonTest  {
 		TagItem tagItem = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 
 		//-- GUI
@@ -159,7 +160,7 @@ public class TagContactGroup extends AjaxCommonTest  {
 		TagItem tagItem = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 
 		//-- GUI
@@ -200,7 +201,7 @@ public class TagContactGroup extends AjaxCommonTest  {
 		TagItem tag2 = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 
 		//-- GUI
@@ -240,7 +241,7 @@ public class TagContactGroup extends AjaxCommonTest  {
 		TagItem tagItem = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 
 		//-- GUI

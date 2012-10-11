@@ -6,7 +6,6 @@ import java.util.HashMap;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -37,7 +36,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		//-- Data
 		
 		// Create a contact
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 		
 		// The contact group name
 		String groupname = "group" + ZimbraSeleniumProperties.getUniqueString();
@@ -83,10 +82,10 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		//-- Data
 		
 		// Create a contact
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		
@@ -129,12 +128,12 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		//-- Data
 		
 		// Create a contact
-		ContactItem contact1 = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
-		ContactItem contact2 = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
-		ContactItem contact3 = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact1 = ContactItem.createContactItem(app.zGetActiveAccount());
+		ContactItem contact2 = ContactItem.createContactItem(app.zGetActiveAccount());
+		ContactItem contact3 = ContactItem.createContactItem(app.zGetActiveAccount());
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		
@@ -193,9 +192,9 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		//-- Data
 		
 		// Create a contact
-		ContactItem contact1 = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
-		ContactItem contact2 = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
-		ContactItem contact3 = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact1 = ContactItem.createContactItem(app.zGetActiveAccount());
+		ContactItem contact2 = ContactItem.createContactItem(app.zGetActiveAccount());
+		ContactItem contact3 = ContactItem.createContactItem(app.zGetActiveAccount());
 		
 		// Create a contact group
 		String groupname = "group"+ ZimbraSeleniumProperties.getUniqueString();
@@ -260,10 +259,10 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		//-- Data
 		
 		// Create a contact
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		String groupname = "group" + ZimbraSeleniumProperties.getUniqueString();
 		
@@ -324,11 +323,11 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		//-- Data
 		
 		// Create a contact
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 		
 		// Create a contact group
-		ContactGroupItem group1 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
-		ContactGroupItem group2 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group1 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
+		ContactGroupItem group2 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		

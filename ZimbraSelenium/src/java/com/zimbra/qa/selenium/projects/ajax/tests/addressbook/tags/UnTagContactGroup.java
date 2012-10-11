@@ -4,7 +4,6 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.tags;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -35,7 +34,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		TagItem tagItem = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 		// Tag the contact
 		app.zGetActiveAccount().soapSend(
@@ -81,7 +80,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		TagItem tagItem = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 		// Tag the contact
 		app.zGetActiveAccount().soapSend(
@@ -125,7 +124,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		TagItem tag2 = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 		// Tag the contact
 		app.zGetActiveAccount().soapSend(
@@ -182,7 +181,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		TagItem tag2 = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 		// Tag the contact
 		app.zGetActiveAccount().soapSend(
@@ -234,7 +233,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		TagItem tag2 = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 		// Tag the contact
 		app.zGetActiveAccount().soapSend(
@@ -287,7 +286,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		TagItem tag2 = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 		// Tag the contact
 		app.zGetActiveAccount().soapSend(
@@ -341,7 +340,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		TagItem tag2 = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 		// Tag the contact
 		app.zGetActiveAccount().soapSend(
@@ -394,7 +393,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		TagItem tag1 = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
 		// Tag the contact
 		app.zGetActiveAccount().soapSend(

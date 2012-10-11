@@ -6,8 +6,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contacts;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
-import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
+import com.zimbra.qa.selenium.framework.items.ContactItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -35,7 +34,7 @@ public class ForwardContact extends AjaxCommonTest  {
 		//-- Data
 	
 		// Create a contact
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 
 		// Mail subject
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
@@ -107,7 +106,7 @@ public class ForwardContact extends AjaxCommonTest  {
 		//-- Data
 	
 		// Create a contact
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 
 		// Mail subject
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
@@ -183,7 +182,7 @@ public class ForwardContact extends AjaxCommonTest  {
 		//-- Data
 	
 		// Create a contact
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 
 		// Mail subject
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();

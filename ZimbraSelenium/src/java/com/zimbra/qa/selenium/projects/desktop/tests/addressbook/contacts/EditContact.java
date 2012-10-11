@@ -4,19 +4,13 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.ContactItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.Toaster;
-import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.*;
+import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.FormContactNew;
 
 public class EditContact extends AjaxCommonTest  {
 	public EditContact() {
@@ -37,7 +31,7 @@ public class EditContact extends AjaxCommonTest  {
 	private ContactItem _createSelectContactItem(SOAP_DESTINATION_HOST_TYPE destType,
          String accountName) throws HarnessException {
       // Create a contact 
-      ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
+      ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
 
       app.zGetActiveAccount().soapSend(
             "<CreateContactRequest xmlns='urn:zimbraMail'>" +
@@ -142,7 +136,7 @@ public class EditContact extends AjaxCommonTest  {
       FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
 
       //generate the new contact
-      ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);
+      ContactItem newContact = ContactItem.createContactItem(app.zGetActiveAccount());
 
       _editAndVerify(formContactNew, contactItem, newContact);
    }
@@ -156,7 +150,7 @@ public class EditContact extends AjaxCommonTest  {
       FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, contactItem.fileAs);        
 
       //generate the new contact
-      ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);
+      ContactItem newContact = ContactItem.createContactItem(app.zGetActiveAccount());
 
       _editAndVerify(formContactNew, contactItem, newContact);
 
@@ -172,7 +166,7 @@ public class EditContact extends AjaxCommonTest  {
       FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
 
       //generate the new contact
-      ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);
+      ContactItem newContact = ContactItem.createContactItem(app.zGetActiveAccount());
 
       _editAndVerify(formContactNew, contactItem, newContact, SOAP_DESTINATION_HOST_TYPE.CLIENT, ZimbraAccount.clientAccountName);     
    }
@@ -187,7 +181,7 @@ public class EditContact extends AjaxCommonTest  {
       FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, contactItem.fileAs);        
 
       //generate the new contact
-      ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);
+      ContactItem newContact = ContactItem.createContactItem(app.zGetActiveAccount());
 
       _editAndVerify(formContactNew, contactItem, newContact, SOAP_DESTINATION_HOST_TYPE.CLIENT, ZimbraAccount.clientAccountName);
 

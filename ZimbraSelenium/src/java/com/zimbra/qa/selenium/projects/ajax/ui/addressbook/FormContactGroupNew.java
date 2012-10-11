@@ -134,6 +134,13 @@ public class FormContactGroupNew extends AbsForm {
 			
 			return (page);
 			
+		} else if ( button == Button.B_DELETE ) {
+
+			locator = "css=div#" + getToolbarID() + " div[id$='__DELETE'] td[id$='_title']";
+			page = null;
+		
+			// FALL THROUGH
+		
 		} else if ( button == Button.B_CHOOSE_ADDRESSBOOK ) {
 
 			// click the folder menu

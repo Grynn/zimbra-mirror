@@ -7,7 +7,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -224,7 +223,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		//Click Edit contact	
         FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, contactItem.fileAs);        
 	  	        
-		ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);							
+		ContactItem newContact = ContactItem.createContactItem(app.zGetActiveAccount());
 		
 		//clear the form, 
 		formContactNew.zReset();

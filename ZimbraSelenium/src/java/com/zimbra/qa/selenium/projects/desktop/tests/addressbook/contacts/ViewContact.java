@@ -5,13 +5,13 @@ package com.zimbra.qa.selenium.projects.desktop.tests.addressbook.contacts;
 import java.util.List;
 
 import org.testng.annotations.Test;
+
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.*;
+import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.DisplayContact;
 
 
 public class ViewContact extends AjaxCommonTest  {
@@ -35,23 +35,20 @@ public class ViewContact extends AjaxCommonTest  {
 	      String firstLetterOfFirstName,
 	      SOAP_DESTINATION_HOST_TYPE destType,
 	      String accountName) throws HarnessException {
-	   ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
-	   contact.firstName = firstLetterOfFirstName + contact.firstName;	    
-	   contact.fileAs = contact.firstName + " " + contact.lastName;
+	      ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
+	   String firstName = firstLetterOfFirstName + contact.firstName;	    
+	   String fileAs = firstName + " " + contact.lastName;
 
-	   app.zGetActiveAccount().soapSend(
-	         "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-	         "<cn >" +
-	         "<a n='firstName'>" + contact.firstName +"</a>" +
-	         "<a n='lastName'>" + contact.lastName +"</a>" +
-	         "<a n='email'>" + contact.email + "</a>" +
+       app.zGetActiveAccount().soapSend(
+    		   "<ModifyContactRequest xmlns = 'urn:zimbraMail' replace = '0' force = '1'>" +
+                "<cn id = '"+ contact.getId() +"'>" +
+   	         "<a n='firstName'>" + firstName +"</a>" +
 	         "<a n='fileAs'>2</a>" +
-	         "</cn>" +
-	   "</CreateContactRequest>",
-	   destType,
-	   accountName);
+                "</cn>" +
+            "</ModifyContactRequest>");
 
-	   return contact;
+		return (ContactGroupItem.importFromSOAP(app.zGetActiveAccount(), "item:"+ contact.getId()));
+
 	}
 
 	@Test(	description = "View a contact  created via soap",

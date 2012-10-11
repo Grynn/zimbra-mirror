@@ -7,7 +7,6 @@ import java.util.HashMap;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -44,7 +43,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		
@@ -81,7 +80,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		
@@ -117,7 +116,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		
@@ -154,7 +153,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		
@@ -191,7 +190,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		
@@ -229,9 +228,9 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 		
 		// Create a contact group
-		ContactGroupItem group1 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
-		ContactGroupItem group2 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
-		ContactGroupItem group3 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group1 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
+		ContactGroupItem group2 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
+		ContactGroupItem group3 = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		
@@ -279,8 +278,8 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 		
 		
 		
@@ -320,7 +319,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		

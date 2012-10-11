@@ -93,6 +93,9 @@ public class FwdReplyTextSignatureAboveIncludeMsg extends AjaxCommonTest {
 		app.zPageMail.zClickAt(Locators.zForwardToolbarButton, "0,0");
 		ZAssert.assertTrue(actual.zGetMailPropertyAsText(com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field.Subject).contains("Fwd"),"Verify Fwd Window");
 
+		
+		actual.zPressButton(Button.B_FORWARD);
+		
 		//Click Options Drop Down and select Signature
 		app.zPageMail.zToolbarPressPulldown(Button.B_OPTIONS,Button.O_ADD_FWD_SIGNATURE,this.sigName);		
 

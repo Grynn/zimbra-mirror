@@ -5,7 +5,6 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -155,8 +154,8 @@ public class CreateContactGroup extends AjaxCommonTest  {
 		String groupName = "group" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create two contacts
-		ContactItem contact1 = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
-		ContactItem contact2 = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact1 = ContactItem.createContactItem(app.zGetActiveAccount());
+		ContactItem contact2 = ContactItem.createContactItem(app.zGetActiveAccount());
 
 		
 		
@@ -208,7 +207,7 @@ public class CreateContactGroup extends AjaxCommonTest  {
 		String groupName = "group" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create a contact
-		ContactItem contact1 = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact1 = ContactItem.createContactItem(app.zGetActiveAccount());
 
 		// A general email address
 		String member1 = "m" + ZimbraSeleniumProperties.getUniqueString() + "@example.com";

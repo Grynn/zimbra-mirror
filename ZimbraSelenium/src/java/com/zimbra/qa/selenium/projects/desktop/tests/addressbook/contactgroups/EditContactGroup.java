@@ -4,13 +4,10 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
-
 import com.zimbra.qa.selenium.framework.ui.*;
-
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.*;
+import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.FormContactGroupNew;
 
 
 
@@ -27,7 +24,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 	}
 	
 	private void EditGroup(FormContactGroupNew formContactGroupNew , ContactGroupItem group) throws HarnessException {
-        ContactGroupItem newGroup = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
+        ContactGroupItem newGroup = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 							
 		
 		//clear the form, 

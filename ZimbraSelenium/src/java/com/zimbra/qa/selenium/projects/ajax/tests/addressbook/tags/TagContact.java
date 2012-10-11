@@ -4,11 +4,10 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.tags;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 
 public class TagContact extends AjaxCommonTest  {
 	public TagContact() {
@@ -32,7 +31,7 @@ public class TagContact extends AjaxCommonTest  {
 		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
 
 		// Create a contact via Soap then select
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 
 
 		//-- GUI
@@ -74,7 +73,7 @@ public class TagContact extends AjaxCommonTest  {
 		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
 
 		// Create a contact via Soap then select
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 
 
 		//-- GUI
@@ -117,7 +116,7 @@ public class TagContact extends AjaxCommonTest  {
 		TagItem tagItem = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact via Soap then select
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 
 
 		//-- GUI
@@ -157,7 +156,7 @@ public class TagContact extends AjaxCommonTest  {
 		TagItem tagItem = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact via Soap then select
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 
 
 		//-- GUI
@@ -198,7 +197,7 @@ public class TagContact extends AjaxCommonTest  {
 		TagItem tag2 = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact via Soap then select
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 
 
 		//-- GUI
@@ -241,7 +240,7 @@ public class TagContact extends AjaxCommonTest  {
 		TagItem tagItem = TagItem.CreateUsingSoap(app.zGetActiveAccount());		
 
 		// Create a contact via Soap then select
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 
 
 		//-- GUI

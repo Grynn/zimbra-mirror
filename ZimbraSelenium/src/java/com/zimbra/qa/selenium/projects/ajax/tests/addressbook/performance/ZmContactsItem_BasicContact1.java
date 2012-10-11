@@ -28,8 +28,8 @@ public class ZmContactsItem_BasicContact1 extends AjaxCommonTest{
    public void ZmContactsItem_01() throws HarnessException {
       // Create 2 contacts via Soap because by default the first one will be selected
       // therefore measuring the performance of loading the second one
-      ContactItem.createUsingSOAP(app);
-      ContactItem contactItem = ContactItem.createUsingSOAP(app);
+      ContactItem.createContactItem(app.zGetActiveAccount());
+      ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
 
       FolderItem contactFolder = FolderItem.importFromSOAP(
             app.zGetActiveAccount(), "Contacts");

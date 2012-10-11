@@ -3,8 +3,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contactgroups;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
+import com.zimbra.qa.selenium.framework.items.ContactGroupItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -40,7 +39,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 		String newname = "edit" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		//-- GUI
@@ -77,7 +76,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 		String newname = "edit" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		//-- GUI
@@ -112,7 +111,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 		String newname = "edit" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		//-- GUI
@@ -143,7 +142,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 		//--  Data
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		//-- GUI
@@ -182,7 +181,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 		String newname = "edit" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		//-- GUI
@@ -231,7 +230,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 		String newname = "edit" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		//-- GUI
@@ -278,7 +277,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 		String newname = "edit" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create a contact group
-		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 		
 		
 		//-- GUI

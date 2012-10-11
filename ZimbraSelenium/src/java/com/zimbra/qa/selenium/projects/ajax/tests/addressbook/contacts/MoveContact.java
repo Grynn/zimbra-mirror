@@ -4,7 +4,6 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contacts;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -41,7 +40,7 @@ public class MoveContact extends AjaxCommonTest  {
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
 
 		 // Create a contact
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 		
 	
 		//-- GUI
@@ -86,7 +85,7 @@ public class MoveContact extends AjaxCommonTest  {
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
 
 		 // Create a contact
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 		
 	
 		//-- GUI
@@ -134,7 +133,7 @@ public class MoveContact extends AjaxCommonTest  {
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
 
 		 // Create a contact
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 		
 	
 		//-- GUI
@@ -178,7 +177,7 @@ public class MoveContact extends AjaxCommonTest  {
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 
 		 // Create a contact
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 
 
 		//-- GUI
@@ -216,7 +215,7 @@ public class MoveContact extends AjaxCommonTest  {
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
 
 		 // Create a contact
-		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount(), GenerateItemType.Basic);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 
 
 		//-- GUI
@@ -263,7 +262,7 @@ public class MoveContact extends AjaxCommonTest  {
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
 		
 		 // Create a contact via Soap then select
-		ContactItem contact = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+		ContactItem contact = ContactItem.createContactItem(app.zGetActiveAccount());
 	
 		
 		//-- GUI

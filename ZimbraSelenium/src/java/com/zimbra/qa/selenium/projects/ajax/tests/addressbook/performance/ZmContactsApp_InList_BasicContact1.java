@@ -36,7 +36,7 @@ public class ZmContactsApp_InList_BasicContact1 extends AjaxCommonTest {
    @Test(description = "Measure the time to load address book page with 1 contact item",
          groups = {"performance"}, dataProvider = "DataProvider_LoadingApp_1Contact")
    public void ZmContactsApp_01(String logMessage) throws HarnessException {
-      ContactItem.createUsingSOAP(app);
+      ContactItem.createContactItem(app.zGetActiveAccount());
 
       PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmContactsApp,
             logMessage);

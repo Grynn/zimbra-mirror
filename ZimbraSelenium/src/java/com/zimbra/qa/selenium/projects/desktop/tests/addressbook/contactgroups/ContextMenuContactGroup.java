@@ -27,7 +27,7 @@ public class ContextMenuContactGroup extends AjaxCommonTest  {
 	
 	private ContactGroupItem createSelectAContactGroup(String ... tagIdArray) throws HarnessException {
 		        
-        ContactGroupItem group = ContactGroupItem.createUsingSOAP(app, tagIdArray);
+        ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
         
         // Refresh the view, to pick up the new contact
         FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");

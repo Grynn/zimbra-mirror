@@ -321,7 +321,7 @@ public class PageAddressbook extends AbsTab {
 
    public ContactGroupItem createUsingSOAPSelectContactGroup(AppAjaxClient app, Action action, String ... tagIDArray)  throws HarnessException {   
       // Create a contact group via Soap
-      ContactGroupItem group = ContactGroupItem.createUsingSOAP(app, tagIDArray);
+      ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
                     
       group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
       String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
@@ -344,7 +344,8 @@ public class PageAddressbook extends AbsTab {
 
    public ContactItem createUsingSOAPSelectContact(AppAjaxClient app, Action action, String ... tagIDArray)  throws HarnessException { 
       // Create a contact via Soap
-      ContactItem contactItem = ContactItem.createUsingSOAP(app, tagIDArray);                     
+      ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
+
       contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
                
          
@@ -371,7 +372,7 @@ public class PageAddressbook extends AbsTab {
          String accountName,
          String ... tagIDArray)  throws HarnessException {   
       // Create a contact group via Soap
-      ContactGroupItem group = ContactGroupItem.createLocalUsingSOAP(app, accountName, tagIDArray);
+      ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
 
       group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
       String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
@@ -406,7 +407,7 @@ public class PageAddressbook extends AbsTab {
          String accountName,
          String ... tagIDArray)  throws HarnessException { 
       // Create a contact via Soap
-      ContactItem contactItem = ContactItem.createLocalUsingSOAP(app, accountName, tagIDArray);                     
+      ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
       contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
 
       // Refresh the view, to pick up the new contact
