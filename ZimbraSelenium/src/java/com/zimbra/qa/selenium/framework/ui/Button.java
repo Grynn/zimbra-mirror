@@ -166,6 +166,10 @@ public class Button {
 	public static final Button O_CONTACTS = new Button("O_CONTACTS");
 	public static final Button O_PERSONAL_AND_SHARED_CONTACTS = new Button("O_PERSONAL_AND_SHARED_CONTACTS");
 	public static final Button O_GLOBAL_ADDRESS_LIST = new Button("O_GLOBAL_ADDRESS_LIST");
+	public static final Button O_ADD_FWD_SIGNATURE = new Button("O_ADD_FWD_SIGNATURE");
+	public static final Button O_ADD_Reply_SIGNATURE = new Button("O_ADD_Reply_SIGNATURE");
+	public static final Button O_ADD_ReplyAll_SIGNATURE = new Button("O_ADD_ReplyAll_SIGNATURE");
+
 
 	// Dumpster dialog
 	public static final Button B_RECOVER_DELETED_ITEMS = new Button("B_RECOVER_DELETED_ITEMS");
