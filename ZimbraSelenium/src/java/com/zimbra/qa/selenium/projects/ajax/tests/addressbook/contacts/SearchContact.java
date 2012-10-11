@@ -1,16 +1,13 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contacts;
 
+
 import java.util.*;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.ContactItem;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
-import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.items.*;
-
 import com.zimbra.qa.selenium.framework.ui.*;
-
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAllItemTypes;
 
@@ -32,7 +29,7 @@ public class SearchContact extends AjaxCommonTest {
 			groups = { "deprecated" })
 	public void SelectAllItemTypesSearchExistedContac() throws HarnessException {
 		// Search a contact item 		
-		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+		ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
 		PageAllItemTypes resultPage = null;
 		
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_ALL);
@@ -79,7 +76,7 @@ public class SearchContact extends AjaxCommonTest {
 			groups = { "functional" })
 	public void searchExistContact() throws HarnessException {
 		// Create a contact via soap 
-		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+		ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
  
 		// search for firstname
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_CONTACTS);	 		
@@ -102,7 +99,7 @@ public class SearchContact extends AjaxCommonTest {
 			groups = { "functional" })
 	public void searchNonExistContact() throws HarnessException {
 		// Create a contact via soap 
-		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
+		ContactItem contactItem = ContactItem.createContactItem(app.zGetActiveAccount());
 		
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_CONTACTS);	 		
 		app.zPageSearch.zAddSearchQuery(contactItem.firstName);
