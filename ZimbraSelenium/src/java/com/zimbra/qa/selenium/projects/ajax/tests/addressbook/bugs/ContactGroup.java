@@ -65,7 +65,7 @@ public class ContactGroup extends AjaxCommonTest  {
 		formGroup.zToolbarPressPulldown(Button.B_CONTACTGROUP_SEARCH_TYPE, Button.O_CONTACTGROUP_SEARCH_CONTACTS);
 		
 		// Get the displayed list
-		ArrayList<ContactItem> ciArray = formGroup.zListGroupRows();
+		ArrayList<ContactItem> ciArray = formGroup.zListGetSearchResults();
 		
 		boolean found=false;
 		for (ContactItem ci: ciArray) {
@@ -77,21 +77,18 @@ public class ContactGroup extends AjaxCommonTest  {
         
 		ZAssert.assertTrue(found, "Verify contact " + contact.getName() + " populated");
 
-		// add all to the email list
+		// Try to close out the window
 		formGroup.zToolbarPressButton(Button.B_CONTACTGROUP_ADD_ADDRESS);
 		
 		formGroup.zToolbarPressButton(Button.B_SAVE);
 		
-		formGroup.zClick(FormContactGroupNew.Locators.zAddButton);
 
 		
 	}
 
 	@Test(	description = "Click Delete Toolbar button in Edit Contact Group form",
-			groups = { "functional", "matt" })
+			groups = { "functional" })
 	public void Bug62026_ClickDeleteToolbarButtonInEditContactGroupForm() throws HarnessException {
-
-		DistributionListItem dlist = DistributionListItem.createDistributionListItem(app.zGetActiveAccount());
 		
 		//-- Data
 		
@@ -128,7 +125,7 @@ public class ContactGroup extends AjaxCommonTest  {
    	}
 	
 	@Test( description="create a new contact group from GAL search result",
-		   groups=("smoke"))
+		   groups= { "functional"  } )
 	public void Bug66623_AddingAGALToAContactGroup() throws HarnessException{
 		String email=ZimbraAccount.AccountB().EmailAddress.substring(0,ZimbraAccount.AccountB().EmailAddress.indexOf('@'));
 		

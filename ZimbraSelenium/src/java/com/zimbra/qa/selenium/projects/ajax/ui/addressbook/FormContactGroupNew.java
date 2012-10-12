@@ -429,34 +429,44 @@ public class FormContactGroupNew extends AbsForm {
 		return sIsElementPresent(getLocator(" div#[id$=_listView].groupMembers div[id^=zl__DWT][id$=__rows] td.NoResults"));			
 	}
 
-	/* return an array list of contact items displayed in the group list view
-	 * 
+	/**
+	 * Return the list of group members currently showing in the group member list
+	 * @return
 	 */
-	public ArrayList<ContactItem> zListGroupRows() {
-		ArrayList<ContactItem> ciArray = new ArrayList<ContactItem>();
-		ContactItem ci=null;
-		
-	    try {
-	      int count=1;
-	      
-	      while (true) {
-	    	  String cssCommon= getLocator(" div[id^=zl__DWT][id$=__rows]>div:nth-child(" + count + ") ");
-		      String cssName = cssCommon + "td:nth-child(2)"; 	
-		      String cssEmail= cssCommon + "td:nth-child(3)";
-		      
-	    	  ci= new ContactItem(sGetText(cssName));
-	    	  ci.setAttribute("email", sGetText(cssEmail));
-	    	  
-	    	  ciArray.add(ci);
-	    	  count++;
-	      }
-	    	
-	    } 
-	    catch (Exception e) {
-	       logger.info("reach the end of the node list");    	
-	    }
+	public ArrayList<ContactItem> zListGetMembers() throws HarnessException {
+		throw new HarnessException("implement me");
+	}
 	
-		return ciArray;
+	
+	/**
+	 * Return the list of contacts/groups/GAL currently showing in the search results
+	 * @return
+	 */
+	public ArrayList<ContactItem> zListGetSearchResults() throws HarnessException {
+		logger.info("zListGetSearchResults()");
+		
+		
+		String locator = null;
+		ArrayList<ContactItem> items = new ArrayList<ContactItem>();
+
+		int count = this.sGetCssCount("css=div#"+ MyDivID +" div[id$='_listView'] div[id$='__rows'] div[id^='zli__']");
+		for ( int i = 1; i <= count; i++) {
+			
+			locator = "css=div#"+ MyDivID +" div[id$='_listView'] div[id$='__rows']>div:nth-child(" + i + ")";
+			
+			String name = this.sGetText(locator + " td:nth-child(2)");
+			String email = this.sGetText(locator + " td:nth-child(3)");
+			
+			ContactItem item = new ContactItem();
+			item.setAttribute("fileAs", name);
+			item.setAttribute("email", email);
+			
+			logger.info(item.prettyPrint());
+			items.add(item);
+			
+		}
+
+		return items;
 	}
 	
 	
