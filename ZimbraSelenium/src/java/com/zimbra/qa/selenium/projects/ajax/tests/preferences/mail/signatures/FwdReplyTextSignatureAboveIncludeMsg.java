@@ -19,7 +19,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail.Locators;
 
 
 public class FwdReplyTextSignatureAboveIncludeMsg extends AjaxCommonTest {
@@ -69,7 +68,6 @@ public class FwdReplyTextSignatureAboveIncludeMsg extends AjaxCommonTest {
 
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
 
-
 		// Send a message to the account(self)
 		ZimbraAccount.AccountZWC().soapSend(
 				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
@@ -90,12 +88,9 @@ public class FwdReplyTextSignatureAboveIncludeMsg extends AjaxCommonTest {
 		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 
 		// Forward the item
-		app.zPageMail.zClickAt(Locators.zForwardToolbarButton, "0,0");
+		actual.zPressButton(Button.B_FORWARD);
 		ZAssert.assertTrue(actual.zGetMailPropertyAsText(com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field.Subject).contains("Fwd"),"Verify Fwd Window");
 
-		
-		actual.zPressButton(Button.B_FORWARD);
-		
 		//Click Options Drop Down and select Signature
 		app.zPageMail.zToolbarPressPulldown(Button.B_OPTIONS,Button.O_ADD_FWD_SIGNATURE,this.sigName);		
 
@@ -148,7 +143,8 @@ public class FwdReplyTextSignatureAboveIncludeMsg extends AjaxCommonTest {
 		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 
 		// Reply the item
-		app.zPageMail.zClickAt(Locators.zReplyToolbarButton, "0,0");
+		//	app.zPageMail.zClickAt(Locators.zReplyToolbarButton, "0,0");
+		actual.zPressButton(Button.B_REPLY);
 		ZAssert.assertTrue(actual.zGetMailPropertyAsText(com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field.Subject).contains("Re"),"Verify Reply Window");
 
 		//Click Options Drop Down and select Signature
@@ -200,7 +196,8 @@ public class FwdReplyTextSignatureAboveIncludeMsg extends AjaxCommonTest {
 		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 
 		// Reply the item
-		app.zPageMail.zClickAt(Locators.zReplyAllToolbarButton, "0,0");
+		//app.zPageMail.zClickAt(Locators.zReplyAllToolbarButton, "0,0");
+		actual.zPressButton(Button.B_REPLYALL);
 		ZAssert.assertTrue(actual.zGetMailPropertyAsText(com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field.Subject).contains("Re"),"Verify ReplyAll Window");
 
 		//Click Options Drop Down and select Signature
