@@ -20,7 +20,7 @@ import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
  *      ://wiki.zimbra.com/wiki/Testing:_Selenium:_ZimbraSelenium_Overview#Mail_Page
  */
 public class FormApptNew extends AbsForm {
-
+	public static String locatorValue;
 	/**
 	 * Defines Selenium locators for various objects in {@link FormApptNew}
 	 */
@@ -30,7 +30,9 @@ public class FormApptNew extends AbsForm {
 		public static final String CustomizeLink = "css=div[id$='repeatDesc']:contains('Customize')";
 		public static final String ConfigureLink = "css=div[class='FakeAnchor']:contains('Configure')";
 		public static final String SuggestAtimeLink = "css=div[id$='_suggest_time']:contains('Suggest a time')";
-		public static final String SuggestALocationLink = "css=css=div[id$='_suggest_location']:contains('Suggest a location')";
+		public static final String SuggestATime10AM = "css=div[id$='_suggest_view'] td:contains(10:00 AM)";		
+		public static final String SuggestALocationLink = "css=div[id$='_suggest_location']:contains('Suggest a location')";
+		public static String SuggestedLocations = "css=div[id='zv__CSLP'] div[class$='ZmLocationSuggestion']:contains('" + locatorValue + "')";
 		public static final String ShowSchedulerLink = "css=div[id$='_scheduleButton']:contains('Show')";
 		public static final String HideSchedulerLink = "css=div[id$='_scheduleButton']:contains('Hide')";
 		
@@ -137,6 +139,10 @@ public class FormApptNew extends AbsForm {
 		sp.waitForPostqueue();
 	}
 	
+	public String zGetSuggestedLocation(String apptLocation) throws HarnessException {
+		return "css=div[id='zv__CSLP'] div[class$='ZmLocationSuggestion']:contains('" + apptLocation + "')";		
+	}
+	
 	public void zAddRequiredAttendeeFromScheduler(String attendee) throws HarnessException {
 		zToolbarPressButton(Button.B_SHOW);
 		SleepUtil.sleepSmall();
@@ -210,8 +216,6 @@ public class FormApptNew extends AbsForm {
 	 */
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
-
-		SleepUtil.sleepMedium();
 		
 		tracer.trace("Click button " + button);
 
@@ -256,6 +260,29 @@ public class FormApptNew extends AbsForm {
 			page = null;
 
 			// FALL THROUGH
+		
+		} else if (button == Button.B_SUGGESTATIME) {
+
+			locator = Locators.SuggestAtimeLink;
+			SleepUtil.sleepSmall();
+			page = null;
+
+			// FALL THROUGH
+		
+		} else if (button == Button.B_10AM) {
+
+			locator = Locators.SuggestATime10AM;
+			page = null;
+
+			// FALL THROUGH
+		
+		} else if (button == Button.B_SUGGESTALOCATION) {
+
+			locator = Locators.SuggestALocationLink;
+			SleepUtil.sleepSmall();
+			page = null;
+
+			// FALL THROUGH
 			
 		} else if (button == Button.B_SHOW) {
 
@@ -282,7 +309,7 @@ public class FormApptNew extends AbsForm {
 		//
 
 		// Click it
-		this.zClick(locator);
+		this.sClickAt(locator, "");
 
 		// if the app is busy, wait for it to become active again
 		this.zWaitForBusyOverlay();
@@ -297,6 +324,70 @@ public class FormApptNew extends AbsForm {
 		// Return the page, if specified
 		return (page);
 
+	}
+	
+	public AbsPage zPressButton(Button button, String value) throws HarnessException {
+		logger.info(myPageName() + " zPressButton(" + button + ")");
+
+		tracer.trace("Click button " + button);
+
+		if (button == null)
+			throw new HarnessException("Button cannot be null!");
+
+		// Fallthrough objects
+		AbsPage page = null;
+		String locator = null;
+
+		if (button == Button.B_SUGGESTEDLOCATION) {
+
+			locator = zGetSuggestedLocation(value);
+			SleepUtil.sleepSmall();
+			page = null;
+
+			// FALL THROUGH
+			
+		} else {
+			throw new HarnessException("no logic defined for button " + button);
+		}
+
+		if (locator == null)
+			throw new HarnessException("locator was null for button " + button);
+
+		this.sClickAt(locator, "");
+		
+		this.zWaitForBusyOverlay();
+
+		if (page != null) {
+			page.zWaitForActive();
+
+		}
+
+		return (page);
+
+	}
+	
+	public void zVerifySpecificTimeNotExists(String time) throws HarnessException {
+		PageCalendar pageCal = new PageCalendar(MyApplication);
+		String[] timeArray = time.split(",");
+		for (int i=0; i<=timeArray.length-1; i++) {
+			ZAssert.assertEquals(false, pageCal.sIsElementPresent("css=div[id$='_suggest_view'] td:contains(" + timeArray[i] + ")"), "Verify busy timeslots are not showing while suggesting a time");
+		}
+	}
+	
+	public void zVerifySpecificTimeExists(String time) throws HarnessException {
+		PageCalendar pageCal = new PageCalendar(MyApplication);
+		String[] timeArray = time.split(",");
+		for (int i=0; i<=timeArray.length-1; i++) {
+			ZAssert.assertEquals(true, pageCal.sIsElementPresent("css=div[id$='_suggest_view'] td:contains(" + timeArray[i] + ")"), "Verify free timeslots are showing while suggesting a time");
+		}
+	}
+	
+	public void zVerifySpecificLocationNotExists(String location) throws HarnessException {
+		PageCalendar pageCal = new PageCalendar(MyApplication);
+		String[] locationArray = location.split(",");
+		for (int i=0; i<=locationArray.length-1; i++) {
+			ZAssert.assertEquals(false, pageCal.sIsElementPresent("css=div[id$='_suggest_view'] td:contains(" + locationArray[i] + ")"), "Verify busy timeslot are not showing while suggesting a time");
+		}
 	}
 
 	/**
