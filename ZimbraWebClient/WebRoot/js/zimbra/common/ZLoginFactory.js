@@ -75,7 +75,7 @@ function(msgs) {
 		userNameMsg : msgs["username"] ? msgs["username"] + ':' : "",
 		
 		showMoreField : false,
-                moreMsg : msgs["more"] || "",
+				moreMsg : msgs["more"] || "",
 
 		showPasswordField : false,
 		passwordMsg : msgs["password"] ? msgs["password"] + ':' : "",
@@ -129,9 +129,9 @@ ZLoginFactory.showForm = function ()				{												this.show("ZLoginFormPanel"
 ZLoginFactory.hideForm = function () 				{												this.hide("ZLoginFormPanel");	}
 ZLoginFactory.getForm = function () 				{												return this.get("ZLoginFormPanel");	}
 
-ZLoginFactory.showMoreField = function (name)           {       this.setValue(ZLoginFactory.MORE_ID, name);                             this.show(ZLoginFactory.MORE_ID);       }
-ZLoginFactory.hideMoreField = function ()                       {                                                                                               this.hide(ZLoginFactory.MORE_ID);       }
-ZLoginFactory.getMoreField = function ()                        {                                                                                               return this.get(ZLoginFactory.MORE_ID); }
+ZLoginFactory.showMoreField = function (name)		   {	   this.setValue(ZLoginFactory.MORE_ID, name);							 this.show(ZLoginFactory.MORE_ID);	   }
+ZLoginFactory.hideMoreField = function ()					   {																							   this.hide(ZLoginFactory.MORE_ID);	   }
+ZLoginFactory.getMoreField = function ()						{																							   return this.get(ZLoginFactory.MORE_ID); }
 
 ZLoginFactory.showUserField = function (name)		{	this.setValue(ZLoginFactory.USER_ID, name);				this.show(ZLoginFactory.USER_ID);	}
 ZLoginFactory.hideUserField = function () 			{												this.hide(ZLoginFactory.USER_ID);	}
@@ -161,63 +161,63 @@ ZLoginFactory.getLoginButton = function () 		{	return this.get(ZLoginFactory.LOG
 
 ZLoginFactory.getLoginDialogHTML = function (params) {
 	var html = [
-		 "<div ", (params.showAbout ? " " : "class='center'"), ">",
-				"<div class='contentBox'>",
+		"<div ", (params.showAbout ? " " : "class='center'"), ">",
+			"<div class='contentBox'>",
 				"<div class='ImgAltBanner'></div>",
-		 		"<h1><a href='http://www.zimbra.com/' id='bannerLink' target='_new'>",
-		 			"<span class='ImgLoginBanner'></span>",
-		 		"</a></h1>",
-		 		"<div id='ZLoginErrorPanel' ", (params.showError ? " " :  "style='display:none'"), ">",
-		 			"<table><tr><td width='40'><div class='ImgCritical_32'></div></td><td width='*'><span class='errorText' id='ZLoginErrorMsg'></span></td></tr></table>",
+				"<h1><a href='http://www.zimbra.com/' id='bannerLink' target='_new'>",
+					"<span class='ImgLoginBanner'></span>",
+				"</a></h1>",
+				"<div id='ZLoginErrorPanel' ", (params.showError ? " " :  "style='display:none'"), ">",
+					"<table><tr><td width='40'><div class='ImgCritical_32'></div></td><td width='*'><span class='errorText' id='ZLoginErrorMsg'></span></td></tr></table>",
 				"</div>",
 				"<form name='loginForm' method='POST'>",
-		 		"<table class='form' ", (params.showForm ? " " : "style='display:none'"),">",
-				"<tr ", (params.showMoreField ? " " : "style='display:none'"), ">",
-					"<td></td>",
-					"<td><span class='Img ImgInformation_xtra_small'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><label for='", ZLoginFactory.MORE_ID, "'>",params.moreMsg,"</label></td>",
-				"</tr>",
-				"<tr ", (params.showLoading ? " " : "style='display:none'"), ">",
-		 			"<td colspan=2 class='ZLoadingMessage'>" , params.loadingMsg, "</td>",
-				"</tr>",
-				"<tr id='ZLoginLicenseMsgContainer' ", (params.showLicenseMsg ? " " : "style='display:none'"), ">",
-					"<td colspan=3 id='ZLoginLicenseMsg'>", params.licenseMsg, "</td>",
-				"</tr>",
-                "<tr ", (params.showUserField ? " " : "style='display:none'"), ">",
-		 			"<td><label for='", ZLoginFactory.USER_ID, "'>",params.userNameMsg,"</label></td>",
-		 			"<td><input id='", ZLoginFactory.USER_ID, "' name='", ZLoginFactory.USER_ID, "' class='zLoginField' type='text' size='40' autocomplete=OFF/></td>",
-		 		"</tr>",
-		 		"<tr ", (params.showPasswordField ? " " : "style='display:none'"), ">",
-		 			"<td><label for=",ZLoginFactory.PASSWORD_ID,">", params.passwordMsg,"</label></td>",
-		 			"<td><input id=",ZLoginFactory.PASSWORD_ID," class='zLoginField' name=",ZLoginFactory.PASSWORD_ID," type='password' autocomplete=OFF size='40'/></td>",
-		 		"</tr>",
-		 		"<tr id=", ZLoginFactory.NEW_PASSWORD_TR_ID, (params.showNewPasswordFields ? " " : " style='display:none'"), ">",
-		 			"<td><label for='", ZLoginFactory.NEW_PASSWORD_ID, "'>", params.newPassword1Msg, "</label></td>",
-		 			"<td><input id='", ZLoginFactory.NEW_PASSWORD_ID, "' class='zLoginField' name='", ZLoginFactory.NEW_PASSWORD_ID, "' type='password' autocomplete=OFF size='40'/></td>",
-		 		"</tr>",
-		 		"<tr id=", ZLoginFactory.PASSWORD_CONFIRM_TR_ID, (params.showNewPasswordFields ? " " : " style='display:none'"), ">",
-		 			"<td><label for='", ZLoginFactory.PASSWORD_CONFIRM_ID, "'>", params.newPassword2Msg, "</label></td>",
-		 			"<td><input id='", ZLoginFactory.PASSWORD_CONFIRM_ID, "' class='zLoginField' name='", ZLoginFactory.PASSWORD_CONFIRM_ID, "' type='password' autocomplete=OFF size='40'/></td>",
-		 		"</tr>",		 		
-                "<tr>",
-	                "<td>&nbsp;</td>",
-	                "<td class='submitTD'>",
-	               	    "<input id='", ZLoginFactory.LOGIN_BUTTON_ID, "' class='ZLoginButton DwtButton' type='button' onclick='", params.loginAction, ";return false' value='",params.buttonName,(params.showButton ?"'/>" :"' style='display:none'/>"),
-	                    "<input id='", ZLoginFactory.REMEMBER_ME_ID, "' value='1' type='checkbox' name='", ZLoginFactory.REMEMBER_ME_ID, "'  ", (params.showRememberMeCheckbox ? "" : "style='display:none'"), "/>",
-	                    "<label ", (params.showRememberMeCheckbox ? "" : "style='display:none'"), " for='", ZLoginFactory.REMEMBER_ME_ID, "'>", params.rememberMeMsg, "</label>",
-	                "</td>",
-                "</tr>",	
-    			"</table>",
-				"</div>",
-    			"</form>",
+					"<table class='form' ", (params.showForm ? " " : "style='display:none'"),">",
+					"<tr ", (params.showMoreField ? " " : "style='display:none'"), ">",
+						"<td></td>",
+						"<td><span class='Img ImgInformation_xtra_small'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><label for='", ZLoginFactory.MORE_ID, "'>",params.moreMsg,"</label></td>",
+					"</tr>",
+					"<tr ", (params.showLoading ? " " : "style='display:none'"), ">",
+						"<td colspan=2 class='ZLoadingMessage'>" , params.loadingMsg, "</td>",
+					"</tr>",
+					"<tr id='ZLoginLicenseMsgContainer' ", (params.showLicenseMsg ? " " : "style='display:none'"), ">",
+						"<td colspan=3 id='ZLoginLicenseMsg'>", params.licenseMsg, "</td>",
+					"</tr>",
+					"<tr ", (params.showUserField ? " " : "style='display:none'"), ">",
+						"<td><label for='", ZLoginFactory.USER_ID, "'>",params.userNameMsg,"</label></td>",
+						"<td><input id='", ZLoginFactory.USER_ID, "' name='", ZLoginFactory.USER_ID, "' class='zLoginField' type='text' size='40' autocomplete=OFF/></td>",
+					"</tr>",
+					"<tr ", (params.showPasswordField ? " " : "style='display:none'"), ">",
+						"<td><label for=",ZLoginFactory.PASSWORD_ID,">", params.passwordMsg,"</label></td>",
+						"<td><input id=",ZLoginFactory.PASSWORD_ID," class='zLoginField' name=",ZLoginFactory.PASSWORD_ID," type='password' autocomplete=OFF size='40'/></td>",
+					"</tr>",
+					"<tr id=", ZLoginFactory.NEW_PASSWORD_TR_ID, (params.showNewPasswordFields ? " " : " style='display:none'"), ">",
+						"<td><label for='", ZLoginFactory.NEW_PASSWORD_ID, "'>", params.newPassword1Msg, "</label></td>",
+						"<td><input id='", ZLoginFactory.NEW_PASSWORD_ID, "' class='zLoginField' name='", ZLoginFactory.NEW_PASSWORD_ID, "' type='password' autocomplete=OFF size='40'/></td>",
+					"</tr>",
+					"<tr id=", ZLoginFactory.PASSWORD_CONFIRM_TR_ID, (params.showNewPasswordFields ? " " : " style='display:none'"), ">",
+						"<td><label for='", ZLoginFactory.PASSWORD_CONFIRM_ID, "'>", params.newPassword2Msg, "</label></td>",
+						"<td><input id='", ZLoginFactory.PASSWORD_CONFIRM_ID, "' class='zLoginField' name='", ZLoginFactory.PASSWORD_CONFIRM_ID, "' type='password' autocomplete=OFF size='40'/></td>",
+					"</tr>",
+					"<tr>",
+						"<td>&nbsp;</td>",
+						"<td class='submitTD'>",
+							"<input id='", ZLoginFactory.LOGIN_BUTTON_ID, "' class='ZLoginButton DwtButton' type='button' onclick='", params.loginAction, ";return false' value='",params.buttonName,(params.showButton ?"'/>" :"' style='display:none'/>"),
+							"<input id='", ZLoginFactory.REMEMBER_ME_ID, "' value='1' type='checkbox' name='", ZLoginFactory.REMEMBER_ME_ID, "'  ", (params.showRememberMeCheckbox ? "" : "style='display:none'"), "/>",
+							"<label ", (params.showRememberMeCheckbox ? "" : "style='display:none'"), " for='", ZLoginFactory.REMEMBER_ME_ID, "'>", params.rememberMeMsg, "</label>",
+						"</td>",
+					"</tr>",	
+					"</table>",
+				"</form>",
 				"<div id='ZLoginAboutPanel' ", (params.showAbout ? "" : "style='display:none'"), ">", params.aboutMsg,
 				"</div>",	
-    			"<div id='ZLoginLongVersion' class='version' ", (params.showLongVersion ? "" : "style='display:none'"), ">", params.longVersion, "</div>",
-    	"</div>",
-	"<div class='Footer'>",
-		"<div id='ZLoginNotice'>",params.clientLevelNotice,"</div>",
-		"<div class='copyright'>",params.copyrightText,"</div>",
+				"<div id='ZLoginLongVersion' class='version' ", (params.showLongVersion ? "" : "style='display:none'"), ">", params.longVersion, "</div>",
+			"</div>",
+			"<div class='decor1'></div>",
+		"</div>",
+		"<div class='Footer'>",
+			"<div id='ZLoginNotice'>",params.clientLevelNotice,"</div>",
+			"<div class='copyright'>",params.copyrightText,"</div>",
 	"</div>",
-    "<div class='decor1Outer'><div class='decor1'></div></div>",   //css class 'center' have 'filter' attribute which make 'overflow:visible' not work in ie. so put this out of 'center'
 	"<div class='decor2'></div>"
 	].join("");
 	return html;
@@ -256,17 +256,17 @@ ZLoginFactory.get = function (id) {
 
 ZLoginFactory.handleKeyPress =
 function(ev) {
-    ev = ev || window.event;
-    if (ev == null) {
-    	return true;
-    }
-    var target = ev.target ? ev.target: ev.srcElement;
-    if (!target) {
-    	return true;
-    }
-    var keyCode = ev.keyCode;
-    var fakeTabKey = false;
-    if (keyCode == 13) { // Enter
+	ev = ev || window.event;
+	if (ev == null) {
+		return true;
+	}
+	var target = ev.target ? ev.target: ev.srcElement;
+	if (!target) {
+		return true;
+	}
+	var keyCode = ev.keyCode;
+	var fakeTabKey = false;
+	if (keyCode == 13) { // Enter
 		if (target.id == ZLoginFactory.USER_ID || target.id == ZLoginFactory.NEW_PASSWORD_ID) {
 			fakeTabKey = true;
 		} else {
@@ -278,7 +278,7 @@ function(ev) {
 			ZLoginFactory._cancelEvent(ev);
 			return false;
 		}
-    }
+	}
 	if (fakeTabKey || (keyCode == 9)) { // Tab
 		var startIndex = ZLoginFactory.TAB_ORDER.length - 1;
 		for (var i = 0; i < ZLoginFactory.TAB_ORDER.length; i++) {
