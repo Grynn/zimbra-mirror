@@ -66,6 +66,10 @@ public class DisplayMail extends AbsDisplay {
 		
 		public static final String ProposeNewTimeButton = "css=td[id$='__Inv__PROPOSE_NEW_TIME_title']";
 		public static final String zSubjectField = "css=div[id^=zv__COMPOSE] input[id$=_subject_control]";
+		public static final String zReplyButton ="css=div[id$='__REPLY']";
+		public static final String zReplyAllButton ="css=div[id$='__REPLY_ALL']";
+		public static final String zForwardButton ="css=div[id$='__FORWARD']";
+	
 	}
 
 	/**
@@ -232,6 +236,21 @@ public class DisplayMail extends AbsDisplay {
 			page = new DialogShareDecline(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
 			doPostfixCheck = true;
 
+		}else if ( button == Button.B_FORWARD) {
+
+			locator = Locators.zForwardButton;
+			page = null;
+			doPostfixCheck = true;
+		}else if ( button == Button.B_REPLY) {
+
+			locator = Locators.zReplyButton;
+			page = null;
+			doPostfixCheck = true;
+		}else if ( button == Button.B_REPLYALL) {
+
+			locator = Locators.zReplyAllButton;
+			page = null;
+			doPostfixCheck = true;
 		} else  {
 			
 			throw new HarnessException("no implementation for button: "+ button);
