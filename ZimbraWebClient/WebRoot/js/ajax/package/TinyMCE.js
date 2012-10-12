@@ -10,3 +10,4 @@ AjxPackage.require("ajax.3rdparty.tinymce.plugins.table.editor_plugin_src");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.paste.editor_plugin_src");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.directionality.editor_plugin_src");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.zbreakquote.editor_plugin");
+AjxPackage.require("ajax.3rdparty.tinymce.plugins.emotions.editor_plugin_src");
