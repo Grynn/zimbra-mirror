@@ -27,7 +27,8 @@ public class CreateMailHtml extends PrefGroupMailByMessageTest {
 		MailItem mail = new MailItem();
 		mail.dToRecipients.add(new RecipientItem(ZimbraAccount.AccountA()));
 		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		mail.dBodyHtml = "body" + ZimbraSeleniumProperties.getUniqueString();
+		/* TODO: ... debugging to be removed */ 
+		//mail.dBodyHtml = "body" + ZimbraSeleniumProperties.getUniqueString();
 
 
 		// Open the new mail form
@@ -46,7 +47,14 @@ public class CreateMailHtml extends PrefGroupMailByMessageTest {
 
 			// Fill out the form with the data
 			window.zFill(mail);
-
+			
+			/* TODO: ... debugging to be removed */ 
+			mail.dBodyHtml = "body" + ZimbraSeleniumProperties.getUniqueString();
+			window.sSelectWindow("Zimbra: Compose");
+			String locator = "css=iframe[id*=ifr]";
+			window.sClickAt(locator,"");
+			window.zTypeFormattedText(locator, mail.dBodyHtml);
+			
 			// Send the message
 			window.zToolbarPressButton(Button.B_SEND);
 			
