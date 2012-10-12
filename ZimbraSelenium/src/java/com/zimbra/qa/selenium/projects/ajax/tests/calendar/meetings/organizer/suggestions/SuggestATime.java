@@ -64,7 +64,6 @@ public class SuggestATime extends CalendarWorkWeekTest {
         // Suggest a time, pickup 10AM and send the appointment
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
         apptForm.zToolbarPressButton(Button.B_SUGGESTATIME);
-        SleepUtil.sleepMedium();
         apptForm.zVerifySpecificTimeNotExists("6:00 AM,7:00 AM,7:30 AM");
         apptForm.zVerifySpecificTimeExists("8:00 AM,8:30 AM,9:00 AM,3:00 PM,3:30 PM,4:00 PM");
         apptForm.zToolbarPressButton(Button.B_10AM);
