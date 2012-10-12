@@ -66,7 +66,6 @@ public class SuggestALocation extends CalendarWorkWeekTest {
         // Select the location from suggested location pane
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
         apptForm.zToolbarPressButton(Button.B_SUGGESTALOCATION); 
-        SleepUtil.sleepMedium();
         apptForm.zPressButton(Button.B_SUGGESTEDLOCATION, apptLocation);
         
         // Verify 'free' location appears in suggested locations pane
@@ -88,7 +87,6 @@ public class SuggestALocation extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
 		apptForm.zToolbarPressButton(Button.B_SUGGESTALOCATION); 
-        SleepUtil.sleepMedium();
         ZAssert.assertEquals(apptForm.zVerifyLocation(apptLocation), false, "Verify 'busy' location doesn't appear in suggested locations pane");
 		
 	}

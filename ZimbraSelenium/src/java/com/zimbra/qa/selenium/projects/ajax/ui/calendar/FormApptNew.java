@@ -264,7 +264,7 @@ public class FormApptNew extends AbsForm {
 		} else if (button == Button.B_SUGGESTATIME) {
 
 			locator = Locators.SuggestAtimeLink;
-			SleepUtil.sleepSmall();
+			SleepUtil.sleepMedium();
 			page = null;
 
 			// FALL THROUGH
@@ -279,7 +279,7 @@ public class FormApptNew extends AbsForm {
 		} else if (button == Button.B_SUGGESTALOCATION) {
 
 			locator = Locators.SuggestALocationLink;
-			SleepUtil.sleepSmall();
+			SleepUtil.sleepMedium();
 			page = null;
 
 			// FALL THROUGH
@@ -341,7 +341,7 @@ public class FormApptNew extends AbsForm {
 		if (button == Button.B_SUGGESTEDLOCATION) {
 
 			locator = zGetSuggestedLocation(value);
-			SleepUtil.sleepSmall();
+			SleepUtil.sleepMedium();
 			page = null;
 
 			// FALL THROUGH
