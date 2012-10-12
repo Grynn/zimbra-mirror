@@ -903,7 +903,10 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 		var changehandler = DwtForm.__makeFunc(itemDef.onchange);
 		var onkeyup = AjxCallback.simpleClosure(this._input2model2handler, this, id, changehandler);
 		control.setHandler(DwtEvent.ONKEYUP, onkeyup);
-
+        if (AjxEnv.isFirefox){
+            var onkeydown = this._onkeydownhandler.bind(this, id, changehandler);
+            control.setHandler(DwtEvent.ONKEYDOWN, onkeydown);
+        }
 		var blurhandler = DwtForm.__makeFunc(itemDef.onblur);
         if (blurhandler) {
 		    var onblur = AjxCallback.simpleClosure(this._input2model2handler, this, id, blurhandler);
@@ -1001,6 +1004,10 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 
 	// return control
 	return control;
+};
+
+DwtForm.prototype._onkeydownhandler  = function(id, changehandler){
+    setTimeout(this._input2model2handler.bind(this, id, changehandler), 500);
 };
 
 DwtForm.prototype._initControl = function(itemDef, useCurrentValues) {
