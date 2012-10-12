@@ -50,7 +50,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
 		// Select the contact group
-		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.fileAs);
+		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.getName());
 
     	// Untag it by click Tag->Remove Tag on toolbar 
 		app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_REMOVETAG);
@@ -96,7 +96,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
     	// Untag it by click Tag->Remove Tag on context menu
-		app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_REMOVETAG , group.fileAs);
+		app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_REMOVETAG , group.getName());
     	
 		
 		
@@ -145,7 +145,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
 		// Select the contact group
-		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.fileAs);
+		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.getName());
 
     	// Untag one tag by click Tag->Remove Tag->A Tag name on toolbar 
 		app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_REMOVETAG, tag1);
@@ -202,7 +202,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
     	// Untag one tag by click Tag->Remove Tag->A Tag name on context menu
-		app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_REMOVETAG , tag1.getName(), group.fileAs);
+		app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_REMOVETAG , tag1.getName(), group.getName());
     	
 		
 		
@@ -254,7 +254,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
 		// Select the contact group
-		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.fileAs);
+		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.getName());
 
     	// Untag one tag by click Tag->Remove Tag->All Tags on toolbar 
 		app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_REMOVETAG, TagItem.Remove_All_Tags);
@@ -307,10 +307,10 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
 		// Select the contact group
-		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.fileAs);
+		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.getName());
 
     	// Untag one tag by click Tag->Remove Tag->All Tags on context menu
-		app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_REMOVETAG , "All Tags", group.fileAs);
+		app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_REMOVETAG , "All Tags", group.getName());
     	
 		
 		
@@ -361,7 +361,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
 		// Select the contact group
-		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.fileAs);
+		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.getName());
 
     	// Untag one tag by click Tag->Remove Tag->All Tags on context menu
 	    app.zPageAddressbook.zKeyboardShortcut(Shortcut.S_MAIL_REMOVETAG);
@@ -410,7 +410,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
 		// Select the contact group
-		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.fileAs);
+		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.getName());
 
     	// Untag one tag by click Tag->Remove Tag->All Tags on context menu
 	    app.zPageAddressbook.zKeyboardShortcut(Shortcut.S_MAIL_REMOVETAG);

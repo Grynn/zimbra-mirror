@@ -1247,7 +1247,7 @@ public class PageAddressbook extends AbsTab {
 		
 		AbsPage page = null;
 		String contactLocator = getContactLocator(contact);
-		String locator = null;
+		String optionLocator = null;
 		String itemLocator = null;
 
         
@@ -1260,19 +1260,19 @@ public class PageAddressbook extends AbsTab {
 			if (option == Button.B_TAG) {		        
 						
 				// Hover over the context menu "tags" item
-				locator = "css=div#zm__Contacts div#TAG_MENU td[id$='_title']";
+				optionLocator = "css=div#zm__Contacts div#TAG_MENU td[id$='_title']";
 
 				if (item instanceof TagItem) {
 					
 					// Left click the existing tag
-					itemLocator = "css=td[id$=title]:contains('" + item.getName() + "')";
+					itemLocator = "css=div[id^='TAG_MENU|MENU'] td[id$='_title']:contains('" + item.getName() + "')";
 					
 				}
 			
 			}
 			else if (option == Button.B_CONTACTGROUP) {
 				
-				locator = "css=div#zm__Contacts div[id^='CONTACTGROUP_MENU'] td[id$='_title']";
+				optionLocator = "css=div#zm__Contacts div[id^='CONTACTGROUP_MENU'] td[id$='_title']";
 
 				if ( item instanceof ContactGroupItem) {
 					itemLocator = "css=div[id^='CONTACTGROUP_MENU'] td[id$='_title']:contains('"+ item.getName() +"')";
@@ -1288,13 +1288,17 @@ public class PageAddressbook extends AbsTab {
 			zRightClickAt(contactLocator,"0,0");
 			this.zWaitForBusyOverlay();
 
-			if ( !this.sIsElementPresent(locator) ) {
+			if ( !this.sIsElementPresent(optionLocator) ) {
 				throw new HarnessException("Unable to hover over context menu");
 			}
 			
 			// Mouse over the option
-			sMouseOver(locator);
+			sMouseOver(optionLocator);
 			this.zWaitForBusyOverlay();
+			
+			// It seems to take a while to draw the context menu
+			// Sleep a bit to let it draw.
+			SleepUtil.sleepLong();
 			
 
 			if ( !this.sIsElementPresent(itemLocator) ) {

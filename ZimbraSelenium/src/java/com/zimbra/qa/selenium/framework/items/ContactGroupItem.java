@@ -71,6 +71,14 @@ public class ContactGroupItem extends ContactItem implements IItem {
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.items.ContactItem#getName()
+	 */
+	@Override
+	public String getName() {
+		return (groupName);
+	}
+	
 	/**
 	 * Add a contact item to the dlist
 	 * @param ContactItem
