@@ -97,7 +97,7 @@ public class SearchContactGroup extends AjaxCommonTest {
 			app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
 			ZAssert.assertFalse(app.zPageAddressbook.zIsContactDisplayed(group), "Verify contact " + group.fileAs + " displayed");
 
-			app.zPageSearch.zAddSearchQuery(group.dlist.get(i).company);
+			app.zPageSearch.zAddSearchQuery(group.dlist.get(i).getAttribute("company"));
 			app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
 			ZAssert.assertFalse(app.zPageAddressbook.zIsContactDisplayed(group), "Verify contact " + group.fileAs + " displayed");
 

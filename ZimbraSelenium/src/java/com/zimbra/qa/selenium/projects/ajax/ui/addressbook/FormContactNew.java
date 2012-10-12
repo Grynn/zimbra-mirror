@@ -404,6 +404,16 @@ public class FormContactNew extends AbsForm {
 		// Convert object to ContactItem
 		ContactItem contact = (ContactItem) item;
 		
+		if ( contact.email != null ) {
+			zFillField(Field.fromString("email"), contact.email);
+		}
+		if ( contact.firstName != null ) {
+			zFillField(Field.fromString("firstName"), contact.firstName);
+		}
+		if ( contact.lastName != null ) {
+			zFillField(Field.fromString("lastName"), contact.lastName);
+		}
+		
 		for ( Entry<String, String> entry : contact.ContactAttributes.entrySet() ) {
 			zFillField(Field.fromString(entry.getKey()), entry.getValue());			
 		}

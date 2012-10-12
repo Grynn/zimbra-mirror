@@ -22,26 +22,26 @@ public class ContactItem implements IItem {
 	public String fileAs = null;
 	public String type = null;
 	public String firstName = null;
-	public String middleName = null;
 	public String lastName = null;
 	public String email = null;
-	public String homePostalCode = null;
-	public String nameSuffix = null;
-	public String birthday = null;
-	public String homeStreet = null;
-	public String nickname = null;
-	public String department = null;
-	public String homeCountry = null;
-	public String homeCity = null;
-	public String company = null;
-	public String homeState = null;
-	public String notes = null;
-	public String jobTitle = null;
-	public String maidenName = null;
-	public String imAddress1 = null;
-	public String mobilePhone = null;
-	public String namePrefix = null;
-	public String homeURL = null;
+//	public String middleName = null;
+//	public String homePostalCode = null;
+//	public String nameSuffix = null;
+//	public String birthday = null;
+//	public String homeStreet = null;
+//	public String nickname = null;
+//	public String department = null;
+//	public String homeCountry = null;
+//	public String homeCity = null;
+//	public String company = null;
+//	public String homeState = null;
+//	public String notes = null;
+//	public String jobTitle = null;
+//	public String maidenName = null;
+//	public String imAddress1 = null;
+//	public String mobilePhone = null;
+//	public String namePrefix = null;
+//	public String homeURL = null;
 
 	public HashMap<String, String> ContactAttributes = new HashMap<String, String>();
 
@@ -117,44 +117,10 @@ public class ContactItem implements IItem {
 			email = value;
 		else if ( key.equals("firstName"))
 			firstName = value;
-		else if ( key.equals("middleName"))
-			middleName = value;
 		else if ( key.equals("lastName"))
 			lastName = value;
-		else if ( key.equals("homePostalCode"))
-			homePostalCode = value;
-		else if ( key.equals("nameSuffix"))
-			nameSuffix = value;
-		else if ( key.equals("birthday"))
-			birthday = value;
-		else if ( key.equals("homeStreet"))
-			homeStreet = value;
-		else if ( key.equals("nickname"))
-			nickname = value;
-		else if ( key.equals("department"))
-			department = value;
-		else if ( key.equals("homeCountry"))
-			homeCountry = value;
-		else if ( key.equals("homeCity"))
-			homeCity = value;
-		else if ( key.equals("company"))
-			company = value;
-		else if ( key.equals("homeState"))
-			homeState = value;
-		else if ( key.equals("notes"))
-			notes = value;
-		else if ( key.equals("jobTitle"))
-			jobTitle = value;
-		else if ( key.equals("imAddress1"))
-			imAddress1 = value;
-		else if ( key.equals("namePrefix"))
-			namePrefix = value;
-		else if ( key.equals("mobilePhone"))
-			mobilePhone = value;
-		else if ( key.equals("maidenName"))
-			maidenName = value;
-		else if ( key.equals("homeURL"))
-			homeURL = value;
+		else if ( key.equals("fileAs"))
+			fileAs = value;
 
 		// add to the map
 		ContactAttributes.put(key, value);
@@ -327,8 +293,8 @@ public class ContactItem implements IItem {
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(ContactItem.class.getSimpleName()).append('\n');
-		sb.append("Email: ").append(email).append('\n');
-		sb.append(String.format("Name: first(%s) middle(%s) last(%s)\n", firstName, middleName, lastName)).append('\n');
+		sb.append("Email: ").append(getAttribute("email", "")).append('\n');
+		sb.append(String.format("Name: first(%s) middle(%s) last(%s)\n", firstName, getAttribute("middleName", ""), lastName)).append('\n');
 		for (String key : ContactAttributes.keySet())
 			sb.append(String.format("Attribute: key(%s) value(%s)", key, ContactAttributes.get(key))).append('\n');
 		return (sb.toString());

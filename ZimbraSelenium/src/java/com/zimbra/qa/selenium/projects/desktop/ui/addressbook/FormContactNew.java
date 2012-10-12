@@ -176,47 +176,50 @@ public class FormContactNew extends AbsForm {
 	
 	@Override
    public void zFill(IItem item) throws HarnessException {
-      logger.info("FormMailNew.fill(IItem)");
-      logger.info(item.prettyPrint());
-
-      // Make sure the item is a ContactItem
-      if ( !(item instanceof ContactItem) ) {
-         throw new HarnessException("Invalid item type - must be ContactItem");
-      }
-
-      // Convert object to ContactItem
-      ContactItem contact = (ContactItem) item;
-      
-      // Fill out the form    
-      if ( contact.firstName != null ) {        
-         zFillField(Locators.zFirstEditField, contact.firstName);
-
-      }
-      
-      if ( contact.lastName != null ) {         
-         zFillField(Locators.zLastEditField, contact.lastName);       
-      }
-      
-      if ( contact.middleName != null ) {       
-         zFillField(Locators.zMiddleEditField, contact.middleName);
-      }
-      
-      if ( contact.email != null ) {         
-         zFillField(Locators.zEmail1EditField, contact.email);
-      }
-      
-      if (contact.ContactAttributes.size() >0) {
-         for ( String key:contact.ContactAttributes.keySet()) {
-            zFillField(key, contact.ContactAttributes.get(key));
-         }
-      }
-      
-      //TODO: need fix xpath for zEmail1EditField
-      //if ( contact.email != null ) {       
-      // this.sType(Locators.zEmail1EditField, contact.email);
-      //}
-
-      SleepUtil.sleepMedium();
+		
+		throw new HarnessException("implement me");
+		
+//      logger.info("FormMailNew.fill(IItem)");
+//      logger.info(item.prettyPrint());
+//
+//      // Make sure the item is a ContactItem
+//      if ( !(item instanceof ContactItem) ) {
+//         throw new HarnessException("Invalid item type - must be ContactItem");
+//      }
+//
+//      // Convert object to ContactItem
+//      ContactItem contact = (ContactItem) item;
+//      
+//      // Fill out the form    
+//      if ( contact.firstName != null ) {        
+//         zFillField(Locators.zFirstEditField, contact.firstName);
+//
+//      }
+//      
+//      if ( contact.lastName != null ) {         
+//         zFillField(Locators.zLastEditField, contact.lastName);       
+//      }
+//      
+//      if ( contact.middleName != null ) {       
+//         zFillField(Locators.zMiddleEditField, contact.middleName);
+//      }
+//      
+//      if ( contact.email != null ) {         
+//         zFillField(Locators.zEmail1EditField, contact.email);
+//      }
+//      
+//      if (contact.ContactAttributes.size() >0) {
+//         for ( String key:contact.ContactAttributes.keySet()) {
+//            zFillField(key, contact.ContactAttributes.get(key));
+//         }
+//      }
+//      
+//      //TODO: need fix xpath for zEmail1EditField
+//      //if ( contact.email != null ) {       
+//      // this.sType(Locators.zEmail1EditField, contact.email);
+//      //}
+//
+//      SleepUtil.sleepMedium();
          
    }
 
