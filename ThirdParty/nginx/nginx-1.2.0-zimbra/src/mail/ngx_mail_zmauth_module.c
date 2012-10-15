@@ -88,7 +88,7 @@ static ngx_str_t ngx_mail_zmauth_method[] = {
 };
 
 static ngx_str_t LOGIN_FAILED = ngx_string("LOGIN failed");
-static ngx_str_t AUTHENTICATE_FAILED = ngx_string("AUTHENTICATE failed")
+static ngx_str_t AUTHENTICATE_FAILED = ngx_string("AUTHENTICATE failed");
 
 void
 ngx_mail_zmauth_init(ngx_mail_session_t *s) {
