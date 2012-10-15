@@ -290,7 +290,32 @@ public class PageCalendar extends AbsTab {
 
 		return (page);
 	}
+	
+	public AbsPage zMouseOver(Button button) throws HarnessException {
 
+		if ( button == null )
+			throw new HarnessException("locator cannot be null");
+
+		String locator = null;
+		AbsPage page = null;
+
+		if ( button == Button.B_TAGAPPOINTMENTMENU ) {
+			
+			locator = Locators.TagAppointmentMenu;
+			
+			this.sMouseOver(locator);
+			this.zWaitForBusyOverlay();
+
+			page = null;
+			
+			return (page);
+			
+		} else {
+			throw new HarnessException("implement me!  button = "+ button);
+		}
+
+	}
+	
 	@Override
 	public AbsPage zListItem(Action action, String subject) throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");

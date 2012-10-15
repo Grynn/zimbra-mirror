@@ -102,21 +102,11 @@ public class UnTagAppointment extends AjaxCommonTest {
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
 		tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
 		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag1 +"'/>" + "</ItemActionRequest>");
-        
-        // Selenium doesn't select latest sub menu and clicks to wrong hidden menu so test fails.
-        // Adding work around to refresh browser (which is not suppose to do but application is not doing anything wrong)
-        // Manually everything works fine though.
-        // Running this test individually also works fine because it doesn't find duplicate sub menu
-        //Robot Robot = new Robot();
-        //Robot.keyPress(KeyEvent.VK_F5); Robot.keyRelease(KeyEvent.VK_F5);
-        //SleepUtil.sleepVeryLong();
-        //Robot.keyPress(KeyEvent.VK_G); Robot.keyPress(KeyEvent.VK_C);
-        //Robot.keyRelease(KeyEvent.VK_G); Robot.keyRelease(KeyEvent.VK_C);
-        //SleepUtil.sleepLong();
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
 		// Remove tag from appointment using context menu
         app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, apptSubject);
-        app.zPageCalendar.sMouseOver(PageCalendar.Locators.TagAppointmentMenu);
+        app.zPageCalendar.zMouseOver(Button.B_TAGAPPOINTMENTMENU);
         SleepUtil.sleepSmall();
         app.zPageCalendar.zToolbarPressButton(Button.O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU);
         SleepUtil.sleepSmall(); // give time to soap verification because it runs fast and test fails
