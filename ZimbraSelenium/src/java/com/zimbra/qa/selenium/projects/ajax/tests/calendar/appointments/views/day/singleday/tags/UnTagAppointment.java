@@ -107,7 +107,6 @@ public class UnTagAppointment extends AjaxCommonTest {
 		// Remove tag from appointment using context menu
         app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, apptSubject);
         app.zPageCalendar.zMouseOver(Button.B_TAGAPPOINTMENTMENU);
-        SleepUtil.sleepSmall();
         app.zPageCalendar.zToolbarPressButton(Button.O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU);
         SleepUtil.sleepSmall(); // give time to soap verification because it runs fast and test fails
         
