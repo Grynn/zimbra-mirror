@@ -9,8 +9,9 @@
 smtp      inet  n       -       n       -       -       smtpd
 	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10029
 465    inet  n       -       n       -       -       smtpd
-  -o smtpd_tls_wrappermode=yes 
-  -o smtpd_sasl_auth_enable=yes
+	-o smtpd_tls_wrappermode=yes 
+	-o smtpd_sasl_auth_enable=yes
+	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10029
 submission inet n      -       n       -       -       smtpd
 	-o smtpd_etrn_restrictions=reject
 	-o smtpd_sasl_auth_enable=%%zimbraMtaSaslAuthEnable%%
