@@ -1479,7 +1479,7 @@ public abstract class AbsSeleniumObject {
 	public boolean sIsVisible(String locator) throws HarnessException {
 		boolean visible = false;
 		if (ZimbraSeleniumProperties.isWebDriver()) {
-			logger.info("...WebDriver...findElement.getLocation()");
+			logger.info("...WebDriver...findElement.isDisplayed()");
 			visible = elementVisible(locator);					
 		} 
 		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){

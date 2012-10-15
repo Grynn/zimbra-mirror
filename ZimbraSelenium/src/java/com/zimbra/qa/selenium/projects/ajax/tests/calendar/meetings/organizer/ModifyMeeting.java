@@ -135,12 +135,16 @@ public class ModifyMeeting extends CalendarWorkWeekTest {
         if(ZimbraSeleniumProperties.isWebDriver()){
             String locator = "css=td[id$='_folderSelect'] td[id$='_select_container']";
             apptForm.sClickAt(locator, "");            
-            apptForm.sClick("css=div[parentid=" 
-        	    + apptForm.sGetAttribute("div[id*='_Menu_']" 
-        		    + "[class*='DwtMenu']" 
-        		    + "[style*=width]"
-        		    + "@id")
-        		    + "]:contains(" + apptCalendar + ")");
+
+            locator = "//div[@id='z_shell']/div[contains(@id,'_Menu_') and contains(@class, 'DwtMenu')]";   
+            int count = apptForm.sGetXpathCount(locator);           
+            for  (int  i = 1; i <= count; i++) {
+        	String calPullDown = locator + "[position()=" + i + "]//tr//*[contains(text(),'" + apptCalendar + "')]";
+        	if(apptForm.zIsVisiblePerPosition(calPullDown, 0, 0)){
+        	    apptForm.sClickAt(calPullDown, "");
+        	    break;
+        	}        	
+            }            
         }else{
             apptForm.zFillField(Field.CalendarFolder, apptCalendar);
         }

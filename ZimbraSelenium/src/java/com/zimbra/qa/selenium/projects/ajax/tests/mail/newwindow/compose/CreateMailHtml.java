@@ -52,6 +52,7 @@ public class CreateMailHtml extends PrefGroupMailByMessageTest {
 			mail.dBodyHtml = "body" + ZimbraSeleniumProperties.getUniqueString();
 			window.sSelectWindow("Zimbra: Compose");
 			String locator = "css=iframe[id*=ifr]";
+			window.zWaitForElementPresent(locator, "5000");
 			window.sClickAt(locator,"");
 			window.zTypeFormattedText(locator, mail.dBodyHtml);
 			
