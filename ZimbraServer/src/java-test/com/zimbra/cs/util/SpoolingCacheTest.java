@@ -12,7 +12,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.common.util;
+package com.zimbra.cs.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +23,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.zimbra.common.localconfig.LC;
+import com.zimbra.cs.util.SpoolingCache;
 
 public class SpoolingCacheTest {
 

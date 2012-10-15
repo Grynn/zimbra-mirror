@@ -12,7 +12,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.common.util;
+package com.zimbra.cs.util;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -30,6 +30,7 @@ import java.util.NoSuchElementException;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.zimbra.common.localconfig.LC;
+import com.zimbra.common.util.ByteUtil;
 
 public class SpoolingCache<K extends Serializable> implements Iterable<K> {
     final int memlimit;
