@@ -12,6 +12,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsDialog;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
@@ -48,6 +49,7 @@ public class CancelTask extends AjaxCommonTest {
 		
 		//Click NEW button
 		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
+		SleepUtil.sleepSmall();
 		
 		//Fill out resulting form
 		taskNew.zFillField(Field.Subject, subject);
@@ -84,6 +86,7 @@ public class CancelTask extends AjaxCommonTest {
 		
 		//Click NEW button
 		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
+		SleepUtil.sleepSmall();
 		
 		//Fill out resulting form		
 		taskNew.zFillField(Field.Subject, subject);
@@ -132,14 +135,18 @@ public class CancelTask extends AjaxCommonTest {
 		//1st attempt
 		//Click NEW button
 		app.zPageTasks.zClickAt(Locators.zNewTask,"");
-		app.zPageTasks.zClickAt(Locators.zAttachButton, "");		 
+		SleepUtil.sleepMedium();
+		app.zPageTasks.zClickAt(Locators.zAttachButton, "");
+		SleepUtil.sleepMedium();
 		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zAttachmentInputBox),"Verify Attachment input box ");		 
 		app.zPageTasks.zClickAt(FormTaskNew.Locators.zCancelTask,"");
 		ZAssert.assertTrue(app.zPageTasks.sGetEval("window.appCtxt.getCurrentViewType()").equalsIgnoreCase("TKL"),"Verify List view is open");
 
 		//2nd attempt
 		app.zPageTasks.zClickAt(Locators.zNewTask,"");
-		app.zPageTasks.zClickAt(Locators.zAttachButton, "");		 
+		SleepUtil.sleepMedium();
+		app.zPageTasks.zClickAt(Locators.zAttachButton, "");	
+		SleepUtil.sleepMedium();
 		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zAttachmentInputBox),"Verify Attachment input box ");		 
 		app.zPageTasks.zClickAt(FormTaskNew.Locators.zCancelTask,"");
 		ZAssert.assertTrue(app.zPageTasks.sGetEval("window.appCtxt.getCurrentViewType()").equalsIgnoreCase("TKL"),"Verify List view is open");		 
