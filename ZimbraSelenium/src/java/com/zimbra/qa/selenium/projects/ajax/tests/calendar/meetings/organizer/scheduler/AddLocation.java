@@ -77,6 +77,8 @@ public class AddLocation extends CalendarWorkWeekTest {
 		app.zPageCalendar.zKeyboard.zTypeKeyEvent(keyEvent);
         ZAssert.assertTrue(apptForm.zVerifyLocation(apptLocation), "Verify location bubble after adding location from scheduler");
         apptForm.zToolbarPressButton(Button.B_SEND);
+        SleepUtil.sleepLong(); // test fails while checking location free/busy status, waitForPostqueue is not sufficient here
+        // Tried sleepMedium() as well but although fails so using sleepLong()
  
         // Verify that location present in the appointment
         AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");

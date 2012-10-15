@@ -76,6 +76,8 @@ public class AddEquipment extends CalendarWorkWeekTest {
 		app.zPageCalendar.zKeyboard.zTypeKeyEvent(keyEvent);
         ZAssert.assertTrue(apptForm.zVerifyEquipment(apptEquipment), "Verify equipment bubble after adding equipment from scheduler");
         apptForm.zToolbarPressButton(Button.B_SEND);
+        SleepUtil.sleepLong(); // test fails while checking location free/busy status, waitForPostqueue is not sufficient here
+        // Tried sleepMedium() as well but although fails so using sleepLong()
  
         // Verify that equipment present in the appointment
         AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
