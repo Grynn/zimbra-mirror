@@ -32,6 +32,7 @@ public class PageManageAccounts extends AbsTab {
 		public static final String MANAGE="Manage";
 		public static final String ACCOUNT="Accounts";
 		public static final String NEW_MENU="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgNewAccount']";
+		public static final String NEW_ADMIN_USER="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDomainAdminUser']";		
 		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
 		public static final String EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgEdit']";
 		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON="css=div[id^='zm__ACLV__MENU_POP'] div[class='ImgDelete']";
@@ -256,6 +257,11 @@ public class PageManageAccounts extends AbsTab {
 				page = new WizardCreateAccount(this);
 
 				// FALL THROUGH
+
+			}else if(option == Button.O_NEW_ADMIN) {
+				optionLocator = Locators.NEW_ADMIN_USER;
+
+				page = new WizardCreateAdminAccount(this);
 
 			} else if(option == Button.O_EDIT) {
 				optionLocator = Locators.EDIT_BUTTON;
