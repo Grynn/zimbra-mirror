@@ -223,7 +223,7 @@ public class QuickAddAppointment extends AbsTab {
 	
 	public void zNewAppointmentUsingMiniCal() throws HarnessException {
 		zWaitForMiniCalToLoad();
-		this.zRightClickAt("css=td[class='DwtCalendarDay']:contains('15')", "");
+		this.zRightClickAt("css=td[class^='DwtCalendarDay']:contains('15')", "");
 		SleepUtil.sleepSmall();
 		this.zClickAt("css=div[id^='POPUP_'] td[id='NEW_APPT_title']", "");
 	}
@@ -236,7 +236,7 @@ public class QuickAddAppointment extends AbsTab {
 	
 	public void zNewAllDayAppointmentUsingMiniCal() throws HarnessException {
 		zWaitForMiniCalToLoad();
-		this.zRightClickAt("css=td[class='DwtCalendarDay']:contains('15')", "");
+		this.zRightClickAt("css=td[class^='DwtCalendarDay']:contains('15')", "");
 		SleepUtil.sleepSmall();
 		this.zClickAt("css=div[id^='POPUP_'] td[id='NEW_ALLDAY_APPT_title']", "");
 	}
