@@ -961,7 +961,34 @@ public class ZimbraAPI
                 if ((nam.CompareTo("imageContentDisp")== 0) || (nam.CompareTo("imageContentType")==0))
                 { }
                 else
-                    WriteAttrNVPair(writer, "a", "n", nam, val);
+                    if (nam.CompareTo("dlist") == 0)
+                    {
+                        string[] tokens = contact["dlist"].Split(',');
+
+                        if (tokens.Length > 0)
+                        {
+
+                            for (int i = 0; i < tokens.Length; i++)
+                            {
+                                writer.WriteStartElement("m");
+                                writer.WriteAttributeString("type", "I");
+                                writer.WriteAttributeString("value", tokens.GetValue(i).ToString());
+
+                                writer.WriteEndElement();
+                            }
+                        }
+                        else
+                        {
+                            writer.WriteStartElement("m");
+                            writer.WriteAttributeString("type", "I");
+                            writer.WriteAttributeString("value",val);
+
+                            writer.WriteEndElement();
+                        }
+
+                    }
+                    else
+                        WriteAttrNVPair(writer, "a", "n", nam, val);
 
             }
         }
