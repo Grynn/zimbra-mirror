@@ -21,8 +21,27 @@ public class PageSearchResults extends AbsTab {
 		public static final String SEARCH_BUTTON="css=td.xform_container div.ImgSearch";
 		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
 		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON="css=div[id='zm__SCHLV__MENU_POP'] div[class='ImgDelete']";
-		public static final String EDIT_BUTTON="div[id='zm__zb_currentApp__MENU_POP']  div[class='ImgEdit']";
+		public static final String RIGHT_CLICK_MENU_EDIT_BUTTON="css=div[id='zm__SCHLV__MENU_POP'] div[class='ImgEdit']";
+		public static final String EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP']  div[class='ImgEdit']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
+	}
+	
+	public static class TypeOfObject {
+		public static final String ACCOUNT = "Account";
+		public static final String ALIAS = "ALIAS";
+		public static final String RESOURCE = "RESOURCE";
+		public static final String DISTRIBUTION_LIST = "Distribution List";
+	}
+	
+	public String typeOfObject = "";
+	
+
+	public String getType() {
+		return typeOfObject;
+	}
+
+	public void setType(String type) {
+		this.typeOfObject = type;
 	}
 
 	public PageSearchResults(AbsApplication application) {
@@ -150,7 +169,25 @@ public class PageSearchResults extends AbsTab {
 				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
 
 			// FALL THROUGH
-		} else{
+		} else if(button == Button.B_TREE_EDIT) {
+			locator = Locators.RIGHT_CLICK_MENU_EDIT_BUTTON;
+			
+			if(typeOfObject.equals(TypeOfObject.DISTRIBUTION_LIST))
+				page=new FormEditDistributionList(this.MyApplication);
+			else if(typeOfObject.equals(TypeOfObject.ACCOUNT))
+				page=new FormEditAccount(this.MyApplication);
+			else if(typeOfObject.equals(TypeOfObject.RESOURCE))
+				page=new FormEditResource(this.MyApplication);
+			else if(typeOfObject.equals(TypeOfObject.ALIAS))
+				page=new FormEditAccount(this.MyApplication);
+
+	
+			// Make sure the button exists
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
+
+			// FALL THROUGH
+		}else{
 			throw new HarnessException("no logic defined for button "+ button);
 		}
 
@@ -215,10 +252,14 @@ public class PageSearchResults extends AbsTab {
 				pulldownLocator = Locators.GEAR_ICON;
 				optionLocator = Locators.EDIT_BUTTON;
 
-				//page = new FormEditAccount(this.MyApplication);
-				page=new FormEditDistributionList(this.MyApplication);
-
-				// FALL THROUGH
+				if(typeOfObject.equals(TypeOfObject.DISTRIBUTION_LIST))
+					page=new FormEditDistributionList(this.MyApplication);
+				else if(typeOfObject.equals(TypeOfObject.ACCOUNT))
+					page=new FormEditAccount(this.MyApplication);
+				else if(typeOfObject.equals(TypeOfObject.RESOURCE))
+					page=new FormEditResource(this.MyApplication);
+				else if(typeOfObject.equals(TypeOfObject.ALIAS))
+					page=new FormEditAccount(this.MyApplication);
 
 			}else {
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
