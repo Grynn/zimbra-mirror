@@ -333,7 +333,7 @@ function() {
 */
 DwtInputField.prototype.getValue =
 function() {
-	return this._hintIsVisible ? '' : this._inputField.value;
+	return this._hintIsVisible ? '' : AjxStringUtil.trim(this._inputField.value);
 };
 
 /**
