@@ -46,7 +46,8 @@
  * @param {string}      params.hint				a hint to display in the input field when the value is empty.
  * @param {string}      params.id				an explicit ID to use for the control's DIV element
  * @param {string}      params.inputId			an explicit ID to use for the control's INPUT element
- * 
+ * @param {boolean}      params.noTrim			(optional - default false) - if <code>true</code> - do not trim leading and trailing spaces from value returned by getValue.
+ *
  * @extends		DwtComposite
  * 
  * TODO: Use HTML5 feature of placeholder text for inputs (not supported by IE):
@@ -67,6 +68,8 @@ DwtInputField = function(params) {
     this._type = params.type ? params.type : DwtInputField.STRING;
     this._rows = params.rows ? params.rows : 1;
     this._size = params.size;
+
+	this.noTrim = params.noTrim;
 
 	this._errorIconStyle = params.errorIconStyle ? params.errorIconStyle :
 							params.validator ? DwtInputField.ERROR_ICON_RIGHT : DwtInputField.ERROR_ICON_NONE;
@@ -333,7 +336,12 @@ function() {
 */
 DwtInputField.prototype.getValue =
 function() {
-	return this._hintIsVisible ? '' : AjxStringUtil.trim(this._inputField.value);
+	return this._hintIsVisible ? '' : this.trim(this._inputField.value);
+};
+
+DwtInputField.prototype.trim =
+function(value) {
+	return this.noTrim ? value : AjxStringUtil.trim(value);
 };
 
 /**

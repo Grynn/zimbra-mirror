@@ -42,7 +42,8 @@ DwtPasswordField = function(params) {
 	if (arguments.length == 0) return;
 
 	params = params || { parent: DwtShell.getShell(window) };
-	params.type = DwtInputField.PASSWORD; 
+	params.type = DwtInputField.PASSWORD;
+	params.noTrim = true;
 	DwtInputField.call(this, params);
 
 	this._tabGroup = new DwtTabGroup(this._htmlElId);
