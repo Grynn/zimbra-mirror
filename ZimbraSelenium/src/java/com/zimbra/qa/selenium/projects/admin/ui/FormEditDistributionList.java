@@ -19,7 +19,7 @@ public class FormEditDistributionList extends AbsForm {
 	}
 	
 	public static class Locators {
-		public static final String NAME_TEXT_BOX="css=input.admin_xform_name_input";
+		public static final String NAME_TEXT_BOX="css=input#ztabv__UNDEFINE_";
 		public static final String SAVE_BUTTON="css=td[id^='zb__ZaCurrentAppBar__SAVE']";
 		public static final String CLOSE_BUTTON="css=td[id^='zb__ZaCurrentAppBar__CLOSE']";
 	}
@@ -75,6 +75,13 @@ public class FormEditDistributionList extends AbsForm {
 	}
 	
 	public void setName(String name) throws HarnessException {
-		sType(Locators.NAME_TEXT_BOX, name);
+		for(int i=10;i>=2;i--) {
+			if(sIsElementPresent(Locators.NAME_TEXT_BOX+i+"_name_2")) {
+				sType(Locators.NAME_TEXT_BOX+i+"_name_2", name);
+				return;
+			}
+		}
+		sType(Locators.NAME_TEXT_BOX+"name_2", name);
+		}
 	}
-}
+
