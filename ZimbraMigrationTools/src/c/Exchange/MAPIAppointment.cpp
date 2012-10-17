@@ -846,11 +846,11 @@ HRESULT MAPIAppointment::SetOrganizerAndAttendees()
 
     typedef enum _AttendeePropTagIdx
     {
-        AT_DISPLAY_NAME, AT_SMTP_ADDR, AT_RECIPIENT_FLAGS, AT_RECIPIENT_TYPE, AT_RECIPIENT_TRACKSTATUS, AT_NPROPS
+        AT_DISPLAY_NAME, AT_SMTP_ADDR, AT_RECIPIENT_FLAGS, AT_RECIPIENT_TYPE, AT_RECIPIENT_TRACKSTATUS,AT_EMAIL_ADDRESS, AT_NPROPS
     } AttendeePropTagIdx;
 
-    SizedSPropTagArray(5, reciptags) = {
-        5, { PR_DISPLAY_NAME_W, PR_SMTP_ADDRESS_W, PR_RECIPIENT_FLAGS, PR_RECIPIENT_TYPE, PR_RECIPIENT_TRACKSTATUS }
+    SizedSPropTagArray(6, reciptags) = {
+        6, { PR_DISPLAY_NAME_W, PR_SMTP_ADDRESS_W, PR_RECIPIENT_FLAGS, PR_RECIPIENT_TYPE, PR_RECIPIENT_TRACKSTATUS,PR_EMAIL_ADDRESS }
     };
 
     ULONG ulRows = 0;
@@ -899,8 +899,15 @@ HRESULT MAPIAppointment::SetOrganizerAndAttendees()
 		        Attendee* pAttendee = new Attendee();   // delete done in CMapiAccessWrap::GetData after we allocate dict string for ZimbraAPI
 			    if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_DISPLAY_NAME].ulPropTag) != PT_ERROR)
 				    pAttendee->nam = pRecipRows->aRow[iRow].lpProps[AT_DISPLAY_NAME].Value.lpszW;
+				
 			    if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].ulPropTag) != PT_ERROR)
 				    pAttendee->addr = pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].Value.lpszW;
+				wstring attaddress = pAttendee->addr;
+				if(lstrcmpiW(attaddress.c_str(),L"") == 0) 
+				{
+					 if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_EMAIL_ADDRESS].ulPropTag) != PT_ERROR)
+				    pAttendee->addr = pRecipRows->aRow[iRow].lpProps[AT_EMAIL_ADDRESS].Value.lpszW;
+				}
 			    if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TYPE].ulPropTag) != PT_ERROR)
 				    pAttendee->role = ConvertValueToRole(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TYPE].Value.l);
 				if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TRACKSTATUS].ulPropTag) != PT_ERROR)
