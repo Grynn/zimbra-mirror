@@ -36,7 +36,7 @@ public class AddOptionalAttendee extends CalendarWorkWeekTest {
 		};
 	}
 	@Test(description = "Add optional attendee from scheduler pane using keyboard Enter and Tab key",
-			groups = { "sanity" },
+			groups = { "functional" },
 			dataProvider = "DataProviderShortcutKeys")
 	public void AddOptionalAttendee_01(String name, int keyEvent) throws HarnessException {
 		
@@ -71,8 +71,7 @@ public class AddOptionalAttendee extends CalendarWorkWeekTest {
         
         // Add optional attendee using scheduler and send the appointment
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        apptForm.zAddOptionalAttendeeFromScheduler(apptAttendee);
-		app.zPageCalendar.zKeyboard.zTypeKeyEvent(keyEvent);
+        apptForm.zAddOptionalAttendeeFromScheduler(apptAttendee, keyEvent);
         ZAssert.assertTrue(apptForm.zVerifyOptionalAttendee(apptAttendee), "Verify email address bubble after adding attendee from scheduler");
         apptForm.zToolbarPressButton(Button.B_SEND);
  

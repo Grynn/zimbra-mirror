@@ -21,6 +21,8 @@ import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
  */
 public class FormApptNew extends AbsForm {
 	public static String locatorValue;
+	PageCalendar pageCal = new PageCalendar(MyApplication);
+	
 	/**
 	 * Defines Selenium locators for various objects in {@link FormApptNew}
 	 */
@@ -35,6 +37,7 @@ public class FormApptNew extends AbsForm {
 		public static String SuggestedLocations = "css=div[id='zv__CSLP'] div[class$='ZmLocationSuggestion']:contains('" + locatorValue + "')";
 		public static final String ShowSchedulerLink = "css=div[id$='_scheduleButton']:contains('Show')";
 		public static final String HideSchedulerLink = "css=div[id$='_scheduleButton']:contains('Hide')";
+		public static final String SelectLocationBySuggestingTime_11AM = "css=div[class='ZmSuggestBody'] table tr:contains('11:00 AM') td:nth-child(4) div[class='ImgLocationGreen']";
 		
 		public static final String Button_Send = "css=div[id^='ztb__APPT-'] td[id$='_SEND_INVITE_title']";
 		public static final String Button_Save = "css=div[id^='ztb__APPT-'] td[id$='_SAVE_title']";
@@ -143,38 +146,52 @@ public class FormApptNew extends AbsForm {
 		return "css=div[id='zv__CSLP'] div[class$='ZmLocationSuggestion']:contains('" + apptLocation + "')";		
 	}
 	
-	public void zAddRequiredAttendeeFromScheduler(String attendee) throws HarnessException {
+	public String zGetLocationVaueFromPopUp(String apptLocation) throws HarnessException {
+		return "css=div[id^='POPUP_DWT'] td[id^='" + apptLocation + "']";
+		
+	} 
+
+	public void zAddRequiredAttendeeFromScheduler(String attendee, int keyEvent) throws HarnessException {
 		zToolbarPressButton(Button.B_SHOW);
 		SleepUtil.sleepSmall();
 		this.zType("css=td[id$='_scheduler'] td[id$='_NAME_'] input", attendee);
+		this.sClickAt("css=td[id$='_scheduler'] td[id$='_NAME_'] input", "");
 		SleepUtil.sleepSmall();
+		pageCal.zKeyboard.zTypeKeyEvent(keyEvent);
 	}
 	
-	public void zAddOptionalAttendeeFromScheduler(String attendee) throws HarnessException {
+	public void zAddOptionalAttendeeFromScheduler(String attendee, int keyEvent) throws HarnessException {
 		zToolbarPressButton(Button.B_SHOW);
 		SleepUtil.sleepSmall();
 		this.zClickAt("css=td[id$='_scheduler'] td[id$='_SELECT_'] td[id$='_dropdown']", "");
 		this.zClickAt("css=div[class='DwtMenu ZHasIcon'] td[id$='_title']:contains('Optional Attendee')", "");		
 		this.zType("css=td[id$='_scheduler'] td[id$='_NAME_'] input", attendee);
+		this.sClickAt("css=td[id$='_scheduler'] td[id$='_NAME_'] input", "");
 		SleepUtil.sleepSmall();
+		pageCal.zKeyboard.zTypeKeyEvent(keyEvent);
 	}
 	
-	public void zAddLocationFromScheduler(String location) throws HarnessException {
+	public void zAddLocationFromScheduler(String location, int keyEvent) throws HarnessException {
+		SleepUtil.sleepMedium();
 		zToolbarPressButton(Button.B_SHOW);
 		SleepUtil.sleepSmall();
 		this.zClickAt("css=td[id$='_scheduler'] td[id$='_SELECT_'] td[id$='_dropdown']", "");
 		this.zClickAt("css=div[class='DwtMenu ZHasIcon'] td[id$='_title']:contains('Location')", "");
 		this.zType("css=td[id$='_scheduler'] td[id$='_NAME_'] input", location);
+		this.sClickAt("css=td[id$='_scheduler'] td[id$='_NAME_'] input", "");
 		SleepUtil.sleepSmall();
+		pageCal.zKeyboard.zTypeKeyEvent(keyEvent);
 	}
 	
-	public void zAddEquipmentFromScheduler(String equipment) throws HarnessException {
+	public void zAddEquipmentFromScheduler(String equipment, int keyEvent) throws HarnessException {
 		zToolbarPressButton(Button.B_SHOW);
 		SleepUtil.sleepSmall();
 		this.zClickAt("css=td[id$='_scheduler'] td[id$='_SELECT_'] td[id$='_dropdown']", "");
 		this.zClickAt("css=div[class='DwtMenu ZHasIcon'] td[id$='_title']:contains('Equipment')", "");
 		this.zType("css=td[id$='_scheduler'] td[id$='_NAME_'] input", equipment);
+		this.sClickAt("css=td[id$='_scheduler'] td[id$='_NAME_'] input", "");
 		SleepUtil.sleepSmall();
+		pageCal.zKeyboard.zTypeKeyEvent(keyEvent);
 	}
 	
 	public Boolean zVerifyRequiredAttendee(String attendee) throws HarnessException {
@@ -214,6 +231,7 @@ public class FormApptNew extends AbsForm {
 	 * @return
 	 * @throws HarnessException
 	 */
+	
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
 		
@@ -283,7 +301,13 @@ public class FormApptNew extends AbsForm {
 			page = null;
 
 			// FALL THROUGH
-			
+
+		} else if (button == Button.B_SelectLocationBySuggestingTime_11AM) {
+
+			locator = Locators.SelectLocationBySuggestingTime_11AM;
+	        SleepUtil.sleepMedium();
+			page = null;
+
 		} else if (button == Button.B_SHOW) {
 
 			locator = Locators.ShowSchedulerLink;
@@ -328,6 +352,7 @@ public class FormApptNew extends AbsForm {
 	
 	public AbsPage zPressButton(Button button, String value) throws HarnessException {
 		logger.info(myPageName() + " zPressButton(" + button + ")");
+		SleepUtil.sleepMedium();
 
 		tracer.trace("Click button " + button);
 
@@ -341,7 +366,11 @@ public class FormApptNew extends AbsForm {
 		if (button == Button.B_SUGGESTEDLOCATION) {
 
 			locator = zGetSuggestedLocation(value);
-			SleepUtil.sleepMedium();
+			page = null;
+		
+		} else if (button == Button.B_LOCATIONMENU) {
+
+			locator = zGetLocationVaueFromPopUp(value);
 			page = null;
 
 			// FALL THROUGH
@@ -354,6 +383,7 @@ public class FormApptNew extends AbsForm {
 			throw new HarnessException("locator was null for button " + button);
 
 		this.sClickAt(locator, "");
+		SleepUtil.sleepMedium(); // Let location bubble gets ready and adds value in field
 		
 		this.zWaitForBusyOverlay();
 

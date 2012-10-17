@@ -72,8 +72,7 @@ public class AddEquipment extends CalendarWorkWeekTest {
         
         // Add equipment using scheduler and send the appointment
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        apptForm.zAddEquipmentFromScheduler(apptEquipment);
-		app.zPageCalendar.zKeyboard.zTypeKeyEvent(keyEvent);
+        apptForm.zAddEquipmentFromScheduler(apptEquipment, keyEvent);
         ZAssert.assertTrue(apptForm.zVerifyEquipment(apptEquipment), "Verify equipment bubble after adding equipment from scheduler");
         apptForm.zToolbarPressButton(Button.B_SEND);
         SleepUtil.sleepLong(); // test fails while checking location free/busy status, waitForPostqueue is not sufficient here

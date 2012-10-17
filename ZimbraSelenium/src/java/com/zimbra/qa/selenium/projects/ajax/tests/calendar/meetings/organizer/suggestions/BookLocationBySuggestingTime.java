@@ -1,9 +1,8 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.scheduler;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.suggestions;
 
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import org.testng.annotations.*;
-
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
@@ -20,37 +19,30 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 
 @SuppressWarnings("unused")
-public class AddRequiredAttendee extends CalendarWorkWeekTest {	
+public class BookLocationBySuggestingTime extends CalendarWorkWeekTest {	
 	
-	public AddRequiredAttendee() {
-		logger.info("New "+ AddRequiredAttendee.class.getCanonicalName());
+	public BookLocationBySuggestingTime() {
+		logger.info("New "+ BookLocationBySuggestingTime.class.getCanonicalName());
 		
 	}
 	
-	@Bugs(ids = "77711")
-	@DataProvider(name = "DataProviderShortcutKeys")
-	public Object[][] DataProviderShortcutKeys() {
-		return new Object[][] {
-				new Object[] { "VK_ENTER", KeyEvent.VK_ENTER },
-	//			new Object[] { "VK_TAB", KeyEvent.VK_TAB },
-		};
-	}
-	@Test(description = "Add required attendee from scheduler pane using keyboard Enter and Tab key",
-			groups = { "sanity" },
-			dataProvider = "DataProviderShortcutKeys")
-	public void AddRequiredAttendee_01(String name, int keyEvent) throws HarnessException {
+	@Test(description = "Suggest a free time and book location for selected time while creating new appointment",
+			groups = { "smoke" })
+	public void BookLocationBySuggestingTime_01() throws HarnessException {
 		
 		// Create a meeting
 		AppointmentItem appt = new AppointmentItem();
-			
+		ZimbraResource location = new ZimbraResource(ZimbraResource.Type.LOCATION);
+
 		String tz = ZTimeZone.TimeZoneEST.getID();
 		String apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		String apptAttendee = ZimbraAccount.AccountA().EmailAddress;
+		String apptLocation = location.EmailAddress;
 		
 		// Absolute dates in UTC zone
 		Calendar now = this.calendarWeekDayUTC;
-		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
-		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
+		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 6, 0, 0);
+		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 7, 0, 0);
 		
 		app.zGetActiveAccount().soapSend(
                 "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
@@ -59,6 +51,7 @@ public class AddRequiredAttendee extends CalendarWorkWeekTest {
                      		"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
                      		"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
                      		"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+                     		"<at role='REQ' ptst='NE' rsvp='1' a='" + apptAttendee + "' d='1'/>" +
                      	"</inv>" +
                      	"<e a='"+ ZimbraAccount.AccountA().EmailAddress +"' t='t'/>" +
                      	"<mp content-type='text/plain'>" +
@@ -67,30 +60,26 @@ public class AddRequiredAttendee extends CalendarWorkWeekTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
+		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
-        // Add required attendee using scheduler and send the appointment
+        // Suggest a time, pickup 10AM and send the appointment
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        apptForm.zAddRequiredAttendeeFromScheduler(apptAttendee, keyEvent);
-        ZAssert.assertTrue(apptForm.zVerifyRequiredAttendee(apptAttendee), "Verify email address bubble after adding attendee from scheduler");
+        apptForm.zToolbarPressButton(Button.B_SUGGESTATIME);
+        apptForm.zToolbarPressButton(Button.B_SelectLocationBySuggestingTime_11AM);
+        apptForm.zPressButton(Button.B_LOCATIONMENU, apptLocation);
         apptForm.zToolbarPressButton(Button.B_SEND);
- 
-        // Verify that attendee present in the appointment
+        SleepUtil.sleepLong(); // test fails while checking location free/busy status, waitForPostqueue is not sufficient here
+        // Tried sleepMedium() as well but although fails so using sleepLong()
+
+        // Verify that location present in the appointment
         AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
 		ZAssert.assertEquals(actual.getSubject(), apptSubject, "Subject: Verify the appointment data");
-		ZAssert.assertStringContains(actual.getAttendees(), apptAttendee, "Attendees: Verify the appointment data");
+		ZAssert.assertStringContains(actual.getLocation(), apptLocation, "Location: Verify the appointment data");
 		
-		// Verify attendee free/busy status
-		String attendeeStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptAttendee +"']", "ptst");
-		ZAssert.assertEquals(attendeeStatus, "NE", "Verify attendee free/busy status");
-		
-		// Verify attendee receives meeting invitation message
-		ZimbraAccount.AccountA().soapSend(
-				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
-			+		"<query>subject:("+ apptSubject +")</query>"
-			+	"</SearchRequest>");
-		String id = ZimbraAccount.AccountA().soapSelectValue("//mail:m", "id");
-		ZAssert.assertNotNull(id, "Verify attendee receives meeting invitation message");
+		// Verify location free/busy status
+		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation +"']", "ptst");
+		ZAssert.assertEquals(locationStatus, "AC", "Verify location free/busy status");
 		
 	}
 	
