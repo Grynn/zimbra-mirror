@@ -924,6 +924,7 @@ public class ZimbraAPI
     public void CreateContactRequest(XmlWriter writer, Dictionary<string, string> contact,
         string folderId, int requestId)
     {
+        bool IsGroup = false;
         writer.WriteStartElement("CreateContactRequest", "urn:zimbraMail");
         if (requestId != -1)
             writer.WriteAttributeString("requestId", requestId.ToString());
@@ -933,10 +934,15 @@ public class ZimbraAPI
         {
             writer.WriteAttributeString("t", contact["tags"]);
         }
+
+        
+
         foreach (KeyValuePair<string, string> pair in contact)
         {
             string nam = pair.Key;
             string val = pair.Value;
+
+            
 
             if (nam == "image")
             {
@@ -963,6 +969,7 @@ public class ZimbraAPI
                 else
                     if (nam.CompareTo("dlist") == 0)
                     {
+                        IsGroup = true;
                         string[] tokens = contact["dlist"].Split(',');
 
                         if (tokens.Length > 0)
@@ -991,6 +998,27 @@ public class ZimbraAPI
                         WriteAttrNVPair(writer, "a", "n", nam, val);
 
             }
+        }
+        
+        if(IsGroup)
+        {
+
+            string tempname = contact["fileAs"];
+            int index = tempname.IndexOf(":");
+            if (index > 0)
+            {
+                string nickname = tempname.Substring((index + 1));
+
+
+                if (nickname.Length > 0)
+                {
+                   
+                    WriteAttrNVPair(writer, "a", "n", "nickname", nickname);
+
+
+                }
+            }
+
         }
         writer.WriteEndElement();               // cn
         writer.WriteEndElement();               // CreateContactRequest
