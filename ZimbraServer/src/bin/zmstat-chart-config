@@ -1033,6 +1033,26 @@ sub ldapConfig() {
 _HERE_
 }
 
+sub mobileSyncConfig() {
+print <<_HERE_;
+  <!-- mobile sync stats -->
+  <chart title="Host $ZIMBRA_HOSTNAME: MobileSync: SyncState cache Hit Rate"
+         category="mobile"
+         infile="$mailboxdCsv"
+         outfile="${ZIMBRA_HOSTNAME}_mobile-syncstate-cache.png"
+         yAxis="rate">
+    <plot data="mobile_syncstate_cache_hit_rate" legend="SyncState cache hit rate"/>
+  </chart>
+
+  <chart title="Host $ZIMBRA_HOSTNAME: MobileSync: Ping cache Hit Rate"
+         category="mobile"
+         infile="$mailboxdCsv"
+         outfile="${ZIMBRA_HOSTNAME}_mobile-ping-cache.png"
+         yAxis="rate">
+    <plot data="mobile_ping_cache_hit_rate" legend="Ping cache hit rate"/>
+  </chart>
+_HERE_
+}
 
 
 #
@@ -1060,5 +1080,6 @@ if ($HAS_MAILBOX) {
     convertdConfig() if !$isMac;
     nginxConfig();
     ldapConfig();
+    mobileSyncConfig();
 }
 print "</charts>\n";
