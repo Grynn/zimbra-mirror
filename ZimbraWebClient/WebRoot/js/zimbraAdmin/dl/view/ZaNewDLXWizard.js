@@ -710,7 +710,7 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 
 	if(ZaTabView.isTAB_ENABLED(entry,ZaNewDLXWizard.NOTES_TAB_ATTRS, ZaNewDLXWizard.NOTES_TAB_RIGHTS)) {
 		_tab2 = ++this.TAB_INDEX;
-		this.stepChoices.push({value:_tab2, label:ZaMsg.DLXV_TabNotes});
+		this.stepChoices.push({value:_tab2, label:ZaMsg.DLXV_TabProperties});
 	}
 
 	if(ZaTabView.isTAB_ENABLED(entry,ZaNewDLXWizard.MEMBEROF_TAB_ATTRS, ZaNewDLXWizard.MEMBEROF_TAB_RIGHTS)) {
@@ -813,139 +813,12 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 					label : ZaMsg.NAD_Description,
 					labelLocation : _LEFT_, // cssClass : "admin_xform_name_input" ,
 					align : _LEFT_,
-					type : _TEXTFIELD_,
+					type : _TEXTAREA_,
 					enableDisableChecks : [ZaItem.hasWritePermission] ,
 					visibilityChecks : [ZaItem.hasReadPermission],
 					cssClass : "admin_xform_name_input",
-					width : "100%"
-				}
-				,
-				{
-					ref : "zimbraMailStatus",
-					type : _WIZ_CHECKBOX_,
-					trueValue : "enabled",
-					falseValue : "disabled",
-					align : _LEFT_,
-					nowrap : false,
-					labelWrap : true,
-					label : ZaMsg.DLXV_LabelEnabled,
-					msgName : ZaMsg.DLXV_LabelEnabled,
-					labelLocation : _LEFT_,
-					labelCssClass : "xform_label",
-					cssStyle : "padding-left:0px"
-				}
-				,
-				{
-					ref : ZaAccount.A_zimbraHideInGal,
-					type : _WIZ_CHECKBOX_,
-					trueValue : "TRUE",
-					falseValue : "FALSE",
-					label : ZaMsg.LBL_zimbraHideInGal,
-					labelLocation : _LEFT_,
-					labelCssClass : "xform_label",
-					labelWrap : true,
-					align : _LEFT_,
-					nowrap : false,
-					msgName : ZaMsg.LBL_zimbraHideInGal,
-					cssStyle : "padding-left:0px"
-				}
-				,
-				{
-					type : _GROUP_, numCols : 3, nowrap : true, label : ZaMsg.NAD_MailServer, labelLocation : _LEFT_,
-					visibilityChecks : [[ZaItem.hasWritePermission, ZaAccount.A_mailHost]],
-					items : [
-					{
-						ref : ZaAccount.A_mailHost, type : _OSELECT1_, label : null, editable : false, choices : ZaApp.getInstance().getServerListChoices(),
-						enableDisableChecks : [ZaAccount.isAutoMailServer],
-						enableDisableChangeEventSources : [ZaAccount.A2_autoMailServer],
-						visibilityChecks : [],
-						tableCssStyle : "height: 15px"
-					}
-					,
-					{
-						ref : ZaAccount.A2_autoMailServer, type : _WIZ_CHECKBOX_, msgName : ZaMsg.NAD_Auto, label : ZaMsg.NAD_Auto, labelLocation : _RIGHT_, trueValue : "TRUE", falseValue : "FALSE",
-						visibilityChecks : [], labelLocation : _RIGHT_, align : _RIGHT_, subLabel : "",
-						enableDisableChecks : []
-					}
-					]
-				}
-				]
-			}
-			,
-			{
-				type : _GROUP_, colSpan : "*", width : "98%", colSizes : ["130px", "*"],
-				labelCssClass : "xform_label", cssStyle : "padding-left:0px",
-				items : [
-				{
-					ref : ZaDistributionList.A2_dlType,
-					type : _WIZ_CHECKBOX_,
-					trueValue : ZaDistributionList.DYNAMIC_DL_TYPE,
-					falseValue : ZaDistributionList.STATIC_DL_TYPE,
-					label : ZaMsg.LBL_DL_Type,
-					labelLocation : _LEFT_,
-					labelCssClass : "xform_label",
-					labelWrap : true,
-					align : _LEFT_,
-					nowrap : false,
-					msgName : ZaMsg.LBL_DL_Type,
-					subLabel : "",
-					visibilityChecks : [],
-					enableDisableChecks : [],
-                    elementChanged: function (elementValue, instanceValue, event) {
-                        var memberItem = this.getParentItem().items[2];
-                        if (elementValue == ZaDistributionList.STATIC_DL_TYPE) {
-                            if( memberItem.hasError() ) {
-                                memberItem.clearError();
-                            }
-                            memberItem.setInstanceValue(null);
-                        } else {
-                            if (this.getInstanceValue(ZaDistributionList.A_zimbraIsACLGroup) != "TRUE") {
-                                memberItem.setError(AjxMsg.valueIsRequired);
-                            }
-                        }
-                        this.getForm().itemChanged(this, elementValue, event);
-                    }
-				}
-				,
-				{
-					ref : ZaDistributionList.A_zimbraIsACLGroup,
-					type : _WIZ_CHECKBOX_,
-					trueValue : "TRUE",
-					falseValue : "FALSE",
-					label : ZaMsg.LBL_ACL_Group,
-					labelLocation : _LEFT_,
-					labelCssClass : "xform_label",
-					align : _LEFT_,
-					subLabel : "",
-					visibilityChangeEventSources : [ZaDistributionList.A2_dlType],
-					visibilityChecks : [ZaDLXFormView.isDynamicDL],
-					enableDisableChecks : [],
-                    elementChanged: function (elementValue, instanceValue, event) {
-                        var memberItem = this.getParentItem().items[2];
-                        if (elementValue == "TRUE") {
-                            if( memberItem.hasError() ) {
-                                memberItem.clearError();
-                            }
-                            memberItem.setInstanceValue(null);
-                        } else {
-                            memberItem.setError(AjxMsg.valueIsRequired);
-                        }
-                        this.getForm().itemChanged(this, elementValue, event);
-                    }
-				}
-				,
-				{
-					type : _INPUT_,
-					ref : ZaDistributionList.A_memberOfURL,
-					label : ZaMsg.LBL_Member_URL,
-					labelLocation : _LEFT_,
-					labelCssClass : "xform_label",
 					width : "100%",
-                    bmolsnr: true,
-					visibilityChangeEventSources : [ZaDistributionList.A2_dlType],
-					visibilityChecks : [ZaDLXFormView.isDynamicDL],
-					enableDisableChangeEventSources : [ZaDistributionList.A_zimbraIsACLGroup],
-					enableDisableChecks : [ZaDLXFormView.isNotACLGroup]
+					height:"100"
 				}
 				]
 			}
@@ -1353,12 +1226,275 @@ ZaNewDLXWizard.myXFormModifier = function(xFormObject, entry) {
 		var case2 =
 		{type:_CASE_, caseKey:_tab2, colSizes:[10, "auto"], colSpan:"*",
 			items:[
-			    {type:_SPACER_, height:5},
-			    {type:_SPACER_, height:5},
-			    {type:_CELLSPACER_, width:10 },
-			    {type: _OUTPUT_, value:ZaMsg.DLXV_LabelNotes, cssStyle:"align:left"},
-			    {type:_CELLSPACER_, width:10 },
-			    {ref:ZaAccount.A_notes, type:_TEXTAREA_, width:"600", height:"250", labelCssStyle:"vertical-align: top"}
+				{
+					type:_GROUPER_,
+					label:ZaMsg.DLXV_LabelProperties,
+					id:"dl_properties",
+					colSpan: "*",
+					numCols: 2,
+					colSizes:[125, "*"],
+					visibilityChangeEventSources:[],
+					items: [
+						{
+							ref : "zimbraMailStatus",
+							type : _WIZ_CHECKBOX_,
+							trueValue : "enabled",
+							falseValue : "disabled",
+							align : _LEFT_,
+							nowrap : false,
+							labelWrap : true,
+							label : ZaMsg.DLXV_LabelEnabled,
+							msgName : ZaMsg.DLXV_LabelEnabled,
+							labelLocation : _LEFT_,
+							labelCssClass : "xform_label",
+							cssStyle : "padding-left:0px;margin-bottom-10px;"
+						}
+						,
+						{
+							ref : ZaAccount.A_zimbraHideInGal,
+							type : _WIZ_CHECKBOX_,
+							trueValue : "TRUE",
+							falseValue : "FALSE",
+							label : ZaMsg.LBL_zimbraHideInGal,
+							labelLocation : _LEFT_,
+							labelCssClass : "xform_label",
+							labelWrap : true,
+							align : _LEFT_,
+							nowrap : false,
+							msgName : ZaMsg.LBL_zimbraHideInGal,
+							cssStyle : "padding-left:0px;margin-bottom-10px;"
+						}
+						,
+						{
+							type : _GROUP_, numCols : 3, nowrap : true, label : ZaMsg.NAD_MailServer, labelLocation : _LEFT_,
+							visibilityChecks : [[ZaItem.hasWritePermission, ZaAccount.A_mailHost]],
+							items : [
+								{
+									ref : ZaAccount.A_mailHost, type : _OSELECT1_, label : null, editable : false, choices : ZaApp.getInstance().getServerListChoices(),
+									enableDisableChecks : [ZaAccount.isAutoMailServer],
+									enableDisableChangeEventSources : [ZaAccount.A2_autoMailServer],
+									visibilityChecks : [],
+									tableCssStyle : "height: 15px",
+									cssStyle : "margin-left:5px;margin-bottom-10px;"
+								}
+								,
+								{
+									ref : ZaAccount.A2_autoMailServer, type : _WIZ_CHECKBOX_, msgName : ZaMsg.NAD_Auto, label : ZaMsg.NAD_Auto, labelLocation : _RIGHT_, trueValue : "TRUE", falseValue : "FALSE",
+									visibilityChecks : [], labelLocation : _RIGHT_, align : _RIGHT_, subLabel : "",
+									enableDisableChecks : []
+								}
+							]
+						}
+						,
+						{
+							type : _GROUP_, colSpan : "*", colSizes : ["153px", "*"],
+							labelCssClass : "xform_label", cssStyle : "padding-left:0px",
+							items : [
+								{
+									ref : ZaDistributionList.A2_dlType,
+									type : _WIZ_CHECKBOX_,
+									trueValue : ZaDistributionList.DYNAMIC_DL_TYPE,
+									falseValue : ZaDistributionList.STATIC_DL_TYPE,
+									label : ZaMsg.LBL_DL_Type,
+									labelLocation : _LEFT_,
+									labelCssClass : "xform_label",
+									cssStyle : "margin-bottom-10px;",
+									labelWrap : true,
+									align : _LEFT_,
+									nowrap : false,
+									msgName : ZaMsg.LBL_DL_Type,
+									subLabel : "",
+									visibilityChecks : [],
+									enableDisableChecks : [],
+									elementChanged: function (elementValue, instanceValue, event) {
+										var memberItem = this.getParentItem().items[2];
+										if (elementValue == ZaDistributionList.STATIC_DL_TYPE) {
+											if( memberItem.hasError() ) {
+												memberItem.clearError();
+											}
+											memberItem.setInstanceValue(null);
+										} else {
+											if (this.getInstanceValue(ZaDistributionList.A_zimbraIsACLGroup) != "TRUE") {
+												memberItem.setError(AjxMsg.valueIsRequired);
+											}
+										}
+										this.getForm().itemChanged(this, elementValue, event);
+									}
+								}
+								,
+								{
+									ref : ZaDistributionList.A_zimbraIsACLGroup,
+									type : _WIZ_CHECKBOX_,
+									trueValue : "TRUE",
+									falseValue : "FALSE",
+									label : ZaMsg.LBL_ACL_Group,
+									labelLocation : _LEFT_,
+									labelCssClass : "xform_label",
+									cssStyle : "margin-bottom-10px;",
+									align : _LEFT_,
+									subLabel : "",
+									visibilityChangeEventSources : [ZaDistributionList.A2_dlType],
+									visibilityChecks : [ZaDLXFormView.isDynamicDL],
+									enableDisableChecks : [],
+									elementChanged: function (elementValue, instanceValue, event) {
+										var memberItem = this.getParentItem().items[2];
+										if (elementValue == "TRUE") {
+											if( memberItem.hasError() ) {
+												memberItem.clearError();
+											}
+											memberItem.setInstanceValue(null);
+										} else {
+											memberItem.setError(AjxMsg.valueIsRequired);
+										}
+										this.getForm().itemChanged(this, elementValue, event);
+									}
+								}
+								,
+								{
+									type : _INPUT_,
+									ref : ZaDistributionList.A_memberOfURL,
+									label : ZaMsg.LBL_Member_URL,
+									labelLocation : _LEFT_,
+									labelCssClass : "xform_label",
+									cssStyle : "margin-left:5px;margin-bottom-10px;",
+									width : "100%",
+									bmolsnr: true,
+									visibilityChangeEventSources : [ZaDistributionList.A2_dlType],
+									visibilityChecks : [ZaDLXFormView.isDynamicDL],
+									enableDisableChangeEventSources : [ZaDistributionList.A_zimbraIsACLGroup],
+									enableDisableChecks : [ZaDLXFormView.isNotACLGroup]
+								}
+							]
+						}
+						,
+						{
+							type : _SPACER_, height : "5"
+						}
+						,
+						{
+							type : _GROUP_,
+							numCols : 2,
+							label:ZaMsg.DLXV_SubscriptionRequest,
+							labelLocation:_LEFT_,
+							items :
+								[{
+									ref:ZaDistributionList.A_zimbraDistributionListSubscriptionPolicy,
+									type:_RADIO_,
+									groupname:"subscription_settings",
+									msgName:ZaMsg.DLXV_SubscriptionPolicyAccept,
+									label:ZaMsg.DLXV_SubscriptionPolicyAccept,
+									onChange:ZaTabView.onFormFieldChanged,
+									updateElement:function () {
+										this.getElement().checked = (this.getInstanceValue(ZaDistributionList.A_zimbraDistributionListSubscriptionPolicy) == ZaDistributionList.A2_zimbraDLSubscriptionPolicyAccept);
+									},
+									elementChanged: function(elementValue,instanceValue, event) {
+										this.getForm().itemChanged(this, ZaDistributionList.A2_zimbraDLSubscriptionPolicyAccept, event);
+									}
+								}
+									,
+									{
+										ref:ZaDistributionList.A_zimbraDistributionListSubscriptionPolicy,
+										type:_RADIO_,
+										groupname:"subscription_settings",
+										msgName:ZaMsg.DLXV_SubscriptionPolicyApproval,
+										label:ZaMsg.DLXV_SubscriptionPolicyApproval,
+										onChange:ZaTabView.onFormFieldChanged,
+										updateElement:function () {
+											this.getElement().checked = (this.getInstanceValue(ZaDistributionList.A_zimbraDistributionListSubscriptionPolicy) == ZaDistributionList.A2_zimbraDLSubscriptionPolicyApproval);
+										},
+										elementChanged: function(elementValue,instanceValue, event) {
+											this.getForm().itemChanged(this, ZaDistributionList.A2_zimbraDLSubscriptionPolicyApproval, event);
+										}
+									}
+									,
+									{
+										ref:ZaDistributionList.A_zimbraDistributionListSubscriptionPolicy,
+										type:_RADIO_,
+										groupname:"subscription_settings",
+										msgName:ZaMsg.DLXV_SubscriptionPolicyReject,
+										label:ZaMsg.DLXV_SubscriptionPolicyReject,
+										onChange:ZaTabView.onFormFieldChanged,
+										updateElement:function () {
+											this.getElement().checked = (this.getInstanceValue(ZaDistributionList.A_zimbraDistributionListSubscriptionPolicy) == ZaDistributionList.A2_zimbraDLSubscriptionPolicyReject);
+										},
+										elementChanged: function(elementValue,instanceValue, event) {
+											this.getForm().itemChanged(this, ZaDistributionList.A2_zimbraDLSubscriptionPolicyReject, event);
+										}
+									}]
+						}
+						,
+						{
+							type : _SPACER_, height : "5"
+						}
+						,
+						{
+							type : _GROUP_,
+							numCols : 2,
+							label:ZaMsg.DLXV_UnsubscriptionRequest,
+							labelLocation:_LEFT_,
+							items :
+								[{
+									ref:ZaDistributionList.A_zimbraDistributionListUnsubscriptionPolicy,
+									type:_RADIO_,
+									groupname:"unsubscription_settings",
+									msgName:ZaMsg.DLXV_SubscriptionPolicyAccept,
+									label:ZaMsg.DLXV_SubscriptionPolicyAccept,
+									onChange:ZaTabView.onFormFieldChanged,
+									updateElement:function () {
+										this.getElement().checked = (this.getInstanceValue(ZaDistributionList.A_zimbraDistributionListUnsubscriptionPolicy) == ZaDistributionList.A2_zimbraDLSubscriptionPolicyAccept);
+									},
+									elementChanged: function(elementValue,instanceValue, event) {
+										this.getForm().itemChanged(this, ZaDistributionList.A2_zimbraDLSubscriptionPolicyAccept, event);
+									}
+								}
+									,
+									{
+										ref:ZaDistributionList.A_zimbraDistributionListUnsubscriptionPolicy,
+										type:_RADIO_,
+										groupname:"unsubscription_settings",
+										msgName:ZaMsg.DLXV_SubscriptionPolicyApproval,
+										label:ZaMsg.DLXV_SubscriptionPolicyApproval,
+										onChange:ZaTabView.onFormFieldChanged,
+										updateElement:function () {
+											this.getElement().checked = (this.getInstanceValue(ZaDistributionList.A_zimbraDistributionListUnsubscriptionPolicy) == ZaDistributionList.A2_zimbraDLSubscriptionPolicyApproval);
+										},
+										elementChanged: function(elementValue,instanceValue, event) {
+											this.getForm().itemChanged(this, ZaDistributionList.A2_zimbraDLSubscriptionPolicyApproval, event);
+										}
+									}
+									,
+									{
+										ref:ZaDistributionList.A_zimbraDistributionListUnsubscriptionPolicy,
+										type:_RADIO_,
+										groupname:"unsubscription_settings",
+										msgName:ZaMsg.DLXV_SubscriptionPolicyReject,
+										label:ZaMsg.DLXV_SubscriptionPolicyReject,
+										onChange:ZaTabView.onFormFieldChanged,
+										updateElement:function () {
+											this.getElement().checked = (this.getInstanceValue(ZaDistributionList.A_zimbraDistributionListUnsubscriptionPolicy) == ZaDistributionList.A2_zimbraDLSubscriptionPolicyReject);
+										},
+										elementChanged: function(elementValue,instanceValue, event) {
+											this.getForm().itemChanged(this, ZaDistributionList.A2_zimbraDLSubscriptionPolicyReject, event);
+										}
+									}]
+						}
+						,
+						{
+							type : _SPACER_, height : "5"
+						}
+						,
+						{
+							ref:ZaAccount.A_notes,
+							type:_TEXTAREA_,
+							label:ZaMsg.DLXV_LabelNotes,
+							labelLocation:_LEFT_,
+							width:"400",
+							height:"100",
+							labelCssStyle:"vertical-align: top",
+							cssStyle : "margin-left:5px"
+						}
+					]
+				}
 			]
 		};
 		cases.push(case2);

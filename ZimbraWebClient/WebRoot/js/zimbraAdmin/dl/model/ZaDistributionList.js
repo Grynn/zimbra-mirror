@@ -95,6 +95,13 @@ ZaDistributionList.A_zimbraPrefReplyToAddress = "zimbraPrefReplyToAddress";
 ZaDistributionList.A_zimbraPrefReplyToDisplay = "zimbraPrefReplyToDisplay";
 ZaDistributionList.A_zimbraPrefReplyToEnabled = "zimbraPrefReplyToEnabled";
 
+ZaDistributionList.A_zimbraDistributionListSubscriptionPolicy = "zimbraDistributionListSubscriptionPolicy";
+ZaDistributionList.A_zimbraDistributionListUnsubscriptionPolicy = "zimbraDistributionListUnsubscriptionPolicy";
+
+ZaDistributionList.A2_zimbraDLSubscriptionPolicyAccept = "ACCEPT";
+ZaDistributionList.A2_zimbraDLSubscriptionPolicyReject = "REJECT";
+ZaDistributionList.A2_zimbraDLSubscriptionPolicyApproval = "APPROVAL";
+
 ZaDistributionList.A2_DLOwners = "DLOwner";
 ZaDistributionList.A2_owners_selection_cache = "owners_selection_cache";
 ZaDistributionList.getDLStatus = function (status) {
@@ -1353,6 +1360,8 @@ ZaDistributionList.myXModel = {
 		{id:ZaAccount.A_displayname, type:_STRING_, ref:"attrs/"+ZaAccount.A_displayname},
 		{id:ZaAccount.A_zimbraMailAlias, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraMailAlias, listItem:{type:_STRING_}},
 		{id:ZaDistributionList.A_mailStatus, ref:"attrs/"+ZaDistributionList.A_mailStatus, type:_STRING_},
+		{id:ZaDistributionList.A_zimbraDistributionListSubscriptionPolicy, ref:"attrs/"+ZaDistributionList.A_zimbraDistributionListSubscriptionPolicy, type:_STRING_},
+		{id:ZaDistributionList.A_zimbraDistributionListUnsubscriptionPolicy, ref:"attrs/"+ZaDistributionList.A_zimbraDistributionListUnsubscriptionPolicy, type:_STRING_},
 		{id:ZaDistributionList.A2_membersSelected, type:_LIST_},
 		{id:ZaDistributionList.A2_nonmembersSelected, type:_LIST_},
 		{id:ZaDistributionList.A2_memberPoolSelected, type:_LIST_},
