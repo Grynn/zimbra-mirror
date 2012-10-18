@@ -62,6 +62,10 @@ public class  ZFolderBean {
      */
     public String getPath() { return mFolder.getPath(); }
 
+
+	public String getPathURLEncoded() { return mFolder.getPathURLEncoded(); }
+
+
     /** Returns the folder's  path relative to the root
      * @return path
      */
