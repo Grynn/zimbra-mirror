@@ -139,7 +139,7 @@ function() {
 		}
 	}
 	//cleanup tail separator
-	if (previousVisibleIsSeparator) {
+	if (previousVisibleIsSeparator && lastSeparator) {
 		lastSeparator.setVisible(false);
 	}
 };
