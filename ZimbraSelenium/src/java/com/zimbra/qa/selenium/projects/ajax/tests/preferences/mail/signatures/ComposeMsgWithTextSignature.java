@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem;
 import com.zimbra.qa.selenium.framework.items.SignatureItem;
@@ -53,6 +54,7 @@ public class ComposeMsgWithTextSignature extends AjaxCommonTest {
 	 * 
 	 * @throws HarnessException
 	 */
+	@Bugs(ids="78085")
 	@Test(description = " Compose Msg with text signature and Verify signature thropugh soap", groups = { "functional" })
 	public void ComposeMsgWithTextSignature_01() throws HarnessException {
 
