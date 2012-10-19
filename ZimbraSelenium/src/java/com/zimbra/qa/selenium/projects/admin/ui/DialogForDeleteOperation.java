@@ -7,13 +7,14 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.projects.admin.ui.FormEditResource.Locators;
 
 public class DialogForDeleteOperation extends AbsDialog {
 
 	public static class Locators {
 		public static final String YES_BUTTON="zdlg__MSG__GLOBAL__confirm2btn_button5_title";
 		public static final String NO_BUTTON="zdlg__MSG__GLOBAL__confirm2btn_button4_title";
-		public static final String OK_BUTTON="zdlg__UNDEFINE1_button2_title";
+		public static final String OK_BUTTON="css=td#zdlg__UNDEFINE";
 	}
 	
 	public DialogForDeleteOperation(AbsApplication application, AbsTab page) {
@@ -43,7 +44,12 @@ public class DialogForDeleteOperation extends AbsDialog {
 		} else if (button == Button.B_NO) {
 			locator = Locators.NO_BUTTON;
 		} else if (button == Button.B_OK) {
-			locator = Locators.OK_BUTTON;
+			for(int i=0;i<=10;i++) {
+				if(sIsElementPresent(Locators.OK_BUTTON+i+"_button2_title")) {
+					locator=Locators.OK_BUTTON+i+"_button2_title";
+					break;		
+				}
+			}
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
 		}
@@ -64,7 +70,7 @@ public class DialogForDeleteOperation extends AbsDialog {
 		// "]");
 
 		this.zClickAt(locator,"0,0");
-		SleepUtil.sleepMedium();
+		SleepUtil.sleepLong();
 
 		// If the app is busy, wait for it to become active
 		//this.zWaitForBusyOverlay();
