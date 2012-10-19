@@ -1485,6 +1485,11 @@ void CRuleMap::WriteFilterActions(CRule &rule, LPWSTR &filterActions)
         {
             lstrcat(filterActions, L"actionStop");
         }
+		if (0 == lstrcmpiW((LPCWSTR)wstrActionName.c_str(), L"tag"))
+        {
+            lstrcat(filterActions, L"actionTag`~tagName`~");
+            lstrcat(filterActions, wstrActionArg.c_str());
+        }
         //else etc == do the rest of the actions
 
         iCount++;
