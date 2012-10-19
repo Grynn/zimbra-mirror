@@ -31,6 +31,7 @@
 #define ERR_ROOT_FOLDER						L"Error: Root folder cannot be opened"
 #define ERR_MAPI_TASK						L"Error: MAPI Task item error"
 
+const WCHAR* const ERR_AVOID_LIST[] = {ERR_ADOBJECT_OPEN, ERR_AD_NOROWS};
 
 class GenericException
 {

@@ -1055,8 +1055,15 @@ LPCWSTR ExchangeOps::SelectExchangeUsers(vector<ObjectPickerData> &vUserList)
 
 BOOL ExchangeOps::AvoidInternalErrors(LPCWSTR lpToCmp)
 {
-    if(wcscmp(lpToCmp, ERR_ADOBJECT_OPEN)==0)
-        return TRUE;
-    else
-        return FALSE;
+	BOOL retval = FALSE;
+	const size_t len = sizeof(ERR_AVOID_LIST) / sizeof(ERR_AVOID_LIST[0]);
+    for (size_t i = 0; i < len; ++i)
+	{
+        if(wcscmp(lpToCmp, ERR_AVOID_LIST[i])==0)
+		{
+			retval=TRUE;
+			break;
+		}
+    }    
+    return retval;
 }
