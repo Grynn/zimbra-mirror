@@ -357,6 +357,9 @@ for i in ${components}; do
   elif [ -d ${zimbra_home}/${i} ]; then
     printMsg "Fixing ownership and permissions on ${zimbra_home}/${i}"
     chown -R ${root_user}:${root_group} ${zimbra_home}/${i} 2> /dev/null
+    if [ x$i = "xzimbramon/pylibs" ]; then
+      chmod a+r ${zimbra_home}/${i}/*.class 2>/dev/null
+    fi
   fi
 done
 
