@@ -85,7 +85,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
 		// Right click -> Edit	
-        FormContactGroupNew formContactGroupNew = (FormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, group.fileAs);        
+        FormContactGroupNew formContactGroupNew = (FormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, group.getName());        
         
         // CHange the group name
         formContactGroupNew.zFillField(Field.GroupName, newname);
@@ -120,7 +120,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
 		// Double click	
-        FormContactGroupNew formContactGroupNew = (FormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_DOUBLECLICK, group.fileAs);        
+        FormContactGroupNew formContactGroupNew = (FormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_DOUBLECLICK, group.getName());        
         
         // CHange the group name
         formContactGroupNew.zFillField(Field.GroupName, newname);
