@@ -1199,8 +1199,10 @@ public class PageAddressbook extends AbsTab {
 					zWaitForBusyOverlay();
 
 				    // Left Click "Tag"
-					this.sMouseOver(tagContactLocator);
+					this.sMouseOver(tagContactLocator);					
+					SleepUtil.sleepMedium();
 					zClickAt(tagContactLocator, "");
+					SleepUtil.sleepMedium();
 					zWaitForBusyOverlay();
 
 					/*
