@@ -49,6 +49,8 @@ public class CreateAllDayMeeting extends CalendarWorkWeekTest {
 		FormApptNew apptForm = new FormApptNew(app);
 		apptForm.zFill(appt2);
 		apptForm.zSubmit();
+		SleepUtil.sleepVeryLong(); // test fails while checking free/busy status, waitForPostqueue is not sufficient here
+        // Tried sleepLong() as well but although fails so using sleepVeryLong()
 		
 		// Verify appointment exists on the server
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt1.getSubject() +")", appt1.getStartTime().addDays(-7), appt1.getEndTime().addDays(7));
@@ -59,7 +61,6 @@ public class CreateAllDayMeeting extends CalendarWorkWeekTest {
 		ZAssert.assertEquals(actual.getContent(), appt2.getContent(), "Content: Verify the appointment data");
 
 		// Verify the attendee receives the meeting
-		SleepUtil.sleepMedium();
 		AppointmentItem received = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ appt1.getSubject() +")", appt1.getStartTime().addDays(-7), appt1.getEndTime().addDays(7));
 		ZAssert.assertEquals(received.getSubject(), appt1.getSubject(), "Subject: Verify the appointment data");
 		ZAssert.assertEquals(received.getAttendees(), apptAttendee, "Attendees: Verify the appointment data");
@@ -67,7 +68,6 @@ public class CreateAllDayMeeting extends CalendarWorkWeekTest {
 		ZAssert.assertEquals(received.getContent(), appt2.getContent(), "Content: Verify the appointment data");
 
 		// Verify the attendee receives the invitation
-		SleepUtil.sleepMedium();
 		MailItem invite = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ appt1.getSubject() +")");
 		ZAssert.assertNotNull(invite, "Verify the invite is received");
 		ZAssert.assertEquals(invite.dSubject, appt1.getSubject(), "Subject: Verify the appointment data");
