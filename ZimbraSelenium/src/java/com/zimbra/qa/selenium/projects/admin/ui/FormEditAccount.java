@@ -70,12 +70,12 @@ public class FormEditAccount extends AbsForm {
 	
 	public void setName(String name) throws HarnessException {
 		for(int i=10;i>=2;i--) {
-			if(sIsElementPresent(Locators.NAME_TEXT_BOX+i+"_name_2")) {
-				sType(Locators.NAME_TEXT_BOX+i+"_name_2", name);
+			if(sIsElementPresent(Locators.NAME_TEXT_BOX+i+"_name_3")) {
+				sType(Locators.NAME_TEXT_BOX+i+"_name_3", name);
 				return;
 			}
 		}
-		sType(Locators.NAME_TEXT_BOX+"name_2", name);
+		sType(Locators.NAME_TEXT_BOX+"name_3", name);
 		}
 	}
 
