@@ -164,7 +164,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 		"<div ", (params.showAbout ? " " : "class='center'"), ">",
 			"<div class='contentBox'>",
 				"<div class='ImgAltBanner'></div>",
-				"<h1><a href='http://www.zimbra.com/' id='bannerLink' target='_new'>",
+				"<h1><a href='" + params.companyURL + "' id='bannerLink' target='_new'>",
 					"<span class='ImgLoginBanner'></span>",
 				"</a></h1>",
 				"<div id='ZLoginErrorPanel' ", (params.showError ? " " :  "style='display:none'"), ">",

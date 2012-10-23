@@ -176,8 +176,8 @@ function() {
 
 ZaAppCtxt.getLogoURI =
 function () {
-    if (skin && skin.hints && skin.hints.logo) {
-        return skin.hints.logo.url ;
+    if (skin && skin.hints && skin.hints.banner) {
+        return skin.hints.banner.url ;
     } else {
         return ZaSettings.LOGO_URI ;
     }
