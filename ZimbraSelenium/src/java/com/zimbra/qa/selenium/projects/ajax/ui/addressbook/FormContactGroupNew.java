@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
@@ -195,7 +197,9 @@ public class FormContactGroupNew extends AbsForm {
 		//
 		
 		// Click it
-		this.zClick(locator);
+		this.zClickAt(locator,"");
+		
+		SleepUtil.sleepMedium();
 
 		// if the app is busy, wait for it to become active again
 		this.zWaitForBusyOverlay();
@@ -235,7 +239,7 @@ public class FormContactGroupNew extends AbsForm {
 		//
 		String pulldownLocator = null;	// If set, this will be expanded
 		String optionLocator = null;	// If set, this will be clicked
-		AbsPage page = null;	// If set, this page will be returned
+		//AbsPage page = null;	// If set, this page will be returned
 		
 		// Based on the button specified, take the appropriate action(s)
 		//
@@ -322,12 +326,20 @@ public class FormContactGroupNew extends AbsForm {
 			    sType(locator, value);
 			}else{
 				
-//				this.sFocus(locator);
-//				this.sClickAt(locator,"");
-				this.sType(locator, ""); // clear the contents
-				this.sType(locator, value);
+				this.sFocus(locator);
+				this.sClickAt(locator,"");
+				Robot zRobot;
+				try {
+					zRobot = new Robot();
+					zRobot.keyPress(KeyEvent.VK_CONTROL);
+					zRobot.keyPress(KeyEvent.VK_A);
+					zRobot.keyRelease(KeyEvent.VK_CONTROL);
+					zRobot.keyRelease(KeyEvent.VK_A);				
+				} catch (AWTException e) {
+					e.printStackTrace();
+				}
+				this.zKeyboard.zTypeCharacters(value);
 				this.zWaitForBusyOverlay();
-
 			}
 					
 			return;
