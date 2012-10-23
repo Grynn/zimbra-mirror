@@ -64,8 +64,8 @@ public class FormApptNew extends AbsForm {
 		public static final String ExpandZimletContextMenu = "css=div[id^='POPUP_'] td[id='EXPAND_title']";
 		public static final String AddToContactsZimletContextMenu = "css=div[id^='POPUP_'] td[id='CONTACT_title']";
 		
-		public static final String SendUpdatesToAddedRemovedRadioButton = "css=div[class='DwtDialog'] div[id$='_content'] td:contains('Send updates only to added or removed attendees')";
-		public static final String SendUpdatesToAllRadioButton = "css=div[class='DwtDialog'] div[id$='_content'] td:contains('Send updates to all attendees')";
+		public static final String SendUpdatesToAddedRemovedRadioButton = "css=div[class='DwtDialog'] div[id$='_content'] p table tr:nth-child(1) input";
+		public static final String SendUpdatesToAllRadioButton = "css=div[class='DwtDialog'] div[id$='_content'] p table tr:nth-child(2) input";
 		
 	}
 
@@ -233,6 +233,8 @@ public class FormApptNew extends AbsForm {
 	 */
 	
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		SleepUtil.sleepSmall();
+		
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
 		
 		tracer.trace("Click button " + button);
@@ -792,14 +794,18 @@ public class FormApptNew extends AbsForm {
 			zRecurringOptions(locator, value, isRepeat);
 		} else {
 		    if(ZimbraSeleniumProperties.isWebDriver()){
-			this.sClickAt(locator, "");
-			this.clearField(locator);
-			this.sClickAt(locator, "");
+				this.sClickAt(locator, "");
+				this.clearField(locator);
+				this.sClickAt(locator, "");
 		    }
 		    this.sType(locator, value);
+		    SleepUtil.sleepSmall();
+		    
+		    if (field == Field.Attendees || field == Field.Optional || field == Field.Location || field == Field.Equipment) {
+		    	this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
+		    }
 		}
 		this.zWaitForBusyOverlay();
-
 	}
 
 	@Override
