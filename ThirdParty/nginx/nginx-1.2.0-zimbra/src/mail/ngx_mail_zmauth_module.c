@@ -89,6 +89,7 @@ static ngx_str_t ngx_mail_zmauth_method[] = {
 
 static ngx_str_t LOGIN_FAILED = ngx_string("LOGIN failed");
 static ngx_str_t AUTHENTICATE_FAILED = ngx_string("AUTHENTICATE failed");
+static ngx_str_t AUTHENTICATION_FAILED = ngx_string("authentication failed: ");
 
 void
 ngx_mail_zmauth_init(ngx_mail_session_t *s) {
@@ -412,6 +413,9 @@ ngx_mail_zmauth_lookup_result_handler(ngx_zm_lookup_work_t * work) {
 
         case NGX_MAIL_POP3_PROTOCOL:
             size = sizeof("-ERR ") - 1 + errmsg.len + sizeof(CRLF) - 1;
+            if (s->command == NGX_POP3_AUTH) {
+                size +=  AUTHENTICATION_FAILED.len;
+            }
             break;
 
         case NGX_MAIL_IMAP_PROTOCOL:
@@ -440,6 +444,9 @@ ngx_mail_zmauth_lookup_result_handler(ngx_zm_lookup_work_t * work) {
 
         case NGX_MAIL_POP3_PROTOCOL:
             *p++ = '-'; *p++ = 'E'; *p++ = 'R'; *p++ = 'R'; *p++ = ' ';
+            if (s->command == NGX_POP3_AUTH) {
+                p = ngx_cpymem(p, AUTHENTICATION_FAILED.data, AUTHENTICATION_FAILED.len);
+            }
             break;
 
         case NGX_MAIL_IMAP_PROTOCOL:
