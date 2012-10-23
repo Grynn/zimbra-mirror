@@ -3,7 +3,6 @@
 #include "MAPIMessage.h"
 #include "MAPIAppointment.h"
 #include "Logger.h"
-
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MAPIAppointmentException
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -43,7 +42,7 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MA
 	pr_timezoneid = 0;
 	pr_reminderminutes = 0;
         pr_private = 0;
-		
+		pr_reminderset =0;
 	pr_responsestatus = 0;
         pr_exceptionreplacetime = 0;
 	InitNamedPropsForAppt();
@@ -64,6 +63,7 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MA
     m_pOrganizerName = L"";
     m_pOrganizerAddr = L"";
     m_pPrivate = L"";
+	m_pReminderSet = L"";
 	m_pResponseRequested = L"";
 
     SetMAPIAppointmentValues();
@@ -95,6 +95,7 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
 
     nameIdsC[0] = 0x8501;
     nameIdsC[1] = 0x8506;
+	nameIdsC[2] = 0x8503;
 
     HRESULT hr = S_OK;
     Zimbra::Util::ScopedBuffer<SPropValue> pPropValMsgClass;
@@ -151,7 +152,7 @@ HRESULT MAPIAppointment::InitNamedPropsForAppt()
     pr_reminderminutes = SetPropType(pAppointmentTagsC->aulPropTag[N_REMINDERMINUTES], PT_LONG);
 	
     pr_private = SetPropType(pAppointmentTagsC->aulPropTag[N_PRIVATE], PT_BOOLEAN);
-
+	pr_reminderset = SetPropType(pAppointmentTagsC->aulPropTag[N_REMINDERSET], PT_BOOLEAN);
     // free the memory we allocated on the head
     for (int i = 0; i < N_NUMAPPTPROPS; i++)
     {
@@ -177,7 +178,7 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
 	    pr_appt_start, pr_appt_end, pr_location, pr_busystatus, pr_allday,
 	    pr_isrecurring, pr_recurstream, pr_timezoneid, pr_responsestatus,
             PR_RESPONSE_REQUESTED,pr_exceptionreplacetime,
-	    pr_reminderminutes, pr_private
+			pr_reminderminutes, pr_private, pr_reminderset
 	}
     };
 
@@ -237,15 +238,24 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     {
 	SetResponseRequested(m_pPropVals[C_RESPONSEREQUESTED].Value.b);
     }
-    if (m_pPropVals[C_REMINDERMINUTES].ulPropTag == appointmentProps.aulPropTag[C_REMINDERMINUTES])
+	
+	unsigned short usReminderSet=1;
+	if (m_pPropVals[C_REMINDERSET].ulPropTag == appointmentProps.aulPropTag[C_REMINDERSET])
     {
-	SetReminderMinutes(m_pPropVals[C_REMINDERMINUTES].Value.l);
+		usReminderSet= m_pPropVals[C_REMINDERSET].Value.b;
     }
+	if(usReminderSet)
+	{
+		if (m_pPropVals[C_REMINDERMINUTES].ulPropTag == appointmentProps.aulPropTag[C_REMINDERMINUTES])
+		{
+		SetReminderMinutes(m_pPropVals[C_REMINDERMINUTES].Value.l);
+		}
+	}
     if (m_pPropVals[C_PRIVATE].ulPropTag == appointmentProps.aulPropTag[C_PRIVATE])
     {
 	SetPrivate(m_pPropVals[C_PRIVATE].Value.b);
     }
-
+	
     SetTransparency(L"O");
     SetPlainTextFileAndContent();
     SetHtmlFileAndContent();
@@ -585,6 +595,10 @@ void MAPIAppointment::FillInExceptionAppt(MAPIAppointment* pEx, Zimbra::Mapi::CO
     {
         pEx->m_pPrivate = m_pPrivate;
     }
+	if (pEx->m_pReminderSet.length() == 0)
+    {
+        pEx->m_pReminderSet = m_pReminderSet;
+    }
 	if (pEx->m_pResponseRequested.length() == 0)
     {
         pEx->m_pResponseRequested = m_pResponseRequested;
@@ -613,6 +627,7 @@ void MAPIAppointment::FillInCancelException(MAPIAppointment* pEx, Zimbra::Mapi::
     pEx->m_pOrganizerAddr = m_pOrganizerAddr;
     pEx->m_pReminderMinutes = m_pReminderMinutes;
     pEx->m_pPrivate = m_pPrivate;
+	pEx->m_pReminderSet = m_pReminderSet;
 	pEx->m_pResponseRequested = m_pResponseRequested;
     pEx->m_pPlainTextFile = m_pPlainTextFile;
     pEx->m_pHtmlFile = m_pHtmlFile;
@@ -802,6 +817,11 @@ void MAPIAppointment::SetPrivate(unsigned short usPrivate)
     m_pPrivate = (usPrivate == 1) ? L"1" : L"0";
 }
 
+void MAPIAppointment::SetReminderSet(unsigned short usReminderset)
+{
+	m_pReminderSet = (usReminderset == 1) ? L"1" : L"0";
+}
+
 void MAPIAppointment::SetResponseRequested(unsigned short usPrivate)
 {
     m_pResponseRequested = (usPrivate == 1) ? L"1" : L"0";
@@ -938,6 +958,7 @@ wstring MAPIAppointment::GetResponseRequested() { return m_pResponseRequested; }
 wstring MAPIAppointment::GetOrganizerName() { return m_pOrganizerName; }
 wstring MAPIAppointment::GetOrganizerAddr() { return m_pOrganizerAddr; }
 wstring MAPIAppointment::GetPrivate() { return m_pPrivate; }
+wstring MAPIAppointment::GetReminderSet() {return m_pReminderSet;}
 wstring MAPIAppointment::GetPlainTextFileAndContent() { return m_pPlainTextFile; }
 wstring MAPIAppointment::GetHtmlFileAndContent() { return m_pHtmlFile; }
 vector<Attendee*> MAPIAppointment::GetAttendees() { return m_vAttendees; }

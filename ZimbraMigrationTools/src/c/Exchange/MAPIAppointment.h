@@ -21,7 +21,7 @@ private:
 
     // prop tags for named properties
     ULONG pr_clean_global_objid, pr_appt_start, pr_appt_end, pr_location, pr_busystatus, pr_allday, pr_isrecurring,
-	  pr_recurstream, pr_timezoneid, pr_responsestatus, pr_exceptionreplacetime, pr_reminderminutes, pr_private;
+	  pr_recurstream, pr_timezoneid, pr_responsestatus, pr_exceptionreplacetime, pr_reminderminutes, pr_private, pr_reminderset;
 
     // index of props
     typedef enum _AppointmentPropIdx
@@ -32,14 +32,14 @@ private:
 
     typedef enum _CommonPropIdx
     {
-        N_REMINDERMINUTES, N_PRIVATE, N_NUMCOMMONPROPS
+        N_REMINDERMINUTES, N_PRIVATE, N_REMINDERSET, N_NUMCOMMONPROPS
     } CommonPropIdx;
 
     // this enum lists all the props
     enum
     {
         C_MESSAGE_FLAGS, C_SUBJECT, C_BODY, C_HTMLBODY, C_UID, C_START, C_END, C_LOCATION, C_BUSYSTATUS, C_ALLDAY, C_ISRECUR, C_RECURSTREAM,
-	C_TIMEZONEID, C_RESPONSESTATUS,C_RESPONSEREQUESTED, C_EXCEPTIONREPLACETIME, C_REMINDERMINUTES, C_PRIVATE, C_NUMALLAPPTPROPS
+	C_TIMEZONEID, C_RESPONSESTATUS,C_RESPONSEREQUESTED, C_EXCEPTIONREPLACETIME, C_REMINDERMINUTES, C_PRIVATE, C_REMINDERSET, C_NUMALLAPPTPROPS
 	//org stuff later
     };
 
@@ -67,6 +67,7 @@ private:
     vector<Attendee*> m_vAttendees;
     wstring m_pReminderMinutes;
     wstring m_pPrivate;
+	wstring m_pReminderSet;
 	wstring m_pResponseRequested;
     wstring m_pPlainTextFile;
     wstring m_pHtmlFile;
@@ -95,6 +96,7 @@ public:
     HRESULT SetOrganizerAndAttendees();
     void SetReminderMinutes(long reminderminutes);
     void SetPrivate(unsigned short usPrivate);
+	void SetReminderSet(unsigned short usReminderset);
 	void SetResponseRequested(unsigned short usPrivate);
     void SetPlainTextFileAndContent();
     void SetHtmlFileAndContent();
@@ -122,6 +124,7 @@ public:
     wstring GetOrganizerName();
     wstring GetOrganizerAddr();
     wstring GetPrivate();
+	wstring GetReminderSet();
     wstring GetPlainTextFileAndContent();
     wstring GetHtmlFileAndContent();
     vector<Attendee*> GetAttendees();
