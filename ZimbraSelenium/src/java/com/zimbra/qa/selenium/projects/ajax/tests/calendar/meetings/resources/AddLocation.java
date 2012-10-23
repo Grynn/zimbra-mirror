@@ -65,6 +65,8 @@ public class AddLocation extends CalendarWorkWeekTest {
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
         apptForm.zFillField(Field.Location, apptLocation);
         apptForm.zToolbarPressButton(Button.B_SEND);
+        SleepUtil.sleepVeryLong(); // test fails while checking free/busy status, waitForPostqueue is not sufficient here
+        // Tried sleepLong() as well but although fails so using sleepVeryLong()
 
         // Verify location in the appointment
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");

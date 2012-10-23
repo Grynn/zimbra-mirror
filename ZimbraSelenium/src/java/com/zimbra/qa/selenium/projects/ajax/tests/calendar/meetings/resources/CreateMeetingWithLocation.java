@@ -54,6 +54,8 @@ public class CreateMeetingWithLocation extends CalendarWorkWeekTest {
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
 		apptForm.zSubmit();
+		SleepUtil.sleepVeryLong(); // test fails while checking free/busy status, waitForPostqueue is not sufficient here
+        // Tried sleepLong() as well but although fails so using sleepVeryLong()
 		
 		
 		// Because the response from the resource may
