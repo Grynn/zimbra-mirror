@@ -238,7 +238,6 @@ function(line) {
 
 AjxStringUtil.WRAP_LENGTH				= 72;
 // ID for a BLOCKQUOTE to mark it as ours
-AjxStringUtil.HTML_QUOTE_ID				= "zwcbq";
 AjxStringUtil.HTML_QUOTE_COLOR			= "#1010FF";
 AjxStringUtil.HTML_QUOTE_STYLE			= "color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;";
 AjxStringUtil.HTML_QUOTE_PREFIX_PRE		= '<blockquote style="border-left:2px solid ' +
@@ -246,7 +245,6 @@ AjxStringUtil.HTML_QUOTE_PREFIX_PRE		= '<blockquote style="border-left:2px solid
 									 ';margin-left:5px;padding-left:5px;'+
 									 AjxStringUtil.HTML_QUOTE_STYLE +
 									 '">';
-AjxStringUtil.HTML_QUOTE_PREFIX_PRE_ID	= AjxStringUtil.HTML_QUOTE_PREFIX_PRE.replace("<blockquote ", '<blockquote id="' + AjxStringUtil.HTML_QUOTE_ID + '" ');
 AjxStringUtil.HTML_QUOTE_PREFIX_POST	= '</blockquote>';
 AjxStringUtil.HTML_QUOTE_NONPREFIX_PRE	= '<div style="' +
 									 AjxStringUtil.HTML_QUOTE_STYLE +
@@ -667,10 +665,10 @@ function(str, removeContent) {
  * @return	{string}	the resulting string
  */
 AjxStringUtil.convertToHtml =
-function(str, quotePrefix, openTag) {
+function(str, quotePrefix, openTag, closeTag) {
 
 	openTag = openTag || "<blockquote>";
-	var closeTag = "</blockquote>";
+	closeTag = closeTag || "</blockquote>";
 	
 	if (!str) {return "";}
 
@@ -965,7 +963,7 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor, onlyOne
 
 	var result = null;
 	if (convertor && convertor[nodeName]) {
-		result = convertor[nodeName](el,ctxt);
+		result = convertor[nodeName](el, ctxt);
 	}
 
 	if (result != null) {
@@ -2227,7 +2225,7 @@ function(count, results, isHtml, ctxt) {
 };
 
 /**
- * Removes non-content HTML from the beginning and end. Would typically be used on content from an editor
+ * Removes non-content HTML from the beginning and end. Would typically be used on content from an editor.
  * 
  * @param {string}	str		some HTML
  */
@@ -2235,15 +2233,16 @@ AjxStringUtil.trimHtml =
 function(str) {
 
 	str = str.replace(/\n/g, "");								// remove line returns
-	// Remove unneeded HTML
 	str = str.replace(/<\/?html>|<\/?head>|<\/?body>/gi, "");	// strip empty document-level tags
-	str = str.replace(/<div>$/i, "");							// remove trailing <div>
 	str = str.replace(/<div><br ?\/?><\/div>/gi, "<br>");		// TinyMCE loves <div> containers
-	while (/^<div>.*<\/div>$/i.test(str)) {						// remove empty container <div> tags
-		str = str.replace(/^<div>/, "");
-		str = str.replace(/<\/div>$/, "");
+
+	// remove leading and trailing <div> and <br>
+	while (/^<\/?div>/i.test(str) || /<\/?div>$/i.test(str) ||
+		   /^<br ?\/?>/i.test(str) || /<br ?\/?>$/i.test(str)) {
+
+		str = str.replace(/^(<div>)+/i, "").replace(/(<\/div>)+$/i, "");
+		str = str.replace(/^(<br ?\/?>)+/i, "").replace(/(<br ?\/?>)+$/i, "");
 	}
-	str = str.replace(/(<br ?\/?>)+$/g, "");					// remove HTML-style trailing line returns
 	str = AjxStringUtil.trim(str);
 	
 	return str;
