@@ -179,7 +179,7 @@ function(stylesheet, selector, declaration, index) {
 		return (index == null) ? (stylesheet.rules.length - 1) : index;
 	}
 	else {
-		stylesheet.insertRule(selector + "{" + declaration + "}", index);
+		stylesheet.insertRule(selector + "{" + declaration + "}", index || 0);
 		return (index == null) ? (stylesheet.cssRules.length - 1) : index;
 	}
 };
