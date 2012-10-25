@@ -93,7 +93,7 @@ static ngx_command_t  ngx_mail_core_commands[] = {
       offsetof(ngx_mail_core_srv_conf_t, resolver_timeout),
       NULL },
 
-    { ngx_string("master_auth_username"),
+    /*{ ngx_string("master_auth_username"),
       NGX_MAIL_MAIN_CONF|NGX_MAIL_SRV_CONF|NGX_CONF_TAKE1,
       ngx_conf_set_str_slot,
       NGX_MAIL_SRV_CONF_OFFSET,
@@ -105,7 +105,7 @@ static ngx_command_t  ngx_mail_core_commands[] = {
       ngx_conf_set_str_slot,
       NGX_MAIL_SRV_CONF_OFFSET,
       offsetof(ngx_mail_core_srv_conf_t, master_auth_password),
-      NULL },
+      NULL },*/
 
     { ngx_string("sasl_app_name"),
       NGX_MAIL_MAIN_CONF|NGX_CONF_TAKE1,
@@ -278,10 +278,12 @@ ngx_mail_core_merge_srv_conf(ngx_conf_t *cf, void *parent, void *child)
         return NGX_CONF_ERROR;
     }
 
-    /* set the master auth username and password - TODO warn about empty strings */
-    ngx_conf_merge_str_value(conf->master_auth_username, prev->master_auth_username, "");
-    ngx_conf_merge_str_value(conf->master_auth_password, prev->master_auth_password, "");
-
+    /*
+     * master_auth_username and master_auth_password is already set in ngx_zm_lookup module
+     *
+     * ngx_conf_merge_str_value(conf->master_auth_username, prev->master_auth_username, "");
+     * ngx_conf_merge_str_value(conf->master_auth_password, prev->master_auth_password, "");
+     */
     ngx_conf_merge_msec_value (conf->auth_wait_intvl, prev->auth_wait_intvl, 10000);
 
     ngx_conf_merge_str_value (conf->default_realm, prev->default_realm,"");
