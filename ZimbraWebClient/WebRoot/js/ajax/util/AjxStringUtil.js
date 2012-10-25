@@ -2225,14 +2225,13 @@ function(count, results, isHtml, ctxt) {
 };
 
 /**
- * Removes non-content HTML from the beginning and end. Would typically be used on content from an editor.
+ * Removes non-content HTML from the beginning and end. Would typically be used on raw content from an editor.
  * 
  * @param {string}	str		some HTML
  */
 AjxStringUtil.trimHtml =
 function(str) {
 
-	str = str.replace(/\n/g, "");								// remove line returns
 	str = str.replace(/<\/?html>|<\/?head>|<\/?body>/gi, "");	// strip empty document-level tags
 	str = str.replace(/<div><br ?\/?><\/div>/gi, "<br>");		// TinyMCE loves <div> containers
 
@@ -2243,9 +2242,8 @@ function(str) {
 		str = str.replace(/^(<div>)+/i, "").replace(/(<\/div>)+$/i, "");
 		str = str.replace(/^(<br ?\/?>)+/i, "").replace(/(<br ?\/?>)+$/i, "");
 	}
-	str = AjxStringUtil.trim(str);
 	
-	return str;
+	return AjxStringUtil.trim(str);
 };
 
 // Replaces img src to cid for inline or dfsrc if external image and remove dfsrc before sending for a given htmlContent
