@@ -412,7 +412,11 @@ class Account: BackgroundWorker
                     {
                         string msg1 = "{0} of {1} for account  " + f.AccountID.ToString();
                         string msgF = String.Format(msg1, f.CurrentCountOfItems, f.TotalCountOfItems);
-                        System.Console.WriteLine(msgF);
+                        if (f.CurrentCountOfItems > 0)
+                        {
+
+                            System.Console.WriteLine(msgF);
+                        }
 
                     }
                 }
@@ -424,7 +428,10 @@ class Account: BackgroundWorker
                     string msg2 = "{0} of {1} for account  " + f.AccountID.ToString();
                     string msgF = String.Format(msg2, f.CurrentCountOfItems, f.TotalCountOfItems);
 
-                    System.Console.WriteLine(msgF);
+                    if (f.CurrentCountOfItems > 0)
+                    {
+                        System.Console.WriteLine(msgF);
+                    }
 
                 }
             }
