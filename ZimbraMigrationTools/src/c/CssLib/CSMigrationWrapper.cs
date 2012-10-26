@@ -790,8 +790,8 @@ public class CSMigrationWrapper
 
         if (value.Length > 0)
         {
-            Log.err("Unable to initialize", accountName, value);
-            Acct.LastProblemInfo = new ProblemInfo(accountName, value, ProblemInfo.TYPE_ERR);
+            Log.err("Unable to initialize", accountName, value +"or verify if source mailbox exists.");
+            Acct.LastProblemInfo = new ProblemInfo(accountName, value + " Or Verify if source mailbox exists.", ProblemInfo.TYPE_ERR);
             Acct.TotalErrors++;
             return;
         }
