@@ -69,7 +69,7 @@ STDMETHODIMP CUserObject::GetFolders(VARIANT *vObjects)
 {
     HRESULT hr = S_OK;
 
-dlog.dump(L"--------------", L"aaaaaaaa\r\n   bbbb\r\nccccccc");
+//dlog.dump(L"--------------", L"aaaaaaaa\r\n   bbbb\r\nccccccc");
     dlog.trace(L"Begin GetFolders");
     VariantInit(vObjects);
     hr = mapiObj->GetFolderList(vObjects);    
