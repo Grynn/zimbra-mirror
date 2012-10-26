@@ -1463,7 +1463,7 @@ function(colIdx, params) {
 	if (width) {
 		if (width != "auto" && width > 0) {
 			if (AjxEnv.isIE)		return (width + 2);
-			if (AjxEnv.isSafari && !AjxEnv.isChrome19up) {
+			if (AjxEnv.isSafari && !AjxEnv.isSafari6up && !AjxEnv.isChrome19up) {
 				return (width + 5);
 			}
 		}
