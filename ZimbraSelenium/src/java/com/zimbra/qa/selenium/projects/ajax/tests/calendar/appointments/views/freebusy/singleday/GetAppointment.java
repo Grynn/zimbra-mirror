@@ -60,10 +60,10 @@ public class GetAppointment extends AjaxCommonTest {
 				+			"</mp>"
 				+		"</m>"
 				+	"</CreateAppointmentRequest>");
-		
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		//-- GUI Actions
-
+		
 		// Go to F/B view
 		SleepUtil.sleepMedium();
 		app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_FREEBUSY);
