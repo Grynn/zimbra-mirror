@@ -900,7 +900,7 @@ public class PageAddressbook extends AbsTab {
 			// Log this item to the debug output
 			LogManager.getLogger("projects").info("zListItem: found contact "+ displayAs);
 			if (displayAs != null) {
-				if (contact.toLowerCase().contains(displayAs.toLowerCase())) {
+				if (displayAs.toLowerCase().contains(contact.toLowerCase())) {
 					// Found the item!
 					contactLocator = itemLocator;
 					break;
