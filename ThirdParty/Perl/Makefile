@@ -220,6 +220,7 @@ PERL_LIBS 	:= \
 	Net::DNS::Resolver::Programmable \
 	Geography::Countries \
 	IP::Country \
+	Net::Patricia \
 	DBD::SQLite
 
 ARRAY_COMPARE	:= \
