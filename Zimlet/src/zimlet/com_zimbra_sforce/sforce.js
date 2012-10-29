@@ -508,7 +508,7 @@ function() {
 	html[i++] = "<DIV>";
 	html[i++] = "<TABLE class='SForce_table'  width='100%'><TR><TD style='font-weight:bold'>Salesforce User Name:</TD><TD><INPUT type='text' id='sforce_logindlg_userNamefield' /></TD></TR>";
 	html[i++] = "<TR><TD  style='font-weight:bold'>Password + SecurityToken*:</TD><TD><INPUT type='password' id='sforce_logindlg_passwordfield' /></TD></TR>";
-	html[i++] = "<TR><TD style='font-weight:bold'>Ignore emails with following domain(s):<br/><label style=\"font-size: 10px; color: gray;\">(Saperate multiple domains by comma)</label></TD><TD><INPUT type='text' id='sforce_logindlg_ignoreDomainsfield' /></TD></TR>";
+	html[i++] = "<TR><TD style='font-weight:bold'>Ignore emails with following domain(s):<br/><label style=\"font-size: 10px; color: gray;\">(Separate multiple domains by comma)</label></TD><TD><INPUT type='text' id='sforce_logindlg_ignoreDomainsfield' /></TD></TR>";
 	html[i++] = "<TR><TD style='font-weight:bold'>Salesforce API URL:</TD><TD><INPUT type='text' id='sforce_logindlg_apiURL' /></TD></TR>";
 
 	html[i++] = "</TABLE></DIV><BR/>";
