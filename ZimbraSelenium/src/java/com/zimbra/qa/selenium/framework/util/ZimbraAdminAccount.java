@@ -100,6 +100,17 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 	}
 	private static ZimbraAdminAccount _AdminConsoleAdmin = null;
 
+	/**
+	 * Reset all static accounts.  This method should be used before/after
+	 * the harness has executed in the STAF service mode.  For example, if
+	 * one STAF request executes on server1 and the subsequent STAF request
+	 * executes on server2, then all accounts need to be reset, otherwise
+	 * the second request will have references to server1.
+	 */
+	public static void reset() {
+		ZimbraAdminAccount._AdminConsoleAdmin = null;
+		ZimbraAdminAccount._GlobalAdmin = null;		
+	}
 
 	/**
 	 * Get the global admin account

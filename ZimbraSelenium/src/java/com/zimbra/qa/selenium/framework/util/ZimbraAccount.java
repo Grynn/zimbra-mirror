@@ -226,6 +226,22 @@ public class ZimbraAccount {
 	private static ZimbraAccount _AccountB = null;
 
 
+	/**
+	 * Reset all static accounts.  This method should be used before/after
+	 * the harness has executed in the STAF service mode.  For example, if
+	 * one STAF request executes on server1 and the subsequent STAF request
+	 * executes on server2, then all accounts need to be reset, otherwise
+	 * the second request will have references to server1.
+	 */
+	public static void reset() {
+		ZimbraAccount._AccountA = null;
+		ZimbraAccount._AccountB = null;
+		ZimbraAccount._AccountHTML = null;
+		ZimbraAccount._AccountZDC = null;
+		ZimbraAccount._AccountZMC = null;
+		ZimbraAccount._AccountZWC = null;		
+	}
+	
 	// Set the default account settings
 	@SuppressWarnings("serial")
 	private static final Map<String, String> accountAttrs = new HashMap<String, String>() {{
