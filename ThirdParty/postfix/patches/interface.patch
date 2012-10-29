@@ -1,0 +1,29 @@
+--- postfix-2.10-20121007/src/global/mynetworks.c.orig	2012-10-29 11:50:34.193679633 -0700
++++ postfix-2.10-20121007/src/global/mynetworks.c	2012-10-29 11:51:41.687846734 -0700
+@@ -59,6 +59,7 @@
+ #include <mask_addr.h>
+ #include <argv.h>
+ #include <inet_proto.h>
++#include <split_at.h>
+ 
+ /* Global library. */
+ 
+@@ -252,6 +253,8 @@
+ 			  MAI_V6ADDR_BITS - shift);
+ 		SOCKADDR_TO_HOSTADDR(SOCK_ADDR_PTR(&net6), SOCK_ADDR_LEN(&net6),
+ 				     &hostaddr, (MAI_SERVPORT_STR *) 0, 0);
++		/* Remove unwanted datalink suffix from IPv6 address. */
++		(void) split_at(hostaddr.buf, '%');
+ 		vstring_sprintf_append(result, "[%s]/%d ",
+ 				     hostaddr.buf, MAI_V6ADDR_BITS - shift);
+ 		net_mask_count++;
+--- postfix-2.10-20121007/src/global/Makefile.in.orig	2012-10-29 11:51:54.753679088 -0700
++++ postfix-2.10-20121007/src/global/Makefile.in	2012-10-29 11:52:15.753681345 -0700
+@@ -1758,6 +1758,7 @@
+ mynetworks.o: ../../include/myaddrinfo.h
+ mynetworks.o: ../../include/name_mask.h
+ mynetworks.o: ../../include/sock_addr.h
++mynetworks.o: ../../include/split_at.h
+ mynetworks.o: ../../include/sys_defs.h
+ mynetworks.o: ../../include/vbuf.h
+ mynetworks.o: ../../include/vstring.h
