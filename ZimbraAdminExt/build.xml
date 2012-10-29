@@ -226,12 +226,20 @@
 		</antcall>
 	</target>
 	
+	<target name="deploy-viewmail" description="deploy view mail extension">
+		<antcall target="deploy-zimlet">
+			<param name="ext.dir" value="com_zimbra_viewmail"/>
+			<param name="ext.name" value="com_zimbra_viewmail"/>
+		</antcall>
+	</target>
+
 	<target name="deploy-all" description="deploy all the admin extensions in ZimbraAdminExt">
 		<antcall target="deploy-bulkprovision" />
 		<antcall target="deploy-helptooltip" />
 		<antcall target="deploy-certmgr" />
 		<antcall target="deploy-proxyconfig" />
 		<antcall target="deploy-clientuploader" />
+		<antcall target="deploy-viewmail" />
 	</target>
 
     <target name="package-clientuploader" description="package clientuploader extension">
