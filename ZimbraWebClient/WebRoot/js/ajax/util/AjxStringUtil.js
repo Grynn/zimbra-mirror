@@ -215,28 +215,26 @@ function(str, dels) {
 	return chunks;
 };
 
+AjxStringUtil.SPACE_WORD_RE = new RegExp("\\s*\\S+", "g");
 /**
+ * Splits the line into words, keeping leading whitespace with each word.
  *
- * splits the line into words, keeping leading whitespace with each word
- *
- * @param line the text to split
+ * @param {string}	line	the text to split
  *
  * @return {array} the array of words
  */
 AjxStringUtil.splitKeepLeadingWhitespace =
 function(line) {
-
-	var wordWithLeadingSpaces = /\s*\S+/g;
-	var words = [];
-	var result;
-	while (result = wordWithLeadingSpaces.exec(line)) {
-		var word = result[0];
-		words.push(word);
+	var words = [], result;
+	while (result = AjxStringUtil.SPACE_WORD_RE.exec(line)) {
+		words.push(result[0]);
 	}
 	return words;
 };
 
-AjxStringUtil.WRAP_LENGTH				= 72;
+AjxStringUtil.WRAP_LENGTH				= 80;
+AjxStringUtil.HDR_WRAP_LENGTH			= 120;
+
 // ID for a BLOCKQUOTE to mark it as ours
 AjxStringUtil.HTML_QUOTE_COLOR			= "#1010FF";
 AjxStringUtil.HTML_QUOTE_STYLE			= "color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;";
@@ -251,35 +249,19 @@ AjxStringUtil.HTML_QUOTE_NONPREFIX_PRE	= '<div style="' +
 									 '">';
 AjxStringUtil.HTML_QUOTE_NONPREFIX_POST	= '</div><br/>';
 
-// returns a standard set of params for wrapping text of HTML content
-AjxStringUtil.getWrapParams =
-function(htmlMode, incOptions) {
-
-	incOptions = incOptions || {};
-	var params = {};
-
-	params.htmlMode	= htmlMode;
-	params.len		= AjxStringUtil.WRAP_LENGTH;
-	params.eol		= htmlMode ? '<br/>' : '\n';
-	params.pre		= (htmlMode || !incOptions.prefix) ? "" : appCtxt.get(ZmSetting.REPLY_PREFIX) + " ";
-	params.before	= htmlMode ? (incOptions.prefix ? AjxStringUtil.HTML_QUOTE_PREFIX_PRE : AjxStringUtil.HTML_QUOTE_NONPREFIX_PRE) : "";
-	params.after	= htmlMode ? (incOptions.prefix ? AjxStringUtil.HTML_QUOTE_PREFIX_POST : AjxStringUtil.HTML_QUOTE_NONPREFIX_POST) : "";
-
-	return params;
-};
-
 /**
  * Wraps text to the given length and optionally quotes it. The level of quoting in the
  * source text is preserved based on the prefixes. Special lines such as email headers
  * always start a new line.
  *
  * @param {hash}	params	a hash of parameters
- * @param {string}      params.text 				the text to be wrapped
- * @param {number}      [params.len=80]				the desired line length of the wrapped text, defaults to 80
- * @param {string}      [params.pre]				an optional string to prepend to each line (useful for quoting)
- * @param {string}      [params.before]				text to prepend to final result
- * @param {string}      [params.after]				text to append to final result
- * @param {boolean}		[params.preserveReturns]	if true, don't combine small lines
+ * @param {string}      text 				the text to be wrapped
+ * @param {number}      len					the desired line length of the wrapped text, defaults to 80
+ * @param {string}      prefix				an optional string to prepend to each line (useful for quoting)
+ * @param {string}      before				text to prepend to final result
+ * @param {string}      after				text to append to final result
+ * @param {boolean}		preserveReturns		if true, don't combine small lines
+ * @param {boolean}		isHeaders			if true, we are wrapping a block of email headers
  *
  * @return	{string}	the wrapped/quoted text
  */
@@ -289,21 +271,22 @@ function(params) {
 	if (!(params && params.text)) { return ""; }
 
 	var text = params.text;
-	var before = params.before || "", after = params.after || "";
+	var before = params.before || "";
+	var after = params.after || "";
 
 	// For HTML, just surround the content with the before and after, which is
 	// typically a block-level element that puts a border on the left
 	if (params.htmlMode) {
+		before = params.before || (params.prefix ? AjxStringUtil.HTML_QUOTE_PREFIX_PRE : AjxStringUtil.HTML_QUOTE_NONPREFIX_PRE);
+		after = params.after || (params.prefix ? AjxStringUtil.HTML_QUOTE_PREFIX_POST : AjxStringUtil.HTML_QUOTE_NONPREFIX_POST);
 		return [before, text, after].join("");
 	}
 
-	var len = params.len || 80;
-	var pre = params.pre || "";
+	var max = params.len || (params.isHeaders ? AjxStringUtil.HDR_WRAP_LENGTH : AjxStringUtil.WRAP_LENGTH);
+	var prefixChar = params.prefix || "";
 	var eol = "\n";
 
-	text = AjxStringUtil.trim(text, false, "[\t ]");
-	text = text.replace(/\r\n/g, eol);
-	var lines = text.split(eol);
+	var lines = text.split(AjxStringUtil.SPLIT_RE);
 	var words = [];
 
 	// Divides lines into words. Each word is part of a hash that also has
@@ -317,57 +300,69 @@ function(params) {
 		if (prefix) {
 			line = line.substr(prefix.length);
 		}
-		var wds = AjxStringUtil.splitKeepLeadingWhitespace(line);
-		if (wds && wds[0] && wds[0].length) {
-			var isSpecial = AjxStringUtil.MSG_SEP_RE.test(line) || AjxStringUtil.COLON_RE.test(line) ||
-							AjxStringUtil.HDR_RE.test(line) || AjxStringUtil.SIG_RE.test(line);
-			for (var w = 0, wlen = wds.length; w < wlen; w++) {
-				var lastWord = params.preserveReturns && (w == wlen - 1);
-				words.push({w:wds[w], p:prefix, special:(isSpecial && w == 0), lastWord:lastWord});
+		if (AjxStringUtil._NON_WHITESPACE.test(line)) {
+			var wds = AjxStringUtil.splitKeepLeadingWhitespace(line);
+			if (wds && wds[0] && wds[0].length) {
+				var isSpecial = AjxStringUtil.MSG_SEP_RE.test(line) || AjxStringUtil.COLON_RE.test(line) ||
+								AjxStringUtil.HDR_RE.test(line) || AjxStringUtil.SIG_RE.test(line);
+				for (var w = 0, wlen = wds.length; w < wlen; w++) {
+					words.push({
+						w:			wds[w],
+						prefix:		prefix,
+						special:	w === 0 && (isSpecial || params.isHeaders),
+						lastWord:	params.preserveReturns && (w === wlen - 1)
+					});
+				}
 			}
 		} else {
-			words.push({para:true, p:prefix});	// paragraph marker
+			// paragraph marker
+			words.push({
+				para:	true,
+				prefix:	prefix
+			});
 		}
 	}
 
 	// Take the array of words and put them back together. We break for a new line
 	// when we hit the max line length, change prefixes, or hit a special word.
-	var max = params.len || 72;
-	var addPrefix = params.pre || "";
-	var apl = addPrefix.length;
-	var result = "", curLen = 0, wds = [], curP = null;
+	var result = "", curLen = 0, wds = [], curPrefix = null;
 	for (var i = 0, len = words.length; i < len; i++) {
 		var word = words[i];
-		var w = word.w, p = word.p;
-		var sp = wds.length ? 1 : 0;
-		var pl = (curP === null) ? 0 : curP.length;
+		var w = word.w, prefix = word.prefix;
+		var addPrefix = !prefixChar ? "" : curPrefix ? prefixChar : prefixChar + " ";
+		var pl = (curPrefix === null) ? 0 : curPrefix.length;
+		pl = 0;
+		var newPrefix = addPrefix + (curPrefix || "");
 		if (word.para) {
-			// paragraph break - output what we have, add a blank line
+			// paragraph break - output what we have, then add a blank line
 			if (wds.length) {
-				result += addPrefix + (curP || "") + wds.join("").replace(/^ +/,"") + eol;
+				result += newPrefix + wds.join("").replace(/^ +/, "") + eol;
 			}
-			if (i < words.length - 1) {		// don't add a trailing blank line
-				result += addPrefix + p + eol;
+			if (i < words.length - 1) {
+				curPrefix = prefix;
+				addPrefix = !prefixChar ? "" : curPrefix ? prefixChar : prefixChar + " ";
+				newPrefix = addPrefix + (curPrefix || "");
+				result += newPrefix + eol;
 			}
 			wds = [];
 			curLen = 0;
-			curP = null;
-		} else if ((apl + pl + curLen + sp + w.length <= max) && (p == curP || curP === null) && !word.special) {
+			curPrefix = null;
+		} else if ((pl + curLen + w.length <= max) && (prefix === curPrefix || curPrefix === null) && !word.special) {
 			// still room left on the current line, add the word
 			wds.push(w);
 			curLen += w.length;
-			curP = p;
+			curPrefix = prefix;
 			if (word.lastWord && words[i + 1]) {
 				words[i + 1].special = true;
 			}
 		} else {
-			// output what we have and start a new line
+			// no more room - output what we have and start a new line
 			if (wds.length) {
-				result += addPrefix + (curP || "") + wds.join("").replace(/^ +/,"") + eol;
+				result += newPrefix + wds.join("").replace(/^ +/, "") + eol;
 			}
 			wds = [w];
 			curLen = w.length;
-			curP = p;
+			curPrefix = prefix;
 			if (word.lastWord && words[i + 1]) {
 				words[i + 1].special = true;
 			}
@@ -376,7 +371,9 @@ function(params) {
 
 	// handle last line
 	if (wds.length) {
-		result += addPrefix + curP + wds.join("").replace(/^ /,"") + eol;
+		var addPrefix = !prefixChar ? "" : wds[0].prefix ? prefixChar : prefixChar + " ";
+		var newPrefix = addPrefix + (curPrefix || "");
+		result += newPrefix + wds.join("").replace(/^ /, "") + eol;
 	}
 
 	return [before, result, after].join("");
@@ -998,7 +995,7 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor, onlyOne
 		if (listType == AjxStringUtil._ORDERED_LIST) {
 			text[idx++] = bulletNum + ". ";
 		} else {
-			text[idx++] = "\u002A "; // TODO ZmMsg.bullet
+			text[idx++] = "\u002A "; // TODO AjxMsg.bullet
 		}
 	} else if (nodeName == "tr" && el.parentNode.firstChild != el) {
 		text[idx++] = "\n";
@@ -1556,7 +1553,7 @@ AjxStringUtil.ORIG_LINE			= "LINE";
 AjxStringUtil.ORIG_SIG_SEP		= "SIG_SEP";
 
 // regexes for parsing msg body content so we can figure out what was quoted and what's new
-// TODO: should these be moved to ZmMsg to be fully localizable?
+// TODO: should these be moved to AjxMsg to be fully localizable?
 AjxStringUtil.MSG_REGEXES = [
 	{
 		// the two most popular quote characters, > and |
