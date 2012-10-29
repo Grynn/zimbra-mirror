@@ -58,9 +58,6 @@ public class AddTo extends PrefGroupMailByMessageTest {
 		pickerform.zToolbarPressButton(Button.B_SEARCH);
 		pickerform.zToolbarPressButton(Button.B_TO);
 		
-		/* TODO: MATT ... debugging to be removed */
-		ResultListener.captureScreen();
-		
 		pickerform.zSubmit();
 		
 		// Addresspicker should now be closed

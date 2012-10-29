@@ -126,8 +126,6 @@ public class AutoCompleteContactGroup extends PrefGroupMailByMessageTest {
 			}
 		}
 		
-		/* TODO: MATT ... debugging to be removed */
-		ResultListener.captureScreen();
 		
 
 		ZAssert.assertNotNull(found, "Verify the autocomplete entry exists in the returned list");
