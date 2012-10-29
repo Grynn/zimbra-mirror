@@ -11,7 +11,7 @@ endif
 MAKEARGS ?= -j2
 ZIMBRA_HOME ?= /opt/zimbra
 
-PATCH	:=
+PATCH	:= patch -g0 -p1 < ../patches/ld-fix.patch;
 
 ifdef BETA
 	include $(OPENDKIM_ROOT)/../beta_versions.def
@@ -34,6 +34,7 @@ checksrc:
 build:
 	(tar xzf src/opendkim-$(DKIM_VERSION).tar.gz; \
 	cd opendkim-$(DKIM_VERSION); \
+	$(PATCH) \
 	$(LDFLAGS) \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) \
 	ac_cv_path_SENDMAIL_PATH=/opt/zimbra/postfix/sbin/sendmail \
