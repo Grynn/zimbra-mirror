@@ -400,7 +400,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 		
 	}
 	
-	@Bugs(ids = "69132")
+	@Bugs(ids = "69132,77548")
 	@Test(description = "Modify meeting cancellation message while cancelling appointment",
 			groups = { "functional" })
 	public void CancelMeeting_06() throws HarnessException {
