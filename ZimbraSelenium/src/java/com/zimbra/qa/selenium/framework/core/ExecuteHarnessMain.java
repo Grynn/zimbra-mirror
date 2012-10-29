@@ -61,6 +61,9 @@ public class ExecuteHarnessMain {
 
 	private static HashMap<String, String> configMap= new HashMap<String,String>();
 	
+	// The current result listener, so that the current status can be queried
+	public static ResultListener currentResultListener = null;
+	
 	
 	public ExecuteHarnessMain() {
 		
@@ -450,52 +453,56 @@ public class ExecuteHarnessMain {
 	protected String executeTests() throws FileNotFoundException, IOException, HarnessException {
 		logger.info("Execute tests ...");
 		
-		ResultListener listener = null;
-		
+		try {		
 
-		// Build the class list
-		classes = getClassesFromJar(new File(jarfilename), (classfilter == null ? null : Pattern.compile(classfilter)),excludefilter);
-		
-		// Build the list of XmlSuites
-		List<XmlSuite> suites = getXmlSuiteList();
-					
-		// Create the TestNG test runner
-		TestNG ng = new TestNG();
-		
-		for (String st : configMap.keySet()) {
-			ZimbraSeleniumProperties.setStringProperty(st,configMap.get(st));
+			// Build the class list
+			classes = getClassesFromJar(new File(jarfilename), (classfilter == null ? null : Pattern.compile(classfilter)),excludefilter);
+			
+			// Build the list of XmlSuites
+			List<XmlSuite> suites = getXmlSuiteList();
+						
+			// Create the TestNG test runner
+			TestNG ng = new TestNG();
+			
+			for (String st : configMap.keySet()) {
+				ZimbraSeleniumProperties.setStringProperty(st,configMap.get(st));
+			}
+			
+			
+			// keep checking for server down
+			while (ZimbraSeleniumProperties.zimbraGetVersionString().indexOf("unknown") != -1) {
+				SleepUtil.sleep(100000);
+			}
+			
+			// Configure the runner
+			ng.setXmlSuites(suites);
+			ng.addListener(new MethodListener(this.testoutputfoldername));
+			ng.addListener(new ErrorDialogListener());
+			ng.addListener(ExecuteHarnessMain.currentResultListener = new ResultListener(this.testoutputfoldername));
+			
+			try {
+				ng.setOutputDirectory(this.testoutputfoldername + "/TestNG");
+			} catch (Exception e) {
+				throw new HarnessException(e);
+			}
+	
+			// Run!
+			ng.run();
+			
+			// finish inProgress - overwrite inProgress/index.html		
+			TestStatusReporter.copyFile(testoutputfoldername + "\\inProgress\\result.txt" , testoutputfoldername + "\\inProgress\\index.html");
+	
+			logger.info("Execute tests ... completed");
+			
+			SleepMetrics.report();
+			
+			return ( ExecuteHarnessMain.currentResultListener == null ? "Done" : ExecuteHarnessMain.currentResultListener.getResults() );
+
+		} finally {
+			
+			ExecuteHarnessMain.currentResultListener = null;
+			
 		}
-		
-		
-		// keep checking for server down
-		while (ZimbraSeleniumProperties.zimbraGetVersionString().indexOf("unknown") != -1) {
-			SleepUtil.sleep(100000);
-		}
-		
-		// Configure the runner
-		ng.setXmlSuites(suites);
-		ng.addListener(new MethodListener(this.testoutputfoldername));
-		ng.addListener(new ErrorDialogListener());
-		ng.addListener(listener = new ResultListener(this.testoutputfoldername));
-		
-		try {
-			ng.setOutputDirectory(this.testoutputfoldername + "/TestNG");
-		} catch (Exception e) {
-			throw new HarnessException(e);
-		}
-
-		// Run!
-		ng.run();
-		
-		// finish inProgress - overwrite inProgress/index.html		
-		TestStatusReporter.copyFile(testoutputfoldername + "\\inProgress\\result.txt" , testoutputfoldername + "\\inProgress\\index.html");
-
-		logger.info("Execute tests ... completed");
-		
-		SleepMetrics.report();
-		
-		return ( listener == null ? "Done" : listener.getResults() );
-
 	}
 	
 
@@ -716,7 +723,7 @@ public class ExecuteHarnessMain {
 			ResultListener.setOutputfolder(folder);
 		}
 		
-		protected String getResults() {
+		public String getResults() {
 			StringBuilder sb = new StringBuilder();
 			sb.append("Total Tests:   ").append(testsTotal).append('\n');
 			sb.append("Total Passed:  ").append(testsPass).append('\n');

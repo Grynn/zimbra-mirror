@@ -365,7 +365,27 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	
 
 	private STAFResult handleQuery(RequestInfo info) {
-		return (new STAFResult(STAFResult.JavaError, "handleQuery: Implement me!"));
+
+        mLog.info("STAF: handleExecute ...");
+
+    	// Check whether Trust level is sufficient for this command.
+        if (info.trustLevel < 2)
+        {   
+            
+        	return new STAFResult(STAFResult.AccessDenied, 
+                "Trust level 2 required for "+ Arguments.optionQuery +" request.\n" +
+                "The requesting machine's trust level: " +  info.trustLevel); 
+            
+        }    
+
+        String status = "Not running";
+        
+        if ( ExecuteHarnessMain.currentResultListener != null ) {
+        	status = ExecuteHarnessMain.currentResultListener.getResults();
+        }
+
+        return (new STAFResult(STAFResult.Ok, status));
+        
 	}
 	
 	private STAFResult handleHalt(RequestInfo info) {
