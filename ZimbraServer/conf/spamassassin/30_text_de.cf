@@ -94,8 +94,6 @@ lang de describe RCVD_IN_SORBS_ZOMBIE SORBS: Senderechner in Liste "entführter" 
 lang de describe RCVD_IN_SORBS_DUL SORBS: Senderechner nur temporär mit Internet verbunden
 lang de describe RCVD_IN_SBL Transportiert via Rechner in SBL-Liste (http://www.spamhaus.org/sbl/)
 lang de describe RCVD_IN_XBL Transportiert via Rechner in XBL-Liste (http://www.spamhaus.org/xbl/)
-lang de describe DNS_FROM_RFC_DSN Absender in dsn-Liste von www.rfc-ignorant.org
-lang de describe DNS_FROM_RFC_BOGUSMX Absender in bogusmx-Liste von www.rfc-ignorant.org
 lang de describe DNS_FROM_AHBL_RHSBL Absenderadresse in Liste von dnsbl.ahbl.org
 lang de describe RCVD_IN_BL_SPAMCOP_NET Transportiert via Rechner in Liste von www.spamcop.net
 lang de describe RCVD_IN_MAPS_RBL Transportiert via Rechner in Liste von http://www.mail-abuse.org/rbl/
@@ -192,7 +190,7 @@ lang de describe GAPPY_SUBJECT Betreff enthält Text mit "L.ü.c.k.e.n"
 lang de describe MISSING_MIMEOLE Kopfzeile "X-MSMail-Priority" aber kein "X-MimeOLE"
 lang de describe SUBJ_AS_SEEN Betreff enthält "as seen"
 lang de describe SUBJ_DOLLARS Betreff beginnt mit einem Dollar-Betrag
-lang de describe SUBJ_YOUR_DEBT Betreff dreht sich um Rechnungen oder Kredite
+#lang de describe SUBJ_YOUR_DEBT Betreff dreht sich um Rechnungen oder Kredite
 lang de describe SUBJ_YOUR_FAMILY Betreff enthält "Your Family"
 lang de describe RCVD_FAKE_HELO_DOTCOM "Received"-Kopfzeilen enthalten gefälschten HELO-Rechnernamen
 lang de describe SUBJECT_DIET Betreff dreht sich um Gewichtsabnahme
@@ -323,6 +321,9 @@ lang de describe WEIRD_PORT Ungewöhnliche Portnummer in HTTP-Hyperlink
 lang de describe YAHOO_RD_REDIR URL mit Umleitung über Yahoo
 lang de describe YAHOO_DRS_REDIR URL mit Umleitung über Yahoo
 lang de describe HTTP_77 Enthält URL mit kodiertem Rechnernamen
+
+# 23_bayes.cf
+ifplugin Mail::SpamAssassin::Plugin::Bayes
 lang de describe BAYES_00 Spamwahrscheinlichkeit nach Bayes-Test: 0-1%
 lang de describe BAYES_05 Spamwahrscheinlichkeit nach Bayes-Test: 1-5%
 lang de describe BAYES_20 Spamwahrscheinlichkeit nach Bayes-Test: 5-20%
@@ -332,6 +333,8 @@ lang de describe BAYES_60 Spamwahrscheinlichkeit nach Bayes-Test: 60-80%
 lang de describe BAYES_80 Spamwahrscheinlichkeit nach Bayes-Test: 80-95%
 lang de describe BAYES_95 Spamwahrscheinlichkeit nach Bayes-Test: 95-99%
 lang de describe BAYES_99 Spamwahrscheinlichkeit nach Bayes-Test: 99-100%
+endif
+#
 lang de describe USER_IN_BLACKLIST Absenderadresse steht in Ihrer persönlichen schwarzen Liste
 lang de describe USER_IN_WHITELIST Absenderadresse steht in Ihrer persönlichen weißen Liste
 lang de describe USER_IN_DEF_WHITELIST Absenderadresse steht in der allgemeinen weißen Liste
@@ -365,7 +368,7 @@ lang de describe URIBL_SBL Enthält URL in SBL-Liste (http://www.spamhaus.org/sbl
 lang de describe URIBL_SC_SURBL Enthält URL in SC-Liste  (www.surbl.org)
 lang de describe URIBL_WS_SURBL Enthält URL in WS-Liste (www.surbl.org)
 lang de describe URIBL_PH_SURBL Enthält URL in PH-Liste (www.surbl.org)
-lang de describe URIBL_OB_SURBL Enthält URL in OB-Liste (www.surbl.org)
+#lang de describe URIBL_OB_SURBL Enthält URL in OB-Liste (www.surbl.org)  - REMOVED BUG 6853
 lang de describe URIBL_AB_SURBL Enthält URL in AB-Liste (www.surbl.org)
 lang de describe URIBL_JP_SURBL Enthält URL in JP-Liste (www.surbl.org)
 endif

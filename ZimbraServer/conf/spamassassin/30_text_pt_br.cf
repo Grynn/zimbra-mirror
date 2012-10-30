@@ -116,8 +116,6 @@ lang pt_BR describe __RCVD_IN_ZEN Recebida por um relay listado em Spamhaus Zen
 lang pt_BR describe RCVD_IN_SBL Recebida por um relay listado em Spamhaus SBL
 lang pt_BR describe RCVD_IN_XBL Recebida por um relay listado em Spamhaus XBL
 lang pt_BR describe RCVD_IN_PBL Recebida por um relay listado em Spamhaus PBL
-lang pt_BR describe DNS_FROM_RFC_DSN Envelope sender consta em dsn.rfc-ignorant.org
-lang pt_BR describe DNS_FROM_RFC_BOGUSMX Envelope sender consta em bogusmx.rfc-ignorant.org
 lang pt_BR describe DNS_FROM_AHBL_RHSBL Envelope sender consta em dnsbl.ahbl.org
 lang pt_BR describe RCVD_IN_BL_SPAMCOP_NET Recebida por um relay listado em bl.spamcop.net
 lang pt_BR describe RCVD_IN_MAPS_RBL Relay consta em RBL, http://www.mail-abuse.com/enduserinfo_rbl.html
@@ -243,7 +241,7 @@ lang pt_BR describe X_IP Mensagem possui cabeçalho X-IP
 lang pt_BR describe MISSING_MIMEOLE Mensagem possui X-MSMail-Priority mas não possui X-MimeOLE
 lang pt_BR describe SUBJ_AS_SEEN Assunto contém "As Seen"
 lang pt_BR describe SUBJ_DOLLARS Assunto começa com um valor em dólar
-lang pt_BR describe SUBJ_YOUR_DEBT Assunto contém "Your Bills" ou algo parecido
+#lang pt_BR describe SUBJ_YOUR_DEBT Assunto contém "Your Bills" ou algo parecido
 lang pt_BR describe SUBJ_YOUR_FAMILY Assunto contém "Your Family" ou algo parecido
 lang pt_BR describe RCVD_FAKE_HELO_DOTCOM Cabeçalho Received contém um hostname de HELO falso
 lang pt_BR describe SUBJECT_DIET Assunto fala sobre perda de peso
@@ -484,6 +482,7 @@ lang pt_BR describe VBOUNCE_MESSAGE Bounce de mensagem de antivirus
 lang pt_BR describe ANY_BOUNCE_MESSAGE Mensagem é um bounce de algum email
 
 # 23_bayes.cf
+ifplugin Mail::SpamAssassin::Plugin::Bayes
 lang pt_BR describe BAYES_00 Probabilidade de ser spam entre 0 to 1%
 lang pt_BR describe BAYES_05 Probabilidade de ser spam entre 1 to 5%
 lang pt_BR describe BAYES_20 Probabilidade de ser spam entre 5 to 20%
@@ -493,7 +492,8 @@ lang pt_BR describe BAYES_60 Probabilidade de ser spam entre 60 to 80%
 lang pt_BR describe BAYES_80 Probabilidade de ser spam entre 80 to 95%
 lang pt_BR describe BAYES_95 Probabilidade de ser spam entre 95 to 99%
 lang pt_BR describe BAYES_99 Probabilidade de ser spam entre 99 to 100%
-
+endif
+#
 # 25_accessdb.cf
 ifplugin Mail::SpamAssassin::Plugin::AccessDB
 lang pt_BR describe ACCESSDB Mensagem teria sido pega pela accessdb
@@ -608,7 +608,7 @@ lang pt_BR describe URIBL_DBL_ERROR Erro: Consultou a DBL por um IP
 lang pt_BR describe URIBL_SC_SURBL Contém uma URL listada na blacklist SC SURBL
 lang pt_BR describe URIBL_WS_SURBL Contém uma URL listada na blacklist WS SURBL
 lang pt_BR describe URIBL_PH_SURBL Contém uma URL listada na blacklist PH SURBL
-lang pt_BR describe URIBL_OB_SURBL Contém uma URL listada na blacklist OB SURBL
+#lang pt_BR describe URIBL_OB_SURBL Contém uma URL listada na blacklist OB SURBL - REMOVED BUG 6853
 lang pt_BR describe URIBL_AB_SURBL Contém uma URL listada na blacklist AB SURBL
 lang pt_BR describe URIBL_JP_SURBL Contém uma URL listada na blacklist JP SURBL
 lang pt_BR describe URIBL_BLACK Contém uma URL listada na blacklist URIBL

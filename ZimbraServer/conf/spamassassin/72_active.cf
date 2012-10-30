@@ -28,7 +28,7 @@ require_version @@VERSION@@
 ##{ ACH_CANCELLED
 
 meta        ACH_CANCELLED          __ACH_CANCELLED
-describe    ACH_CANCELLED          "ACH cancelled" probable malware
+describe    ACH_CANCELLED          "ACH cancelled" fraud / phish
 ##} ACH_CANCELLED
 
 ##{ ADVANCE_FEE_2_NEW_FORM
@@ -46,15 +46,16 @@ describe  ADVANCE_FEE_2_NEW_FRM_MNY    Advance Fee fraud form and lots of money
 
 ##{ ADVANCE_FEE_2_NEW_MONEY
 
-meta      ADVANCE_FEE_2_NEW_MONEY    __ADVANCE_FEE_2_NEW_MONEY && !__DOS_HAS_LIST_UNSUB && !__TAG_EXISTS_CENTER && !__LYRIS_EZLM_REMAILER && !__COMMENT_EXISTS && !__UNSUB_LINK && !__VIA_ML && !__HTML_LINK_IMAGE && !__HDRS_LCASE && !__NAME_EQ_EMAIL
+meta      ADVANCE_FEE_2_NEW_MONEY    __ADVANCE_FEE_2_NEW_MONEY && !__DOS_HAS_LIST_UNSUB && !__TAG_EXISTS_CENTER && !__LYRIS_EZLM_REMAILER && !__COMMENT_EXISTS && !__UNSUB_LINK && !__VIA_ML && !__HTML_LINK_IMAGE && !__HDRS_LCASE && !__NAME_EQ_EMAIL && !__URI_MAILTO_MANY && !__RP_MATCHES_RCVD
 describe  ADVANCE_FEE_2_NEW_MONEY    Advance Fee fraud and lots of money
 tflags    ADVANCE_FEE_2_NEW_MONEY    publish
 ##} ADVANCE_FEE_2_NEW_MONEY
 
 ##{ ADVANCE_FEE_3_NEW
 
-meta      ADVANCE_FEE_3_NEW  __ADVANCE_FEE_3_NEW && !__HTML_LINK_IMAGE && !__TAG_EXISTS_CENTER && !__COMMENT_EXISTS && !__VIA_ML && !__THREADED && !__UNSUB_LINK
+meta      ADVANCE_FEE_3_NEW  __ADVANCE_FEE_3_NEW && !__HTML_LINK_IMAGE && !__TAG_EXISTS_CENTER && !__COMMENT_EXISTS && !__VIA_ML && !__THREADED && !__UNSUB_LINK && !__UPPERCASE_URI && !__SURVEY
 describe  ADVANCE_FEE_3_NEW  Appears to be advance fee fraud (Nigerian 419)
+#score     ADVANCE_FEE_3_NEW  3.5		# limit
 tflags    ADVANCE_FEE_3_NEW          publish
 ##} ADVANCE_FEE_3_NEW
 
@@ -73,7 +74,7 @@ describe  ADVANCE_FEE_3_NEW_FRM_MNY    Advance Fee fraud form and lots of money
 
 ##{ ADVANCE_FEE_3_NEW_MONEY
 
-meta      ADVANCE_FEE_3_NEW_MONEY    __ADVANCE_FEE_3_NEW_MONEY && !__HTML_LINK_IMAGE
+meta      ADVANCE_FEE_3_NEW_MONEY    __ADVANCE_FEE_3_NEW_MONEY && !__HTML_LINK_IMAGE && !__UPPERCASE_URI && !__UNSUB_LINK && !__VIA_ML && !__THREADED
 describe  ADVANCE_FEE_3_NEW_MONEY    Advance Fee fraud and lots of money
 tflags    ADVANCE_FEE_3_NEW_MONEY    publish
 ##} ADVANCE_FEE_3_NEW_MONEY
@@ -141,23 +142,250 @@ header		APOSTROPHE_FROM	From:addr =~ /'/
 describe	APOSTROPHE_FROM	From address contains an apostrophe
 ##} APOSTROPHE_FROM
 
-##{ AXB_BODYMAIL_SBL112884
+##{ AXB_XMAILER_MIMEOLE_OL_024C2
 
-body            AXB_BODYMAIL_SBL112884  /\@yeah\.net\b/
-describe        AXB_BODYMAIL_SBL112884  Spammer dropbox SBL112884
-##} AXB_BODYMAIL_SBL112884
+meta   AXB_XMAILER_MIMEOLE_OL_024C2  (__AXB_XM_OL_024C2 && __AXB_MO_OL_024C2)
+##} AXB_XMAILER_MIMEOLE_OL_024C2
 
-##{ AXB_HELO_HOME_UN
+##{ AXB_XMAILER_MIMEOLE_OL_07794
 
-header          AXB_HELO_HOME_UN        X-Spam-Relays-Untrusted =~ /^[^\]]+ helo=\w+\.(lan|home) /i
-describe        AXB_HELO_HOME_UN        HELO from home  - untrusted
-##} AXB_HELO_HOME_UN
+meta   AXB_XMAILER_MIMEOLE_OL_07794  (__AXB_XM_OL_07794 && __AXB_MO_OL_07794)
+##} AXB_XMAILER_MIMEOLE_OL_07794
 
-##{ AXB_OBFU_MULE
+##{ AXB_XMAILER_MIMEOLE_OL_0ECF8
 
-meta		AXB_OBFU_MULE	(__AXB_LI_U && !__AXB_LI_CLASS && !__AXB_LI_FBL)
-describe	AXB_OBFU_MULE	spacey mules
-##} AXB_OBFU_MULE
+meta   AXB_XMAILER_MIMEOLE_OL_0ECF8  (__AXB_XM_OL_0ECF8 && __AXB_MO_OL_0ECF8)
+##} AXB_XMAILER_MIMEOLE_OL_0ECF8
+
+##{ AXB_XMAILER_MIMEOLE_OL_12495
+
+meta   AXB_XMAILER_MIMEOLE_OL_12495  (__AXB_XM_OL_12495 && __AXB_MO_OL_12495)
+##} AXB_XMAILER_MIMEOLE_OL_12495
+
+##{ AXB_XMAILER_MIMEOLE_OL_1ECD5
+
+meta   AXB_XMAILER_MIMEOLE_OL_1ECD5  (__AXB_XM_OL_1ECD5 && __AXB_MO_OL_1ECD5)
+##} AXB_XMAILER_MIMEOLE_OL_1ECD5
+
+##{ AXB_XMAILER_MIMEOLE_OL_22B61
+
+meta   AXB_XMAILER_MIMEOLE_OL_22B61  (__AXB_XM_OL_22B61 && __AXB_MO_OL_22B61)
+##} AXB_XMAILER_MIMEOLE_OL_22B61
+
+##{ AXB_XMAILER_MIMEOLE_OL_2E645
+
+meta   AXB_XMAILER_MIMEOLE_OL_2E645  (__AXB_XM_OL_2E645 && __AXB_MO_OL_2E645)
+##} AXB_XMAILER_MIMEOLE_OL_2E645
+
+##{ AXB_XMAILER_MIMEOLE_OL_326A6
+
+meta   AXB_XMAILER_MIMEOLE_OL_326A6  (__AXB_XM_OL_326A6 && __AXB_MO_OL_326A6)
+##} AXB_XMAILER_MIMEOLE_OL_326A6
+
+##{ AXB_XMAILER_MIMEOLE_OL_32D97
+
+meta   AXB_XMAILER_MIMEOLE_OL_32D97  (__AXB_XM_OL_32D97 && __AXB_MO_OL_32D97)
+##} AXB_XMAILER_MIMEOLE_OL_32D97
+
+##{ AXB_XMAILER_MIMEOLE_OL_335D0
+
+meta   AXB_XMAILER_MIMEOLE_OL_335D0  (__AXB_XM_OL_335D0 && __AXB_MO_OL_335D0)
+##} AXB_XMAILER_MIMEOLE_OL_335D0
+
+##{ AXB_XMAILER_MIMEOLE_OL_35FFA
+
+meta   AXB_XMAILER_MIMEOLE_OL_35FFA  (__AXB_XM_OL_35FFA && __AXB_MO_OL_35FFA)
+##} AXB_XMAILER_MIMEOLE_OL_35FFA
+
+##{ AXB_XMAILER_MIMEOLE_OL_3AC1D
+
+meta   AXB_XMAILER_MIMEOLE_OL_3AC1D  (__AXB_XM_OL_3AC1D && __AXB_MO_OL_3AC1D)
+##} AXB_XMAILER_MIMEOLE_OL_3AC1D
+
+##{ AXB_XMAILER_MIMEOLE_OL_4204A
+
+meta   AXB_XMAILER_MIMEOLE_OL_4204A  (__AXB_XM_OL_4204A && __AXB_MO_OL_4204A)
+##} AXB_XMAILER_MIMEOLE_OL_4204A
+
+##{ AXB_XMAILER_MIMEOLE_OL_4379D
+
+meta   AXB_XMAILER_MIMEOLE_OL_4379D  (__AXB_XM_OL_4379D && __AXB_MO_OL_4379D)
+##} AXB_XMAILER_MIMEOLE_OL_4379D
+
+##{ AXB_XMAILER_MIMEOLE_OL_44FE0
+
+meta   AXB_XMAILER_MIMEOLE_OL_44FE0  (__AXB_XM_OL_44FE0 && __AXB_MO_OL_44FE0)
+##} AXB_XMAILER_MIMEOLE_OL_44FE0
+
+##{ AXB_XMAILER_MIMEOLE_OL_4BF4C
+
+meta   AXB_XMAILER_MIMEOLE_OL_4BF4C  (__AXB_XM_OL_4BF4C && __AXB_MO_OL_4BF4C)
+##} AXB_XMAILER_MIMEOLE_OL_4BF4C
+
+##{ AXB_XMAILER_MIMEOLE_OL_4F240
+
+meta   AXB_XMAILER_MIMEOLE_OL_4F240  (__AXB_XM_OL_4F240 && __AXB_MO_OL_4F240)
+##} AXB_XMAILER_MIMEOLE_OL_4F240
+
+##{ AXB_XMAILER_MIMEOLE_OL_56DF6
+
+meta   AXB_XMAILER_MIMEOLE_OL_56DF6  (__AXB_XM_OL_56DF6 && __AXB_MO_OL_56DF6)
+##} AXB_XMAILER_MIMEOLE_OL_56DF6
+
+##{ AXB_XMAILER_MIMEOLE_OL_5933D
+
+meta   AXB_XMAILER_MIMEOLE_OL_5933D  (__AXB_XM_OL_5933D && __AXB_MO_OL_5933D)
+##} AXB_XMAILER_MIMEOLE_OL_5933D
+
+##{ AXB_XMAILER_MIMEOLE_OL_5B79A
+
+meta   AXB_XMAILER_MIMEOLE_OL_5B79A  (__AXB_XM_OL_5B79A && __AXB_MO_OL_5B79A)
+##} AXB_XMAILER_MIMEOLE_OL_5B79A
+
+##{ AXB_XMAILER_MIMEOLE_OL_616F8
+
+meta   AXB_XMAILER_MIMEOLE_OL_616F8  (__AXB_XM_OL_616F8 && __AXB_MO_OL_616F8)
+##} AXB_XMAILER_MIMEOLE_OL_616F8
+
+##{ AXB_XMAILER_MIMEOLE_OL_787D6
+
+meta   AXB_XMAILER_MIMEOLE_OL_787D6  (__AXB_XM_OL_787D6 && __AXB_MO_OL_787D6)
+##} AXB_XMAILER_MIMEOLE_OL_787D6
+
+##{ AXB_XMAILER_MIMEOLE_OL_79A9A
+
+meta   AXB_XMAILER_MIMEOLE_OL_79A9A  (__AXB_XM_OL_79A9A && __AXB_MO_OL_79A9A)
+##} AXB_XMAILER_MIMEOLE_OL_79A9A
+
+##{ AXB_XMAILER_MIMEOLE_OL_7C3E5
+
+meta   AXB_XMAILER_MIMEOLE_OL_7C3E5  (__AXB_XM_OL_7C3E5 && __AXB_MO_OL_7C3E5)
+##} AXB_XMAILER_MIMEOLE_OL_7C3E5
+
+##{ AXB_XMAILER_MIMEOLE_OL_7EB15
+
+meta   AXB_XMAILER_MIMEOLE_OL_7EB15  (__AXB_XM_OL_7EB15 && __AXB_MO_OL_7EB15)
+##} AXB_XMAILER_MIMEOLE_OL_7EB15
+
+##{ AXB_XMAILER_MIMEOLE_OL_7F4F5
+
+meta   AXB_XMAILER_MIMEOLE_OL_7F4F5  (__AXB_XM_OL_7F4F5 && __AXB_MO_OL_7F4F5)
+##} AXB_XMAILER_MIMEOLE_OL_7F4F5
+
+##{ AXB_XMAILER_MIMEOLE_OL_8627E
+
+meta   AXB_XMAILER_MIMEOLE_OL_8627E  (__AXB_XM_OL_8627E && __AXB_MO_OL_8627E)
+##} AXB_XMAILER_MIMEOLE_OL_8627E
+
+##{ AXB_XMAILER_MIMEOLE_OL_8B970
+
+meta   AXB_XMAILER_MIMEOLE_OL_8B970  (__AXB_XM_OL_8B970 && __AXB_MO_OL_8B970)
+##} AXB_XMAILER_MIMEOLE_OL_8B970
+
+##{ AXB_XMAILER_MIMEOLE_OL_8E893
+
+meta   AXB_XMAILER_MIMEOLE_OL_8E893  (__AXB_XM_OL_8E893 && __AXB_MO_OL_8E893)
+##} AXB_XMAILER_MIMEOLE_OL_8E893
+
+##{ AXB_XMAILER_MIMEOLE_OL_9B90B
+
+meta   AXB_XMAILER_MIMEOLE_OL_9B90B  (__AXB_XM_OL_9B90B && __AXB_MO_OL_9B90B)
+##} AXB_XMAILER_MIMEOLE_OL_9B90B
+
+##{ AXB_XMAILER_MIMEOLE_OL_A275F
+
+meta   AXB_XMAILER_MIMEOLE_OL_A275F  (__AXB_XM_OL_A275F && __AXB_MO_OL_A275F)
+##} AXB_XMAILER_MIMEOLE_OL_A275F
+
+##{ AXB_XMAILER_MIMEOLE_OL_A50F8
+
+meta   AXB_XMAILER_MIMEOLE_OL_A50F8  (__AXB_XM_OL_A50F8 && __AXB_MO_OL_A50F8)
+##} AXB_XMAILER_MIMEOLE_OL_A50F8
+
+##{ AXB_XMAILER_MIMEOLE_OL_A6545
+
+meta   AXB_XMAILER_MIMEOLE_OL_A6545  (__AXB_XM_OL_A6545 && __AXB_MO_OL_A6545)
+##} AXB_XMAILER_MIMEOLE_OL_A6545
+
+##{ AXB_XMAILER_MIMEOLE_OL_A7B9C
+
+meta   AXB_XMAILER_MIMEOLE_OL_A7B9C  (__AXB_XM_OL_A7B9C && __AXB_MO_OL_A7B9C)
+##} AXB_XMAILER_MIMEOLE_OL_A7B9C
+
+##{ AXB_XMAILER_MIMEOLE_OL_B4B40
+
+meta   AXB_XMAILER_MIMEOLE_OL_B4B40  (__AXB_XM_OL_B4B40 && __AXB_MO_OL_B4B40)
+##} AXB_XMAILER_MIMEOLE_OL_B4B40
+
+##{ AXB_XMAILER_MIMEOLE_OL_B9B11
+
+meta   AXB_XMAILER_MIMEOLE_OL_B9B11  (__AXB_XM_OL_B9B11 && __AXB_MO_OL_B9B11)
+##} AXB_XMAILER_MIMEOLE_OL_B9B11
+
+##{ AXB_XMAILER_MIMEOLE_OL_BC7E6
+
+meta   AXB_XMAILER_MIMEOLE_OL_BC7E6  (__AXB_XM_OL_BC7E6 && __AXB_MO_OL_BC7E6)
+##} AXB_XMAILER_MIMEOLE_OL_BC7E6
+
+##{ AXB_XMAILER_MIMEOLE_OL_C0C83
+
+meta   AXB_XMAILER_MIMEOLE_OL_C0C83  (__AXB_XM_OL_C0C83 && __AXB_MO_OL_C0C83)
+##} AXB_XMAILER_MIMEOLE_OL_C0C83
+
+##{ AXB_XMAILER_MIMEOLE_OL_C1698
+
+meta   AXB_XMAILER_MIMEOLE_OL_C1698  (__AXB_XM_OL_C1698 && __AXB_MO_OL_C1698)
+##} AXB_XMAILER_MIMEOLE_OL_C1698
+
+##{ AXB_XMAILER_MIMEOLE_OL_C3E2E
+
+meta   AXB_XMAILER_MIMEOLE_OL_C3E2E  (__AXB_XM_OL_C3E2E && __AXB_MO_OL_C3E2E)
+##} AXB_XMAILER_MIMEOLE_OL_C3E2E
+
+##{ AXB_XMAILER_MIMEOLE_OL_C95DC
+
+meta   AXB_XMAILER_MIMEOLE_OL_C95DC  (__AXB_XM_OL_C95DC && __AXB_MO_OL_C95DC)
+##} AXB_XMAILER_MIMEOLE_OL_C95DC
+
+##{ AXB_XMAILER_MIMEOLE_OL_C9CC0
+
+meta   AXB_XMAILER_MIMEOLE_OL_C9CC0  (__AXB_XM_OL_C9CC0 && __AXB_MO_OL_C9CC0)
+##} AXB_XMAILER_MIMEOLE_OL_C9CC0
+
+##{ AXB_XMAILER_MIMEOLE_OL_CD271
+
+meta   AXB_XMAILER_MIMEOLE_OL_CD271  (__AXB_XM_OL_CD271 && __AXB_MO_OL_CD271)
+##} AXB_XMAILER_MIMEOLE_OL_CD271
+
+##{ AXB_XMAILER_MIMEOLE_OL_DDE5D
+
+meta   AXB_XMAILER_MIMEOLE_OL_DDE5D  (__AXB_XM_OL_DDE5D && __AXB_MO_OL_DDE5D)
+##} AXB_XMAILER_MIMEOLE_OL_DDE5D
+
+##{ AXB_XMAILER_MIMEOLE_OL_E023A
+
+meta   AXB_XMAILER_MIMEOLE_OL_E023A  (__AXB_XM_OL_E023A && __AXB_MO_OL_E023A)
+##} AXB_XMAILER_MIMEOLE_OL_E023A
+
+##{ AXB_XMAILER_MIMEOLE_OL_E9F46
+
+meta   AXB_XMAILER_MIMEOLE_OL_E9F46  (__AXB_XM_OL_E9F46 && __AXB_MO_OL_E9F46)
+##} AXB_XMAILER_MIMEOLE_OL_E9F46
+
+##{ AXB_XMAILER_MIMEOLE_OL_F475E
+
+meta   AXB_XMAILER_MIMEOLE_OL_F475E  (__AXB_XM_OL_F475E && __AXB_MO_OL_F475E)
+##} AXB_XMAILER_MIMEOLE_OL_F475E
+
+##{ AXB_XMAILER_MIMEOLE_OL_FB17C
+
+meta   AXB_XMAILER_MIMEOLE_OL_FB17C  (__AXB_XM_OL_FB17C && __AXB_MO_OL_FB17C)
+##} AXB_XMAILER_MIMEOLE_OL_FB17C
+
+##{ AXB_XMAILER_MIMEOLE_OL_FF5C8
+
+meta   AXB_XMAILER_MIMEOLE_OL_FF5C8  (__AXB_XM_OL_FF5C8 && __AXB_MO_OL_FF5C8)
+##} AXB_XMAILER_MIMEOLE_OL_FF5C8
 
 ##{ AXB_XMA_BASP
 
@@ -165,17 +393,23 @@ header          AXB_XMA_BASP            X-Mail-Agent =~ /^BASP21/
 describe        AXB_XMA_BASP            Mailer fingerprint
 ##} AXB_XMA_BASP
 
-##{ AXB_XRCVD_EYOU_SEND
+##{ AXB_XMID_PFIX_CTRIP
 
-header   AXB_XRCVD_EYOU_SEND    Received =~ /\(eyou send program\)/
-describe AXB_XRCVD_EYOU_SEND    fingerprint
-##} AXB_XRCVD_EYOU_SEND
+header          AXB_XMID_PFIX_CTRIP     Message-ID =~ /\<[A-F0-9]{8}.[0-9]{6}\@ctrip\.com\>/
+describe        AXB_XMID_PFIX_CTRIP     possibly forged ctrip sender - postfix
+##} AXB_XMID_PFIX_CTRIP
 
-##{ AXB_X_AOL_SEZ_S
+##{ AXB_XM_FORGED_OL2600
 
-header          AXB_X_AOL_SEZ_S         x-aol-global-disposition =~ /^S$/
-describe        AXB_X_AOL_SEZ_S         AOL said this is S
-##} AXB_X_AOL_SEZ_S
+meta            AXB_XM_FORGED_OL2600    (__AXB_XM_OL_2600  && !__AXB_MO_OL_2600 )
+describe        AXB_XM_FORGED_OL2600     Forged OE v. 6.2600
+##} AXB_XM_FORGED_OL2600
+
+##{ AXB_X_PHPS_CTRIP
+
+header          AXB_X_PHPS_CTRIP        X-PHP-Script =~ /\bctrip\.com\/sendmail\.php\b/
+describe        AXB_X_PHPS_CTRIP        possibly forged ctrip sender - php
+##} AXB_X_PHPS_CTRIP
 
 ##{ AXB_X_RCV_WLOCAL
 
@@ -206,26 +440,6 @@ endif
 
 header BUG6152_INVALID_DATE_TZ_ABSURD   Date =~ /[-+](?!(?:0\d|1[0-4])(?:[03]0|[14]5))\d{4}/
 ##} BUG6152_INVALID_DATE_TZ_ABSURD
-
-##{ CK_HELO_DYNAMIC_SPLIT_IP
-
-header 		CK_HELO_DYNAMIC_SPLIT_IP 	X-Spam-Relays-Untrusted =~ /^[^\]]+helo=(?!(?:\d+\.){4})\d+[^\d\s]+\d+[^\d\s]\d+[^\d\s]\d+[^\d\s]/i
-describe 	CK_HELO_DYNAMIC_SPLIT_IP	Relay HELO'd using suspicious hostname (Split IP)
-#score		CK_HELO_DYNAMIC_SPLIT_IP	3.0
-##} CK_HELO_DYNAMIC_SPLIT_IP
-
-##{ CK_HELO_GENERIC
-
-header 		CK_HELO_GENERIC   	X-Spam-Relays-Untrusted =~ /^[^\]]+helo=(?=\S*(?:pool|dyna|lease|dial|dip|static))\S*\d+[^\d\s]+\d+[^\]]+ auth= /i
-describe	CK_HELO_GENERIC		Relay used name indicative of a Dynamic Pool or Generic rPTR
-#score		CK_HELO_GENERIC		0.25
-##} CK_HELO_GENERIC
-
-##{ CN_B2B_SPAMMER
-
-body        CN_B2B_SPAMMER         /We are (?:a )?China[-\s]based/i
-describe    CN_B2B_SPAMMER         Chinese company introducing itself
-##} CN_B2B_SPAMMER
 
 ##{ CORRUPT_FROM_LINE_IN_HDRS
 
@@ -258,39 +472,11 @@ endif
 body CURR_PRICE         /\bCurrent Price:/
 ##} CURR_PRICE
 
-##{ DATE_DOTS
-
-header          DATE_DOTS               Date =~ /\d\d\.\d\d\.\d\d/
-describe        DATE_DOTS               Periods in date header
-##} DATE_DOTS
-
-##{ DATE_IN_FUTURE_96_Q ifplugin Mail::SpamAssassin::Plugin::HeaderEval
-
-ifplugin Mail::SpamAssassin::Plugin::HeaderEval
-header	 DATE_IN_FUTURE_96_Q	eval:check_for_shifted_date('96', '2920')
-describe DATE_IN_FUTURE_96_Q	Date: is 4 days to 4 months after Received: date
-endif
-##} DATE_IN_FUTURE_96_Q ifplugin Mail::SpamAssassin::Plugin::HeaderEval
-
-##{ DATE_IN_FUTURE_Q_PLUS ifplugin Mail::SpamAssassin::Plugin::HeaderEval
-
-ifplugin Mail::SpamAssassin::Plugin::HeaderEval
-header	 DATE_IN_FUTURE_Q_PLUS	eval:check_for_shifted_date('2920', 'undef')
-describe DATE_IN_FUTURE_Q_PLUS	Date: is over 4 months after Received: date
-endif
-##} DATE_IN_FUTURE_Q_PLUS ifplugin Mail::SpamAssassin::Plugin::HeaderEval
-
 ##{ DEAR_BENEFICIARY
 
 body     DEAR_BENEFICIARY         /\b(?:De[ae]r\s|At+(?:ention|n):?\s?)(?:\S+\s)?Ben[ei]ficiary\b/i
 describe DEAR_BENEFICIARY         Dear Beneficiary:
 ##} DEAR_BENEFICIARY
-
-##{ DEAR_EMAIL_USER
-
-body           DEAR_EMAIL_USER          /^\s?(?:Dear\s|Attention:?\s?)(?:E|Web)-?mail\s(?:account\s)?User\b/i
-describe       DEAR_EMAIL_USER          Dear Email User:
-##} DEAR_EMAIL_USER
 
 ##{ DEAR_WINNER
 
@@ -299,7 +485,7 @@ body DEAR_WINNER /\bdear.{1,20}winner/i
 
 ##{ DECEASED_NO_ML
 
-meta     DECEASED_NO_ML   __DECEASED && !__VIA_ML && !__UNSUB_LINK && !__DOS_HAS_LIST_UNSUB && !__HAS_THREAD_INDEX && !__THREAD_INDEX_GOOD && !__HS_SUBJ_RE_FW && !__IMS_MSGID && !__IS_EXCH && !__COMMENT_EXISTS
+meta     DECEASED_NO_ML   __DECEASED && !__VIA_ML && !__UNSUB_LINK && !__DOS_HAS_LIST_UNSUB && !__HAS_THREAD_INDEX && !__THREAD_INDEX_GOOD && !__HS_SUBJ_RE_FW && !__IMS_MSGID && !__IS_EXCH && !__COMMENT_EXISTS && !__DOS_SINGLE_EXT_RELAY
 describe DECEASED_NO_ML   Dead not via mailing list
 ##} DECEASED_NO_ML
 
@@ -404,16 +590,16 @@ meta DYN_RDNS_SHORT_HELO_IMAGE       (__HELO_NO_DOMAIN && RDNS_DYNAMIC && __ANY_
 describe DYN_RDNS_SHORT_HELO_IMAGE    Short HELO string, dynamic rDNS, inline image
 ##} DYN_RDNS_SHORT_HELO_IMAGE
 
-##{ EMRCP
-
-body     EMRCP            /\bExcess Maximum Return Capital Profit\b/i
-describe EMRCP            "Excess Maximum Return Capital Profit" Fidelity scam
-##} EMRCP
-
 ##{ FAKE_REPLY_C
 
 meta     FAKE_REPLY_C		(__SUBJ_RE && __MISSING_REF && __NO_INR_YES_REF)
 ##} FAKE_REPLY_C
+
+##{ FB_ACHIEVE_BACH
+
+body     FB_ACHIEVE_BACH        /Achieve your Bachelor/i
+describe FB_ACHIEVE_BACH        Phrase: Achieve your bachelor
+##} FB_ACHIEVE_BACH
 
 ##{ FB_ADD_INCHES
 
@@ -540,12 +726,6 @@ describe FB_HG_H_CAP            Phrase: HGH
 body     FB_HOMELOAN            /\$\d{3},\d{3} home loan/i
 describe FB_HOMELOAN            Phrase $x home loan
 ##} FB_HOMELOAN
-
-##{ FB_IMAGIRL
-
-body     FB_IMAGIRL             /i am a girl/i
-describe FB_IMAGIRL             Phrae: I am a girl
-##} FB_IMAGIRL
 
 ##{ FB_IMPRESS_GIRL
 
@@ -1012,6 +1192,15 @@ ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 endif
 ##} FILL_THIS_FORM_LONG ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 
+##{ FILL_THIS_FORM_SHORT ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
+
+ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
+  meta     FILL_THIS_FORM_SHORT           __FILL_THIS_FORM_SHORT && !__VIA_ML && !__MSGID_JAVAMAIL
+  describe FILL_THIS_FORM_SHORT           Fill in a short form with personal information
+#  score    FILL_THIS_FORM_SHORT           1.0	# limit
+endif
+##} FILL_THIS_FORM_SHORT ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
+
 ##{ FM_DOESNT_SAY_STOCK
 
 meta     FM_DOESNT_SAY_STOCK    (__FB_S_SYMBOL && __FM_MY_PRICE && !__FB_S_STOCK && !__FS_S_TRADE)
@@ -1164,7 +1353,7 @@ describe FM_XMAIL_F_OUT         Looks like Fake Outlook?
 
 ##{ FORM_FRAUD_3
 
-meta     FORM_FRAUD_3    __FORM_FRAUD_3 && !__DOS_HAS_LIST_UNSUB && !__THREADED && !__HAS_THREAD_INDEX && !__VIA_ML && !__HTML_LINK_IMAGE && !__MIME_QP
+meta     FORM_FRAUD_3    __FORM_FRAUD_3 && !__DOS_HAS_LIST_UNSUB && !__THREADED && !__HAS_THREAD_INDEX && !__VIA_ML && !__HTML_LINK_IMAGE && !__MIME_QP && !__DOS_BODY_FRI && !__UNSUB_LINK && !__BUGGED_IMG && !__NOT_SPOOFED
 describe FORM_FRAUD_3    Fill a form and several fraud phrases
 tflags   FORM_FRAUD_3    publish
 ##} FORM_FRAUD_3
@@ -1175,6 +1364,26 @@ meta     FORM_FRAUD_5    __FORM_FRAUD_5 && !__DOS_HAS_LIST_UNSUB && !__THREADED 
 describe FORM_FRAUD_5    Fill a form and many fraud phrases
 tflags   FORM_FRAUD_5    publish
 ##} FORM_FRAUD_5
+
+##{ FROM_12LTRDOM
+
+describe       FROM_12LTRDOM       From a 12-letter domain
+#score          FROM_12LTRDOM       0.10  	# limit
+##} FROM_12LTRDOM
+
+##{ FROM_12LTRDOM if !plugin(Mail::SpamAssassin::Plugin::FreeMail)
+
+if !plugin(Mail::SpamAssassin::Plugin::FreeMail)
+  meta         FROM_12LTRDOM       __FROM_12LTRDOM_1 && !__VIA_ML && !__TO___LOWER && !__FS_SUBJ_RE && !__RCD_RDNS_MAIL_MESSY && !__UNSUB_LINK && !NO_RELAYS && !__UNUSABLE_MSGID && !DATE_IN_PAST_96_XX && !ALL_TRUSTED && !__MSGID_APPLEMAIL && !__RCD_RDNS_SMTP_MESSY && !__FB_NATIONAL && !__MAIL_LINK && !__NAME_EMAIL_DIFF && !__RCD_RDNS_MX_MESSY && !__RCD_RDNS_MX && !__SENDER_BOT && !__IMS_MSGID && !__HS_SUBJ_RE_FW && !__DOS_HAS_LIST_UNSUB && !__THREAD_INDEX_GOOD && !__TO_EQ_FROM_DOM && !__URI_MAILTO && !__SUBSCRIPTION_INFO
+endif
+##} FROM_12LTRDOM if !plugin(Mail::SpamAssassin::Plugin::FreeMail)
+
+##{ FROM_12LTRDOM ifplugin Mail::SpamAssassin::Plugin::FreeMail
+
+ifplugin Mail::SpamAssassin::Plugin::FreeMail
+  meta         FROM_12LTRDOM       __FROM_12LTRDOM_1 && !__VIA_ML && !__TO___LOWER && !__FS_SUBJ_RE && !__RCD_RDNS_MAIL_MESSY && !__freemail_safe && !__UNSUB_LINK && !NO_RELAYS && !__UNUSABLE_MSGID && !DATE_IN_PAST_96_XX && !ALL_TRUSTED && !__MSGID_APPLEMAIL && !__RCD_RDNS_SMTP_MESSY && !__FB_NATIONAL && !__MAIL_LINK && !__NAME_EMAIL_DIFF && !__RCD_RDNS_MX_MESSY && !__RCD_RDNS_MX && !__SENDER_BOT && !__IMS_MSGID && !__HS_SUBJ_RE_FW && !__DOS_HAS_LIST_UNSUB && !__THREAD_INDEX_GOOD && !__TO_EQ_FROM_DOM && !__URI_MAILTO && !__SUBSCRIPTION_INFO
+endif
+##} FROM_12LTRDOM ifplugin Mail::SpamAssassin::Plugin::FreeMail
 
 ##{ FROM_IN_TO_AND_SUBJ
 
@@ -1189,13 +1398,6 @@ meta           FROM_MISSPACED        __FROM_MISSPACED && !__RCD_RDNS_MTA_MESSY &
 describe       FROM_MISSPACED        From: missing whitespace
 #score          FROM_MISSPACED        2.00
 ##} FROM_MISSPACED
-
-##{ FROM_MISSP_DKIM
-
-meta           FROM_MISSP_DKIM       (__FROM_RUNON && __DKIM_DEPENDABLE)
-describe       FROM_MISSP_DKIM       From misspaced, DKIM dependable
-tflags         FROM_MISSP_DKIM       net
-##} FROM_MISSP_DKIM
 
 ##{ FROM_MISSP_DYNIP
 
@@ -1230,6 +1432,13 @@ meta           FROM_MISSP_NO_TO      (__FROM_RUNON && MISSING_HEADERS)
 describe       FROM_MISSP_NO_TO      From misspaced, To missing
 ##} FROM_MISSP_NO_TO
 
+##{ FROM_MISSP_PHISH
+
+meta        FROM_MISSP_PHISH     __FROM_MISSP_PHISH
+describe    FROM_MISSP_PHISH     Malformed, claims to be from financial organization - possible phish
+#score       FROM_MISSP_PHISH     4.00	# limit
+##} FROM_MISSP_PHISH
+
 ##{ FROM_MISSP_REPLYTO
 
 meta           FROM_MISSP_REPLYTO    __FROM_MISSP_REPLYTO && !__NOT_SPOOFED && !__RCD_RDNS_MTA_MESSY && !__TO___LOWER && !__COMMENT_EXISTS && !__UNSUB_LINK && !__MIME_QP && !__CTYPE_MULTIPART_ALT && !__JM_REACTOR_DATE && !__PLING_QUERY
@@ -1252,7 +1461,7 @@ describe       FROM_MISSP_TO_UNDISC  From misspaced, To undisclosed
 
 ##{ FROM_MISSP_URI
 
-meta           FROM_MISSP_URI        __FROM_MISSP_URI && !__NOT_SPOOFED && !__RCD_RDNS_MTA_MESSY && !MISSING_MIMEOLE && !__COMMENT_EXISTS && !__REPTO_QUOTE && !__UNSUB_LINK && !__TO___LOWER && !__MSGID_OK_HEX && !__MAIL_LINK && !__MIME_QP && !__BUGGED_IMG && !MIME_BASE64_TEXT
+meta           FROM_MISSP_URI        __FROM_MISSP_URI && !__NOT_SPOOFED && !__RCD_RDNS_MTA_MESSY && !MISSING_MIMEOLE && !__REPTO_QUOTE && !__UNSUB_LINK && !__MSGID_OK_HEX && !__MAIL_LINK && !__MIME_QP && !__BUGGED_IMG && !MIME_BASE64_TEXT && !__CTYPE_MULTIPART_ALT
 describe       FROM_MISSP_URI        From misspaced, has URI
 ##} FROM_MISSP_URI
 
@@ -1291,6 +1500,14 @@ body     FRT_BIGGERMEM1         /<inter SP2><post P2>(?:<B><IX><GX><GX><E><R>|<L
 describe FRT_BIGGERMEM1         ReplaceTags: Bigger / Larger, Penis / Member
 endif
 ##} FRT_BIGGERMEM1 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
+
+##{ FRT_ERECTION ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
+
+ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
+body     FRT_ERECTION           /<inter SP2><post P2>(?!erection)<E><R><E><C><TX><IX><O><N>/i
+describe FRT_ERECTION           ReplaceTags: Erection
+endif
+##} FRT_ERECTION ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 
 ##{ FRT_OFFER2 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 
@@ -1348,12 +1565,6 @@ rawbody  FR_MIDER               m'http[^ ]{5,30}/gall?/'
 describe FR_MIDER               Sign often seen in spams
 ##} FR_MIDER
 
-##{ FR_TITLE_CONS_6
-
-rawbody  FR_TITLE_CONS_6        m'<title>.{0,4}[bcdfgjklmnpqrstvwxyz]{6}.{0,25}</title>'i
-describe FR_TITLE_CONS_6        Title Attribute has 6 non-vowels.
-##} FR_TITLE_CONS_6
-
 ##{ FR_TITLE_NUMS
 
 rawbody  FR_TITLE_NUMS          m'<title>\d+</title>'i
@@ -1364,111 +1575,73 @@ describe FR_TITLE_NUMS          HTML Title is only numbers
 
 header   FSL_CTYPE_WIN1251   Content-Type =~ /charset="Windows-1251"/
 describe FSL_CTYPE_WIN1251   Content-Type only seen in 419 spam
-#score    FSL_CTYPE_WIN1251   2.0
 ##} FSL_CTYPE_WIN1251
 
 ##{ FSL_FAKE_GMAIL_RCVD
 
-header	FSL_FAKE_GMAIL_RCVD	X-Spam-Relays-External =~ /gmail-smtp-in\.l\.google\.com/
-#score	FSL_FAKE_GMAIL_RCVD	0.001
+header  FSL_FAKE_GMAIL_RCVD     X-Spam-Relays-External =~ /gmail-smtp-in\.l\.google\.com/
 ##} FSL_FAKE_GMAIL_RCVD
 
 ##{ FSL_FAKE_HOTMAIL_RVCD
 
-header	FSL_FAKE_HOTMAIL_RVCD	X-Spam-Relays-External =~ /mx[1234]\.hotmail\.com/
+header  FSL_FAKE_HOTMAIL_RVCD   X-Spam-Relays-External =~ /mx[1234]\.hotmail\.com/
 ##} FSL_FAKE_HOTMAIL_RVCD
-
-##{ FSL_FREEMAIL_1
-
-meta	FSL_FREEMAIL_1 (__HAS_REPLY_TO && __REPLY_FREEMAIL)
-#score	FSL_FREEMAIL_1 0.001
-##} FSL_FREEMAIL_1
-
-##{ FSL_FREEMAIL_2
-
-meta	FSL_FREEMAIL_2 (__HAS_REPLY_TO && __REPLY_FREEMAIL && __FROM_FREEMAIL)
-#score	FSL_FREEMAIL_2 0.001
-##} FSL_FREEMAIL_2
 
 ##{ FSL_GEO_ABUSE
 
 uri FSL_GEO_ABUSE /\/geocities\.com\/\S+$/
-#score FSL_GEO_ABUSE 3.0
 ##} FSL_GEO_ABUSE
 
 ##{ FSL_HELO_BARE_IP_1
 
 header  FSL_HELO_BARE_IP_1      X-Spam-Relays-External =~ /^[^\]]+ helo=\d+\.\d+\.\d+\.\d+ /i
-#score   FSL_HELO_BARE_IP_1      0.001
 ##} FSL_HELO_BARE_IP_1
 
 ##{ FSL_HELO_DEVICE
 
-header	FSL_HELO_DEVICE		X-Spam-Relays-External =~ /\bhelo=(?:(?:dsl)?device|speedtouch)\.lan\b/i
-#score	FSL_HELO_DEVICE		0.001
+header  FSL_HELO_DEVICE         X-Spam-Relays-External =~ /\bhelo=(?:(?:dsl)?device|speedtouch)\.lan\b/i
 ##} FSL_HELO_DEVICE
+
+##{ FSL_HELO_FIREWALL
+
+header  FSL_HELO_FIREWALL       X-Spam-Relays-External =~ /\bhelo=\S+\.firewall\b/i
+##} FSL_HELO_FIREWALL
 
 ##{ FSL_HELO_NON_FQDN_1
 
 header  FSL_HELO_NON_FQDN_1     X-Spam-Relays-External =~ /^[^\]]+ helo=[a-zA-Z0-9-_]+ /i
-#score   FSL_HELO_NON_FQDN_1     0.001
 ##} FSL_HELO_NON_FQDN_1
 
 ##{ FSL_HELO_SETUP
 
-header	FSL_HELO_SETUP		X-Spam-Relays-External =~ /\bhelo=\S+\.setup\b/i
-#score	FSL_HELO_SETUP		0.001
+header  FSL_HELO_SETUP          X-Spam-Relays-External =~ /\bhelo=\S+\.setup\b/i
 ##} FSL_HELO_SETUP
 
 ##{ FSL_INTERIA_ABUSE
 
 uri FSL_INTERIA_ABUSE /\/\S+\.(?:w|eu|fm)\.interia\.pl/
-#score FSL_INTERIA_ABUSE 15.0 
 ##} FSL_INTERIA_ABUSE
 
 ##{ FSL_MID_419
 
 header   FSL_MID_419   MESSAGE-ID =~ /\@User>$/
 describe FSL_MID_419   Spam signature in Message-ID
-#score    FSL_MID_419   2.0
 ##} FSL_MID_419
 
 ##{ FSL_MISSP_REPLYTO
 
 meta     FSL_MISSP_REPLYTO   (__FROM_MISSPACED && __HAS_REPLY_TO)
 describe FSL_MISSP_REPLYTO   Mis-spaced from and Reply-to
-#score    FSL_MISSP_REPLYTO   2.0
 ##} FSL_MISSP_REPLYTO
 
 ##{ FSL_NEW_HELO_USER
 
 meta    FSL_NEW_HELO_USER   (__FSL_HELO_USER_1 || __FSL_HELO_USER_2 || __FSL_HELO_USER_3)
-#score   FSL_NEW_HELO_USER   2.0
 ##} FSL_NEW_HELO_USER
-
-##{ FSL_RCVD_USER
-
-header	FSL_RCVD_USER		Received =~ /\bUser\b/i
-#score   FSL_RCVD_USER		0.001
-##} FSL_RCVD_USER
-
-##{ FSL_UA
-
-meta FSL_UA (__FSL_UA_1 || __FSL_UA_2)
-#score FSL_UA 3.0
-##} FSL_UA
-
-##{ FSL_XM_419
-
-header   FSL_XM_419   X-Mailer =~ /\s+6\.00\.2600\.0000$/
-describe FSL_XM_419   Old OE version in X-Mailer only seen in 419 spam
-#score    FSL_XM_419   2.0
-##} FSL_XM_419
 
 ##{ FSL_YG_ABUSE
 
 uri FSL_YG_ABUSE /\/groups\.yahoo\.com\/group\/\S+\/message\/1$/
-#score FSL_YG_ABUSE 15.0
 ##} FSL_YG_ABUSE
 
 ##{ FS_ABIGGER
@@ -1530,6 +1703,12 @@ describe FS_LARGE_PERCENT2      Larger than 100% in subj.
 header   FS_LOW_RATES           Subject =~ / low rates/i
 describe FS_LOW_RATES           Subject says low rates
 ##} FS_LOW_RATES
+
+##{ FS_MAKE_MONEY
+
+header   FS_MAKE_MONEY          Subject =~ /make money/i
+describe FS_MAKE_MONEY          Subject says "make money"
+##} FS_MAKE_MONEY
 
 ##{ FS_NEW_SOFT_UPLOAD
 
@@ -1658,12 +1837,6 @@ uri      FU_ENDS_NUMS_DOTS_CLK  m'(?:clk|uns)/\d+\.\d+\.\d+'i
 describe FU_ENDS_NUMS_DOTS_CLK  Ends with clk/d+.d+.d+
 ##} FU_ENDS_NUMS_DOTS_CLK
 
-##{ FU_ENDS_SG
-
-uri      FU_ENDS_SG             m'/sg$'i
-describe FU_ENDS_SG             URL ends with /sg
-##} FU_ENDS_SG
-
 ##{ FU_END_ET
 
 uri      FU_END_ET              m'/et/$'i
@@ -1700,15 +1873,42 @@ uri      FU_URI_TRACKER_T       m'/[yi]/(?:sp|et|vm|xl2)/'i
 describe FU_URI_TRACKER_T       URI style tracker (T)
 ##} FU_URI_TRACKER_T
 
+##{ GAPPY_HTML
+
+meta        GAPPY_HTML             __GAPPY_HTML && !__UNSUB_LINK && !__RP_MATCHES_RCVD && !__RCD_RDNS_MAIL_MESSY
+describe    GAPPY_HTML             HTML body with much useless whitespace
+##} GAPPY_HTML
+
 ##{ GEO_QUERY_STRING
 
 uri	GEO_QUERY_STRING	/^http:\/\/(?:\w{2,4}\.)?geocities\.com(?::\d*)?\/.+?\/\?/i
 ##} GEO_QUERY_STRING
 
+##{ HDRS_LCASE
+
+describe       HDRS_LCASE            Odd capitalization of message header
+#score          HDRS_LCASE            0.10	# limit
+##} HDRS_LCASE
+
+##{ HDRS_LCASE if !plugin(Mail::SpamAssassin::Plugin::FreeMail)
+
+if !plugin(Mail::SpamAssassin::Plugin::FreeMail)
+  meta         HDRS_LCASE            __HDRS_LCASE && !__HDRS_LCASE_KNOWN && !__VIA_ML && !__THREADED && !__UNUSABLE_MSGID && !__DOS_SINGLE_EXT_RELAY && !__DKIM_EXISTS && !__BUGGED_IMG && !__SUBSCRIPTION_INFO && !NO_RELAYS && !__RDNS_NONE && !__MIME_BASE64 && !__SUBJECT_ENCODED_B64 && !__RCD_RDNS_MX_MESSY && !__HTML_LINK_IMAGE && !__RDNS_SHORT && !__TAG_EXISTS_STYLE && !ALL_TRUSTED && !__NOT_SPOOFED && !__RCD_RDNS_SMTP_MESSY && !__NAKED_TO
+endif
+##} HDRS_LCASE if !plugin(Mail::SpamAssassin::Plugin::FreeMail)
+
+##{ HDRS_LCASE ifplugin Mail::SpamAssassin::Plugin::FreeMail
+
+ifplugin Mail::SpamAssassin::Plugin::FreeMail
+  meta         HDRS_LCASE            __HDRS_LCASE && !__HDRS_LCASE_KNOWN && !__VIA_ML && !__freemail_safe && !__THREADED && !__UNUSABLE_MSGID && !__DOS_SINGLE_EXT_RELAY && !__DKIM_EXISTS && !__BUGGED_IMG && !__SUBSCRIPTION_INFO && !NO_RELAYS && !__RDNS_NONE && !__MIME_BASE64 && !__SUBJECT_ENCODED_B64 && !__RCD_RDNS_MX_MESSY && !__HTML_LINK_IMAGE && !__RDNS_SHORT && !__TAG_EXISTS_STYLE && !ALL_TRUSTED && !__NOT_SPOOFED && !__RCD_RDNS_SMTP_MESSY && !__NAKED_TO
+endif
+##} HDRS_LCASE ifplugin Mail::SpamAssassin::Plugin::FreeMail
+
 ##{ HDRS_LCASE_1K
 
-meta           HDRS_LCASE_1K         __HDRS_LCASE_1K && !__VIA_ML
+meta           HDRS_LCASE_1K         __HDRS_LCASE_1K && !__HDRS_LCASE_KNOWN && !__VIA_ML && !__MIME_QP && !__BUGGED_IMG && !__BOUNCE_RPATH_NULL && !__NOT_SPOOFED && !__DKIM_EXISTS && !__RDNS_NONE
 describe       HDRS_LCASE_1K         Odd capitalization of message headers + long header
+#score          HDRS_LCASE_1K         0.50	# limit
 ##} HDRS_LCASE_1K
 
 ##{ HDR_ORDER_FTSDMCXX_001C
@@ -1751,22 +1951,10 @@ header HELO_LH_LD   X-Spam-Relays-External =~ /^[^\]]+ helo=localhost\.localdoma
 header HELO_LOCALHOST   X-Spam-Relays-External =~ /^[^\]]+ helo=localhost /i
 ##} HELO_LOCALHOST
 
-##{ HELO_MISC_IP
-
-meta     	HELO_MISC_IP          	(__HELO_MISC_IP && !HELO_DYNAMIC_IPADDR && !HELO_DYNAMIC_IPADDR2 && !HELO_DYNAMIC_SPLIT_IP && !HELO_DYNAMIC_HCC && !HELO_DYNAMIC_DIALIN && ((TVD_RCVD_IP4 + TVD_RCVD_IP + RCVD_NUMERIC_HELO) <2))
-describe	HELO_MISC_IP		Looking for more Dynamic IP Relays
-#score		HELO_MISC_IP		0.25
-##} HELO_MISC_IP
-
 ##{ HELO_OEM
 
 header HELO_OEM  X-Spam-Relays-External =~ /^[^\]]+ helo=(?:pc|oem\S*) /i
 ##} HELO_OEM
-
-##{ HK_GOLDDUST
-
-body		HK_GOLDDUST		/\bgold ?dust\b/i
-##} HK_GOLDDUST
 
 ##{ HK_LOTTO
 
@@ -1786,27 +1974,6 @@ header		HK_NAME_DRUGS		From:name =~ /(viagra|\bcialis|cialis\b)/mi
 describe	HK_NAME_DRUGS		From name contains drugs
 #score		HK_NAME_DRUGS		2
 ##} HK_NAME_DRUGS
-
-##{ HK_NAME_FM_DR ifplugin Mail::SpamAssassin::Plugin::FreeMail
-
-ifplugin Mail::SpamAssassin::Plugin::FreeMail
-meta		HK_NAME_FM_DR		__HK_NAME_DR && FREEMAIL_FROM
-endif
-##} HK_NAME_FM_DR ifplugin Mail::SpamAssassin::Plugin::FreeMail
-
-##{ HK_NAME_FM_FROM ifplugin Mail::SpamAssassin::Plugin::FreeMail
-
-ifplugin Mail::SpamAssassin::Plugin::FreeMail
-meta		HK_NAME_FM_FROM		__HK_NAME_FROM && FREEMAIL_FROM
-endif
-##} HK_NAME_FM_FROM ifplugin Mail::SpamAssassin::Plugin::FreeMail
-
-##{ HK_NAME_FM_MR_MRS ifplugin Mail::SpamAssassin::Plugin::FreeMail
-
-ifplugin Mail::SpamAssassin::Plugin::FreeMail
-meta		HK_NAME_FM_MR_MRS	__HK_NAME_MR_MRS && FREEMAIL_FROM
-endif
-##} HK_NAME_FM_MR_MRS ifplugin Mail::SpamAssassin::Plugin::FreeMail
 
 ##{ HK_NAME_FROM ifplugin Mail::SpamAssassin::Plugin::FreeMail
 
@@ -1829,27 +1996,17 @@ describe	HK_RANDOM_ENVFROM	Envelope sender username looks random
 #score		HK_RANDOM_ENVFROM	1
 ##} HK_RANDOM_ENVFROM
 
-##{ HK_RANDOM_REPLYTO
+##{ HK_RANDOM_FROM
 
-header		HK_RANDOM_REPLYTO	Reply-To:addr =~ /^(?!(?:mail|bounce)[_.-]|[^@]*(?:[+=^~\#]|mcgr|kpmg|nlpbr|ndqv|lcgc|cplpr|-mailer@)|[^@]{26}|.*?@.{0,20}\b(?:cmpgnr|cnn)\.com$)[^@]*(?:[bcdfgjklmnpqrtvwxz]{5}|[aeiouy]{5}|([a-z]{1,2})(?:\1){3})/mi
-describe	HK_RANDOM_REPLYTO	Reply-To username looks random
-#score		HK_RANDOM_REPLYTO	1
-##} HK_RANDOM_REPLYTO
+header		HK_RANDOM_FROM		From:addr =~ /^(?!(?:mail|bounce)[_.-]|[^@]*(?:[+=^~\#]|mcgr|kpmg|nlpbr|ndqv|lcgc|cplpr|-mailer@)|[^@]{26}|.*?@.{0,20}\bcmp-info\.com$)[^@]*(?:[bcdfgjklmnpqrtvwxz]{5}|[aeiouy]{5}|([a-z]{1,2})(?:\1){3})/mi
+describe	HK_RANDOM_FROM		From username looks random
+#score		HK_RANDOM_FROM		1
+##} HK_RANDOM_FROM
 
 ##{ HK_SCAM_N1
 
 body		HK_SCAM_N1		/\b(?:widow|son|daughter|husband|wife|brother|sister) of (?:the )?(?:late|sacked|dead|passed)\b/i
 ##} HK_SCAM_N1
-
-##{ HK_SCAM_N12
-
-body		HK_SCAM_N12		/\binsured with your email\b/i
-##} HK_SCAM_N12
-
-##{ HK_SCAM_N13
-
-body		HK_SCAM_N13		/\b(?:business|important|discreet) transaction\b/i
-##} HK_SCAM_N13
 
 ##{ HK_SCAM_N15
 
@@ -1866,125 +2023,20 @@ body		HK_SCAM_N2		/\bnext of kin\b/i
 body		HK_SCAM_N3		/\bdirect telephone numbers?\b/i
 ##} HK_SCAM_N3
 
-##{ HK_SCAM_N4
-
-body		HK_SCAM_N4		/\b(?:e?mail me below|reply (?:me to )?this e?mail (?:at|to)?|send your reply (?:to|at))\b/i
-##} HK_SCAM_N4
-
 ##{ HK_SCAM_N8
 
 body		HK_SCAM_N8		/\byour compensation\b/i
 ##} HK_SCAM_N8
-
-##{ HK_SCAM_S1
-
-body		HK_SCAM_S1		/pay you the sum of/i
-##} HK_SCAM_S1
-
-##{ HK_SCAM_S15
-
-body		HK_SCAM_S15		/(?:discovered a dormant account|can you be my partner)/i
-##} HK_SCAM_S15
 
 ##{ HK_SCAM_S25
 
 body		HK_SCAM_S25		/\bbank (?:in|of) ghana/i
 ##} HK_SCAM_S25
 
-##{ HK_SCAM_S3
-
-body		HK_SCAM_S3		/invest(?:ment (?:in your area|partner)|in your country|assist me in an investment)/i
-##} HK_SCAM_S3
-
 ##{ HK_SCAM_S7
 
 body		HK_SCAM_S7		/(?:(?:investment|proposed|lucrative) (?:business|venture)|(?:business|venture) (?:enterprise|propos(?:al|ition)))/i
 ##} HK_SCAM_S7
-
-##{ HK_SPAMMY_FILENAME ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-
-ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-meta		HK_SPAMMY_FILENAME	__HK_SPAMMY_CTFN || __HK_SPAMMY_CDFN
-endif
-##} HK_SPAMMY_FILENAME ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-
-##{ HS_BOBAX_MID_2
-
-header HS_BOBAX_MID_2 Message-Id =~ /^<\dIX\d{3}EJXVWDA\d{3}\@[a-z\-]+\.[a-z]+>/
-describe HS_BOBAX_MID_2 Bobax? Message-Id: <0IX000EJXVWDA000@example.com>
-##} HS_BOBAX_MID_2
-
-##{ HS_BODY_UPLOADED_SOFTWARE
-
-body HS_BODY_UPLOADED_SOFTWARE /^\w+ has uploaded some new software/
-describe HS_BODY_UPLOADED_SOFTWARE Somebody has uploaded some new software for you
-##} HS_BODY_UPLOADED_SOFTWARE
-
-##{ HS_DRUG_DOLLAR_1
-
-body HS_DRUG_DOLLAR_1 m'^[a-z]+[glrt][a-z]?[eir][a-z]?[asx](?: -|:)? \$[\d.]+$'i
-describe HS_DRUG_DOLLAR_1 Contains a drug and price-like pattern.
-##} HS_DRUG_DOLLAR_1
-
-##{ HS_DRUG_DOLLAR_2
-
-body HS_DRUG_DOLLAR_2 m'^[a-z]+[lmor][a-z]?[aex][a-z]?[mx](?: -|:)? \$[\d.]+$'i
-describe HS_DRUG_DOLLAR_2 Contains a drug and price-like pattern.
-##} HS_DRUG_DOLLAR_2
-
-##{ HS_DRUG_DOLLAR_3
-
-body HS_DRUG_DOLLAR_3 m'^[a-z]+[dino][a-z]?[aimu][a-z]?[amx](?: -|:)? \$[\d.]+$'i
-describe HS_DRUG_DOLLAR_3 Contains a drug and price-like pattern.
-##} HS_DRUG_DOLLAR_3
-
-##{ HS_DRUG_DOLLAR_MANY
-
-meta HS_DRUG_DOLLAR_MANY HS_DRUG_DOLLAR_1 + HS_DRUG_DOLLAR_2 + HS_DRUG_DOLLAR_3 >= 2
-describe HS_DRUG_DOLLAR_MANY Contains several drug and dollar-like patterns.
-##} HS_DRUG_DOLLAR_MANY
-
-##{ HS_FORGED_OE_FW
-
-meta HS_FORGED_OE_FW __HS_SUBJ_UC_FW && __OE_MUA
-describe HS_FORGED_OE_FW Outlook does not prefix forwards with "FW:"
-##} HS_FORGED_OE_FW
-
-##{ HS_GETMEOFF
-
-uri HS_GETMEOFF m'/get(?:me)?off\.php(?:$|[\#?])'
-describe HS_GETMEOFF Links to common unsubscribe script: 'getmeoff.php'
-##} HS_GETMEOFF
-
-##{ HS_INDEX_PARAM
-
-uri HS_INDEX_PARAM m'^https?:/*([^/]*/)+(?:index.(?:cgi|html?|php)|default.(?:asp|jsp))?\?(?!(?-i:[A-Z][a-z]{2,}){2,}$)\w+={0,2}$'i
-describe HS_INDEX_PARAM Link contains a common tracker pattern.
-##} HS_INDEX_PARAM
-
-##{ HS_MEETUP_FOR_SEX
-
-body HS_MEETUP_FOR_SEX m'(?:meet ?up|see eachother|get together) for (?:some )?(?:action|sex)'i
-describe HS_MEETUP_FOR_SEX Talks about meeting up for sex.
-##} HS_MEETUP_FOR_SEX
-
-##{ HS_SUBJ_NEW_SOFTWARE
-
-header HS_SUBJ_NEW_SOFTWARE Subject =~ /^New software uploaded by/
-describe HS_SUBJ_NEW_SOFTWARE Subject starts with 'New software uploaded by'
-##} HS_SUBJ_NEW_SOFTWARE
-
-##{ HS_SUBJ_ONLINE_PHARMACEUTICAL
-
-header HS_SUBJ_ONLINE_PHARMACEUTICAL Subject =~ /\bOnline Pharmaceutical/i
-describe HS_SUBJ_ONLINE_PHARMACEUTICAL Subject contains the phrase 'Online pharmaceutical'
-##} HS_SUBJ_ONLINE_PHARMACEUTICAL
-
-##{ HS_VPXL
-
-body HS_VPXL /\bVPXL\b/i
-describe HS_VPXL Contains VPXL, yet the recommended dose is only 2 tablets.
-##} HS_VPXL
 
 ##{ HTTPS_HTTP_MISMATCH ifplugin Mail::SpamAssassin::Plugin::HTTPSMismatch
 
@@ -1992,6 +2044,13 @@ ifplugin Mail::SpamAssassin::Plugin::HTTPSMismatch
 body  HTTPS_HTTP_MISMATCH eval:check_https_http_mismatch('1','10')
 endif
 ##} HTTPS_HTTP_MISMATCH ifplugin Mail::SpamAssassin::Plugin::HTTPSMismatch
+
+##{ IRS_SPOOF
+
+meta        IRS_SPOOF            __IRS_SPOOF
+describe    IRS_SPOOF            Claims to be IRS, but not from IRS domain
+#score       IRS_SPOOF            1.00	# limit
+##} IRS_SPOOF
 
 ##{ JM_FAKE_PSMTP_RCVD
 
@@ -2024,6 +2083,12 @@ meta     KB_DATE_CONTAINS_TAB  __KB_DATE_CONTAINS_TAB && !__ML_TURNS_SP_TO_TAB
 meta     KB_FAKED_THE_BAT      (__THEBAT_MUA && KB_DATE_CONTAINS_TAB)
 ##} KB_FAKED_THE_BAT
 
+##{ KB_FORGED_MOZ4
+
+header   KB_FORGED_MOZ4   User-Agent =~ /\bMozilla 4/
+describe KB_FORGED_MOZ4   Mozilla 4 uses X-Mailer
+##} KB_FORGED_MOZ4
+
 ##{ KB_RATWARE_BOUNDARY
 
 meta   KB_RATWARE_BOUNDARY   __RATWARE_BOUND_A || __RATWARE_BOUND_B
@@ -2053,6 +2118,12 @@ header  KB_RATWARE_OUTLOOK_16  ALL =~ /^Message-Id: <....([0-9a-f]{8})\$([0-9a-f
 
 header  KB_RATWARE_OUTLOOK_MID  ALL =~ /^Message-Id: <....([0-9a-f]{8})\$([0-9a-f]{8})\$[0-9a-f]{8}\@.{100,400}boundary="----=_NextPart_000_...._\1\.\2"/msi
 ##} KB_RATWARE_OUTLOOK_MID
+
+##{ KHOP_BIG_TO_CC
+
+header	 KHOP_BIG_TO_CC      ToCc =~ /(?:[^,\@]{1,60}\@[^,]{4,25},){10}/
+describe KHOP_BIG_TO_CC      Sent to 10+ recipients instaed of Bcc or a list
+##} KHOP_BIG_TO_CC
 
 ##{ KHOP_JS_OBFUSCATION
 
@@ -2100,31 +2171,14 @@ meta LOTTERY_PH_004470  (__AFF_004470_NUMBER && __AFF_LOTTERY)
 
 body     LOTTO_AGENT      /\b(?:claim(?:s|ing)?(?:\sprocessing)?|fiducia\w+|reimbursement|(?:prize|international|intl|foreign|win+ing)(?:[\s,.]+(?:rem+it+ance|settlement|payment|payout|award|transfer))+|payment|payout|immunity|grants?)\s?(?:agent|manager|officer|secretary|director|mgr\b)/i
 describe LOTTO_AGENT      Claims Agent
+#score    LOTTO_AGENT      3.50		# limit
 ##} LOTTO_AGENT
-
-##{ LOTTO_AGENT_FM
-
-header   LOTTO_AGENT_FM   From =~ /(?:claim(?:s|ing)?(?:[\s_.]processing)?|fiducia\w+|dispatch|reimbursement|payout|prize[\s_.]transfer|(?:international|foreign|win+ing)[\s_.]rem+it+ance)[\s_.]?(?:agent|manager|officer|secretary|director|department|dept)/i
-describe LOTTO_AGENT_FM   Claims Agent
-##} LOTTO_AGENT_FM
-
-##{ LOTTO_AGENT_RPLY
-
-header   LOTTO_AGENT_RPLY Reply-To =~ /(?:claim(?:s|ing)?(?:[\s_.]processing)?|fiducia\w+|dispatch|reimbursement|payout|prize\stransfer|(?:international|foreign|win+ing)[\s_.]rem+it+ance)[\s_.]?(?:agent|manager|officer|secretary|director|department|dept)/i
-describe LOTTO_AGENT_RPLY Claims Agent
-##} LOTTO_AGENT_RPLY
 
 ##{ LOTTO_DEPT
 
 body     LOTTO_DEPT       /\b(?:claim(?:s|ing)?(?:\sprocessing)?|fiducia\w+|reimbursement|(?:international|foreign|win+ing)(?:\s(?:rem+it+ance|settlement|payment|award))+|payment|award|compensation|lot+ery)(?:\s\w+)?\s?(?:department|dept|unit|group|committee|bureau)/i
 describe LOTTO_DEPT       Claims Department
 ##} LOTTO_DEPT
-
-##{ LOTTO_URI
-
-uri      LOTTO_URI       /(?:claim(?:s|ing)?(?:[-_]?processing)?|fiducia\w+|reimbursement|(?:international|foreign|win+ing)?[-_]?rem+it+ance|award)[-_]?(?:department|dept|unit|group|committee|office|agent|manager|secretary)/i
-describe LOTTO_URI       Claims Department
-##} LOTTO_URI
 
 ##{ L_SPAM_TOOL_13
 
@@ -2172,19 +2226,19 @@ describe MONEY_ATM_CARD   Lots of money on an ATM card
 
 ##{ MONEY_FORM
 
-meta     MONEY_FORM        LOTS_OF_MONEY && __FILL_THIS_FORM && !__FB_TOUR && !__FM_MY_PRICE && !__FR_SPACING_8 && !__COMMENT_EXISTS && !__CAN_HELP
-describe MONEY_FORM        Lots of money if you fill out a form
+meta     MONEY_FORM          __MONEY_FORM && !__FB_TOUR && !__FM_MY_PRICE && !__FR_SPACING_8 && !__COMMENT_EXISTS && !__CAN_HELP
+describe MONEY_FORM          Lots of money if you fill out a form
 ##} MONEY_FORM
 
 ##{ MONEY_FORM_SHORT
 
-meta     MONEY_FORM_SHORT  LOTS_OF_MONEY && __FILL_THIS_FORM_SHORT
-describe MONEY_FORM_SHORT  Lots of money if you fill out a short form
+meta     MONEY_FORM_SHORT    __MONEY_FORM_SHORT && !__DOS_HAS_LIST_UNSUB && !__VIA_ML && !__HTML_LINK_IMAGE && !__UPPERCASE_URI && !__THREADED
+describe MONEY_FORM_SHORT    Lots of money if you fill out a short form
 ##} MONEY_FORM_SHORT
 
 ##{ MONEY_FRAUD_3
 
-meta     MONEY_FRAUD_3    __MONEY_FRAUD_3 && !__COMMENT_EXISTS && !__TAG_EXISTS_CENTER && !__IS_EXCH && !__VIA_ML && !__HAS_THREAD_INDEX && !__UNSUB_LINK && !__DOS_HAS_LIST_UNSUB && !__HTML_LINK_IMAGE
+meta     MONEY_FRAUD_3    __MONEY_FRAUD_3 && !__COMMENT_EXISTS && !__TAG_EXISTS_CENTER && !__IS_EXCH && !__VIA_ML && !__HAS_THREAD_INDEX && !__UNSUB_LINK && !__DOS_HAS_LIST_UNSUB && !__HTML_LINK_IMAGE && !__THREADED && !__DOS_BODY_THU
 describe MONEY_FRAUD_3    Lots of money and several fraud phrases
 tflags   MONEY_FRAUD_3    publish
 ##} MONEY_FRAUD_3
@@ -2203,25 +2257,18 @@ describe MONEY_FRAUD_8    Lots of money and very many fraud phrases
 tflags   MONEY_FRAUD_8    publish
 ##} MONEY_FRAUD_8
 
+##{ MONEY_FROM_41
+
+meta            MONEY_FROM_41             __MONEY_FROM_41
+describe        MONEY_FROM_41             Lots of money from Africa
+#score           MONEY_FROM_41             2.00	# limit
+##} MONEY_FROM_41
+
 ##{ MONEY_FROM_MISSP
 
 meta     MONEY_FROM_MISSP   LOTS_OF_MONEY && __FROM_MISSPACED && !__MIME_QP
 describe MONEY_FROM_MISSP   Lots of money and misspaced From
 ##} MONEY_FROM_MISSP
-
-##{ MONEY_LOTTERY
-
-meta     MONEY_LOTTERY    LOTS_OF_MONEY && (__LOTTO_WINNINGS + __LOTTO_WIN_01 + __YOU_WON + LOTTO_AGENT + LOTTO_DEPT + LOTTO_AGENT_FM + LOTTO_AGENT_RPLY + __LOTTO_ADMITS + __LOTTO_RELATED + DEAR_WINNER + __LOTTO_VERIFY > 1) && !__CAN_HELP && !__HTML_LINK_IMAGE && !__DOS_HAS_LIST_UNSUB
-describe MONEY_LOTTERY    Lots of money from a lottery
-##} MONEY_LOTTERY
-
-##{ MONEY_PERCENT ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-
-ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-  meta     MONEY_PERCENT    LOTS_OF_MONEY && (__PCT_FOR_YOU || __PCT_OF_PMTS || __FIFTY_FIFTY)
-  describe MONEY_PERCENT    X% of a lot of money for you
-endif
-##} MONEY_PERCENT ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 
 ##{ MSGID_MULTIPLE_AT
 
@@ -2234,16 +2281,6 @@ describe 	MSGID_MULTIPLE_AT	Message-ID contains multiple '@' characters
 
 meta MSOE_MID_WRONG_CASE  (__XM_OUTLOOK_EXPRESS && __MSOE_MID_WRONG_CASE && !__MIMEOLE_1106)
 ##} MSOE_MID_WRONG_CASE
-
-##{ MS_XYMOSG_4K
-
-header	 MS_XYMOSG_4K	X-YMail-OSG =~ /^(?=.{4096,5119}$)/s
-##} MS_XYMOSG_4K
-
-##{ MS_XYMOSG_5K
-
-header	 MS_XYMOSG_5K	X-YMail-OSG =~ /^(?=.{4096})/s
-##} MS_XYMOSG_5K
 
 ##{ NSL_RCVD_FROM_USER
 
@@ -2263,22 +2300,6 @@ full NULL_IN_BODY       /\x00/
 describe NULL_IN_BODY   Message has NUL (ASCII 0) byte in message
 ##} NULL_IN_BODY
 
-##{ OBFU_ATTACH_MISSP ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-
-ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-  meta         OBFU_ATTACH_MISSP   __FROM_RUNON && (OBFU_HTML_ATTACH || OBFU_TEXT_ATTACH || T_OBFU_DOC_ATTACH || T_OBFU_PDF_ATTACH || T_OBFU_JPG_ATTACH || T_OBFU_GIF_ATTACH)
-  describe     OBFU_ATTACH_MISSP   Obfuscated attachment type and misspaced From
-endif
-##} OBFU_ATTACH_MISSP ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-
-##{ OBFU_HTML_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-
-ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-  mimeheader   OBFU_HTML_ATTACH    Content-Type =~ m,application/octet-stream;.+\.html?\b,i
-  describe     OBFU_HTML_ATTACH    HTML attachment with non-text MIME type
-endif
-##} OBFU_HTML_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-
 ##{ OBFU_JVSCR_ESC
 
 rawbody     OBFU_JVSCR_ESC         /document\.write\(unescape\("(?:%[0-9a-f]{2}){10}/i
@@ -2289,7 +2310,7 @@ tflags      OBFU_JVSCR_ESC         publish
 ##{ OBFU_TEXT_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
 ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-  mimeheader   OBFU_TEXT_ATTACH    Content-Type =~ m,application/octet-stream;.+\.txt\b,i
+  mimeheader   OBFU_TEXT_ATTACH    Content-Type =~ m,\bapplication/octet-stream\b.+\.txt\b,i
   describe     OBFU_TEXT_ATTACH    Text attachment with non-text MIME type
   tflags       OBFU_TEXT_ATTACH    publish
 endif
@@ -2310,6 +2331,12 @@ meta PART_CID_STOCK_LESS (__ANY_IMAGE_ATTACH&&__PART_CID_STOCK_LESS)
 describe PART_CID_STOCK_LESS Has a spammy image attachment (by Content-ID, more specific)
 endif
 ##} PART_CID_STOCK_LESS ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+
+##{ POSTCARD_09
+
+body       POSTCARD_09   /(?:rec[ie]{2}ve|view|enjoy|download|open|pick\sup)\syour\s(?:post|e-?)?card/i
+describe   POSTCARD_09   You got a postcard!
+##} POSTCARD_09
 
 ##{ RCVD_BAD_ID
 
@@ -2334,13 +2361,6 @@ header RCVD_IN_BRBL_LASTEXT   eval:check_rbl('brbl-lastexternal','bb.barracudace
 tflags RCVD_IN_BRBL_LASTEXT   net
 endif
 ##} RCVD_IN_BRBL_LASTEXT ifplugin Mail::SpamAssassin::Plugin::DNSEval
-
-##{ RCVD_IN_CSS
-
-header   RCVD_IN_CSS            eval:check_rbl_sub('zen', '127.0.0.3')
-describe RCVD_IN_CSS            Received via a relay in Spamhaus CSS
-tflags   RCVD_IN_CSS            net
-##} RCVD_IN_CSS
 
 ##{ RCVD_IN_DNSWL_BLOCKED ifplugin Mail::SpamAssassin::Plugin::DNSEval
 
@@ -2630,33 +2650,41 @@ tflags RCVD_IN_IADB_UT_CPR_MAT		net nice
 endif
 ##} RCVD_IN_IADB_UT_CPR_MAT ifplugin Mail::SpamAssassin::Plugin::DNSEval
 
-##{ RCVD_IN_PSBL
+##{ RCVD_IN_PSBL ifplugin Mail::SpamAssassin::Plugin::DNSEval # {
 
+ifplugin Mail::SpamAssassin::Plugin::DNSEval # {
 header   RCVD_IN_PSBL  eval:check_rbl('psbl-lastexternal', 'psbl.surriel.com.')
 describe RCVD_IN_PSBL  Received via a relay in PSBL
 tflags   RCVD_IN_PSBL  net
-##} RCVD_IN_PSBL
+endif
+##} RCVD_IN_PSBL ifplugin Mail::SpamAssassin::Plugin::DNSEval # {
 
-##{ RCVD_IN_RP_CERTIFIED
+##{ RCVD_IN_RP_CERTIFIED ifplugin Mail::SpamAssassin::Plugin::DNSEval # {
 
+ifplugin Mail::SpamAssassin::Plugin::DNSEval # {
 header RCVD_IN_RP_CERTIFIED     eval:check_rbl_txt('ssc-firsttrusted', 'sa-trusted.bondedsender.org.')
-describe RCVD_IN_RP_CERTIFIED   Sender is in Return Path Certified (trusted relay)
+describe RCVD_IN_RP_CERTIFIED   Sender in ReturnPath Certified - Contact cert-sa@returnpath.net
 tflags RCVD_IN_RP_CERTIFIED     net nice
-##} RCVD_IN_RP_CERTIFIED
+endif
+##} RCVD_IN_RP_CERTIFIED ifplugin Mail::SpamAssassin::Plugin::DNSEval # {
 
-##{ RCVD_IN_RP_RNBL
+##{ RCVD_IN_RP_RNBL ifplugin Mail::SpamAssassin::Plugin::DNSEval # {
 
+ifplugin Mail::SpamAssassin::Plugin::DNSEval # {
 header RCVD_IN_RP_RNBL         eval:check_rbl('rnbl-lastexternal','bl.score.senderscore.com.')
 describe RCVD_IN_RP_RNBL       Relay in RNBL, https://senderscore.org/blacklistlookup/
 tflags RCVD_IN_RP_RNBL         net
-##} RCVD_IN_RP_RNBL
+endif
+##} RCVD_IN_RP_RNBL ifplugin Mail::SpamAssassin::Plugin::DNSEval # {
 
-##{ RCVD_IN_RP_SAFE
+##{ RCVD_IN_RP_SAFE ifplugin Mail::SpamAssassin::Plugin::DNSEval # {
 
+ifplugin Mail::SpamAssassin::Plugin::DNSEval # {
 header RCVD_IN_RP_SAFE     eval:check_rbl_txt('ssc-firsttrusted','sa-accredit.habeas.com.')
-describe RCVD_IN_RP_SAFE   Sender is in Return Path Safe (trusted relay)
+describe RCVD_IN_RP_SAFE   Sender in ReturnPath Safe - Contact safe-sa@returnpath.net
 tflags RCVD_IN_RP_SAFE     net nice
-##} RCVD_IN_RP_SAFE
+endif
+##} RCVD_IN_RP_SAFE ifplugin Mail::SpamAssassin::Plugin::DNSEval # {
 
 ##{ RCVD_MAIL_COM
 
@@ -2681,22 +2709,21 @@ meta     RISK_FREE      __FRAUD_IOV && !__UNSUB_LINK && !__VIA_ML && !__HTML_LIN
 describe RISK_FREE      No risk!
 ##} RISK_FREE
 
-##{ RP_8BIT
+##{ RP_MATCHES_RCVD if version >= 3.003000 ifplugin Mail::SpamAssassin::Plugin::WLBLEval
 
-header   RP_8BIT	Return-Path:raw =~ /[^\000-\177]/
-describe RP_8BIT	Return-Path contains 8-bit characters with high bit on
-##} RP_8BIT
+if version >= 3.003000
+ifplugin Mail::SpamAssassin::Plugin::WLBLEval
+header   RP_MATCHES_RCVD  eval:check_mailfrom_matches_rcvd()
+describe RP_MATCHES_RCVD  Envelope sender domain matches handover relay domain
+tflags   RP_MATCHES_RCVD  nice
+endif
+endif
+##} RP_MATCHES_RCVD if version >= 3.003000 ifplugin Mail::SpamAssassin::Plugin::WLBLEval
 
 ##{ SB_GIF_AND_NO_URIS
 
 meta SB_GIF_AND_NO_URIS (__GIF_ATTACH&&!__HAS_ANY_URI&&!__HAS_ANY_EMAIL)
 ##} SB_GIF_AND_NO_URIS
-
-##{ SCANNED_EXTERNAL
-
-meta        SCANNED_EXTERNAL       __SCANNED_HP && !ALL_TRUSTED
-describe    SCANNED_EXTERNAL       "Scanned Document" email from external source - malware?
-##} SCANNED_EXTERNAL
 
 ##{ SERGIO_SUBJECT_VIAGRA01
 
@@ -2710,11 +2737,6 @@ meta     SHARE_50_50     (__SHARE_IT || __AGREED_RATIO) && __FIFTY_FIFTY
 describe SHARE_50_50     Share the money 50/50
 ##} SHARE_50_50
 
-##{ SHORTENED_URL_SRC
-
-rawbody	 SHORTENED_URL_SRC	/<[^>]{1,99}\ssrc=\W?http:\/\/(?:bit\.ly|tinyurl\.com|ow\.ly|is\.gd|tumblr\.com|formspring\.me|ff\.im|youtu\.be|tl\.gd|plurk\.com|migre\.me|j\.mp|cli\.gs|goo\.gl|yfrog\.com|lnk\.ms|su\.pr|fb\.me|alturl\.com|wp\.me|ping\.fm|chatter\.com|post\.ly|twurl\.nl|tiny\.cc|4sq\.com|ustre\.am|short\.to|u\.nu|flic\.kr|budurl\.com|digg\.com|twitvid\.com|gowal\.la|om\.ly|justin\.tv|icio\.us|p\.gs|loopt\.us|tcrn\.ch|xrl\.us|wpo\.st|bkite\.com)\/[^\/]{3}/
-##} SHORTENED_URL_SRC
-
 ##{ SHORT_HELO_AND_INLINE_IMAGE
 
 meta SHORT_HELO_AND_INLINE_IMAGE     (__HELO_NO_DOMAIN && __ANY_IMAGE_ATTACH)
@@ -2725,18 +2747,6 @@ describe SHORT_HELO_AND_INLINE_IMAGE    Short HELO string, with inline image
 
 body SHORT_TERM_PRICE /short\W+term\W+(target|projected)(\W+price)?/i
 ##} SHORT_TERM_PRICE
-
-##{ SINGLE_HEADER_1K
-
-meta     SINGLE_HEADER_1K	__SINGLE_HEADER_1K && !__VIA_ML && !__THREADED
-describe SINGLE_HEADER_1K	A single header contains 1K-2K characters
-##} SINGLE_HEADER_1K
-
-##{ SINGLE_HEADER_2K
-
-header   SINGLE_HEADER_2K	ALL:raw =~ /(?-xim:(?=(?:^|\n)[^\s\n]+:(?:.(?!\n\S)){2048,3071}.(?:\n\S|$)))/s
-describe SINGLE_HEADER_2K	A single header contains 2K-3K characters
-##} SINGLE_HEADER_2K
 
 ##{ SPAMMY_XMAILER
 
@@ -2799,6 +2809,12 @@ describe       STYLE_GIBBERISH          Nonsense in HTML <STYLE> tag
 meta SUBJECT_NEEDS_ENCODING    (!__SUBJECT_ENCODED_B64 && !__SUBJECT_ENCODED_QP) && __SUBJECT_NEEDS_MIME
 ##} SUBJECT_NEEDS_ENCODING
 
+##{ TAB_IN_FROM
+
+meta		TAB_IN_FROM		__TAB_IN_FROM && !__ML_TURNS_SP_TO_TAB 
+describe	TAB_IN_FROM		From starts with a tab
+##} TAB_IN_FROM
+
 ##{ TBIRD_SUSP_MIME_BDRY
 
 meta           TBIRD_SUSP_MIME_BDRY  __MUA_TBIRD && __TB_MIME_BDRY_NO_Z
@@ -2810,17 +2826,11 @@ describe       TBIRD_SUSP_MIME_BDRY  Unlikely Thunderbird MIME boundary
 header  THEBAT_UNREG  X-Mailer =~ /^The Bat! .{0,20} UNREG$/
 ##} THEBAT_UNREG
 
-##{ TO_EQ_FM_DOM_HTML_IMG
+##{ TINY_FLOAT
 
-meta           TO_EQ_FM_DOM_HTML_IMG    __TO_EQ_FM_DOM_HTML_IMG && !__CTYPE_MULTIPART_ALT && !ALL_TRUSTED && !__MIME_QP && !__IS_EXCH && !__UNSUB_LINK && !__COMMENT_EXISTS && !__FM_TO_ALL_NUMS && !__DKIM_EXISTS && !__HAS_THREAD_INDEX
-describe       TO_EQ_FM_DOM_HTML_IMG    To domain == From domain and HTML image link
-##} TO_EQ_FM_DOM_HTML_IMG
-
-##{ TO_EQ_FM_DOM_HTML_ONLY
-
-meta           TO_EQ_FM_DOM_HTML_ONLY   __TO_EQ_FM_DOM_HTML_ONLY && !__CTYPE_MULTIPART_ALT && !HTML_MIME_NO_HTML_TAG && !ALL_TRUSTED && !__MIME_QP && !__IS_EXCH && !__MSGID_BEFORE_RECEIVED && !__RCD_RDNS_MAIL_MESSY && !__FM_TO_ALL_NUMS
-describe       TO_EQ_FM_DOM_HTML_ONLY   To domain == From domain and HTML only
-##} TO_EQ_FM_DOM_HTML_ONLY
+rawbody        TINY_FLOAT         /\bstyle\s*=\s*"[^"]{0,40}?(?:(?:FONT-SIZE\s*:\s+\dpx|FLOAT\s*:\s+(?:right|left))(?:;\s+)?(?:(?!(?:FONT-SIZE|FLOAT))\w+:\s+\w+;?\s*)*){2}/i
+describe       TINY_FLOAT         Has small-font floating HTML - text obfuscation?
+##} TINY_FLOAT
 
 ##{ TO_EQ_FM_DOM_SPF_FAIL ifplugin Mail::SpamAssassin::Plugin::SPF
 
@@ -2831,18 +2841,6 @@ ifplugin Mail::SpamAssassin::Plugin::SPF
 endif
 ##} TO_EQ_FM_DOM_SPF_FAIL ifplugin Mail::SpamAssassin::Plugin::SPF
 
-##{ TO_EQ_FM_HTML_DIRECT
-
-meta           TO_EQ_FM_HTML_DIRECT  __TO_EQ_FM_HTML_DIRECT && !__HUSH_HUSH
-describe       TO_EQ_FM_HTML_DIRECT  To == From and HTML only, direct-to-MX
-##} TO_EQ_FM_HTML_DIRECT
-
-##{ TO_EQ_FM_HTML_ONLY
-
-meta           TO_EQ_FM_HTML_ONLY   __TO_EQ_FM_HTML_ONLY && !ALL_TRUSTED && !__RCD_RDNS_MAIL_MESSY && !__RCD_RDNS_SMTP_MESSY && !__NOT_SPOOFED && !__DKIM_EXISTS && !__ANY_IMAGE_ATTACH 
-describe       TO_EQ_FM_HTML_ONLY   To == From and HTML only
-##} TO_EQ_FM_HTML_ONLY
-
 ##{ TO_EQ_FM_SPF_FAIL ifplugin Mail::SpamAssassin::Plugin::SPF
 
 ifplugin Mail::SpamAssassin::Plugin::SPF
@@ -2852,18 +2850,6 @@ ifplugin Mail::SpamAssassin::Plugin::SPF
 endif
 ##} TO_EQ_FM_SPF_FAIL ifplugin Mail::SpamAssassin::Plugin::SPF
 
-##{ TO_IN_SUBJ
-
-meta           TO_IN_SUBJ           __SUBJ_HAS_TO_1 && !__VIA_ML && !MISSING_MIMEOLE && !__THREAD_INDEX_GOOD
-describe       TO_IN_SUBJ           To address is in Subject
-##} TO_IN_SUBJ
-
-##{ TO_NO_BRKTS_DIRECT
-
-meta       TO_NO_BRKTS_DIRECT       __TO_NO_BRKTS_DIRECT && !__IS_EXCH && !__THREAD_INDEX_GOOD && !__COMMENT_EXISTS && !__RCD_RDNS_MTA_MESSY && !__TVD_SPACE_RATIO && !__THREADED && !__FB_DO_NOT_REPLY && !__VBOUNCE_MAILSWEEP3 && !__DEAL && !__RCD_RDNS_MAIL_MESSY && !__UNSUB_LINK && !__RP_MATCHES_RCVD && !__DKIM_EXISTS && !__TAG_EXISTS_CENTER
-describe   TO_NO_BRKTS_DIRECT       To: misformatted and direct-to-MX
-##} TO_NO_BRKTS_DIRECT
-
 ##{ TO_NO_BRKTS_FROM_MSSP
 
 meta       TO_NO_BRKTS_FROM_MSSP     __TO_NO_BRKTS_FROM_RUNON && !__RCD_RDNS_MTA_MESSY && !__CTYPE_MULTIPART_ALT && !__REPTO_QUOTE && !__MIME_QP && !__TO___LOWER && !__BUGGED_IMG && !__SUBJECT_ENCODED_QP && !__VIA_ML && !__FR_SPACING_8 && !__TAG_EXISTS_CENTER && !__RCVD_ZIXMAIL
@@ -2871,23 +2857,17 @@ meta       TO_NO_BRKTS_FROM_MSSP     __TO_NO_BRKTS_FROM_RUNON && !__RCD_RDNS_MTA
 describe   TO_NO_BRKTS_FROM_MSSP     Multiple formatting errors
 ##} TO_NO_BRKTS_FROM_MSSP
 
+##{ TO_NO_BRKTS_HTML_ONLY
+
+meta       TO_NO_BRKTS_HTML_ONLY   __TO_NO_BRKTS_HTML_ONLY && !__MIME_QP && !__MSGID_JAVAMAIL && !__CTYPE_CHARSET_QUOTED && !__SUBJECT_ENCODED_B64 && !__VIA_ML && !__MSGID_BEFORE_RECEIVED && !__MIME_BASE64 && !__RCD_RDNS_MAIL_MESSY && !__COMMENT_EXISTS && !LOTS_OF_MONEY && !__TAG_EXISTS_CENTER && !__UPPERCASE_URI && !__UNSUB_LINK && !__RCD_RDNS_MX_MESSY && !__DKIM_EXISTS && !__BUGGED_IMG && !__FM_TO_ALL_NUMS && !__URI_12LTRDOM && !__RDNS_NO_SUBDOM && !__HDRS_LCASE
+describe   TO_NO_BRKTS_HTML_ONLY   To: misformatted and HTML only
+##} TO_NO_BRKTS_HTML_ONLY
+
 ##{ TO_NO_BRKTS_MSFT
 
-meta       TO_NO_BRKTS_MSFT         __TO_NO_BRKTS_MSFT && !__VIA_ML && !__LYRIS_EZLM_REMAILER && !__THREAD_INDEX_GOOD && !__IS_EXCH && !__UNSUB_LINK && !__NOT_SPOOFED && !__DOS_HAS_LIST_UNSUB && !__NAME_EQ_EMAIL
+meta       TO_NO_BRKTS_MSFT         __TO_NO_BRKTS_MSFT && !__VIA_ML && !__LYRIS_EZLM_REMAILER && !__THREAD_INDEX_GOOD && !__IS_EXCH && !__UNSUB_LINK && !__NOT_SPOOFED && !__DOS_HAS_LIST_UNSUB && !__NAME_EQ_EMAIL && !__SUBJECT_ENCODED_QP
 describe   TO_NO_BRKTS_MSFT         To: misformatted and supposed Microsoft tool
 ##} TO_NO_BRKTS_MSFT
-
-##{ TO_NO_BRKTS_PCNT
-
-meta       TO_NO_BRKTS_PCNT         __TO_NO_BRKTS_PCNT && !__SUBJECT_ENCODED_B64 && !__COMMENT_EXISTS && !__DOS_HAS_LIST_UNSUB && !__VIA_ML && !__ISO_2022_JP_DELIM && !__IMS_MSGID && !__THREAD_INDEX_GOOD && !__RCD_RDNS_MAIL_MESSY && !__NOT_SPOOFED && !__DKIM_EXISTS && !__RCD_RDNS_MX_MESSY && !__UNSUB_LINK && !__LONGLINE && !URI_HEX && !__SENDER_BOT && !__RP_MATCHES_RCVD
-describe   TO_NO_BRKTS_PCNT         To: misformatted + percentage
-##} TO_NO_BRKTS_PCNT
-
-##{ TR_JS_FROMCHARCODE
-
-rawbody  TR_JS_FROMCHARCODE	/[+=(]\s{0,9}String\.fromCharCode\b/
-describe TR_JS_FROMCHARCODE	JavaScript: function String.fromCharCode
-##} TR_JS_FROMCHARCODE
 
 ##{ TT_MSGID_TRUNC
 
@@ -2941,11 +2921,6 @@ header TVD_FINGER_02    Content-Type =~ /^text\/plain(?:; (?:format=flowed|chars
 
 rawbody TVD_FLOAT_GENERAL       /\bstyle\s*=\s*"[^"]*\bfloat\s*:\s*[a-z]+\s*">\s*[a-zA-Z]+\s*</i
 ##} TVD_FLOAT_GENERAL
-
-##{ TVD_FROM_1
-
-header TVD_FROM_1       From:addr =~ /[^\@0-9]{2}\d{3}\.(?:com|net|org|info|biz)$/i
-##} TVD_FROM_1
 
 ##{ TVD_FUZZY_DEGREE ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 
@@ -3013,20 +2988,20 @@ body TVD_INCREASE_SIZE          /\bsize of .{1,20}(?:penis|dick|manhood)/i
 body TVD_LINK_SAVE              /\blink to save\b/i
 ##} TVD_LINK_SAVE
 
+##{ TVD_PH_1
+
+body TVD_PH_1	/Dear valued .{1,40}(?:member|customer)/i
+##} TVD_PH_1
+
 ##{ TVD_PH_BODY_ACCOUNTS_PRE
 
-body TVD_PH_BODY_ACCOUNTS_PRE	/\baccounts? (?:[a-z_,-]+ )+?(?:record[a-z]*|suspen[a-z]+|notif(?:y|ication)|updated|verifications?|credited)\b/i
+meta TVD_PH_BODY_ACCOUNTS_PRE		__TVD_PH_BODY_ACCOUNTS_PRE
 ##} TVD_PH_BODY_ACCOUNTS_PRE
 
 ##{ TVD_PH_BODY_META
 
-meta TVD_PH_BODY_META		__TVD_PH_BODY_01 || __TVD_PH_BODY_02 || __TVD_PH_BODY_03 || __TVD_PH_BODY_04 || __TVD_PH_BODY_05 || __TVD_PH_BODY_06 || __TVD_PH_BODY_07 || __TVD_PH_BODY_08
+meta TVD_PH_BODY_META		__TVD_PH_BODY_META
 ##} TVD_PH_BODY_META
-
-##{ TVD_PH_BODY_META_ALL
-
-meta TVD_PH_BODY_META_ALL	TVD_PH_BODY_META || TVD_PH_BODY_ACCOUNTS_PRE || T_TVD_PH_BODY_ACCOUNTS_POST
-##} TVD_PH_BODY_META_ALL
 
 ##{ TVD_PH_REC
 
@@ -3118,11 +3093,6 @@ describe TVD_SUBJ_ACC_NUM	Subject has spammy looking monetary reference
 header TVD_SUBJ_FINGER_03       Subject =~ /^\s*\*\s+(?:\w+\W+)+\*\s*$/
 ##} TVD_SUBJ_FINGER_03
 
-##{ TVD_SUBJ_FINGER_04
-
-header TVD_SUBJ_FINGER_04       Subject =~ /^(?:(?:Re|Fw)[^:]{0,5}: )?[A-Z]+[\/a-zA-Z]+[A-Z]+\s+(?i:news)?\s*$/
-##} TVD_SUBJ_FINGER_04
-
 ##{ TVD_SUBJ_OWE
 
 header TVD_SUBJ_OWE Subject =~ /^\s*(?:\w+\s+)+you\s+(?:\w+\s+)*(?:owe|indebted)\s+(?:\w+\s+)+an\s*other/i
@@ -3143,6 +3113,28 @@ body TVD_VISIT_PHARMA           /Online Ph.rmacy/i
 rawbody TVD_VIS_HIDDEN /<TEXTAREA[^>]+style\s*=\s*"visibility:\s*hidden\b/i
 ##} TVD_VIS_HIDDEN
 
+##{ T_ACH_CANCELLED_EXE ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+
+ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+	meta         T_ACH_CANCELLED_EXE   __ACH_CANCELLED_EXE
+	describe     T_ACH_CANCELLED_EXE   "ACH cancelled" probable malware
+endif
+##} T_ACH_CANCELLED_EXE ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+
+##{ T_AJB_CANPOST_BADLINK ifplugin Mail::SpamAssassin::Plugin::URIDetail
+
+ifplugin  Mail::SpamAssassin::Plugin::URIDetail
+describe        T_AJB_CANPOST_BADLINK     Found a mismatch between href and anchored text pretending to link to www.canadapost.ca
+endif
+##} T_AJB_CANPOST_BADLINK ifplugin Mail::SpamAssassin::Plugin::URIDetail
+
+##{ T_AJB_UTUBE_BADLINK ifplugin Mail::SpamAssassin::Plugin::URIDetail
+
+ifplugin  Mail::SpamAssassin::Plugin::URIDetail
+describe        T_AJB_UTUBE_BADLINK       Found a mismatch between href and anchored text pretending to link to www.youtube.com
+endif
+##} T_AJB_UTUBE_BADLINK ifplugin Mail::SpamAssassin::Plugin::URIDetail
+
 ##{ T_CTYPE_NULL ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
 ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
@@ -3151,6 +3143,22 @@ ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 endif
 ##} T_CTYPE_NULL ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
+##{ T_DATE_IN_FUTURE_96_Q ifplugin Mail::SpamAssassin::Plugin::HeaderEval
+
+ifplugin Mail::SpamAssassin::Plugin::HeaderEval
+header	 T_DATE_IN_FUTURE_96_Q	eval:check_for_shifted_date('96', '2920')
+describe T_DATE_IN_FUTURE_96_Q	Date: is 4 days to 4 months after Received: date
+endif
+##} T_DATE_IN_FUTURE_96_Q ifplugin Mail::SpamAssassin::Plugin::HeaderEval
+
+##{ T_DATE_IN_FUTURE_Q_PLUS ifplugin Mail::SpamAssassin::Plugin::HeaderEval
+
+ifplugin Mail::SpamAssassin::Plugin::HeaderEval
+header	 T_DATE_IN_FUTURE_Q_PLUS	eval:check_for_shifted_date('2920', 'undef')
+describe T_DATE_IN_FUTURE_Q_PLUS	Date: is over 4 months after Received: date
+endif
+##} T_DATE_IN_FUTURE_Q_PLUS ifplugin Mail::SpamAssassin::Plugin::HeaderEval
+
 ##{ T_DKIM_INVALID ifplugin Mail::SpamAssassin::Plugin::DKIM
 
 ifplugin Mail::SpamAssassin::Plugin::DKIM
@@ -3158,6 +3166,14 @@ ifplugin Mail::SpamAssassin::Plugin::DKIM
   describe T_DKIM_INVALID	DKIM-Signature header exists but is not valid
 endif
 ##} T_DKIM_INVALID ifplugin Mail::SpamAssassin::Plugin::DKIM
+
+##{ T_DOC_ATTACH_NO_EXT ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+
+ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+  meta         T_DOC_ATTACH_NO_EXT   __ATTACH_NAME_NO_EXT && (__PDF_ATTACH || __DOC_ATTACH_MT)
+  describe     T_DOC_ATTACH_NO_EXT   Document attachment with suspicious name
+endif
+##} T_DOC_ATTACH_NO_EXT ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
 ##{ T_DOS_OUTLOOK_TO_MX_IMAGE
 
@@ -3174,13 +3190,11 @@ ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 endif
 ##} T_DOS_ZIP_HARDCORE ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
-##{ T_FILL_THIS_FORM_SHORT ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
+##{ T_EMRCP
 
-ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-  meta     T_FILL_THIS_FORM_SHORT           __FILL_THIS_FORM_SHORT && !__VIA_ML && !__MSGID_JAVAMAIL
-  describe T_FILL_THIS_FORM_SHORT           Fill in a short form with personal information
-endif
-##} T_FILL_THIS_FORM_SHORT ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
+body     T_EMRCP            /\bExcess Maximum Return Capital Profit\b/i
+describe T_EMRCP            "Excess Maximum Return Capital Profit" Fidelity scam
+##} T_EMRCP
 
 ##{ T_FORGED_TBIRD_IMG_SIZE ifplugin Mail::SpamAssassin::Plugin::ImageInfo
 
@@ -3288,14 +3302,6 @@ body     T_FRT_CONTACT            /<inter SP2><post P2>\b(?!contr?act)<C><O><N><
 describe T_FRT_CONTACT            ReplaceTags: Contact
 endif
 ##} T_FRT_CONTACT ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-
-##{ T_FRT_ERECTION ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-
-ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-body     T_FRT_ERECTION           /<inter SP2><post P2>(?!erection)<E><R><E><C><TX><IX><O><N>/i
-describe T_FRT_ERECTION           ReplaceTags: Erection
-endif
-##} T_FRT_ERECTION ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 
 ##{ T_FRT_ESTABLISH ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 
@@ -3513,11 +3519,6 @@ describe T_FRT_VIRGIN1            ReplaceTags: Virgin (1)
 endif
 ##} T_FRT_VIRGIN1 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 
-##{ T_FSL_FAKE_HOTMAIL_RCVD
-
-#score	T_FSL_FAKE_HOTMAIL_RCVD	0.001
-##} T_FSL_FAKE_HOTMAIL_RCVD
-
 ##{ T_FUZZY_OPTOUT ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
@@ -3551,11 +3552,39 @@ meta		T_HK_NAME_DR		__HK_NAME_DR && !FREEMAIL_FROM
 endif
 ##} T_HK_NAME_DR ifplugin Mail::SpamAssassin::Plugin::FreeMail
 
+##{ T_HK_NAME_FM_DR ifplugin Mail::SpamAssassin::Plugin::FreeMail
+
+ifplugin Mail::SpamAssassin::Plugin::FreeMail
+meta		T_HK_NAME_FM_DR		__HK_NAME_DR && FREEMAIL_FROM
+endif
+##} T_HK_NAME_FM_DR ifplugin Mail::SpamAssassin::Plugin::FreeMail
+
+##{ T_HK_NAME_FM_FROM ifplugin Mail::SpamAssassin::Plugin::FreeMail
+
+ifplugin Mail::SpamAssassin::Plugin::FreeMail
+meta		T_HK_NAME_FM_FROM		__HK_NAME_FROM && FREEMAIL_FROM
+endif
+##} T_HK_NAME_FM_FROM ifplugin Mail::SpamAssassin::Plugin::FreeMail
+
+##{ T_HK_NAME_FM_MR_MRS ifplugin Mail::SpamAssassin::Plugin::FreeMail
+
+ifplugin Mail::SpamAssassin::Plugin::FreeMail
+meta		T_HK_NAME_FM_MR_MRS	__HK_NAME_MR_MRS && FREEMAIL_FROM
+endif
+##} T_HK_NAME_FM_MR_MRS ifplugin Mail::SpamAssassin::Plugin::FreeMail
+
+##{ T_HK_SPAMMY_FILENAME ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+
+ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+meta		T_HK_SPAMMY_FILENAME	__HK_SPAMMY_CTFN || __HK_SPAMMY_CDFN
+endif
+##} T_HK_SPAMMY_FILENAME ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+
 ##{ T_HTML_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
 ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-  mimeheader   T_HTML_ATTACH    Content-Type =~ m,text/html;.+\.html?\b,i
-  describe     T_HTML_ATTACH    HTML attachment to bypass scanning?
+  meta         T_HTML_ATTACH         __HTML_ATTACH_01 || __HTML_ATTACH_02
+  describe     T_HTML_ATTACH         HTML attachment to bypass scanning?
 endif
 ##} T_HTML_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
@@ -3590,18 +3619,73 @@ body T_LFUZ_PWRMALE       /<inter W1><post P2><P><O><W><E><R><M><A><L><E>/i
 endif
 ##} T_LFUZ_PWRMALE ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 
+##{ T_LOTTO_AGENT_FM
+
+header   T_LOTTO_AGENT_FM   From =~ /(?:claim(?:s|ing)?(?:[\s_.]processing)?|fiducia\w+|dispatch|reimbursement|payout|prize[\s_.]transfer|(?:international|foreign|win+ing)[\s_.]rem+it+ance)[\s_.]?(?:agent|manager|officer|secretary|director|department|dept)/i
+describe T_LOTTO_AGENT_FM   Claims Agent
+##} T_LOTTO_AGENT_FM
+
+##{ T_LOTTO_AGENT_RPLY
+
+header   T_LOTTO_AGENT_RPLY Reply-To =~ /(?:claim(?:s|ing)?(?:[\s_.]processing)?|fiducia\w+|dispatch|reimbursement|payout|prize\stransfer|(?:international|foreign|win+ing)[\s_.]rem+it+ance)[\s_.]?(?:agent|manager|officer|secretary|director|department|dept)/i
+describe T_LOTTO_AGENT_RPLY Claims Agent
+##} T_LOTTO_AGENT_RPLY
+
+##{ T_LOTTO_URI
+
+uri      T_LOTTO_URI       /(?:claim(?:s|ing)?(?:[-_]?processing)?|fiducia\w+|reimbursement|(?:international|foreign|win+ing)?[-_]?rem+it+ance|award)[-_]?(?:department|dept|unit|group|committee|office|agent|manager|secretary)/i
+describe T_LOTTO_URI       Claims Department
+##} T_LOTTO_URI
+
+##{ T_MANY_HDRS_LCASE
+
+describe       T_MANY_HDRS_LCASE       Odd capitalization of multiple message headers
+#score          T_MANY_HDRS_LCASE       0.10	# limit
+##} T_MANY_HDRS_LCASE
+
+##{ T_MANY_HDRS_LCASE if !plugin(Mail::SpamAssassin::Plugin::FreeMail)
+
+if !plugin(Mail::SpamAssassin::Plugin::FreeMail)
+  meta         T_MANY_HDRS_LCASE       __MANY_HDRS_LCASE && !__HDRS_LCASE_KNOWN && !__VIA_ML && !__THREADED && !__UNUSABLE_MSGID && !__DOS_SINGLE_EXT_RELAY && !__DKIM_EXISTS && !__NOT_SPOOFED && !__BUGGED_IMG && !__MIME_QP && !__RDNS_NONE
+endif
+##} T_MANY_HDRS_LCASE if !plugin(Mail::SpamAssassin::Plugin::FreeMail)
+
+##{ T_MANY_HDRS_LCASE ifplugin Mail::SpamAssassin::Plugin::FreeMail
+
+ifplugin Mail::SpamAssassin::Plugin::FreeMail
+  meta         T_MANY_HDRS_LCASE       __MANY_HDRS_LCASE && !__HDRS_LCASE_KNOWN && !__VIA_ML && !__freemail_safe && !__THREADED && !__UNUSABLE_MSGID && !__DOS_SINGLE_EXT_RELAY && !__DKIM_EXISTS && !__NOT_SPOOFED && !__BUGGED_IMG && !__MIME_QP && !__RDNS_NONE
+endif
+##} T_MANY_HDRS_LCASE ifplugin Mail::SpamAssassin::Plugin::FreeMail
+
 ##{ T_MIME_NO_TEXT ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
 ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
   meta        T_MIME_NO_TEXT  (__CTYPE_MULTIPART_ANY && !__ANY_TEXT_ATTACH)
+#  score       T_MIME_NO_TEXT  2.00	# limit
   describe    T_MIME_NO_TEXT  No text body parts
 endif
 ##} T_MIME_NO_TEXT ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
+##{ T_MONEY_PERCENT ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
+
+ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
+  meta     T_MONEY_PERCENT    LOTS_OF_MONEY && (__PCT_FOR_YOU || __PCT_OF_PMTS || __FIFTY_FIFTY)
+  describe T_MONEY_PERCENT    X% of a lot of money for you
+endif
+##} T_MONEY_PERCENT ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
+
+##{ T_OBFU_ATTACH_MISSP ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+
+ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+  meta         T_OBFU_ATTACH_MISSP   __FROM_RUNON && (T_OBFU_HTML_ATTACH || OBFU_TEXT_ATTACH || T_OBFU_DOC_ATTACH || T_OBFU_PDF_ATTACH || T_OBFU_JPG_ATTACH || T_OBFU_GIF_ATTACH)
+  describe     T_OBFU_ATTACH_MISSP   Obfuscated attachment type and misspaced From
+endif
+##} T_OBFU_ATTACH_MISSP ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+
 ##{ T_OBFU_DOC_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
 ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-  mimeheader   T_OBFU_DOC_ATTACH     Content-Type =~ m,application/octet-stream;.+\.(?:doc|rtf)\b,i
+  mimeheader   T_OBFU_DOC_ATTACH     Content-Type =~ m,\bapplication/octet-stream\b.+\.(?:doc|rtf)\b,i
   describe     T_OBFU_DOC_ATTACH     MS Document attachment with generic MIME type
 endif
 ##} T_OBFU_DOC_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
@@ -3609,15 +3693,31 @@ endif
 ##{ T_OBFU_GIF_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
 ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-  mimeheader   T_OBFU_GIF_ATTACH     Content-Type =~ m,application/octet-stream;.+\.gif\b,i
+  mimeheader   T_OBFU_GIF_ATTACH     Content-Type =~ m,\bapplication/octet-stream\b.+\.gif\b,i
   describe     T_OBFU_GIF_ATTACH     GIF attachment with generic MIME type
 endif
 ##} T_OBFU_GIF_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
+##{ T_OBFU_HTML_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+
+ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+  mimeheader   T_OBFU_HTML_ATTACH    Content-Type =~ m,\bapplication/octet-stream\b.+\.html?\b,i
+  describe     T_OBFU_HTML_ATTACH    HTML attachment with non-text MIME type
+endif
+##} T_OBFU_HTML_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+
+##{ T_OBFU_HTML_ATT_MALW ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+
+ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+  meta         T_OBFU_HTML_ATT_MALW  __ZIP_ATTACH_NOFN && __HTML_ATTACH_02
+  describe     T_OBFU_HTML_ATT_MALW  HTML attachment with incorrect MIME type - possible malware
+endif
+##} T_OBFU_HTML_ATT_MALW ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+
 ##{ T_OBFU_JPG_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
 ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-  mimeheader   T_OBFU_JPG_ATTACH     Content-Type =~ m,application/octet-stream;.+\.jpe?g\b,i
+  mimeheader   T_OBFU_JPG_ATTACH     Content-Type =~ m,\bapplication/octet-stream\b.+\.jpe?g\b,i
   describe     T_OBFU_JPG_ATTACH     JPG attachment with generic MIME type
 endif
 ##} T_OBFU_JPG_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
@@ -3625,7 +3725,7 @@ endif
 ##{ T_OBFU_PDF_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
 ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-  mimeheader   T_OBFU_PDF_ATTACH     Content-Type =~ m,application/octet-stream;.+\.pdf\b,i
+  mimeheader   T_OBFU_PDF_ATTACH     Content-Type =~ m,\bapplication/octet-stream\b.+\.pdf\b,i
   describe     T_OBFU_PDF_ATTACH     PDF attachment with generic MIME type
 endif
 ##} T_OBFU_PDF_ATTACH ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
@@ -3637,17 +3737,6 @@ ifplugin Mail::SpamAssassin::Plugin::MIMEHeader # {
   describe T_REMOTE_IMAGE	Message contains an external image
 endif
 ##} T_REMOTE_IMAGE ifplugin Mail::SpamAssassin::Plugin::MIMEHeader # {
-
-##{ T_RP_MATCHES_RCVD if version >= 3.003000 ifplugin Mail::SpamAssassin::Plugin::WLBLEval
-
-if version >= 3.003000
-ifplugin Mail::SpamAssassin::Plugin::WLBLEval
-header   T_RP_MATCHES_RCVD  eval:check_mailfrom_matches_rcvd()
-describe T_RP_MATCHES_RCVD  Envelope sender domain matches handover relay domain
-tflags   T_RP_MATCHES_RCVD  nice
-endif
-endif
-##} T_RP_MATCHES_RCVD if version >= 3.003000 ifplugin Mail::SpamAssassin::Plugin::WLBLEval
 
 ##{ T_TVD_FUZZY_SECTOR ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 
@@ -3684,11 +3773,6 @@ body T_TVD_MIME_NO_HEADERS      eval:check_msg_parse_flags('missing_mime_headers
 endif
 ##} T_TVD_MIME_NO_HEADERS ifplugin Mail::SpamAssassin::Plugin::MIMEEval
 
-##{ T_TVD_PH_BODY_ACCOUNTS_POST
-
-body T_TVD_PH_BODY_ACCOUNTS_POST	/\b(?:(?:re-?)?activat[a-z]*|(?:re-?)?validate|secure|restore|confirm|update|suspend) (?!your)(?:[a-z_,-]+ )+?accounts?\b/i
-##} T_TVD_PH_BODY_ACCOUNTS_POST
-
 ##{ URIBL_RHS_DOB ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
 
 ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
@@ -3711,11 +3795,12 @@ endif
 endif
 ##} URIBL_SBL_A if (version >= 3.004000) ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
 
-##{ URI_OBFU_TLD
+##{ URI_MALWARE_BH
 
-meta          URI_OBFU_TLD      __URI_OBFU_TLD && !__MSGID_OK_HOST
-describe      URI_OBFU_TLD      URI top-level domain with space obfuscation
-##} URI_OBFU_TLD
+uri         URI_MALWARE_BH     /\.\w{2,4}\/[\d\w]{8}\/index\.html/
+describe    URI_MALWARE_BH     Possible BlackHole malware links / phishing
+#score       URI_MALWARE_BH     1.0	# limit
+##} URI_MALWARE_BH
 
 ##{ URI_OBFU_WWW ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 
@@ -3732,221 +3817,6 @@ describe VANITY Vanity or fake awards
 #score VANITY 2.3
 ##} VANITY
 
-##{ XMAILER_MIMEOLE_OL_015D5
-
-meta XMAILER_MIMEOLE_OL_015D5  (__XM_OL_015D5 && __MO_OL_015D5)
-##} XMAILER_MIMEOLE_OL_015D5
-
-##{ XMAILER_MIMEOLE_OL_07794
-
-meta XMAILER_MIMEOLE_OL_07794  (__XM_OL_07794 && __MO_OL_07794)
-##} XMAILER_MIMEOLE_OL_07794
-
-##{ XMAILER_MIMEOLE_OL_09BB4
-
-meta XMAILER_MIMEOLE_OL_09BB4  (__XM_OL_09BB4 && __MO_OL_09BB4)
-##} XMAILER_MIMEOLE_OL_09BB4
-
-##{ XMAILER_MIMEOLE_OL_1ECD5
-
-meta XMAILER_MIMEOLE_OL_1ECD5  (__XM_OL_1ECD5 && __MO_OL_1ECD5)
-##} XMAILER_MIMEOLE_OL_1ECD5
-
-##{ XMAILER_MIMEOLE_OL_20C99
-
-meta XMAILER_MIMEOLE_OL_20C99  (__XM_OL_20C99 && __MO_OL_20C99)
-##} XMAILER_MIMEOLE_OL_20C99
-
-##{ XMAILER_MIMEOLE_OL_22B61
-
-meta XMAILER_MIMEOLE_OL_22B61  (__XM_OL_22B61 && __MO_OL_22B61)
-##} XMAILER_MIMEOLE_OL_22B61
-
-##{ XMAILER_MIMEOLE_OL_25340
-
-meta XMAILER_MIMEOLE_OL_25340  (__XM_OL_25340 && __MO_OL_25340)
-##} XMAILER_MIMEOLE_OL_25340
-
-##{ XMAILER_MIMEOLE_OL_32D97
-
-meta XMAILER_MIMEOLE_OL_32D97  (__XM_OL_32D97 && __MO_OL_32D97)
-##} XMAILER_MIMEOLE_OL_32D97
-
-##{ XMAILER_MIMEOLE_OL_3857F
-
-meta XMAILER_MIMEOLE_OL_3857F  (__XM_OL_3857F && __MO_OL_3857F)
-##} XMAILER_MIMEOLE_OL_3857F
-
-##{ XMAILER_MIMEOLE_OL_3AC1D
-
-meta XMAILER_MIMEOLE_OL_3AC1D  (__XM_OL_3AC1D && __MO_OL_3AC1D)
-##} XMAILER_MIMEOLE_OL_3AC1D
-
-##{ XMAILER_MIMEOLE_OL_3D61D
-
-meta XMAILER_MIMEOLE_OL_3D61D  (__XM_OL_3D61D && __MO_OL_3D61D)
-##} XMAILER_MIMEOLE_OL_3D61D
-
-##{ XMAILER_MIMEOLE_OL_465CD
-
-meta XMAILER_MIMEOLE_OL_465CD  (__XM_OL_465CD && __MO_OL_465CD)
-##} XMAILER_MIMEOLE_OL_465CD
-
-##{ XMAILER_MIMEOLE_OL_4B815
-
-meta XMAILER_MIMEOLE_OL_4B815  (__XM_OL_4B815 && __MO_OL_4B815)
-##} XMAILER_MIMEOLE_OL_4B815
-
-##{ XMAILER_MIMEOLE_OL_4BF4C
-
-meta XMAILER_MIMEOLE_OL_4BF4C  (__XM_OL_4BF4C && __MO_OL_4BF4C)
-##} XMAILER_MIMEOLE_OL_4BF4C
-
-##{ XMAILER_MIMEOLE_OL_4EEDB
-
-meta XMAILER_MIMEOLE_OL_4EEDB  (__XM_OL_4EEDB && __MO_OL_4EEDB)
-##} XMAILER_MIMEOLE_OL_4EEDB
-
-##{ XMAILER_MIMEOLE_OL_4F240
-
-meta XMAILER_MIMEOLE_OL_4F240  (__XM_OL_4F240 && __MO_OL_4F240)
-##} XMAILER_MIMEOLE_OL_4F240
-
-##{ XMAILER_MIMEOLE_OL_58CB5
-
-meta XMAILER_MIMEOLE_OL_58CB5  (__XM_OL_58CB5 && __MO_OL_58CB5)
-##} XMAILER_MIMEOLE_OL_58CB5
-
-##{ XMAILER_MIMEOLE_OL_5B79A
-
-meta XMAILER_MIMEOLE_OL_5B79A  (__XM_OL_5B79A && __MO_OL_5B79A)
-##} XMAILER_MIMEOLE_OL_5B79A
-
-##{ XMAILER_MIMEOLE_OL_6554A
-
-meta XMAILER_MIMEOLE_OL_6554A  (__XM_OL_6554A && __MO_OL_6554A)
-##} XMAILER_MIMEOLE_OL_6554A
-
-##{ XMAILER_MIMEOLE_OL_72641
-
-meta XMAILER_MIMEOLE_OL_72641  (__XM_OL_72641 && __MO_OL_72641)
-##} XMAILER_MIMEOLE_OL_72641
-
-##{ XMAILER_MIMEOLE_OL_7533E
-
-meta XMAILER_MIMEOLE_OL_7533E  (__XM_OL_7533E && __MO_OL_7533E)
-##} XMAILER_MIMEOLE_OL_7533E
-
-##{ XMAILER_MIMEOLE_OL_812FF
-
-meta XMAILER_MIMEOLE_OL_812FF  (__XM_OL_812FF && __MO_OL_812FF)
-##} XMAILER_MIMEOLE_OL_812FF
-
-##{ XMAILER_MIMEOLE_OL_83BF7
-
-meta XMAILER_MIMEOLE_OL_83BF7  (__XM_OL_83BF7 && __MO_OL_83BF7)
-##} XMAILER_MIMEOLE_OL_83BF7
-
-##{ XMAILER_MIMEOLE_OL_8627E
-
-meta XMAILER_MIMEOLE_OL_8627E  (__XM_OL_8627E && __MO_OL_8627E)
-##} XMAILER_MIMEOLE_OL_8627E
-
-##{ XMAILER_MIMEOLE_OL_8E893
-
-meta XMAILER_MIMEOLE_OL_8E893  (__XM_OL_8E893 && __MO_OL_8E893)
-##} XMAILER_MIMEOLE_OL_8E893
-
-##{ XMAILER_MIMEOLE_OL_91287
-
-meta XMAILER_MIMEOLE_OL_91287  (__XM_OL_91287 && __MO_OL_91287)
-##} XMAILER_MIMEOLE_OL_91287
-
-##{ XMAILER_MIMEOLE_OL_9B90B
-
-meta XMAILER_MIMEOLE_OL_9B90B  (__XM_OL_9B90B && __MO_OL_9B90B)
-##} XMAILER_MIMEOLE_OL_9B90B
-
-##{ XMAILER_MIMEOLE_OL_A50F8
-
-meta XMAILER_MIMEOLE_OL_A50F8  (__XM_OL_A50F8 && __MO_OL_A50F8)
-##} XMAILER_MIMEOLE_OL_A50F8
-
-##{ XMAILER_MIMEOLE_OL_A842E
-
-meta XMAILER_MIMEOLE_OL_A842E  (__XM_OL_A842E && __MO_OL_A842E)
-##} XMAILER_MIMEOLE_OL_A842E
-
-##{ XMAILER_MIMEOLE_OL_ADFF7
-
-meta XMAILER_MIMEOLE_OL_ADFF7  (__XM_OL_ADFF7 && __MO_OL_ADFF7)
-##} XMAILER_MIMEOLE_OL_ADFF7
-
-##{ XMAILER_MIMEOLE_OL_B30D1
-
-meta XMAILER_MIMEOLE_OL_B30D1  (__XM_OL_B30D1 && __MO_OL_B30D1)
-##} XMAILER_MIMEOLE_OL_B30D1
-
-##{ XMAILER_MIMEOLE_OL_B4B40
-
-meta XMAILER_MIMEOLE_OL_B4B40  (__XM_OL_B4B40 && __MO_OL_B4B40)
-##} XMAILER_MIMEOLE_OL_B4B40
-
-##{ XMAILER_MIMEOLE_OL_B9B11
-
-meta XMAILER_MIMEOLE_OL_B9B11  (__XM_OL_B9B11 && __MO_OL_B9B11)
-##} XMAILER_MIMEOLE_OL_B9B11
-
-##{ XMAILER_MIMEOLE_OL_BC7E6
-
-meta XMAILER_MIMEOLE_OL_BC7E6  (__XM_OL_BC7E6 && __MO_OL_BC7E6)
-##} XMAILER_MIMEOLE_OL_BC7E6
-
-##{ XMAILER_MIMEOLE_OL_C65FA
-
-meta XMAILER_MIMEOLE_OL_C65FA  (__XM_OL_C65FA && __MO_OL_C65FA)
-##} XMAILER_MIMEOLE_OL_C65FA
-
-##{ XMAILER_MIMEOLE_OL_CAC8F
-
-meta XMAILER_MIMEOLE_OL_CAC8F  (__XM_OL_CAC8F && __MO_OL_CAC8F)
-##} XMAILER_MIMEOLE_OL_CAC8F
-
-##{ XMAILER_MIMEOLE_OL_CF0C0
-
-meta XMAILER_MIMEOLE_OL_CF0C0  (__XM_OL_CF0C0 && __MO_OL_CF0C0)
-##} XMAILER_MIMEOLE_OL_CF0C0
-
-##{ XMAILER_MIMEOLE_OL_EF20B
-
-meta XMAILER_MIMEOLE_OL_EF20B  (__XM_OL_EF20B && __MO_OL_EF20B)
-##} XMAILER_MIMEOLE_OL_EF20B
-
-##{ XMAILER_MIMEOLE_OL_EF222
-
-meta XMAILER_MIMEOLE_OL_EF222  (__XM_OL_EF222 && __MO_OL_EF222)
-##} XMAILER_MIMEOLE_OL_EF222
-
-##{ XMAILER_MIMEOLE_OL_F3B05
-
-meta XMAILER_MIMEOLE_OL_F3B05  (__XM_OL_F3B05 && __MO_OL_F3B05)
-##} XMAILER_MIMEOLE_OL_F3B05
-
-##{ XMAILER_MIMEOLE_OL_F475E
-
-meta XMAILER_MIMEOLE_OL_F475E  (__XM_OL_F475E && __MO_OL_F475E)
-##} XMAILER_MIMEOLE_OL_F475E
-
-##{ XMAILER_MIMEOLE_OL_F6D01
-
-meta XMAILER_MIMEOLE_OL_F6D01  (__XM_OL_F6D01 && __MO_OL_F6D01)
-##} XMAILER_MIMEOLE_OL_F6D01
-
-##{ XMAILER_MIMEOLE_OL_FF5C8
-
-meta XMAILER_MIMEOLE_OL_FF5C8  (__XM_OL_FF5C8 && __MO_OL_FF5C8)
-##} XMAILER_MIMEOLE_OL_FF5C8
-
 ##{ XM_PHPMAILER_FORGED
 
 meta        XM_PHPMAILER_FORGED    __XM_PHPMAILER_FORGED
@@ -3958,12 +3828,25 @@ describe    XM_PHPMAILER_FORGED    Apparently forged header
 header X_MAILER_CME_6543_MSN	X-Mailer =~ /^CME-V6\.5\.4\.3; MSN\s*$/
 ##} X_MAILER_CME_6543_MSN
 
+##{ YOUR_PERMISSION
+
+meta     YOUR_PERMISSION  __YOUR_PERM && !__CTYPE_HAS_BOUNDARY && !__DKIM_EXISTS && !__DOS_HAS_LIST_UNSUB && !__CT_TEXT_PLAIN && !__BUGGED_IMG && !__COMMENT_EXISTS
+describe YOUR_PERMISSION  With your permission...
+##} YOUR_PERMISSION
+
 ##{ if !(! plugin (Mail::SpamAssassin::Plugin::URIDetail))_sandbox
 
 if !(! plugin (Mail::SpamAssassin::Plugin::URIDetail))
   uri_detail T_KHOP_FOREIGN_CLICK	text =~ /\b(?:cli(?:quez\W|ck\Wa)ici\b|cli(?:cca\W|c\Wa|que\Wa)qu[^<.,a ]|klie?k(?:\Whi?er|ni(?:j|nite)\Wtu[tk]aj)\b)/i
 endif
 ##} if !(! plugin (Mail::SpamAssassin::Plugin::URIDetail))_sandbox
+
+##{ ifplugin Mail::SpamAssassin::Plugin::DNSEval # {_sandbox
+
+ifplugin Mail::SpamAssassin::Plugin::DNSEval # {
+reuse    RCVD_IN_PSBL
+endif
+##} ifplugin Mail::SpamAssassin::Plugin::DNSEval # {_sandbox
 
 ##{ ifplugin Mail::SpamAssassin::Plugin::DNSEval_sandbox
 
@@ -4029,7 +3912,7 @@ replace_rules T_FRT_CLICK
 replace_rules T_FRT_COCK
 replace_rules T_FRT_CONTACT
 replace_rules FRT_DISCOUNT
-replace_rules T_FRT_ERECTION
+replace_rules FRT_ERECTION
 replace_rules T_FRT_ESTABLISH
 replace_rules T_FRT_EXPERIENCE
 replace_rules T_FRT_FOLLOW1
@@ -4074,7 +3957,7 @@ replace_rules TVD_FUZZY_DEGREE
   replace_tag FF_LNNO   (?:(?:\d{1,3}(?:[)}\]:.,]{1,80}|(?:st|nd|rd|th)[)}\]:.,]{0,3})|\W?\([\div]{1,5}\)|\W?\{\d{1,3}\}|\[\d{1,3}\]|\*{1,5}|\#{1,5}|\(?[A-K][)}\]:.,]{1,3})\s?)
   replace_tag FF_YOUR   (?:a?\s?copy\sof\s)?(?:(?:your|din|seu)[\s,:]{1,5})?(?:present\s|c[uo]rrent\s|full(?:st[\xe4]ndigt)?\s?|complete\s|direct\s|private?\s|valid\s|personal\s|nuvarande\s|vollst[\xe4]ndige\s|aktuelle\s){0,3}
   replace_tag ANDOR     (?:\s?[\/&+,]\s?|\sor\s|\sand?\s)
-  replace_tag NUMBER    (?:(?:ruf)?num(?:[bm]er)?s?|nos?\.|no\b|\#s?|nbrs?\.?)
+  replace_tag NUMBER    (?:(?:ruf)?num(?:[bm]er)?s?|nos?\.|no\b|n[\xb0]|\#s?|nbrs?\.?)
   replace_tag FF_SUFFIX (?:\sin\s(?:full|words)|\scompleto)?:?(?:\s?[({][^)}]{1,30}[)}])?
   replace_tag FF_BLANK1 (?:[\s:;]{0,4}(?:(?:[-=_.,:;*\s\x85]|&\#\d{1,3};|[\xe2][\x80][\xa6]){3,100}))
   replace_tag FF_BLANK2 (?:[^-=_.,:;*\w]{0,3}(?:[-=_.,:;*\s\x85]|&\#\d{1,3};|[\xe2][\x80][\xa6]){1,100})
@@ -4082,8 +3965,8 @@ replace_rules TVD_FUZZY_DEGREE
   replace_tag FF_A2 (?:(?:contact|full|house|home|resident[ia]+l|busines+|mailing|work|delivery|ship+ing|post(?:al)?|of+ice|e-?mail|bostads|wohn)<ANDOR>?){0,3}\s?(?:ad+res+[es]{0,2}|location|endere[\xe7]o)(?:\sline)?(?:\s[0-9])?
   replace_tag FF_N1 (?:company|first|last|all|busines+|legal|ben[ei]ficiary|vollstaendigen)?\s?(?:name?[sn]?|navne|nome)(?:<ANDOR>ad+res+)?
   replace_tag FF_P1 (?:(?:(?:busines+|contact|fax|voice|house|home|mobile?|cel+(?:ular)?|of+ice|tel+e?(?:\s?(?:ph|f)one?)?|(?:ph|f)one|private)(?:\s(?:ph|f)one)?<ANDOR>?){1,3}(?:\s?<NUMBER>)?<ANDOR>?){1,3}
-  replace_tag FF_M1 (?:(?:age|marital\s?statu[se]|sex|gender|male\sor\sfemale|(?:date\sof\s)?birth|religion|nationality|email|next\sof\skin|alter|staatsangehoerigkeit|nationalitet|idade)<ANDOR>?){1,3}
-  replace_tag FF_L1 (?:(?:previous\s)?work(?:ing)\s?experience|employment|position|profes+ion|(?:monthly|an+ual)?\s?income|purpose\sof\sl(?:oa|ao)n|an+ual\sturn\s?over|l(?:oa|ao)n\sduration|oc+up[ae]tion(?:\/position)?|(?:l(?:oa|ao)n\s|the\s)?amount(?:\sneed(ed)?|\sdesired)?(?:\s(?:as|of)\sloan)?|beruf)
+  replace_tag FF_M1 (?:(?:ages?|marital\s?statu[se]|sex|gender|male\sor\sfemale|(?:date\s(?:of\s)?)?birth|religion|nationality|email|next\sof\skin|alter|staatsangehoerigkeit|nationalitet|idade)<ANDOR>?){1,3}
+  replace_tag FF_L1 (?:(?:previous\s)?work(?:ing)\s?experience|employment|position|profes+ion|(?:monthly|an+ual)?\s?income|purpose\sof\sl(?:oa|ao)n|an+ual\sturn\s?over|l(?:oa|ao)n\sduration|oc+up[ae]tion(?:\/position)?s?|(?:l(?:oa|ao)n\s|the\s)?amount(?:\sneed(ed)?|\sdesired)?(?:\s(?:as|of)\sloan)?|beruf)
   replace_tag FF_F1 (?:(?:bank|beneficiary|billing|acc(?:oun)?t|rout(?:ing)?|swift|receiver|user)<ANDOR>?){1,3}\s(?:(?:name|ad+res+(?:es)?|location|code|details|a\/c|<NUMBER>)<ANDOR>?){1,3}
   replace_tag FF_F2 (?:(?:(?:international\s)?driver'?s?\sli[sc]+(?:en[sc]e)?|pas+\s?port|id\scard|[ia]d(?:entification|entity)(?:\s(?:card|<NUMBER>|papers?))?)<ANDOR>?){1,3}(?:\s<NUMBER>)?
   replace_tag FF_F3 (?:picture|test\squestion|answer|amount\swon|(?:inheritance\s)?funds?\svalue|(?:e-?mail\s)?pas+word|e-?mai?l\sid|amount\s[\w\s]{0,30}lost[\w\s]{0,15})
@@ -4098,7 +3981,7 @@ replace_rules TVD_FUZZY_DEGREE
   replace_rules   __FILL_THIS_FORM_SHORT2
   replace_rules   __FILL_THIS_FORM_LOAN1
   replace_rules   __FILL_THIS_FORM_FRAUD_PHISH1
-  replace_tag  CURRENCY   [\(\[]?(?:\bUS[D\$]{0,2}|\$(?:US)?|usd|GBP|=[Aa][34]|\xa3|&\#16[34];|(?i:pounds\ssterling)|\xa4|EUR(?:OS)?|[Ee]uro?s?|(?i:eur)\sde|CHF|FCFA|d[\xf3]lares\sde\slos\sE+\.\s?U+\.)[\]\)]?
+  replace_tag  CURRENCY   [\(\[]?(?:\bU[Ss][D\$]{0,2}|\$(?:US)?|usd|GBP|=[Aa][34]|\xa3|&\#16[34];|(?i:pounds\ssterling)|\xa4|EUR(?:OS)?|(?:d')?[Ee]uro?s?|(?i:eur)\sde|CHF|FCFA|d[\xf3]lares\sde\slos\sE+\.\s?U+\.)[\]\)]?
   replace_tag  GB_UK      \b(?:U\.?K\.?|(?:Great\s)?Brit(?:ain|ish)|G\.?B\.?)\b
   replace_rules   __LOTSA_MONEY_00 __LOTSA_MONEY_01 __LOTSA_MONEY_02 __LOTSA_MONEY_03 __LOTSA_MONEY_04
   replace_tag  PERCENT      \b(?:\d\d|ten|[a-z]+teen|(?:twen|thir|fou?r|fif)ty(?:-?[a-z]+)?)\s?(?:%|percent)
@@ -4109,14 +3992,13 @@ replace_rules T_LFUZ_PWRMALE
 endif
 ##} ifplugin Mail::SpamAssassin::Plugin::ReplaceTags_sandbox
 
-##{ ifplugin Mail::SpamAssassin::Plugin::URIDNSBL_sandbox
+##{ ifplugin Mail::SpamAssassin::Plugin::URIDetail_sandbox
 
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-reuse     T_URIBL_SEM_FRESH
-reuse     T_URIBL_SEM_FRESH_10
-reuse     T_URIBL_SEM_FRESH_15
+ifplugin  Mail::SpamAssassin::Plugin::URIDetail
+uri_detail      T_AJB_CANPOST_BADLINK     raw !~ /canadapost\./ text =~ /(?:https?:\/\/|www\.)canadapost\./ type =~ /^a$/
+uri_detail      T_AJB_UTUBE_BADLINK       raw !~ /youtube\./ text =~ /(?:https?:\/\/|www\.)youtube\./ type =~ /^a$/
 endif
-##} ifplugin Mail::SpamAssassin::Plugin::URIDNSBL_sandbox
+##} ifplugin Mail::SpamAssassin::Plugin::URIDetail_sandbox
 
 ##{ redirector_pattern_sandbox
 
@@ -4132,18 +4014,11 @@ redirector_pattern m'^https?/*(?:\w+\.)?facebook\.com/l/;(.*)'i
 
 ##{ reuse_sandbox
 
-reuse    RCVD_IN_PSBL
 reuse	 T_RCVD_IN_NIX_SPAM
 ##} reuse_sandbox
 
 
-if !plugin(Mail::SpamAssassin::Plugin::MIMEHeader)
-	meta         __ACH_CANCELLED     (__ACH_CANCELLED_01 || __ACH_CANCELLED_02 || __ACH_CANCELLED_03 || __ACH_CANCELLED_04) && __HAS_ANY_URI
-endif
-
-ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-	meta         __ACH_CANCELLED     (__ACH_CANCELLED_01 || __ACH_CANCELLED_02 || __ACH_CANCELLED_03 || __ACH_CANCELLED_04) && (__HAS_ANY_URI || __EXE_ATTACH)
-endif
+meta        __ACH_CANCELLED        (__ACH_CANCELLED_01 || __ACH_CANCELLED_02 || __ACH_CANCELLED_03 || __ACH_CANCELLED_04) && (__HAS_ANY_URI || LOTS_OF_MONEY)
 
 body        __ACH_CANCELLED_01     /\b(?:(?-i:ACH)|dividend)[-_ ](?:payment|transfer|transaction|was)[-_ ](?:(?:was|is)[-_ ])?(?:rejected|cancel+ed|declined|disabled|not[-_ ]accepted|(?:technical )?error)/i
 
@@ -4153,7 +4028,11 @@ body        __ACH_CANCELLED_03     /\bwire[-_ ]?(?:payment|transfer|transaction)
 
 body        __ACH_CANCELLED_04     /\bregarding[-_ ]your[-_ ]direct[-_ ]deposit[-_ ]via[-_ ](?-i:ACH)/i
 
-meta      __ADVANCE_FEE_2_NEW  (__AFRICAN_STATE + __ATM_CARD + __BACK_SCRATCH +  __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + __EX_CUSTOMER + __FOUND_YOU + __FRAUD_AON + __FRAUD_AUM + __FRAUD_AXF + __FRAUD_BEP + __FRAUD_BGP + __FRAUD_CKF + __FRAUD_DPR + __FRAUD_FVU + __FRAUD_GBW + __FRAUD_IPK + __FRAUD_IRT + __FRAUD_JNB + __FRAUD_JYG + __FRAUD_MCQ + __FRAUD_MLY + __FRAUD_MQO + __FRAUD_NEB + __FRAUD_QFY + __FRAUD_QXX + __FRAUD_SNT + __FRAUD_ULK + __FRAUD_UOQ + __FRAUD_VQE + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_XJR + __FRAUD_XWW + __FRAUD_YPO + __FRAUD_YQV + __I_INHERIT + __INTL_BANK + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + LOTTO_AGENT + LOTTO_AGENT_RPLY + LOTTO_DEPT + __LOTTO_RELATED + LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS + __LUCKY_WINNER + __NEXT_OF_KIN + __NOT_DEAD_YET + __PCT_OF_PMTS + __SCAM + __SHARE_IT + __THEY_INHERIT +  UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_FUND + __YOUR_PERM + __YOU_WON > 1) && !__THREAD_INDEX_GOOD
+ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+	meta         __ACH_CANCELLED_EXE (__ACH_CANCELLED_01 || __ACH_CANCELLED_02 || __ACH_CANCELLED_03 || __ACH_CANCELLED_04) && __EXE_ATTACH
+endif
+
+meta      __ADVANCE_FEE_2_NEW  (__AFRICAN_STATE + __ATM_CARD + __BACK_SCRATCH +  __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + __EX_CUSTOMER + __FOUND_YOU + __FRAUD_AON + __FRAUD_AUM + __FRAUD_AXF + __FRAUD_BEP + __FRAUD_BGP + __FRAUD_CKF + __FRAUD_DPR + __FRAUD_FVU + __FRAUD_GBW + __FRAUD_IPK + __FRAUD_IRT + __FRAUD_JNB + __FRAUD_JYG + __FRAUD_MCQ + __FRAUD_MLY + __FRAUD_MQO + __FRAUD_NEB + __FRAUD_QFY + __FRAUD_QXX + __FRAUD_SNT + __FRAUD_ULK + __FRAUD_UOQ + __FRAUD_VQE + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_XJR + __FRAUD_XWW + __FRAUD_YPO + __FRAUD_YQV + __I_INHERIT + __INTL_BANK + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + LOTTO_AGENT + T_LOTTO_AGENT_RPLY + LOTTO_DEPT + __LOTTO_RELATED + T_LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS + __LUCKY_WINNER + __NEXT_OF_KIN + __NOT_DEAD_YET + __PCT_OF_PMTS + __SCAM + __SHARE_IT + __THEY_INHERIT +  UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_FUND + __YOUR_PERM + __YOU_WON > 1) && !__THREAD_INDEX_GOOD
 
 meta      __ADVANCE_FEE_2_NEW_FORM  __FILL_THIS_FORM && __ADVANCE_FEE_2_NEW
 
@@ -4161,7 +4040,7 @@ meta      __ADVANCE_FEE_2_NEW_FRM_MNY  __FILL_THIS_FORM && LOTS_OF_MONEY && __AD
 
 meta      __ADVANCE_FEE_2_NEW_MONEY  LOTS_OF_MONEY && __ADVANCE_FEE_2_NEW
 
-meta      __ADVANCE_FEE_3_NEW  (__AFRICAN_STATE + __ATM_CARD + __BACK_SCRATCH +  __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + __EX_CUSTOMER + __FOUND_YOU + __FRAUD_AON + __FRAUD_AUM + __FRAUD_AXF + __FRAUD_BEP + __FRAUD_BGP + __FRAUD_CKF + __FRAUD_DPR + __FRAUD_FVU + __FRAUD_GBW + __FRAUD_IPK + __FRAUD_IRT + __FRAUD_JNB + __FRAUD_JYG + __FRAUD_MCQ + __FRAUD_MLY + __FRAUD_MQO + __FRAUD_NEB + __FRAUD_QFY + __FRAUD_QXX + __FRAUD_SNT + __FRAUD_ULK + __FRAUD_UOQ + __FRAUD_VQE + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_XJR + __FRAUD_XWW + __FRAUD_YPO + __FRAUD_YQV + __I_INHERIT + __INTL_BANK + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + LOTTO_AGENT + LOTTO_AGENT_RPLY + LOTTO_DEPT + __LOTTO_RELATED + LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS + __LUCKY_WINNER + __NEXT_OF_KIN + __NOT_DEAD_YET + __PCT_OF_PMTS + __SCAM + __SHARE_IT + __THEY_INHERIT +  UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_FUND + __YOUR_PERM + __YOU_WON > 2) && !__THREAD_INDEX_GOOD
+meta      __ADVANCE_FEE_3_NEW  (__AFRICAN_STATE + __ATM_CARD + __BACK_SCRATCH +  __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + __EX_CUSTOMER + __FOUND_YOU + __FRAUD_AON + __FRAUD_AUM + __FRAUD_AXF + __FRAUD_BEP + __FRAUD_BGP + __FRAUD_CKF + __FRAUD_DPR + __FRAUD_FVU + __FRAUD_GBW + __FRAUD_IPK + __FRAUD_IRT + __FRAUD_JNB + __FRAUD_JYG + __FRAUD_MCQ + __FRAUD_MLY + __FRAUD_MQO + __FRAUD_NEB + __FRAUD_QFY + __FRAUD_QXX + __FRAUD_SNT + __FRAUD_ULK + __FRAUD_UOQ + __FRAUD_VQE + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_XJR + __FRAUD_XWW + __FRAUD_YPO + __FRAUD_YQV + __I_INHERIT + __INTL_BANK + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + LOTTO_AGENT + T_LOTTO_AGENT_RPLY + LOTTO_DEPT + __LOTTO_RELATED + T_LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS + __LUCKY_WINNER + __NEXT_OF_KIN + __NOT_DEAD_YET + __PCT_OF_PMTS + __SCAM + __SHARE_IT + __THEY_INHERIT +  UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_FUND + __YOUR_PERM + __YOU_WON > 2) && !__THREAD_INDEX_GOOD
 
 meta      __ADVANCE_FEE_3_NEW_FORM  __FILL_THIS_FORM && __ADVANCE_FEE_3_NEW
 
@@ -4169,7 +4048,7 @@ meta      __ADVANCE_FEE_3_NEW_FRM_MNY  __FILL_THIS_FORM && LOTS_OF_MONEY && __AD
 
 meta      __ADVANCE_FEE_3_NEW_MONEY  LOTS_OF_MONEY && __ADVANCE_FEE_3_NEW
 
-meta      __ADVANCE_FEE_4_NEW  (__AFRICAN_STATE + __ATM_CARD + __BACK_SCRATCH +  __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + __EX_CUSTOMER + __FOUND_YOU + __FRAUD_AON + __FRAUD_AUM + __FRAUD_AXF + __FRAUD_BEP + __FRAUD_BGP + __FRAUD_CKF + __FRAUD_DPR + __FRAUD_FVU + __FRAUD_GBW + __FRAUD_IPK + __FRAUD_IRT + __FRAUD_JNB + __FRAUD_JYG + __FRAUD_MCQ + __FRAUD_MLY + __FRAUD_MQO + __FRAUD_NEB + __FRAUD_QFY + __FRAUD_QXX + __FRAUD_SNT + __FRAUD_ULK + __FRAUD_UOQ + __FRAUD_VQE + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_XJR + __FRAUD_XWW + __FRAUD_YPO + __FRAUD_YQV + __I_INHERIT + __INTL_BANK + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + LOTTO_AGENT + LOTTO_AGENT_RPLY + LOTTO_DEPT + __LOTTO_RELATED + LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS + __LUCKY_WINNER + __NEXT_OF_KIN + __NOT_DEAD_YET + __PCT_OF_PMTS + __SCAM + __SHARE_IT + __THEY_INHERIT +  UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_FUND + __YOUR_PERM + __YOU_WON > 3) && !__THREAD_INDEX_GOOD
+meta      __ADVANCE_FEE_4_NEW  (__AFRICAN_STATE + __ATM_CARD + __BACK_SCRATCH +  __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + __EX_CUSTOMER + __FOUND_YOU + __FRAUD_AON + __FRAUD_AUM + __FRAUD_AXF + __FRAUD_BEP + __FRAUD_BGP + __FRAUD_CKF + __FRAUD_DPR + __FRAUD_FVU + __FRAUD_GBW + __FRAUD_IPK + __FRAUD_IRT + __FRAUD_JNB + __FRAUD_JYG + __FRAUD_MCQ + __FRAUD_MLY + __FRAUD_MQO + __FRAUD_NEB + __FRAUD_QFY + __FRAUD_QXX + __FRAUD_SNT + __FRAUD_ULK + __FRAUD_UOQ + __FRAUD_VQE + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_XJR + __FRAUD_XWW + __FRAUD_YPO + __FRAUD_YQV + __I_INHERIT + __INTL_BANK + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + LOTTO_AGENT + T_LOTTO_AGENT_RPLY + LOTTO_DEPT + __LOTTO_RELATED + T_LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS + __LUCKY_WINNER + __NEXT_OF_KIN + __NOT_DEAD_YET + __PCT_OF_PMTS + __SCAM + __SHARE_IT + __THEY_INHERIT +  UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_FUND + __YOUR_PERM + __YOU_WON > 3) && !__THREAD_INDEX_GOOD
 
 meta      __ADVANCE_FEE_4_NEW_FORM  __FILL_THIS_FORM && __ADVANCE_FEE_4_NEW
 
@@ -4177,7 +4056,7 @@ meta      __ADVANCE_FEE_4_NEW_FRM_MNY  __FILL_THIS_FORM && LOTS_OF_MONEY && __AD
 
 meta      __ADVANCE_FEE_4_NEW_MONEY  LOTS_OF_MONEY && __ADVANCE_FEE_4_NEW
 
-meta      __ADVANCE_FEE_5_NEW  (__AFRICAN_STATE + __ATM_CARD + __BACK_SCRATCH +  __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + __EX_CUSTOMER + __FOUND_YOU + __FRAUD_AON + __FRAUD_AUM + __FRAUD_AXF + __FRAUD_BEP + __FRAUD_BGP + __FRAUD_CKF + __FRAUD_DPR + __FRAUD_FVU + __FRAUD_GBW + __FRAUD_IPK + __FRAUD_IRT + __FRAUD_JNB + __FRAUD_JYG + __FRAUD_MCQ + __FRAUD_MLY + __FRAUD_MQO + __FRAUD_NEB + __FRAUD_QFY + __FRAUD_QXX + __FRAUD_SNT + __FRAUD_ULK + __FRAUD_UOQ + __FRAUD_VQE + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_XJR + __FRAUD_XWW + __FRAUD_YPO + __FRAUD_YQV + __I_INHERIT + __INTL_BANK + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + LOTTO_AGENT + LOTTO_AGENT_RPLY + LOTTO_DEPT + __LOTTO_RELATED + LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS + __LUCKY_WINNER + __NEXT_OF_KIN + __NOT_DEAD_YET + __PCT_OF_PMTS + __SCAM + __SHARE_IT + __THEY_INHERIT +  UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_FUND + __YOUR_PERM + __YOU_WON > 4) && !__THREAD_INDEX_GOOD
+meta      __ADVANCE_FEE_5_NEW  (__AFRICAN_STATE + __ATM_CARD + __BACK_SCRATCH +  __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + __EX_CUSTOMER + __FOUND_YOU + __FRAUD_AON + __FRAUD_AUM + __FRAUD_AXF + __FRAUD_BEP + __FRAUD_BGP + __FRAUD_CKF + __FRAUD_DPR + __FRAUD_FVU + __FRAUD_GBW + __FRAUD_IPK + __FRAUD_IRT + __FRAUD_JNB + __FRAUD_JYG + __FRAUD_MCQ + __FRAUD_MLY + __FRAUD_MQO + __FRAUD_NEB + __FRAUD_QFY + __FRAUD_QXX + __FRAUD_SNT + __FRAUD_ULK + __FRAUD_UOQ + __FRAUD_VQE + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_XJR + __FRAUD_XWW + __FRAUD_YPO + __FRAUD_YQV + __I_INHERIT + __INTL_BANK + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + LOTTO_AGENT + T_LOTTO_AGENT_RPLY + LOTTO_DEPT + __LOTTO_RELATED + T_LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS + __LUCKY_WINNER + __NEXT_OF_KIN + __NOT_DEAD_YET + __PCT_OF_PMTS + __SCAM + __SHARE_IT + __THEY_INHERIT +  UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_FUND + __YOUR_PERM + __YOU_WON > 4) && !__THREAD_INDEX_GOOD
 
 meta      __ADVANCE_FEE_5_NEW_FORM  __FILL_THIS_FORM && __ADVANCE_FEE_5_NEW
 
@@ -4195,7 +4074,7 @@ body     __AFR_UNION      /\bafrican\sunion\b/i
 
 body     __AGREED_RATIO   /\b(?:agreed|sharing)\s(?:ratios?|percent\w+)\b/i
 
-body     __AM_DYING       /\bam\s(?:\S+\s)?dying\b/i
+body     __AM_DYING       /\b(?:am\s(?:\S+\s)?dying|terminally\sill|cancer|en\sphase\sterminale)\b/i
 
 ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 mimeheader __ANY_IMAGE_ATTACH Content-Type =~ /image\/(?:gif|jpeg|png)/
@@ -4211,13 +4090,211 @@ endif
 
 body     __APPROVALFVGT         /approval/i
 
-body     __ATM_CARD       /\b(?:your|the|this|through|via)\s(?:atm|debit|(?:money[\s-]?gram\s)?fast\scash)(?:\smaster|swift)?\scard/i
+body     __ATM_CARD       /\b(?:your|the|this|through|via|by\smeans\sof\|that\sa)\s(?:\w{1,20}\s)?(?:atm|debit|(?:money[\s-]?gram\s)?fast\scash)(?:\smaster|swift|value?|cash)?\scard/i
 
-header		__AXB_LI_CLASS	exists:X-LinkedIn-Class
+ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+  mimeheader   __ATTACH_NAME_NO_EXT Content-Type =~ m,\bname\s?=\s?"(?!=\?)[^."]+",i
+endif
 
-header		__AXB_LI_FBL	exists:X-LinkedIn-fbl
+header __AXB_MO_OL_024C2  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2600\.0000/
 
-header		__AXB_LI_U	List-Unsubscribe =~ /\@em\.linkedin\.com\b/
+header __AXB_MO_OL_07794  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1437/
+
+header __AXB_MO_OL_0ECF8  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2670/
+
+header __AXB_MO_OL_12495  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4522\.1200/
+
+header __AXB_MO_OL_1ECD5  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1081/
+
+header __AXB_MO_OL_22B61  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1158/
+
+header          __AXB_MO_OL_2600  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2600\.0000/
+
+header __AXB_MO_OL_2E645  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1106/
+
+header __AXB_MO_OL_326A6  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.02\.2022/
+
+header __AXB_MO_OL_32D97  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V9\.0\.2416/
+
+header __AXB_MO_OL_335D0  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1106/
+
+header __AXB_MO_OL_35FFA  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1807/
+
+header __AXB_MO_OL_3AC1D  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.00\.2919\.6700/
+
+header __AXB_MO_OL_4204A  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V10\.0\.2627/
+
+header __AXB_MO_OL_4379D  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2180/
+
+header __AXB_MO_OL_44FE0  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2670/
+
+header __AXB_MO_OL_4BF4C  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4522\.1200/
+
+header __AXB_MO_OL_4F240  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1158/
+
+header __AXB_MO_OL_56DF6  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.01/
+
+header __AXB_MO_OL_5933D  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.3790\.1830/
+
+header __AXB_MO_OL_5B79A  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.3790\.1830/
+
+header __AXB_MO_OL_616F8  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1409/
+
+header __AXB_MO_OL_787D6  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.3790\.2663/
+
+header __AXB_MO_OL_79A9A  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.3790\.1830/
+
+header __AXB_MO_OL_7C3E5  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2527/
+
+header __AXB_MO_OL_7EB15  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.0\.6001\.18049/
+
+header __AXB_MO_OL_7F4F5  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.3790\.2663/
+
+header __AXB_MO_OL_8627E  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1437/
+
+header __AXB_MO_OL_8B970  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2180/
+
+header __AXB_MO_OL_8E893  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V10\.0\.2616/
+
+header __AXB_MO_OL_9B90B  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4807\.1700/
+
+header __AXB_MO_OL_A275F  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1506/
+
+header __AXB_MO_OL_A50F8  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4922\.1500/
+
+header __AXB_MO_OL_A6545  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1807/
+
+header __AXB_MO_OL_A7B9C  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1106/
+
+header __AXB_MO_OL_B4B40  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4133\.2400/
+
+header __AXB_MO_OL_B9B11  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2462\.0000/
+
+header __AXB_MO_OL_BC7E6  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4927\.1200/
+
+header __AXB_MO_OL_C0C83  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.3790\.2663/
+
+header __AXB_MO_OL_C1698  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2869/
+
+header __AXB_MO_OL_C3E2E  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.6157/
+
+header __AXB_MO_OL_C95DC  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2905/
+
+header __AXB_MO_OL_C9CC0  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2741\.2600/
+
+header __AXB_MO_OL_CD271  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1478/
+
+header __AXB_MO_OL_DDE5D  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1478/
+
+header __AXB_MO_OL_E023A  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.5512/
+
+header __AXB_MO_OL_E9F46  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V12\.0/
+
+header __AXB_MO_OL_F475E  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2741\.2600/
+
+header __AXB_MO_OL_FB17C  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4807\.1700/
+
+header __AXB_MO_OL_FF5C8  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2741\.2600/
+
+header __AXB_XM_OL_024C2  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2600\.0000/
+
+header __AXB_XM_OL_07794  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
+
+header __AXB_XM_OL_0ECF8  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2900\.2670/
+
+header __AXB_XM_OL_12495  X-Mailer =~ /Microsoft\ Outlook\ Express\ 5\.50\.4522\.1200/
+
+header __AXB_XM_OL_1ECD5  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1081/
+
+header __AXB_XM_OL_22B61  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1158/
+
+header          __AXB_XM_OL_2600  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2600\.0000/
+
+header __AXB_XM_OL_2E645  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
+
+header __AXB_XM_OL_326A6  X-Mailer =~ /Microsoft\-Outlook\-Express\-Macintosh\-Edition\/5\.02\.2022/
+
+header __AXB_XM_OL_32D97  X-Mailer =~ /Microsoft\ Outlook\ IMO\,\ Build\ 9\.0\.2416\ \(9\.0\.2910\.0\)/
+
+header __AXB_XM_OL_335D0  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
+
+header __AXB_XM_OL_35FFA  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
+
+header __AXB_XM_OL_3AC1D  X-Mailer =~ /Microsoft\ Outlook\ Express\ 5\.00\.2919\.6700/
+
+header __AXB_XM_OL_4204A  X-Mailer =~ /Microsoft\ Outlook\,\ Build\ 10\.0\.2627/
+
+header __AXB_XM_OL_4379D  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2900\.2180/
+
+header __AXB_XM_OL_44FE0  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
+
+header __AXB_XM_OL_4BF4C  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
+
+header __AXB_XM_OL_4F240  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
+
+header __AXB_XM_OL_56DF6  X-Mailer =~ /Microsoft\ Outlook\ Express\ Macintosh\ Edition\ \-\ 5\.01\ \(1630\)/
+
+header __AXB_XM_OL_5933D  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
+
+header __AXB_XM_OL_5B79A  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
+
+header __AXB_XM_OL_616F8  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1409/
+
+header __AXB_XM_OL_787D6  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.3790\.2663/
+
+header __AXB_XM_OL_79A9A  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.3790\.1830/
+
+header __AXB_XM_OL_7C3E5  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
+
+header __AXB_XM_OL_7EB15  X-Mailer =~ /Microsoft\ Windows\ Mail\ 6\.0\.6001\.18000/
+
+header __AXB_XM_OL_7F4F5  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
+
+header __AXB_XM_OL_8627E  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1437/
+
+header __AXB_XM_OL_8B970  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
+
+header __AXB_XM_OL_8E893  X-Mailer =~ /Microsoft\ Outlook\,\ Build\ 10\.0\.2616/
+
+header __AXB_XM_OL_9B90B  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
+
+header __AXB_XM_OL_A275F  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1506/
+
+header __AXB_XM_OL_A50F8  X-Mailer =~ /Microsoft\ Outlook\ Express\ 5\.50\.4922\.1500/
+
+header __AXB_XM_OL_A6545  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1807/
+
+header __AXB_XM_OL_A7B9C  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1106/
+
+header __AXB_XM_OL_B4B40  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
+
+header __AXB_XM_OL_B9B11  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2462\.0000/
+
+header __AXB_XM_OL_BC7E6  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
+
+header __AXB_XM_OL_C0C83  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
+
+header __AXB_XM_OL_C1698  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2900\.2869/
+
+header __AXB_XM_OL_C3E2E  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2900\.5512/
+
+header __AXB_XM_OL_C95DC  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2900\.2905/
+
+header __AXB_XM_OL_C9CC0  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2741\.2600/
+
+header __AXB_XM_OL_CD271  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1478/
+
+header __AXB_XM_OL_DDE5D  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
+
+header __AXB_XM_OL_E023A  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2900\.5512/
+
+header __AXB_XM_OL_E9F46  X-Mailer =~ /Microsoft\ Office\ Outlook\ 12\.0/
+
+header __AXB_XM_OL_F475E  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
+
+header __AXB_XM_OL_FB17C  X-Mailer =~ /Microsoft\ Outlook\ Express\ 5\.50\.4807\.1700/
+
+header __AXB_XM_OL_FF5C8  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
 
 body     __BACHELORS            /Bachelor/i
 
@@ -4247,7 +4324,7 @@ body     __CAN_HELP             /can help/
 
 body __CASHPRZ      /cash prize of/
 
-body     __CHARITY        /\bcharit(?:y|[ai]ble)\b/i
+body     __CHARITY        /\b(?:charit(?:y|[ai]ble)|orphans?|homeless|orphelins|sans\sabri)\b/i
 
 body     __COMPENSATION   /\b(?:compensat(?:e|ion)|recompensed?|ausgleich)\b/i
 
@@ -4275,11 +4352,11 @@ body __DBLCLAIM     /avoid double claiming/
 
 body     __DEAD_PARENT    /\b(?:my|meu)\s(?:(?:deceased|dead)\s(?:father|mother|husband)|(?:father|dad|mother|mom|husband|marido)(?:'?s)?\s(?:death|died|passed\saway|murder|was\s(?:killed|murdered|poisoned)|faleceu))/i
 
-body     __DEAL           /\b(?:business|financial|this|the|mutual|die(?:se)?r?|cette|profitable)\s(?:deal|transa[ck]tion|proposal|offer|venture|suggestion|partnership)/i
+body     __DEAL           /\b(?:(?:business|financial|this|the|mutual|die(?:se)?r?|cette|profitable)\s(?:deal|transa[ck]tion|proposal|off[er]{2}|venture|suggestion|partnership)|your\spartnership)/i
 
-body     __DECEASED       /\b(?:the|my|der|du|le|meu)\s(?:deceased|late|verstorbenen|d[\xe9]funt|d[\xc3][\xa9]nt|falecido)\b/i
+body     __DECEASED       /\b(?:the|my|der|du|le|meu?)\s(?:deceased|late|verstorbenen|d[i\xe9]funto?|d[\xc3][\xa9]nt|falecido)\b/i
 
-body     __DESTROY_ME     /\b(?:destroy|hunt)\sm[ey]\b/i
+body     __DESTROY_ME     /\b(?:destroy|hunt|quemar)\sm[eyi]\b/i
 
 body     __DIED_IN        /\bdied\sin\b/i
 
@@ -4404,7 +4481,7 @@ ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 	mimeheader   __EXE_ATTACH        Content-Type =~ /\.exe\b/i
 endif
 
-body     __EX_CUSTOMER    /\b(?:(?:dead|deceased|late|verstorbenen)\s(?:[ck]lient|customer|ac+ount|invest[eo]r|beneficiary|mr\.|kunde|engr?\.?)|titulaire\sdu\scompte\sest\s(?:d[\xe9]c[\xe9]d[\xe9]|d[\xc3][\xa9]c[\xc3][\xa9]d[\xc3][\xa9])|invest[eo]r\sdied|[\xe9]tranger\sd[\xe9]c[\xe9]d[\xe9]|(?:[ck]lient|customer|ac+ount|invest[eo]r|beneficiary|mr\.|kunde|engr?\.?)\s(?:[a-z]{1,10}\s)?(?:dead|deceased|verstorbenen))/i
+body     __EX_CUSTOMER    /\b(?:(?:dead|deceased|late|verstorbenen|death\sof\sthe)\s(?:[ck]lient|customer|ac+ount|invest[eo]r|beneficiary|depositor|mr\.|kunde|engr?\.?)|titulaire\sdu\scompte\sest\s(?:d[\xe9]c[\xe9]d[\xe9]|d[\xc3][\xa9]c[\xc3][\xa9]d[\xc3][\xa9])|invest[eo]r\sdied|[\xe9]tranger\sd[\xe9]c[\xe9]d[\xe9]|(?:[ck]lient|customer|ac+ount|invest[eo]r|beneficiary|mr\.|kunde|engr?\.?)\s(?:[a-z]{1,10}\s)?(?:dead|deceased|verstorbenen))/i
 
 body     __FB_BA                /\bBA\b/
 
@@ -4415,8 +4492,6 @@ body     __FB_BRAND_NAME        /brand name/i
 body     __FB_CONGRADS          /Congratulations/i
 
 body     __FB_DESIGNER          /designer/i
-
-body     __FB_DO_NOT_REPLY      /Do not reply to this address/i
 
 body     __FB_GAME              /game/i
 
@@ -4559,9 +4634,9 @@ meta           __FM_TO_ALL_NUMS     __FROM_ALL_NUMS && __TO_ALL_NUMS
 meta       __FORGED_TBIRD_IMG      __MUA_TBIRD && __JPEG_ATTACH && __MIME_BDRY_0D0D
 describe   __FORGED_TBIRD_IMG      Possibly forged Thunderbird image spam
 
-meta     __FORM_FRAUD_3  (__FILL_THIS_FORM || __FILL_THIS_FORM_SHORT) && (__FRAUD_VQE + __FRAUD_KJV + __FRAUD_IRJ + __FRAUD_NEB + __FRAUD_XJR + __FRAUD_DPR + __FRAUD_BEP + __FRAUD_TDP + __FRAUD_GAN + __FRAUD_IRT + __FRAUD_AON + __FRAUD_WNY + __FRAUD_IPK + __FRAUD_QXX + __FRAUD_IOV + __FRAUD_MLY + __FRAUD_ULK + __FRAUD_BGP + __FRAUD_YWW + __FRAUD_JYG + __FRAUD_XWW + __FRAUD_UUY + __FRAUD_SNT + __FRAUD_JNB + __FRAUD_QFY + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_AUM + __FRAUD_MCQ + __FRAUD_PVN + __FRAUD_FVU + __FRAUD_CKF + __FRAUD_MQO + __FRAUD_TCC + __FRAUD_GBW + __FRAUD_AXF + __FRAUD_THJ + __FRAUD_YQV + __FRAUD_YJA + __FRAUD_YPO + __FRAUD_UOQ + __AFRICAN_STATE + __AGREED_RATIO + __AM_DYING + __ATM_CARD + __BACK_SCRATCH +  __BARRISTER + __BENEFICIARY + __COMPENSATION + __CONTACT_ATTY + __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIED_IN + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + EMRCP + __EX_CUSTOMER + __FEES + __FIFTY_FIFTY + __FOUND_YOU + __FRAUD + __FRAUD_PTX + __HUSH_HUSH + __I_INHERIT + __INHERIT_PMT + __INTL_BANK + __INVEST_COUNTRY + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + __LOTTO_ADMITS + LOTTO_AGENT + LOTTO_DEPT + __LOTTO_RELATED + __LOTTO_VERIFY + LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS + __LUCKY_WINNER + __LUCRATIVE + __MILLIONS + __MY_FORTUNE + __NEXT_OF_KIN + __NOT_DEAD_YET + __NOT_SCAM + __OUR_BEHALF + __SCAM + __SHARE_IT + __SUM_OF_FUND + __SURVIVORS + __THEY_INHERIT + __TRTMT_DEFILED + __TRUNK_BOX +  __UN + UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_BANK + __YOUR_FUND + __YOUR_PERM + __YOUR_PROFIT + __YOU_WON + LOTTO_AGENT_FM + LOTTO_AGENT_RPLY + __PCT_FOR_YOU + __PCT_OF_PMTS + __RANDOM_PICK + __CHARITY > 3)
+meta     __FORM_FRAUD_3  (__FILL_THIS_FORM || __FILL_THIS_FORM_SHORT) && (__FRAUD_VQE + __FRAUD_KJV + __FRAUD_IRJ + __FRAUD_NEB + __FRAUD_XJR + __FRAUD_DPR + __FRAUD_BEP + __FRAUD_TDP + __FRAUD_GAN + __FRAUD_IRT + __FRAUD_AON + __FRAUD_WNY + __FRAUD_IPK + __FRAUD_QXX + __FRAUD_IOV + __FRAUD_MLY + __FRAUD_ULK + __FRAUD_BGP + __FRAUD_YWW + __FRAUD_JYG + __FRAUD_XWW + __FRAUD_UUY + __FRAUD_SNT + __FRAUD_JNB + __FRAUD_QFY + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_AUM + __FRAUD_MCQ + __FRAUD_PVN + __FRAUD_FVU + __FRAUD_CKF + __FRAUD_MQO + __FRAUD_TCC + __FRAUD_GBW + __FRAUD_AXF + __FRAUD_THJ + __FRAUD_YQV + __FRAUD_YJA + __FRAUD_YPO + __FRAUD_UOQ + __AFRICAN_STATE + __AGREED_RATIO + __AM_DYING + __ATM_CARD + __BACK_SCRATCH +  __BARRISTER + __BENEFICIARY + __COMPENSATION + __CONTACT_ATTY + __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIED_IN + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + T_EMRCP + __EX_CUSTOMER + __FEES + __FIFTY_FIFTY + __FOUND_YOU + __FRAUD + __FRAUD_PTX + __HUSH_HUSH + __I_INHERIT + __INHERIT_PMT + __INTL_BANK + __INVEST_COUNTRY + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + __LOTTO_ADMITS + LOTTO_AGENT + LOTTO_DEPT + __LOTTO_RELATED + __LOTTO_VERIFY + T_LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS + __LUCKY_WINNER + __LUCRATIVE + __MILLIONS + __MY_FORTUNE + __NEXT_OF_KIN + __NOT_DEAD_YET + __NOT_SCAM + __OUR_BEHALF + __SCAM + __SHARE_IT + __SUM_OF_FUND + __SURVIVORS + __THEY_INHERIT + __TRTMT_DEFILED + __TRUNK_BOX +  __UN + UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_BANK + __YOUR_FUND + __YOUR_PERM + __YOUR_PROFIT + __YOU_WON + T_LOTTO_AGENT_FM + T_LOTTO_AGENT_RPLY + __PCT_FOR_YOU + __PCT_OF_PMTS + __RANDOM_PICK + __CHARITY > 3)
 
-meta     __FORM_FRAUD_5  (__FILL_THIS_FORM || __FILL_THIS_FORM_SHORT) && (__FRAUD_VQE + __FRAUD_KJV + __FRAUD_IRJ + __FRAUD_NEB + __FRAUD_XJR + __FRAUD_DPR + __FRAUD_BEP + __FRAUD_TDP + __FRAUD_GAN + __FRAUD_IRT + __FRAUD_AON + __FRAUD_WNY + __FRAUD_IPK + __FRAUD_QXX + __FRAUD_IOV + __FRAUD_MLY + __FRAUD_ULK + __FRAUD_BGP + __FRAUD_YWW + __FRAUD_JYG + __FRAUD_XWW + __FRAUD_UUY + __FRAUD_SNT + __FRAUD_JNB + __FRAUD_QFY + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_AUM + __FRAUD_MCQ + __FRAUD_PVN + __FRAUD_FVU + __FRAUD_CKF + __FRAUD_MQO + __FRAUD_TCC + __FRAUD_GBW + __FRAUD_AXF + __FRAUD_THJ + __FRAUD_YQV + __FRAUD_YJA + __FRAUD_YPO + __FRAUD_UOQ + __AFRICAN_STATE + __AGREED_RATIO + __AM_DYING + __ATM_CARD + __BACK_SCRATCH +  __BARRISTER + __BENEFICIARY + __COMPENSATION + __CONTACT_ATTY + __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIED_IN + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + EMRCP + __EX_CUSTOMER + __FEES + __FIFTY_FIFTY + __FOUND_YOU + __FRAUD + __FRAUD_PTX + __HUSH_HUSH + __I_INHERIT + __INHERIT_PMT + __INTL_BANK + __INVEST_COUNTRY + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + __LOTTO_ADMITS + LOTTO_AGENT + LOTTO_DEPT + __LOTTO_RELATED + __LOTTO_VERIFY + LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS + __LUCKY_WINNER + __LUCRATIVE + __MILLIONS + __MY_FORTUNE + __NEXT_OF_KIN + __NOT_DEAD_YET + __NOT_SCAM + __OUR_BEHALF + __SCAM + __SHARE_IT + __SUM_OF_FUND + __SURVIVORS + __THEY_INHERIT + __TRTMT_DEFILED + __TRUNK_BOX +  __UN + UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_BANK + __YOUR_FUND + __YOUR_PERM + __YOUR_PROFIT + __YOU_WON + LOTTO_AGENT_FM + LOTTO_AGENT_RPLY + __PCT_FOR_YOU + __PCT_OF_PMTS + __RANDOM_PICK + __CHARITY > 5)
+meta     __FORM_FRAUD_5  (__FILL_THIS_FORM || __FILL_THIS_FORM_SHORT) && (__FRAUD_VQE + __FRAUD_KJV + __FRAUD_IRJ + __FRAUD_NEB + __FRAUD_XJR + __FRAUD_DPR + __FRAUD_BEP + __FRAUD_TDP + __FRAUD_GAN + __FRAUD_IRT + __FRAUD_AON + __FRAUD_WNY + __FRAUD_IPK + __FRAUD_QXX + __FRAUD_IOV + __FRAUD_MLY + __FRAUD_ULK + __FRAUD_BGP + __FRAUD_YWW + __FRAUD_JYG + __FRAUD_XWW + __FRAUD_UUY + __FRAUD_SNT + __FRAUD_JNB + __FRAUD_QFY + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_AUM + __FRAUD_MCQ + __FRAUD_PVN + __FRAUD_FVU + __FRAUD_CKF + __FRAUD_MQO + __FRAUD_TCC + __FRAUD_GBW + __FRAUD_AXF + __FRAUD_THJ + __FRAUD_YQV + __FRAUD_YJA + __FRAUD_YPO + __FRAUD_UOQ + __AFRICAN_STATE + __AGREED_RATIO + __AM_DYING + __ATM_CARD + __BACK_SCRATCH +  __BARRISTER + __BENEFICIARY + __COMPENSATION + __CONTACT_ATTY + __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIED_IN + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + T_EMRCP + __EX_CUSTOMER + __FEES + __FIFTY_FIFTY + __FOUND_YOU + __FRAUD + __FRAUD_PTX + __HUSH_HUSH + __I_INHERIT + __INHERIT_PMT + __INTL_BANK + __INVEST_COUNTRY + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + __LOTTO_ADMITS + LOTTO_AGENT + LOTTO_DEPT + __LOTTO_RELATED + __LOTTO_VERIFY + T_LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS + __LUCKY_WINNER + __LUCRATIVE + __MILLIONS + __MY_FORTUNE + __NEXT_OF_KIN + __NOT_DEAD_YET + __NOT_SCAM + __OUR_BEHALF + __SCAM + __SHARE_IT + __SUM_OF_FUND + __SURVIVORS + __THEY_INHERIT + __TRTMT_DEFILED + __TRUNK_BOX +  __UN + UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_BANK + __YOUR_FUND + __YOUR_PERM + __YOUR_PROFIT + __YOU_WON + T_LOTTO_AGENT_FM + T_LOTTO_AGENT_RPLY + __PCT_FOR_YOU + __PCT_OF_PMTS + __RANDOM_PICK + __CHARITY > 5)
 
 if can(Mail::SpamAssassin::Conf::feature_bug6558_free)
   body        __FOR_SALE_LTP            /00\.? (?:less 10%|LTP)/i
@@ -4638,7 +4713,9 @@ body __FRAUD_IOV	/\b(?:no risks?|risky?[- ]{0,3}free|free of risks?|100% safe|v.
 
 body __FRAUD_PTX	/\b(?:ass?ass?inat(?:ed|ion)|murder(?:e?d)?|poison(?:e?d)?|kill(?:ed|ing)\b[^.]{0,99}\b(?:war veterans|rebels?))\b/i
 
-body __FRAUD_XWW	/\b(?:honest(?:ly)?\sco(?:-?operat(?:e|ion)|llaborat(?:e|ion))|ehrliche\szusammenarbeit)\b/i
+body __FRAUD_XWW	/\b(?:honest(?:ly)?\sco(?:-?operat(?:e|ion)|llaborat(?:e|ion))|ehrliche\szusammenarbeit|col+aboration\swith\sme)\b/i
+
+header         __FROM_12LTRDOM_1   From =~ /\@(?!facebookmail)[a-z]{12}\./
 
 ifplugin Mail::SpamAssassin::Plugin::FreeMail
   meta         __FROM_41_FREEMAIL         (__NSL_ORIG_FROM_41 || __NSL_RCVD_FROM_41) && (FREEMAIL_FROM || FREEMAIL_REPLYTO) && !__THREADED
@@ -4647,15 +4724,28 @@ endif
 
 header         __FROM_ALL_NUMS      From:addr =~ /^\d+@/
 
+header      __FROM_AMEX          From =~ /american\s?express/i
+
+header      __FROM_BANK_LOOSE    From =~ /ban(?:k|co)/i
+
+header      __FROM_CHASE         From:addr =~ /chase(?:2?-?paymentech)\.com$/i
+
 header __FROM_EBAY	From:addr =~ /\@ebay\.com$/i
 
-header	__FROM_FREEMAIL	From =~ /\@(?:googlemail|gmail|yahoo|hotmail|msn|aol|aim)\./
+header      __FROM_EBAY_LOOSE    From =~ /\be-?bay\b/i
+
+header      __FROM_HSBC          From:addr =~ /\bhsbc\.co\.uk$/i
 
 header   __FROM_ISO_2022_JP     From:raw =~ /=\?ISO-2022-JP\?/
 
 header   __FROM_LEFT_BRACK      From:name =~ /</
 
+header      __FROM_LLOYDSTSB     From:addr =~ /\blloyds(?:tsb)\.(?:co\.uk|com)$/i
+
 header         __FROM_MISSPACED      From =~ /^\s*"[^"]*"</
+
+meta           __FROM_MISSP_DKIM     (__FROM_RUNON && __DKIM_DEPENDABLE)
+tflags         __FROM_MISSP_DKIM     net
 
 meta           __FROM_MISSP_EH_MATCH __FROM_RUNON && __ENV_AND_HDR_FROM_MATCH
 
@@ -4663,17 +4753,25 @@ ifplugin Mail::SpamAssassin::Plugin::FreeMail
   meta         __FROM_MISSP_FREEMAIL __FROM_RUNON && (FREEMAIL_FROM || FREEMAIL_REPLYTO)
 endif
 
+meta        __FROM_MISSP_PHISH   __FROM_MISSPACED && (__FROM_AMEX || __FROM_BANK_LOOSE || __FROM_CHASE || __FROM_EBAY_LOOSE || __FROM_HSBC || __FROM_LLOYDSTSB || __FROM_PAYPAL_LOOSE || __FROM_WELLSFARGO || __FROM_WESTERNUNION)
+
 meta           __FROM_MISSP_REPLYTO  __FROM_RUNON && __REPLYTO_EXISTS
 
 meta           __FROM_MISSP_URI      __FROM_RUNON && __HAS_ANY_URI
 
 header __FROM_PAYPAL	From:addr =~ /\@paypal\.com$/i
 
+header      __FROM_PAYPAL_LOOSE  From:name =~ /paypal/i
+
 header   __FROM_RIGH_BRACK      From:name =~ />/
 
 header         __FROM_RUNON          From =~ /\S+<\w+/
 
 header   __FROM_VEGAS           From =~ /Vegas/i
+
+header      __FROM_WELLSFARGO    From:addr =~ /wellsfargo\.com$/i
+
+header      __FROM_WESTERNUNION  From:addr =~ /westernunion\.com$/i
 
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 body     __FRT_GOLD             /<inter SP2><post P2>\b(?!gold)<G><O><L><D>\b/i
@@ -4687,13 +4785,9 @@ rawbody  __FR_SPACING_8         /[a-z0-9]{6}\s{8}[a-z0-9]{5}/i
 
 header  __FSL_HELO_USER_1   X-Spam-Relays-External =~ / helo=user /i
 
-header 	__FSL_HELO_USER_2   Received =~ /from User(?:\s+by|\s*\(|$)/i
+header  __FSL_HELO_USER_2   Received =~ /from User(?:\s+by|\s*\(|$)/i
 
 header  __FSL_HELO_USER_3   Received =~ /helo(?:=|\s)User/i
-
-header __FSL_UA_1 User-Agent =~ /6\.00\.2600\.000/
-
-header __FSL_UA_2 X-Mailer =~ /6\.00\.2600\.000/
 
 header   __FS_REPLICA           Subject =~ /\breplica\b/i
 
@@ -4705,6 +4799,12 @@ body     __F_LARGE_MONEY        /\d\d\d,\d\d\d/
 
 body     __F_LARGE_MONEY_2      /\d\d?\s?(?:thousand|(?:m|b|tr)illion)/i
 
+meta        __GAPPY_HTML           __MIME_HTML && (__GAPPY_HTML_01 || __GAPPY_HTML_02)
+
+full        __GAPPY_HTML_01        m;</?[a-z]{1,6}(?:\s[^>]{0,40})?>(?:\s|=09){0,80}(?:(?!\d)[\w'()\#,.:!]{1,15}(?:\s|=09){4,80}){7}\S;
+
+full        __GAPPY_HTML_02        m;\S(?:(?:\s|=09){4,80}(?!\d)[\w'()\#,.:!]{1,15}){7}(?:\s|=09){0,5}</?[a-z]{1,6}/?>;
+
 body     __GHANA          /\bghana\b/i
 
 ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
@@ -4715,20 +4815,18 @@ body __HAS_ANY_EMAIL /\w@\S+\.\w/
 
 uri __HAS_ANY_URI   /./
 
-header	__HAS_REPLY_TO	exists:Reply-To
-
 header __HAS_THREAD_INDEX  exists:Thread-Index
 
 body     __HAS_WON_01    /\bque ha ganado\b/i
 
 header         __HDRS_LCASE          ALL =~ /\n(?:Message-id|Content-type|X-MSMail-priority|from|subject|to|cc|Disposition-notification-to):/sm
-tflags         __HDRS_LCASE          multiple maxhits=2
+tflags         __HDRS_LCASE          multiple maxhits=3
 
 meta           __HDRS_LCASE_1K       __HDRS_LCASE && __SINGLE_HEADER_1K
 
-header __HDR_ORDER_FTSDMCXXXX ALL =~ /\nFrom: .{1,80}?\nTo: .{1,80}?\nSubject: .{1,200}?\nDate: .{1,40}?\nMIME-Version: .{1,40}?\nContent-Type: .{1,120}?\nX-Priority: .{1,40}?\nX-MSMail-Priority: .{1,40}?\nX-Mailer: .{1,80}?\nX-MimeOLE:/s
+meta           __HDRS_LCASE_KNOWN    __MSGID_JAVAMAIL || __UA_MSOEMAC || __UA_MSOMAC || __MSGID_APPLEMAIL || __MSGID_HEX_UID || __MSGID_HEXISH
 
-header   __HELO_MISC_IP        	X-Spam-Relays-Untrusted =~ /^[^\]]+ helo=[^a-z\?]\S{0,30}(?:\d{1,3}[^\d]){4}[^\]]+ auth= /i
+header __HDR_ORDER_FTSDMCXXXX ALL =~ /\nFrom: .{1,80}?\nTo: .{1,80}?\nSubject: .{1,200}?\nDate: .{1,40}?\nMIME-Version: .{1,40}?\nContent-Type: .{1,120}?\nX-Priority: .{1,40}?\nX-MSMail-Priority: .{1,40}?\nX-Mailer: .{1,80}?\nX-MimeOLE:/s
 
 header __HELO_NO_DOMAIN   X-Spam-Relays-External =~ /^[^\]]+ helo=[^\.]+ /
 
@@ -4772,7 +4870,13 @@ rawbody __HS_QUOTE /^> /
 
 header __HS_SUBJ_RE_FW Subject =~ /^(?i:re|fw):/
 
-header __HS_SUBJ_UC_FW Subject =~ /^FW:/
+ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+  mimeheader   __HTML_ATTACH_01    Content-Type =~ m,\btext/html\b.+\.html?\b,i
+endif
+
+ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+  mimeheader   __HTML_ATTACH_02    Content-Disposition =~ m,\bfilename="?[^"]+\.html?\b,i
+endif
 
 ifplugin Mail::SpamAssassin::Plugin::HTMLEval
 body __HTML_COMMENT_10000 eval:html_text_match('comment', '(?s)^(?=.{10000})')
@@ -4790,7 +4894,7 @@ ifplugin Mail::SpamAssassin::Plugin::HTMLEval
 body __HTML_COMMENT_50000 eval:html_text_match('comment', '(?s)^(?=(?:.{25000}){2})')
 endif
 
-body     __HUSH_HUSH      /\b(?:confiden[tc]i[ae]l(?:\b|ity\b|it(?:[\xe9]|[\xc3][\xa9]))|private\b|secr[e\xe8](?:te?|cy)\b|sensitive\b|concealed\b|obscured?\b|discre(?:et|tion)\b|top\ssecret|vertraulich(?:en)?\b|geheim\b|priv(?:[\xe9]|[\xc3][\xa9]))/i
+body     __HUSH_HUSH      /\b(?:confiden[tc]i[ae]l(?:\b|ity\b|it(?:[\xe9]|[\xc3][\xa9]))|private\b|secr[e\xe8](?:te?|cy)\b|sensitive\b|concealed\b|obscured?\b|discre(?:et|tion)\b|very\sdiscrete|top\ssecret|vertraulich(?:en)?\b|geheim\b|priv(?:[\xe9]|[\xc3][\xa9]))/i
 
 ifplugin Mail::SpamAssassin::Plugin::ImageInfo
   body       __IMG_LE_300K           eval:pixel_coverage('all',62500,300000)
@@ -4802,9 +4906,17 @@ body     __INTL_BANK      /\b(?:international\s(?:\w+\s)?bank|banque\sinternatio
 
 body     __INVEST_COUNTRY /\binvest\sin\syour?\scountry\b/i
 
-body     __INVEST_MONEY   /\binvest\sthis\smoney\b/i
+body     __INVEST_MONEY   /\binvest(?:ir)?\s(?:this|ces|d[ae]s|sur ce|de ces)\s(?:money|f[ou]nds?)\b/i
 
-body     __IS_LEGAL       /\b(?:this\s(?:deal|offer|transaction|proposal|exchange|arrangement|work)|it)?\sis\s(?:(?:guaranteed|completely|absolutely|perfectly|100%|very|fully)\s)?(?:legal|hitch-free)\b/i
+header      __IRS_FM_DOM         From:addr =~ /\birs\.gov$/
+
+header      __IRS_FM_NAME        From:name =~ /internal\srevenue\sservice/i
+
+header      __IRS_RCVD_DOM       X-Spam-Relays-External =~ / rdns=\S+\birs\.gov /
+
+meta        __IRS_SPOOF          __IRS_FM_NAME && !__IRS_FM_DOM && !__IRS_RCVD_DOM
+
+body     __IS_LEGAL       /\b(?:(?:(this|esta)\s(?:deal|offer|transac[tc]i(?:o|[\xc3][\xb3])n|proposal|exchange|arrangement|work)|it)?\s[ie]s\s(?:(?:guaranteed|completely|absolutely|perfectly|100%|very|fully)\s)?(?:legal|hitch-free|seguro|legitimate)|legitimate\sarrangement)\b/i
 
 body     __IVORY_COAST    /\b(?:Cote\s?D.Ivoire|Ivory\s?Coast|Costa\sde\sMarfil)\b/i
 
@@ -4820,6 +4932,34 @@ endif
 
 ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 mimeheader 	__KAM_BLOCK_UTF7_2     	Content-Type =~ /charset=(?:unicode-\d+-\d+-)?utf-7/i
+endif
+
+ifplugin Mail::SpamAssassin::Plugin::BodyEval
+  if can(Mail::SpamAssassin::Plugin::BodyEval::has_check_body_length)
+        body            __KAM_BODY_LENGTH_LT_1024       eval:check_body_length('1024')
+        describe        __KAM_BODY_LENGTH_LT_1024       The length of the body of the email is less than 1024 bytes.
+endif
+endif
+
+ifplugin Mail::SpamAssassin::Plugin::BodyEval
+  if can(Mail::SpamAssassin::Plugin::BodyEval::has_check_body_length)
+	body            __KAM_BODY_LENGTH_LT_128        eval:check_body_length('128')
+        describe        __KAM_BODY_LENGTH_LT_128        The length of the body of the email is less than 128 bytes.
+endif
+endif
+
+ifplugin Mail::SpamAssassin::Plugin::BodyEval
+  if can(Mail::SpamAssassin::Plugin::BodyEval::has_check_body_length)
+        body            __KAM_BODY_LENGTH_LT_256        eval:check_body_length('256')
+        describe        __KAM_BODY_LENGTH_LT_256        The length of the body of the email is less than 256 bytes.
+endif
+endif
+
+ifplugin Mail::SpamAssassin::Plugin::BodyEval
+  if can(Mail::SpamAssassin::Plugin::BodyEval::has_check_body_length)
+        body            __KAM_BODY_LENGTH_LT_512        eval:check_body_length('512')
+        describe        __KAM_BODY_LENGTH_LT_512        The length of the body of the email is less than 512 bytes.
+endif
 endif
 
 body            __KAM_LOTTO2    /((ticket|serial|lucky) number|secret pin ?code|batch number|reference number|promotion date)/is
@@ -4845,8 +4985,6 @@ endif
 
 uri      __LOANURIFVGT          /\bloa.?ns?\b/i
 
-rawbody  __LONGLINE	/^.{998}[^\r\n]/
-
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
   body     __LOTSA_MONEY_00   /<CURRENCY>[\s\.]?\d[\dO][,\.][\dO]{3}(?:(?!\d)|\b)/
 endif
@@ -4864,7 +5002,7 @@ ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 endif
 
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-  body     __LOTSA_MONEY_04   /(?:\d[\d\.]{0,4}M|million(?!s)|mill<O>n|hund?rea?d(?!s)[^\.]{1,25}thousand(?!s)|cents?[^\.]{1,25}mille|hundert[^\.]{1,30}tausend|ientos?[^\.]{1,20}mil|cent[a-z\s]{1,20}mil\s[a-z]{1,20}centos)[^\.\$]{0,50}(?:(?:U\.?\s?S\.?\s?(?:A\.?\s?)?|united\s?states\s|E\.\s?U\.\s|canad(?:ian|a)\s|ia\sde\s)?d[o\xf3]llare?s?|bucks|USD|GBP|<GB_UK>\spounds?|(?:<GB_UK>\s)?pounds?\ssterling|pounds(?!\sof)|(?:d'\s?)?euros?|francs?)\b/i
+  body     __LOTSA_MONEY_04   /(?:\d[\d\.,]{0,4}(?:M|\smilli?one?s)|million(?!s)|mill<O>n|hund?rea?d(?!s)[^\.]{1,25}thousand(?!s)|cents?[^\.]{1,25}mille|hundert[^\.]{1,30}tausend|ientos?[^\.]{1,20}mil|cent[a-z\s]{1,20}mil\s[a-z]{1,20}centos)[^\.\$]{0,50}?(?:(?:U\.?\s?S\.?\s?(?:A\.?\s?)?|united\s?states\s|E\.\s?U\.\s|canad(?:ian|a)\s|(?:ia\s)?de\s)?d(?:[o\xf3]|[\xc3][\xb3])l+are?s?|bucks|USD|GBP|<GB_UK>\spounds?|(?:<GB_UK>\s)?pounds?\ssterling|pounds(?!\sof)|(?:d'\s?)?euros?|francs?)\b/i
 endif
 
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
@@ -4914,6 +5052,8 @@ header __MAILER_OL_6626 X-Mailer =~ /^Microsoft Outlook, Build 10\.0\.6626$/
 uri	 __MAIL_LINK	/\?.{0,200}\w\@[\w-]{1,20}.\w\w\w?\b/i
 tflags	 __MAIL_LINK	nice
 
+meta           __MANY_HDRS_LCASE     __HDRS_LCASE > 1
+
 header   __MANY_RECIPS          ToCc =~ /(?:\@[^@]{5,30}){3}/
 
 meta           __MANY_SPAN_IN_TEXT   (__SPAN_BEG_TEXT > 4) && (__SPAN_END_TEXT > 4)
@@ -4936,101 +5076,25 @@ header   __MISSING_REPLY	In-Reply-To =~ /^UNSET$/ [if-unset: UNSET]
 
 header __MOLE_2962  X-MimeOLE =~ /^Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2962$/
 
-meta     __MONEY_FRAUD_3  LOTS_OF_MONEY && (__FRAUD_VQE + __FRAUD_KJV + __FRAUD_IRJ + __FRAUD_NEB + __FRAUD_XJR + __FRAUD_DPR + __FRAUD_BEP + __FRAUD_TDP + __FRAUD_GAN + __FRAUD_IRT + __FRAUD_AON + __FRAUD_WNY + __FRAUD_IPK + __FRAUD_QXX + __FRAUD_IOV + __FRAUD_MLY + __FRAUD_ULK + __FRAUD_BGP + __FRAUD_YWW + __FRAUD_JYG + __FRAUD_XWW + __FRAUD_UUY + __FRAUD_SNT + __FRAUD_JNB + __FRAUD_QFY + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_AUM + __FRAUD_MCQ + __FRAUD_PVN + __FRAUD_FVU + __FRAUD_CKF + __FRAUD_MQO + __FRAUD_TCC + __FRAUD_GBW + __FRAUD_AXF + __FRAUD_THJ + __FRAUD_YQV + __FRAUD_YJA + __FRAUD_YPO + __FRAUD_UOQ + __AFRICAN_STATE + __AGREED_RATIO + __AM_DYING + __ATM_CARD + __BACK_SCRATCH +  __BARRISTER + __BENEFICIARY + __COMPENSATION + __CONTACT_ATTY + __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIED_IN + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + EMRCP + __EX_CUSTOMER + __FEES + __FIFTY_FIFTY + __FOUND_YOU + __FRAUD + __FRAUD_PTX + __HUSH_HUSH + __I_INHERIT + __INHERIT_PMT + __INTL_BANK + __INVEST_COUNTRY + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + __LOTTO_ADMITS + LOTTO_AGENT + LOTTO_DEPT + __LOTTO_RELATED + __LOTTO_VERIFY + LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS +  __LUCKY_WINNER + __LUCRATIVE + __MILLIONS + __MY_FORTUNE + __NEXT_OF_KIN + __NOT_DEAD_YET + __NOT_SCAM + __OUR_BEHALF + __SCAM + __SHARE_IT + __SUM_OF_FUND + __SURVIVORS + __THEY_INHERIT + __TRTMT_DEFILED + __TRUNK_BOX +  __UN + UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_BANK + __YOUR_FUND + __YOUR_PERM + __YOUR_PROFIT + __YOU_WON + LOTTO_AGENT_FM + LOTTO_AGENT_RPLY + __PCT_FOR_YOU + __PCT_OF_PMTS + __RANDOM_PICK + __CHARITY > 3)
+meta     __MONEY_FORM        LOTS_OF_MONEY && __FILL_THIS_FORM
 
-meta     __MONEY_FRAUD_5  LOTS_OF_MONEY && (__FRAUD_VQE + __FRAUD_KJV + __FRAUD_IRJ + __FRAUD_NEB + __FRAUD_XJR + __FRAUD_DPR + __FRAUD_BEP + __FRAUD_TDP + __FRAUD_GAN + __FRAUD_IRT + __FRAUD_AON + __FRAUD_WNY + __FRAUD_IPK + __FRAUD_QXX + __FRAUD_IOV + __FRAUD_MLY + __FRAUD_ULK + __FRAUD_BGP + __FRAUD_YWW + __FRAUD_JYG + __FRAUD_XWW + __FRAUD_UUY + __FRAUD_SNT + __FRAUD_JNB + __FRAUD_QFY + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_AUM + __FRAUD_MCQ + __FRAUD_PVN + __FRAUD_FVU + __FRAUD_CKF + __FRAUD_MQO + __FRAUD_TCC + __FRAUD_GBW + __FRAUD_AXF + __FRAUD_THJ + __FRAUD_YQV + __FRAUD_YJA + __FRAUD_YPO + __FRAUD_UOQ + __AFRICAN_STATE + __AGREED_RATIO + __AM_DYING + __ATM_CARD + __BACK_SCRATCH +  __BARRISTER + __BENEFICIARY + __COMPENSATION + __CONTACT_ATTY + __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIED_IN + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + EMRCP + __EX_CUSTOMER + __FEES + __FIFTY_FIFTY + __FOUND_YOU + __FRAUD + __FRAUD_PTX + __HUSH_HUSH + __I_INHERIT + __INHERIT_PMT + __INTL_BANK + __INVEST_COUNTRY + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + __LOTTO_ADMITS + LOTTO_AGENT + LOTTO_DEPT + __LOTTO_RELATED + __LOTTO_VERIFY + LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS +  __LUCKY_WINNER + __LUCRATIVE + __MILLIONS + __MY_FORTUNE + __NEXT_OF_KIN + __NOT_DEAD_YET + __NOT_SCAM + __OUR_BEHALF + __SCAM + __SHARE_IT + __SUM_OF_FUND + __SURVIVORS + __THEY_INHERIT + __TRTMT_DEFILED + __TRUNK_BOX +  __UN + UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_BANK + __YOUR_FUND + __YOUR_PERM + __YOUR_PROFIT + __YOU_WON + LOTTO_AGENT_FM + LOTTO_AGENT_RPLY + __PCT_FOR_YOU + __PCT_OF_PMTS + __RANDOM_PICK + __CHARITY > 5)
+meta     __MONEY_FORM_SHORT  LOTS_OF_MONEY && __FILL_THIS_FORM_SHORT
 
-meta     __MONEY_FRAUD_8  LOTS_OF_MONEY && (__FRAUD_VQE + __FRAUD_KJV + __FRAUD_IRJ + __FRAUD_NEB + __FRAUD_XJR + __FRAUD_DPR + __FRAUD_BEP + __FRAUD_TDP + __FRAUD_GAN + __FRAUD_IRT + __FRAUD_AON + __FRAUD_WNY + __FRAUD_IPK + __FRAUD_QXX + __FRAUD_IOV + __FRAUD_MLY + __FRAUD_ULK + __FRAUD_BGP + __FRAUD_YWW + __FRAUD_JYG + __FRAUD_XWW + __FRAUD_UUY + __FRAUD_SNT + __FRAUD_JNB + __FRAUD_QFY + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_AUM + __FRAUD_MCQ + __FRAUD_PVN + __FRAUD_FVU + __FRAUD_CKF + __FRAUD_MQO + __FRAUD_TCC + __FRAUD_GBW + __FRAUD_AXF + __FRAUD_THJ + __FRAUD_YQV + __FRAUD_YJA + __FRAUD_YPO + __FRAUD_UOQ + __AFRICAN_STATE + __AGREED_RATIO + __AM_DYING + __ATM_CARD + __BACK_SCRATCH +  __BARRISTER + __BENEFICIARY + __COMPENSATION + __CONTACT_ATTY + __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIED_IN + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + EMRCP + __EX_CUSTOMER + __FEES + __FIFTY_FIFTY + __FOUND_YOU + __FRAUD + __FRAUD_PTX + __HUSH_HUSH + __I_INHERIT + __INHERIT_PMT + __INTL_BANK + __INVEST_COUNTRY + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + __LOTTO_ADMITS + LOTTO_AGENT + LOTTO_DEPT + __LOTTO_RELATED + __LOTTO_VERIFY + LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS +  __LUCKY_WINNER + __LUCRATIVE + __MILLIONS + __MY_FORTUNE + __NEXT_OF_KIN + __NOT_DEAD_YET + __NOT_SCAM + __OUR_BEHALF + __SCAM + __SHARE_IT + __SUM_OF_FUND + __SURVIVORS + __THEY_INHERIT + __TRTMT_DEFILED + __TRUNK_BOX +  __UN + UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_BANK + __YOUR_FUND + __YOUR_PERM + __YOUR_PROFIT + __YOU_WON + LOTTO_AGENT_FM + LOTTO_AGENT_RPLY + __PCT_FOR_YOU + __PCT_OF_PMTS + __RANDOM_PICK + __CHARITY > 8)
+meta     __MONEY_FRAUD_3  LOTS_OF_MONEY && (__FRAUD_VQE + __FRAUD_KJV + __FRAUD_IRJ + __FRAUD_NEB + __FRAUD_XJR + __FRAUD_DPR + __FRAUD_BEP + __FRAUD_TDP + __FRAUD_GAN + __FRAUD_IRT + __FRAUD_AON + __FRAUD_WNY + __FRAUD_IPK + __FRAUD_QXX + __FRAUD_IOV + __FRAUD_MLY + __FRAUD_ULK + __FRAUD_BGP + __FRAUD_YWW + __FRAUD_JYG + __FRAUD_XWW + __FRAUD_UUY + __FRAUD_SNT + __FRAUD_JNB + __FRAUD_QFY + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_AUM + __FRAUD_MCQ + __FRAUD_PVN + __FRAUD_FVU + __FRAUD_CKF + __FRAUD_MQO + __FRAUD_TCC + __FRAUD_GBW + __FRAUD_AXF + __FRAUD_THJ + __FRAUD_YQV + __FRAUD_YJA + __FRAUD_YPO + __FRAUD_UOQ + __AFRICAN_STATE + __AGREED_RATIO + __AM_DYING + __ATM_CARD + __BACK_SCRATCH +  __BARRISTER + __BENEFICIARY + __COMPENSATION + __CONTACT_ATTY + __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIED_IN + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + T_EMRCP + __EX_CUSTOMER + __FEES + __FIFTY_FIFTY + __FOUND_YOU + __FRAUD + __FRAUD_PTX + __HUSH_HUSH + __I_INHERIT + __INHERIT_PMT + __INTL_BANK + __INVEST_COUNTRY + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + __LOTTO_ADMITS + LOTTO_AGENT + LOTTO_DEPT + __LOTTO_RELATED + __LOTTO_VERIFY + T_LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS +  __LUCKY_WINNER + __LUCRATIVE + __MILLIONS + __MY_FORTUNE + __NEXT_OF_KIN + __NOT_DEAD_YET + __NOT_SCAM + __OUR_BEHALF + __SCAM + __SHARE_IT + __SUM_OF_FUND + __SURVIVORS + __THEY_INHERIT + __TRTMT_DEFILED + __TRUNK_BOX +  __UN + UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_BANK + __YOUR_FUND + __YOUR_PERM + __YOUR_PROFIT + __YOU_WON + T_LOTTO_AGENT_FM + T_LOTTO_AGENT_RPLY + __PCT_FOR_YOU + __PCT_OF_PMTS + __RANDOM_PICK + __CHARITY > 3)
+
+meta     __MONEY_FRAUD_5  LOTS_OF_MONEY && (__FRAUD_VQE + __FRAUD_KJV + __FRAUD_IRJ + __FRAUD_NEB + __FRAUD_XJR + __FRAUD_DPR + __FRAUD_BEP + __FRAUD_TDP + __FRAUD_GAN + __FRAUD_IRT + __FRAUD_AON + __FRAUD_WNY + __FRAUD_IPK + __FRAUD_QXX + __FRAUD_IOV + __FRAUD_MLY + __FRAUD_ULK + __FRAUD_BGP + __FRAUD_YWW + __FRAUD_JYG + __FRAUD_XWW + __FRAUD_UUY + __FRAUD_SNT + __FRAUD_JNB + __FRAUD_QFY + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_AUM + __FRAUD_MCQ + __FRAUD_PVN + __FRAUD_FVU + __FRAUD_CKF + __FRAUD_MQO + __FRAUD_TCC + __FRAUD_GBW + __FRAUD_AXF + __FRAUD_THJ + __FRAUD_YQV + __FRAUD_YJA + __FRAUD_YPO + __FRAUD_UOQ + __AFRICAN_STATE + __AGREED_RATIO + __AM_DYING + __ATM_CARD + __BACK_SCRATCH +  __BARRISTER + __BENEFICIARY + __COMPENSATION + __CONTACT_ATTY + __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIED_IN + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + T_EMRCP + __EX_CUSTOMER + __FEES + __FIFTY_FIFTY + __FOUND_YOU + __FRAUD + __FRAUD_PTX + __HUSH_HUSH + __I_INHERIT + __INHERIT_PMT + __INTL_BANK + __INVEST_COUNTRY + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + __LOTTO_ADMITS + LOTTO_AGENT + LOTTO_DEPT + __LOTTO_RELATED + __LOTTO_VERIFY + T_LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS +  __LUCKY_WINNER + __LUCRATIVE + __MILLIONS + __MY_FORTUNE + __NEXT_OF_KIN + __NOT_DEAD_YET + __NOT_SCAM + __OUR_BEHALF + __SCAM + __SHARE_IT + __SUM_OF_FUND + __SURVIVORS + __THEY_INHERIT + __TRTMT_DEFILED + __TRUNK_BOX +  __UN + UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_BANK + __YOUR_FUND + __YOUR_PERM + __YOUR_PROFIT + __YOU_WON + T_LOTTO_AGENT_FM + T_LOTTO_AGENT_RPLY + __PCT_FOR_YOU + __PCT_OF_PMTS + __RANDOM_PICK + __CHARITY > 5)
+
+meta     __MONEY_FRAUD_8  LOTS_OF_MONEY && (__FRAUD_VQE + __FRAUD_KJV + __FRAUD_IRJ + __FRAUD_NEB + __FRAUD_XJR + __FRAUD_DPR + __FRAUD_BEP + __FRAUD_TDP + __FRAUD_GAN + __FRAUD_IRT + __FRAUD_AON + __FRAUD_WNY + __FRAUD_IPK + __FRAUD_QXX + __FRAUD_IOV + __FRAUD_MLY + __FRAUD_ULK + __FRAUD_BGP + __FRAUD_YWW + __FRAUD_JYG + __FRAUD_XWW + __FRAUD_UUY + __FRAUD_SNT + __FRAUD_JNB + __FRAUD_QFY + __FRAUD_WDR + __FRAUD_WFC + __FRAUD_AUM + __FRAUD_MCQ + __FRAUD_PVN + __FRAUD_FVU + __FRAUD_CKF + __FRAUD_MQO + __FRAUD_TCC + __FRAUD_GBW + __FRAUD_AXF + __FRAUD_THJ + __FRAUD_YQV + __FRAUD_YJA + __FRAUD_YPO + __FRAUD_UOQ + __AFRICAN_STATE + __AGREED_RATIO + __AM_DYING + __ATM_CARD + __BACK_SCRATCH +  __BARRISTER + __BENEFICIARY + __COMPENSATION + __CONTACT_ATTY + __CONTACT_YOU + __COURIER + __DEAD_PARENT + __DEAL + DEAR_BENEFICIARY + DEAR_WINNER + __DECEASED + __DESTROY_ME + __DIED_IN + __DIPLOMATIC + __DORMANT_ACCT + __EARLY_DEMISE + T_EMRCP + __EX_CUSTOMER + __FEES + __FIFTY_FIFTY + __FOUND_YOU + __FRAUD + __FRAUD_PTX + __HUSH_HUSH + __I_INHERIT + __INHERIT_PMT + __INTL_BANK + __INVEST_COUNTRY + __INVEST_MONEY + __IS_LEGAL + __I_WILL_YOU + __KAM_LOTTO2 + __LOTTO_ADMITS + LOTTO_AGENT + LOTTO_DEPT + __LOTTO_RELATED + __LOTTO_VERIFY + T_LOTTO_URI + __LOTTO_WIN_01 + __LOTTO_WINNINGS +  __LUCKY_WINNER + __LUCRATIVE + __MILLIONS + __MY_FORTUNE + __NEXT_OF_KIN + __NOT_DEAD_YET + __NOT_SCAM + __OUR_BEHALF + __SCAM + __SHARE_IT + __SUM_OF_FUND + __SURVIVORS + __THEY_INHERIT + __TRTMT_DEFILED + __TRUNK_BOX +  __UN + UNCLAIMED_MONEY + __WIDOW + __WILL_LEGAL + __XFER_MONEY + __YOU_ASSIST + __YOU_INHERIT + __YOUR_BANK + __YOUR_FUND + __YOUR_PERM + __YOUR_PROFIT + __YOU_WON + T_LOTTO_AGENT_FM + T_LOTTO_AGENT_RPLY + __PCT_FOR_YOU + __PCT_OF_PMTS + __RANDOM_PICK + __CHARITY > 8)
+
+meta            __MONEY_FROM_41           __NSL_RCVD_FROM_41 && LOTS_OF_MONEY
 
 uri      __MORTURIFVGT          /\bmor.?t\b/i
 
-body     __MOVE_MONEY     /\b(?:(?:receive|re-?profile|transfer(?:ring)?|repatriate|rapatrier|secure|r[\xe9]clamation|possession|virer|dona(?:te|r))\s(?:th(?:e(?:se)?|is)|das|sur ce|de ces|cet|est[ea])|re-?profiling|re-?locat(?:e|ing)(?:\s\w{1,15})?)\s(?:sums?\sof\s)?(?:proceeds|funds?|money|balance|account|g[eo]ld|compte|fond[so]|argent)\b/i
+body     __MOVE_MONEY     /\b(?:(?:receive|re-?profile|transfer(?:ring|t)?|release|repatriate|rapatrier|secure|r[\xe9]clamation|possession|virer|dona(?:te|r)|depositante|dep[\xc3][\xb3]sito)\s(?:th(?:e(?:se)?|is)|d[ae]s|sur ce|de ces|cet|est[ea]|del?)|re-?profiling|re-?locat(?:e|ing)(?:\s\w{1,15})?)\s(?:sums?\sof\s)?(?:proceeds|funds?|money|balance|account|g[eo]ld|compte|fond[so]{1,2}|argent)\b/i
 
-header __MO_OL_015D5  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2905/
+header         __MSGID_HEXISH        Message-ID =~ /^<?OF[0-9A-F]{8}\.[0-9A-F]{8}-ON[0-9A-F]{8}\.[0-9A-F]{8}(?:-[0-9A-F]{8}\.[0-9A-F]{8})?\@/
 
-header __MO_OL_07794  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1437/
-
-header __MO_OL_09BB4  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V4\.72\.3155\.0/
-
-header __MO_OL_1ECD5  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1081/
-
-header __MO_OL_20C99  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V4\.72\.3338\.1/
-
-header __MO_OL_22B61  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1158/
-
-header __MO_OL_25340  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4963\.1700/
-
-header __MO_OL_32D97  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V9\.0\.2416/
-
-header __MO_OL_3857F  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1409/
-
-header __MO_OL_3AC1D  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.00\.2919\.6700/
-
-header __MO_OL_3D61D  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V4\.71\.2244\.8/
-
-header __MO_OL_465CD  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1506/
-
-header __MO_OL_4B815  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V4\.71\.2730\.2/
-
-header __MO_OL_4BF4C  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4522\.1200/
-
-header __MO_OL_4EEDB  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4963\.1700/
-
-header __MO_OL_4F240  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1158/
-
-header __MO_OL_58CB5  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4133\.2400/
-
-header __MO_OL_5B79A  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.3790\.1830/
-
-header __MO_OL_6554A  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2905/
-
-header __MO_OL_72641  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1441/
-
-header __MO_OL_7533E  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4963\.1700/
-
-header __MO_OL_812FF  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4927\.1200/
-
-header __MO_OL_83BF7  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V4\.72\.3110\.3/
-
-header __MO_OL_8627E  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1437/
-
-header __MO_OL_8E893  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V10\.0\.2616/
-
-header __MO_OL_91287  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4807\.2300/
-
-header __MO_OL_9B90B  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4807\.1700/
-
-header __MO_OL_A50F8  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4922\.1500/
-
-header __MO_OL_A842E  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1441/
-
-header __MO_OL_ADFF7  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1158/
-
-header __MO_OL_B30D1  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4807\.2300/
-
-header __MO_OL_B4B40  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4133\.2400/
-
-header __MO_OL_B9B11  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2462\.0000/
-
-header __MO_OL_BC7E6  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4927\.1200/
-
-header __MO_OL_C65FA  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4807\.1700/
-
-header __MO_OL_CAC8F  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V4\.71\.1712\.3/
-
-header __MO_OL_CF0C0  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4807\.2300/
-
-header __MO_OL_EF20B  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2180/
-
-header __MO_OL_EF222  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2873/
-
-header __MO_OL_F3B05  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1437/
-
-header __MO_OL_F475E  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2741\.2600/
-
-header __MO_OL_F6D01  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4522\.1200/
-
-header __MO_OL_FF5C8  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2741\.2600/
+header         __MSGID_HEX_UID       Message-ID =~ /^<?[0-9A-F]{8}\.[0-9A-F]{2,5}%[a-zA-Z]/
 
 header __MSGID_JAVAMAIL	Message-ID =~ /\.JavaMail\./
 tflags __MSGID_JAVAMAIL	nice
@@ -5048,7 +5112,11 @@ body     __MY_FORTUNE     /\b(?:my|his|her)\s(?:fortune|heritage)\b/i
 
 header __NAKED_TO   To =~ /^[^\s<>]+\@[^\s<>]+$/
 
+meta           __NAME_EMAIL_DIFF   __NAME_IS_EMAIL && ! __NAME_EQ_EMAIL
+
 header __NAME_EQ_EMAIL	From:raw =~ /([\w+.-]+\@[\w.-]+\.\w\w+)["'`\s]*<\s*\1>/
+
+header __NAME_IS_EMAIL	From:raw =~ /\w\@[\w.-]+\.\w\w+["'`]*\s*<\w+\@\w/
 
 body     __NEXT_OF_KIN    /\bnext[-\s]of[-\s]kin\b/i
 
@@ -5134,10 +5202,11 @@ ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 endif
 
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-  body     __PCT_OF_PMTS    /<PERCENT>[\s)]+(?:of\s[\w\s]{0,35}?)?of\s(?:the\s)?(?:payments?|rem+it+ances?|chec(?:k|que)s?|mon(?:ey|ies))/i
+  body     __PCT_OF_PMTS    /<PERCENT>[\s)]+(?:of\s[\w\s]{0,35}?)?(?:of|du|de)\s(?:(?:the|la)\s)?(?:total\s)?(?:payments?|rem+it+ances?|capital|chec(?:k|que)s?|mon(?:ey|ies)|suma?)/i
 endif
 
 ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+  mimeheader   __PDF_ATTACH        Content-Type =~ m,\bapplication/pdf\b,i
   meta         __PDF_ATTACH       (__PDF_ATTACH_MT || __PDF_ATTACH_FN1 || __PDF_ATTACH_FN2)
 endif
 
@@ -5193,6 +5262,9 @@ tflags __RCD_RDNS_MAIL_MESSY nice
 header __RCD_RDNS_MTA_MESSY X-Spam-Relays-External =~ /^[^\]]+ rdns=\S*mta/i
 tflags __RCD_RDNS_MTA_MESSY nice
 
+header __RCD_RDNS_MX X-Spam-Relays-External =~ /^[^\]]+ rdns=\S*\bmx[^a-z]/i
+tflags __RCD_RDNS_MX nice
+
 header __RCD_RDNS_MX_MESSY X-Spam-Relays-External =~ /^[^\]]+ rdns=\S*mx/
 tflags __RCD_RDNS_MX_MESSY nice
 
@@ -5206,9 +5278,11 @@ endif
 
 header         __RCVD_ZIXMAIL        X-Spam-Relays-Untrusted =~ / helo=smtpout\.zixmail\.net /
 
-header __REPLYTO_EXISTS             exists:Reply-To
+header __RDNS_NO_SUBDOM	X-Spam-Relays-External =~ /^[^\]]+ rdns=[^. ]*\.\w+ /
 
-header  __REPLY_FREEMAIL Reply-To =~ /\@(?:googlemail|gmail|yahoo|hotmail|msn|aol|aim)\./
+header __RDNS_SHORT	X-Spam-Relays-External =~ /^[^\]]+ rdns=\S{4,14} /
+
+header __REPLYTO_EXISTS             exists:Reply-To
 
 if version >= 3.003000
 ifplugin Mail::SpamAssassin::Plugin::WLBLEval
@@ -5217,8 +5291,6 @@ endif
 endif
 
 body     __SCAM           /\bscam(?:m?e[dr])?s?\b/i
-
-body        __SCANNED_HP           /(?:(?:document was scan+ed and sent ?to you using|Scan from)(?: a)? (?:Hewlet+-Packard |HP ){1,2}Officejet|Hewlet+-Packard Officejet Location: machine location not set)/i
 
 header	 __SENDER_BOT	ALL =~ /(?:not?\W?repl[yi]|bounce|contact|daemon|subscri|report|respon[ds]e?r?s?\b|\b(?:root|news|nobody|agent|(?:post|web)?master|manag|send(?:er|ing)?|out|(?:bot|web|www)\b))[^\@ >]{0,5}s?\@\w/i
 tflags	 __SENDER_BOT	nice
@@ -5259,8 +5331,6 @@ header   __SUBJ_APPROVE         Subject =~ /Approve/i
 
 header         __SUBJ_HAS_FROM_1    ALL =~ /\nFrom:\s+(?:[^\n<]{0,80}<)?([^\n\s>]+)>?\n(?:[^\n]{1,100}\n)*Subject:\s+[^\n]{0,100}\1[>,\s\n]/ism
 
-header         __SUBJ_HAS_TO_1      ALL =~ /\nTo:\s+(?:[^\n<]{0,80}<)?([^\n\s>,]+)>?\n(?:[^\n]{1,100}\n)*Subject:\s+[^\n]{0,100}\1[>,\s\n]/ism
-
 header   __SUBJ_RE		Subject =~ /^R[eE]:/
 
 header   __SUBJ_VEGAS           Subject =~ /(?:Vegas|Casino)/i
@@ -5270,7 +5340,12 @@ tflags	 __SUBSCRIPTION_INFO	nice
 
 body     __SUM_OF_FUND    /\b(?:sum|release|freigabe)\s(?:of|der)\s(?:amount|fund|investment|mittel)\b/i
 
-body     __SURVIVORS      /\b(?:widow|son|daughter|husband|wife|brother|sister|attorney|vi[\xfa]va)\s(?:of|to|do)\s(?:the\s)?(?:late|falecido)\s\w+\b/i
+body     __SURVEY               /\bsurvey\b/i
+
+body     __SURVIVORS      /\b(?:widow|son|daughter|husband|wife|brother|sister|attorney|vi[\xfa]va|esposa)\s(?:of|to|do|de)\s(?:the\s)?(?:late|falecido|finales)\s\w+\b/i
+
+header		__TAB_IN_FROM		From:raw =~ /^\t/s
+describe	__TAB_IN_FROM		From starts with a tab
 
 header         __TB_MIME_BDRY_NO_Z   Content-Type =~ /boundary="-{8,}(?:[1-9]){16}/
 
@@ -5283,20 +5358,10 @@ header __THREAD_INDEX_GOOD  Thread-Index =~ m,^A[a-z0-9][A-Za-z0-9+/]{27}(?:[A-Z
 
 header         __TO_ALL_NUMS        To:addr =~ /^\d+@/
 
-meta           __TO_EQ_FM_DIRECT_MX __TO_EQ_FROM && __DOS_DIRECT_TO_MX
-
-meta           __TO_EQ_FM_DOM_HTML_IMG  __TO_EQ_FROM_DOM && __HTML_LINK_IMAGE
-
-meta           __TO_EQ_FM_DOM_HTML_ONLY __TO_EQ_FROM_DOM && MIME_HTML_ONLY
-
 ifplugin Mail::SpamAssassin::Plugin::SPF
   meta           __TO_EQ_FM_DOM_SPF_FAIL  __TO_EQ_FROM_DOM && SPF_FAIL
   tflags         __TO_EQ_FM_DOM_SPF_FAIL  net
 endif
-
-meta           __TO_EQ_FM_HTML_DIRECT __TO_EQ_FM_DIRECT_MX && MIME_HTML_ONLY
-
-meta           __TO_EQ_FM_HTML_ONLY __TO_EQ_FROM && MIME_HTML_ONLY
 
 ifplugin Mail::SpamAssassin::Plugin::SPF
   meta           __TO_EQ_FM_SPF_FAIL  __TO_EQ_FROM && SPF_FAIL
@@ -5319,17 +5384,15 @@ header         __TO_EQ_FROM_DOM_2   ALL =~ /\nTo:\s+[^\n@]{0,80}@([^\n\s>]+)>?\n
 
 header     __TO_NO_ARROWS_R        To !~ /(?:>$|>,)/
 
-meta       __TO_NO_BRKTS_DIRECT     __TO_NO_ARROWS_R && __DOS_DIRECT_TO_MX
-
 ifplugin Mail::SpamAssassin::Plugin::FreeMail
   meta       __TO_NO_BRKTS_FREEMAIL  __TO_NO_ARROWS_R && (FREEMAIL_FROM || FREEMAIL_REPLYTO)
 endif
 
 meta       __TO_NO_BRKTS_FROM_RUNON  __TO_NO_ARROWS_R && !__TO_UNDISCLOSED && __FROM_RUNON
 
-meta       __TO_NO_BRKTS_MSFT       __TO_NO_ARROWS_R && !__TO_UNDISCLOSED && (__ANY_OUTLOOK_MUA || __HAS_MIMEOLE || __MIMEOLE_MS)
+meta       __TO_NO_BRKTS_HTML_ONLY __TO_NO_ARROWS_R && !__TO_UNDISCLOSED && MIME_HTML_ONLY
 
-meta       __TO_NO_BRKTS_PCNT       __TO_NO_ARROWS_R && __FB_NUM_PERCNT
+meta       __TO_NO_BRKTS_MSFT       __TO_NO_ARROWS_R && !__TO_UNDISCLOSED && (__ANY_OUTLOOK_MUA || __HAS_MIMEOLE || __MIMEOLE_MS)
 
 header     __TO_UNDISCLOSED        To =~ /(?:undisclosed-recipients|destinataires inconnus):/i
 
@@ -5400,9 +5463,17 @@ body __TVD_PH_BODY_07		/\bguarantee the safety of your (?:[a-z_,-]+ )*?account/i
 
 body __TVD_PH_BODY_08		/\bmultiple password failures/i
 
+body __TVD_PH_BODY_ACCOUNTS_PRE		/\baccounts? (?:[a-z_,-]+ )+?(?:record[a-z]*|suspen[a-z]+|notif(?:y|ication)|updated|verifications?|credited)\b/i
+
+meta __TVD_PH_BODY_META		__TVD_PH_BODY_01 || __TVD_PH_BODY_02 || __TVD_PH_BODY_03 || __TVD_PH_BODY_04 || __TVD_PH_BODY_05 || __TVD_PH_BODY_06 || __TVD_PH_BODY_07 || __TVD_PH_BODY_08
+
 header   __UA_GNUS		User-Agent =~ /^Gnus/
 
 header   __UA_KNODE		User-Agent =~ /^KNode/
+
+header   __UA_MSOEMAC		User-Agent =~ /^Microsoft-Outlook-Express-Mac/
+
+header         __UA_MSOMAC           User-Agent =~ /^Microsoft-MacOutlook\/(?:\d+\.){3}/
 
 header   __UA_MUTT		User-Agent =~ /^Mutt/
 
@@ -5418,7 +5489,14 @@ tflags	 __UNSUB_EMAIL	nice
 uri	 __UNSUB_LINK	/\b(?:(?:un)?subscri(?:ber?|ptions?)|abuses?|opt(?:ing)?.?out)\b/i
 tflags	 __UNSUB_LINK	nice
 
-body          __URI_OBFU_TLD    /\.\s(?:c\so\sm|n\se\st|o\sr\sg|b\si\sz|i\sn\sf\so)/i
+uri         __UPPERCASE_URI        /^[^:A-Z]+[A-Z]/
+
+uri            __URI_12LTRDOM      m,://(?:[^./]+\.)*[a-z]{12}\.[^./]+/,
+
+uri         __URI_MAILTO              /^mailto:/
+tflags      __URI_MAILTO              multiple maxhits=16
+
+meta        __URI_MAILTO_MANY         __URI_MAILTO > 15
 
 header __VACATION Subject =~ /\b(?:vacatio|away|out.of.offic|auto.?re|confirm)/i
 tflags __VACATION nice
@@ -5473,7 +5551,7 @@ body __V_USCAVANITY	/\bUS Commerce Association/
 
 body __V_WHOSWHO		/\bWho.s Who\b/
 
-body     __WIDOW          /\bwidow(?:e[rd])'?s?\b/i
+body     __WIDOW          /\b(?:widow(?:e[rd])'?s?|veuve)\b/i
 
 body     __WILL_LEGAL     /\b(?:codicil|last\stestament|probate|executor|intestate|bequest|mandamus)\b/i
 
@@ -5491,101 +5569,15 @@ header   __XM_MSOE6		X-Mailer =~ /^Microsoft Outlook Express 6/
 
 header __XM_MS_IN_GENERAL     X-Mailer =~ /\bMSCRM\b|Microsoft (?:CDO|Outlook|Office Outlook)\b/
 
-header __XM_OL_015D5  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
-
-header __XM_OL_07794  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
-
-header __XM_OL_09BB4  X-Mailer =~ /Microsoft\ Outlook\ Express\ 4\.72\.3155\.0/
-
 header __XM_OL_10_0_4115    X-Mailer =~ /^Microsoft Outlook, Build 10.0.4115$/
-
-header __XM_OL_1ECD5  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1081/
-
-header __XM_OL_20C99  X-Mailer =~ /Microsoft\ Outlook\ Express\ 4\.72\.3338\.1/
-
-header __XM_OL_22B61  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1158/
-
-header __XM_OL_25340  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
 
 header __XM_OL_28001441    X-Mailer =~ /^Microsoft Outlook Express 6.00.2800.1441$/
 
 header __XM_OL_28004682    X-Mailer =~ /^Microsoft Outlook Express 6.00.2800.4682$/
 
-header __XM_OL_32D97  X-Mailer =~ /Microsoft\ Outlook\ IMO\,\ Build\ 9\.0\.2416\ \(9\.0\.2910\.0\)/
-
-header __XM_OL_3857F  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
-
-header __XM_OL_3AC1D  X-Mailer =~ /Microsoft\ Outlook\ Express\ 5\.00\.2919\.6700/
-
-header __XM_OL_3D61D  X-Mailer =~ /Microsoft\ Outlook\ Express\ 4\.71\.2244\.8/
-
-header __XM_OL_465CD  X-Mailer =~ /Microsoft\ Outlook\,\ Build\ 10\.0\.3416/
-
 header __XM_OL_48072300    X-Mailer =~ /^Microsoft Outlook Express 5.50.4807.2300$/
 
-header __XM_OL_4B815  X-Mailer =~ /Microsoft\ Outlook\ Express\ 4\.71\.2730\.2/
-
-header __XM_OL_4BF4C  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
-
-header __XM_OL_4EEDB  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
-
-header __XM_OL_4F240  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
-
 header __XM_OL_4_72_2106_4  X-Mailer =~ /^Microsoft Outlook Express 4.72.2106.4$/
-
-header __XM_OL_58CB5  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
-
-header __XM_OL_5B79A  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
-
-header __XM_OL_6554A  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
-
-header __XM_OL_72641  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1441/
-
-header __XM_OL_7533E  X-Mailer =~ /Microsoft\ Outlook\ Express\ 5\.50\.4963\.1700/
-
-header __XM_OL_812FF  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
-
-header __XM_OL_83BF7  X-Mailer =~ /Microsoft\ Outlook\ Express\ 4\.72\.3110\.3/
-
-header __XM_OL_8627E  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1437/
-
-header __XM_OL_8E893  X-Mailer =~ /Microsoft\ Outlook\,\ Build\ 10\.0\.2616/
-
-header __XM_OL_91287  X-Mailer =~ /Microsoft\ Outlook\ Express\ 5\.50\.4807\.2300/
-
-header __XM_OL_9B90B  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
-
-header __XM_OL_A50F8  X-Mailer =~ /Microsoft\ Outlook\ Express\ 5\.50\.4922\.1500/
-
-header __XM_OL_A842E  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1158/
-
-header __XM_OL_ADFF7  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
-
-header __XM_OL_B30D1  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
-
-header __XM_OL_B4B40  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
-
-header __XM_OL_B9B11  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2462\.0000/
-
-header __XM_OL_BC7E6  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
-
-header __XM_OL_C65FA  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
-
-header __XM_OL_CAC8F  X-Mailer =~ /Microsoft\ Outlook\ Express\ 4\.71\.1712\.3/
-
-header __XM_OL_CF0C0  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
-
-header __XM_OL_EF20B  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1478/
-
-header __XM_OL_EF222  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2900\.2873/
-
-header __XM_OL_F3B05  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
-
-header __XM_OL_F475E  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
-
-header __XM_OL_F6D01  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
-
-header __XM_OL_FF5C8  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
 
 header __XM_OUTLOOK_EXPRESS    X-Mailer =~ /^Microsoft Outlook Express \d/
 
@@ -5624,3 +5616,7 @@ body     __YOU_WON_02    /\bw[io]n\s(?:(?:for|by)\s)?your?\b/i
 body     __YOU_WON_03    /\b(?:your?|win+ing|win+ers?|beneficiaries|participants?|individuals?|address(?:es)?|accounts?|emails?)(?:\s[-a-z\s]{4,40})?\s(?:w(?:ere|as)|ha(?:ve|s) be(?:en)?)\s(?:automatically\s)?(?:(?:randomly|raffly)\s(?:selected|cho+sen|cho+sing|picked)|(?:selected|cho+sen|cho+sing|picked)\s(?:[a-z\s]{2,40}?\srandom(?:ly)?|online|lottery|computer\s(?:ballot|wahlgang)))/i 
 
 meta     __YOU_WON_SOMTIN       (__YOU_HAVE_WON || __FB_CONGRADS)
+
+ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
+  mimeheader   __ZIP_ATTACH_NOFN   Content-Type =~ m,\bapplication/zip[;\s]*$,i
+endif

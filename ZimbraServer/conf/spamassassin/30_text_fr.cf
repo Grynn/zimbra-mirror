@@ -14,9 +14,9 @@
 # The ASF licenses this file to you under the Apache License, Version 2.0
 # (the "License"); you may not use this file except in compliance with
 # the License.  You may obtain a copy of the License at:
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -70,6 +70,7 @@ lang fr unsafe-report dur, et de l'afficher ensuite avec un éditeur de texte.
 
 #############
 # 23_bayes.cf
+ifplugin Mail::SpamAssassin::Plugin::Bayes
 lang fr describe BAYES_00	L'algorithme Bayésien a évalué la probabilité de spam entre 0 et 1%
 lang fr describe BAYES_05	L'algorithme Bayésien a évalué la probabilité de spam entre 1 et 5%
 lang fr describe BAYES_20	L'algorithme Bayésien a évalué la probabilité de spam entre 5 et 20%
@@ -79,6 +80,7 @@ lang fr describe BAYES_60	L'algorithme Bayésien a évalué la probabilité de spam 
 lang fr describe BAYES_80	L'algorithme Bayésien a évalué la probabilité de spam entre 80 et 95%
 lang fr describe BAYES_95	L'algorithme Bayésien a évalué la probabilité de spam entre 95 et 99%
 lang fr describe BAYES_99	L'algorithme Bayésien a évalué la probabilité de spam entre 99 et 100%
+endif
 
 lang fr describe ACT_NOW_CAPS		Demande d'agir immédiatement (en majuscules)
 lang fr describe BAD_CREDIT		Contient "Eliminate Bad Credit"
@@ -239,7 +241,7 @@ lang fr describe SUBJ_AS_SEEN		Le sujet contient "As Seen" (généralement "vu à l
 lang fr describe SUBJ_BUY               Le sujet commence par "Buy, Buying" (achetez, achat)
 lang fr describe SUBJ_DOLLARS           Le sujet commence par une somme en dollars
 lang fr describe SUBJ_ILLEGAL_CHARS	Subject: contient trop de caractères bruts invalides
-lang fr describe SUBJ_YOUR_DEBT		Le sujet contient "Your Bills" (vos factures) ou similaire
+#lang fr describe SUBJ_YOUR_DEBT		Le sujet contient "Your Bills" (vos factures) ou similaire
 lang fr describe SUBJ_YOUR_FAMILY	Le sujet contient "Your Family" (votre famille)
 lang fr describe SUSPICIOUS_RECIPS	L'en-tête To: contient plus de dix fois le même nom de domaine
 lang fr describe TO_MALFORMED		L'en-tête To: contient une adresse mal formée

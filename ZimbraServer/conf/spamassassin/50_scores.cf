@@ -181,7 +181,6 @@ score FH_HELO_ALMOST_IP 3.699 3.268 3.457 0.688 # n=2
 score FH_HELO_ENDS_DOT 0 # n=0 n=1 n=2 n=3
 score FH_HELO_EQ_610HEX 0 # n=0 n=1 n=2 n=3
 score FH_HELO_EQ_CHARTER 0.607 0.286 0.093 2.683 # n=2
-score FH_HELO_EQ_D_D_D_D 2.361 1.117 2.815 3.177 # n=2
 score FH_HELO_GMAILSMTP 0 # n=0 n=1 n=2 n=3
 score FH_HOST_EQ_DYNAMICIP 2.632 2.454 3.299 3.298 # n=2
 score FH_HOST_EQ_PACBELL_D 0.001 0.927 0.559 1.703 # n=2
@@ -219,7 +218,6 @@ score FM_ROLEX_ADS 0 # n=0 n=1 n=2 n=3
 score FM_SCHOOLING 2.357 1.651 3.276 2.132 # n=2
 score FM_SCHOOL_DIPLOMA 2.399 1.287 0.625 0.277 # n=2
 score FM_SCHOOL_TYPES 0 # n=0 n=1 n=2 n=3
-score FM_SEX_HELODDDD 0.233 1.085 1.915 0.053 # n=2
 score FM_SUBJ_APPROVE 1.664 1.464 1.323 0.269 # n=1
 score FM_TRUE_LOV_ALL_N 0 # n=0 n=1 n=2 n=3
 score FM_VEGAS_CASINO 3.399 0.748 3.186 0.851 # n=1
@@ -344,19 +342,6 @@ score HIGH_CODEPAGE_URI 0 # n=0 n=1 n=2
 score HK_LOTTO 3.599 2.755 2.993 3.599
 score HK_NAME_DRUGS 4.299 0.001 3.077 0.552
 score HK_RANDOM_ENVFROM 2.638 0.626 1.798 0.001
-score HS_BOBAX_MID_2 2.762 2.612 1.243 1.437
-score HS_BODY_UPLOADED_SOFTWARE 0 # n=0 n=1 n=2 n=3
-score HS_DRUG_DOLLAR_1 0.001 # n=0 n=1 n=2 n=3
-score HS_DRUG_DOLLAR_2 0.001 # n=0 n=1 n=2 n=3
-score HS_DRUG_DOLLAR_3 0.001 # n=0 n=1 n=2 n=3
-score HS_DRUG_DOLLAR_MANY 0 # n=0 n=1 n=2 n=3
-score HS_FORGED_OE_FW 0.482 2.252 1.565 2.011 # n=2
-score HS_GETMEOFF 0 # n=0 n=1 n=2 n=3
-score HS_INDEX_PARAM 1.105 0.023 1.203 0.574 # n=1
-score HS_MEETUP_FOR_SEX 0 # n=0 n=1 n=2 n=3
-score HS_SUBJ_NEW_SOFTWARE 0 # n=0 n=1 n=2 n=3
-score HS_SUBJ_ONLINE_PHARMACEUTICAL 0 # n=0 n=1 n=2 n=3
-score HS_VPXL 3.211 1.399 2.696 1.948
 score HTML_MIME_NO_HTML_TAG 0.001 0.635 0.001 0.377
 score HTML_MISSING_CTYPE 0 # n=0 n=1 n=2 n=3
 score HTML_SHORT_CENTER 3.799 3.421 2.611 0.743
@@ -503,7 +488,7 @@ score SUBJECT_SEXUAL 0 # n=0 n=1 n=2 n=3
 score SUBJ_AS_SEEN 2.711 3.099 3.099 1.461 # n=0
 score SUBJ_BUY 0.594 1.498 0.001 0.639
 score SUBJ_DOLLARS 0.600 0.001 0.601 1.800
-score SUBJ_YOUR_DEBT 3.299 3.045 1.199 0.987
+#score SUBJ_YOUR_DEBT 3.299 3.045 1.199 0.987
 score SUBJ_YOUR_FAMILY 2.910 2.999 2.999 2.999
 score TBIRD_SUSP_MIME_BDRY 2.400 2.400 2.399 2.399
 score THEBAT_UNREG 2.599 1.843 2.324 1.524
@@ -557,49 +542,6 @@ score VIA_GAP_GRA 0 # n=0 n=1 n=2 n=3
 score WEIRD_PORT 0.001 0.001 0.097 0.001
 score WEIRD_QUOTING 0.001 0.001 0.001 0.001
 score WITH_LC_SMTP 0 # n=0 n=1 n=2 n=3
-score XMAILER_MIMEOLE_OL_015D5 2.358 0.123 1.311 1.206 # n=2
-score XMAILER_MIMEOLE_OL_07794 1.918 2.399 2.283 1.312 # n=2
-score XMAILER_MIMEOLE_OL_09BB4 1.296 0.375 1.528 0.001 # n=2
-score XMAILER_MIMEOLE_OL_1ECD5 2.300 2.448 2.204 2.772 # n=2
-score XMAILER_MIMEOLE_OL_20C99 2.599 0.001 2.018 0.671 # n=2
-score XMAILER_MIMEOLE_OL_22B61 3.199 3.199 3.199 3.159 # n=2
-score XMAILER_MIMEOLE_OL_25340 2.415 1.777 0.971 1.556 # n=2
-score XMAILER_MIMEOLE_OL_32D97 0 # n=0 n=1 n=2 n=3
-score XMAILER_MIMEOLE_OL_3857F 1.134 2.360 0.790 1.639 # n=2
-score XMAILER_MIMEOLE_OL_3AC1D 3.399 3.399 1.225 2.273 # n=2
-score XMAILER_MIMEOLE_OL_3D61D 2.599 0.838 1.615 2.305 # n=2
-score XMAILER_MIMEOLE_OL_465CD 0 # n=0 n=1 n=2 n=3
-score XMAILER_MIMEOLE_OL_4B815 2.497 1.907 2.080 1.591 # n=2
-score XMAILER_MIMEOLE_OL_4BF4C 2.499 1.558 2.499 0.768 # n=2
-score XMAILER_MIMEOLE_OL_4EEDB 2.499 0.652 1.805 0.385 # n=2
-score XMAILER_MIMEOLE_OL_4F240 2.096 0.351 2.227 1.852 # n=2
-score XMAILER_MIMEOLE_OL_58CB5 2.005 1.162 2.079 1.917 # n=2
-score XMAILER_MIMEOLE_OL_5B79A 1.581 1.913 0.959 0.076 # n=2
-score XMAILER_MIMEOLE_OL_6554A 2.499 0.535 2.221 2.437 # n=2
-score XMAILER_MIMEOLE_OL_72641 0 # n=0 n=1 n=2 n=3
-score XMAILER_MIMEOLE_OL_7533E 2.699 2.022 1.890 2.283 # n=2
-score XMAILER_MIMEOLE_OL_812FF 2.499 2.223 2.026 0.612 # n=2
-score XMAILER_MIMEOLE_OL_83BF7 2.599 1.242 2.599 1.212 # n=2
-score XMAILER_MIMEOLE_OL_8627E 2.549 2.550 2.531 2.422 # n=2
-score XMAILER_MIMEOLE_OL_8E893 0 # n=0 n=1 n=2 n=3
-score XMAILER_MIMEOLE_OL_91287 2.522 2.417 1.544 1.873 # n=2
-score XMAILER_MIMEOLE_OL_9B90B 2.499 1.615 2.499 2.056 # n=2
-score XMAILER_MIMEOLE_OL_A50F8 0 # n=0 n=1 n=2 n=3
-score XMAILER_MIMEOLE_OL_A842E 0 # n=0 n=1 n=2 n=3
-score XMAILER_MIMEOLE_OL_ADFF7 1.652 2.389 1.949 0.245 # n=2
-score XMAILER_MIMEOLE_OL_B30D1 2.599 2.103 1.644 1.425 # n=2
-score XMAILER_MIMEOLE_OL_B4B40 2.168 1.820 2.255 1.825 # n=2
-score XMAILER_MIMEOLE_OL_B9B11 0 # n=0 n=1 n=2 n=3
-score XMAILER_MIMEOLE_OL_BC7E6 1.588 0.402 1.313 0.807 # n=2
-score XMAILER_MIMEOLE_OL_C65FA 2.237 1.313 1.593 1.527 # n=2
-score XMAILER_MIMEOLE_OL_CAC8F 1.431 1.729 0.712 1.577 # n=2
-score XMAILER_MIMEOLE_OL_CF0C0 2.499 0.831 0.576 0.324 # n=2
-score XMAILER_MIMEOLE_OL_EF20B 0 # n=0 n=1 n=2 n=3
-score XMAILER_MIMEOLE_OL_EF222 0 # n=0 n=1 n=2 n=3
-score XMAILER_MIMEOLE_OL_F3B05 2.499 1.219 2.176 1.873 # n=2
-score XMAILER_MIMEOLE_OL_F475E 2.499 1.124 2.271 0.142 # n=2
-score XMAILER_MIMEOLE_OL_F6D01 2.499 1.773 1.190 2.162 # n=2
-score XMAILER_MIMEOLE_OL_FF5C8 2.499 1.804 2.239 1.134 # n=2
 score X_IP 0.001 0.001 0.001 0.001
 score X_MAILER_CME_6543_MSN 2.886 2.004 3.002 3.348
 score X_MESSAGE_INFO 0 # n=0 n=1 n=2 n=3
@@ -742,15 +684,6 @@ score DNS_FROM_AHBL_RHSBL 0 2.438 0 2.699 # n=0 n=2
 score NO_DNS_FOR_FROM 0 0.379 0 0.001 # n=0 n=2
 # </gen:mutable>
 
-# rfc-ignorant.org, disabled May 2011 due to poor hit rate and accuracy:
-# https://issues.apache.org/SpamAssassin/show_bug.cgi?id=6526
-score DNS_FROM_RFC_BOGUSMX 0
-score DNS_FROM_RFC_DSN 0
-
-# Spamhaus CSS does not appear in masschecks thus cannot be
-# scored by automated means.  Set an explicit score.
-score RCVD_IN_CSS 0 1.0 0 1.0
-
 # ReturnPath Certified
 # http://www.returnpath.net/internetserviceprovider/certification/
 # CERTIFIED is a subset of SAFE, thus the score is cumulative.
@@ -758,7 +691,7 @@ score RCVD_IN_CSS 0 1.0 0 1.0
 score RCVD_IN_RP_CERTIFIED 0.0 -3.0 0.0 -3.0
 score RCVD_IN_RP_SAFE 0.0 -2.0 0.0 -2.0
 
-# DNSWL is a commercial service that requires payment for servers over 100K queries daily. 
+# DNSWL is a commercial service that requires payment for servers over 100K queries daily.
 # Unfortunately, they will return true answers for DNS servers they consider abusive so
 # SA Admins must enable these rules manually.
 #
@@ -1018,10 +951,11 @@ ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
 # <gen:mutable>
 score URIBL_AB_SURBL 0 4.499 0 4.499 # n=0 n=2
 score URIBL_JP_SURBL 0 1.948 0 1.250 # n=0 n=2
-score URIBL_OB_SURBL 0 0.785 0 0.122 # n=0 n=2
+#score URIBL_OB_SURBL 0 0.785 0 0.122 # n=0 n=2 REMOVED BUG 6853
 score URIBL_PH_SURBL 0 0.001 0 0.610 # n=0 n=2
 score URIBL_RHS_DOB 0 0.276 0 1.514 # n=0 n=2
 score URIBL_SBL 0 0.644 0 1.623 # n=0 n=2
+score URIBL_SBL_A 0 0.1 0 0.1
 score URIBL_SC_SURBL 0 0.001 0 0.568 # n=0 n=2
 score URIBL_WS_SURBL 0 1.659 0 1.608 # n=0 n=2
 score URIBL_BLACK 0 1.775 0 1.725 # n=0 n=2
@@ -1124,10 +1058,12 @@ endif # Mail::SpamAssassin::Plugin::AntiVirus
 # to detect messages that hit ANY_BOUNCE_MESSAGE, and filter them aside
 # as spurious bounces.
 #
+ifplugin Mail::SpamAssassin::Plugin::VBounce
 score BOUNCE_MESSAGE     0.1
 score CRBOUNCE_MESSAGE   0.1
 score VBOUNCE_MESSAGE    0.1
 score ANY_BOUNCE_MESSAGE 0.1
+endif # Mail::SpamAssassin::Plugin::VBounce
 
 # another informational rule: this is for C/R responses to mail the user
 # really did sent -- the opposite of CRBOUNCE_MESSAGE.  some users might
