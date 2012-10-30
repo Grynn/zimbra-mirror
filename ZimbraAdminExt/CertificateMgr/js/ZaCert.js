@@ -271,7 +271,8 @@ if(ZaTabView.XFormModifiers["ZaHomeXFormView"]) {
         if (serverList.size() > 0) {
             var lastServer = serverList.getVector().getLast();
             var certServerList = ZaApp.getInstance().getCertsServerListController();
-            ZaCert.launchNewCertWizard.call (certServerList, lastServer.id) ;
+	        ZaApp.getInstance().getCertsServerListController().show(serverList);
+	       ZaCert.launchNewCertWizard.call (certServerList, lastServer.id) ;
         }
     }
 
