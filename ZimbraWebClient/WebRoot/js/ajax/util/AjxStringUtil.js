@@ -262,6 +262,7 @@ AjxStringUtil.HTML_QUOTE_NONPREFIX_POST	= '</div><br/>';
  * @param {string}      after				text to append to final result
  * @param {boolean}		preserveReturns		if true, don't combine small lines
  * @param {boolean}		isHeaders			if true, we are wrapping a block of email headers
+ * @param {boolean}		isFlowed			format text for display as flowed (RFC 3676)
  *
  * @return	{string}	the wrapped/quoted text
  */
@@ -273,6 +274,7 @@ function(params) {
 	var text = params.text;
 	var before = params.before || "";
 	var after = params.after || "";
+	var isFlowed = params.isFlowed;
 
 	// For HTML, just surround the content with the before and after, which is
 	// typically a block-level element that puts a border on the left
@@ -290,8 +292,8 @@ function(params) {
 	var words = [];
 
 	// Divides lines into words. Each word is part of a hash that also has
-	// the word's prefix, whether it's a paragraph break, and whether it's
-	// special (cannot be wrapped into a previous line)
+	// the word's prefix, whether it's a paragraph break, and whether it
+	// needs to be preserved at the start or end of a line.
 	for (var l = 0, llen = lines.length; l < llen; l++) {
 		var line = lines[l];
 		// get this line's prefix
@@ -303,14 +305,25 @@ function(params) {
 		if (AjxStringUtil._NON_WHITESPACE.test(line)) {
 			var wds = AjxStringUtil.splitKeepLeadingWhitespace(line);
 			if (wds && wds[0] && wds[0].length) {
-				var isSpecial = AjxStringUtil.MSG_SEP_RE.test(line) || AjxStringUtil.COLON_RE.test(line) ||
-								AjxStringUtil.HDR_RE.test(line) || AjxStringUtil.SIG_RE.test(line);
+				var mustStart = AjxStringUtil.MSG_SEP_RE.test(line) || AjxStringUtil.COLON_RE.test(line) ||
+								AjxStringUtil.HDR_RE.test(line) || params.isHeaders || AjxStringUtil.SIG_RE.test(line);
+				var mustEnd = params.preserveReturns;
+				if (isFlowed) {
+					var m = line.match(/( +)$/);
+					if (m) {
+						wds[wds.length - 1] += m[1];	// preserve trailing space at end of line
+						mustEnd = false;
+					}
+					else {
+						mustEnd = true;
+					}
+				}
 				for (var w = 0, wlen = wds.length; w < wlen; w++) {
 					words.push({
 						w:			wds[w],
 						prefix:		prefix,
-						special:	w === 0 && (isSpecial || params.isHeaders),
-						lastWord:	params.preserveReturns && (w === wlen - 1)
+						mustStart:	(w === 0) && mustStart,
+						mustEnd:	(w === wlen - 1) && mustEnd
 					});
 				}
 			}
@@ -324,7 +337,7 @@ function(params) {
 	}
 
 	// Take the array of words and put them back together. We break for a new line
-	// when we hit the max line length, change prefixes, or hit a special word.
+	// when we hit the max line length, change prefixes, or hit a word that must start a new line.
 	var result = "", curLen = 0, wds = [], curPrefix = null;
 	for (var i = 0, len = words.length; i < len; i++) {
 		var word = words[i];
@@ -347,13 +360,13 @@ function(params) {
 			wds = [];
 			curLen = 0;
 			curPrefix = null;
-		} else if ((pl + curLen + w.length <= max) && (prefix === curPrefix || curPrefix === null) && !word.special) {
+		} else if ((pl + curLen + w.length <= max) && (prefix === curPrefix || curPrefix === null) && !word.mustStart) {
 			// still room left on the current line, add the word
 			wds.push(w);
 			curLen += w.length;
 			curPrefix = prefix;
-			if (word.lastWord && words[i + 1]) {
-				words[i + 1].special = true;
+			if (word.mustEnd && words[i + 1]) {
+				words[i + 1].mustStart = true;
 			}
 		} else {
 			// no more room - output what we have and start a new line
@@ -363,8 +376,8 @@ function(params) {
 			wds = [w];
 			curLen = w.length;
 			curPrefix = prefix;
-			if (word.lastWord && words[i + 1]) {
-				words[i + 1].special = true;
+			if (word.mustEnd && words[i + 1]) {
+				words[i + 1].mustStart = true;
 			}
 		}
 	}
