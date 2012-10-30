@@ -298,7 +298,7 @@ sub finishEntry() {
         finishAttr();
     }
 
-    if (defined(@entryAttrMap)) { # sanity checking for there could be extra empty lines
+    if (@entryAttrMap) { # sanity checking for there could be extra empty lines
         $dn = $entryAttrMap[0];
         
         if ($entryType ne "") {
