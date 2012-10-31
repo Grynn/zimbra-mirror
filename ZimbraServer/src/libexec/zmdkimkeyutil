@@ -83,7 +83,7 @@ if ($zimbra_home eq "") {
   $zimbra_home = "/opt/zimbra";
 }
 
-my $keygen = "${zimbra_home}/opendkim/bin/opendkim-genkey";
+my $keygen = "${zimbra_home}/opendkim/sbin/opendkim-genkey";
 
 my $mesg;
 my @masters=split(/ /, $ldap_master_url);
