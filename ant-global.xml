@@ -229,6 +229,29 @@
         <fail if="junit.failure" message="Unit test failed"/>
     </target>
 
+    <!-- e.g. ant -Dtest.name=com.zimbra.cs.mailbox.ContactTest single-test -->
+    <target name="single-test" depends="test-compile" description="Run single unit test">
+        <fail message="test.name must be set - Need e.g. ant -Dtest.name=com.zimbra.cs.mailbox.ContactTest single-test"
+              unless="test.name"/>
+        <property name="single.test.dir" value="${test.dir}-${test.name}"/>
+        <delete dir="${single.test.dir}" quiet="true"/>
+        <mkdir dir="${single.test.dir}/output"/>
+        <mkdir dir="${single.test.dir}/report"/>
+        <junit printsummary="on" failureproperty="junit.failure" tempdir="${single.test.dir}">
+            <classpath refid="class.path"/>
+            <classpath path="${test.classes.dir}"/>
+            <assertions><enable/></assertions>
+            <formatter type="xml"/>
+            <test name="${test.name}" todir="${single.test.dir}/output" />
+        </junit>
+        <junitreport todir="${single.test.dir}/report">
+            <fileset dir="${single.test.dir}/output"/>
+            <report todir="${single.test.dir}/report"/>
+        </junitreport>
+        <echo>Test Report: ${single.test.dir}/report/index.html</echo>
+        <fail if="junit.failure" message="Single Unit test failed"/>
+    </target>
+
     <target name="emma" description="Emma Instrutmentation">
 
       <taskdef resource="emma_ant.properties" classpathref="emma.lib"/>
