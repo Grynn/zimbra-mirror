@@ -5,7 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.search;
 
 import java.util.*;
 
-import com.zimbra.qa.selenium.framework.items.MailItem;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
@@ -152,12 +152,9 @@ public class PageSearch extends AbsTab {
 		//
 		
 		if ( button == Button.B_SEARCH ) {
-			locator = "css=div#zb__Search__SEARCH_left_icon div.ImgSearch2";
 			
-			// for all item types
-			if (zIsSearchType(Button.O_SEARCHTYPE_ALL)) {
-			    page = new PageAllItemTypes(((AppAjaxClient)MyApplication));
-			}
+			locator = "css=div#zb__Search__SEARCH_left_icon div.ImgSearch2";
+			page = null;
 			
 		} else if ( (button == Button.B_SEARCHSAVE) || (button == Button.B_SAVE) ) {
 			
@@ -390,5 +387,82 @@ public class PageSearch extends AbsTab {
 		throw new HarnessException("Unable to determine the Page Mail View");
 	}
 
+	
+	private ContactItem parseContactRow(String top) throws HarnessException {
+		
+		
+		
+		/*
+
+		  <div class="Row SimpleContact SimpleContact RowOdd" id="zli__CNS-SR-Contacts-1__297">
+		    <table width="100%">
+		      <tbody>
+		        <tr id="zlif__CNS-SR-Contacts-1__297__rw">
+		          <td style="vertical-align:middle;" width="20">
+		            <center>
+		              <div class="ImgContact" id="zlif__CNS-SR-Contacts-1__297__type"></div>
+		            </center>
+		          </td>
+
+		          <td id="zlif__CNS-SR-Contacts-1__297__fileas" style="vertical-align:middle;">&nbsp;bbbb, aaaa</td>
+
+		          <td style="vertical-align:middle;" width="16" class="Tag">
+		            <div class="ImgBlank_16" id="zlif__CNS-SR-Contacts-1__297__tg"></div>
+		          </td>
+		        </tr>
+		      </tbody>
+		    </table>
+		  </div>
+
+	 */
+
+		ContactItem item = new ContactItem();
+
+		String locator;
+
+		// Is it a contact icon?
+		locator = top + " div[id$='__type'].ImgContact";
+		// TODO
+		
+		// Get the fileAs
+		locator = top + " td[id$='__fileas']";
+		if ( this.sIsElementPresent(locator) ) {
+			item.setAttribute("fileAs", this.sGetText(locator));
+		}
+
+		return (item);
+
+	}
+	
+	public List<ContactItem> zListGetContacts() throws HarnessException {
+
+		List<ContactItem> items = new ArrayList<ContactItem>();
+
+		String listLocator = "css=div[id^='zv__CNS-SR-Contacts-']";
+		String rowLocator = "div[id*='zli__CNS-SR-Contacts']";
+
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(listLocator) )
+			throw new HarnessException("Contacts Rows is not present: " + listLocator);
+
+		String tableLocator = listLocator + " " + rowLocator;
+		
+		// How many items are in the table?
+		int count = this.sGetCssCount(tableLocator);
+		logger.debug(myPageName() + " zListGetContacts: number of contacts: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+
+			// Add the new item to the list
+			ContactItem item = parseContactRow(listLocator + " div:nth-of-type("+ i +") ");
+			items.add(item);
+			logger.info(item.prettyPrint());
+		}
+
+		// Return the list of items
+		return (items);
+	}
+	
 
 }
