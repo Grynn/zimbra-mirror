@@ -47,7 +47,7 @@
 + 		      portnum ? portnum->buf : (char *) 0,
 + 		      portnum ? sizeof(portnum->buf) : 0,
 + 		      NI_NUMERICHOST | NI_NUMERICSERV);
-+     if (ret == 0 && sa->sa_family == AF_INET6)
++     if (hostaddr != 0 && ret == 0 && sa->sa_family == AF_INET6)
 + 	(void) split_at(hostaddr->buf, '%');
 +     return (ret);
  #endif
