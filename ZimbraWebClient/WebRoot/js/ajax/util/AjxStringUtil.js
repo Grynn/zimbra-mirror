@@ -2236,22 +2236,40 @@ function(count, results, isHtml, ctxt) {
 
 /**
  * Removes non-content HTML from the beginning and end. Would typically be used on raw content from an editor.
+ * There's almost certainly a better way to do this.
  * 
  * @param {string}	str		some HTML
  */
 AjxStringUtil.trimHtml =
 function(str) {
 
+	if (!str) {
+		return "";
+	}
+	
 	str = str.replace(/<\/?html>|<\/?head>|<\/?body>/gi, "");	// strip empty document-level tags
 	str = str.replace(/<div><br ?\/?><\/div>/gi, "<br>");		// TinyMCE loves <div> containers
 
-	// remove leading and trailing <div> and <br>
-	while (/^<\/?div>/i.test(str) || /<\/?div>$/i.test(str) ||
-		   /^<br ?\/?>/i.test(str) || /<br ?\/?>$/i.test(str)) {
+	// remove empty surrounding <div> containers, and leading/trailing <br>
+	var len = 0;
+	while ((str.length !== len) &&
+		   ((/^<?div>/i.test(str) && /<\/div>$/i.test(str)) ||
+			 /^<br ?\/?>/i.test(str) || /<br ?\/?>$/i.test(str))) {
 
-		str = str.replace(/^(<div>)+/i, "").replace(/(<\/div>)+$/i, "");
-		str = str.replace(/^(<br ?\/?>)+/i, "").replace(/(<br ?\/?>)+$/i, "");
+		len = str.length;	// loop prevention
+		str = str.replace(/^<div>/i, "").replace(/<\/div>$/i, "");
+		str = str.replace(/^<br ?\/?>/i, "").replace(/<br ?\/?>$/i, "");
 	}
+	
+	// remove trailing <br> trapped in front of closing tags
+	var m = str && str.match(/((<br ?\/?>)+)((<\/\w+>)+)$/i);
+	if (m && m.length) {
+		var regex = new RegExp(m[1] + m[3] + "$", "i");
+		str = str.replace(regex, m[3]);
+	}
+	
+	// remove empty internal <div> containers
+	str = str.replace(/(<div><\/div>)+/gi, "");
 	
 	return AjxStringUtil.trim(str);
 };
