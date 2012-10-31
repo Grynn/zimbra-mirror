@@ -26,6 +26,7 @@ public class WizardCreateAdminAccount extends AbsWizard {
 		public static final String ADMIN_TYPE="css=div[id$='zdlgv__NEW_ADMIN'] div.ImgSelectPullDownArrow";
 		public static final String ADMIN_USER="css=div[id$='new_admin_type_choice_1']";
 		public static final String ADMIN_GROUP="css=div[id$='new_admin_type_choice_0']";
+		public static final String GLOBAL_ADMIN_CHECK_BOX="zdlgv__NEW_ADMIN_";
 	}
 
 	public WizardCreateAdminAccount(AbsTab page) {
@@ -34,6 +35,24 @@ public class WizardCreateAdminAccount extends AbsWizard {
 	}
 	
 	public String adminType="";
+	public static boolean IsGlobalAdmin=false;
+		
+	public static boolean isGlobalAdmin() {
+		return IsGlobalAdmin;
+	}
+
+	public void setGlobalAdmin(boolean isGlobalAdmin) throws HarnessException {
+		IsGlobalAdmin = isGlobalAdmin;
+		if(IsGlobalAdmin) {
+			for(int i=10;i>=1;i--) {
+				if(sIsElementPresent(Locators.GLOBAL_ADMIN_CHECK_BOX+i+"_zimbraIsAdminAccount")) {
+					sCheck(Locators.GLOBAL_ADMIN_CHECK_BOX+i+"_zimbraIsAdminAccount");
+					return;
+				}
+			}	
+			sCheck(Locators.GLOBAL_ADMIN_CHECK_BOX+"zimbraIsAdminAccount");
+		}
+	}	
 
 	public String getAdminType() {
 		return adminType;
