@@ -369,8 +369,11 @@ ngx_mail_zmauth_lookup_result_handler(ngx_zm_lookup_work_t * work) {
         s->qlogin = *(ngx_pstrcpy(s->connection->pool, &work->account_name));
         s->key_alias = *(ngx_pstrcpy(s->connection->pool, &work->alias_key));
         s->key_route = *(ngx_pstrcpy(s->connection->pool, &work->route_key));
-        s->dusr = *(ngx_pstrcpy(s->connection->pool, &work->auth_id));
-        s->dpasswd = *(ngx_pstrcpy(s->connection->pool, &work->zm_auth_token));
+        if (s->auth_method == NGX_MAIL_AUTH_GSSAPI ||
+            s->auth_method == NGX_MAIL_AUTH_GSSAPI_IR) {
+            s->dusr = *(ngx_pstrcpy(s->connection->pool, &work->auth_id));
+            s->dpasswd = *(ngx_pstrcpy(s->connection->pool, &work->zm_auth_token));
+        }
         peer = ngx_palloc(s->connection->pool, sizeof(ngx_addr_t));
 
         peer->name = *(ngx_pstrcpy(s->connection->pool, &work->route->name));
