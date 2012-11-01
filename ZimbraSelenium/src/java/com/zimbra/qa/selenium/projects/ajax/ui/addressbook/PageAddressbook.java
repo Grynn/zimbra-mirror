@@ -621,12 +621,13 @@ public class PageAddressbook extends AbsTab {
 			if ( this.zIsBrowserMatch(BrowserMasks.BrowserMaskIE)){
 			 				 
 				// TODO check if the following code make the test case CreateContactGroup.GroupOfNewEmail() pass in wdc			
-			    sGetEval("var evObj = document.createEventObject();" 
+			    	/*
+			    	sGetEval("return var evObj = document.createEventObject();" 
 						+ "var x = selenium.browserbot.findElementOrNull('" + pulldownLocator + "');"
 						+ "x.focus();x.blur();x.fireEvent('onclick');");
-
+			    	*/
 				//the following code failed in wdc, but pass in my machine :
-				//sClickAt(pulldownLocator,center);
+				sClickAt(pulldownLocator,"");
 			}
 			else {
 			    //others

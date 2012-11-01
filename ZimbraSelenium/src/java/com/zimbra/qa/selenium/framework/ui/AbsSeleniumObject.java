@@ -2906,6 +2906,7 @@ public abstract class AbsSeleniumObject {
 		
 		try{	
 			logger.info("handles size" );
+			SleepUtil.sleepSmall();
 			handles = driver.getWindowHandles();	
 			logger.info(" : " + handles.size());
 			if (handles != null && !handles.isEmpty()) {
