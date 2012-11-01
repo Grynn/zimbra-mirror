@@ -36,7 +36,7 @@ EnableCoredumps       yes
 FixCRLF               no
 MaximumHeaders        65536
 Minimum               0
-Mode                  sv
+Mode                  s
 MultipleSignatures    no
 NoHeaderB             no
 RequireSafeKeys       Yes
