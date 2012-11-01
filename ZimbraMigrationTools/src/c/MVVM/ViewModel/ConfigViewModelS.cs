@@ -193,6 +193,7 @@ public class ConfigViewModelS: BaseViewModel
         {
             MessageBox.Show(ret, "Zimbra Migration", MessageBoxButton.OK,
                 MessageBoxImage.Error);
+            ret = mw.GlobalUninit();
             return;
         }
         iMailSvrInitialized = (IsProfile) ? PROFILE_MODE : EXCHSVR_MODE;
