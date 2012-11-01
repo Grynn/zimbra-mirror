@@ -38,7 +38,7 @@ my ($add, $bits, $help, $query, $update, $domain, $delete, $selector);
 my $opts_good = GetOptions(
         'h|help' => \$help,
         'a|add' => \$add,
-	'b|bits' => \$bits,
+	'b|bits=s' => \$bits,
         'd|domain=s' => \$domain,
         'q|query' => \$query,
         'r|remove' => \$delete,
