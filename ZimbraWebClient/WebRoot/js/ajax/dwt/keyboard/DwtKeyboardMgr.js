@@ -779,7 +779,7 @@ function(ev) {
 	// Filter out modifier keys. If we're in an input field, filter out legitimate input.
 	// (A shortcut from an input field must use a modifier key.)
 	if (DwtKeyMap.IS_MODIFIER[keyCode] || (!kbMgr.__dwtCtrlHasFocus && (kbMgr.__killKeySeqTimedActionId == -1) &&
-		DwtKeyMapMgr.isInputElement(kev.target) && !DwtKeyboardMgr.isPossibleInputShortcut(kev))) {
+		kev.target && DwtKeyMapMgr.isInputElement(kev.target) && !kev.target["data-hidden"] && !DwtKeyboardMgr.isPossibleInputShortcut(kev))) {
 
 	 	return kbMgr.__processKeyEvent(ev, kev, true, DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED);
 	}

@@ -2970,7 +2970,9 @@ function(ev) {
  */
 DwtControl.__badDrop =
 function(obj, mouseEv) {
-	obj._dragSource._cancelDrag();
+	if (obj._dragSource) {
+		obj._dragSource._cancelDrag();
+	}
     var targetObj = mouseEv.dwtObj;
     if (targetObj) {
        targetObj._drop(mouseEv);
