@@ -19,7 +19,14 @@
 # MySQL.
 #
 source `dirname $0`/zmshutil || exit 1
-zmsetvars zimbra_home antispam_mysql_user antispam_mysql_root_password
+zmsetvars zimbra_home antispam_mysql_user antispam_mysql_root_password antispam_mysql_enabled
+
+antispam_mysql_enabled=`echo ${antispam_mysql_enabled} | tr [:upper:] [:lower:]`
+if [ "${antispam_mysql_enabled}x" != "truex" ]
+then
+    echo "Spamassassin is not set up to use MySQL backend database!  Aborting..."
+    exit 1
+fi
 
 #
 # Usage.
