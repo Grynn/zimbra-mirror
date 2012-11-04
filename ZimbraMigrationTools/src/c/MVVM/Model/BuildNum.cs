@@ -6,7 +6,7 @@ public class BuildNum
 
     public BuildNum()
     {
-        BUILD_NUM = "9.0.0.683";
+        BUILD_NUM = "9.0.0.684";
     }
 }
 }
