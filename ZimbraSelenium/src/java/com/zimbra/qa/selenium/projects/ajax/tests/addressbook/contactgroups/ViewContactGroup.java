@@ -36,9 +36,12 @@ public class ViewContactGroup extends AjaxCommonTest  {
 		DisplayContactGroup groupView = (DisplayContactGroup) app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.getName());
 
 		// verify groupname
+		//
+		// The GUI view shows the group name surrounded in quotes, so do a 'contains'
+		//
 		ZAssert.assertStringContains(
+				groupView.zGetContactProperty(DisplayContactGroup.Field.Company),
 				group.getName(),
-				groupView.zGetContactProperty(DisplayContactGroup.Field.Company).replaceAll("“", "").replaceAll("”", ""),
 				"Verify contact group email (" + group.getName() + ") displayed");	
 
 		// verify group members
