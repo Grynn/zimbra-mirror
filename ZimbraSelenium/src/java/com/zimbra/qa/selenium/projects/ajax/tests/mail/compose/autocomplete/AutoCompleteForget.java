@@ -43,7 +43,7 @@ public class AutoCompleteForget extends PrefGroupMailByMessageTest {
 	public void AutoCompleteForget_01() throws HarnessException {
 		
 		// Create a contact
-		String emailaddress = "foo"+ ZimbraSeleniumProperties.getUniqueString() + "@"+ ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
+		String emailaddress = "foo"+ ZimbraSeleniumProperties.getUniqueString() + "@testdomain.zimbra.com";
 
 		// Send a message to the invalid email
 		
@@ -263,8 +263,12 @@ public class AutoCompleteForget extends PrefGroupMailByMessageTest {
 	public void AutoCompleteForget_04() throws HarnessException {
 		
 		// Create two contacts
-		String emailaddress1 = "email"+ ZimbraSeleniumProperties.getUniqueString() + "@"+ ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
-		String firstname1 = "Paul" + ZimbraSeleniumProperties.getUniqueString();
+		ZimbraAccount contact1 = new ZimbraAccount();
+		contact1.provision();
+		contact1.authenticate();
+		
+		String emailaddress1 = contact1.EmailAddress;
+		String firstname1 = "PaulOne" + ZimbraSeleniumProperties.getUniqueString();
 		String lastname1 = "Harris" + ZimbraSeleniumProperties.getUniqueString();
 		
 		app.zGetActiveAccount().soapSend(
@@ -290,8 +294,12 @@ public class AutoCompleteForget extends PrefGroupMailByMessageTest {
 
 		
 		// Create a second contact
-		String emailaddress2 = "email"+ ZimbraSeleniumProperties.getUniqueString() + "@"+ ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
-		String firstname2 = "Paul" + ZimbraSeleniumProperties.getUniqueString();
+		ZimbraAccount contact2 = new ZimbraAccount();
+		contact2.provision();
+		contact2.authenticate();
+		
+		String emailaddress2 = contact2.EmailAddress;
+		String firstname2 = "PaulTwo" + ZimbraSeleniumProperties.getUniqueString();
 		String lastname2 = "Harris" + ZimbraSeleniumProperties.getUniqueString();
 		
 		app.zGetActiveAccount().soapSend(
