@@ -1,0 +1,27 @@
+From bb36bdcd1c22d1fbc6575452ef5c9112715ab083 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@symas.com>
+Date: Mon, 5 Nov 2012 05:06:06 -0800
+Subject: [PATCH] ITS#7432 fix typo in mdb_midl_sort
+
+Wasn't pushing the optimal half of the array onto the stack,
+thus used more stack than expected -> overrun.
+---
+ libraries/libmdb/midl.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/libraries/libmdb/midl.c b/libraries/libmdb/midl.c
+index 9ee100d..8de61e3 100644
+--- a/libraries/libmdb/midl.c
++++ b/libraries/libmdb/midl.c
+@@ -232,7 +232,7 @@ mdb_midl_sort( MDB_IDL ids )
+ 			ids[l+1] = ids[j];
+ 			ids[j] = a;
+ 			jstack += 2;
+-			if (ir-i+1 >= j-1) {
++			if (ir-i+1 >= j-l) {
+ 				istack[jstack] = ir;
+ 				istack[jstack-1] = i;
+ 				ir = j-1;
+-- 
+1.7.4.2
+
