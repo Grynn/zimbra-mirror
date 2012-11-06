@@ -39,7 +39,10 @@ public class DialogWarning extends AbsDialog {
 		public static final DialogWarningID DeleteAppointment = new DialogWarningID("YesNo");
 
 		// See bug: http://bugzilla.zimbra.com/show_bug.cgi?id=63353
-		public static final DialogWarningID SelectedTimeIsInPast = new DialogWarningID("ShowDelayPastDialog");
+		// In main, the dialog id is <div id='OkCancel' .../>
+		// In 8.x, the dialog id is <div id='ShowDelayPastDialog' .../>
+		// public static final DialogWarningID SelectedTimeIsInPast = new DialogWarningID("ShowDelayPastDialog");
+		public static final DialogWarningID SelectedTimeIsInPast = new DialogWarningID("OkCancel");
 		
 		// See http://bugzilla.zimbra.com/show_bug.cgi?id=64081
 		public static final DialogWarningID SendReadReceipt = new DialogWarningID("YesNoMsgDialog");;
