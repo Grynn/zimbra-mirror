@@ -1400,6 +1400,8 @@ public class ZimbraAPI
         writer.WriteStartElement("or");
         writer.WriteAttributeString("d", appt["orName"]);
 
+       
+
         // always convert -- not like old tool that gives you a choice
         //string theOrganizer = AccountName;
         string theOrganizer = "";
@@ -1455,8 +1457,13 @@ public class ZimbraAPI
                 }
                 else
                 {
-                    if(appt["orAddr"] != tokens.GetValue(i + 1).ToString())
-                    writer.WriteAttributeString("ptst", appt["currst"]);
+                    if (appt["orAddr"] != tokens.GetValue(i + 1).ToString())
+                    {
+                        if(AccountID == tokens.GetValue(i).ToString())
+                        writer.WriteAttributeString("ptst", appt["currst"]);
+                        else
+                            writer.WriteAttributeString("ptst", "NE");
+                    }
                 }
 
                 writer.WriteEndElement();
