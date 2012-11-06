@@ -89,11 +89,11 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 				    {type:_GROUP_, numCols:3,
 				    	items: [
 				    	    {type:_OUTPUT_, value:AjxImg.getImageHtml("Migration")},
-				    	    {type:_OUTPUT_, cssStyle:"front-size:12px", labelLocation:_NONE_, label:null,
+				    	    {type:_OUTPUT_, cssStyle:"font-size:12px", labelLocation:_NONE_, label:null,
 				    	     id:"general_migration_x86_link",
 				    	     value: ZaMigrationWizView.getDownloadLink(ZaMsg.GENERAL_MIG_WIZ_X86_DOWNLOAD_LINK, ZaMsg.GENERAL_MIG_WIZ_X86_DOWNLOAD_LINK_MSG)
 				    	    },
-				    	    {type:_OUTPUT_, cssStyle:"front-size:12px", labelLocation:_NONE_, label:null,
+				    	    {type:_OUTPUT_, cssStyle:"font-size:12px", labelLocation:_NONE_, label:null,
 				    	     id:"general_migration_x64_link",
 				    	     value: ZaMigrationWizView.getDownloadLink(ZaMsg.GENERAL_MIG_WIZ_X64_DOWNLOAD_LINK, ZaMsg.GENERAL_MIG_WIZ_X64_DOWNLOAD_LINK_MSG)
 				    	    }
