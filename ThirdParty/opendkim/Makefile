@@ -11,7 +11,7 @@ endif
 MAKEARGS ?= -j2
 ZIMBRA_HOME ?= /opt/zimbra
 
-PATCH	:= 
+PATCH	:=	patch -g0 -N -p1 < ../patches/keygen.patch;
 
 ifdef BETA
 	include $(OPENDKIM_ROOT)/../beta_versions.def
