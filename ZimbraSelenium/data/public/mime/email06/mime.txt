@@ -1,0 +1,28 @@
+Date: Tue, 6 Nov 2012 14:53:13 -0800 (PST)
+From: foo@example.com
+To: bar@example.com
+Subject: subject135219672356274
+MIME-Version: 1.0
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_885_840462048.1352242393475"
+
+------=_Part_885_840462048.1352242393475
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+body135219672356275
+
+------=_Part_885_840462048.1352242393475
+Content-Type: text/plain; name=attachment1.txt
+Content-Disposition: attachment; filename=attachment1.txt
+Content-Transfer-Encoding: base64
+
+YXR0YWNobWVudDE=
+------=_Part_885_840462048.1352242393475
+Content-Type: text/plain; name=attachment2.txt
+Content-Disposition: attachment; filename=attachment2.txt
+Content-Transfer-Encoding: base64
+
+YXR0YWNobWVudDI=
+------=_Part_885_840462048.1352242393475--
+

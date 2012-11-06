@@ -151,6 +151,7 @@ public class Button {
 	public static final Button B_BCC = new Button("B_BCC");
 	public static final Button B_SHOWBCC = new Button("B_SHOWBCC");
 	public static final Button B_REMOVE = new Button("B_REMOVE");
+	public static final Button B_REMOVE_ALL = new Button("B_REMOVE_ALL");
 	public static final Button B_SHOW_NAMES_FROM = new Button("B_SHOW_NAMES_FROM");
 
 	public static final Button O_SEND_SEND = new Button("O_SEND_SEND");

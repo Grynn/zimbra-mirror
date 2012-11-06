@@ -120,7 +120,24 @@ public class DisplayMail extends AbsDisplay {
 		String locator = null;
 		boolean doPostfixCheck = false;
 
-		if ( button == Button.B_VIEW_ENTIRE_MESSAGE ) {
+		if ( button == Button.B_REMOVE_ALL ) {
+			
+			locator = this.ContainerLocator + " a[id$='_removeAll']";
+			page = new DialogWarning(
+					DialogWarning.DialogWarningID.PermanentlyRemoveTheAttachment,
+					MyApplication, 
+					((AppAjaxClient) MyApplication).zPageMail);
+ 
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("locator is not present for button "+ button +" : "+ locator);
+			
+			this.sClick(locator); // sClick() is required for this element
+			
+			this.zWaitForBusyOverlay();
+
+			return (page);
+
+		} else if ( button == Button.B_VIEW_ENTIRE_MESSAGE ) {
 			
 			locator = this.ContainerLocator + " span[id$='_msgTruncation_link']";
 

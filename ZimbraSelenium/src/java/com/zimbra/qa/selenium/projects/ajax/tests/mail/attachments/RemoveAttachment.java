@@ -109,5 +109,81 @@ public class RemoveAttachment extends PrefGroupMailByMessageTest {
 
 	}
 
+	@Test(	description = "Remove all attachments (2 attachments) from a mail",
+			groups = { "functional" })
+	public void RemoveAttachment_02() throws HarnessException {
+
+		//-- Data Setup
+		
+		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email06/mime.txt";
+		final String subject = "subject135219672356274";
+		ZimbraAccount account = app.zGetActiveAccount();
+		
+		// Inject the message
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFile));
+
+		// Double check that there is an attachment
+		account.soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>subject:("+ subject +")</query>"
+			+	"</SearchRequest>");
+		String id = account.soapSelectValue("//mail:m", "id");
+		
+		account.soapSend(
+				"<GetMsgRequest xmlns='urn:zimbraMail' >"
+			+		"<m id='"+ id +"'/>"
+			+	"</GetMsgRequest>");
+		Element[] nodes = account.soapSelectNodes("//mail:mp[@cd='attachment']");
+		ZAssert.assertGreaterThan(nodes.length, 0, "Verify the message has the attachment");
+
+
+		//-- GUI actions
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail display = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		ZAssert.assertNotNull(display, "Verify the message shows");
+		
+		// Click remove
+		DialogWarning dialog = (DialogWarning)display.zPressButton(Button.B_REMOVE_ALL);
+		dialog.zClickButton(Button.B_YES);
+
+		
+		//-- Verification
+
+		// Verify the message no longer has an attachment
+		account.soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>subject:("+ subject +")</query>"
+			+	"</SearchRequest>");
+		id = account.soapSelectValue("//mail:m", "id");
+		
+		
+		try{
+			
+			int i = 0;
+			do {
+				SleepUtil.sleepSmall();
+
+		    	account.soapSend(
+		    			  "<GetMsgRequest xmlns='urn:zimbraMail' >"
+		    			+   "<m id='"+ id +"'/>"
+		    			+ "</GetMsgRequest>");
+		    	nodes = account.soapSelectNodes("//mail:mp[@cd='attachment']");
+
+			} while ( (i++ < 10) && (nodes.length > 0) );
+			
+		    
+		}catch(Exception ex){
+		    logger.error(ex);
+		}
+		
+		ZAssert.assertEquals(nodes.length, 0, "Verify the message no longer has the attachment");
+		
+
+	}
+
 
 }
