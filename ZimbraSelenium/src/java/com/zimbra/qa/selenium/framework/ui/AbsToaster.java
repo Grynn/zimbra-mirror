@@ -53,8 +53,13 @@ public abstract class AbsToaster extends AbsSeleniumObject {
     	text=sGetText(Locators.ToastTextLocatorCSS);
     	    
     	//make the toasted message invisible if it contains "Undo" link
-    	sKeyPressNative(String.valueOf(KeyEvent.VK_ESCAPE));
-    	    	
+    	/* Reason for adding If condition:
+    	 * For some cases like Signature Toaster(Bug_78058)
+    	 * unnecessary warning dialog gets appeared every time after pressing Escape key
+    	 */
+    	if (sIsElementPresent(Locators.ToastUndoLocatorCSS)) {
+			sKeyPressNative(String.valueOf(KeyEvent.VK_ESCAPE));
+		}    	    	
     	zWaitForElementInvisible(Locators.ToastTextLocatorCSS);
 		return text;					
 	}
