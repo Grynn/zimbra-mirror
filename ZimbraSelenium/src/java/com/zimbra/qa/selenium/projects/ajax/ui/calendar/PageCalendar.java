@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 
 @SuppressWarnings("unused")
@@ -113,7 +114,6 @@ public class PageCalendar extends AbsTab {
 		// Dialog locators
 		public static final String DialogDivID = "CNF_DEL_YESNO";
 		public static final String DialogDivCss = "css=div[id='CNF_DEL_YESNO']";
-		
 	}
 
 	public PageCalendar(AbsApplication application) {
@@ -379,10 +379,10 @@ public class PageCalendar extends AbsTab {
 			// Single occurrence locator
 			locator = itemsLocator +" td.appt_name:contains('"+ subject +"')";
 
-		} else if ( this.sIsElementPresent(itemsLocator +" td[id$='appt_new_name']:contains('"+ subject +"')")) {
+		} else if ( this.sIsElementPresent(itemsLocator +" td[class$='appt_new_name']:contains('"+ subject +"')")) {
 			
 			// Recurring appointment locator (might point to any visible instance)
-			locator = itemsLocator +" td[id$='appt_new_name']:contains('"+ subject +"')";
+			locator = itemsLocator +" td[class$='appt_new_name']:contains('"+ subject +"')";
 			
 		} else if ( this.sIsElementPresent(itemsLocator +" td.appt_allday_name>div:contains('"+ subject +"')")) {
 			
@@ -737,10 +737,10 @@ public class PageCalendar extends AbsTab {
 			// Single occurrence locator
 			locator = itemsLocator +" td.appt_name:contains('"+ subject +"')";
 
-		} else if ( this.sIsElementPresent(itemsLocator +" td[id$='appt_new_name']:contains('"+ subject +"')")) {
+		} else if ( this.sIsElementPresent(itemsLocator +" td[class$='appt_new_name']:contains('"+ subject +"')")) {
 			
 			// Recurring appointment locator (might point to any visible instance)
-			locator = itemsLocator +" td[id$='appt_new_name']:contains('"+ subject +"')";
+			locator = itemsLocator +" td[class$='appt_new_name']:contains('"+ subject +"')";
 			
 		} else if ( this.sIsElementPresent(itemsLocator +" td.appt_allday_name>div:contains('"+ subject +"')")) {
 			
@@ -819,7 +819,7 @@ public class PageCalendar extends AbsTab {
 					this.zWaitForBusyOverlay();
 				}
 				
-				page = null;
+				page = new FormMailNew(this.MyApplication);
 				waitForPostfix = true;
 			
 			} else if ( option == Button.O_REPLY_TO_ALL_MENU ) {
@@ -832,7 +832,7 @@ public class PageCalendar extends AbsTab {
 					this.zWaitForBusyOverlay();
 				}
 				
-				page = null;
+				page = new FormMailNew(this.MyApplication);
 				waitForPostfix = true;
 				
 			} else if ( option == Button.O_FORWARD_MENU) {
