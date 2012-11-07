@@ -257,4 +257,178 @@ public class DialogEditFolder extends AbsDialog {
 
 	}
 
+	public enum DialogTab {
+		Properties, Retention, Disposal, Other
+	}
+
+	public void zNavigateToTab(DialogTab tab) throws HarnessException {
+		logger.info(myPageName() + " zNavigateToTab(" + tab + ")");
+
+		tracer.trace("Click on dialog tab " + tab);
+
+		String locator = null;
+		
+		if ( tab == DialogTab.Properties ) {
+			
+			// See: https://bugzilla.zimbra.com/show_bug.cgi?id=78459
+			locator = "css=div[id='FolderProperties'] td[id$='_title']:contains('Properties')"; // TODO: I18N
+			
+		} else if ( tab == DialogTab.Retention ) {
+			
+			// See: https://bugzilla.zimbra.com/show_bug.cgi?id=78459
+			locator = "css=div[id='FolderProperties'] td[id$='_title']:contains('Retention')"; // TODO: I18N
+
+		} else {
+			
+			throw new HarnessException("No logic defined for tab = "+ tab);
+			
+		}
+
+
+		if ( !this.sIsElementPresent(locator) ) {
+			throw new HarnessException("Locator not found: "+ locator);
+		}
+		
+		// Click on the tab
+		this.zClickAt(locator, "");
+		this.zWaitForBusyOverlay();
+		
+		// Done!
+
+	}
+	
+	public enum RetentionRangeUnits {
+		Years, Months, Weeks, Days, Other
+	};
+	
+	public enum RetentionRangeType {
+		Custom, Other
+	};
+
+	public void zRetentionSetRange(RetentionRangeType type, RetentionRangeUnits units, int value) throws HarnessException {
+		logger.info(myPageName() + " zRetentionSetRange(" + type + ", "+ units + ", "+ value +")");
+
+		tracer.trace("Set retention range " + type +" "+ value + " " + units);
+
+		
+		// Make sure we are on the retention tab
+		zNavigateToTab(DialogTab.Retention);
+
+		// Set the values
+		zRetentionSetRangeType(type);
+		zRetentionSetRangeUnits(units);
+		zRetentionSetRangeValue(value);
+		
+	}
+	
+	public void zRetentionSetRangeType(RetentionRangeType type) throws HarnessException {
+		logger.info(myPageName() + " zRetentionSetRangeType(" + type + ")");
+
+		tracer.trace("Set retention range type " + type);
+
+		// 11/7/2012: only "Custom" is supported/allowed
+		if ( type != RetentionRangeType.Custom ) {
+			throw new HarnessException("implement me: retention range type: "+ type);
+		}
+		
+	}
+	
+	public void zRetentionSetRangeValue(int value) throws HarnessException {
+		logger.info(myPageName() + " zRetentionSetRangeValue(" + value +")");
+
+		tracer.trace("Set retention range value " + value);
+
+		// Set the range
+		String locator = "css=div[id='FolderProperties'] input[id$='_keepValue']";
+		
+		this.sType(locator, "" + value);
+		this.zWaitForBusyOverlay();
+		
+	}
+	
+	public void zRetentionSetRangeUnits(RetentionRangeUnits units) throws HarnessException {
+		logger.info(myPageName() + " zRetentionSetRangeUnits(" + units +")");
+
+		tracer.trace("Set retention range units " + units);
+
+		String locator = "css=div[id='FolderProperties'] select[id$='_keepUnit']";
+		String option = "value=day";
+		
+		switch (units) {
+		case Days:
+			option = "value=day";
+			break;
+		case Weeks:
+			option = "value=week";
+			break;
+		case Months:
+			option = "value=month";
+			break;
+		case Years:
+			option = "value=year";
+			break;
+		default:
+			throw new HarnessException("Unknown units: "+ units);
+
+		}
+
+		// Pulldown
+		this.sSelectDropDown(locator, option);
+		this.zWaitForBusyOverlay();
+		
+	}
+	
+	public void zRetentionSetRangeUnits(RetentionRangeType type) throws HarnessException {
+		
+		// 11/7/2012: only "Custom" is supported/allowed
+		if ( type != RetentionRangeType.Custom ) {
+			throw new HarnessException("implement me: retention range type: "+ type);
+		}
+		
+	}
+	
+	public void zRetentionEnable() throws HarnessException {
+		logger.info(myPageName() + " zRetentionEnable()");
+
+		tracer.trace("Enable retention");
+		
+		
+		// Make sure we are on the retention tab
+		zNavigateToTab(DialogTab.Retention);
+
+
+		// Check the checkbox
+		String locator = "css=div[id='FolderProperties'] input[id$='_keepCheckbox']";
+
+		if ( this.sIsChecked(locator) ) {
+			logger.info("Checkbox already checked");
+		} else {
+			this.sCheck(locator);
+			this.zWaitForBusyOverlay();
+		}
+
+	}
+	
+	public void zRetentionDisable() throws HarnessException {
+		logger.info(myPageName() + " zRetentionDisable()");
+
+		tracer.trace("Disable retention");
+		
+		
+		// Make sure we are on the retention tab
+		zNavigateToTab(DialogTab.Retention);
+
+
+		// Uncheck the checkbox
+		String locator = "css=div[id='FolderProperties'] input[id$='_keepCheckbox']";
+
+		if ( !this.sIsChecked(locator) ) {
+			logger.info("Checkbox already unchecked");
+		} else {
+			this.sUncheck(locator);
+			this.zWaitForBusyOverlay();
+		}
+
+	}
+
 }
