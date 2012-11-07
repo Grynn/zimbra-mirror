@@ -8,18 +8,18 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder;
 
-public class CreateRetention extends PrefGroupMailByMessageTest {
+public class CreateDisposal extends PrefGroupMailByMessageTest {
 
-	public CreateRetention() {
-		logger.info("New " + CreateRetention.class.getCanonicalName());
+	public CreateDisposal() {
+		logger.info("New " + CreateDisposal.class.getCanonicalName());
 
 	}
 
 	@Test(
-			description = "Save a new basic retention on a folder (Context menu -> Edit -> Retention)", 
+			description = "Save a new basic disposal on a folder (Context menu -> Edit -> Retention)", 
 			groups = { "smoke" }
 			)
-	public void CreateRetention_01() throws HarnessException {
+	public void CreateDisposal_01() throws HarnessException {
 
 		//-- Data
 		
@@ -44,8 +44,8 @@ public class CreateRetention extends PrefGroupMailByMessageTest {
 		DialogEditFolder dialog = (DialogEditFolder) app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folder);
 
 		// Set to 2 years
-		dialog.zRetentionEnable();
-		dialog.zRetentionSetRange(
+		dialog.zDisposalEnable();
+		dialog.zDisposalSetRange(
 				DialogEditFolder.RetentionRangeType.Custom, 
 				DialogEditFolder.RetentionRangeUnits.Years, 
 				2);
@@ -61,8 +61,8 @@ public class CreateRetention extends PrefGroupMailByMessageTest {
 				"<GetFolderRequest xmlns='urn:zimbraMail'>"
 			+		"<folder l='" + folder.getId() + "'/>"
 			+	"</GetFolderRequest>");
-		String lifetime = app.zGetActiveAccount().soapSelectValue("//mail:keep//mail:policy", "lifetime");
-		String type = app.zGetActiveAccount().soapSelectValue("//mail:keep//mail:policy", "type");
+		String lifetime = app.zGetActiveAccount().soapSelectValue("//mail:purge//mail:policy", "lifetime");
+		String type = app.zGetActiveAccount().soapSelectValue("//mail:purge//mail:policy", "type");
 		
 		ZAssert.assertEquals(lifetime, "732d", "Verify the policy lifetime is set to 2 years");
 		ZAssert.assertEquals(type, "user", "Verify the policy type is set to 'user'");
@@ -81,11 +81,11 @@ public class CreateRetention extends PrefGroupMailByMessageTest {
 	
 
 	@Test(
-			description = "Create day, week, month, year retentions", 
+			description = "Create day, week, month, year disposals", 
 			groups = { "functional" },
 			dataProvider = "DataProviderRetentions"
 				)
-	public void CreateRetention_02(DialogEditFolder.RetentionRangeUnits units, String expected) throws HarnessException {
+	public void CreateDisposal_02(DialogEditFolder.RetentionRangeUnits units, String expected) throws HarnessException {
 
 		//-- Data
 		
@@ -110,8 +110,8 @@ public class CreateRetention extends PrefGroupMailByMessageTest {
 		DialogEditFolder dialog = (DialogEditFolder) app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folder);
 
 		// Set to 2 years
-		dialog.zRetentionEnable();
-		dialog.zRetentionSetRange(
+		dialog.zDisposalEnable();
+		dialog.zDisposalSetRange(
 				DialogEditFolder.RetentionRangeType.Custom, 
 				units, 
 				2);
@@ -127,10 +127,10 @@ public class CreateRetention extends PrefGroupMailByMessageTest {
 				"<GetFolderRequest xmlns='urn:zimbraMail'>"
 			+		"<folder l='" + folder.getId() + "'/>"
 			+	"</GetFolderRequest>");
-		String lifetime = app.zGetActiveAccount().soapSelectValue("//mail:keep//mail:policy", "lifetime");
-		
+		String lifetime = app.zGetActiveAccount().soapSelectValue("//mail:purge//mail:policy", "lifetime");
 		ZAssert.assertEquals(lifetime, expected, "Verify the policy lifetime is set correctly");
 		
+
 	}
 
 }

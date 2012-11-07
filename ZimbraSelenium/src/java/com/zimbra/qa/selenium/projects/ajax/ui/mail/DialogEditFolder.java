@@ -273,7 +273,7 @@ public class DialogEditFolder extends AbsDialog {
 			// See: https://bugzilla.zimbra.com/show_bug.cgi?id=78459
 			locator = "css=div[id='FolderProperties'] td[id$='_title']:contains('Properties')"; // TODO: I18N
 			
-		} else if ( tab == DialogTab.Retention ) {
+		} else if ( tab == DialogTab.Retention || tab == DialogTab.Disposal ) {
 			
 			// See: https://bugzilla.zimbra.com/show_bug.cgi?id=78459
 			locator = "css=div[id='FolderProperties'] td[id$='_title']:contains('Retention')"; // TODO: I18N
@@ -378,15 +378,6 @@ public class DialogEditFolder extends AbsDialog {
 		
 	}
 	
-	public void zRetentionSetRangeUnits(RetentionRangeType type) throws HarnessException {
-		
-		// 11/7/2012: only "Custom" is supported/allowed
-		if ( type != RetentionRangeType.Custom ) {
-			throw new HarnessException("implement me: retention range type: "+ type);
-		}
-		
-	}
-	
 	public void zRetentionEnable() throws HarnessException {
 		logger.info(myPageName() + " zRetentionEnable()");
 
@@ -430,5 +421,123 @@ public class DialogEditFolder extends AbsDialog {
 		}
 
 	}
+
+	public void zDisposalSetRange(RetentionRangeType type, RetentionRangeUnits units, int value) throws HarnessException {
+		logger.info(myPageName() + " zDisposalSetRange(" + type + ", "+ units + ", "+ value +")");
+
+		tracer.trace("Set disposal range " + type +" "+ value + " " + units);
+
+		
+		// Make sure we are on the retention tab
+		zNavigateToTab(DialogTab.Disposal);
+
+		// Set the values
+		zDisposalSetRangeType(type);
+		zDisposalSetRangeUnits(units);
+		zDisposalSetRangeValue(value);
+		
+	}
+	
+	public void zDisposalSetRangeType(RetentionRangeType type) throws HarnessException {
+		logger.info(myPageName() + " zDisposalSetRangeType(" + type + ")");
+
+		tracer.trace("Set disposal range type " + type);
+
+		// 11/7/2012: only "Custom" is supported/allowed
+		if ( type != RetentionRangeType.Custom ) {
+			throw new HarnessException("implement me: retention range type: "+ type);
+		}
+		
+	}
+	
+	public void zDisposalSetRangeValue(int value) throws HarnessException {
+		logger.info(myPageName() + " zDisposalSetRangeValue(" + value +")");
+
+		tracer.trace("Set disposal range value " + value);
+
+		// Set the range
+		String locator = "css=div[id='FolderProperties'] input[id$='_purgeValue']";
+		
+		this.sType(locator, "" + value);
+		this.zWaitForBusyOverlay();
+		
+	}
+	
+	public void zDisposalSetRangeUnits(RetentionRangeUnits units) throws HarnessException {
+		logger.info(myPageName() + " zDisposalSetRangeUnits(" + units +")");
+
+		tracer.trace("Set disposal range units " + units);
+
+		String locator = "css=div[id='FolderProperties'] select[id$='_purgeUnit']";
+		String option = "value=day";
+		
+		switch (units) {
+		case Days:
+			option = "value=day";
+			break;
+		case Weeks:
+			option = "value=week";
+			break;
+		case Months:
+			option = "value=month";
+			break;
+		case Years:
+			option = "value=year";
+			break;
+		default:
+			throw new HarnessException("Unknown units: "+ units);
+
+		}
+
+		// Pulldown
+		this.sSelectDropDown(locator, option);
+		this.zWaitForBusyOverlay();
+		
+	}
+		
+	public void zDisposalEnable() throws HarnessException {
+		logger.info(myPageName() + " zDisposalEnable()");
+
+		tracer.trace("Enable disposal");
+		
+		
+		// Make sure we are on the retention tab
+		zNavigateToTab(DialogTab.Disposal);
+
+
+		// Check the checkbox
+		String locator = "css=div[id='FolderProperties'] input[id$='_purgeCheckbox']";
+
+		if ( this.sIsChecked(locator) ) {
+			logger.info("Checkbox already checked");
+		} else {
+			this.sCheck(locator);
+			this.zWaitForBusyOverlay();
+		}
+
+	}
+	
+	public void zDisposalDisable() throws HarnessException {
+		logger.info(myPageName() + " zDisposalDisable()");
+
+		tracer.trace("Disable disposal");
+		
+		
+		// Make sure we are on the retention tab
+		zNavigateToTab(DialogTab.Disposal);
+
+
+		// Uncheck the checkbox
+		String locator = "css=div[id='FolderProperties'] input[id$='_purgeCheckbox']";
+
+		if ( !this.sIsChecked(locator) ) {
+			logger.info("Checkbox already unchecked");
+		} else {
+			this.sUncheck(locator);
+			this.zWaitForBusyOverlay();
+		}
+
+	}
+
 
 }

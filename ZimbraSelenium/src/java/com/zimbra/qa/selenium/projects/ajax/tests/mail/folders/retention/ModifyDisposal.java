@@ -8,18 +8,18 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder;
 
-public class ModifyRetention extends PrefGroupMailByMessageTest {
+public class ModifyDisposal extends PrefGroupMailByMessageTest {
 
-	public ModifyRetention() {
-		logger.info("New " + ModifyRetention.class.getCanonicalName());
+	public ModifyDisposal() {
+		logger.info("New " + ModifyDisposal.class.getCanonicalName());
 
 	}
 
 	@Test(
-			description = "Modify a basic retention (Context menu -> Edit -> Retention)", 
+			description = "Modify a basic disposal (Context menu -> Edit -> Retention)", 
 			groups = { "functional" }
 			)
-	public void ModifyRetention_01() throws HarnessException {
+	public void ModifyDisposal_01() throws HarnessException {
 
 		//-- Data
 		
@@ -39,9 +39,9 @@ public class ModifyRetention extends PrefGroupMailByMessageTest {
 				"<FolderActionRequest xmlns='urn:zimbraMail'>"
 			+		"<action id='" + folder.getId() + "' op='retentionpolicy'>"
 			+			"<retentionPolicy>"
-			+				"<keep>"
+			+				"<purge>"
 			+					"<policy lifetime='5d' type='user'/>"
-			+				"</keep>"
+			+				"</purge>"
 			+			"</retentionPolicy>"
 			+		"</action>"
 			+	"</FolderActionRequest>");
@@ -58,8 +58,8 @@ public class ModifyRetention extends PrefGroupMailByMessageTest {
 		DialogEditFolder dialog = (DialogEditFolder) app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folder);
 
 		// Set to 4 years
-		dialog.zNavigateToTab(DialogEditFolder.DialogTab.Retention);
-		dialog.zRetentionSetRangeValue(6);
+		dialog.zNavigateToTab(DialogEditFolder.DialogTab.Disposal);
+		dialog.zDisposalSetRangeValue(6);
 
 		// Save
 		dialog.zClickButton(Button.B_OK);
@@ -72,7 +72,7 @@ public class ModifyRetention extends PrefGroupMailByMessageTest {
 				"<GetFolderRequest xmlns='urn:zimbraMail'>"
 			+		"<folder l='" + folder.getId() + "'/>"
 			+	"</GetFolderRequest>");
-		String lifetime = app.zGetActiveAccount().soapSelectValue("//mail:keep//mail:policy", "lifetime");
+		String lifetime = app.zGetActiveAccount().soapSelectValue("//mail:purge//mail:policy", "lifetime");
 		
 		ZAssert.assertEquals(lifetime, "6d", "Verify the policy lifetime is set to 6 days");
 		
