@@ -9,10 +9,11 @@
 smtp      inet  n       -       n       -       -       smtpd
 	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10029
 465    inet  n       -       n       -       -       smtpd
+	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10029
 	-o smtpd_tls_wrappermode=yes 
 	-o smtpd_sasl_auth_enable=yes
-	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10029
 submission inet n      -       n       -       -       smtpd
+	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10029
 	-o smtpd_etrn_restrictions=reject
 	-o smtpd_sasl_auth_enable=%%zimbraMtaSaslAuthEnable%%
 	-o smtpd_client_restrictions=permit_sasl_authenticated,reject
@@ -101,7 +102,7 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o smtpd_delay_reject=no
 	-o smtpd_client_restrictions=permit_mynetworks,reject
 	-o smtpd_helo_restrictions=
-	-o smtpd_milters=inet:localhost:8465
+	-o smtpd_milters=
 	-o smtpd_sender_restrictions=
 	-o smtpd_recipient_restrictions=permit_mynetworks,reject
 	-o mynetworks_style=host
@@ -116,3 +117,4 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o local_header_rewrite_clients=
 [%%zimbraLocalBindAddress%%]:10029 inet n - n - - smtpd
 	-o smtpd_milters=inet:localhost:8465
+	-o smtpd_sender_restrictions=
