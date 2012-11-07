@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -12,6 +13,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.FormSignatureNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.FormSignatureNew.Field;
+import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.PageSignature.Locators;
 
 
 public class Bug_78058 extends AjaxCommonTest {
@@ -55,16 +57,25 @@ public class Bug_78058 extends AjaxCommonTest {
 
 		//Click on New signature button
 		FormSignatureNew signew =(FormSignatureNew) app.zPageSignature.zToolbarPressButton(Button.B_NEW);
-
+		SleepUtil.sleepMedium();
+		
 		// Empty Signature body and some text in Name
 		signew.zFillField(Field.SignatureName, sigName);
+	
 		signew.zFillField(Field.SignatureBody, sigBody);
+		
 		signew.zSubmit();
-
 		// Verifying the toaster message
 		Toaster toast = app.zPageMain.zGetToaster();
 		String toastMsg = toast.zGetToastMessage();
 		ZAssert.assertStringContains(toastMsg, "Signature value is empty. It's required","Verify toast message:Signature value is empty. It's required");
+		
+		//This is special case where we need to explicitly delete signature to avoid  failing other test cases  
+		//Select signature which is to be Delete
+		signew.zClick(Locators.zSignatureListView);
+		signew.zClick("//td[contains(text(),'"+sigName+"')]");
+		//click Delete button
+		app.zPageSignature.zToolbarPressButton(Button.B_DELETE);
 
 	}
 }
