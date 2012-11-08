@@ -213,7 +213,7 @@ function(imageName, styles, attrStr, wrapInTable, disabled) {
 	                var imgId = attrStr;
 	                if (!imgId) {
 		                imgId = Dwt.getNextId("CANVAS_IMG_");  //create an imgId in case we need to update the img.src for an element without an id
-		                attrStr = "id='" + imgId + "'";
+		                attrStr = " id='" + imgId + "'";
 	                }
 	                else {
 		                var match = attrStr.match(/id=[\"\']([^\"\']+)[\"\']+/);
@@ -256,7 +256,7 @@ function(imageName, styles, attrStr, wrapInTable, disabled) {
                 }
 
                 html = [
-                    "<img src='", overlay[color], "' border=0", styleStr, attrStr, ">"
+                    "<img src='", overlay[color], "'"," border=0 ", styleStr, attrStr, ">"
                 ].join("");
             }
         }
