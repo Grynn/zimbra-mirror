@@ -582,17 +582,26 @@ function(response) {
 DwtHtml5SoundPlugin.prototype.play =
 function() {
 	var player = this._getPlayer();
-    try {
-	    this._monitorStatus();
-        player.play();
-    } catch (ex){
+    if (player && player.readyState){
+        try {
+	        this._monitorStatus();
+            player.play();
+        } catch (ex){
+            DBG.println("Exception in DwtHtml5SoundPlugin.prototype.play: "+ ex);
+        }
     }
 };
 
 DwtHtml5SoundPlugin.prototype.pause =
 function() {
 	var player = this._getPlayer();
-	player.pause();
+    if (player && player.readyState){
+        try {
+            player.pause();
+        } catch (ex){
+            DBG.println("Exception in DwtHtml5SoundPlugin.prototype.pause: "+ ex);
+        }
+    }
 };
 
 DwtHtml5SoundPlugin.prototype._getPlayer =
@@ -611,12 +620,17 @@ function(time) {
     if (isNaN(time)){
         time = 0;
     }
+    time = (time > 0) ?  (time / 1000) : 0;
 	var player = this._getPlayer();
-    if (player){
-        player.currentTime = time > 0 ?  (time / 1000) : 0;
-        if (player.controls){
-            player.controls.currentPosition =  time > 0 ?  (time / 1000) : 0;
+    try {
+        if (player && player.readyState && player.currentTime != time ){
+            player.currentTime = time;
+            if (player.controls){
+                player.controls.currentPosition =  time;
+            }
         }
+    } catch(ex){
+        DBG.println("Exception in DwtHtml5SoundPlugin.prototype.setTime: "+ ex);
     }
 };
 
