@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.testng.annotations.*;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -261,5 +262,45 @@ public class GetMessage extends AjaxCommonTest {
 
 	}
 
+	@Bugs(ids = "73264")
+	@Test(	description = "Receive a mail with an unformated number string - should not match",
+			groups = { "functional", "matt" })
+	public void GetMessage_06() throws HarnessException {
+		
+		// Create the message data to be sent
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		String phonenumber = "16504755345";
+		String body = "text " + System.getProperty("line.separator") + phonenumber + System.getProperty("line.separator") + "text"+ ZimbraSeleniumProperties.getUniqueString() + System.getProperty("line.separator") ;
+		
+		// Send the message from AccountA to the ZWC user
+		ZimbraAccount.AccountA().soapSend(
+					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+						"<m>" +
+							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+							"<su>"+ subject +"</su>" +
+							"<mp ct='text/plain'>" +
+								"<content>"+ body +"</content>" +
+							"</mp>" +
+						"</m>" +
+					"</SendMsgRequest>");
+
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Get all the messages in the inbox
+		DisplayMail display = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		
+		// Wait for a bit so the zimlet can take affect
+		SleepUtil.sleep(5000);
+		
+		// Get the HTML of the body
+		HtmlElement bodyElement = display.zGetMailPropertyAsHtml(Field.Body);
+		
+		// Verify that the phone zimlet has been applied
+		// <a href="callto:1-877-486-9273" onclick="window.top.Com_Zimbra_Phone.unsetOnbeforeunload()">1-877-486-9273</a>
+		HtmlElement.evaluate(bodyElement, "//a[@href='callto:16504755345']", null, (String)null, 0);
+
+
+	}
 
 }
