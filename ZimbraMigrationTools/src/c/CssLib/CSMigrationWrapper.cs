@@ -106,6 +106,7 @@ public class MigrationOptions
     public Int32 MaxErrorCnt;
     public string SpecialCharRep;
     public bool IsMaintainenceMode;
+    
 }
 
 public class CSMigrationWrapper
@@ -538,7 +539,7 @@ public class CSMigrationWrapper
                                             string errMsg = (api.LastError.IndexOf("upload ID: null") != -1)    // FBS bug 75159 -- 6/7/12
                                                             ? "Unable to upload file. Please check server message size limits."
                                                             : api.LastError;
-                                            if (errMsg.Contains("maintenance"))
+                                            if (errMsg.Contains("maintenance") || errMsg.Contains("not active"))
                                             {
                                                 errMsg = errMsg + " Try Back later";
                                                 options.IsMaintainenceMode = true;
@@ -574,7 +575,7 @@ public class CSMigrationWrapper
                                     if (stat != 0)
                                     {
                                         string errMsg = api.LastError;
-                                        if (errMsg.Contains("maintenance"))
+                                        if (errMsg.Contains("maintenance") || errMsg.Contains("not active") )
                                         {
                                             errMsg = errMsg + " Try Back later";
                                             
@@ -627,7 +628,7 @@ public class CSMigrationWrapper
                                         if (stat != 0)
                                         {
                                             string errMsg = api.LastError;
-                                            if (errMsg.Contains("maintenance"))
+                                            if (errMsg.Contains("maintenance") || errMsg.Contains("not active"))
                                             {
                                                 errMsg = errMsg + " Try Back later";
 
@@ -690,7 +691,7 @@ public class CSMigrationWrapper
                                         if (stat != 0)
                                         {
                                             string errMsg = api.LastError;
-                                            if (errMsg.Contains("maintenance"))
+                                            if (errMsg.Contains("maintenance") || errMsg.Contains("not active"))
                                             {
                                                 errMsg = errMsg + " Try Back later";
 
@@ -840,8 +841,8 @@ public class CSMigrationWrapper
                 Acct.TotalItems += folder.ItemCount;
         }
         Log.info("Acct.TotalItems=", Acct.TotalItems.ToString());
+        ZimbraAPI  api = new ZimbraAPI(isServer, logLevel, options.SpecialCharRep);
 
-        ZimbraAPI api = new ZimbraAPI(isServer, logLevel, options.SpecialCharRep);
         api.AccountID = Acct.AccountID;
         api.AccountName = Acct.AccountName;
 
