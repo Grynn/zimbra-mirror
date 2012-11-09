@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.conversation;
+package com.zimbra.qa.selenium.projects.ajax.tests.conversation.conversations;
 
 import org.testng.annotations.Test;
 

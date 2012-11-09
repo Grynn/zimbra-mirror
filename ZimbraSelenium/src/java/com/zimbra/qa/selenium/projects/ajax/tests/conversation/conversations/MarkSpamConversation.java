@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.conversation;
+package com.zimbra.qa.selenium.projects.ajax.tests.conversation.conversations;
 
 import org.testng.annotations.Test;
 
@@ -66,7 +66,7 @@ public class MarkSpamConversation extends PrefGroupMailByConversationTest {
 	}
 
 
-	@Test(	description = "Mark a message as spam, using keyboard shortcut (keyboard='ms')",
+	@Test(	description = "Mark a conversation as spam, using keyboard shortcut (keyboard='ms')",
 			groups = { "smoke" })
 	public void MarkSpamConversation_02() throws HarnessException {
 		
@@ -112,7 +112,7 @@ public class MarkSpamConversation extends PrefGroupMailByConversationTest {
 				
 	}
 
-	@Test(	description = "Mark multiple messages (3) as spam by select and toolbar delete",
+	@Test(	description = "Mark multiple conversations (3) as spam by select and toolbar delete",
 			groups = { "functional" })
 	public void MarkSpamConversation_03() throws HarnessException {
 		

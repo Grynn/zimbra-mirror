@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.conversation;
+package com.zimbra.qa.selenium.projects.ajax.tests.conversation.conversationview;
 
 import java.util.List;
 
