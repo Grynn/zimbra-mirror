@@ -1199,7 +1199,7 @@ public class PageMail extends AbsTab {
 
 
 			itemlocator = listLocator + " div:nth-of-type("+ i +") ";
-			String s = this.sGetText(itemlocator + " span[id$='__su']").trim();
+			String s = this.sGetText(itemlocator + " [id$='__su']").trim();
 
 			if ( s.contains(subject) ) {
 				break; // found it

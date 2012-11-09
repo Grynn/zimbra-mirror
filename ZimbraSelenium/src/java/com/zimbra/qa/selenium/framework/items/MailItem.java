@@ -165,6 +165,10 @@ public class MailItem implements IItem {
 	
 	@Override
 	public String getName() {
+		return (getSubject());
+	}
+	
+	public String getSubject() {
 		return (dSubject);
 	}
 	
