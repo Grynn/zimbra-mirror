@@ -52,21 +52,25 @@ ZaModel.FONT_SIZE_CHOICES = [
 	{value:"18pt", label: "18pt"},
 	{value:"24pt", label: "24pt"},
 	{value:"36pt", label: "36pt"}];
-	
-ZaModel.FONT_FAMILY_CHOICES = [
-	{label:ZaMsg.LBL_fontFamilySansSerif,		value:"arial, helvetica, sans-serif" },
-   	{label:ZaMsg.LBL_fontFamilySerif,				value:"times new roman, new york, times, serif"},
-    {label:ZaMsg.LBL_fontFamilyWideBlock,       	value:"arial black,avant garde" },
-	{label:ZaMsg.LBL_fontFamilyMonospaced, 		value:"courier new, courier, monaco, monospace, sans-serif" },
-    {label:ZaMsg.LBL_fontFamilyComic,		        value:"comic sans ms, comic sans, sans-serif" },
-    {label:ZaMsg.LBL_fontFamilyConsole,           value:"lucida console, sans-serif" },
-    {label:ZaMsg.LBL_fontFamilyGaramond,          value:"garamond, new york, times, serif" },
-    {label:ZaMsg.LBL_fontFamilyElegant,    		value:"georgia,serif" },
-    {label:ZaMsg.LBL_fontFamilyProfessional,		value:"tahoma, new york, times, serif"},
-    {label:ZaMsg.LBL_fontFamilyTerminal,          value:"terminal,monaco" },
-    {label:ZaMsg.LBL_fontFamilyModern,   			value:"trebuchet ms,sans-serif" },
-    {label:ZaMsg.LBL_fontFamilyWide,      		value:"verdana, helvetica, sans-serif" }
-];
+
+ZaModel.getFontFamilyChoices = function() {
+	return [
+		{label:ZaMsg.LBL_fontFamilySansSerif,		value:"arial, helvetica, sans-serif" },
+	    {label:ZaMsg.LBL_fontFamilySerif,				value:"times new roman, new york, times, serif"},
+	    {label:ZaMsg.LBL_fontFamilyWideBlock,       	value:"arial black,avant garde" },
+		{label:ZaMsg.LBL_fontFamilyMonospaced, 		value:"courier new, courier, monaco, monospace, sans-serif" },
+	    {label:ZaMsg.LBL_fontFamilyComic,		        value:"comic sans ms, comic sans, sans-serif" },
+	    {label:ZaMsg.LBL_fontFamilyConsole,           value:"lucida console, sans-serif" },
+	    {label:ZaMsg.LBL_fontFamilyGaramond,          value:"garamond, new york, times, serif" },
+	    {label:ZaMsg.LBL_fontFamilyElegant,    		value:"georgia,serif" },
+	    {label:ZaMsg.LBL_fontFamilyProfessional,		value:"tahoma, new york, times, serif"},
+	    {label:ZaMsg.LBL_fontFamilyTerminal,          value:"terminal,monaco" },
+	    {label:ZaMsg.LBL_fontFamilyModern,   			value:"trebuchet ms,sans-serif" },
+	    {label:ZaMsg.LBL_fontFamilyWide,      		value:"verdana, helvetica, sans-serif" }
+	];
+}
+
+ZaModel.FONT_FAMILY_CHOICES = ZaModel.getFontFamilyChoices;
 
 ZaModel.getComposeFormatChoices =   function () {
     return [{value:"text", label:ZaMsg.Text}, {value:"html", label:ZaMsg.HTML}];
