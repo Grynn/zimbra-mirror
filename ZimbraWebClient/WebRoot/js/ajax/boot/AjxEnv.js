@@ -173,7 +173,7 @@ AjxEnv.indirectEvalIsGlobal;
 		evl('__indirectEval=true');
 		if('__indirectEval' in window){
 			AjxEnv.indirectEvalIsGlobal=true;
-			delete window.__indirectEval;
+			delete __indirectEval;
 		}
 	}catch(e){}
 })();
