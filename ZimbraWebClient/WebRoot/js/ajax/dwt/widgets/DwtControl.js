@@ -205,6 +205,9 @@ DwtControl = function(params) {
 
 	// set to true to ignore OVER and OUT mouse events between elements in the same control
 	this._ignoreInternalOverOut = false;
+	
+	// set to true for an event type to override default behavior of swallowing the event
+	this._propagateEvent = {};
 
 	// override this control's default template
 	this.TEMPLATE = params.template || this.TEMPLATE;
@@ -787,6 +790,20 @@ function(eventType) {
 
 	var htmlElement = this.getHtmlElement();
 	Dwt.clearHandler(htmlElement, eventType);
+};
+
+/**
+ * Set the default behavior for whether an event will propagate (bubble up).
+ * 
+ * @param {boolean}		propagate		if true, event will propagate
+ * @param {array}		events			one or more events
+ */
+DwtControl.prototype.setEventPropagation =
+function(propagate, events) {
+	events = AjxUtil.toArray(events);
+	for (var i = 0; i < events.length; i++) {
+		this._propagateEvent[events[i]] = propagate;
+	}
 };
 
 /**
@@ -1820,6 +1837,16 @@ function(targetEl) {
 };
 
 /**
+ * Returns the content of the control HTML element.
+ * 
+ * @return {string}		HTML content
+ */
+DwtControl.prototype.getContent =
+function() {
+	return this.getHtmlElement().innerHTML;
+};
+
+/**
  * Sets the content of the control HTML element to the provided
  * content. Care should be taken when using this method as it can blow away all
  * the content of the control which can be particularly bad if the control is
@@ -1830,8 +1857,9 @@ function(targetEl) {
  */
 DwtControl.prototype.setContent =
 function(content) {
-	if (content)
+	if (content) {
 		this.getHtmlElement().innerHTML = content;
+	}
 };
 
 /**
@@ -3133,6 +3161,7 @@ function(ev) {
  */
 DwtControl.__mouseEvent =
 function(ev, eventType, obj, mouseEv) {
+
 	var obj = obj ? obj : DwtControl.getTargetControl(ev);
 	if (!obj) { return false; }
 
@@ -3141,15 +3170,13 @@ function(ev, eventType, obj, mouseEv) {
 		mouseEv.setFromDhtmlEvent(ev, obj);
 	}
 
-	// By default, we halt event processing. Listeners may override
+	// By default, we halt event processing. The default can be overridden here through
+	// the use of setEventPropagation(). A listener may also change the event props when called.
 	var tn = mouseEv.target.tagName && mouseEv.target.tagName.toLowerCase();
-	if (!tn || (tn != "input" && tn != "textarea" && tn != "a")) {
-		mouseEv._stopPropagation = true;
-		mouseEv._returnValue = false;
-	} else {
-		mouseEv._stopPropagation = false;
-		mouseEv._returnValue = true;
-	}
+	var propagate = obj._propagateEvent[eventType] || (tn === "input" || tn === "textarea" || tn === "a");
+	mouseEv._stopPropagation = !propagate;
+	mouseEv._dontCallPreventDefault = propagate;
+	mouseEv._returnValue = propagate;
 
 	// notify global listeners
 	DwtEventManager.notifyListeners(eventType, mouseEv);
