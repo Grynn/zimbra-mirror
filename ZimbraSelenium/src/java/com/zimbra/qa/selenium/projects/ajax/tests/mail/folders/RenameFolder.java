@@ -109,15 +109,10 @@ public class RenameFolder extends PrefGroupMailByMessageTest {
 		
 	}
 
-	@DataProvider(name = "DataProviderFilenames")
-	public Object[][] DataProviderDeleteKeys() throws HarnessException {
-		return (ZimbraCharsets.getInstance().getSampleTable());
-	}
-
 	@Test(
 			description = "Get a folder with non-ASCII special characters", 
 			groups = { "functional" },
-			dataProvider = "DataProviderFilenames")
+			dataProvider = "DataProviderSupportedCharsets")
 	public void RenameFolder_03(ZCharset charset, String foldername) throws HarnessException {
 		
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);

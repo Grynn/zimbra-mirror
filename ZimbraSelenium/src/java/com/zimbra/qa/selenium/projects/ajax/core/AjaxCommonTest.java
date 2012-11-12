@@ -4,17 +4,14 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
+
 import org.apache.log4j.*;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverBackedSelenium;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.*;
 import org.testng.*;
 import org.testng.annotations.*;
 import org.xml.sax.SAXException;
+
 import com.thoughtworks.selenium.*;
 import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -588,6 +585,17 @@ public class AjaxCommonTest {
 
     }
 	
+	/**
+	 * A TestNG data provider for all supported character sets
+	 * @return
+	 * @throws HarnessException 
+	 */
+	@DataProvider(name = "DataProviderSupportedCharsets")
+	public Object[][] DataProviderSupportedCharsets() throws HarnessException {
+		return (ZimbraCharsets.getInstance().getSampleTable());
+	}
+
+
 	public void ModifyAccountPreferences(String string) throws HarnessException {
 		StringBuilder settings = new StringBuilder();
 		for (Map.Entry<String, String> entry : startingAccountPreferences.entrySet()) {

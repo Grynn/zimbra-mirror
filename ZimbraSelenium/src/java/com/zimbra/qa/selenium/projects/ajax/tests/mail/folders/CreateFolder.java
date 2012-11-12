@@ -127,15 +127,10 @@ public class CreateFolder extends PrefGroupMailByMessageTest {
 
 	}
 
-	@DataProvider(name = "DataProviderFilenames")
-	public Object[][] DataProviderDeleteKeys() throws HarnessException {
-		return (ZimbraCharsets.getInstance().getSampleTable());
-	}
-
 	@Test(
 			description = "Create a folder with non-ASCII special characters", 
 			groups = { "functional" },
-			dataProvider = "DataProviderFilenames")
+			dataProvider = "DataProviderSupportedCharsets")
 	public void CreateFolder_05(ZCharset charset, String foldername) 
 	throws HarnessException 
 	{
