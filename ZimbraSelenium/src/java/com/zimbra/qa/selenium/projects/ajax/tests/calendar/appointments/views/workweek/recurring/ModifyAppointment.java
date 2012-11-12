@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.recurring;
 
 import java.util.Calendar;
-import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
@@ -14,23 +13,14 @@ import com.zimbra.qa.selenium.framework.util.ZDate;
 import com.zimbra.qa.selenium.framework.util.ZTimeZone;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
-import com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.allday.CreateAppointment;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
 public class ModifyAppointment extends CalendarWorkWeekTest {
-
+	java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
+	
 	public ModifyAppointment() {
-		logger.info("New "+ CreateAppointment.class.getCanonicalName());
+		logger.info("New " + ModifyAppointment.class.getCanonicalName());
 
-		// All tests start at the Calendar page
-		super.startingPage = app.zPageCalendar;
-
-		// Make sure we are using an account with work week view
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			private static final long serialVersionUID = -2913827779459595178L;
-		{
-		    put("zimbraPrefCalendarInitialView", "workWeek");
-		}};
 	}
 
 	@Test(

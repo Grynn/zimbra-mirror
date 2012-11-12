@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.allday;
 
 import java.util.Calendar;
-import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
@@ -13,19 +12,11 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 
 public class ModifyAppointment extends CalendarWorkWeekTest {
-
+	java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
+	
 	public ModifyAppointment() {
-		logger.info("New "+ CreateAppointment.class.getCanonicalName());
+		logger.info("New " + ModifyAppointment.class.getCanonicalName());
 
-		// All tests start at the Calendar page
-		super.startingPage = app.zPageCalendar;
-
-		// Make sure we are using an account with work week view
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			private static final long serialVersionUID = -2913827779459595178L;
-		{
-		    put("zimbraPrefCalendarInitialView", "workWeek");
-		}};
 	}
 
 	@Bugs(ids = "69132")
@@ -70,13 +61,11 @@ public class ModifyAppointment extends CalendarWorkWeekTest {
 
         // Open appointment & modify subject, body and save it
         FormApptNew form = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        SleepUtil.sleepMedium();
-        ZAssert.assertNotNull(form, "Verify the appointment form opens correctly");
+        ZAssert.assertNotNull(form, "Verify the appointment form oopens correctly");
 
         form.zFillField(Field.Subject, editApptSubject);
         form.zFillField(Field.Body, editApptBody);
         form.zToolbarPressButton(Button.B_SAVEANDCLOSE);
-        SleepUtil.sleepMedium();
         
         // Use GetAppointmentRequest to verify the changes are saved
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ apptId +"'/>");

@@ -9,24 +9,14 @@ import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
-import com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.allday.CreateAppointment;
 
 
 public class GetAppointment extends CalendarWorkWeekTest {
-
+	java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
 	
 	public GetAppointment() {
-		logger.info("New "+ CreateAppointment.class.getCanonicalName());
+		logger.info("New "+ GetAppointment.class.getCanonicalName());
 
-		// All tests start at the Calendar page
-		super.startingPage = app.zPageCalendar;
-
-		// Make sure we are using an account with work week view
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			private static final long serialVersionUID = -2913827779459595178L;
-		{
-		    put("zimbraPrefCalendarInitialView", "workWeek");
-		}};
 	}
 	
 	@Bugs(ids = "69132")
@@ -75,19 +65,22 @@ public class GetAppointment extends CalendarWorkWeekTest {
 		
 		
 		//-- Verification
-		
-	    //verify appt displayed in workweek view
-		boolean found = false;
-		List<AppointmentItem> items = app.zPageCalendar.zListGetAppointments();
-		for (AppointmentItem item : items ) {
-			if ( subject.equals(item.getSubject()) ) {
-				found = true;
-				break;
+
+		if (cal.get(java.util.Calendar.DAY_OF_WEEK) == 1 || cal.get(java.util.Calendar.DAY_OF_WEEK) == 7) {
+			app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_WEEK);
+			
+			boolean found = false;
+			List<AppointmentItem> items = app.zPageCalendar.zListGetAppointments();
+			for (AppointmentItem item : items ) {
+				if ( subject.equals(item.getSubject()) ) {
+					found = true;
+					break;
+				}
 			}
+			
+			ZAssert.assertTrue(found, "Verify appt gets displayed in work week view");
 		}
 		
-		ZAssert.assertTrue(found, "Verify appt gets displayed in work week view");
-	    
 	}
 
 

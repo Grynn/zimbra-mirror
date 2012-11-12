@@ -9,25 +9,15 @@ import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
-import com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.allday.CreateAppointment;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.ApptWorkWeekView;
 
 
 public class GetAppointment extends CalendarWorkWeekTest {
-
+	java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
 	
 	public GetAppointment() {
-		logger.info("New "+ CreateAppointment.class.getCanonicalName());
-
-		// All tests start at the Calendar page
-		super.startingPage = app.zPageCalendar;
-
-		// Make sure we are using an account with work week view
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			private static final long serialVersionUID = -2913827779459595178L;
-		{
-		    put("zimbraPrefCalendarInitialView", "workWeek");
-		}};
+		logger.info("New "+ GetAppointment.class.getCanonicalName());
+		
 	}
 	
 	@Bugs(ids = "69132")
@@ -75,13 +65,16 @@ public class GetAppointment extends CalendarWorkWeekTest {
 
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
-	    //verify appt displayed in workweek view
-		ApptWorkWeekView view = (ApptWorkWeekView) app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
-		
-		//wait for the appointment displayed in the view
-		app.zPageCalendar.zWaitForElementPresent("css=div[id*=zli__CLWW__]");
-		
-		ZAssert.assertTrue(view.isApptExist(appt), "Verify appt gets displayed in work week view");
-	    
+		if (cal.get(java.util.Calendar.DAY_OF_WEEK) == 1 || cal.get(java.util.Calendar.DAY_OF_WEEK) == 7) {
+			app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_WEEK);
+			
+		    //verify appt displayed in workweek view
+			ApptWorkWeekView view = (ApptWorkWeekView) app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
+			
+			//wait for the appointment displayed in the view
+			app.zPageCalendar.zWaitForElementPresent("css=div[id*=zli__CLWW__]");
+			
+			ZAssert.assertTrue(view.isApptExist(appt), "Verify appt gets displayed in work week view");
+		}
 	}
 }

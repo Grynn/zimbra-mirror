@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.allday;
 
 import java.util.*;
-
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
@@ -11,19 +10,11 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 
 public class GetAppointment extends CalendarWorkWeekTest {
-
+	java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
+	
 	public GetAppointment() {
-		logger.info("New "+ CreateAppointment.class.getCanonicalName());
-
-		// All tests start at the Calendar page
-		super.startingPage = app.zPageCalendar;
-
-		// Make sure we are using an account with work week view
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			private static final long serialVersionUID = -2913827779459595178L;
-		{
-		    put("zimbraPrefCalendarInitialView", "workWeek");
-		}};
+		logger.info("New "+ GetAppointment.class.getCanonicalName());
+		
 	}
 	
 	@Bugs(ids = "69132")
@@ -70,7 +61,9 @@ public class GetAppointment extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		//wait for the appointment displayed in the view
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetReadOnlyAllDayApptLocator(apptSubject)), true, "Verify all-day appointment is deleted");
-	    
+		if (cal.get(java.util.Calendar.DAY_OF_WEEK) == 1 || cal.get(java.util.Calendar.DAY_OF_WEEK) == 7) {
+			app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_WEEK);
+			ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetReadOnlyAllDayApptLocator(apptSubject)), true, "Verify all-day appointment is deleted");
+		}
 	}
 }
