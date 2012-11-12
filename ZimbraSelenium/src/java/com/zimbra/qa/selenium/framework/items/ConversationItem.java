@@ -124,13 +124,8 @@ public class ConversationItem extends MailItem {
 					"</m>" +
 				"</SendMsgRequest>");
 
-		ConversationItem c = new ConversationItem();
-		c.gSubject = subject;
-		c.dMessageList.add(MailItem.importFromSOAP(account, "content:("+ body1 +")"));
-		c.dMessageList.add(MailItem.importFromSOAP(account, "content:("+ body2 +")"));
-		c.dMessageList.add(MailItem.importFromSOAP(account, "content:("+ body3 +")"));
 		
-		return (c);
+		return (ConversationItem.importFromSOAP(account, "subject:("+ subject +")"));
 
 	}
 
