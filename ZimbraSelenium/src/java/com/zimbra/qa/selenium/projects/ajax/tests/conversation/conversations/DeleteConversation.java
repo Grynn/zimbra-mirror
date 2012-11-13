@@ -8,6 +8,7 @@ import org.testng.annotations.*;
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByConversationTest;
@@ -347,5 +348,85 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 		
 	}
 
+
+	
+	@Test(	description = "Delete a conversation - 1 message in inbox, 1 message in sent, 1 message in subfolder",
+			groups = { "functional" })
+	public void DeleteConversation_10() throws HarnessException {
+		
+		//-- DATA
+		
+		// Create a conversation (3 messages)
+		ConversationItem c = ConversationItem.createConversationItem(app.zGetActiveAccount());
+
+		// Put one message in inbox, one in trash, one in subfolder
+		
+		// Get the system folders
+		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
+		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+		FolderItem sent = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Sent);
+
+		// Move the conversation to the trash
+		app.zGetActiveAccount().soapSend(
+				"<ItemActionRequest xmlns='urn:zimbraMail'>" +
+					"<action op='move' l='"+ trash.getId() +"' id='"+ c.getMessageList().get(0).getId() + "'/>" +
+				"</ItemActionRequest>");
+
+		// Create a message in a subfolder
+		String foldername = "folder"+ ZimbraSeleniumProperties.getUniqueString();
+		app.zGetActiveAccount().soapSend(
+					"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+						"<folder name='" + foldername +"' l='"+ inbox.getId() +"'/>" +
+					"</CreateFolderRequest>");
+		FolderItem subfolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
+
+		// Move the conversation to the subfolder
+		app.zGetActiveAccount().soapSend(
+				"<ItemActionRequest xmlns='urn:zimbraMail'>" +
+					"<action op='move' l='"+ subfolder.getId() +"' id='"+ c.getMessageList().get(1).getId() + "'/>" +
+				"</ItemActionRequest>");
+
+		// Reply to one message (putting a message in sent)
+		app.zGetActiveAccount().soapSend(
+					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+						"<m origid='"+ c.getMessageList().get(2).getId() +"' rt='r'>" +
+							"<e t='t' a='"+ ZimbraAccount.AccountA().EmailAddress +"'/>" +
+							"<su>RE: "+ c.getSubject() +"</su>" +
+							"<mp ct='text/plain'>" +
+								"<content>"+ "body" + ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+							"</mp>" +
+						"</m>" +
+					"</SendMsgRequest>");
+		String idSent = app.zGetActiveAccount().soapSelectValue("//mail:m", "id");
+
+		
+		//-- GUI
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+				
+		// Right click the item, select delete
+		app.zPageMail.zListItem(Action.A_RIGHTCLICK, Button.B_DELETE, c.getSubject());
+		
+
+
+		//-- Verification
+		
+		// Expected: all messages should be in trash, except for the sent message
+		// Check each message to verify they exist in the trash
+		ConversationItem actual = ConversationItem.importFromSOAP(app.zGetActiveAccount(), "is:anywhere subject:"+ c.getSubject());
+		
+		for (MailItem m : actual.getMessageList()) {
+			if ( idSent.equals(m.getId()) ) {
+				// Sent message should remain in sent
+				ZAssert.assertEquals(m.dFolderId, sent.getId(), "Verify the conversation message is in the sent folder");
+			} else {
+				// All other messages should be moved to trash
+				ZAssert.assertEquals(m.dFolderId, trash.getId(), "Verify the conversation message is in the trash");
+			}
+		}
+
+		
+	}
 
 }

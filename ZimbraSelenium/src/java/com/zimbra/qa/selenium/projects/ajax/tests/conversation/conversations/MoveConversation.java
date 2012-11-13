@@ -288,4 +288,106 @@ public class MoveConversation extends PrefGroupMailByConversationTest {
 	}
 
 
+	
+	@Test(	description = "Move a conversation - 1 message in inbox, 1 message in sent, 1 message in subfolder",
+			groups = { "functional" })
+	public void MoveConversation_10() throws HarnessException {
+		
+		//-- DATA
+		
+		// Create a conversation (3 messages)
+		ConversationItem c = ConversationItem.createConversationItem(app.zGetActiveAccount());
+
+		// Put one message in inbox, one in trash, one in subfolder
+		
+		// Get the system folders
+		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
+		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+		FolderItem sent = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Sent);
+
+		// Move the conversation to the trash
+		String idTrash = c.getMessageList().get(0).getId();
+		app.zGetActiveAccount().soapSend(
+				"<ItemActionRequest xmlns='urn:zimbraMail'>" +
+					"<action op='move' l='"+ trash.getId() +"' id='"+ idTrash + "'/>" +
+				"</ItemActionRequest>");
+
+		// Create a message in a subfolder
+		String foldername = "folder"+ ZimbraSeleniumProperties.getUniqueString();
+		app.zGetActiveAccount().soapSend(
+					"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+						"<folder name='" + foldername +"' l='"+ inbox.getId() +"'/>" +
+					"</CreateFolderRequest>");
+		FolderItem subfolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
+
+		// Move the conversation to the subfolder
+		app.zGetActiveAccount().soapSend(
+				"<ItemActionRequest xmlns='urn:zimbraMail'>" +
+					"<action op='move' l='"+ subfolder.getId() +"' id='"+ c.getMessageList().get(1).getId() + "'/>" +
+				"</ItemActionRequest>");
+
+		// Reply to one message (putting a message in sent)
+		app.zGetActiveAccount().soapSend(
+					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+						"<m origid='"+ c.getMessageList().get(2).getId() +"' rt='r'>" +
+							"<e t='t' a='"+ ZimbraAccount.AccountA().EmailAddress +"'/>" +
+							"<su>RE: "+ c.getSubject() +"</su>" +
+							"<mp ct='text/plain'>" +
+								"<content>"+ "body" + ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+							"</mp>" +
+						"</m>" +
+					"</SendMsgRequest>");
+		String idSent = app.zGetActiveAccount().soapSelectValue("//mail:m", "id");
+
+		// Create a folder to move the converation to
+		String destinationname = "folder"+ ZimbraSeleniumProperties.getUniqueString();
+		app.zGetActiveAccount().soapSend(
+					"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+						"<folder name='" + destinationname +"' l='"+ inbox.getId() +"'/>" +
+					"</CreateFolderRequest>");
+		FolderItem destination = FolderItem.importFromSOAP(app.zGetActiveAccount(), destinationname);
+
+
+		//-- GUI
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		
+		// Select the item
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, c.getSubject());
+		
+		// Click move -> subfolder
+		app.zPageMail.zToolbarPressPulldown(Button.B_MOVE, destination);
+		
+
+
+		//-- Verification
+		
+		// Expected: all messages should be in subfolder, except for the sent message and the trash message
+		
+		ConversationItem actual = ConversationItem.importFromSOAP(app.zGetActiveAccount(), "is:anywhere subject:"+ c.getSubject());
+		
+		for (MailItem m : actual.getMessageList()) {
+			if ( idSent.equals(m.getId()) ) {
+				
+				// Sent message should remain in sent
+				ZAssert.assertEquals(m.dFolderId, sent.getId(), "Verify the conversation message is in the sent folder");
+				
+			} else if ( idTrash.equals(m.getId()) ) {
+				
+				// Trash message should remain in trash
+				ZAssert.assertEquals(m.dFolderId, trash.getId(), "Verify the conversation message is in the trash");
+				
+			} else {
+				
+				// All other messages should be moved to trash
+				ZAssert.assertEquals(m.dFolderId, destination.getId(), "Verify the conversation message is in the subfolder");
+				
+			}
+		}
+
+		
+	}
+
+
 }
