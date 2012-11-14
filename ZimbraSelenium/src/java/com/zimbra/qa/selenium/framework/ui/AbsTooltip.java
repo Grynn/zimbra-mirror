@@ -12,19 +12,19 @@ import com.zimbra.qa.selenium.framework.util.*;
  * @author Matt Rhoades
  *
  */
-public abstract class AbsTooltip {
+public abstract class AbsTooltip extends AbsPage {
 	protected static Logger logger = LogManager.getLogger(AbsTooltip.class);
 
-	protected AbsTab MyTab = null;
-	
+
 	/**
 	 * Create this Tooltip object that exists in the specified page
 	 * @param application
 	 */
-	protected AbsTooltip(AbsTab tab) {		
+	protected AbsTooltip(AbsApplication application) {		
+		super(application);
+
 		logger.info("new " + this.getClass().getCanonicalName());
 		
-		MyTab = tab;
 	}
 	
 	/**
@@ -40,34 +40,6 @@ public abstract class AbsTooltip {
 	 * @throws HarnessException
 	 */
 	public abstract boolean zIsActive() throws HarnessException;
-
-	/**
-	 * Wait for this tooltip to become active
-	 * @throws HarnessException
-	 */
-	public void zWaitForActive() throws HarnessException {
-		long millis = 10000;
-		
-		if ( zIsActive() ) {
-			return; // Page became active
-		}
-		
-		do {
-			SleepUtil.sleep(SleepUtil.SleepGranularity);
-			millis = millis - SleepUtil.SleepGranularity;
-			if ( zIsActive() ) {
-				return; // Page became active
-			}
-		} while (millis > SleepUtil.SleepGranularity);
-		
-		SleepUtil.sleep(millis);
-		if ( zIsActive() ) {
-			return;	// Page became active
-		}
-
-		throw new HarnessException("Page never became active");
-
-	}
 	
 	/**
 	 * Return the unique name for this page class

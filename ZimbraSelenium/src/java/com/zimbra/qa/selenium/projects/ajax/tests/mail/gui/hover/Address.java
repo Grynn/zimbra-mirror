@@ -59,7 +59,7 @@ public class Address extends PrefGroupMailByMessageTest {
 		
 		//-- GUI Verification
 		
-		TooltipContact tooltip = new TooltipContact(app.zPageMail);
+		TooltipContact tooltip = new TooltipContact(app);
 		tooltip.zWaitForActive();
 		
 		ZAssert.assertTrue(tooltip.zIsActive(), "Verify the tooltip shows");
@@ -109,7 +109,7 @@ public class Address extends PrefGroupMailByMessageTest {
 		
 		//-- GUI Verification
 		
-		TooltipContact tooltip = new TooltipContact(app.zPageMail);
+		TooltipContact tooltip = new TooltipContact(app);
 		tooltip.zWaitForActive();
 		
 		ZAssert.assertTrue(tooltip.zIsActive(), "Verify the tooltip shows");

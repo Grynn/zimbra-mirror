@@ -1730,7 +1730,7 @@ public class PageMail extends AbsTab {
 		// Don't wait if the tooltip is not active
 		//
 		
-		Tooltip tooltip = new Tooltip(this);
+		Tooltip tooltip = new Tooltip(MyApplication);
 		if (tooltip.zIsActive()) {
 			
 			// Mouse over

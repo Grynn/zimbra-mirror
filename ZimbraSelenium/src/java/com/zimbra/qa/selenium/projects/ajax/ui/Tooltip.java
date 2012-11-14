@@ -20,8 +20,8 @@ public class Tooltip extends AbsTooltip {
 		
 	}
 	
-	public Tooltip(AbsTab tab) {	
-		super(tab);
+	public Tooltip(AbsApplication application) {	
+		super(application);
 		
 		logger.info("new " + this.getClass().getCanonicalName());
 	}
@@ -31,7 +31,7 @@ public class Tooltip extends AbsTooltip {
 	{
 		logger.info(myPageName() + " zGetContents()");
 
-		return (MyTab.sGetText(Locators.TooltipContentsCSS));
+		return (this.sGetText(Locators.TooltipContentsCSS));
 	}
 	
 	
@@ -40,11 +40,11 @@ public class Tooltip extends AbsTooltip {
 	{
 		logger.info(myPageName() + " zIsVisible()");
 		
-		boolean present = MyTab.sIsElementPresent(Locators.DwtToolTipCSS);
+		boolean present = this.sIsElementPresent(Locators.DwtToolTipCSS);
 		if ( !present )
 			return (false);
 		
-		boolean visible = MyTab.zIsVisiblePerPosition(Locators.DwtToolTipCSS, 0, 0);
+		boolean visible = this.zIsVisiblePerPosition(Locators.DwtToolTipCSS, 0, 0);
 		if ( !visible )
 			return (false);
 		
