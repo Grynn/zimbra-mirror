@@ -12,7 +12,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 
 public class ModifyAppointment extends CalendarWorkWeekTest {
-	java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
 	
 	public ModifyAppointment() {
 		logger.info("New " + ModifyAppointment.class.getCanonicalName());

@@ -15,7 +15,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDeleteAppoi
 
 @SuppressWarnings("unused")
 public class DeleteAppointment extends CalendarWorkWeekTest {
-	java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
 	
 	public DeleteAppointment() {
 		logger.info("New "+ DeleteAppointment.class.getCanonicalName());
@@ -60,10 +59,8 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
 		dlgConfirm.zClickButton(Button.B_YES);
 		dlgConfirm.zWaitForClose();
 		
-		if (cal.get(java.util.Calendar.DAY_OF_WEEK) == 1 || cal.get(java.util.Calendar.DAY_OF_WEEK) == 7) {
-			app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_WEEK);
-			ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify appointment is deleted");
-		}	
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify appointment is deleted");
+
 	}
 	
 	@Bugs(ids = "69132")
@@ -104,10 +101,8 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
 		dlgConfirm.zClickButton(Button.B_YES);
 		dlgConfirm.zWaitForClose();
 		
-		if (cal.get(java.util.Calendar.DAY_OF_WEEK) == 1 || cal.get(java.util.Calendar.DAY_OF_WEEK) == 7) {
-			app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_WEEK);
-			ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify appointment is deleted");
-		}	
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify appointment is deleted");
+	
 	}
 	
 	@DataProvider(name = "DataProviderShortcutKeys")
@@ -156,7 +151,6 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         DialogConfirmDeleteAppointment dlgConfirm = (DialogConfirmDeleteAppointment)app.zPageCalendar.zKeyboardKeyEvent(keyEvent);
 		dlgConfirm.zClickButton(Button.B_YES);
-		
 		
 		//-- Verification
 		app.zGetActiveAccount().soapSend(

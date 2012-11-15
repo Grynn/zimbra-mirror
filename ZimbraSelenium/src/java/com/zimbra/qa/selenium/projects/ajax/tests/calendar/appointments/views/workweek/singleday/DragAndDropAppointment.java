@@ -14,7 +14,6 @@ import com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.wo
 
 
 public class DragAndDropAppointment extends CalendarWorkWeekTest {
-
 	
 	public DragAndDropAppointment() {
 		logger.info("New "+ CreateAppointment.class.getCanonicalName());

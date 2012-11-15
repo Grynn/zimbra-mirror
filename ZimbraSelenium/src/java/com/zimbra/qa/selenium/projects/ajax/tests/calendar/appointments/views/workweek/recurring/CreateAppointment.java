@@ -11,7 +11,6 @@ import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
 public class CreateAppointment extends CalendarWorkWeekTest {
-	java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
 
 	public CreateAppointment() {
 		logger.info("New "+ CreateAppointment.class.getCanonicalName());

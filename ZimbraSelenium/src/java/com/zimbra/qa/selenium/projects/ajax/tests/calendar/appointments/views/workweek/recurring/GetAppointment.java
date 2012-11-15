@@ -13,7 +13,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.ApptWorkWeekView;
 
 
 public class GetAppointment extends CalendarWorkWeekTest {
-	java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
 	
 	public GetAppointment() {
 		logger.info("New "+ GetAppointment.class.getCanonicalName());
@@ -65,16 +64,12 @@ public class GetAppointment extends CalendarWorkWeekTest {
 
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
-		if (cal.get(java.util.Calendar.DAY_OF_WEEK) == 1 || cal.get(java.util.Calendar.DAY_OF_WEEK) == 7) {
-			app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_WEEK);
-			
-		    //verify appt displayed in workweek view
-			ApptWorkWeekView view = (ApptWorkWeekView) app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
-			
-			//wait for the appointment displayed in the view
-			app.zPageCalendar.zWaitForElementPresent("css=div[id*=zli__CLWW__]");
-			
-			ZAssert.assertTrue(view.isApptExist(appt), "Verify appt gets displayed in work week view");
-		}
+	    //verify appt displayed in workweek view
+		ApptWorkWeekView view = (ApptWorkWeekView) app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
+		
+		//wait for the appointment displayed in the view
+		app.zPageCalendar.zWaitForElementPresent("css=div[id*=zli__CLWW__]");
+		
+		ZAssert.assertTrue(view.isApptExist(appt), "Verify appt gets displayed in work week view");
 	}
 }

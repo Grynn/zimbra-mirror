@@ -10,7 +10,6 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 
 public class GetAppointment extends CalendarWorkWeekTest {
-	java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
 	
 	public GetAppointment() {
 		logger.info("New "+ GetAppointment.class.getCanonicalName());
@@ -61,9 +60,7 @@ public class GetAppointment extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		//wait for the appointment displayed in the view
-		if (cal.get(java.util.Calendar.DAY_OF_WEEK) == 1 || cal.get(java.util.Calendar.DAY_OF_WEEK) == 7) {
-			app.zPageCalendar.zToolbarPressButton(Button.O_LISTVIEW_WEEK);
-			ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetReadOnlyAllDayApptLocator(apptSubject)), true, "Verify all-day appointment is deleted");
-		}
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetReadOnlyAllDayApptLocator(apptSubject)), true, "Verify all-day appointment is deleted");
+		
 	}
 }

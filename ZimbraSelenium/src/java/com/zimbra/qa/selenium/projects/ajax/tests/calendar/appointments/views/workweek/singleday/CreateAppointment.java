@@ -9,7 +9,6 @@ import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
 public class CreateAppointment extends CalendarWorkWeekTest {
-	java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
 	
 	public CreateAppointment() {
 		logger.info("New "+ CreateAppointment.class.getCanonicalName());
@@ -26,10 +25,10 @@ public class CreateAppointment extends CalendarWorkWeekTest {
 		AppointmentItem appt = new AppointmentItem();
 		Calendar now = this.calendarWeekDayUTC;
 		appt.setSubject("appointment" + ZimbraSeleniumProperties.getUniqueString());
-		appt.setContent("content" + ZimbraSeleniumProperties.getUniqueString());
 		appt.setStartTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0));
 		appt.setEndTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0));
-	
+		appt.setContent("content" + ZimbraSeleniumProperties.getUniqueString());
+		
 		// Open the new mail form
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		ZAssert.assertNotNull(apptForm, "Verify the new form opened");
@@ -98,12 +97,15 @@ public class CreateAppointment extends CalendarWorkWeekTest {
 		
 		// Create appointment
 		String apptSubject;
+		Calendar now = this.calendarWeekDayUTC;
 		apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 		AppointmentItem appt = new AppointmentItem();
 		
 		appt.setSubject(apptSubject);
 		appt.setContent("content" + ZimbraSeleniumProperties.getUniqueString());
 		appt.setAttendees(ZimbraAccount.AccountA().EmailAddress);
+		appt.setStartTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0));
+		appt.setEndTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0));
 		appt.setIsPrivate(true);
 	
 		// Open the new mail form
