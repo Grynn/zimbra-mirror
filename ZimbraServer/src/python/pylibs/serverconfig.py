@@ -33,8 +33,6 @@ class ServerConfig(config.Config):
 		if (hostname is None):
 			raise Exception, "Hostname required"
 		self.loaded = True
-		self.config = {}
-		self.serviceconfig = {}
 
 		t1 = time.clock()
 		c = commands.commands["gs"]

@@ -24,7 +24,6 @@ import time
 class MiscConfig(config.Config):
 	def load(self):
 		self.loaded = True
-		self.config = {}
 
 		t1 = time.clock()
 		#th = []

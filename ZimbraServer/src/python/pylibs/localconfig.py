@@ -23,7 +23,6 @@ import time
 class LocalConfig(config.Config):
 	def load(self):
 		self.loaded = True
-		self.config = {}
 
 		t1 = time.clock()
 		c = commands.commands["localconfig"]

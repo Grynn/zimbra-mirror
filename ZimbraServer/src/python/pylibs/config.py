@@ -20,6 +20,7 @@ class Config:
 	def __init__(self):
 		self.loaded = False
 		self.config = {}
+		self.serviceconfig = {}
 
 	def __setitem__(self,key,val):
 		self.config[key] = val
