@@ -15,12 +15,12 @@
 package com.zimbra.soap;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.ws.soap.SOAPFaultException;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sun.xml.ws.api.message.Header;
 import com.sun.xml.ws.api.message.Headers;
@@ -95,8 +95,10 @@ import generated.zcsclient.ws.service.ZcsAdminPortType;
 import generated.zcsclient.ws.service.ZcsAdminService;
 import generated.zcsclient.ws.service.ZcsPortType;
 import generated.zcsclient.ws.service.ZcsService;
+import generated.zcsclient.zm.ObjectFactory;
 import generated.zcsclient.zm.testAccountBy;
 import generated.zcsclient.zm.testAccountSelector;
+import generated.zcsclient.zm.testHeaderContext;
 
 import org.junit.Assert;
 
@@ -112,23 +114,21 @@ public class Utility {
     private static String adminAuthToken = null;
     private static Map<String,String> acctAuthToks = Maps.newHashMap();
 
-    public static void addSoapAcctAuthHeader(WSBindingProvider bp,
-                String authToken)
+    public static void addSoapAcctAuthHeader(WSBindingProvider bp, String authToken)
     throws Exception {
-        // Note that am not using JAXB generated HeaderContext here
-        JAXBRIContext jaxb = (JAXBRIContext) JAXBRIContext.newInstance(com.zimbra.soap.header.HeaderContext.class);
-        com.zimbra.soap.header.HeaderContext hdrCtx = new com.zimbra.soap.header.HeaderContext();
+        JAXBRIContext jaxb = (JAXBRIContext) JAXBRIContext.newInstance(testHeaderContext.class);
+        testHeaderContext hdrCtx = new testHeaderContext();
         hdrCtx.setAuthToken(authToken);
-        Header soapHdr = Headers.create(jaxb,hdrCtx);
-        List <Header> soapHdrs = new ArrayList <Header>();
-        soapHdrs.add(soapHdr);
+        ObjectFactory fact = new ObjectFactory();
+        // testHeaderContext doesn't have an @XmlRootElement annotation for some reason - so wrap in JAXBElement
+        JAXBElement<testHeaderContext> jaxbHeaderContext = fact.createContext(hdrCtx);
+        Header soapHdr = Headers.create(jaxb, jaxbHeaderContext);
+        Lists.newArrayList(soapHdr);
         // See http://metro.java.net/1.5/guide/SOAP_headers.html
-        // WSBindingProvider bp = (WSBindingProvider)acctSvcEIF;
-        bp.setOutboundHeaders(soapHdrs);
+        bp.setOutboundHeaders(Lists.newArrayList(soapHdr));
     }
 
-    public static String addSoapAcctAuthHeaderForAcct(WSBindingProvider bp,
-            String acctName)
+    public static String addSoapAcctAuthHeaderForAcct(WSBindingProvider bp, String acctName)
     throws Exception {
         String authTok;
         if (acctAuthToks.containsKey(acctName))
@@ -226,16 +226,16 @@ public class Utility {
 
     public static void addSoapAdminAuthHeader(WSBindingProvider bp) throws Exception {
         Utility.getAdminServiceAuthToken();
-        // Note that am not using JAXB generated HeaderContext here
-        JAXBRIContext jaxb = (JAXBRIContext) JAXBRIContext.newInstance(com.zimbra.soap.header.HeaderContext.class);
-        com.zimbra.soap.header.HeaderContext hdrCtx = new com.zimbra.soap.header.HeaderContext();
+        JAXBRIContext jaxb = (JAXBRIContext) JAXBRIContext.newInstance(testHeaderContext.class);
+        testHeaderContext hdrCtx = new testHeaderContext();
         hdrCtx.setAuthToken(adminAuthToken);
-        Header soapHdr = Headers.create(jaxb,hdrCtx);
-        List <Header> soapHdrs = new ArrayList <Header>();
-        soapHdrs.add(soapHdr);
+        ObjectFactory fact = new ObjectFactory();
+        // testHeaderContext doesn't have an @XmlRootElement annotation for some reason - so wrap in JAXBElement
+        JAXBElement<testHeaderContext> jaxbHeaderContext = fact.createContext(hdrCtx);
+        Header soapHdr = Headers.create(jaxb, jaxbHeaderContext);
+        Lists.newArrayList(soapHdr);
         // See http://metro.java.net/1.5/guide/SOAP_headers.html
-        // WSBindingProvider bp = (WSBindingProvider)acctSvcEIF;
-        bp.setOutboundHeaders(soapHdrs);
+        bp.setOutboundHeaders(Lists.newArrayList(soapHdr));
     }
 
     public static String getAdminServiceAuthToken() throws Exception {
