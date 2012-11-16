@@ -635,6 +635,14 @@ deployCert() {
       getCertFromLdap $type
       cli_comm_crt=${commercial_crt}
     fi
+
+    # Add newline char to end of cert file if it does not have one.
+    if [ `perl -e 'my $char; open(FILE, "'${cli_comm_crt}'"); seek(FILE, -1, 2); read(FILE, $char, 1); close(FILE); if ("$char" ne "\n") { print "1" } else { print "0" }'` == "1" ]; then
+      echo "" >> ${cli_comm_crt}
+    fi
+    if [ `perl -e 'my $char; open(FILE, "'${cli_ca_chain}'"); seek(FILE, -1, 2); read(FILE, $char, 1); close(FILE); if ("$char" ne "\n") { print "1" } else { print "0" }'` == "1" ]; then
+      echo "" >> ${cli_ca_chain}
+    fi
   
     if [ x"$cli_comm_crt" != "x" ]; then
       $0 verifycrt comm ${commercial_key} ${cli_comm_crt} ${cli_ca_chain}
