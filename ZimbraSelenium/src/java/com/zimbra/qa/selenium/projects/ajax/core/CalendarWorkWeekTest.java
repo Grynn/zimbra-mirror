@@ -12,7 +12,9 @@ import java.util.*;
  *
  */
 public class CalendarWorkWeekTest extends AjaxCommonTest {
-
+	
+	public static boolean organizerTest;
+	
 	protected Calendar calendarWeekDayUTC = null;
 	
 	public CalendarWorkWeekTest() {

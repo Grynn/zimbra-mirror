@@ -2,19 +2,18 @@ package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
 import java.awt.event.KeyEvent;
 import java.util.*;
-
 import org.apache.commons.lang.StringUtils;
 import org.seleniumhq.jetty7.util.log.Log;
-
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
+import com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.CopyMeeting;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-
+import com.zimbra.qa.unittest.TestUtil;
 
 @SuppressWarnings("unused")
 public class PageCalendar extends AbsTab {
@@ -834,7 +833,7 @@ public class PageCalendar extends AbsTab {
 				
 				page = new FormMailNew(this.MyApplication);
 				waitForPostfix = true;
-				
+					
 			} else if ( option == Button.O_FORWARD_MENU) {
 				
 				optionLocator = Locators.ForwardMenu;
@@ -849,6 +848,27 @@ public class PageCalendar extends AbsTab {
 				waitForPostfix = true;
 				
 				// FALL THROUGH
+			
+			} else if ( option == Button.O_CREATE_A_COPY_MENU) {
+				
+				optionLocator = Locators.CreateACopyMenu;
+				
+				if ( optionLocator != null ) {
+					this.zClickAt(optionLocator, "");
+					SleepUtil.sleepSmall();
+					this.zWaitForBusyOverlay();
+				}
+				
+				if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.CopyMeeting.organizerTest == false) {
+					page = new DialogInformational(DialogInformational.DialogWarningID.InformationalDialog, MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+				} else {	
+					page = null;
+				}
+				
+				waitForPostfix = false;
+				
+				// FALL THROUGH
+				
 				
 			} else {
 

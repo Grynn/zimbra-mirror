@@ -12,6 +12,7 @@ public class AppointmentItem implements IItem {
 	public String dApptID = null;
 	protected String dSubject = null;
 	protected String dFragment = null;
+	protected String dOrganizer = null;
 	protected String dAttendees = null;
 	protected String dOptionals = null;
 	protected String dLocation = null;
@@ -35,6 +36,7 @@ public class AppointmentItem implements IItem {
 	// GUI values
 	protected String gSubject = null;
 	protected String gFragment = null;
+	protected String gOrganizer = null;
 	protected String gAttendees = null;
 	protected String gOptionals = null;	
 	protected String gLocation = null;
@@ -104,9 +106,11 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 						
 			String parentFolder = m.getAttribute("l");
 			if ( parentFolder != null ) {
+				
+				// Parent folder
 				appt.dFolder = parentFolder;
 			}
-
+			
 			Element sElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:s");
 			if ( sElement != null ) {
 				
@@ -135,7 +139,15 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 				// Display
 				appt.dDisplay = compElement.getAttribute("fb");
 			}
+			
+			Element oElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:or");
+			if ( oElement != null ) {
 				
+				// Organizer
+				appt.dOrganizer = oElement.getAttribute("a");
+				
+			}
+			
 			// Parse the required attendees
 			ArrayList<String> attendees = new ArrayList<String>();
 			Element[] requiredElements = ZimbraAccount.SoapClient.selectNodes(m, "//mail:at[@role='REQ']");
@@ -326,6 +338,10 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 	
 	public void setFragment(String subject) {
 		dFragment = subject;
+	}
+	
+	public String getOrganizer() {
+		return (dOrganizer);
 	}
 	
 	public String getAttendees() {
