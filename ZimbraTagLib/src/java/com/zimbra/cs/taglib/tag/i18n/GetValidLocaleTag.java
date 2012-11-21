@@ -14,16 +14,24 @@
  */
 package com.zimbra.cs.taglib.tag.i18n;
 
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.client.ZMailbox;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
-import java.io.IOException;
-import java.util.List;
+
+import com.zimbra.common.auth.ZAuthToken;
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.AccountConstants;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.Element.XMLElement;
+import com.zimbra.common.soap.SoapHttpTransport;
+import com.zimbra.cs.taglib.ZJspSession;
+import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 
 
 public class GetValidLocaleTag extends ZimbraSimpleTag {
@@ -44,10 +52,22 @@ public class GetValidLocaleTag extends ZimbraSimpleTag {
             ctxt.setAttribute(mVar, false,  PageContext.REQUEST_SCOPE);
             return;
         }
-        ZMailbox mbox = getMailbox();
+        ZAuthToken authToken = ZJspSession.getAuthToken((PageContext)ctxt);
+        String soapUri = ZJspSession.getSoapURL((PageContext)ctxt);
+        SoapHttpTransport transport = null;
         try {
+        	transport = new SoapHttpTransport(soapUri);
+     		transport.setAuthToken(authToken);
+        	XMLElement req = new XMLElement(AccountConstants.GET_AVAILABLE_LOCALES_REQUEST);
+            Element resp = transport.invokeWithoutSession(req);
+            List<String> locales = new ArrayList<String>();
+            for (Element locale : resp.listElements(AccountConstants.E_LOCALE)) {
+                String id = locale.getAttribute(AccountConstants.A_ID, null);
+                if (id != null)
+                	locales.add(id);
+            }
+            Collections.sort(locales);
             boolean isValid = false;
-            List<String> locales = mbox.getAvailableLocales();
             for(String s : locales) {
                 if (this.mLocale.toLowerCase().startsWith(s.toLowerCase())) {
                     isValid = true;
@@ -58,6 +78,9 @@ public class GetValidLocaleTag extends ZimbraSimpleTag {
         }
         catch(ServiceException e) {
             throw new JspTagException(e.getMessage(), e);   
+        } finally {
+            if (transport != null)
+                transport.shutdown();
         }
     }
 
