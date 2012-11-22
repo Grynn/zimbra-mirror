@@ -4,12 +4,14 @@ import java.awt.event.KeyEvent;
 import java.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.seleniumhq.jetty7.util.log.Log;
+
+import com.zimbra.common.util.SystemUtil;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
-import com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.CopyMeeting;
+import com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.actions.CreateACopy;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
@@ -212,6 +214,21 @@ public class PageCalendar extends AbsTab {
 	
 	public String zGetReadOnlyAllDayApptLocator(String apptSubject) throws HarnessException {
 		return "css=td.appt_allday_new_name:contains('" + apptSubject + "')";
+	}
+	
+	public String zGetApptSubjectFromReadOnlyAppt() throws HarnessException {
+		return sGetText("css=div[class='MsgHeader'] td[class='SubjectCol']");
+	}
+	
+	public String zGetApptBodyFromReadOnlyAppt() throws HarnessException {
+		String bodyValue;
+		try {
+			this.sSelectFrame("css=iframe[id$='__body__iframe']");
+			bodyValue = this.sGetText("css=body");
+			return bodyValue;
+		} finally {
+			this.sSelectFrame("relative=top");
+		}
 	}
 	
 	private AbsPage zListItemListView(Action action, String subject) throws HarnessException {
@@ -729,6 +746,7 @@ public class PageCalendar extends AbsTab {
 		AbsPage page = null;
 		boolean waitForPostfix = false;
 		String optionLocator = null;
+		String subOptionLocator = null;
 
 		
 		if ( this.sIsElementPresent(itemsLocator +" td.appt_name:contains('"+ subject +"')")) {
@@ -793,6 +811,140 @@ public class PageCalendar extends AbsTab {
 				}
 
 				throw new HarnessException("Dialog box not opened after performing action");
+			
+			} else if ( option == Button.O_OPEN_MENU ) {
+				
+				optionLocator = Locators.OpenMenu;
+				
+				if ( optionLocator != null ) {
+
+					this.zClickAt(optionLocator, "");
+					SleepUtil.sleepSmall();
+					this.zWaitForBusyOverlay();
+
+				}
+				
+				System.out.println(com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.actions.Open.organizerTest);
+				if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.actions.Open.organizerTest == false) {
+					page = null;
+				} else {	
+					page = new FormApptNew(this.MyApplication);
+				}
+				
+				waitForPostfix = false;
+				
+			} else if ( option == Button.O_ACCEPT_MENU ) {
+				
+				optionLocator = Locators.AcceptMenu;
+				
+				if ( optionLocator != null ) {
+
+					this.zClickAt(optionLocator, "");
+					SleepUtil.sleepSmall();
+					this.zWaitForBusyOverlay();
+
+				}
+				page = null;
+				waitForPostfix = true;
+			
+			} else if ( option == Button.O_TENTATIVE_MENU ) {
+				
+				optionLocator = Locators.TentativeMenu;
+				
+				if ( optionLocator != null ) {
+
+					this.zClickAt(optionLocator, "");
+					SleepUtil.sleepSmall();
+					this.zWaitForBusyOverlay();
+
+				}
+				page = null;
+				waitForPostfix = true;
+			
+			} else if ( option == Button.O_DECLINE_MENU ) {
+				
+				optionLocator = Locators.DeclineMenu;
+				
+				if ( optionLocator != null ) {
+
+					this.zClickAt(optionLocator, "");
+					SleepUtil.sleepSmall();
+					this.zWaitForBusyOverlay();
+
+				}
+				page = null;
+				waitForPostfix = true;
+			
+			} else if ( option == Button.O_EDIT_REPLY_ACCEPT_SUB_MENU ) {
+				
+				optionLocator = Locators.EditReplyMenu;
+				subOptionLocator = Locators.EditReplyAcceptSubMenu;
+				
+				if ( optionLocator != null ) {
+
+					this.sMouseOver(optionLocator);
+					SleepUtil.sleepSmall();
+					
+					this.sClickAt(subOptionLocator, "");					
+					SleepUtil.sleepSmall();
+					
+					this.zWaitForBusyOverlay();
+
+				}
+				page = new FormMailNew(this.MyApplication);
+				waitForPostfix = true;
+			
+			} else if ( option == Button.O_EDIT_REPLY_TENTATIVE_SUB_MENU ) {
+				
+				optionLocator = Locators.EditReplyMenu;
+				subOptionLocator = Locators.EditReplyTentativeSubMenu;
+				
+				if ( optionLocator != null ) {
+
+					this.sMouseOver(optionLocator);
+					SleepUtil.sleepSmall();
+					
+					this.sClickAt(subOptionLocator, "");					
+					SleepUtil.sleepSmall();
+					
+					this.zWaitForBusyOverlay();
+
+				}
+				page = new FormMailNew(this.MyApplication);
+				waitForPostfix = true;
+				
+			} else if ( option == Button.O_EDIT_REPLY_DECLINE_SUB_MENU ) {
+				
+				optionLocator = Locators.EditReplyMenu;
+				subOptionLocator = Locators.EditReplyDeclineSubMenu;
+				
+				if ( optionLocator != null ) {
+			
+					this.sMouseOver(optionLocator);
+					SleepUtil.sleepSmall();
+					
+					this.sClickAt(subOptionLocator, "");					
+					SleepUtil.sleepSmall();
+					
+					this.zWaitForBusyOverlay();
+			
+				}
+				page = new FormMailNew(this.MyApplication);
+				waitForPostfix = true;
+				
+			} else if ( option == Button.O_REINVITE ) {
+				
+				optionLocator = "css=div#zm__Calendar div#REINVITE_ATTENDEES td[id$='_title']";
+				
+				if ( optionLocator != null ) {
+
+					this.zClickAt(optionLocator, "");
+					SleepUtil.sleepSmall();
+					this.zWaitForBusyOverlay();
+
+				}
+				page = null;
+				waitForPostfix = true;
 				
 			} else if ( option == Button.O_REINVITE ) {
 				
@@ -846,8 +998,6 @@ public class PageCalendar extends AbsTab {
 				
 				page = null;
 				waitForPostfix = true;
-				
-				// FALL THROUGH
 			
 			} else if ( option == Button.O_CREATE_A_COPY_MENU) {
 				
@@ -859,16 +1009,13 @@ public class PageCalendar extends AbsTab {
 					this.zWaitForBusyOverlay();
 				}
 				
-				if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.CopyMeeting.organizerTest == false) {
+				if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.actions.CreateACopy.organizerTest == false) {
 					page = new DialogInformational(DialogInformational.DialogWarningID.InformationalDialog, MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 				} else {	
 					page = null;
 				}
 				
 				waitForPostfix = false;
-				
-				// FALL THROUGH
-				
 				
 			} else {
 

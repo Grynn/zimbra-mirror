@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
 import java.awt.event.KeyEvent;
-
 import com.zimbra.qa.selenium.framework.core.SeleniumService;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -194,6 +193,10 @@ public class FormApptNew extends AbsForm {
 		pageCal.zKeyboard.zTypeKeyEvent(keyEvent);
 	}
 	
+	public String zGetApptSubject() throws HarnessException {
+		return sGetValue("css=td[id$='_subject'] input[id$='_subject_input']");
+	}
+    
 	public Boolean zVerifyRequiredAttendee(String attendee) throws HarnessException {
 		return sIsElementPresent("css=td[id$='_person'] span:contains('" + attendee + "')");
 	}
@@ -208,6 +211,10 @@ public class FormApptNew extends AbsForm {
 	
 	public Boolean zVerifyEquipment(String equipment) throws HarnessException {
 		return sIsElementPresent("css=td[id$='_resourcesData'] span:contains('" + equipment + "')");
+	}
+	
+	public String zGetApptBody() throws HarnessException {
+		return sGetValue("css=div[class='ZmHtmlEditor'] textarea[class=DwtHtmlEditorTextArea]");
 	}
 	
 	public void zRemoveAttendee(String attendee) throws HarnessException {
