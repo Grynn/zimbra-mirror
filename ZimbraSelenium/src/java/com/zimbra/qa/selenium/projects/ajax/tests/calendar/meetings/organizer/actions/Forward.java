@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.actions;
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
@@ -10,10 +10,10 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 
-public class ForwardMeeting extends CalendarWorkWeekTest {	
+public class Forward extends CalendarWorkWeekTest {	
 	
-	public ForwardMeeting() {
-		logger.info("New "+ ForwardMeeting.class.getCanonicalName());
+	public Forward() {
+		logger.info("New "+ Forward.class.getCanonicalName());
 		
 	}
 	

@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.actions;
 
 import java.util.Calendar;
 
@@ -10,11 +10,11 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 
-public class ResendMeeting extends CalendarWorkWeekTest {	
+public class ReinviteAttendees extends CalendarWorkWeekTest {	
 	
 	
-	public ResendMeeting() {
-		logger.info("New "+ ResendMeeting.class.getCanonicalName());
+	public ReinviteAttendees() {
+		logger.info("New "+ ReinviteAttendees.class.getCanonicalName());
 		
 	}
 	
@@ -24,7 +24,7 @@ public class ResendMeeting extends CalendarWorkWeekTest {
 	@Bugs(ids = "21181")
 	@Test(description = "Resend a meeting invite using context menu",
 			groups = { "smoke" })
-	public void ResendMeeting_01() throws HarnessException {
+	public void ReinviteAttendees_01() throws HarnessException {
 		
 		
 		//-- Data setup
