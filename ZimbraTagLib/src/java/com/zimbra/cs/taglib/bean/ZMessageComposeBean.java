@@ -1420,6 +1420,7 @@ public class ZMessageComposeBean {
 
     public ZInvite toInvite(ZMailbox mailbox, ZMessageBean message) throws ServiceException {
         ZInvite existingInvite = message != null ? message.getInvite() : null;
+        setOrigOrganizer(existingInvite != null ? existingInvite.getComponent().getOrganizer().getAddress() : null);
         ZInvite invite = new ZInvite();
         ZInvite.ZComponent comp = new ZComponent();
 
