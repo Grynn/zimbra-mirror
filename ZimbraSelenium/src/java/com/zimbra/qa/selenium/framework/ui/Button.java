@@ -359,8 +359,10 @@ public class Button {
 
 	// Mail 'Display' buttons
 	public static final Button B_ACCEPT = new Button("B_ACCEPT");
+	public static final Button B_ACCEPT_PROPOSE_NEW_TIME = new Button("B_ACCEPT_PROPOSE_NEW_TIME");
 	public static final Button B_ACCEPT_DROPDOWN = new Button("B_ACCEPT_DROPDOWN");
 	public static final Button B_DECLINE = new Button("B_DECLINE");
+	public static final Button B_DECLINE_PROPOSE_NEW_TIME = new Button("B_DECLINE_PROPOSE_NEW_TIME");
 	public static final Button B_DECLINE_DROPDOWN = new Button("B_DECLINE_DROPDOWN");
 	public static final Button B_TENTATIVE = new Button("B_TENTATIVE");
 	public static final Button B_TENTATIVE_DROPDOWN = new Button("B_TENTATIVE_DROPDOWN");

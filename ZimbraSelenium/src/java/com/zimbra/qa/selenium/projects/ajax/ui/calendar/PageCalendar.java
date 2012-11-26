@@ -824,7 +824,6 @@ public class PageCalendar extends AbsTab {
 
 				}
 				
-				System.out.println(com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.actions.Open.organizerTest);
 				if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.actions.Open.organizerTest == false) {
 					page = null;
 				} else {	
@@ -930,6 +929,21 @@ public class PageCalendar extends AbsTab {
 			
 				}
 				page = new FormMailNew(this.MyApplication);
+				waitForPostfix = true;
+			
+			} else if ( option == Button.O_PROPOSE_NEW_TIME_MENU ) {
+				
+				optionLocator = Locators.ProposeNewTimeMenu;
+				
+				if ( optionLocator != null ) {
+					
+					this.sClickAt(optionLocator, "");					
+					SleepUtil.sleepSmall();
+					
+					this.zWaitForBusyOverlay();
+			
+				}
+				page = new FormApptNew(this.MyApplication);
 				waitForPostfix = true;
 				
 			} else if ( option == Button.O_REINVITE ) {

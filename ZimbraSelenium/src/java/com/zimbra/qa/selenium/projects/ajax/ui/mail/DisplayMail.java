@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
 /**
  * The <code>DisplayMail<code> object defines a read-only view of a message
@@ -64,7 +65,10 @@ public class DisplayMail extends AbsDisplay {
 		public static final String DeclineEditReplyMenu = "id=INVITE_REPLY_DECLINE_title";
 		public static final String DeclineDontNotifyOrganizerMenu = "id=REPLY_DECLINE_IGNORE_title";
 		
+		public static final String AcceptProposeNewTimeButton = "css=td[id$='Cou__ACCEPT_PROPOSAL_title']";
+		public static final String DeclineProposeNewTimeButton = "css=td[id$='Cou__DECLINE_PROPOSAL_title']";
 		public static final String ProposeNewTimeButton = "css=td[id$='__Inv__PROPOSE_NEW_TIME_title']";
+		
 		public static final String zSubjectField = "css=div[id^=zv__COMPOSE] input[id$=_subject_control]";
 		public static final String zReplyButton ="css=div[id$='__REPLY']";
 		public static final String zReplyAllButton ="css=div[id$='__REPLY_ALL']";
@@ -239,7 +243,20 @@ public class DisplayMail extends AbsDisplay {
 		} else if ( button == Button.B_PROPOSE_NEW_TIME ) {
 			
 			locator = Locators.ProposeNewTimeButton;
-			page = null;
+			page = new FormApptNew(this.MyApplication);
+			doPostfixCheck = true;
+		
+		} else if ( button == Button.B_ACCEPT_PROPOSE_NEW_TIME ) {
+					
+			locator = Locators.AcceptProposeNewTimeButton;
+			page = new FormApptNew(this.MyApplication);
+			doPostfixCheck = true;
+					
+		} else if ( button == Button.B_DECLINE_PROPOSE_NEW_TIME ) {
+			
+			locator = Locators.DeclineProposeNewTimeButton;
+			page = new FormMailNew(this.MyApplication);
+			doPostfixCheck = true;
 
 		} else if ( button == Button.B_ACCEPT_SHARE ) {
 
