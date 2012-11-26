@@ -1983,7 +1983,7 @@ function(el, ctxt) {
 
 	// DIV: check for Outlook class used as delimiter
 	} else if (nodeName == "div") {
-		if (el.className == "OutlookMessageHeader") {
+		if (el.className == "OutlookMessageHeader" || el.className === "gmail_quote") {
 			type = AjxStringUtil.ORIG_SEP_STRONG;
 			ctxt.sepNode = el;	// mark for removal
 		}
