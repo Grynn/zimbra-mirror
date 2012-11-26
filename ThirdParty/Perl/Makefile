@@ -129,6 +129,8 @@ SASL_INCLUDE	:= $(ZIMBRA_HOME)/cyrus-sasl/include
 
 # Order is important here
 PRE_PERL_LIBS	:= \
+	Moose \
+	Array::Compare \
 	Tree::DAG_Node \
 	Test::Simple \
 	$(MODULE_UPLEVEL) \
@@ -222,14 +224,11 @@ PERL_LIBS 	:= \
 	IP::Country \
 	DBD::SQLite
 
-ARRAY_COMPARE	:= \
-	Array-Compare-1.17
-
 NET_SSLeay := \
-	Net-SSLeay-1.36
+	Net-SSLeay-1.49
 
 CRYPT_SSLeay := \
-	Crypt-SSLeay-0.58
+	Crypt-SSLeay-0.64
 
 CRYPT_RANDOM := \
 	Crypt-OpenSSL-Random-0.04
@@ -241,10 +240,10 @@ DBFILE_PERL_LIBS := \
 	DB_File
 
 BDB_PERL_LIBS := \
-	BerkeleyDB-0.43
+	BerkeleyDB-0.51
 
 MAIL_SPF := \
-	Mail-SPF-v2.008
+	Mail-SPF-v2.8.0
 
 SA_PERL_LIBS := \
 	Mail-SpamAssassin-$(SA_VERSION)
@@ -262,16 +261,16 @@ NET_SERVER := \
 	Net-Server-2.005
 
 PERL_LDAP := \
-	perl-ldap-0.44
+	perl-ldap-0.50
 
 DBD_PERL_LIBS 	:= \
-	DBD-mysql-4.020
+	DBD-mysql-4.022
 
 ZMQ_CONSTANTS	:= \
-	ZMQ-Constants-1.00
+	ZMQ-Constants-1.01
 
 ZMQ_LIB	:= \
-	ZMQ-LibZMQ3-1.00
+	ZMQ-LibZMQ3-1.01
 
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
@@ -317,15 +316,6 @@ build:
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
-	@for lib in $(ARRAY_COMPARE); do \
-		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
-		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
-			$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
-		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
-	done
-
 	@for lib in $(PRE_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
 		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INCLUDE) BERKELEYDB_LIB=$(BDB_LIB_DIR) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
@@ -345,7 +335,6 @@ build:
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-		patch -g0 -N -p1 < $(PERL_ROOT)/patches/net-ldap-ipv6.patch; \
 		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
