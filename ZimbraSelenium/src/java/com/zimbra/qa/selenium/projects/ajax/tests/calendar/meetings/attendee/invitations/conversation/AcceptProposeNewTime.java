@@ -20,7 +20,7 @@ public class AcceptProposeNewTime extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Receive meeting invite -> Propose New Time to organizer and organizer accepts the new time using conversation view", 
-			groups = { "test" })
+			groups = { "functional" })
 	public void AcceptProposeNewTime_01() throws HarnessException {
 
 		// ------------------------ Test data ------------------------------------
