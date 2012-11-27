@@ -57,7 +57,8 @@ public class PageCalendar extends AbsTab {
 		public static final String TagAppointmentMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_TAG_MENU']";
 		public static final String TagAppointmentNewTagSubMenu = "id=calendar_newtag_title";
 		public static final String TagAppointmentRemoveTagSubMenu = "id=calendar_removetag_title";
-		public static final String ShowOriginalMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_SHOW_ORIG']";
+		public static final String ShowOriginalMenu = "css=div[id='zm__Calendar'] tr[id^='POPUP_SHOW_ORIG']";
+		public static final String ShowOriginalMenuOrg = "css=div[id='zm__Calendar'] tr[id='POPUP_SHOW_ORIG']";
 		public static final String QuickCommandsMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_QUICK_COMMANDS']";
 		
 		public static final String InstanceMenu = "id=VIEW_APPT_INSTANCE_title";
@@ -115,6 +116,17 @@ public class PageCalendar extends AbsTab {
 		// Dialog locators
 		public static final String DialogDivID = "CNF_DEL_YESNO";
 		public static final String DialogDivCss = "css=div[id='CNF_DEL_YESNO']";
+		
+		// Selelct contacts from contact picker
+		public static final String AddAttendees = "css=td[id$='_title']:contains('Attendees:')";
+		public static final String ShowOptionaAttendees = "css= td#DWT273_show_optional.fakeAnchor";
+		public static final String ContactPickerSerachField = "id=ZmContactPicker_searchField";
+		public static final String ContactPickerSerachButton = "css=td[id$='_title']:contains('Search')";
+		public static final String ContactPickerFirstContact = "css=nobr";
+		public static final String SelectContactFromPicker = "css=td[id^='DwtChooserButton']:contains('To:')";
+		public static final String AddContactFromPicker = "css=td[id^='ZmContactPicker_button']:contains('OK')";
+		
+		public static final String AddLocation = "css=td[id$='_title']:contains('Location:')";
 	}
 
 	public PageCalendar(AbsApplication application) {
@@ -1013,7 +1025,45 @@ public class PageCalendar extends AbsTab {
 				page = null;
 				waitForPostfix = true;
 			
-			} else if ( option == Button.O_CREATE_A_COPY_MENU) {
+			} else if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_MOVE) ) {
+				
+				// Use default actionLocator
+				optionLocator = "css=td[id='MOVE_title']";
+				
+				page = new DialogMove(MyApplication,((AppAjaxClient) MyApplication).zPageCalendar);
+
+				this.zClickAt(optionLocator,"");
+
+				// FALL THROUGH
+
+			}else if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_CREATE_COPY) ) {
+				
+				// Use default actionLocator
+				optionLocator = "css=td[id='DUPLICATE_APPT_title']";
+				
+				 page = new FormApptNew(this.MyApplication);
+
+				this.zClickAt(optionLocator,"");
+
+				// FALL THROUGH
+
+			}else if ( option == Button.O_SHOW_ORIGINAL_MENU ) {
+				
+				optionLocator = Locators.ShowOriginalMenu;
+				page = new SeparateWindowShowOriginal(this.MyApplication);
+				
+				//optionLocator= Locators.zShowOrigTaskMenuItem;
+				
+				page = new SeparateWindowShowOriginal(this.MyApplication);
+				((SeparateWindowShowOriginal)page).zInitializeWindowNames();
+				this.zClickAt(optionLocator,"");
+				this.zWaitForBusyOverlay();
+				
+				return (page);
+				
+				//throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			}else if ( option == Button.O_CREATE_A_COPY_MENU) {
 				
 				optionLocator = Locators.CreateACopyMenu;
 				
