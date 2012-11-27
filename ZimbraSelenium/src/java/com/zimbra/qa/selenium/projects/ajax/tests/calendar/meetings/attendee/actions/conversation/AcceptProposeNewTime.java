@@ -71,6 +71,7 @@ public class AcceptProposeNewTime extends CalendarWorkWeekTest {
 
 		// Modify body content and propose new time
 		FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_PROPOSE_NEW_TIME_MENU, apptSubject);
+		
 		apptForm.zVerifyDisabledControlInProposeNewTimeUI();
 		appt.setStartTime(modifiedStartUTC);
 		appt.setEndTime(modifiedEndUTC);
