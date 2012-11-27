@@ -28,7 +28,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 public class ShowOriginal extends CalendarWorkWeekTest {
 
 	public ShowOriginal() {
-		logger.info("New "+ CreateAppointment.class.getCanonicalName());
+		logger.info("New "+ ShowOriginal.class.getCanonicalName());
 
 		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
@@ -42,7 +42,7 @@ public class ShowOriginal extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "check context menu for Show Original option and check of the its displayed", 
-			groups = { "smoke2" })
+			groups = { "smoke" })
 	public void ShowOriginal_01() throws HarnessException {
 
 		String tz, apptSubject, apptBody;
