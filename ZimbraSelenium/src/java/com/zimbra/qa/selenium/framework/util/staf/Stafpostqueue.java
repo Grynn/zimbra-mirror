@@ -12,15 +12,7 @@ public class Stafpostqueue extends StafServicePROCESS {
 	private static final String MailQueueIsEmpty = "Mail queue is empty";
 	private static final String MailQueueIsUnavailable = "mail system is down"; // 	postqueue: fatal: Queue report unavailable - mail system is down
 
-	/**
-	 * How long (msec) to wait for a message to be delivered.  After this time, fail if the message isn't delivered.
-	 */
-	private static final int MailQueueWaitMsec = 30000;
 	
-	/**
-	 * How long (msec) to wait between checking the queue
-	 */
-	private static final int MailQueueWaitIntervalMsec = 1000;
 	
 	/**
 	 * Wait for messages for the current test account to be delivered
@@ -30,9 +22,10 @@ public class Stafpostqueue extends StafServicePROCESS {
 	public void waitForPostqueue() throws HarnessException {
 		
 		// Start: Dev env hack
-		if ( DevEnvironment.isUsingDevEnvironment() ) {
+		if ( "false".equalsIgnoreCase(ZimbraSeleniumProperties.getStringProperty("postqueue.use.staf", "true")) ) {
 			logger.info("In dev environment, waiting for message to be delivered ...");
-			SleepUtil.sleep(5000);
+			int delay = Integer.parseInt(ZimbraSeleniumProperties.getStringProperty("postqueue.sleep.nonstaf.msec", "5000"));
+			SleepUtil.sleep(delay);
 			return;
 		}
 		// End: Dev env hack
@@ -47,7 +40,9 @@ public class Stafpostqueue extends StafServicePROCESS {
 			emailaddress = "@" + ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
 		}
 
-		for (int i = 0; i < MailQueueWaitMsec; i += MailQueueWaitIntervalMsec) {
+		int max = Integer.parseInt(ZimbraSeleniumProperties.getStringProperty("postqueue.sleep.max.msec", "30000"));
+		int interval = Integer.parseInt(ZimbraSeleniumProperties.getStringProperty("postqueue.sleep.interval.msec", "1000"));
+		for (int i = 0; i < max; i += interval) {
 			
 			// Check the server queue if it is empty
 			if (execute(command)) {
@@ -71,7 +66,7 @@ public class Stafpostqueue extends StafServicePROCESS {
 			}
 
 			// Wait a bit for the message to be delivered
-			SleepUtil.sleep(MailQueueWaitIntervalMsec);			
+			SleepUtil.sleep(interval);			
 
 		}
 

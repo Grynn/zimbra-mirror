@@ -4,7 +4,6 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import com.zimbra.qa.selenium.framework.core.DevEnvironment;
 
 
 public class ZimbraAdminAccount extends ZimbraAccount {
@@ -15,11 +14,6 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 		Password = ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123");
 		ZimbraMailHost = EmailAddress.split("@")[1];
 
-		// Start: Dev environment hack
-		if ( DevEnvironment.isUsingDevEnvironment() ) {
-			ZimbraMailHost = "localhost";
-		}
-		// End: Dev environment hack
 	}
 
 	/**
@@ -37,11 +31,6 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 			ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
 			ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
 
-			// Start: Dev environment hack
-			if ( DevEnvironment.isUsingDevEnvironment() ) {
-				ZimbraMailHost = "localhost";
-			}
-			// End: Dev environment hack
 
 		} catch (HarnessException e) {
 			logger.error("Unable to provision account: "+ EmailAddress);

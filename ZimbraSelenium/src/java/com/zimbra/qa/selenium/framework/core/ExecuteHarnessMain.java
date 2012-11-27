@@ -876,7 +876,6 @@ public class ExecuteHarnessMain {
     	Options options = new Options();
         options.addOption(new Option("h", "help", false, "print usage"));
         options.addOption(new Option("l", "log4j", true, "log4j file containing log4j configuration"));
-        options.addOption(new Option("d", "dev", false, "use development settings"));
         options.addOption(new Option("j", "jarfile", true, "jarfile containing test cases"));
         options.addOption(new Option("p", "pattern", true, "class filter regex, i.e. projects.zcs.tests."));
         options.addOption(new Option("g", "groups", true, "comma separated list of groups to execute (always, sanity, smoke, full)"));
@@ -903,12 +902,6 @@ public class ExecuteHarnessMain {
 	        }
 
 	     
-	        // In the dev environment, server name defaults to localhost
-	        // STAF isn't invoked
-	        // etc., etc.
-	        if ( cmd.hasOption('d') ) {
-	        	DevEnvironment.setDevEnvironment(true);
-	        }
 
 	        
 	        if ( cmd.hasOption('c') ) {

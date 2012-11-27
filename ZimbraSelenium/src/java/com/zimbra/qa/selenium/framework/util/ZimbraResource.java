@@ -7,7 +7,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.core.DevEnvironment;
 
 
 
@@ -101,11 +100,6 @@ public class ZimbraResource extends ZimbraAccount {
 				ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:calresource/admin:a[@n='zimbraMailHost']", null);
 			}
 			
-			// Start: Dev environment hack
-			if ( DevEnvironment.isUsingDevEnvironment() ) {
-				ZimbraMailHost = "localhost";
-			}
-			// End: Dev environment hack
 
 			
 		} catch (HarnessException e) {

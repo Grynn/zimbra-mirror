@@ -354,11 +354,6 @@ public class ZimbraAccount {
 
 			}
 			
-			// Start: Dev environment hack
-			if ( DevEnvironment.isUsingDevEnvironment() ) {
-				ZimbraMailHost = "localhost";
-			}
-			// End: Dev environment hack
 
 			
 			// Sync the GAL to put the account into the list
