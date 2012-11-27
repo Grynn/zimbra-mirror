@@ -18,7 +18,7 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
 	
 	public DeleteAppointment() {
 		logger.info("New "+ DeleteAppointment.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Bugs(ids = "69132")

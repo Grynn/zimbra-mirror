@@ -20,7 +20,7 @@ public class DeleteInstance extends CalendarWorkWeekTest {
 	
 	public DeleteInstance() {
 		logger.info("New "+ DeleteInstance.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	

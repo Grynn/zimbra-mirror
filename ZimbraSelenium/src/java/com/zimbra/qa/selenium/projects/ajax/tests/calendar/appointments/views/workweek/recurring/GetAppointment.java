@@ -16,6 +16,7 @@ public class GetAppointment extends CalendarWorkWeekTest {
 	
 	public GetAppointment() {
 		logger.info("New "+ GetAppointment.class.getCanonicalName());
+		super.startingPage = app.zPageCalendar;
 		
 	}
 	

@@ -12,6 +12,7 @@ public class CreateAppointment extends CalendarWorkWeekTest {
 	
 	public CreateAppointment() {
 		logger.info("New "+ CreateAppointment.class.getCanonicalName());
+		super.startingPage = app.zPageCalendar;
 	}
 
 	@Bugs(ids = "69132")

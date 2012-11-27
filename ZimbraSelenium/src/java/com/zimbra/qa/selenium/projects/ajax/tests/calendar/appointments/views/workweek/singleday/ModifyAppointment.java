@@ -21,6 +21,7 @@ public class ModifyAppointment extends CalendarWorkWeekTest {
 	
 	public ModifyAppointment() {
 		logger.info("New " + ModifyAppointment.class.getCanonicalName());
+		super.startingPage = app.zPageCalendar;
 
 	}
 
