@@ -77,6 +77,9 @@ public class FormApptNew extends AbsForm {
 		public static final String SendUpdatesToAddedRemovedRadioButton = "css=div[class='DwtDialog'] div[id$='_content'] p table tr:nth-child(1) input";
 		public static final String SendUpdatesToAllRadioButton = "css=div[class='DwtDialog'] div[id$='_content'] p table tr:nth-child(2) input";
 
+		public static final String LocationPickerSerach="css=td[id$='_title']:contains('Search')";
+		public static final String SelectLocationFromPicker="css=td[id$='_title']:contains('Select')";
+		public static final String AddLocationFromPicker="css=div[class='DwtDialog'] div[class='DwtDialog WindowOuterContainer'] td[class='WindowInnerContainer'] div[id$='_buttons'] td[id^='OK'] div[id$='_button2'] td[id$='_button2_title']";
 	}
 
 	public static class Field {
