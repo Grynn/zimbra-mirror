@@ -28,7 +28,7 @@ public class AddLocation extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Add location to existing appointment and verify F/B",
-			groups = { "test11" })
+			groups = { "smoke" })
 	public void AddLocation_01() throws HarnessException {
 		
 		// Create a meeting
@@ -83,7 +83,7 @@ public class AddLocation extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Add location to existing appointment from Location selector and verify F/B",
-			groups = { "test11" })
+			groups = { "functional" })
 	public void AddLocation_02() throws HarnessException {
 		
 		String tz = ZTimeZone.TimeZoneEST.getID();
