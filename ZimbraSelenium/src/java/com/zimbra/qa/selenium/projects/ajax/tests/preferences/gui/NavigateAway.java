@@ -78,7 +78,7 @@ public class NavigateAway extends AjaxCommonTest {
 				new Object[] { TreeItem.AddressBook,			null },
 				new Object[] { TreeItem.Calendar,				null },
 				new Object[] { TreeItem.Sharing,				null },
-				new Object[] { TreeItem.MobileDevices,			null },
+				new Object[] { TreeItem.MobileDevices,			"css=td#zb__MD__MOBILE_REMOVE_title" },
 				new Object[] { TreeItem.Notifications,			null },
 				new Object[] { TreeItem.ImportExport,			null },
 				new Object[] { TreeItem.Shortcuts,				null },
@@ -98,6 +98,15 @@ public class NavigateAway extends AjaxCommonTest {
 			dataProvider = "DataProviderPreferencePageToLocator")
 	public void NavigateAway_01(TreeItem treeItemLocator, String verificationLocator) throws HarnessException {
 
+		if ( 
+				(treeItemLocator == TreeItem.MobileDevices)
+				&&
+				ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")
+			) {
+			
+			// Mobile access is a NETWORK only feature
+			return;
+		}
 		
 		// Navigate to preferences -> notifications
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, treeItemLocator);
