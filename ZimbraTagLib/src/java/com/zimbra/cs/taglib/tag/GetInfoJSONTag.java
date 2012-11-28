@@ -60,7 +60,13 @@ public class GetInfoJSONTag extends ZimbraSimpleTag {
             String url = ZJspSession.getSoapURL(pageContext);
             String remoteAddr = ZJspSession.getRemoteAddr(pageContext);
             if (mFolderPath!=null && !mFolderPath.isEmpty()) {
-                ZMailbox mbox = this.getMailbox();
+                ZMailbox.Options options = new ZMailbox.Options();
+                options.setClientIp(ZJspSession.getRemoteAddr(pageContext));
+                options.setNoSession(true);
+                options.setAuthToken(mAuthToken);
+                options.setAuthAuthToken(true);
+                options.setUri(url);
+                ZMailbox mbox = ZMailbox.getMailbox(options);
                 String folderId = this.getFolderFromPath(mbox, mFolderPath);
                 if (folderId !=null && !folderId.isEmpty()) {
                     mSortBy = this.getSortByAttr(folderId, mSortBy);
