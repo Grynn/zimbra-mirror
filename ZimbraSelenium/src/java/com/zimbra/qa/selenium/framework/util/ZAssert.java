@@ -125,6 +125,32 @@ public class ZAssert {
 
 	}
 
+	public static void assertNotEqual(Object actual, Object expected, String message) {
+		trace(message);
+
+		TotalCountTests++;
+		CountTests++;
+		message = "assertNotEqual: " + message;
+		String details = String.format("%s -- (!(%s).equals(%s)) [%s]", "assertNotEqual", actual, expected, message);
+		logger.info(details);
+		
+        try
+        {
+        	Assert.assertTrue(!actual.equals(expected), details);
+        	Repository.testCaseVerification(message, String.valueOf(actual), String.valueOf(expected), true);
+        }
+        catch (AssertionError e)
+        {
+        	logger.error(e.getMessage(), e);
+        	Repository.testCaseVerification(message, String.valueOf(actual),
+               String.valueOf(expected), false);
+            throw e;
+        }
+        
+        CountPass++; TotalCountPass++;
+
+	}
+
 	public static void assertGreaterThan(int actual, int expected, String message) {
 		trace(message);
 
