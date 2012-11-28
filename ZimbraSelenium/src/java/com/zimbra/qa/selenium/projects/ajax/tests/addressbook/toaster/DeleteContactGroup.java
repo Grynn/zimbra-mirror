@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -143,7 +144,8 @@ public class DeleteContactGroup extends AjaxCommonTest {
 		String toastMsg = toast.zGetToastMessage();
 		ZAssert.assertStringContains(toastMsg,"1 contact group moved to Trash","Verify toast message: Contact group Moved to Trash");
 	}
-
+	
+	@Bugs(ids="78829")
 	@Test(description = "Delete multiple contact groups at once and verify toast msg", groups = { "functional" })
 	public void DeleteContactGroupToastMsg_06() throws HarnessException {
 
@@ -168,9 +170,8 @@ public class DeleteContactGroup extends AjaxCommonTest {
 		// Verifying the toaster message
 		Toaster toast = app.zPageMain.zGetToaster();
 		String toastMsg = toast.zGetToastMessage();
-		ZAssert.assertStringContains(toastMsg,"3 contacts moved to Trash","Verify toast message: Contact group Moved to Trash");
+		ZAssert.assertStringContains(toastMsg,"3 contact groups moved to Trash","Verify toast message: 3 Contact groups Moved to Trash: Failing due to the bug http://bugzilla.zimbra.com/show_bug.cgi?id=78829");
 	
-
 	}
 
 	@Test(description = "Delete contact + contact group at once and verify toast msg", groups = { "functional" })
