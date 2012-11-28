@@ -487,7 +487,13 @@ public class Button {
 	public static final Button C_FRIDAY_WORK_HOUR		= new Button("C_FRIDAY_WORK_HOUR");
 	public static final Button C_SATURDAY_WORK_HOUR		= new Button("C_SATURDAY_WORK_HOUR");
 
+   //Calendar poups
 
+	public static final Button B_SEARCH_LOCATION = new Button("B_SEARCH_LOCATION");
+	public static final Button B_SELECT_LOCATION = new Button("B_SELECT_LOCATION");
+
+	// Calendar 
+	public static final Button B_CREATE_COPY= new Button("B_CREATE_COPY");
 	//// Admin Console
 	
 	// Accounts buttons
