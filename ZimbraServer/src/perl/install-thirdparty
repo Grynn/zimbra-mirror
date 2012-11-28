@@ -45,6 +45,10 @@ if (! -d $CACHE_DIR) {
     mkdir($CACHE_DIR) || die "Could not create directory: $CACHE_DIR";
 }
 
+if (! -d $LIB_DIR) {
+    mkdir($LIB_DIR) || die "Could not create directory: $LIB_DIR";
+}
+
 # Remove old binaries to make sure there's no cruft.
 for my $binaryName (keys %BINARIES) {
     my $version = $BINARIES{$binaryName};
