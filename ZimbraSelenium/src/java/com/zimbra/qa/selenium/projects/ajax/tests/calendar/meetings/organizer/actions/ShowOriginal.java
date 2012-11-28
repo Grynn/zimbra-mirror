@@ -5,8 +5,6 @@ import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.core.Bugs;
-import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -15,15 +13,9 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZDate;
 import com.zimbra.qa.selenium.framework.util.ZTimeZone;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraResource;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
-import com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.allday.CreateAppointment;
 import com.zimbra.qa.selenium.projects.ajax.ui.SeparateWindowShowOriginal;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogFindLocation;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 
 public class ShowOriginal extends CalendarWorkWeekTest {
 
@@ -76,19 +68,23 @@ public class ShowOriginal extends CalendarWorkWeekTest {
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 
         // Open appointment & click context menu 'Show Original' Option
-        
         SeparateWindowShowOriginal window = (SeparateWindowShowOriginal)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK,Button.O_SHOW_ORIGINAL_MENU, apptSubject);
-		window.zWaitForActive();		// Make sure the window is there
-		SleepUtil.sleepMedium();
-		ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
-		String attendeeHeader = "ATTENDEE;CN=2;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:mailto:";
-		//Verify content in Print view.
-		String body = window.sGetBodyText();
-		ZAssert.assertStringContains(body, apptSubject, "Verify subject in Show original view");
-		ZAssert.assertStringContains(body, apptBody, "Verify content in Show original view");
-		ZAssert.assertStringContains(body, "BEGIN:VCALENDAR", "Verify Begin Header in Show original view");
-		ZAssert.assertStringContains(body, "END:VCALENDAR", "Verify Begin Header in Show original view");
-		ZAssert.assertStringContains(body, attendeeHeader,"Verify Attendee is present in Show original view");
-		window.sClose();
+        try { 
+			window.zWaitForActive();		// Make sure the window is there
+			SleepUtil.sleepMedium();
+			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
+			String attendeeHeader = "ATTENDEE;CN=2;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:mailto:";
+			//Verify content in Print view.
+			String body = window.sGetBodyText();
+			ZAssert.assertStringContains(body, apptSubject, "Verify subject in Show original view");
+			ZAssert.assertStringContains(body, apptBody, "Verify content in Show original view");
+			ZAssert.assertStringContains(body, "BEGIN:VCALENDAR", "Verify Begin Header in Show original view");
+			ZAssert.assertStringContains(body, "END:VCALENDAR", "Verify Begin Header in Show original view");
+			ZAssert.assertStringContains(body, attendeeHeader,"Verify Attendee is present in Show original view");
+        }finally {
+
+			 if ( window != null ) window.sClose();
+
+			}
 	}
 }
