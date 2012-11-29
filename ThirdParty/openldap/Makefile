@@ -74,6 +74,8 @@ build:
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) install STRIP="")
 	(cd openldap-$(LDAP_VERSION)/libraries/libmdb; make; \
+	cp mdb_stat $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/bin; \
+	cp mdb_copy $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/bin; \
 	cp mdb.h $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/include; \
 	cp libmdb.a $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/lib; \
 	cp libmdb.so $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/lib;)
