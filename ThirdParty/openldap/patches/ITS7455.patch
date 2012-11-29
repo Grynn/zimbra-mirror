@@ -1,11 +1,11 @@
-commit 2cb4247399864c88fa4b18fe9a59fd2619b249ee
+commit 27ecc3ecf1554a43346cbbb4c30a74eae07867b8
 Author: Howard Chu <hyc@symas.com>
 Date:   Wed Nov 28 17:13:26 2012 -0800
 
     ITS#7455 use freelist for overflow pages
 
 diff --git a/libraries/libmdb/mdb.c b/libraries/libmdb/mdb.c
-index 251ab6a..53cdf09 100644
+index 251ab6a..f44eb7a 100644
 --- a/libraries/libmdb/mdb.c
 +++ b/libraries/libmdb/mdb.c
 @@ -1242,6 +1242,7 @@ mdb_page_alloc(MDB_cursor *mc, int num, MDB_page **mp)
@@ -59,7 +59,7 @@ index 251ab6a..53cdf09 100644
  				/* It's usable, grab it.
  				 */
  				MDB_oldpages *mop;
-@@ -1331,21 +1337,99 @@ none:
+@@ -1331,29 +1337,108 @@ none:
  		if (txn->mt_env->me_pghead) {
  			MDB_oldpages *mop = txn->mt_env->me_pghead;
  			if (num > 1) {
@@ -84,12 +84,14 @@ index 251ab6a..53cdf09 100644
 +						pgno_t *idl;
 +						int exact;
 +
++						last = mop->mo_txnid + 1;
++
 +						/* We haven't hit the readers list yet? */
 +						if (!oldest) {
 +							MDB_reader *r;
 +							unsigned int nr;
 +							txnid_t mr;
-+							last = txn->mt_env->me_pglast + 1;
++
 +							oldest = txn->mt_txnid - 1;
 +							nr = txn->mt_env->me_txns->mti_numreaders;
 +							r = txn->mt_env->me_txns->mti_readers;
@@ -102,7 +104,7 @@ index 251ab6a..53cdf09 100644
 +						}
 +
 +						/* There's nothing we can use on the freelist */
-+						if (oldest <= last)
++						if (oldest - last < 1)
 +							break;
 +
 +						exact = 0;
@@ -119,7 +121,7 @@ index 251ab6a..53cdf09 100644
 +						i = idl[0]; j = mop->mo_pages[0]; mop2->mo_pages[0] = k = i+j;
 +						mop->mo_pages[0] = P_INVALID;
 +						while (i>0  || j>0) {
-+							if (!j || (i && idl[i] < mop->mo_pages[j]))
++							if (i && idl[i] < mop->mo_pages[j])
 +								mop2->mo_pages[k--] = idl[i--];
 +							else
 +								mop2->mo_pages[k--] = mop->mo_pages[j--];
@@ -131,14 +133,13 @@ index 251ab6a..53cdf09 100644
 +						free(mop);
 +						mop = mop2;
 +						/* Keep trying to read until we have enough */
-+						if (mop->mo_pages[0] < num) {
-+							last++;
++						if (mop->mo_pages[0] < (unsigned)num) {
 +							continue;
 +						}
 +					}
 +
 +					/* current list has enough pages, but are they contiguous? */
-+					for (i=mop->mo_pages[0]; i>=num; i--) {
++					for (i=mop->mo_pages[0]; i>=(unsigned)num; i--) {
 +						if (mop->mo_pages[i-n2] == mop->mo_pages[i] + n2) {
 +							pgno = mop->mo_pages[i];
 +							i -= n2;
@@ -164,10 +165,25 @@ index 251ab6a..53cdf09 100644
 -					mop->mo_pages[2]++;
 -					if (mop->mo_pages[2] > mop->mo_pages[1])
 -						mop->mo_pages[0] = 0;
--				} else {
++				mop->mo_pages[0]--;
++			}
++			if (MDB_IDL_IS_ZERO(mop->mo_pages)) {
++				txn->mt_env->me_pghead = mop->mo_next;
++				if (mc->mc_dbi == FREE_DBI) {
++					mop->mo_next = txn->mt_env->me_pgfree;
++					txn->mt_env->me_pgfree = mop;
+ 				} else {
 -					mop->mo_pages[0]--;
 -				}
-+				mop->mo_pages[0]--;
- 				if (MDB_IDL_IS_ZERO(mop->mo_pages)) {
- 					txn->mt_env->me_pghead = mop->mo_next;
- 					if (mc->mc_dbi == FREE_DBI) {
+-				if (MDB_IDL_IS_ZERO(mop->mo_pages)) {
+-					txn->mt_env->me_pghead = mop->mo_next;
+-					if (mc->mc_dbi == FREE_DBI) {
+-						mop->mo_next = txn->mt_env->me_pgfree;
+-						txn->mt_env->me_pgfree = mop;
+-					} else {
+-						free(mop);
+-					}
++					free(mop);
+ 				}
+ 			}
+ 		}
