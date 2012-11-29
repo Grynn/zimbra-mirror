@@ -102,7 +102,7 @@ index 251ab6a..53cdf09 100644
 +						}
 +
 +						/* There's nothing we can use on the freelist */
-+						if (oldest - last < 1)
++						if (oldest <= last)
 +							break;
 +
 +						exact = 0;
@@ -119,7 +119,7 @@ index 251ab6a..53cdf09 100644
 +						i = idl[0]; j = mop->mo_pages[0]; mop2->mo_pages[0] = k = i+j;
 +						mop->mo_pages[0] = P_INVALID;
 +						while (i>0  || j>0) {
-+							if (i && idl[i] < mop->mo_pages[j])
++							if (!j || (i && idl[i] < mop->mo_pages[j]))
 +								mop2->mo_pages[k--] = idl[i--];
 +							else
 +								mop2->mo_pages[k--] = mop->mo_pages[j--];
