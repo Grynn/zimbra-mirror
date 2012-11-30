@@ -60,15 +60,16 @@ public class ZimbraDistributionList {
 
 			ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:dl", "id");
 
-			if ( ZimbraSeleniumProperties.getStringProperty("soap.trace.enabled", "false").toLowerCase().equals("true") ) {
-				
-				ZimbraAdminAccount.GlobalAdmin().soapSend(
-							"<AddAccountLoggerRequest xmlns='urn:zimbraAdmin'>"
-						+		"<account by='name'>"+ this.EmailAddress + "</account>"
-						+		"<logger category='zimbra.soap' level='trace'/>"
-						+	"</AddAccountLoggerRequest>");
-
-			}
+			// You can't add a logger to a DL
+//			if ( ZimbraSeleniumProperties.getStringProperty("soap.trace.enabled", "false").toLowerCase().equals("true") ) {
+//				
+//				ZimbraAdminAccount.GlobalAdmin().soapSend(
+//							"<AddAccountLoggerRequest xmlns='urn:zimbraAdmin'>"
+//						+		"<account by='name'>"+ this.EmailAddress + "</account>"
+//						+		"<logger category='zimbra.soap' level='trace'/>"
+//						+	"</AddAccountLoggerRequest>");
+//
+//			}
 			
 
 		} catch (HarnessException e) {
