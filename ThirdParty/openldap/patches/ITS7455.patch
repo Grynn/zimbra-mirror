@@ -1,14 +1,6 @@
-commit 27ecc3ecf1554a43346cbbb4c30a74eae07867b8
-Author: Howard Chu <hyc@symas.com>
-Date:   Wed Nov 28 17:13:26 2012 -0800
-
-    ITS#7455 use freelist for overflow pages
-
-diff --git a/libraries/libmdb/mdb.c b/libraries/libmdb/mdb.c
-index 251ab6a..f44eb7a 100644
---- a/libraries/libmdb/mdb.c
-+++ b/libraries/libmdb/mdb.c
-@@ -1242,6 +1242,7 @@ mdb_page_alloc(MDB_cursor *mc, int num, MDB_page **mp)
+--- openldap-2.4.33/libraries/libmdb/mdb.c.orig	2012-11-29 17:21:45.964515642 -0800
++++ openldap-2.4.33/libraries/libmdb/mdb.c	2012-11-29 17:24:01.514512229 -0800
+@@ -1242,6 +1242,7 @@
  	MDB_page *np;
  	pgno_t pgno = P_INVALID;
  	MDB_ID2 mid;
@@ -16,7 +8,7 @@ index 251ab6a..f44eb7a 100644
  	int rc;
  
  	*mp = NULL;
-@@ -1254,12 +1255,11 @@ mdb_page_alloc(MDB_cursor *mc, int num, MDB_page **mp)
+@@ -1254,12 +1255,11 @@
  		if (!txn->mt_env->me_pghead &&
  			txn->mt_dbs[FREE_DBI].md_root != P_INVALID) {
  			/* See if there's anything in the free DB */
@@ -30,7 +22,7 @@ index 251ab6a..f44eb7a 100644
  
  			mdb_cursor_init(&m2, txn, FREE_DBI, NULL);
  			if (!txn->mt_env->me_pgfirst) {
-@@ -1282,15 +1282,21 @@ again:
+@@ -1282,15 +1282,21 @@
  				last = *(txnid_t *)key.mv_data;
  			}
  
@@ -59,7 +51,7 @@ index 251ab6a..f44eb7a 100644
  				/* It's usable, grab it.
  				 */
  				MDB_oldpages *mop;
-@@ -1331,29 +1337,108 @@ none:
+@@ -1331,29 +1337,108 @@
  		if (txn->mt_env->me_pghead) {
  			MDB_oldpages *mop = txn->mt_env->me_pghead;
  			if (num > 1) {
@@ -69,7 +61,7 @@ index 251ab6a..f44eb7a 100644
 -				 */
 -				;
 +				MDB_cursor m2;
-+				int retry = 1, readit = 0, n2 = num-1;
++				int retry = 2, readit = 0, n2 = num-1;
 +				unsigned int i, j, k;
 +
 +				/* If current list is too short, must fetch more and coalesce */
@@ -151,11 +143,11 @@ index 251ab6a..f44eb7a 100644
 +						}
 +					}
 +
-+					/* We only retry once from here */
++					/* Stop if we succeeded, or no more retries */
 +					if (!retry || pgno != P_INVALID)
 +						break;
 +					readit = 1;
-+					retry = 0;
++					retry--;
 +
 +				} while (1);
  			} else {
