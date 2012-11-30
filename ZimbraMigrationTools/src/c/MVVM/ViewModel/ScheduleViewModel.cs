@@ -212,12 +212,15 @@ public class ScheduleViewModel: BaseViewModel
 
     private int AvailableThread()
     {
+        Log.info(" In AvailableThread function");
         int iThreadNum = -1;
         for (int i = 0; i < bgwlist.Count; i++)
         {
+            Log.info(" In AvailableThread function with bwlist count",bgwlist.Count);
             if (!bgwlist[i].IsBusy)
             {
                 iThreadNum = i;
+                Log.info(" Available Thread is number ", i);
                 break;
             }
         }
@@ -388,6 +391,7 @@ public class ScheduleViewModel: BaseViewModel
         int numThreads = Math.Min(numUsers, maxThreads);
         for (int i = 0; i < numUsers; i++)
         {
+            Log.info("Schedule bachground workers with numusers :" + numUsers + " and maxthreads are :"+ numThreads);
             if (i < numThreads)
             {
                 UserBW bgw = new UserBW(i);
@@ -401,9 +405,11 @@ public class ScheduleViewModel: BaseViewModel
                 bgw.usernum = i;
                 bgw.RunWorkerAsync(i);
                 bgwlist.Add(bgw);
+                Log.info("Background worker started number :",bgw.threadnum);
             }
             else
             {
+                Log.info("adding user number to overflow list", i);
                 overflowList.Add(i);
             }
         }; 
@@ -759,8 +765,9 @@ public class ScheduleViewModel: BaseViewModel
     private void worker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
     {
         eventArglist.Add(e);
-
+        
         int num = (int)e.Argument;
+        Log.info(" In Do work for threads for user number", num);
         MigrationAccount MyAcct = new MigrationAccount();
         UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
         AccountResultsViewModel accountResultsViewModel =
@@ -816,6 +823,8 @@ public class ScheduleViewModel: BaseViewModel
 
         }
 
+        Log.info(" start migration for account ", MyAcct.AccountNum);
+
         //mw.StartMigration(MyAcct, importOpts, isServer, (isVerbose ? (LogLevel.Debug):(LogLevel.Info)), m_isPreview);
         mw.StartMigration(MyAcct, importOpts, isServer, importOpts.VerboseOn, m_isPreview, doRulesAndOOO);
 
@@ -856,6 +865,10 @@ public class ScheduleViewModel: BaseViewModel
 
         if (!m_isPreview)
         {
+            int tnum = GetThreadNum(MyAcct.AccountNum);
+        //Log.info(" in worker_RunWorkerCompleted  for ThreadNum : " + tnum);
+        
+            Log.info(" in DOWORK -- Migration completed for usernum: " + MyAcct.AccountNum + " and threadnum" + tnum);
             accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";
             accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Complete";
         }
@@ -883,9 +896,10 @@ public class ScheduleViewModel: BaseViewModel
     {
         AccountResultsViewModel accountResultsViewModel =
             ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);
-
         if (e.Cancelled)
         {
+
+            Log.info(" in worker_RunWorkerCompleted -- thread cancelled  ");
             for (int i = 0; i < accountResultsViewModel.AccountResultsList.Count; i++)  // hate to set them all, but do it for now
             {
                 accountResultsViewModel.AccountResultsList[i].PBMsgValue = "Migration canceled";
@@ -894,15 +908,20 @@ public class ScheduleViewModel: BaseViewModel
         }
         else if (e.Error != null)
         {
+            Log.info(" in worker_RunWorkerCompleted -- thread errored  ");
             accountResultsViewModel.PBMsgValue = "Migration exception: " + e.Error.ToString();
+            Log.info(" in worker_RunWorkerCompleted -- thread errored with message  ",e.Error.ToString());
         }
         else
         {
             if (!m_isPreview)
             {
                 accountResultsViewModel.PBMsgValue = "Migration complete";
+                Log.info(" in worker_RunWorkerCompleted -- Migration completed ");
+                Log.info(" in worker_RunWorkerCompleted -- Migration completed lets cehck overflow count and it is",overflowList.Count);
                 if (overflowList.Count == 0)
                 {
+                    Log.info(" in worker_RunWorkerCompleted -- Migration completed overflowcount is zero");
                     SchedList.Clear();
                     UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
                     usersViewModel.UsersList.Clear();
@@ -912,24 +931,30 @@ public class ScheduleViewModel: BaseViewModel
         }
         if (!m_isPreview)
         {
+            Log.info(" in worker_RunWorkerCompleted -- Migration completed ");
             m_isComplete = true;
         }
         EnablePreview = EnableMigrate = !m_isComplete;
         if (overflowList.Count > 0)
         {
+            Log.info(" in worker_RunWorkerCompleted -- Migration completed overflowcount is > 0", overflowList.Count);
             int usernum = overflowList[0];
+            Log.info(" in worker_RunWorkerCompleted --Check availablethread for usernum ", usernum);
             int threadnum = AvailableThread();
             if (threadnum != -1)
             {
+                Log.info(" in worker_RunWorkerCompleted --Got availablethread for usernum" + usernum +" and threadnum" + threadnum);
                 bgwlist[threadnum].usernum = usernum;
                 bgwlist[threadnum].RunWorkerAsync(usernum);
             }
+            Log.info(" in worker_RunWorkerCompleted --remove the user who got a thread");
             overflowList.RemoveAt(0);
         }
     }
 
     public int GetThreadNum(int usernum)
     {
+        Log.info(" schdeulviewmodel- GetThreadNum");
         int ct = bgwlist.Count;
         for (int i = 0; i < ct; i++)
         {
@@ -989,6 +1014,7 @@ public class ScheduleViewModel: BaseViewModel
             ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);    // main one
         AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[f.AccountNum];
 
+        Log.info("Schdeuleviewmodel -- Folder_OnChanged");
         int tnum = GetThreadNum(f.AccountNum);
         if (bgwlist[tnum].CancellationPending)
         {

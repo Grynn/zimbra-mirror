@@ -269,26 +269,52 @@ namespace CssLib
         public override string Init(string host, string AccountID, string accountName)
         {
 
-            string value = UserObj.Init(host, AccountID, accountName);
+            string value ="";
+            try
+            {
+                value = UserObj.Init(host, AccountID, accountName);
+            }
+            catch (Exception e)
+            {
+                Log.err(" MAPIMigration: Exception in UserObj.init", e.Message);
+            }
             return value;
         }
 
         public override dynamic[] GetFolders()
         {
-            return UserObj.GetFolders();
+            dynamic[] folders = null;
+            try
+            {
+                folders = UserObj.GetFolders();
+                
+            }
+            catch (Exception e)
+            {
+                Log.err(" MApiMigration::Getfolders exception", e.Message);
+            }
 
-
+            return folders;
         }
 
         public override dynamic[] GetItemsForFolder(dynamic folderobject, double Date)
         {
-
-            return UserObj.GetItemsForFolder( folderobject,  Date);
+            dynamic[] Itemsfolder = null;
+            try
+            {
+                Itemsfolder = UserObj.GetItemsForFolder(folderobject, Date);
+            }
+            catch (Exception e)
+            {
+                Log.err(" MApiMigration::Getfolders exception", e.Message);
+            }
+            return Itemsfolder;
 
         }
 
         public override string[,] GetRules()
         {
+
             try
             {
 
@@ -298,7 +324,7 @@ namespace CssLib
             catch (Exception e)
             {
 
-                Log.err("Exception caught in GetRules", e.Message);
+                Log.err("MAPIMigration: Exception caught in GetRules", e.Message);
                 return null;
             }
         }
@@ -318,7 +344,7 @@ namespace CssLib
              
             catch(Exception e)
              {
-                 Log.err("Exception caught in Uninit", e.Message);
+                 Log.err(" MAPIMigration: Exception caught in Uninit", e.Message);
             }
         }
 
