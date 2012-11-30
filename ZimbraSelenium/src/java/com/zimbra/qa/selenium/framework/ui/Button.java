@@ -507,6 +507,18 @@ public class Button {
 	
 	// Resources button
 	public static final Button O_RESOURCES_RESOURCE = new Button("O_RESOURCES_RESOURCE");
+	
+	// Bubble buttons
+	public static Button B_NEW_MAIL = new Button("B_NEW_MAIL");
+	public static Button B_GO_TO_URL = new Button("B_GO_TO_URL");
+	public static Button B_FIND_EMAILS = new Button("B_FIND_EMAILS");
+	public static Button B_RECEIVED_FROM_RECIPIENT = new Button("B_RECEIVED_FROM_RECIPIENT");
+	public static Button B_SENT_TO_RECIPIENT = new Button("B_SENT_TO_RECIPIENT");
+	public static Button B_ADD_TO_FILTER = new Button("B_ADD_TO_FILTER");
+	public static Button B_ADD_TO_CONTACTS = new Button("B_ADD_TO_CONTACTS");
+	public static Button B_MOVE_TO_TO = new Button("B_MOVE_TO_TO");
+	public static Button B_MOVE_TO_CC = new Button("B_MOVE_TO_CC");
+	public static Button B_MOVE_TO_BCC = new Button("B_MOVE_TO_BCC");
 
 
 	

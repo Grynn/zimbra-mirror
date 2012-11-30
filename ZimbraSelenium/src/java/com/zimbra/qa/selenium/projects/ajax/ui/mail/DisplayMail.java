@@ -640,6 +640,76 @@ public class DisplayMail extends AbsDisplay {
 	}
 	
 	/**
+	 * Get a list of bubble objects form the field
+	 * @param field - must be To, Cc, Bcc
+	 * @return
+	 * @throws HarnessException
+	 */
+	public List<AbsBubble> zListGetBubbles(Field field) throws HarnessException {
+		logger.info("DisplayMail.zListGetBubbles(" + field + ")");
+
+		List<AbsBubble> bubbles = new ArrayList<AbsBubble>();
+		String locator = null;
+		String fieldLocator = null;
+		
+		if ( field == Field.To ) {
+		
+			fieldLocator = " tr[id$='_to'] ";
+
+		} else if ( field == Field.Cc ) {
+			
+			fieldLocator = " tr[id$='_cc'] ";
+			
+		} else if ( field == Field.From ) {
+			
+			fieldLocator = " tr[id$='_from'] ";
+
+		} else if ( field == Field.OnBehalfOf ) {
+			
+			fieldLocator = " tr[id$='_obo'] ";
+
+		} else if ( field == Field.ResentFrom ) {
+			
+			fieldLocator = " tr[id$='_bwo'] ";
+
+		} else if ( field == Field.ReplyTo ) {
+			
+			fieldLocator = " tr[id$='_reply to'] ";
+
+		} else if ( field == Field.Bcc ) {
+
+			throw new HarnessException("implement me");
+
+		} else {
+			
+			throw new HarnessException("no logic defined for field "+ field);
+			
+		}
+
+		
+		// Determine how many bubles are listed
+		locator = this.ContainerLocator + fieldLocator + " td[class~='LabelColValue'] span[id$='_com_zimbra_email']";
+		int count = this.sGetCssCount(locator);
+		
+		for (int i = 1; i <= count; i++) {
+			
+			locator = this.ContainerLocator + fieldLocator + " td[class~='LabelColValue']>span:nth-of-type("+ i +")";
+			
+			// Create a new bubble item
+			AbsBubble bubble = new BubbleEmailAddress(MyApplication);
+			bubble.parseBubble(locator);
+			
+			// Add the item to the list
+			bubbles.add(bubble);
+			
+		}
+				
+		return(bubbles);
+
+
+	}
+	
+	/**
 	 * Return TRUE/FALSE whether the appointment Accept/Decline/Tentative buttons are present
 	 * @return
 	 * @throws HarnessException

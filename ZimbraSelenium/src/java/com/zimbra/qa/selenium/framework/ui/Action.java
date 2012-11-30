@@ -58,6 +58,10 @@ public class Action {
 	// Briefcase page actions
 	public static final Action A_BRIEFCASE_CHECKBOX = new Action("A_BRIEFCASE_CHECKBOX");
 	public static final Action A_BRIEFCASE_HEADER_CHECKBOX = new Action("A_BRIEFCASE_HEADER_CHECKBOX");
+	
+	// Bubble actions
+	public static final Action A_EXPAND = new Action("A_EXPAND");
+	public static final Action A_REMOVE = new Action("A_REMOVE");
 
 	private final String ID;
 	
