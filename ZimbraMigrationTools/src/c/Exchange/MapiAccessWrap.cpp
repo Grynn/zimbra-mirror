@@ -60,7 +60,7 @@ STDMETHODIMP CMapiAccessWrap::GetFolderList(VARIANT *folders)
 
     USES_CONVERSION;
     vector<Folder_Data> vfolderlist;
-
+	
    LPCWSTR lpStatus= maapi->GetRootFolderHierarchy(vfolderlist);
    if((lpStatus) != NULL )
    {
@@ -81,6 +81,10 @@ STDMETHODIMP CMapiAccessWrap::GetFolderList(VARIANT *folders)
        return hr;
 
     }
+	else
+	{
+		dlog.trace("GetRootFolderHierarchy returned folders with count", size);
+	}
 
     it = vfolderlist.begin();
 
@@ -95,10 +99,13 @@ STDMETHODIMP CMapiAccessWrap::GetFolderList(VARIANT *folders)
     {
         CComPtr<IFolderObject> pIFolderObject;
 
+		dlog.trace("MAPiACCESSWRAP : GetFolderlist Creating folderobjects");
+
         hr = CoCreateInstance(CLSID_FolderObject, NULL, CLSCTX_ALL, IID_IFolderObject,
             reinterpret_cast<void **>(&pIFolderObject));
         if (SUCCEEDED(hr))
         {
+			dlog.trace("MAPiACCESSWRAP : GetFolderlist Filling up folderobjects");
             CComBSTR temp((*it).name.c_str());
 
             pIFolderObject->put_Name(SysAllocString(temp));
@@ -140,6 +147,8 @@ STDMETHODIMP CMapiAccessWrap::GetFolderList(VARIANT *folders)
                 // Unlock the variant data
                 SafeArrayUnaccessData(var.parray);
             }
+			else
+				dlog.err("MAPiACCESSWRAP : GetFolderlist fillingup  folderobjects safearray creation failed");
             pIFolderObject->put_FolderID(var);
             // /////////////////////////////////////////////
         }
@@ -197,7 +206,7 @@ STDMETHODIMP CMapiAccessWrap::GetItemsList(IFolderObject *FolderObj, VARIANT cre
             // Copy the bitmap into our buffer
             memcpy(folderEntryid.lpb, pArrayData, size);        // Unlock the variant data
             SafeArrayUnaccessData(vararg.parray);
-
+			dlog.trace("MapiAccess->GetFolderItemsList with folderid");
            LPCWSTR lpStatus= maapi->GetFolderItemsList(folderEntryid, vItemDataList);
            if((lpStatus) != NULL)
             {
@@ -207,6 +216,8 @@ STDMETHODIMP CMapiAccessWrap::GetItemsList(IFolderObject *FolderObj, VARIANT cre
 
            }
         }
+		else
+		{dlog.err("MapiAccess->GetFolderItemsList folderEntryid is null");}
     }
 
     size_t size = vItemDataList.size();
@@ -217,6 +228,8 @@ STDMETHODIMP CMapiAccessWrap::GetItemsList(IFolderObject *FolderObj, VARIANT cre
                hr = S_OK;
                return hr;
     }
+	else
+		dlog.trace("MapiAccess->GetFolderItemsList returned folders ");
 
     it = vItemDataList.begin();
 
@@ -274,6 +287,8 @@ STDMETHODIMP CMapiAccessWrap::GetItemsList(IFolderObject *FolderObj, VARIANT cre
                 // Unlock the variant data
                 SafeArrayUnaccessData(var.parray);
             }
+			else
+				dlog.err("MapiAccess->GetFolderItemsList SafeArrayCreate is null");
             pIItemObject->put_ItemID(var);
             /*Zimbra::Util::ScopedArray<CHAR> spUid(new CHAR[(Itemid.cb * 2) + 1]);
     if (spUid.get() != NULL)
@@ -335,7 +350,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
             if (ft == 2)
             {
                 ContactItemData cd;
-
+				dlog.err("MapiAccess->getItem for contacts ");
                 ret = maapi->GetItem(ItemID, cd);
                 if((ret != NULL))
                 {
@@ -446,6 +461,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 MessageItemData msgdata;
 
                 //printf("Got message item:");
+				dlog.trace("Mapiaccess->getItem  MessageItemData ");
                 ret = maapi->GetItem(ItemID, msgdata);
                 if((ret != NULL))
                 {
@@ -545,6 +561,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
             else if (ft == 3)
             {
                 ApptItemData apptData;
+				dlog.err("Mapiaccess->getItem  ApptItemData ");
 
                 ret = maapi->GetItem(ItemID, apptData);
                 if((ret != NULL))
@@ -774,7 +791,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
             else if (ft == 4)
             {
                 TaskItemData taskData;
-
+				dlog.err("Mapiaccess->getItem  TaskItemData ");
                 ret = maapi->GetItem(ItemID, taskData);
                 if((ret != NULL))
                 {

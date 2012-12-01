@@ -131,6 +131,7 @@ STDMETHODIMP CItemObject::GetDataForItemID(IUserObject *Userobj,VARIANT ItemId, 
     }
 
 	CComPtr<IMapiAccessWrap> Mapi;
+	dlog.trace(L"GetMapiAccessObject for itemobject->getData ");
 
 	hr = Userobj->GetMapiAccessObject(L"",&Mapi);
         if(FAILED(hr))
@@ -139,12 +140,17 @@ STDMETHODIMP CItemObject::GetDataForItemID(IUserObject *Userobj,VARIANT ItemId, 
         return hr;
         }
 
+		if(Mapi != NULL)
+		{
 	hr = Mapi->GetData(L"",ItemId,ft,pVal);
         if(FAILED(hr))
         {
         dlog.err(L"Mapiobj->GetData failed for itemobject->getData with hresult",hr);
         return hr;
         }
+		}
+		else
+			dlog.err("GetMapiAccessObject is null for itemobject->getData");
   
  dlog.trace(L"End ItemObject::GetDataForItemID");
     return hr;
