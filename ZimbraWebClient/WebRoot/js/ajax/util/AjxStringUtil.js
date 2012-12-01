@@ -1579,6 +1579,11 @@ AjxStringUtil.MSG_REGEXES = [
 		regex:	new RegExp("^\\s*--+\\s*(" + AjxMsg.origMsg + "|" + AjxMsg.forwardedMessage + "|" + AjxMsg.origAppt + ")\\s*--+\\s*$", "i")
 	},
 	{
+		// marker for Original or Forwarded message, used by ZCS and others
+		type:	AjxStringUtil.ORIG_SEP_STRONG,
+		regex:	new RegExp("^" + AjxMsg.forwardedMessage1 + "$", "i")
+	},
+	{
 		// one of the commonly quoted email headers
 		type:	AjxStringUtil.ORIG_HEADER,
 		regex:	new RegExp("^\\s*(" + [AjxMsg.from, AjxMsg.to, AjxMsg.subject, AjxMsg.date, AjxMsg.sent, AjxMsg.cc].join("|") + ")")
@@ -1679,7 +1684,7 @@ function(text, isHtml) {
 		}
 		
 		// Bugzilla is very good at fooling us, and does not have quoted content, so bail
-		if ((testLine.indexOf("| DO NOT REPLY") == 0) && (lines[i + 2].indexOf("bugzilla") != -1)) {
+		if ((testLine.indexOf("| DO NOT REPLY") === 0) && (lines[i + 2].indexOf("bugzilla") !== -1)) {
 			return text;
 		}
 
@@ -1688,21 +1693,21 @@ function(text, isHtml) {
 		// WROTE can stretch over two lines; if so, join them into one line
 		var nextLine = lines[i + 1];
 		var isMerged = false;
-		if (nextLine && (type == AjxStringUtil.ORIG_UNKNOWN) && AjxStringUtil.ORIG_INTRO_RE.test(testLine) && nextLine.match(/\w+:$/)) {
+		if (nextLine && (type === AjxStringUtil.ORIG_UNKNOWN) && AjxStringUtil.ORIG_INTRO_RE.test(testLine) && nextLine.match(/\w+:$/)) {
 			testLine = [testLine, nextLine].join(" ");
 			type = AjxStringUtil._getLineType(testLine);
 			isMerged = true;
 		}
 		
 		// LINE sometimes used as delimiter; if HEADER follows, lump it in with them
-		if (type == AjxStringUtil.ORIG_LINE) {
+		if (type === AjxStringUtil.ORIG_LINE) {
 			var j = i + 1;
 			nextLine = lines[j];
 			while (!AjxStringUtil._NON_WHITESPACE.test(nextLine) && j < lines.length) {
 				nextLine = lines[++j];
 			}
 			var nextType = nextLine && AjxStringUtil._getLineType(nextLine);
-			if (nextType == AjxStringUtil.ORIG_HEADER) {
+			if (nextType === AjxStringUtil.ORIG_HEADER) {
 				type = AjxStringUtil.ORIG_HEADER;
 			}
 			else {
@@ -1712,9 +1717,9 @@ function(text, isHtml) {
 				
 		// see if we're switching to a new type; if so, package up what we have so far
 		if (curType) {
-			if (curType != type) {
+			if (curType !== type) {
 				results.push({type:curType, block:curBlock});
-				unknownBlock = (curType == AjxStringUtil.ORIG_UNKNOWN) ? curBlock : unknownBlock;
+				unknownBlock = (curType === AjxStringUtil.ORIG_UNKNOWN) ? curBlock : unknownBlock;
 				count[curType] = count[curType] ? count[curType] + 1 : 1;
 				curBlock = [];
 				curType = type;
@@ -1724,7 +1729,7 @@ function(text, isHtml) {
 			curType = type;
 		}
 		
-		if (isMerged && (type == AjxStringUtil.ORIG_WROTE_WEAK || type == AjxStringUtil.ORIG_WROTE_STRONG)) {
+		if (isMerged && (type === AjxStringUtil.ORIG_WROTE_WEAK || type === AjxStringUtil.ORIG_WROTE_STRONG)) {
 			curBlock.push(line);
 			curBlock.push(nextLine);
 			i++;
@@ -1738,23 +1743,16 @@ function(text, isHtml) {
 	// Handle remaining content
 	if (curBlock.length) {
 		results.push({type:curType, block:curBlock});
-		unknownBlock = (curType == AjxStringUtil.ORIG_UNKNOWN) ? curBlock : unknownBlock;
+		unknownBlock = (curType === AjxStringUtil.ORIG_UNKNOWN) ? curBlock : unknownBlock;
 		count[curType] = count[curType] ? count[curType] + 1 : 1;
 	}
 	
 	// Now it's time to analyze all these blocks that we've classified
-	
-	// If we have a STRONG separator (eg "--- Original Message ---"), consider it authoritative and return the text that precedes it
-	if (count[AjxStringUtil.ORIG_SEP_STRONG] > 0) {
-		var block = [];
-		for (var i = 0; i < results.length; i++) {
-			var result = results[i];
-			if (result.type == AjxStringUtil.ORIG_SEP_STRONG) {
-				break;
-			}
-			block = block.concat(result.block);
-		}
-		var originalText = AjxStringUtil._getTextFromBlock(block);
+
+	// Check for UNKNOWN followed by HEADER
+	var first = results[0], second = results[1];
+	if (first && first.type === AjxStringUtil.ORIG_UNKNOWN && second && second.type === AjxStringUtil.ORIG_HEADER) {
+		var originalText = AjxStringUtil._getTextFromBlock(first.block);
 		if (originalText) {
 			return originalText;
 		}
@@ -1765,24 +1763,31 @@ function(text, isHtml) {
 	if (originalText) {
 		return originalText;
 	}
-	
+
 	// If we found quoted content and there's exactly one UNKNOWN block, return it.
-	if (count[AjxStringUtil.ORIG_UNKNOWN] == 1 && count[AjxStringUtil.ORIG_QUOTED] > 0) {
+	if (count[AjxStringUtil.ORIG_UNKNOWN] === 1 && count[AjxStringUtil.ORIG_QUOTED] > 0) {
 		var originalText = AjxStringUtil._getTextFromBlock(unknownBlock);
 		if (originalText) {
 			return originalText;
 		}
 	}
-	
-	// Check for UNKNOWN followed by HEADER
-	var first = results[0], second = results[1];
-	if (first && first.type == AjxStringUtil.ORIG_UNKNOWN && second && second.type == AjxStringUtil.ORIG_HEADER) {
-		var originalText = AjxStringUtil._getTextFromBlock(first.block);
+
+	// If we have a STRONG separator (eg "--- Original Message ---"), consider it authoritative and return the text that precedes it
+	if (count[AjxStringUtil.ORIG_SEP_STRONG] > 0) {
+		var block = [];
+		for (var i = 0; i < results.length; i++) {
+			var result = results[i];
+			if (result.type === AjxStringUtil.ORIG_SEP_STRONG) {
+				break;
+			}
+			block = block.concat(result.block);
+		}
+		var originalText = AjxStringUtil._getTextFromBlock(block);
 		if (originalText) {
 			return originalText;
 		}
 	}
-	
+
 	return text;
 };
 
@@ -1806,7 +1811,7 @@ function(testLine) {
 		}
 	}
 	
-	if (type == AjxStringUtil.ORIG_UNKNOWN) {
+	if (type === AjxStringUtil.ORIG_UNKNOWN) {
 		// "so-and-so wrote:" takes a lot of different forms; look for various common parts and
 		// assign points to determine confidence
 		var m = testLine.match(/(\w+):$/);
@@ -1814,7 +1819,7 @@ function(testLine) {
 		if (verb) {
 			var points = 0;
 			// look for "wrote:" (and discount "changed:", which is used by Bugzilla)
-			points = points + (verb == AjxMsg.wrote) ? 5 : (verb == AjxMsg.changed) ? 0 : 3;
+			points = points + (verb === AjxMsg.wrote) ? 5 : (verb === AjxMsg.changed) ? 0 : 3;
 			if (AjxStringUtil.ORIG_EMAIL_RE.test(testLine)) {
 				points += 4;
 			}
@@ -1883,7 +1888,7 @@ function(text) {
 	
 	// if there's one UNKNOWN section and some QUOTED, preserve the UNKNOWN
 	if (!ctxt.done) {
-		if (ctxt.count[AjxStringUtil.ORIG_UNKNOWN] == 1 && ctxt.hasQuoted) {
+		if (ctxt.count[AjxStringUtil.ORIG_UNKNOWN] === 1 && ctxt.hasQuoted) {
 			for (var i = 0; i < ctxt.toRemove.length; i++) {
 				var el = ctxt.toRemove[i];
 				if (el && el.parentNode) {
@@ -1913,28 +1918,28 @@ function(el, ctxt) {
 	if (ctxt.done || !el) { return; }
 	
 	var nodeName = el.nodeName.toLowerCase();
-	DBG.println("html", AjxStringUtil.repeat("&nbsp;&nbsp;&nbsp;&nbsp;", ctxt.level) + nodeName + ((nodeName == "#text" && /\S+/.test(el.nodeValue) ? " - " + el.nodeValue.substr(0, 20) : "")));
+	DBG.println("html", AjxStringUtil.repeat("&nbsp;&nbsp;&nbsp;&nbsp;", ctxt.level) + nodeName + ((nodeName === "#text" && /\S+/.test(el.nodeValue) ? " - " + el.nodeValue.substr(0, 20) : "")));
 	var type;
 	var processChildren = true;
 	
 	// Text node: test against our regexes
-	if (nodeName == "#text") {
+	if (nodeName === "#text") {
 		if (!AjxStringUtil._NON_WHITESPACE.test(el.nodeValue)) {
 			return;
 		}
 		var testLine = AjxStringUtil.trim(el.nodeValue);
 		type = AjxStringUtil._getLineType(testLine);
-		if (type == AjxStringUtil.ORIG_SEP_STRONG || type == AjxStringUtil.ORIG_WROTE_STRONG) {
+		if (type === AjxStringUtil.ORIG_SEP_STRONG || type === AjxStringUtil.ORIG_WROTE_STRONG) {
 			ctxt.sepNode = el;	// mark for removal
 		}
-		else if (type != AjxStringUtil.ORIG_WROTE_STRONG) {
-			var m = testLine.match(/(\w+):$/);
-			if (m && m[1] && el.parentNode) {
+		else if (type !== AjxStringUtil.ORIG_WROTE_STRONG) {
+			// Check for colon in case we have a "wrote:" line or a header
+			if (testLine.indexOf(":") !== -1 && el.parentNode) {
 				// what appears as a single "... wrote:" line may have multiple elements, so gather it all
 				// together into one line and test that
 				testLine = AjxStringUtil.trim(AjxStringUtil.htmlDecode(AjxStringUtil.stripTags(el.parentNode.innerHTML)));
 				type = AjxStringUtil._getLineType(testLine);
-				if (type == AjxStringUtil.ORIG_WROTE_STRONG) {
+				if (type === AjxStringUtil.ORIG_WROTE_STRONG) {
 					// check for a multinode WROTE; if we find one, gather it into a SPAN so that we
 					// have a single node to deal with later
 					var pn = el.parentNode, nodes = pn.childNodes, startNodeIndex, stopNodeIndex;
@@ -1945,12 +1950,12 @@ function(el, ctxt) {
 						if (text.match(/(\w+):$/)) {
 							stopNodeIndex = i;
 						}
-						else if ((stopNodeIndex != null) && text.match(AjxStringUtil.ORIG_INTRO_RE)) {
+						else if ((stopNodeIndex !== null) && text.match(AjxStringUtil.ORIG_INTRO_RE)) {
 							startNodeIndex = i;
 							break;
 						}
 					}
-					if (startNodeIndex != null && stopNodeIndex != null) {
+					if (startNodeIndex !== null && stopNodeIndex !== null) {
 						var span = document.createElement("span");
 						for (var i = 0; i < (stopNodeIndex - startNodeIndex) + 1; i++) {
 							span.appendChild(nodes[startNodeIndex]);
@@ -1959,54 +1964,65 @@ function(el, ctxt) {
 						ctxt.sepNode = span;
 					}
 				}
+				else if (type === AjxStringUtil.ORIG_HEADER) {
+					if (ctxt.results[ctxt.results.length - 1].type === AjxStringUtil.ORIG_LINE && ctxt.lineNode) {
+						ctxt.sepNode = ctxt.lineNode;
+						ctxt.done = true;
+					}
+				}
 			}
 		}
 		
 	// HR: look for a couple different forms that are used to delimit quoted content
-	} else if (nodeName == "hr") {
+	} else if (nodeName === "hr") {
 		// see if the HR is ours, or one commonly used by other mail clients such as Outlook
-		if (el.id == AjxStringUtil.HTML_SEP_ID ||
-			(el.size == "2" && el.width == "100%" && el.align == "center")) {
-			
+		if (el.id === AjxStringUtil.HTML_SEP_ID || (el.size === "2" && el.width === "100%" && el.align === "center")) {
 			type = AjxStringUtil.ORIG_SEP_STRONG;
 			ctxt.sepNode = el;	// mark for removal
 		}
 		
 	// PRE: treat as one big line of text (should maybe go line by line)
-	} else if (nodeName == "pre") {
+	} else if (nodeName === "pre") {
 		var text = AjxStringUtil.htmlDecode(AjxStringUtil.stripTags(el.innerHTML));
 		type = AjxStringUtil._getLineType(text);
 
 	// BR: ignore
-	} else if (nodeName == "br") {
+	} else if (nodeName === "br") {
 		return;
 
 	// DIV: check for Outlook class used as delimiter
-	} else if (nodeName == "div") {
-		if (el.className == "OutlookMessageHeader" || el.className === "gmail_quote") {
+	} else if (nodeName === "div") {
+		if (el.className === "OutlookMessageHeader" || el.className === "gmail_quote") {
 			type = AjxStringUtil.ORIG_SEP_STRONG;
 			ctxt.sepNode = el;	// mark for removal
 		}
+		else if (el.outerHTML.toLowerCase().indexOf("border-top") !== -1) {
+			var styleObj = DwtCssStyle.getComputedStyleObject(el);
+			if (styleObj && styleObj.borderTopWidth && parseInt(styleObj.borderTopWidth) > 0) {
+				type = AjxStringUtil.ORIG_LINE;
+				ctxt.lineNode = el;
+			}
+		}
 
 	// SPAN: check for Outlook ID used as delimiter
-	} else if (nodeName == "span") {
-		if (el.id == "OLK_SRC_BODY_SECTION") {
+	} else if (nodeName === "span") {
+		if (el.id === "OLK_SRC_BODY_SECTION") {
 			type = AjxStringUtil.ORIG_SEP_STRONG;
 			ctxt.sepNode = el;	// mark for removal
 		}
 
 	// IMG: treat as original content
-	} else if (nodeName == "img") {
+	} else if (nodeName === "img") {
 		type = AjxStringUtil.ORIG_UNKNOWN;
 
 	// BLOCKQUOTE: treat as quoted section
-	} else if (nodeName == "blockquote") {
+	} else if (nodeName === "blockquote") {
 		type = AjxStringUtil.ORIG_QUOTED;
 		ctxt.toRemove.push(el);
 		ctxt.hasQuoted = true;
 		processChildren = false;
 
-	} else if (nodeName == "script") {
+	} else if (nodeName === "script") {
 		throw new Error("SCRIPT tag found in AjxStringUtil._traverseOriginalHtmlContent");
 	
 	// node types to ignore
@@ -2017,7 +2033,7 @@ function(el, ctxt) {
 	// see if we've found a new type
 	if (type) {
 		if (ctxt.curType) {
-			if (ctxt.curType != type) {
+			if (ctxt.curType !== type) {
 				ctxt.count[ctxt.curType] = ctxt.count[ctxt.curType] ? ctxt.count[ctxt.curType] + 1 : 1;
 				ctxt.results.push({type:ctxt.curType});
 				ctxt.curType = type;
@@ -2030,10 +2046,8 @@ function(el, ctxt) {
 	}
 
 	// if we found a recognized delimiter, set flag to clip it and subsequent nodes at its level
-	if (type == AjxStringUtil.ORIG_SEP_STRONG) {
-		if (ctxt.count[AjxStringUtil.ORIG_UNKNOWN] == 1) {
-			ctxt.done = true;
-		}
+	if (type === AjxStringUtil.ORIG_SEP_STRONG) {
+		ctxt.done = true;
 	}
 	
 	if (!processChildren) {
@@ -2049,11 +2063,11 @@ function(el, ctxt) {
 		// see if we ran into a delimiter
 		if (ctxt.done) {
 			// clip all subsequent nodes
-			while (el && el.lastChild && el.lastChild != childNode) {
+			while (el && el.lastChild && el.lastChild !== childNode) {
 				el.removeChild(el.lastChild);
 			}
 			// clip the delimiter node
-			if (el && el.lastChild == ctxt.sepNode) {
+			if (el && el.lastChild === ctxt.sepNode) {
 				el.removeChild(el.lastChild);
 			}
 			break;
@@ -2098,12 +2112,12 @@ function(el, ctxt) {
 	var nodeName = el.nodeName.toLowerCase();
 	
 	// useless <style> that we used to add, remove it
-	if (nodeName == "style" && el.innerHTML == "p { margin: 0; }") {
+	if (nodeName === "style" && el.innerHTML === "p { margin: 0; }") {
 		el.doDelete = true;
 	}
 	
 	// IE likes to insert an empty <title> in the <head>, let it go
-	else if (nodeName == "title" && el.innerHTML == "") {
+	else if (nodeName === "title" && !el.innerHTML) {
 	}
 	
 	// see if tag is allowed
@@ -2146,8 +2160,8 @@ function(el, ctxt) {
 				if (attrValue) {
 					attrValue = attrValue.toLowerCase();
 					// we have global CSS rules for TD that trump table properties, so bail
-					if (nodeName == "table" && (attrName == "cellpadding" || attrName == "cellspacing" ||
-							attrName == "border") && attrValue != "0") {
+					if (nodeName === "table" && (attrName === "cellpadding" || attrName === "cellspacing" ||
+							attrName === "border") && attrValue !== "0") {
 						ctxt.fail = true;
 						break;
 					}
@@ -2193,10 +2207,10 @@ function(count, results, isHtml, ctxt) {
 		var unknownBlock, foundSep = false, afterSep = {};
 		for (var i = 0; i < results.length; i++) {
 			var result = results[i], type = result.type;
-			if (type == AjxStringUtil.ORIG_WROTE_STRONG) {
+			if (type === AjxStringUtil.ORIG_WROTE_STRONG) {
 				foundSep = true;
 			}
-			else if (type == AjxStringUtil.ORIG_UNKNOWN && !foundSep) {
+			else if (type === AjxStringUtil.ORIG_UNKNOWN && !foundSep) {
 				if (unknownBlock) {
 					return null;
 				}
@@ -2210,7 +2224,7 @@ function(count, results, isHtml, ctxt) {
 		}
 
 		var mixed = (afterSep[AjxStringUtil.ORIG_UNKNOWN] && afterSep[AjxStringUtil.ORIG_QUOTED]);
-		var endsWithUnknown = (count[AjxStringUtil.ORIG_UNKNOWN] == 2 && results[results.length - 1].type == AjxStringUtil.ORIG_UNKNOWN);
+		var endsWithUnknown = (count[AjxStringUtil.ORIG_UNKNOWN] === 2 && results[results.length - 1].type === AjxStringUtil.ORIG_UNKNOWN);
 		if (unknownBlock && (!isHtml || ctxt.sepNode) && (!mixed || endsWithUnknown)) {
 			if (isHtml) {
 				// In HTML mode we do DOM surgery rather than returning the original content
