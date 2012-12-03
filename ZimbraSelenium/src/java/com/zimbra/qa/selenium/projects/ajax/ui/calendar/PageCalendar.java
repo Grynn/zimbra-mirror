@@ -11,7 +11,7 @@ import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
-import com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.actions.CreateACopy;
+import com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday.actions.CreateACopy;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
@@ -836,7 +836,7 @@ public class PageCalendar extends AbsTab {
 
 				}
 				
-				if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.actions.Open.organizerTest == false) {
+				if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday.actions.Open.organizerTest == false) {
 					page = null;
 				} else {	
 					page = new FormApptNew(this.MyApplication);
@@ -1073,7 +1073,7 @@ public class PageCalendar extends AbsTab {
 					this.zWaitForBusyOverlay();
 				}
 				
-				if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.actions.CreateACopy.organizerTest == false) {
+				if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday.actions.CreateACopy.organizerTest == false) {
 					page = new DialogInformational(DialogInformational.DialogWarningID.InformationalDialog, MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 				} else {	
 					page = null;
