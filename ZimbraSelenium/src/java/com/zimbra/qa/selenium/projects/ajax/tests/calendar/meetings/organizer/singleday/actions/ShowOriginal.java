@@ -41,11 +41,13 @@ public class ShowOriginal extends CalendarWorkWeekTest {
 		tz = ZTimeZone.TimeZoneEST.getID();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
+		
 		// Absolute dates in UTC zone
 		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		String apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
+		
 		app.zGetActiveAccount().soapSend(
                 "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
                      "<m>"+
@@ -70,21 +72,23 @@ public class ShowOriginal extends CalendarWorkWeekTest {
         // Open appointment & click context menu 'Show Original' Option
         SeparateWindowShowOriginal window = (SeparateWindowShowOriginal)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK,Button.O_SHOW_ORIGINAL_MENU, apptSubject);
         try { 
-			window.zWaitForActive();		// Make sure the window is there
-			SleepUtil.sleepMedium();
-			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
-			String attendeeHeader = "ATTENDEE;CN=2;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:mailto:";
-			//Verify content in Print view.
-			String body = window.sGetBodyText();
-			ZAssert.assertStringContains(body, apptSubject, "Verify subject in Show original view");
-			ZAssert.assertStringContains(body, apptBody, "Verify content in Show original view");
-			ZAssert.assertStringContains(body, "BEGIN:VCALENDAR", "Verify Begin Header in Show original view");
-			ZAssert.assertStringContains(body, "END:VCALENDAR", "Verify Begin Header in Show original view");
-			ZAssert.assertStringContains(body, attendeeHeader,"Verify Attendee is present in Show original view");
-        }finally {
+        	window.zWaitForActive();		// Make sure the window is there
+        	SleepUtil.sleepMedium();
+        	ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
+        	String attendeeHeader = "ATTENDEE;CN=2;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:mailto:";
+        	String organizerHeader = "ORGANIZER:mailto:" + app.zGetActiveAccount().EmailAddress;
+        	
+        	//Verify content in show original
+        	String body = window.sGetBodyText();
+        	ZAssert.assertStringContains(body, apptSubject, "Verify subject in Show original view");
+        	ZAssert.assertStringContains(body, apptBody, "Verify content in Show original view");
+        	ZAssert.assertStringContains(body, "BEGIN:VCALENDAR", "Verify Begin Header in Show original view");
+        	ZAssert.assertStringContains(body, "END:VCALENDAR", "Verify End Header in Show original view");
+        	ZAssert.assertStringContains(body, organizerHeader, "Verify Organizer header present in Show original view");
+        	ZAssert.assertStringContains(body, attendeeHeader, "Verify Attendee header present in Show original view");
 
-			 if ( window != null ) window.sClose();
-
-			}
+        } finally {
+        	window.sSelectWindow(null);
+        } 
 	}
 }
