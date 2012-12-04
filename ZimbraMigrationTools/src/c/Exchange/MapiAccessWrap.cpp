@@ -350,11 +350,13 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
             if (ft == 2)
             {
                 ContactItemData cd;
-				dlog.err("MapiAccess->getItem for contacts ");
+				dlog.info("MapiAccess->getItem for contacts ");
                 ret = maapi->GetItem(ItemID, cd);
                 if((ret != NULL))
                 {
+					delete ItemID.lpb;
                     dlog.err("Mapiaccess->getItem errored  ContactItemData out",ret);
+
                     hr= S_FALSE;
                     return hr;
                 }
@@ -455,6 +457,8 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
 						pIt[L"tags"] = SysAllocString(L"");
 					}
 				}
+				
+
             }
             else if ((ft == 1) || (ft == 5))    // message or meeting request
             {
@@ -466,6 +470,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 if((ret != NULL))
                 {
                     dlog.err("Mapiaccess->getItem  MessageItemData errored out",ret);
+					delete ItemID.lpb;
                     hr= S_FALSE;
                     return hr;
                 }
@@ -567,6 +572,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 if((ret != NULL))
                 {
                     dlog.err("Mapiaccess->getItem  ApptItemData errored out",ret);
+					delete ItemID.lpb;
                     hr= S_FALSE;
                     return hr;
                 }
@@ -796,6 +802,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 if((ret != NULL))
                 {
                     dlog.err("Mapiaccess->getItem  TaskItemData errored out",ret);
+					delete ItemID.lpb;
                     hr= S_FALSE;
                     return hr;
                 }
