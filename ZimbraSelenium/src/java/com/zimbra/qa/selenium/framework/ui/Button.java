@@ -451,6 +451,9 @@ public class Button {
 	public static final Button O_VIEW_MONTH_SUB_MENU = new Button("O_VIEW_MONTH_SUB_MENU");
 	public static final Button O_VIEW_LIST_SUB_MENU = new Button("O_VIEW_LIST_SUB_MENU");
 	public static final Button O_VIEW_SCHEDULE_SUB_MENU = new Button("O_VIEW_SCHEDULE_SUB_MENU");
+	public static final Button O_NEEDS_ACTION_MENU = new Button("O_NEEDS_ACTION_MENU");
+	public static final Button O_ACCEPTED_MENU = new Button("O_ACCEPTED_MENU");	
+	public static final Button O_DECLINED_MENU = new Button("O_DECLINED_MENU");
 	
 	public static final Button B_OPEN_THIS_INSTANCE = new Button("B_OPEN_THIS_INSTANCE");
 	public static final Button B_OPEN_THE_SERIES = new Button("B_OPEN_THE_SERIES");
