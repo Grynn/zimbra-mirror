@@ -80,6 +80,12 @@ public class FormApptNew extends AbsForm {
 		public static final String LocationPickerSerach="css=td[id$='_title']:contains('Search')";
 		public static final String SelectLocationFromPicker="css=td[id$='_title']:contains('Select')";
 		public static final String AddLocationFromPicker="css=div[class='DwtDialog'] div[class='DwtDialog WindowOuterContainer'] td[class='WindowInnerContainer'] div[id$='_buttons'] td[id^='OK'] div[id$='_button2'] td[id$='_button2_title']";
+		
+		public static final String SaveNSendUpdates = "css=input[id$='_send']";
+		public static final String DontSaveNKeepOpen = "css=input[id$='_cancel']";
+		public static final String DiscardNClose = "css=input[id$='_discard']";
+		public static final String Ok_changes = "css=td[id='CHNG_DLG_ORG_1_button2_title']";
+		public static final String Cancel_changes = "css=td[id='CHNG_DLG_ORG_1_button1_title']";
 	}
 
 	public static class Field {

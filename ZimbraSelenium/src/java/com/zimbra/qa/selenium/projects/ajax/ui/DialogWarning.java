@@ -23,6 +23,7 @@ public class DialogWarning extends AbsDialog {
 
 	public static class DialogWarningID {
 		
+		public static final DialogWarningID ZmMsgDialog = new DialogWarningID("ZmMsgDialog");
 
 		public static final DialogWarningID SaveCurrentMessageAsDraft = new DialogWarningID("YesNoCancel");
 
