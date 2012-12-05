@@ -20,7 +20,7 @@ public class Reply extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Check Reply to a meeting is disabled for organizer ",
-			groups = { "smoke12" })
+			groups = { "smoke" })
 	public void Reply_01() throws HarnessException {
 		
 		// Create the appointment on the server
