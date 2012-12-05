@@ -488,6 +488,13 @@ public class Button {
 	public static final Button C_SATURDAY_WORK_HOUR		= new Button("C_SATURDAY_WORK_HOUR");
 
    //Calendar poups
+	
+	public static final Button B_SAVE_SEND_UPDATES = new Button("B_SAVE_SEND_UPDATES");
+	public static final Button B_DONTSAVE_KEEP_OPEN = new Button("B_DONTSAVE_KEEP_OPEN");
+	public static final Button B_DISCARD_CLOSE = new Button("B_DISCARD_CLOSE");
+    public static final Button B_NEXT_WEEK = new Button("B_NEXT_WEEK ");
+	public static final Button O_TAG_APPT = new Button("O_TAG_APPT");
+	
 
 	public static final Button B_SEARCH_LOCATION = new Button("B_SEARCH_LOCATION");
 	public static final Button B_SELECT_LOCATION = new Button("B_SELECT_LOCATION");
