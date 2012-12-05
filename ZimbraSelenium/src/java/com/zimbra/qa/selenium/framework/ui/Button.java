@@ -57,6 +57,7 @@ public class Button {
 	public static final Button O_NEW_DOCUMENT = new Button("O_NEW_DOCUMENT");
 	public static final Button O_NEW_FOLDER = new Button("O_NEW_FOLDER");
 	public static final Button O_NEW_TAG = new Button("O_NEW_TAG");
+	public static final Button O_REMOVE_TAG = new Button("O_REMOVE_TAG");
 	public static final Button O_NEW_ADDRESSBOOK = new Button("O_NEW_ADDRESSBOOK");
 	public static final Button O_NEW_CALENDAR = new Button("O_NEW_CALENDAR");
 	public static final Button O_NEW_TASKFOLDER = new Button("O_NEW_TASKFOLDER");
