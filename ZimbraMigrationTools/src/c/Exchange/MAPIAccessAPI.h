@@ -236,7 +236,6 @@ private:
     HRESULT Iterate_folders(Zimbra::MAPI::MAPIFolder &folder, vector<Folder_Data> &fd);
     void traverse_folder(Zimbra::MAPI::MAPIFolder &folder);
     HRESULT GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder);
-	static Zimbra::Util::MiniDumpGenerator *m_minidmpgntr;
 	static LONG WINAPI UnhandledExceptionFilter(LPEXCEPTION_POINTERS pExPtrs);
 	static void internalInit();
 public:

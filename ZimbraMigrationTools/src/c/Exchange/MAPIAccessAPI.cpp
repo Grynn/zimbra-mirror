@@ -9,7 +9,6 @@ std::wstring MAPIAccessAPI::m_strTargetProfileName = L"";
 std::wstring MAPIAccessAPI::m_strExchangeHostName = L"";
 bool MAPIAccessAPI::m_bSingleMailBoxMigration = false;
 bool MAPIAccessAPI::m_bHasJoinedDomain = false;
-Zimbra::Util::MiniDumpGenerator *MAPIAccessAPI::m_minidmpgntr = NULL;
 
 // Initialize with Exchange Sever hostname, Outlook Admin profile name, Exchange mailbox name to be migrated
 MAPIAccessAPI::MAPIAccessAPI(wstring strUserName, wstring strUserAccount): m_userStore(NULL), m_rootFolder(NULL)
@@ -29,10 +28,7 @@ MAPIAccessAPI::MAPIAccessAPI(wstring strUserName, wstring strUserAccount): m_use
 
 MAPIAccessAPI::~MAPIAccessAPI()
 {
-	if(m_minidmpgntr)
-		delete m_minidmpgntr;
-	m_minidmpgntr=NULL;
-    if ((m_userStore) && (!m_bSingleMailBoxMigration))
+	if ((m_userStore) && (!m_bSingleMailBoxMigration))
         delete m_userStore;
     m_userStore = NULL;
     if (m_rootFolder != NULL)
@@ -67,7 +63,7 @@ bool MAPIAccessAPI::SkipFolder(ExchangeSpecialFolderId exfid)
 LONG WINAPI MAPIAccessAPI::UnhandledExceptionFilter(LPEXCEPTION_POINTERS pExPtrs)
 {
 	LPWSTR strOutMessage=NULL;
-	LONG lRetVal = m_minidmpgntr->GenerateCoreDump(pExPtrs,strOutMessage);
+	LONG lRetVal = Zimbra::Util::MiniDumpGenerator::GenerateCoreDump(pExPtrs,strOutMessage);
 	WCHAR pwszTempPath[MAX_PATH];
 	GetTempPath(MAX_PATH, pwszTempPath);
     wstring strMsg;
@@ -87,7 +83,7 @@ void MAPIAccessAPI::internalInit()
 	LPWSTR pwszTempPath = new WCHAR[MAX_PATH];
 	wcscpy(pwszTempPath,appdir.c_str());
 	Zimbra::Util::AppendString(pwszTempPath,L"dbghelp.dll");
-    m_minidmpgntr = new Zimbra::Util::MiniDumpGenerator(pwszTempPath);
+   Zimbra::Util::MiniDumpGenerator::Initialize(pwszTempPath);
 
 	SetUnhandledExceptionFilter(UnhandledExceptionFilter);
 	delete []pwszTempPath;
@@ -101,7 +97,7 @@ LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
 	{
 		return _InitGlobalSessionAndStore(lpcwstrMigTarget);
 	}
-	__except(m_minidmpgntr->GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
+	__except(Zimbra::Util::MiniDumpGenerator::GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
 	{
 		dloge(exceptionmsg);
 		Zimbra::Util::FreeString(exceptionmsg);
@@ -221,8 +217,7 @@ CLEAN_UP: if (lpwstrStatus)
 
 void MAPIAccessAPI::UnInitGlobalSessionAndStore()
 {
-	if(m_minidmpgntr)
-		delete m_minidmpgntr;
+	Zimbra::Util::MiniDumpGenerator::UnInit();
     // Delete any PST migration profiles
     Zimbra::MAPI::Util::DeleteAlikeProfiles(Zimbra::MAPI::Util::PSTMIG_PROFILE_PREFIX.c_str());
 
@@ -357,7 +352,7 @@ LPCWSTR MAPIAccessAPI::InitializeUser()
 	{
 		return _InitializeUser();
 	}
-	__except(m_minidmpgntr->GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
+	__except(Zimbra::Util::MiniDumpGenerator::GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
 	{
 		dloge(exceptionmsg);		
 	}
@@ -413,7 +408,7 @@ LPCWSTR MAPIAccessAPI::GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist)
 	{
 		return _GetRootFolderHierarchy(vfolderlist);
 	}
-	__except(m_minidmpgntr->GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
+	__except(Zimbra::Util::MiniDumpGenerator::GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
 	{
 		dloge(exceptionmsg);		
 	}
@@ -540,7 +535,7 @@ LPCWSTR MAPIAccessAPI::GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data>
 	{
 		_GetFolderItemsList(sbFolderEID,ItemList);
 	}
-	__except(m_minidmpgntr->GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
+	__except(Zimbra::Util::MiniDumpGenerator::GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
 	{
 		dloge(exceptionmsg);		
 	}
@@ -638,9 +633,9 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData)
 	LPWSTR exceptionmsg=NULL;
 	__try
 	{
-		_GetItem(sbItemEID,itemData);
+		exceptionmsg=(LPWSTR)_GetItem(sbItemEID,itemData);
 	}
-	__except(m_minidmpgntr->GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
+	__except(Zimbra::Util::MiniDumpGenerator::GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
 	{
 		dloge(exceptionmsg);		
 	}
@@ -857,66 +852,65 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
         else if (msg.ItemType() == ZT_CONTACTS)
         {
            // printf("ITEM TYPE: ZT_CONTACTS \n");
+			MAPIContact mapicontact(*m_zmmapisession, msg);
+			ContactItemData *cd = (ContactItemData *)&itemData;
 
-            MAPIContact mapicontact(*m_zmmapisession, msg);
-            ContactItemData *cd = (ContactItemData *)&itemData;
-
-            cd->Birthday = mapicontact.Birthday();
-            cd->CallbackPhone = mapicontact.CallbackPhone();
-            cd->CarPhone = mapicontact.CarPhone();
-            cd->Company = mapicontact.Company();
-            cd->Email1 = mapicontact.Email();
-            cd->Email2 = mapicontact.Email2();
-            cd->Email3 = mapicontact.Email3();
-            cd->FileAs = mapicontact.FileAs();
-            cd->FirstName = mapicontact.FirstName();
-            cd->HomeCity = mapicontact.HomeCity();
-            cd->HomeCountry = mapicontact.HomeCountry();
-            cd->HomeFax = mapicontact.HomeFax();
-            cd->HomePhone = mapicontact.HomePhone();
-            cd->HomePhone2 = mapicontact.HomePhone2();
-            cd->HomePostalCode = mapicontact.HomePostalCode();
-            cd->HomeState = mapicontact.HomeState();
-            cd->HomeStreet = mapicontact.HomeStreet();
-            cd->HomeURL = mapicontact.HomeURL();
-            cd->IMAddress1 = mapicontact.IMAddress1();
-            cd->JobTitle = mapicontact.JobTitle();
-            cd->LastName = mapicontact.LastName();
-            cd->MiddleName = mapicontact.MiddleName();
-            cd->MobilePhone = mapicontact.MobilePhone();
-            cd->NamePrefix = mapicontact.NamePrefix();
-            cd->NameSuffix = mapicontact.NameSuffix();
-            cd->NickName = mapicontact.NickName();
-            cd->Notes = mapicontact.Notes();
-            cd->OtherCity = mapicontact.OtherCity();
-            cd->OtherCountry = mapicontact.OtherCountry();
-            cd->OtherFax = mapicontact.OtherFax();
-            cd->OtherPhone = mapicontact.OtherPhone();
-            cd->OtherPostalCode = mapicontact.OtherPostalCode();
-            cd->OtherState = mapicontact.OtherState();
-            cd->OtherStreet = mapicontact.OtherStreet();
-            cd->OtherURL = mapicontact.OtherURL();
-            cd->Pager = mapicontact.Pager();
+			cd->Birthday = mapicontact.Birthday();
+			cd->CallbackPhone = mapicontact.CallbackPhone();
+			cd->CarPhone = mapicontact.CarPhone();
+			cd->Company = mapicontact.Company();
+			cd->Email1 = mapicontact.Email();
+			cd->Email2 = mapicontact.Email2();
+			cd->Email3 = mapicontact.Email3();
+			cd->FileAs = mapicontact.FileAs();
+			cd->FirstName = mapicontact.FirstName();
+			cd->HomeCity = mapicontact.HomeCity();
+			cd->HomeCountry = mapicontact.HomeCountry();
+			cd->HomeFax = mapicontact.HomeFax();
+			cd->HomePhone = mapicontact.HomePhone();
+			cd->HomePhone2 = mapicontact.HomePhone2();
+			cd->HomePostalCode = mapicontact.HomePostalCode();
+			cd->HomeState = mapicontact.HomeState();
+			cd->HomeStreet = mapicontact.HomeStreet();
+			cd->HomeURL = mapicontact.HomeURL();
+			cd->IMAddress1 = mapicontact.IMAddress1();
+			cd->JobTitle = mapicontact.JobTitle();
+			cd->LastName = mapicontact.LastName();
+			cd->MiddleName = mapicontact.MiddleName();
+			cd->MobilePhone = mapicontact.MobilePhone();
+			cd->NamePrefix = mapicontact.NamePrefix();
+			cd->NameSuffix = mapicontact.NameSuffix();
+			cd->NickName = mapicontact.NickName();
+			cd->Notes = mapicontact.Notes();
+			cd->OtherCity = mapicontact.OtherCity();
+			cd->OtherCountry = mapicontact.OtherCountry();
+			cd->OtherFax = mapicontact.OtherFax();
+			cd->OtherPhone = mapicontact.OtherPhone();
+			cd->OtherPostalCode = mapicontact.OtherPostalCode();
+			cd->OtherState = mapicontact.OtherState();
+			cd->OtherStreet = mapicontact.OtherStreet();
+			cd->OtherURL = mapicontact.OtherURL();
+			cd->Pager = mapicontact.Pager();
 			cd->pDList = mapicontact.DList();   
-            cd->PictureID = mapicontact.Picture();
-            cd->Type = mapicontact.Type();
-            cd->UserField1 = mapicontact.UserField1();
-            cd->UserField2 = mapicontact.UserField2();
-            cd->UserField3 = mapicontact.UserField3();
-            cd->UserField4 = mapicontact.UserField4();
-            cd->WorkCity = mapicontact.WorkCity();
-            cd->WorkCountry = mapicontact.WorkCountry();
-            cd->WorkFax = mapicontact.WorkFax();
-            cd->WorkPhone = mapicontact.WorkPhone();
-            cd->WorkPostalCode = mapicontact.WorkPostalCode();
-            cd->WorkState = mapicontact.WorkState();
-            cd->WorkStreet = mapicontact.WorkStreet();
-            cd->WorkURL = mapicontact.WorkURL();
-            cd->ContactImagePath = mapicontact.ContactImagePath();
+			cd->PictureID = mapicontact.Picture();
+			cd->Type = mapicontact.Type();
+			cd->UserField1 = mapicontact.UserField1();
+			cd->UserField2 = mapicontact.UserField2();
+			cd->UserField3 = mapicontact.UserField3();
+			cd->UserField4 = mapicontact.UserField4();
+			cd->WorkCity = mapicontact.WorkCity();
+			cd->WorkCountry = mapicontact.WorkCountry();
+			cd->WorkFax = mapicontact.WorkFax();
+			cd->WorkPhone = mapicontact.WorkPhone();
+			cd->WorkPostalCode = mapicontact.WorkPostalCode();
+			cd->WorkState = mapicontact.WorkState();
+			cd->WorkStreet = mapicontact.WorkStreet();
+			cd->WorkURL = mapicontact.WorkURL();
+			cd->ContactImagePath = mapicontact.ContactImagePath();
 			cd->ImageContenttype = mapicontact.ContactImageType();
 			cd->ImageContentdisp = mapicontact.ContactImageDisp();
-            cd->vTags = pKeywords;
-            cd->Anniversary = mapicontact.Anniversary();
+			cd->vTags = pKeywords;
+			cd->Anniversary = mapicontact.Anniversary();
 			vector<ContactUDFields>::iterator it;
 			for (it= mapicontact.UserDefinedFields()->begin();it != mapicontact.UserDefinedFields()->end();it++)
 				cd->UserDefinedFields.push_back(*it);

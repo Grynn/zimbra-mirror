@@ -59,15 +59,15 @@ private:
 class MiniDumpGenerator
 {
 public:
-    MiniDumpGenerator(LPTSTR strDbgHelpDllPath);
-    ~MiniDumpGenerator();
-    LONG WINAPI GenerateCoreDump(LPEXCEPTION_POINTERS pExPtrs, LPWSTR &wstrOutMessage);
+    static bool Initialize(LPTSTR strDbgHelpDllPath);
+	static void UnInit();
+    static LONG WINAPI GenerateCoreDump(LPEXCEPTION_POINTERS pExPtrs, LPWSTR &wstrOutMessage);
 private:
-    HINSTANCE m_hDbgHelpDll;
-    wstring m_wstrDbgHelpDllPath;
-    MiniDumpWriteDumpPtr_t m_MiniDumpWriteDumpPtr;
-    bool m_initialized;
-    bool Initialize();
+	static CriticalSection cs;
+    static HINSTANCE m_hDbgHelpDll;
+    static wstring m_wstrDbgHelpDllPath;
+    static MiniDumpWriteDumpPtr_t m_MiniDumpWriteDumpPtr;
+    static bool m_initialized;    
 };
 
 //copy wstr to dest

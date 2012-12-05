@@ -63,7 +63,6 @@ private:
     static ExchangeMigrationSetup *m_exchmigsetup;
     static int Initialized;
     static MAPISession *m_zmmapisession;
-	static Zimbra::Util::MiniDumpGenerator *m_EOminidmpgntr;
 	static void internalEOInit();
 	static LPCWSTR _GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername = NULL, LPCWSTR
         lpAdminPassword = NULL);

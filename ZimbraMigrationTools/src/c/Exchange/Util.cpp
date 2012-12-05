@@ -1,6 +1,11 @@
 #include "common.h"
 #include "Util.h"
 
+Zimbra::Util::CriticalSection Zimbra::Util::MiniDumpGenerator::cs;
+HINSTANCE Zimbra::Util::MiniDumpGenerator::m_hDbgHelpDll=NULL;
+wstring Zimbra::Util::MiniDumpGenerator::m_wstrDbgHelpDllPath=L"";
+Zimbra::Util::MiniDumpWriteDumpPtr_t Zimbra::Util::MiniDumpGenerator::m_MiniDumpWriteDumpPtr=NULL;
+bool Zimbra::Util::MiniDumpGenerator::m_initialized=false;
 
 Zimbra::Util::DllVersion::DllVersion(HINSTANCE hDbgHelpDll)
 {
@@ -144,24 +149,17 @@ BOOL Zimbra::Util::DllVersion::ParseVersionString(LPWSTR lpwszVersion, DWORD &dw
     }
 }
 
-Zimbra::Util::MiniDumpGenerator::MiniDumpGenerator(LPTSTR strDbgHelpDllPath)
-{
-    m_MiniDumpWriteDumpPtr = NULL;
-    m_hDbgHelpDll = NULL;
-    m_wstrDbgHelpDllPath= strDbgHelpDllPath;
-    m_initialized=false;
-    Initialize();
-}
-
-Zimbra::Util::MiniDumpGenerator::~MiniDumpGenerator()
+void Zimbra::Util::MiniDumpGenerator::UnInit()
 {
     if (m_hDbgHelpDll)
     FreeLibrary(m_hDbgHelpDll);
     m_hDbgHelpDll= NULL;
+	m_initialized=false;
 }
 
-bool Zimbra::Util::MiniDumpGenerator::Initialize()
+bool Zimbra::Util::MiniDumpGenerator::Initialize(LPTSTR strDbgHelpDllPath)
 {
+    m_wstrDbgHelpDllPath= strDbgHelpDllPath;
     m_hDbgHelpDll = LoadLibrary(m_wstrDbgHelpDllPath.c_str());
     if (!m_hDbgHelpDll)
     {
@@ -203,104 +201,105 @@ bool Zimbra::Util::MiniDumpGenerator::Initialize()
 
 LONG WINAPI Zimbra::Util::MiniDumpGenerator::GenerateCoreDump(LPEXCEPTION_POINTERS pExPtrs, LPWSTR &wstrOutMessage)
 {
-    LONG retVal= ZM_CORE_GENERATION_FAILED;
-    CriticalSection cs;
-    
-    if(!m_initialized)
+	Zimbra::Util::AutoCriticalSection acs(cs);
+	if(!m_initialized)
         return ZM_MINIDMP_UNINIT;
-    Zimbra::Util::AutoCriticalSection acs(cs);
-    if (pExPtrs)
-    {
-        static std::set<PVOID> setOccuredExcepAddrs;
-        static std::set<DWORD> setOccuredExcepCodes;
+	
+	wstrOutMessage=NULL;
+	LONG retVal= ZM_CORE_GENERATION_FAILED;
+    	
+	if (pExPtrs)
+	{
+		static std::set<PVOID> setOccuredExcepAddrs;
+		static std::set<DWORD> setOccuredExcepCodes;
 
-        if ((setOccuredExcepAddrs.find(pExPtrs->ExceptionRecord->ExceptionAddress) !=
-            setOccuredExcepAddrs.end()) && (setOccuredExcepCodes.end() !=
-            setOccuredExcepCodes.find(pExPtrs->ExceptionRecord->ExceptionCode)))
-        {
-            Zimbra::Util::CopyString(wstrOutMessage,L"Similar core dump already generated. Hence skipping this one.");
-            return ZM_CORE_ALREADY_GENERATED;
-        }
-        if (pExPtrs->ExceptionRecord)
-        {
-            WCHAR strbuf[128];
-            wsprintf(strbuf,L"Exception Address: 0x%x",            
-            pExPtrs->ExceptionRecord->ExceptionAddress);
-            Zimbra::Util::CopyString(wstrOutMessage,strbuf);
-        }
+		if ((setOccuredExcepAddrs.find(pExPtrs->ExceptionRecord->ExceptionAddress) !=
+			setOccuredExcepAddrs.end()) && (setOccuredExcepCodes.end() !=
+			setOccuredExcepCodes.find(pExPtrs->ExceptionRecord->ExceptionCode)))
+		{
+			Zimbra::Util::CopyString(wstrOutMessage,L"Similar core dump already generated. Hence skipping this one.");
+			return ZM_CORE_ALREADY_GENERATED;
+		}
+		if (pExPtrs->ExceptionRecord)
+		{
+			WCHAR strbuf[128];
+			wsprintf(strbuf,L"Exception Address: 0x%x",            
+			pExPtrs->ExceptionRecord->ExceptionAddress);
+			Zimbra::Util::CopyString(wstrOutMessage,strbuf);
+		}
 
-        if (m_MiniDumpWriteDumpPtr)
-        {
-            MINIDUMP_EXCEPTION_INFORMATION mdExInfo;
+		if (m_MiniDumpWriteDumpPtr)
+		{
+			MINIDUMP_EXCEPTION_INFORMATION mdExInfo;
 
-            mdExInfo.ThreadId = GetCurrentThreadId();
-            mdExInfo.ExceptionPointers = pExPtrs;
-            mdExInfo.ClientPointers = TRUE;
+			mdExInfo.ThreadId = GetCurrentThreadId();
+			mdExInfo.ExceptionPointers = pExPtrs;
+			mdExInfo.ClientPointers = TRUE;
 
-            WCHAR pwszDmpFile[MAX_PATH + 32];
-            WCHAR pwszTempPath[MAX_PATH];
+			WCHAR pwszDmpFile[MAX_PATH + 32];
+			WCHAR pwszTempPath[MAX_PATH];
 
-            GetTempPath(MAX_PATH, pwszTempPath);
+			GetTempPath(MAX_PATH, pwszTempPath);
 
-            CString strCoreFileName;
-            SYSTEMTIME st;
+			CString strCoreFileName;
+			SYSTEMTIME st;
 
-            GetLocalTime(&st);
-            strCoreFileName.Format(L"ZimbraCore_%02d%02d%d_%02d%02d%02d.dmp", st.wMonth,
-            st.wDay, st.wYear, st.wHour, st.wMinute, st.wSecond);
+			GetLocalTime(&st);
+			strCoreFileName.Format(L"ZimbraCore_%02d%02d%d_%02d%02d%02d.dmp", st.wMonth,
+			st.wDay, st.wYear, st.wHour, st.wMinute, st.wSecond);
 
-            wcscpy(pwszDmpFile, pwszTempPath);
+			wcscpy(pwszDmpFile, pwszTempPath);
 
-            //Get App Name
-            WCHAR szAppPath[MAX_PATH] = L"";
-            std::wstring strAppName;
-            ::GetModuleFileName(0, szAppPath, MAX_PATH);
-            strAppName = szAppPath;
-            strAppName = strAppName.substr(strAppName.rfind(L"\\") + 1);
-            strAppName = strAppName.substr(0,strAppName.find(L"."));
-            wcscat(pwszDmpFile, strAppName.c_str());
-            wcscat(pwszDmpFile, L"\\");
-            wcscat(pwszDmpFile, strCoreFileName.GetString());
+			//Get App Name
+			WCHAR szAppPath[MAX_PATH] = L"";
+			std::wstring strAppName;
+			::GetModuleFileName(0, szAppPath, MAX_PATH);
+			strAppName = szAppPath;
+			strAppName = strAppName.substr(strAppName.rfind(L"\\") + 1);
+			strAppName = strAppName.substr(0,strAppName.find(L"."));
+			wcscat(pwszDmpFile, strAppName.c_str());
+			wcscat(pwszDmpFile, L"\\");
+			wcscat(pwszDmpFile, strCoreFileName.GetString());
 
-            HANDLE hFile = CreateFile(pwszDmpFile, GENERIC_READ | GENERIC_WRITE, 0, NULL,
-            CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+			HANDLE hFile = CreateFile(pwszDmpFile, GENERIC_READ | GENERIC_WRITE, 0, NULL,
+			CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-            if (hFile != INVALID_HANDLE_VALUE)
-            {
-                if (m_MiniDumpWriteDumpPtr(GetCurrentProcess(), GetCurrentProcessId(), hFile,
-                (MINIDUMP_TYPE)(MiniDumpWithDataSegs | MiniDumpWithFullMemory), &mdExInfo,
-                NULL, NULL))
-                {
-                    WCHAR strbuf[512];
-                    wsprintf(strbuf,L"  CORE: Generated core dump: %s", pwszDmpFile);
-                    if(wstrOutMessage)
-                        Zimbra::Util::AppendString(wstrOutMessage,strbuf);
-                    else
-                        Zimbra::Util::CopyString(wstrOutMessage,strbuf);
-                    setOccuredExcepAddrs.insert(pExPtrs->ExceptionRecord->ExceptionAddress);
-                    setOccuredExcepCodes.insert(pExPtrs->ExceptionRecord->ExceptionCode);
-                    CloseHandle(hFile);
-                    retVal = ZM_CORE_GENERATED;
-                }
-                else
-                {
-                    if(wstrOutMessage)
-                        Zimbra::Util::AppendString(wstrOutMessage,L"  CORE: Failed to generate core dump.");
-                    else
-                        Zimbra::Util::CopyString(wstrOutMessage,L"  CORE: Failed to generate core dump.");
-                    CloseHandle(hFile);
-                    DeleteFile(pwszDmpFile);
-                }
-            }
-        }
-    }
-    else
-    {
-        if(wstrOutMessage)
-            Zimbra::Util::AppendString(wstrOutMessage,L"  CORE: Failed to generate core dump. Invalid LPEXCEPTION_POINTERS.");
-        else
-            Zimbra::Util::CopyString(wstrOutMessage,L"  CORE: Failed to generate core dump. Invalid LPEXCEPTION_POINTERS.");
-    }
+			if (hFile != INVALID_HANDLE_VALUE)
+			{
+				if (m_MiniDumpWriteDumpPtr(GetCurrentProcess(), GetCurrentProcessId(), hFile,
+				(MINIDUMP_TYPE)(MiniDumpWithDataSegs | MiniDumpWithFullMemory), &mdExInfo,
+				NULL, NULL))
+				{
+					WCHAR strbuf[512];
+					wsprintf(strbuf,L"  CORE: Generated core dump: %s", pwszDmpFile);
+					if(wstrOutMessage)
+						Zimbra::Util::AppendString(wstrOutMessage,strbuf);
+					else
+						Zimbra::Util::CopyString(wstrOutMessage,strbuf);
+					setOccuredExcepAddrs.insert(pExPtrs->ExceptionRecord->ExceptionAddress);
+					setOccuredExcepCodes.insert(pExPtrs->ExceptionRecord->ExceptionCode);
+					CloseHandle(hFile);
+					retVal = ZM_CORE_GENERATED;
+				}
+				else
+				{
+					if(wstrOutMessage)
+						Zimbra::Util::AppendString(wstrOutMessage,L"  CORE: Failed to generate core dump.");
+					else
+						Zimbra::Util::CopyString(wstrOutMessage,L"  CORE: Failed to generate core dump.");
+					CloseHandle(hFile);
+					DeleteFile(pwszDmpFile);
+				}
+			}
+		}
+	}
+	else
+	{
+		if(wstrOutMessage)
+			Zimbra::Util::AppendString(wstrOutMessage,L"  CORE: Failed to generate core dump. Invalid LPEXCEPTION_POINTERS.");
+		else
+			Zimbra::Util::CopyString(wstrOutMessage,L"  CORE: Failed to generate core dump. Invalid LPEXCEPTION_POINTERS.");
+	}	
     return retVal;
 }
 

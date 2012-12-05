@@ -906,17 +906,16 @@ HRESULT ExchangeMigrationSetup::GetAllProfiles(vector<string> &vProfileList)
 int ExchangeOps::Initialized = EXCH_UNINITIALIZED;
 ExchangeMigrationSetup *ExchangeOps::m_exchmigsetup = NULL;
 MAPISession *ExchangeOps::m_zmmapisession = NULL;
-Zimbra::Util::MiniDumpGenerator *ExchangeOps::m_EOminidmpgntr = NULL;
 
 void  ExchangeOps::internalEOInit()
 {
 	//Get App dir
 	wstring appdir= Zimbra::Util::GetAppDir();
-	//instantiate dump generator
+	//initialize dump generator
 	LPWSTR pwszTempPath = new WCHAR[MAX_PATH];
 	wcscpy(pwszTempPath,appdir.c_str());
 	Zimbra::Util::AppendString(pwszTempPath,L"dbghelp.dll");
-    m_EOminidmpgntr = new Zimbra::Util::MiniDumpGenerator(pwszTempPath);
+	Zimbra::Util::MiniDumpGenerator::Initialize(pwszTempPath);
 }
 
 LPCWSTR ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername, LPCWSTR
@@ -928,7 +927,7 @@ LPCWSTR ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername, L
 	{
 		return _GlobalInit(lpMAPITarget, lpAdminUsername, lpAdminPassword);
 	}
-	__except(m_EOminidmpgntr->GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
+	__except(Zimbra::Util::MiniDumpGenerator::GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
 	{
 		dloge(exceptionmsg);
 	}
@@ -1024,10 +1023,8 @@ LPCWSTR ExchangeOps::GlobalUninit()
         delete m_zmmapisession;
         m_zmmapisession = NULL;
     }
-	//clean minidump ptr
-	if(m_EOminidmpgntr)
-		delete m_EOminidmpgntr;
-	m_EOminidmpgntr=NULL;
+	
+	Zimbra::Util::MiniDumpGenerator::UnInit();
 
     Initialized = EXCH_UNINITIALIZED;
 	if(lpwstrStatus)
