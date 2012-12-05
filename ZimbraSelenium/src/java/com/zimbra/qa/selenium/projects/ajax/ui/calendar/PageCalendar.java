@@ -8,6 +8,9 @@ import org.seleniumhq.jetty7.util.log.Log;
 import com.zimbra.common.util.SystemUtil;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
+import com.zimbra.qa.selenium.framework.items.ContactGroupItem;
+import com.zimbra.qa.selenium.framework.items.IItem;
+import com.zimbra.qa.selenium.framework.items.TagItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
@@ -127,6 +130,14 @@ public class PageCalendar extends AbsTab {
 		public static final String AddContactFromPicker = "css=td[id^='ZmContactPicker_button']:contains('OK')";
 		
 		public static final String AddLocation = "css=td[id$='_title']:contains('Location:')";
+		
+		public static final String NextWeek = "css= td[id='zb__CAL__Nav__PAGE_FORWARD_left_icon']";
+		public static final String TodayButton = "css=td[id='zb__CLD__TODAY_title']";
+		public static final String TodayHighlighted = "css=div[class='calendar_heading_day_today']";
+		public static final String TodaySelelcted = "css=div[class='calendar_heading_day_today-selected']";	
+		//move appt
+		public static final String MoveToolbar = "css=td[id='zb__CLD__MOVE_MENU_left_icon']";	
+		public static final String MOveFolderOption = "css=div[class='ZmFolderChooser'] div[class='DwtTreeItemLevel1ChildDiv'] td[class='DwtTreeItem-Text']:contains('";  // append the foldername and close the parenthesis
 	}
 
 	public PageCalendar(AbsApplication application) {
@@ -1143,7 +1154,7 @@ public class PageCalendar extends AbsTab {
 				
 				optionLocator = "css=div#VIEW_APPT_INSTANCE td[id$='_title']";
 				
-			}
+			} 
 
 			this.zRightClickAt(locator, "");
 			this.zWaitForBusyOverlay();
@@ -1178,7 +1189,6 @@ public class PageCalendar extends AbsTab {
 			if ( subOption == Button.O_DELETE ) {
 				subOptionLocator = "css=td#DELETE_SERIES_title";
 			}
-
 			if ( subOptionLocator == null ) {
 				throw new HarnessException("implement action:"+ action +" option:"+ option +" suboption:" + subOption);
 			}
@@ -1237,6 +1247,7 @@ public class PageCalendar extends AbsTab {
 
 	}
 
+	
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
@@ -1378,7 +1389,23 @@ public class PageCalendar extends AbsTab {
 			locator = Locators.TagAppointmentRemoveTagSubMenu;
 			page = null;
 			
-		} else {
+		}else if (button == Button.B_NEXT_WEEK) {
+	
+			locator = Locators.NextWeek;
+			page = null;
+			
+		} else if (button == Button.O_GO_TO_TODAY_MENU) {
+	
+			locator = Locators.TodayButton;
+			page = null;
+			
+		} else if (button == Button.O_MOVE_MENU) {
+	
+			locator = Locators.MoveToolbar;
+			page = null;
+			
+		} 
+		else {
 			throw new HarnessException("no logic defined for button " + button);
 		}
 
