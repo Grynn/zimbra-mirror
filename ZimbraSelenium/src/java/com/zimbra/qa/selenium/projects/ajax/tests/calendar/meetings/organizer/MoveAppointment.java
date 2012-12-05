@@ -18,7 +18,7 @@ public class MoveAppointment extends CalendarWorkWeekTest {
 	}
 
 	@Test(description = "Move Appointment using toolbar menu as organizer",
-			groups = { "functional12" })
+			groups = { "functional" })
 	public void MoveAppointment_01() throws HarnessException {
 
 		//-- Data setup
