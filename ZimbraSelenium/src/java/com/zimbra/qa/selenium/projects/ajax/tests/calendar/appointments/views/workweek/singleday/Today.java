@@ -67,7 +67,6 @@ public class Today extends CalendarWorkWeekTest {
        if(d.toString().charAt(8) == '0')
        {
     	   String ad = d.toString().substring(8, 9);
-    	   logger.info("String ad is " + ad);
     	   if(ad.charAt(0)== '0'){
     		   mydate = d.toString().substring(0,7) + " " + d.toString().charAt(9);
     	   }   
@@ -108,8 +107,6 @@ public class Today extends CalendarWorkWeekTest {
         // Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
-        // navigate to next week and make sure Today is not present 
-       
         // click on Today Button and make sure Today is present 
         app.zPageCalendar.zToolbarPressButton(Button.O_GO_TO_TODAY_MENU);
         ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(Locators.TodaySelelcted), "Today is visible");
@@ -123,7 +120,6 @@ public class Today extends CalendarWorkWeekTest {
        if(d.toString().charAt(8) == '0')
        {
     	   String ad = d.toString().substring(8, 9);
-    	   logger.info("String ad is " + ad);
     	   if(ad.charAt(0)== '0'){
     		   mydate = d.toString().substring(0,7) + " " + d.toString().charAt(9);
     	   }   
