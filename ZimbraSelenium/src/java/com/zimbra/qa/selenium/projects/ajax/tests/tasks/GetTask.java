@@ -446,14 +446,16 @@ public class GetTask extends AjaxCommonTest {
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
 		
 		
-		String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();
+		String subject = "atask"+ ZimbraSeleniumProperties.getUniqueString();
 		String content = "content"+ ZimbraSeleniumProperties.getUniqueString();
+		ZDate dueDate      = new ZDate(2015, 1, 17, 12, 0, 0);
 						
 		app.zGetActiveAccount().soapSend(
 				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
 					"<m >" +
 			        	"<inv>" +
 			        		"<comp name='"+ subject +"'>" +
+			        		"<e d='"+ dueDate.toYYYYMMDD() +"'/>" +
 			        			"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 			        		"</comp>" +
 			        	"</inv>" +
