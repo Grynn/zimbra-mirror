@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday;
 
 import java.util.Calendar;
 import org.testng.annotations.*;
@@ -64,12 +64,13 @@ public class MoveAppointment extends CalendarWorkWeekTest {
 
 		// Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+       
         // Select the appointment
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         
-        // Right Click -> Move context menu
+        // move appointment using toolbar menu
         app.zPageCalendar.zToolbarPressButton(Button.O_MOVE_MENU);
-        app.zPageCalendar.zClickAt(Locators.MOveFolderOption + name1 + "')" , "");
+        app.zPageCalendar.zClickAt(Locators.MoveFolderOption + name1 + "')" , "");
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		//-- Server verification

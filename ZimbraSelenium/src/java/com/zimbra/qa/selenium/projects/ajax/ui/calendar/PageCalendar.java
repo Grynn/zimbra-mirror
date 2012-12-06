@@ -156,7 +156,7 @@ public class PageCalendar extends AbsTab {
 		public static final String TodaySelelcted = "css=div[class='calendar_heading_day_today-selected']";	
 		//move appt
 		public static final String MoveToolbar = "css=td[id='zb__CLD__MOVE_MENU_left_icon']";	
-		public static final String MOveFolderOption = "css=div[class='ZmFolderChooser'] div[class='DwtTreeItemLevel1ChildDiv'] td[class='DwtTreeItem-Text']:contains('";  // append the foldername and close the parenthesis
+		public static final String MoveFolderOption = "css=div[class='ZmFolderChooser'] div[class='DwtTreeItemLevel1ChildDiv'] td[class='DwtTreeItem-Text']:contains('";  // append the foldername and close the parenthesis
 	}
 
 	public PageCalendar(AbsApplication application) {

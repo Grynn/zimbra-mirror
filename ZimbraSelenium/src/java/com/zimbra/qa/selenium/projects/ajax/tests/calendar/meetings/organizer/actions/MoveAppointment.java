@@ -79,24 +79,15 @@ public class MoveAppointment extends CalendarWorkWeekTest {
                "</CreateAppointmentRequest>");
 		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
-	
-		
 		//-- GUI actions
-		
-		
         // Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        // Select the appointment
-        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
-        
+
         // Right Click -> Move context menu
- 
         DialogMove dialog = (DialogMove)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, apptSubject);
 		dialog.zClickTreeFolder(subfolder1);
 		dialog.zClickButton(Button.B_OK);
         
-		
 		//-- Server verification
 		AppointmentItem newAppointment = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
 		ZAssert.assertEquals(newAppointment.getFolder(), subfolder1.getId(), "Verify the appointment moved folders");

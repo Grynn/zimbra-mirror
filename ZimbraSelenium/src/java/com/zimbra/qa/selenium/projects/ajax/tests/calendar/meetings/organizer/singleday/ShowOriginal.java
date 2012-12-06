@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.singleday.actions;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.singleday;
 
 import java.util.Calendar;
 import java.util.HashMap;
