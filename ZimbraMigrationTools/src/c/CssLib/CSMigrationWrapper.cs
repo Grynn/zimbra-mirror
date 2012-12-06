@@ -387,307 +387,193 @@ public class CSMigrationWrapper
 
             if (itemobjectarray.GetLength(0) > 0)
             {
-                while (iProcessedItems < Acct.migrationFolder.TotalCountOfItems)
+                if (Acct.migrationFolder.TotalCountOfItems == itemobjectarray.Count())
                 {
-                    Log.debug("Processing folder", folder.Name, "-- Total items:", folder.ItemCount);
-                    foreach (dynamic itemobject in itemobjectarray)
+                    while (iProcessedItems < Acct.migrationFolder.TotalCountOfItems)
                     {
-                        if (options.MaxErrorCnt > 0)
+                        Log.debug("Processing folder", folder.Name, "-- Total items:", folder.ItemCount);
+                        foreach (dynamic itemobject in itemobjectarray)
                         {
-                            if (Acct.TotalErrors > options.MaxErrorCnt)
+                            if (options.MaxErrorCnt > 0)
                             {
-                                Log.err("Cancelling migration -- error threshold reached");
-                                return;
-                            }
-                        }
-                        foldertype type = (foldertype)itemobject.Type;
-                        if (ProcessIt(options, type))
-                        {
-                            bool bError = false;
-
-                            bool bSkipMessage = false;
-                            Dictionary<string, string> dict = new Dictionary<string, string>();
-                            string[,] data = null;
-                            string itemtype = type.ToString();
-                            if (options.IsMaintainenceMode)
-                            {
-                                Log.err("Cancelling migration -- Mailbox is in maintainence  mode.Try back later");
-
-                                return;
-                            }
-
-                            try
-                            {
-
-                                string hex = BitConverter.ToString(itemobject.ItemID);
-                                hex = hex.Replace("-", "");
-                                historyid = itemtype + hex;
-
-                            }
-                            catch (Exception e)
-                            {
-                                Log.err("exception in Bitconverter cconverting itemid to a hexstring", e.Message);
-
-
-                            }
-                            if (options.SkipPrevMigrated)
-                            {
-                                if (historyid != "")
+                                if (Acct.TotalErrors > options.MaxErrorCnt)
                                 {
-                                    if (CheckifAlreadyMigrated(historyfile, historyid))
-                                    {
-                                        bSkipMessage = true;
-                                        iProcessedItems++;
-                                        continue;
-                                    }
-                                }
-                                //uncomment after more testing
-                            }
-                            try
-                            {
-                                data = itemobject.GetDataForItemID(user.GetInternalUser(),
-                                                itemobject.ItemID, itemobject.Type);
-                            }
-                            catch (Exception e)
-                            {
-                                Log.err("exception in ProcessItems->itemobject.GetDataForItemID", e.Message);
-                                iProcessedItems++;
-                                continue;
-                            }
-                            //check if data is valid
-                            if (data == null)
-                            {
-                                iProcessedItems++;
-                                continue;
-                            }
-                            int bound0 = data.GetUpperBound(0);
-                            if (bound0 > 0)
-                            {
-                                for (int i = 0; i <= bound0; i++)
-                                {
-                                    string Key = data[0, i];
-                                    string Value = data[1, i];
-
-                                    try
-                                    {
-                                        dict.Add(Key, Value);
-                                        // Console.WriteLine("{0}, {1}", so1, so2);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        string s = string.Format("Exception adding {0}/{1}: {2}", Key, Value, e.Message);
-                                        Log.warn(s);
-                                        // Console.WriteLine("{0}, {1}", so1, so2);
-                                    }
+                                    Log.err("Cancelling migration -- error threshold reached");
+                                    return;
                                 }
                             }
-
-                            api.AccountID = Acct.AccountID;
-                            api.AccountName = Acct.AccountName;
-                            if (dict.Count > 0)
+                            foldertype type = (foldertype)itemobject.Type;
+                            if (ProcessIt(options, type))
                             {
-                                int stat = 0;
+                                bool bError = false;
 
-                                if ((type == foldertype.Mail) || (type == foldertype.MeetingReq))
+                                bool bSkipMessage = false;
+                                Dictionary<string, string> dict = new Dictionary<string, string>();
+                                string[,] data = null;
+                                string itemtype = type.ToString();
+                                if (options.IsMaintainenceMode)
                                 {
-                                    //Log.debug("Msg Subject: ", dict["Subject"]);
-                                    int msf = 0;
-                                    if (options.MessageSizeFilter != null)
-                                    {
-                                        if (options.MessageSizeFilter.Length > 0)
-                                        {
-                                            msf = Int32.Parse(options.MessageSizeFilter);
-                                            msf *= 1000000;
-                                            if (dict["wstrmimeBuffer"].Length > msf)    // FBS bug 74000 -- 5/14/12 
-                                            {
-                                                bSkipMessage = true;
-                                                Log.debug("Skipping", dict["Subject"], "-- message size exceeds size filter value");
-                                            }
-                                        }
-                                    }
-                                    if (options.DateFilter != null)
-                                    {
-                                        try
-                                        {
-                                            DateTime dtm = DateTime.Parse(dict["Date"]);
-                                            DateTime filterDtm = Convert.ToDateTime(options.DateFilter);
-                                            if (DateTime.Compare(dtm, filterDtm) < 0)
-                                            {
-                                                bSkipMessage = true;
-                                                Log.debug("Skipping", dict["Subject"], "-- message older than date filter value");
-                                            }
-                                        }
-                                        catch (Exception)
-                                        {
-                                            Log.info(dict["Subject"], ": unable to parse date");
-                                        }
-                                    }
-                                    if (!bSkipMessage)
-                                    {
-                                        if (dict["tags"].Length > 0)
-                                        {
-                                            // change the tag names into tag numbers for AddMessage
-                                            string tagsNumstrs = DealWithTags(dict["tags"], Acct, api);
-                                            bool bRet = dict.Remove("tags");
-                                            dict.Add("tags", tagsNumstrs);
-                                        }
-                                        dict.Add("folderId", folder.FolderPath);
-                                        try
-                                        {
-                                            stat = api.AddMessage(dict);
-                                            if (stat != 0)
-                                            {
-                                                string errMsg = (api.LastError.IndexOf("upload ID: null") != -1)    // FBS bug 75159 -- 6/7/12
-                                                                ? "Unable to upload file. Please check server message size limits."
-                                                                : api.LastError;
-                                                if (errMsg.Contains("maintenance") || errMsg.Contains("not active"))
-                                                {
-                                                    errMsg = errMsg + " Try Back later";
-                                                    options.IsMaintainenceMode = true;
-                                                }
+                                    Log.err("Cancelling migration -- Mailbox is in maintainence  mode.Try back later");
 
-                                                Acct.LastProblemInfo = new ProblemInfo(dict["Subject"], errMsg, ProblemInfo.TYPE_ERR);
-                                                Acct.TotalErrors++;
-                                                bError = true;
-                                            }
+                                    return;
+                                }
+
+                                try
+                                {
+
+                                    string hex = BitConverter.ToString(itemobject.ItemID);
+                                    hex = hex.Replace("-", "");
+                                    historyid = itemtype + hex;
+
+                                }
+                                catch (Exception e)
+                                {
+                                    Log.err("exception in Bitconverter cconverting itemid to a hexstring", e.Message);
+
+
+                                }
+                                if (options.SkipPrevMigrated)
+                                {
+                                    if (historyid != "")
+                                    {
+                                        if (CheckifAlreadyMigrated(historyfile, historyid))
+                                        {
+                                            bSkipMessage = true;
+                                            iProcessedItems++;
+                                            continue;
+                                        }
+                                    }
+                                    //uncomment after more testing
+                                }
+                                try
+                                {
+                                    data = itemobject.GetDataForItemID(user.GetInternalUser(),
+                                                    itemobject.ItemID, itemobject.Type);
+                                }
+                                catch (Exception e)
+                                {
+                                    Log.err("exception in ProcessItems->itemobject.GetDataForItemID", e.Message);
+                                    iProcessedItems++;
+                                    continue;
+                                }
+                                //check if data is valid
+                                if (data == null)
+                                {
+                                    iProcessedItems++;
+                                    continue;
+                                }
+                                int bound0 = data.GetUpperBound(0);
+                                if (bound0 > 0)
+                                {
+                                    for (int i = 0; i <= bound0; i++)
+                                    {
+                                        string Key = data[0, i];
+                                        string Value = data[1, i];
+
+                                        try
+                                        {
+                                            dict.Add(Key, Value);
+                                            // Console.WriteLine("{0}, {1}", so1, so2);
                                         }
                                         catch (Exception e)
                                         {
-                                            Acct.TotalErrors++;
-                                            Log.err("Exception caught in ProcessItems->api.AddMessage", e.Message);
-
+                                            string s = string.Format("Exception adding {0}/{1}: {2}", Key, Value, e.Message);
+                                            Log.warn(s);
+                                            // Console.WriteLine("{0}, {1}", so1, so2);
                                         }
                                     }
                                 }
-                                else if (type == foldertype.Contacts)
+
+                                api.AccountID = Acct.AccountID;
+                                api.AccountName = Acct.AccountName;
+                                if (dict.Count > 0)
                                 {
-                                    //Log.debug("Contact Firstname: ", dict["firstName"]);
-                                    if (dict["tags"].Length > 0)
-                                    {
-                                        // change the tag names into tag numbers for CreateContact
-                                        string tagsNumstrs = DealWithTags(dict["tags"], Acct, api);
-                                        bool bRet = dict.Remove("tags");
-                                        dict.Add("tags", tagsNumstrs);
-                                    }
-                                    try
-                                    {
-                                        stat = api.CreateContact(dict, path);
+                                    int stat = 0;
 
-                                        if (stat != 0)
+                                    if ((type == foldertype.Mail) || (type == foldertype.MeetingReq))
+                                    {
+                                        //Log.debug("Msg Subject: ", dict["Subject"]);
+                                        int msf = 0;
+                                        if (options.MessageSizeFilter != null)
                                         {
-                                            string errMsg = api.LastError;
-                                            if (errMsg.Contains("maintenance") || errMsg.Contains("not active"))
+                                            if (options.MessageSizeFilter.Length > 0)
                                             {
-                                                errMsg = errMsg + " Try Back later";
-
-                                                options.IsMaintainenceMode = true;
-                                            }
-                                            Log.err("Error in CreateContact ", errMsg);
-                                        }
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        Acct.TotalErrors++;
-                                        Log.err("Exception caught in ProcessItems->api.CreateContact", e.Message);
-
-
-                                    }
-                                }
-                                else if (type == foldertype.Calendar)
-                                {
-                                    //Log.debug("Cal Subject: ", dict["su"]);
-                                    if (options.DateFilter != null)
-                                    {
-                                        try
-                                        {
-                                            DateTime dtm = DateTime.Parse(dict["sFilterDate"]);
-                                            DateTime filterDtm = Convert.ToDateTime(options.DateFilter);
-                                            if (DateTime.Compare(dtm, filterDtm) < 0)
-                                            {
-                                                bSkipMessage = true;
-                                                Log.debug("Skipping", dict["su"], "-- appointment older than date filter value");
+                                                msf = Int32.Parse(options.MessageSizeFilter);
+                                                msf *= 1000000;
+                                                if (dict["wstrmimeBuffer"].Length > msf)    // FBS bug 74000 -- 5/14/12 
+                                                {
+                                                    bSkipMessage = true;
+                                                    Log.debug("Skipping", dict["Subject"], "-- message size exceeds size filter value");
+                                                }
                                             }
                                         }
-                                        catch (Exception)
+                                        if (options.DateFilter != null)
                                         {
-                                            Log.info(dict["su"], ": unable to parse date");
+                                            try
+                                            {
+                                                DateTime dtm = DateTime.Parse(dict["Date"]);
+                                                DateTime filterDtm = Convert.ToDateTime(options.DateFilter);
+                                                if (DateTime.Compare(dtm, filterDtm) < 0)
+                                                {
+                                                    bSkipMessage = true;
+                                                    Log.debug("Skipping", dict["Subject"], "-- message older than date filter value");
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+                                                Log.info(dict["Subject"], ": unable to parse date");
+                                            }
                                         }
-                                    }
-                                    if (!bSkipMessage)
-                                    {
-                                        try
+                                        if (!bSkipMessage)
                                         {
                                             if (dict["tags"].Length > 0)
                                             {
-                                                // change the tag names into tag numbers for AddAppointment
+                                                // change the tag names into tag numbers for AddMessage
                                                 string tagsNumstrs = DealWithTags(dict["tags"], Acct, api);
                                                 bool bRet = dict.Remove("tags");
                                                 dict.Add("tags", tagsNumstrs);
                                             }
-                                            dict.Add("accountNum", Acct.AccountNum.ToString());
-                                            stat = api.AddAppointment(dict, path);
-                                            if (stat != 0)
+                                            dict.Add("folderId", folder.FolderPath);
+                                            try
                                             {
-                                                string errMsg = api.LastError;
-                                                if (errMsg.Contains("maintenance") || errMsg.Contains("not active"))
+                                                stat = api.AddMessage(dict);
+                                                if (stat != 0)
                                                 {
-                                                    errMsg = errMsg + " Try Back later";
+                                                    string errMsg = (api.LastError.IndexOf("upload ID: null") != -1)    // FBS bug 75159 -- 6/7/12
+                                                                    ? "Unable to upload file. Please check server message size limits."
+                                                                    : api.LastError;
+                                                    if (errMsg.Contains("maintenance") || errMsg.Contains("not active"))
+                                                    {
+                                                        errMsg = errMsg + " Try Back later";
+                                                        options.IsMaintainenceMode = true;
+                                                    }
 
-                                                    options.IsMaintainenceMode = true;
+                                                    Acct.LastProblemInfo = new ProblemInfo(dict["Subject"], errMsg, ProblemInfo.TYPE_ERR);
+                                                    Acct.TotalErrors++;
+                                                    bError = true;
                                                 }
-                                                Acct.LastProblemInfo = new ProblemInfo(dict["su"], errMsg,
-                                                                                       ProblemInfo.TYPE_ERR);
-                                                Acct.TotalErrors++;
-                                                bError = true;
-
-
                                             }
-
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            Acct.LastProblemInfo = new ProblemInfo(dict["su"], e.Message,
-                                                                                   ProblemInfo.TYPE_ERR);
-                                            Acct.TotalErrors++;
-                                            Log.err(dict["su"], "exception caught in ProcessItems->api.AddAppointment", e.Message);
-
-                                        }
-                                    }
-                                }
-                                else if (type == foldertype.Task)
-                                {
-                                    //Log.debug("Task Subject: ", dict["su"]);
-                                    if (options.DateFilter != null)
-                                    {
-                                        try
-                                        {
-                                            DateTime dtm = DateTime.Parse(dict["sFilterDate"]);
-                                            DateTime filterDtm = Convert.ToDateTime(options.DateFilter);
-
-                                            if (DateTime.Compare(dtm, filterDtm) < 0)
+                                            catch (Exception e)
                                             {
-                                                bSkipMessage = true;
-                                                Log.debug("Skipping", dict["su"], "-- task older than date filter value");
+                                                Acct.TotalErrors++;
+                                                Log.err("Exception caught in ProcessItems->api.AddMessage", e.Message);
+
                                             }
                                         }
-                                        catch (Exception)
-                                        {
-
-                                            Log.info(dict["su"], ": unable to parse date");
-                                        }
                                     }
-                                    if (!bSkipMessage)
+                                    else if (type == foldertype.Contacts)
                                     {
+                                        //Log.debug("Contact Firstname: ", dict["firstName"]);
                                         if (dict["tags"].Length > 0)
                                         {
-                                            // change the tag names into tag numbers for AddTask
+                                            // change the tag names into tag numbers for CreateContact
                                             string tagsNumstrs = DealWithTags(dict["tags"], Acct, api);
                                             bool bRet = dict.Remove("tags");
                                             dict.Add("tags", tagsNumstrs);
                                         }
                                         try
                                         {
-                                            stat = api.AddTask(dict, path);
+                                            stat = api.CreateContact(dict, path);
 
                                             if (stat != 0)
                                             {
@@ -698,43 +584,514 @@ public class CSMigrationWrapper
 
                                                     options.IsMaintainenceMode = true;
                                                 }
-
-                                                Log.err("error in AddTask ", errMsg);
-
-
+                                                Log.err("Error in CreateContact ", errMsg);
                                             }
                                         }
                                         catch (Exception e)
                                         {
                                             Acct.TotalErrors++;
-                                            Log.err("exception caught in ProcessItems->api.AddTask", e.Message);
+                                            Log.err("Exception caught in ProcessItems->api.CreateContact", e.Message);
+
+
+                                        }
+                                    }
+                                    else if (type == foldertype.Calendar)
+                                    {
+                                        //Log.debug("Cal Subject: ", dict["su"]);
+                                        if (options.DateFilter != null)
+                                        {
+                                            try
+                                            {
+                                                DateTime dtm = DateTime.Parse(dict["sFilterDate"]);
+                                                DateTime filterDtm = Convert.ToDateTime(options.DateFilter);
+                                                if (DateTime.Compare(dtm, filterDtm) < 0)
+                                                {
+                                                    bSkipMessage = true;
+                                                    Log.debug("Skipping", dict["su"], "-- appointment older than date filter value");
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+                                                Log.info(dict["su"], ": unable to parse date");
+                                            }
+                                        }
+                                        if (!bSkipMessage)
+                                        {
+                                            try
+                                            {
+                                                if (dict["tags"].Length > 0)
+                                                {
+                                                    // change the tag names into tag numbers for AddAppointment
+                                                    string tagsNumstrs = DealWithTags(dict["tags"], Acct, api);
+                                                    bool bRet = dict.Remove("tags");
+                                                    dict.Add("tags", tagsNumstrs);
+                                                }
+                                                dict.Add("accountNum", Acct.AccountNum.ToString());
+                                                stat = api.AddAppointment(dict, path);
+                                                if (stat != 0)
+                                                {
+                                                    string errMsg = api.LastError;
+                                                    if (errMsg.Contains("maintenance") || errMsg.Contains("not active"))
+                                                    {
+                                                        errMsg = errMsg + " Try Back later";
+
+                                                        options.IsMaintainenceMode = true;
+                                                    }
+                                                    Acct.LastProblemInfo = new ProblemInfo(dict["su"], errMsg,
+                                                                                           ProblemInfo.TYPE_ERR);
+                                                    Acct.TotalErrors++;
+                                                    bError = true;
+
+
+                                                }
+
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                Acct.LastProblemInfo = new ProblemInfo(dict["su"], e.Message,
+                                                                                       ProblemInfo.TYPE_ERR);
+                                                Acct.TotalErrors++;
+                                                Log.err(dict["su"], "exception caught in ProcessItems->api.AddAppointment", e.Message);
+
+                                            }
+                                        }
+                                    }
+                                    else if (type == foldertype.Task)
+                                    {
+                                        //Log.debug("Task Subject: ", dict["su"]);
+                                        if (options.DateFilter != null)
+                                        {
+                                            try
+                                            {
+                                                DateTime dtm = DateTime.Parse(dict["sFilterDate"]);
+                                                DateTime filterDtm = Convert.ToDateTime(options.DateFilter);
+
+                                                if (DateTime.Compare(dtm, filterDtm) < 0)
+                                                {
+                                                    bSkipMessage = true;
+                                                    Log.debug("Skipping", dict["su"], "-- task older than date filter value");
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+
+                                                Log.info(dict["su"], ": unable to parse date");
+                                            }
+                                        }
+                                        if (!bSkipMessage)
+                                        {
+                                            if (dict["tags"].Length > 0)
+                                            {
+                                                // change the tag names into tag numbers for AddTask
+                                                string tagsNumstrs = DealWithTags(dict["tags"], Acct, api);
+                                                bool bRet = dict.Remove("tags");
+                                                dict.Add("tags", tagsNumstrs);
+                                            }
+                                            try
+                                            {
+                                                stat = api.AddTask(dict, path);
+
+                                                if (stat != 0)
+                                                {
+                                                    string errMsg = api.LastError;
+                                                    if (errMsg.Contains("maintenance") || errMsg.Contains("not active"))
+                                                    {
+                                                        errMsg = errMsg + " Try Back later";
+
+                                                        options.IsMaintainenceMode = true;
+                                                    }
+
+                                                    Log.err("error in AddTask ", errMsg);
+
+
+                                                }
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                Acct.TotalErrors++;
+                                                Log.err("exception caught in ProcessItems->api.AddTask", e.Message);
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            else
-                            {
-                                Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, "Error on message",
-                                                                       ProblemInfo.TYPE_ERR);
-                                Acct.TotalErrors++;
-                                bError = true;
-                            }
+                                else
+                                {
+                                    Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, "Error on message",
+                                                                           ProblemInfo.TYPE_ERR);
+                                    Acct.TotalErrors++;
+                                    bError = true;
+                                }
 
-                            if (!bError)
-                            {
-                                // Note the : statement.  It seems weird to set Acct.migrationFolder.CurrentCountOFItems
-                                // to itself, but this is done so the method will be called to increment the progress bar
-                                Acct.migrationFolder.CurrentCountOfItems = bSkipMessage
-                                    ? Acct.migrationFolder.CurrentCountOfItems
-                                    : Acct.migrationFolder.CurrentCountOfItems + 1;
+                                if (!bError)
+                                {
+                                    // Note the : statement.  It seems weird to set Acct.migrationFolder.CurrentCountOFItems
+                                    // to itself, but this is done so the method will be called to increment the progress bar
+                                    Acct.migrationFolder.CurrentCountOfItems = bSkipMessage
+                                        ? Acct.migrationFolder.CurrentCountOfItems
+                                        : Acct.migrationFolder.CurrentCountOfItems + 1;
+                                }
                             }
+                            if (historyid != "")
+                            {
+                                File.AppendAllText(historyfile, historyid); //uncomment after more testing
+                                File.AppendAllText(historyfile, "\n");
+                            }
+                            iProcessedItems++;
                         }
-                        if (historyid != "")
+                    }
+                }
+                else
+                {
+                    Log.trace(" Itemobjectarray.count is not equal to MigrationFolder.totalcountofitems");
+                    while (iProcessedItems < itemobjectarray.Count())
+                    {
+                        Log.debug("Processing folder", folder.Name, "-- Total items:", folder.ItemCount);
+                        foreach (dynamic itemobject in itemobjectarray)
                         {
-                            File.AppendAllText(historyfile, historyid); //uncomment after more testing
-                            File.AppendAllText(historyfile, "\n");
+                            if (options.MaxErrorCnt > 0)
+                            {
+                                if (Acct.TotalErrors > options.MaxErrorCnt)
+                                {
+                                    Log.err("Cancelling migration -- error threshold reached");
+                                    return;
+                                }
+                            }
+                            foldertype type = (foldertype)itemobject.Type;
+                            if (ProcessIt(options, type))
+                            {
+                                bool bError = false;
+
+                                bool bSkipMessage = false;
+                                Dictionary<string, string> dict = new Dictionary<string, string>();
+                                string[,] data = null;
+                                string itemtype = type.ToString();
+                                if (options.IsMaintainenceMode)
+                                {
+                                    Log.err("Cancelling migration -- Mailbox is in maintainence  mode.Try back later");
+
+                                    return;
+                                }
+
+                                try
+                                {
+
+                                    string hex = BitConverter.ToString(itemobject.ItemID);
+                                    hex = hex.Replace("-", "");
+                                    historyid = itemtype + hex;
+
+                                }
+                                catch (Exception e)
+                                {
+                                    Log.err("exception in Bitconverter cconverting itemid to a hexstring", e.Message);
+
+
+                                }
+                                if (options.SkipPrevMigrated)
+                                {
+                                    if (historyid != "")
+                                    {
+                                        if (CheckifAlreadyMigrated(historyfile, historyid))
+                                        {
+                                            bSkipMessage = true;
+                                            iProcessedItems++;
+                                            continue;
+                                        }
+                                    }
+                                    //uncomment after more testing
+                                }
+                                try
+                                {
+                                    data = itemobject.GetDataForItemID(user.GetInternalUser(),
+                                                    itemobject.ItemID, itemobject.Type);
+                                }
+                                catch (Exception e)
+                                {
+                                    Log.err("exception in ProcessItems->itemobject.GetDataForItemID", e.Message);
+                                    iProcessedItems++;
+                                    continue;
+                                }
+                                //check if data is valid
+                                if (data == null)
+                                {
+                                    iProcessedItems++;
+                                    continue;
+                                }
+                                int bound0 = data.GetUpperBound(0);
+                                if (bound0 > 0)
+                                {
+                                    for (int i = 0; i <= bound0; i++)
+                                    {
+                                        string Key = data[0, i];
+                                        string Value = data[1, i];
+
+                                        try
+                                        {
+                                            dict.Add(Key, Value);
+                                            // Console.WriteLine("{0}, {1}", so1, so2);
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            string s = string.Format("Exception adding {0}/{1}: {2}", Key, Value, e.Message);
+                                            Log.warn(s);
+                                            // Console.WriteLine("{0}, {1}", so1, so2);
+                                        }
+                                    }
+                                }
+
+                                api.AccountID = Acct.AccountID;
+                                api.AccountName = Acct.AccountName;
+                                if (dict.Count > 0)
+                                {
+                                    int stat = 0;
+
+                                    if ((type == foldertype.Mail) || (type == foldertype.MeetingReq))
+                                    {
+                                        //Log.debug("Msg Subject: ", dict["Subject"]);
+                                        int msf = 0;
+                                        if (options.MessageSizeFilter != null)
+                                        {
+                                            if (options.MessageSizeFilter.Length > 0)
+                                            {
+                                                msf = Int32.Parse(options.MessageSizeFilter);
+                                                msf *= 1000000;
+                                                if (dict["wstrmimeBuffer"].Length > msf)    // FBS bug 74000 -- 5/14/12 
+                                                {
+                                                    bSkipMessage = true;
+                                                    Log.debug("Skipping", dict["Subject"], "-- message size exceeds size filter value");
+                                                }
+                                            }
+                                        }
+                                        if (options.DateFilter != null)
+                                        {
+                                            try
+                                            {
+                                                DateTime dtm = DateTime.Parse(dict["Date"]);
+                                                DateTime filterDtm = Convert.ToDateTime(options.DateFilter);
+                                                if (DateTime.Compare(dtm, filterDtm) < 0)
+                                                {
+                                                    bSkipMessage = true;
+                                                    Log.debug("Skipping", dict["Subject"], "-- message older than date filter value");
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+                                                Log.info(dict["Subject"], ": unable to parse date");
+                                            }
+                                        }
+                                        if (!bSkipMessage)
+                                        {
+                                            if (dict["tags"].Length > 0)
+                                            {
+                                                // change the tag names into tag numbers for AddMessage
+                                                string tagsNumstrs = DealWithTags(dict["tags"], Acct, api);
+                                                bool bRet = dict.Remove("tags");
+                                                dict.Add("tags", tagsNumstrs);
+                                            }
+                                            dict.Add("folderId", folder.FolderPath);
+                                            try
+                                            {
+                                                stat = api.AddMessage(dict);
+                                                if (stat != 0)
+                                                {
+                                                    string errMsg = (api.LastError.IndexOf("upload ID: null") != -1)    // FBS bug 75159 -- 6/7/12
+                                                                    ? "Unable to upload file. Please check server message size limits."
+                                                                    : api.LastError;
+                                                    if (errMsg.Contains("maintenance") || errMsg.Contains("not active"))
+                                                    {
+                                                        errMsg = errMsg + " Try Back later";
+                                                        options.IsMaintainenceMode = true;
+                                                    }
+
+                                                    Acct.LastProblemInfo = new ProblemInfo(dict["Subject"], errMsg, ProblemInfo.TYPE_ERR);
+                                                    Acct.TotalErrors++;
+                                                    bError = true;
+                                                }
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                Acct.TotalErrors++;
+                                                Log.err("Exception caught in ProcessItems->api.AddMessage", e.Message);
+
+                                            }
+                                        }
+                                    }
+                                    else if (type == foldertype.Contacts)
+                                    {
+                                        //Log.debug("Contact Firstname: ", dict["firstName"]);
+                                        if (dict["tags"].Length > 0)
+                                        {
+                                            // change the tag names into tag numbers for CreateContact
+                                            string tagsNumstrs = DealWithTags(dict["tags"], Acct, api);
+                                            bool bRet = dict.Remove("tags");
+                                            dict.Add("tags", tagsNumstrs);
+                                        }
+                                        try
+                                        {
+                                            stat = api.CreateContact(dict, path);
+
+                                            if (stat != 0)
+                                            {
+                                                string errMsg = api.LastError;
+                                                if (errMsg.Contains("maintenance") || errMsg.Contains("not active"))
+                                                {
+                                                    errMsg = errMsg + " Try Back later";
+
+                                                    options.IsMaintainenceMode = true;
+                                                }
+                                                Log.err("Error in CreateContact ", errMsg);
+                                            }
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            Acct.TotalErrors++;
+                                            Log.err("Exception caught in ProcessItems->api.CreateContact", e.Message);
+
+
+                                        }
+                                    }
+                                    else if (type == foldertype.Calendar)
+                                    {
+                                        //Log.debug("Cal Subject: ", dict["su"]);
+                                        if (options.DateFilter != null)
+                                        {
+                                            try
+                                            {
+                                                DateTime dtm = DateTime.Parse(dict["sFilterDate"]);
+                                                DateTime filterDtm = Convert.ToDateTime(options.DateFilter);
+                                                if (DateTime.Compare(dtm, filterDtm) < 0)
+                                                {
+                                                    bSkipMessage = true;
+                                                    Log.debug("Skipping", dict["su"], "-- appointment older than date filter value");
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+                                                Log.info(dict["su"], ": unable to parse date");
+                                            }
+                                        }
+                                        if (!bSkipMessage)
+                                        {
+                                            try
+                                            {
+                                                if (dict["tags"].Length > 0)
+                                                {
+                                                    // change the tag names into tag numbers for AddAppointment
+                                                    string tagsNumstrs = DealWithTags(dict["tags"], Acct, api);
+                                                    bool bRet = dict.Remove("tags");
+                                                    dict.Add("tags", tagsNumstrs);
+                                                }
+                                                dict.Add("accountNum", Acct.AccountNum.ToString());
+                                                stat = api.AddAppointment(dict, path);
+                                                if (stat != 0)
+                                                {
+                                                    string errMsg = api.LastError;
+                                                    if (errMsg.Contains("maintenance") || errMsg.Contains("not active"))
+                                                    {
+                                                        errMsg = errMsg + " Try Back later";
+
+                                                        options.IsMaintainenceMode = true;
+                                                    }
+                                                    Acct.LastProblemInfo = new ProblemInfo(dict["su"], errMsg,
+                                                                                           ProblemInfo.TYPE_ERR);
+                                                    Acct.TotalErrors++;
+                                                    bError = true;
+
+
+                                                }
+
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                Acct.LastProblemInfo = new ProblemInfo(dict["su"], e.Message,
+                                                                                       ProblemInfo.TYPE_ERR);
+                                                Acct.TotalErrors++;
+                                                Log.err(dict["su"], "exception caught in ProcessItems->api.AddAppointment", e.Message);
+
+                                            }
+                                        }
+                                    }
+                                    else if (type == foldertype.Task)
+                                    {
+                                        //Log.debug("Task Subject: ", dict["su"]);
+                                        if (options.DateFilter != null)
+                                        {
+                                            try
+                                            {
+                                                DateTime dtm = DateTime.Parse(dict["sFilterDate"]);
+                                                DateTime filterDtm = Convert.ToDateTime(options.DateFilter);
+
+                                                if (DateTime.Compare(dtm, filterDtm) < 0)
+                                                {
+                                                    bSkipMessage = true;
+                                                    Log.debug("Skipping", dict["su"], "-- task older than date filter value");
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+
+                                                Log.info(dict["su"], ": unable to parse date");
+                                            }
+                                        }
+                                        if (!bSkipMessage)
+                                        {
+                                            if (dict["tags"].Length > 0)
+                                            {
+                                                // change the tag names into tag numbers for AddTask
+                                                string tagsNumstrs = DealWithTags(dict["tags"], Acct, api);
+                                                bool bRet = dict.Remove("tags");
+                                                dict.Add("tags", tagsNumstrs);
+                                            }
+                                            try
+                                            {
+                                                stat = api.AddTask(dict, path);
+
+                                                if (stat != 0)
+                                                {
+                                                    string errMsg = api.LastError;
+                                                    if (errMsg.Contains("maintenance") || errMsg.Contains("not active"))
+                                                    {
+                                                        errMsg = errMsg + " Try Back later";
+
+                                                        options.IsMaintainenceMode = true;
+                                                    }
+
+                                                    Log.err("error in AddTask ", errMsg);
+
+
+                                                }
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                Acct.TotalErrors++;
+                                                Log.err("exception caught in ProcessItems->api.AddTask", e.Message);
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, "Error on message",
+                                                                           ProblemInfo.TYPE_ERR);
+                                    Acct.TotalErrors++;
+                                    bError = true;
+                                }
+
+                                if (!bError)
+                                {
+                                    // Note the : statement.  It seems weird to set Acct.migrationFolder.CurrentCountOFItems
+                                    // to itself, but this is done so the method will be called to increment the progress bar
+                                    Acct.migrationFolder.CurrentCountOfItems = bSkipMessage
+                                        ? Acct.migrationFolder.CurrentCountOfItems
+                                        : Acct.migrationFolder.CurrentCountOfItems + 1;
+                                }
+                            }
+                            if (historyid != "")
+                            {
+                                File.AppendAllText(historyfile, historyid); //uncomment after more testing
+                                File.AppendAllText(historyfile, "\n");
+                            }
+                            iProcessedItems++;
                         }
-                        iProcessedItems++;
                     }
                 }
             }
