@@ -1276,21 +1276,11 @@ DwtListView.prototype._getDiv =
 function(item, params) {
 
 	var	div = document.createElement("div");
+	var html = [];
+	this._getDivHtml(item, params, html, 0, 0);
+	div.innerHTML = html.join("");
 
-	if (params.isDragProxy && AjxEnv.isMozilla) {
-		div.style.overflow = "visible";		// bug fix #3654 - yuck
-	}
-
-	div.className = this._getDivClass(params.divClass || this._normalClass, item, params);
-
-	if (params.isDragProxy) {
-		Dwt.setPosition(div, Dwt.ABSOLUTE_STYLE);
-	}
-
-	var id = params.isDragProxy ? this._getItemId(item) + "_dnd" : null;
-	this.associateItemWithElement(item, div, null, id);
-
-	return div;
+	return div.firstChild; //we want the div that includes the style and class in its element, so we wrap it just for fun (actually not for fun - outerHTML doesn't work)
 };
 
 /**
@@ -1321,6 +1311,15 @@ function(item, params, html, idx, count) {
 	if (params.isDragProxy) {
 		style.push("position:absolute");
 	}
+
+	if (appCtxt.get(ZmSetting.COLOR_MESSAGES)) {
+		var color = item.getColor && item.getColor();
+		if (color) {
+			var colorStyle = Dwt.createLinearGradientCss(AjxColor.lighten(color, 0.75), AjxColor.lighten(color, 0.25), "v");
+			style.push(colorStyle);
+		}
+	}
+
 	if (style.length) {
 		html[idx++] = " style='";
 		html[idx++] = style.join(";");
