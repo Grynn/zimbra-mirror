@@ -20,7 +20,7 @@ public class Bug62137 extends CalendarWorkWeekTest {
 
 	public Bug62137() {
 		logger.info("New " + Bug62137.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 
 	@Bugs( ids = "62137")

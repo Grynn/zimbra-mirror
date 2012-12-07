@@ -12,14 +12,10 @@ import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 
 public class ReinviteAttendees extends CalendarWorkWeekTest {	
 	
-	
 	public ReinviteAttendees() {
 		logger.info("New "+ ReinviteAttendees.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
-	
-	
-	
 	
 	@Bugs(ids = "21181")
 	@Test(description = "Resend a meeting invite using context menu",

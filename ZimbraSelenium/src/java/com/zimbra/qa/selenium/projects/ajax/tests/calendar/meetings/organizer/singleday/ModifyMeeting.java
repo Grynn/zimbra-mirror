@@ -20,12 +20,12 @@ public class ModifyMeeting extends CalendarWorkWeekTest {
 
 	public ModifyMeeting() {
 		logger.info("New "+ ModifyMeeting.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Bugs(ids = "69132")
 	@Test(	description = "Modify appointment subject, body and attendees",
-			groups = { "sanity" })
+			groups = { "smoke" })
 	public void ModifyMeeting_01() throws HarnessException {
 		
 		// Creating object for meeting data
@@ -87,6 +87,7 @@ public class ModifyMeeting extends CalendarWorkWeekTest {
 	@Bugs(ids = "69132")
 	@Test(	description = "Modify appointment calendar",
 			groups = { "sanity" })
+			
 	public void ModifyMeeting_02() throws HarnessException {
 		
 		// Create data

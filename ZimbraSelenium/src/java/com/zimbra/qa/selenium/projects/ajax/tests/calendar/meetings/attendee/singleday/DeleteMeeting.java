@@ -10,7 +10,7 @@ public class DeleteMeeting extends CalendarWorkWeekTest {
 
 	public DeleteMeeting() {
 		logger.info("New "+ DeleteMeeting.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(	description = "View a basic appointment in the week view",

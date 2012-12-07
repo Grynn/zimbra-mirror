@@ -12,11 +12,12 @@ public class ReplyToAll extends CalendarWorkWeekTest {
 	
 	public ReplyToAll() {
 		logger.info("New "+ ReplyToAll.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 
 	@Test(description = "Verify organizer and rest of the attendee receives message while one of the attendee replies to all",
 			groups = { "functional" })
+			
 	public void ReplyToAll_01() throws HarnessException {
 		
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();

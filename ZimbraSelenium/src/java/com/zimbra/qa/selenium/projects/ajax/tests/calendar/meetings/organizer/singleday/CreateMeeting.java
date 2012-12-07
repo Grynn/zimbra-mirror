@@ -14,11 +14,12 @@ public class CreateMeeting extends CalendarWorkWeekTest {
 
 	public CreateMeeting() {
 		logger.info("New "+ CreateMeeting.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(description = "Create a basic meeting with attendee",
-			groups = { "sanity" })
+			groups = { "smoke" })
+			
 	public void CreateMeeting_01() throws HarnessException {
 		
 		// Create appointment data

@@ -15,12 +15,13 @@ public class Move extends CalendarWorkWeekTest {
 	
 	public Move() {
 		logger.info("New "+ Move.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 
 	@Test(description = "Move meeting invite using context menu as attendee",
 			groups = { "functional" })
-	public void MoveAppointment_01() throws HarnessException {
+			
+	public void MoveMeeting_01() throws HarnessException {
 		
 		
 		//-- Data setup

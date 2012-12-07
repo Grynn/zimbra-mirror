@@ -2,7 +2,6 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.si
 
 import java.util.Calendar;
 import org.testng.annotations.*;
-
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -15,12 +14,13 @@ public class MoveMeeting extends CalendarWorkWeekTest {
 	
 	public MoveMeeting() {
 		logger.info("New "+ MoveMeeting.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 
 	@Test(description = "Move meeting invite using toolbar menu as attendee",
 			groups = { "functional" })
-	public void MoveAppointment_01() throws HarnessException {
+			
+	public void MoveMeeting_01() throws HarnessException {
 
 		//-- Data setup
 

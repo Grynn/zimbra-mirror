@@ -12,7 +12,7 @@ public class Bug56465 extends CalendarWorkWeekTest {
 	
 	public Bug56465() {
 		logger.info("New "+ Bug56465.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(description = "Bug 56465 - Forwarding of Calendar events sending invites to all attendees",

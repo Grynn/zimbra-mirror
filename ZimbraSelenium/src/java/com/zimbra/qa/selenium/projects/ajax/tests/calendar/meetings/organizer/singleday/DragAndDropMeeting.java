@@ -1,9 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.singleday;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import org.testng.annotations.Test;
-import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 

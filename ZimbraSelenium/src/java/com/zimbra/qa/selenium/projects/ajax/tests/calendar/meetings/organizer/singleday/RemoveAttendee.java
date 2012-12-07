@@ -25,7 +25,7 @@ public class RemoveAttendee extends CalendarWorkWeekTest {
 	
 	public RemoveAttendee() {
 		logger.info("New "+ RemoveAttendee.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Bugs(ids = "77588,77590")

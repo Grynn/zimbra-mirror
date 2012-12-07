@@ -23,7 +23,7 @@ public class SuggestATime extends CalendarWorkWeekTest {
 	
 	public SuggestATime() {
 		logger.info("New "+ SuggestATime.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(description = "Suggest a free time while creating appointment",

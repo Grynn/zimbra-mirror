@@ -17,7 +17,7 @@ public class DeclineMeeting extends PrefGroupMailByConversationTest {
 
 	public DeclineMeeting() {
 		logger.info("New "+ DeclineMeeting.class.getCanonicalName());
-
+		super.startingPage = app.zPageMail;
 	}
 
 	/**

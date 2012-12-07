@@ -1,27 +1,26 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.singleday;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.navigation;
 
 import java.util.Calendar;
-
 import org.testng.annotations.*;
-
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 import java.util.Date;
-public class Today extends CalendarWorkWeekTest {	
+
+public class NavigateToToday extends CalendarWorkWeekTest {	
 	
-	
-	public Today() {
-		logger.info("New "+ Today.class.getCanonicalName());
-		
+	public NavigateToToday() {
+		logger.info("New "+ NavigateToToday.class.getCanonicalName());
+		super.startingPage = app.zPageCalendar;
 	}
+	
 	@Bugs(ids = "78821")
 	@Test(description = "Verify clicking on Today button highlights today when moved to next week",
 			groups = { "functional" })
 	
-	public void Today_01() throws HarnessException {
+	public void NavigateToToday_01() throws HarnessException {
 		
 		// Creating object for meeting data
 		String tz, apptSubject, apptBody;
@@ -77,7 +76,7 @@ public class Today extends CalendarWorkWeekTest {
 	@Test(description = "Verify clicking on Today button highlights today",
 			groups = { "functional" })
 	
-	public void Today_02() throws HarnessException {
+	public void NavigateToToday_02() throws HarnessException {
 		
 		// Creating object for meeting data
 		String tz, apptSubject, apptBody;

@@ -17,8 +17,7 @@ public class AcceptMeeting extends PrefGroupMailByMessageTest {
 
 	public AcceptMeeting() {
 		logger.info("New "+ AcceptMeeting.class.getCanonicalName());
-
-
+		super.startingPage = app.zPageMail;
 	}
 
 	/**

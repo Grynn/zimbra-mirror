@@ -15,7 +15,7 @@ public class CreateMeetingWithLocation extends CalendarWorkWeekTest {
 
 	public CreateMeetingWithLocation() {
 		logger.info("New "+ CreateMeetingWithLocation.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Bugs(ids = "69132")

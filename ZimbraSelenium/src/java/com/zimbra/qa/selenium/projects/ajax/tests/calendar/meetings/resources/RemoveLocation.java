@@ -22,7 +22,7 @@ public class RemoveLocation extends CalendarWorkWeekTest {
 	
 	public RemoveLocation() {
 		logger.info("New "+ RemoveLocation.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Bugs(ids = "77588")

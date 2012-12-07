@@ -15,11 +15,12 @@ public class Reply extends CalendarWorkWeekTest {
 	
 	public Reply() {
 		logger.info("New "+ Reply.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(description = "Verify organizer receives message while attendee replies to",
 			groups = { "functional" })
+			
 	public void Reply_01() throws HarnessException {
 		
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();

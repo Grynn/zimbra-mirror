@@ -14,7 +14,7 @@ public class Forward extends CalendarWorkWeekTest {
 	
 	public Forward() {
 		logger.info("New "+ Forward.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(description = "Forward a meeting invite using context menu",

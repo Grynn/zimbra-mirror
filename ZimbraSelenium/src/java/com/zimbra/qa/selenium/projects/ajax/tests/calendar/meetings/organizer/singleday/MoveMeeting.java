@@ -14,12 +14,14 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 public class MoveMeeting extends CalendarWorkWeekTest {	
 	
 	public MoveMeeting() {
-		logger.info("New "+ MoveMeeting.class.getCanonicalName());		
+		logger.info("New "+ MoveMeeting.class.getCanonicalName());
+		super.startingPage = app.zPageCalendar;
 	}
 
 	@Test(description = "Move meeting invite using toolbar menu as organizer",
 			groups = { "functional" })
-	public void MoveAppointment_01() throws HarnessException {
+			
+	public void MoveMeeting_01() throws HarnessException {
 
 		//-- Data setup
 

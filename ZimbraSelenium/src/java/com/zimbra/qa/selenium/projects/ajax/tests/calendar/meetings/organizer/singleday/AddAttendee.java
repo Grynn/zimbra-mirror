@@ -23,7 +23,7 @@ public class AddAttendee extends CalendarWorkWeekTest {
 	
 	public AddAttendee() {
 		logger.info("New "+ AddAttendee.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Bugs(ids = "77590,77588,77364")

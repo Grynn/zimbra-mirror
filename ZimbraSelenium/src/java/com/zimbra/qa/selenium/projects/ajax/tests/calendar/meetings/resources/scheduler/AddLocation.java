@@ -24,7 +24,7 @@ public class AddLocation extends CalendarWorkWeekTest {
 	
 	public AddLocation() {
 		logger.info("New "+ AddLocation.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Bugs(ids = "77711")

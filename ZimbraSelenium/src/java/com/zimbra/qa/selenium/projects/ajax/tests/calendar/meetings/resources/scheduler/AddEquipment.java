@@ -24,7 +24,7 @@ public class AddEquipment extends CalendarWorkWeekTest {
 	
 	public AddEquipment() {
 		logger.info("New "+ AddEquipment.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Bugs(ids = "77711")

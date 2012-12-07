@@ -23,7 +23,7 @@ public class BookLocationBySuggestingTime extends CalendarWorkWeekTest {
 	
 	public BookLocationBySuggestingTime() {
 		logger.info("New "+ BookLocationBySuggestingTime.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(description = "Suggest a free time and book location for selected time while creating new appointment",

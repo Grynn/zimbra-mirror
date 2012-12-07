@@ -12,7 +12,7 @@ public class Bug68726 extends CalendarWorkWeekTest {
 
 	public Bug68726() {
 		logger.info("New "+ Bug68726.class.getCanonicalName());
-
+		super.startingPage = app.zPageCalendar;
 		this.startingAccountPreferences.put("zimbraFeatureGroupCalendarEnabled", "FALSE");
 	}
 

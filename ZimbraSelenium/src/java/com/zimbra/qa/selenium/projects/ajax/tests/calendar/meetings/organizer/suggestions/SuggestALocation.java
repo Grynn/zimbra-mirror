@@ -23,7 +23,7 @@ public class SuggestALocation extends CalendarWorkWeekTest {
 	
 	public SuggestALocation() {
 		logger.info("New "+ SuggestALocation.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(description = "Suggest a free location while creating appointment",

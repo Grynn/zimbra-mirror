@@ -19,17 +19,15 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 @SuppressWarnings("unused")
 public class CancelMeeting extends CalendarWorkWeekTest {	
 	
-	
 	public CancelMeeting() {
 		logger.info("New "+ CancelMeeting.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
-	
-	
 	
 	@Bugs(ids = "69132,77548")
 	@Test(description = "Cancel meeting using Delete toolbar button",
 			groups = { "smoke" })
+			
 	public void CancelMeeting_01() throws HarnessException {
 		
 

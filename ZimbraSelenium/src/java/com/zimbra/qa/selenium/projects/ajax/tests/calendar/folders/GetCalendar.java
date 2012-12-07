@@ -16,7 +16,7 @@ public class GetCalendar extends CalendarWorkWeekTest {
 
 	public GetCalendar() {
 		logger.info("New "+ GetCalendar.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(	description = "Get a calendar (under USER_ROOT)",

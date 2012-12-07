@@ -10,7 +10,7 @@ public class ModifyMeeting extends CalendarWorkWeekTest {
 
 	public ModifyMeeting() {
 		logger.info("New "+ ModifyMeeting.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(	description = "View a basic appointment in the week view",

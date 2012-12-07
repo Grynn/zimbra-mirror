@@ -1,36 +1,25 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.singleday.actions;
 
-import java.awt.event.KeyEvent;
 import java.util.Calendar;
-
 import org.testng.annotations.*;
-
-import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDeleteOrganizer;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
-@SuppressWarnings("unused")
 public class Move extends CalendarWorkWeekTest {	
-	
 	
 	public Move() {
 		logger.info("New "+ Move.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
-
 	@Test(description = "Move meeting invite using context menu",
 			groups = { "functional" })
-	public void MoveAppointment_01() throws HarnessException {
+
+	public void MoveMeeting_01() throws HarnessException {
 		
 		
 		//-- Data setup
@@ -51,7 +40,6 @@ public class Move extends CalendarWorkWeekTest {
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
 		String name1 = "folder" + ZimbraSeleniumProperties.getUniqueString();
-		String name2 = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		
 		app.zGetActiveAccount().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
@@ -77,7 +65,6 @@ public class Move extends CalendarWorkWeekTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         
 		//-- GUI actions
         // Refresh the view

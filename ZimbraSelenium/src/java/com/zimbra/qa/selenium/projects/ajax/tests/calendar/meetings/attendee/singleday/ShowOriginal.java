@@ -1,8 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday;
 
 import java.util.Calendar;
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -13,16 +11,7 @@ public class ShowOriginal extends CalendarWorkWeekTest {
 
 	public ShowOriginal() {
 		logger.info("New "+ ShowOriginal.class.getCanonicalName());
-
-		// All tests start at the Calendar page
 		super.startingPage = app.zPageCalendar;
-
-		// Make sure we are using an account with work week view
-		super.startingAccountPreferences = new HashMap<String, String>() {
-			private static final long serialVersionUID = -2913827779459595178L;
-		{
-		    put("zimbraPrefCalendarInitialView", "workWeek");
-		}};
 	}
 	
 	@Test(description = "check context menu for Show Original option and check of the its displayed", 

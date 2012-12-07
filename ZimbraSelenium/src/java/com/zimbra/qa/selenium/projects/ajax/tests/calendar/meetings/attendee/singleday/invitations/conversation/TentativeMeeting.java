@@ -17,8 +17,7 @@ public class TentativeMeeting extends PrefGroupMailByConversationTest {
 
 	public TentativeMeeting() {
 		logger.info("New "+ TentativeMeeting.class.getCanonicalName());
-
-
+		super.startingPage = app.zPageMail;
 	}
 
 	/**
