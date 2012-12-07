@@ -1,24 +1,16 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.singleday.modify;
 
-import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import org.testng.annotations.*;
-import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDeleteOrganizer;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogSendUpdatetoAttendees;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 
-@SuppressWarnings("unused")
 public class ModifyByAddingAttendees extends CalendarWorkWeekTest {	
 	
 	public ModifyByAddingAttendees() {
@@ -32,9 +24,7 @@ public class ModifyByAddingAttendees extends CalendarWorkWeekTest {
 			
 	public void ModifyMeetingByAddingAttendees_01() throws HarnessException {
 		
-		// Create a meeting
-		AppointmentItem appt = new AppointmentItem();
-			
+		// Create a meeting			
 		String tz = ZTimeZone.TimeZoneEST.getID();
 		String apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		String apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
@@ -102,9 +92,7 @@ public class ModifyByAddingAttendees extends CalendarWorkWeekTest {
 			
 	public void ModifyMeetingByAddingAttendees_02() throws HarnessException {
 		
-		// Create a meeting
-		AppointmentItem appt = new AppointmentItem();
-			
+		// Create a meeting			
 		String tz = ZTimeZone.TimeZoneEST.getID();
 		String apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		String apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
