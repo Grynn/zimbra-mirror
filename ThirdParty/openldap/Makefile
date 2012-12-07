@@ -11,7 +11,7 @@ endif
 MAKEARGS ?= -j2 DEFINES="-DCHECK_CSN -DSLAP_SCHEMA_EXPOSE"
 ZIMBRA_HOME ?= /opt/zimbra
 
-PATCH	:= patch -g0 -N -p1 < ../patches/ITS7455.patch;
+PATCH	:= 
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
@@ -73,12 +73,12 @@ build:
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) depend; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) install STRIP="")
-	(cd openldap-$(LDAP_VERSION)/libraries/libmdb; make; \
+	(cd openldap-$(LDAP_VERSION)/libraries/liblmdb; make; \
 	cp mdb_stat $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/bin; \
 	cp mdb_copy $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/bin; \
-	cp mdb.h $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/include; \
-	cp libmdb.a $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/lib; \
-	cp libmdb.so $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/lib;)
+	cp lmdb.h $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/include; \
+	cp liblmdb.a $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/lib; \
+	cp liblmdb.so $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/lib;)
 	(cd openldap-$(LDAP_VERSION)/contrib/slapd-modules/noopsrch; \
 	LD_RUN_PATH=$(LDAP_LIB_DIR):$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) libexecdir=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin LIBS="-L$(LDAP_LIB_DIR) -lldap_r -llber" install STRIP=""; \
 	rm -f $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin/openldap/noopsrch.a; \

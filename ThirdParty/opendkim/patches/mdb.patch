@@ -1,0 +1,68 @@
+--- opendkim-2.7.1/opendkim/opendkim-db.c.orig	2012-12-06 16:57:17.805348687 -0800
++++ opendkim-2.7.1/opendkim/opendkim-db.c	2012-12-06 16:58:21.503678830 -0800
+@@ -88,7 +88,7 @@
+ # include <libmemcached/memcached.h>
+ #endif /* USE_LIBMEMCACHED */
+ #ifdef USE_MDB
+-# include <mdb.h>
++# include <lmdb.h>
+ #endif /* USE_MDB */
+ #ifdef USE_ERLANG
+ # include <sys/time.h>
+@@ -3519,7 +3519,7 @@
+ 			return -1;
+ 		}
+ 
+-		status = mdb_open(mdb->mdb_txn, NULL, 0, &mdb->mdb_dbi);
++		status = mdb_dbi_open(mdb->mdb_txn, NULL, 0, &mdb->mdb_dbi);
+ 		if (status != 0)
+ 		{
+ 			if (err != NULL)
+@@ -3962,7 +3962,7 @@
+ 	data.mv_size = (buflen == 0 ? strlen(buf) : buflen);
+ 
+ 	if (mdb_txn_begin(mdb->mdb_env, NULL, 0, &txn) == 0 &&
+-	    mdb_open(txn, NULL, 0, &dbi) == 0 &&
++	    mdb_dbi_open(txn, NULL, 0, &dbi) == 0 &&
+ 	    mdb_put(txn, dbi, &key, &data, 0) == 0)
+ 		ret = 0;
+ 	else
+--- opendkim-2.7.1/configure.ac.orig	2012-12-06 16:58:09.643679083 -0800
++++ opendkim-2.7.1/configure.ac	2012-12-06 16:59:04.955348799 -0800
+@@ -1785,14 +1785,14 @@
+ 	CFLAGS="-pthread"
+ 	if test x"$mdbpath" != x"auto" -a x"$mdbpath" != x"yes"
+ 	then
+-		if test -f $mdbpath/include/mdb.h
++		if test -f $mdbpath/include/lmdb.h
+ 		then
+ 			LDFLAGS="-L$mdbpath/lib"
+-			AC_CHECK_LIB(mdb, mdb_env_open,
++			AC_CHECK_LIB(lmdb, mdb_env_open,
+ 			[
+ 			        mdb_found="yes"
+ 				LIBMDB_CPPFLAGS="-I$mdbpath/include"
+-				LIBMDB_LIBS="-L$mdbpath/lib -lmdb"
++				LIBMDB_LIBS="-L$mdbpath/lib -llmdb"
+ 			],
+ 			[
+ 				AC_MSG_ERROR([mdb not valid at $mdbpath])
+@@ -1805,15 +1805,15 @@
+ 		mdbdirs="/usr /usr/local"
+ 		for d in $mdbdirs
+ 		do
+-			if test -f $d/include/mdb.h
++			if test -f $d/include/lmdb.h
+ 			then
+ 				LDFLAGS="-L$d/lib"
+-				AC_CHECK_LIB(mdb, mdb_env_open,
++				AC_CHECK_LIB(lmdb, mdb_env_open,
+ 				[
+ 					mdbpath=$d
+ 			        	mdb_found="yes"
+ 					LIBMDB_CPPFLAGS="-I$mdbpath/include"
+-					LIBMDB_LIBS="-L$mdbpath/lib -lmdb"
++					LIBMDB_LIBS="-L$mdbpath/lib -llmdb"
+ 					break
+ 				]
+ 				)
