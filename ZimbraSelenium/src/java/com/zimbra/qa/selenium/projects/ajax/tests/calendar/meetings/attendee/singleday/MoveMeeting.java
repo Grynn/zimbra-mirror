@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday.actions;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday;
 
 import java.util.Calendar;
 import org.testng.annotations.*;
@@ -9,26 +9,23 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 
-public class MoveAppointment extends CalendarWorkWeekTest {	
+public class MoveMeeting extends CalendarWorkWeekTest {	
 	
-	public MoveAppointment() {
-		logger.info("New "+ MoveAppointment.class.getCanonicalName());
+	public MoveMeeting() {
+		logger.info("New "+ MoveMeeting.class.getCanonicalName());
 		
 	}
 
-	@Test(description = "Move Appointment using context menu as attendee",
+	@Test(description = "Move meeting invite using toolbar menu as attendee",
 			groups = { "functional" })
 	public void MoveAppointment_01() throws HarnessException {
-		
-		
+
 		//-- Data setup
-		
-		
+
 		// Creating object for meeting data
 		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
-		
 		String apptSubject;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		// Absolute dates in UTC zone
@@ -67,16 +64,14 @@ public class MoveAppointment extends CalendarWorkWeekTest {
 
 		// Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+       
         // Select the appointment
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         
-        // Right Click -> Move context menu
- 
-        DialogMove dialog = (DialogMove)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, apptSubject);
-		dialog.zClickTreeFolder(subfolder1);
-		dialog.zClickButton(Button.B_OK);
-        
+        // move appointment using toolbar menu
+        app.zPageCalendar.zToolbarPressButton(Button.O_MOVE_MENU);
+        app.zPageCalendar.zClickAt(Locators.MoveFolderOption + name1 + "')" , "");
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		//-- Server verification
 		AppointmentItem newAppointment = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");

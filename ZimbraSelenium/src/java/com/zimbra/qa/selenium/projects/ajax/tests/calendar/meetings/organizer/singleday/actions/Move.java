@@ -19,16 +19,16 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 @SuppressWarnings("unused")
-public class MoveAppointment extends CalendarWorkWeekTest {	
+public class Move extends CalendarWorkWeekTest {	
 	
 	
-	public MoveAppointment() {
-		logger.info("New "+ MoveAppointment.class.getCanonicalName());
+	public Move() {
+		logger.info("New "+ Move.class.getCanonicalName());
 		
 	}
 	
 
-	@Test(description = "Move Appointment using context menu",
+	@Test(description = "Move meeting invite using context menu",
 			groups = { "functional" })
 	public void MoveAppointment_01() throws HarnessException {
 		
