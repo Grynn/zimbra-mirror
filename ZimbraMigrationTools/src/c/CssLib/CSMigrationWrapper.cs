@@ -402,7 +402,10 @@ public class CSMigrationWrapper
                                     return;
                                 }
                             }
+
+                            Log.trace("CSmigration processitems foldertype from itemobject");
                             foldertype type = (foldertype)itemobject.Type;
+                            Log.trace("CSmigration processitems ProcessIt");
                             if (ProcessIt(options, type))
                             {
                                 bool bError = false;
@@ -434,8 +437,11 @@ public class CSMigrationWrapper
                                 }
                                 if (options.SkipPrevMigrated)
                                 {
+
+                                    Log.trace("CSmigration processitems SkipPrevMigrated is true");
                                     if (historyid != "")
                                     {
+                                        Log.trace("CSmigration processitems CheckifAlreadyMigrated");
                                         if (CheckifAlreadyMigrated(historyfile, historyid))
                                         {
                                             bSkipMessage = true;
@@ -447,6 +453,7 @@ public class CSMigrationWrapper
                                 }
                                 try
                                 {
+                                    Log.trace("CSmigration processitems GetDataForItemID");
                                     data = itemobject.GetDataForItemID(user.GetInternalUser(),
                                                     itemobject.ItemID, itemobject.Type);
                                 }
@@ -733,8 +740,18 @@ public class CSMigrationWrapper
                             }
                             if (historyid != "")
                             {
-                                File.AppendAllText(historyfile, historyid); //uncomment after more testing
-                                File.AppendAllText(historyfile, "\n");
+                                try
+                                {
+
+                                    File.AppendAllText(historyfile, historyid); //uncomment after more testing
+                                    File.AppendAllText(historyfile, "\n");
+                                   
+                                }
+                                catch (Exception e)
+                                {
+                                    Acct.TotalErrors++;
+                                    Log.err("CSmigrationwrapper  Exception caught in ProcessItems writing history to the history file", e.Message);
+                                }
                             }
                             iProcessedItems++;
                         }
@@ -1087,8 +1104,19 @@ public class CSMigrationWrapper
                             }
                             if (historyid != "")
                             {
-                                File.AppendAllText(historyfile, historyid); //uncomment after more testing
-                                File.AppendAllText(historyfile, "\n");
+                                try
+                                {
+
+                                    File.AppendAllText(historyfile, historyid); //uncomment after more testing
+                                    File.AppendAllText(historyfile, "\n");
+
+                                }
+                                catch (Exception e)
+                                {
+                                    Acct.TotalErrors++;
+                                    Log.err("CSmigrationwrapper  Exception caught in ProcessItems writing history to the history file", e.Message);
+                                }
+                                
                             }
                             iProcessedItems++;
                         }
@@ -1395,24 +1423,33 @@ public class CSMigrationWrapper
 
         List<string> parsedData = new List<string>();
 
-        if (File.Exists(filename))
+        try
         {
-            using (StreamReader readFile = new StreamReader(filename))
-            {
-                string line;
 
-                string row;
-                while ((line = readFile.ReadLine()) != null)
+            if (File.Exists(filename))
+            {
+                using (StreamReader readFile = new StreamReader(filename))
                 {
-                    row = line;
-                    if (row.CompareTo(itemid) == 0)
+                    string line;
+
+                    string row;
+                    while ((line = readFile.ReadLine()) != null)
                     {
-                        return true;
+                        row = line;
+                        if (row.CompareTo(itemid) == 0)
+                        {
+                            return true;
+                        }
                     }
+                    readFile.Close();
+                    return false;
                 }
-                readFile.Close();
-                return false;
+
             }
+        }
+        catch (Exception e)
+        {
+            Log.err("CSmigrationwrapper  CheckifAlreadyMigrated method errored out", e.Message);
 
         }
 
