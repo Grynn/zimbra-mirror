@@ -1284,6 +1284,17 @@ function(item, params) {
 };
 
 /**
+ * override if needed. Currently in ZmMailListView for coloring messages.
+ * @param item
+ * @return {*}
+ * @private
+ */
+DwtListView.prototype._getExtraStyle =
+function(item) {
+	return null;
+};
+
+/**
  * This is the "HTML" version of the routine above. Instead of returning a DIV
  * element, it returns HTML containing the DIV.
  *
@@ -1312,12 +1323,9 @@ function(item, params, html, idx, count) {
 		style.push("position:absolute");
 	}
 
-	if (appCtxt.get(ZmSetting.COLOR_MESSAGES)) {
-		var color = item.getColor && item.getColor();
-		if (color) {
-			var colorStyle = Dwt.createLinearGradientCss(AjxColor.lighten(color, 0.75), AjxColor.lighten(color, 0.25), "v");
-			style.push(colorStyle);
-		}
+	var extraStyle = this._getExtraStyle(item);
+	if (extraStyle) {
+		style.push(extraStyle);
 	}
 
 	if (style.length) {
