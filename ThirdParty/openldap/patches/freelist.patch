@@ -1,0 +1,12 @@
+--- openldap-2.4.33/libraries/liblmdb/mdb.c.orig	2012-12-10 09:59:26.843661195 -0800
++++ openldap-2.4.33/libraries/liblmdb/mdb.c	2012-12-10 10:00:49.193680275 -0800
+@@ -1347,6 +1347,9 @@
+ 
+ 				mdb_cursor_init(&m2, txn, FREE_DBI, NULL);
+ 				do {
++					/* bail out if we're in the middle of commit */
++					if (!txn->mt_env->me_pgfirst)
++						break;
+ 					if (readit) {
+ 						MDB_val key, data;
+ 						MDB_oldpages *mop2;

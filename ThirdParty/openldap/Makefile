@@ -8,10 +8,11 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-MAKEARGS ?= -j2 DEFINES="-DCHECK_CSN -DSLAP_SCHEMA_EXPOSE -DMDB_DEBUG=3"
+#MAKEARGS ?= -j2 DEFINES="-DCHECK_CSN -DSLAP_SCHEMA_EXPOSE -DMDB_DEBUG=3"
+MAKEARGS ?= -j2 DEFINES="-DCHECK_CSN -DSLAP_SCHEMA_EXPOSE"
 ZIMBRA_HOME ?= /opt/zimbra
 
-PATCH	:= 
+PATCH	:= patch -g0 -N -p1 < ../patches/ITS7465.patch; patch -g0 -N -p1 < ../patches/ITS7467.patch; patch -g0 -N -p1 < ../patches/freelist.patch;
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
