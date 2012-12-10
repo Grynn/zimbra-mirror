@@ -18,11 +18,12 @@ public class ReplyToAll extends CalendarWorkWeekTest {
 	
 	public ReplyToAll() {
 		logger.info("New "+ ReplyToAll.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(description = "Check when attendees get the reply when organizer ReplyAll to a meeting",
 			groups = { "functional" })
+			
 	public void ReplyToAll_01() throws HarnessException {
 		
 

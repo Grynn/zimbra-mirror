@@ -14,6 +14,7 @@ public class CreateAllDayMeeting extends CalendarWorkWeekTest {
 
 	public CreateAllDayMeeting() {
 		logger.info("New "+ CreateMeeting.class.getCanonicalName());
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(	description = "Create all day meeting invite from mini-calendar's date using quick add dialog",

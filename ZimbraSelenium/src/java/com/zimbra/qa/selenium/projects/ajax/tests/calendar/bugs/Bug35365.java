@@ -14,7 +14,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;;
 
-@SuppressWarnings("unused")
 public class Bug35365 extends CalendarWorkWeekTest {
 
 	public Bug35365() {

@@ -39,7 +39,7 @@ public class AcceptProposeNewTime extends CalendarWorkWeekTest {
 		apptAttendee2 = ZimbraAccount.AccountB();
 		apptAttendee2EmailAddress = ZimbraAccount.AccountB().EmailAddress;
 
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		AppointmentItem appt = new AppointmentItem();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 13, 0, 0);

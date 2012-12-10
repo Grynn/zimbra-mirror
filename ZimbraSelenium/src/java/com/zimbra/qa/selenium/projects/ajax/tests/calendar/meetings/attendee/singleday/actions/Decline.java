@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday.actions;
 
 import java.util.*;
+
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -24,7 +25,7 @@ public class Decline extends CalendarWorkWeekTest {
 
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 
@@ -124,7 +125,7 @@ public class Decline extends CalendarWorkWeekTest {
 
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 

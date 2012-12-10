@@ -16,11 +16,12 @@ public class Reply extends CalendarWorkWeekTest {
 	
 	public Reply() {
 		logger.info("New "+ Reply.class.getCanonicalName());
-		
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(description = "Check Reply to a meeting is disabled for organizer ",
-			groups = { "smoke" })
+			groups = { "functional" })
+			
 	public void Reply_01() throws HarnessException {
 		
 		// Create the appointment on the server

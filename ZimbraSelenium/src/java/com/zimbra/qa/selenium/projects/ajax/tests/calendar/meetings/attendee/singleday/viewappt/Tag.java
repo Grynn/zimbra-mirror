@@ -29,7 +29,7 @@ public class Tag extends CalendarWorkWeekTest {
 		String apptBody = ZimbraSeleniumProperties.getUniqueString();
 		String tag = ZimbraSeleniumProperties.getUniqueString();
 		
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 16, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 17, 0, 0);
 
@@ -90,7 +90,7 @@ public class Tag extends CalendarWorkWeekTest {
 		String apptBody = ZimbraSeleniumProperties.getUniqueString();
 		String tag = ZimbraSeleniumProperties.getUniqueString();
 		
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 

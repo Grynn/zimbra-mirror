@@ -13,7 +13,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
-public class DeclineMeeting extends PrefGroupMailByConversationTest {
+public class DeclineMeeting extends CalendarWorkWeekTest {
 
 	public DeclineMeeting() {
 		logger.info("New "+ DeclineMeeting.class.getCanonicalName());
@@ -60,7 +60,7 @@ public class DeclineMeeting extends PrefGroupMailByConversationTest {
 
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 
@@ -156,7 +156,7 @@ public class DeclineMeeting extends PrefGroupMailByConversationTest {
 
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 
 
@@ -213,7 +213,7 @@ public class DeclineMeeting extends PrefGroupMailByConversationTest {
 
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 
@@ -321,7 +321,7 @@ public class DeclineMeeting extends PrefGroupMailByConversationTest {
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 		String modifiedBody = "modified" + ZimbraSeleniumProperties.getUniqueString();
 
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 
@@ -426,7 +426,7 @@ public class DeclineMeeting extends PrefGroupMailByConversationTest {
 
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 
-		Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 

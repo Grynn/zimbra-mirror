@@ -15,13 +15,14 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Locators;
 
 @SuppressWarnings("unused")
-public class Bug50729 extends AjaxCommonTest {
+public class Bug50729 extends CalendarWorkWeekTest {
 
 	public Bug50729() {
 		logger.info("New " + Bug50729.class.getCanonicalName());
@@ -51,7 +52,7 @@ public class Bug50729 extends AjaxCommonTest {
 		apptAttendee = ZimbraAccount.AccountA().EmailAddress;
 		
 		// Absolute dates in UTC zone
-        Calendar now = Calendar.getInstance();
+		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
