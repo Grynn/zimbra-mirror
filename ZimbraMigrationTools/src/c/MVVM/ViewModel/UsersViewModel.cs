@@ -79,7 +79,17 @@ public class UsersViewModel: BaseViewModel
             {
                 uname = uname.Substring(0, uname.IndexOf("@"));
             }
-            UsersViewModel uvm = new UsersViewModel(displayname, uname);
+
+            UsersViewModel uvm;
+
+            if (uname.CompareTo(displayname) == 0)
+            {
+                 uvm = new UsersViewModel(displayname, uname);
+            }
+            else
+            {
+                uvm = new UsersViewModel(uname, uname);
+            }
             uvm.AddOPInfo(new ObjectPickerInfo(displayname, givenname, sn, zfp));
             UsersList.Add(uvm);
 

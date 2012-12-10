@@ -323,10 +323,13 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
 		}
 	}
    
-    wstring strFilter = _T("(&(objectClass=organizationalPerson)(cn=");
+    wstring strFilter = _T("(&(objectClass=organizationalPerson)(|(cn=");
 
     strFilter += lpszUser;
-    strFilter += L"))";
+    strFilter += L")";
+		strFilter += L"(sAMAccountName=";
+		 strFilter += lpszUser;
+	strFilter += L")))";
 
     // Set Search Preferences
     ADS_SEARCH_HANDLE hSearch;
