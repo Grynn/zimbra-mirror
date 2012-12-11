@@ -18,18 +18,17 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-
 @SuppressWarnings("unused")
 public class AddLocation extends CalendarWorkWeekTest {	
 	
 	public AddLocation() {
 		logger.info("New "+ AddLocation.class.getCanonicalName());
-		super.startingPage = app.zPageCalendar;
+	    super.startingPage =  app.zPageCalendar;
+	    super.startingAccountPreferences = null;
 	}
 	
 	@Test(description = "Add location to existing appointment and verify F/B",
 			groups = { "smoke" })
-			
 	public void AddLocation_01() throws HarnessException {
 		
 		// Create a meeting
@@ -67,31 +66,30 @@ public class AddLocation extends CalendarWorkWeekTest {
         // Add location and resend the appointment
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
         apptForm.zFillField(Field.Location, apptLocation);
+        SleepUtil.sleepVeryLong();
         apptForm.zToolbarPressButton(Button.B_SEND);
-        SleepUtil.sleepVeryLong(); // test fails while checking free/busy status, waitForPostqueue is not sufficient here
-        // Tried sleepLong() as well but although fails so using sleepVeryLong()
 
         // Verify location in the appointment
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
 		ZAssert.assertEquals(actual.getSubject(), apptSubject, "Subject: Verify the appointment data");
 		ZAssert.assertEquals(actual.getAttendees(), apptAttendee, "Attendees: Verify the appointment data");
 		ZAssert.assertEquals(actual.getLocation(), apptLocation, "Location: Verify the appointment data");
-		
+		ZAssert.assertNotNull(actual.getLocation(), "Location is not Null");
 		// Verify location free/busy status
 		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation +"']", "ptst");
 		ZAssert.assertEquals(locationStatus, "AC", "Verify location status shows accepted");
 		
 	}
 	
-	@Test(description = "Add location to existing appointment by searching location and verify F/B",
+	@Test(description = "Search Location and add into existing meeting invite",
 			groups = { "functional" })
-			
 	public void AddLocation_02() throws HarnessException {
 		
+		ZimbraResource location = new ZimbraResource(ZimbraResource.Type.LOCATION);
 		String tz = ZTimeZone.TimeZoneEST.getID();
 		String apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		String apptAttendee = ZimbraAccount.AccountA().EmailAddress;
-		//String apptLocation = location.EmailAddress;
+		String apptLocation = location.EmailAddress;
 		
 		// Absolute dates in UTC zone
 		Calendar now = this.calendarWeekDayUTC;
@@ -118,15 +116,13 @@ public class AddLocation extends CalendarWorkWeekTest {
         
         // Add location and resend the appointment
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        apptForm.zClick(Locators.AddLocation);
+        apptForm.zToolbarPressButton(Button.B_LOCATION);
+        
         DialogFindLocation dialogFindLocation = (DialogFindLocation) new DialogFindLocation(app, app.zPageCalendar);
+        dialogFindLocation.zType(Locators.LocationName, apptLocation);
         dialogFindLocation.zClickButton(Button.B_SEARCH_LOCATION);
-
-        dialogFindLocation.zWaitForBusyOverlay();
         dialogFindLocation.zClickButton(Button.B_SELECT_LOCATION);
-        dialogFindLocation.zWaitForBusyOverlay();
         dialogFindLocation.zClickButton(Button.B_OK);
-        SleepUtil.sleepVeryLong(); 
         apptForm.zToolbarPressButton(Button.B_SEND);
         
         SleepUtil.sleepVeryLong(); 
@@ -134,6 +130,6 @@ public class AddLocation extends CalendarWorkWeekTest {
         // Verify location in the appointment is not null
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
 		ZAssert.assertEquals(actual.getSubject(), apptSubject, "Subject: Verify the appointment data");
-		ZAssert.assertNotNull(actual.getLocation(), "Location is not Null");
+		ZAssert.assertStringContains(actual.getLocation(), apptLocation, "Location is set");
 	}
 }

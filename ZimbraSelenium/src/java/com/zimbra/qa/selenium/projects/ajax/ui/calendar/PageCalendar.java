@@ -147,9 +147,7 @@ public class PageCalendar extends AbsTab {
 		public static final String ContactPickerFirstContact = "css=nobr";
 		public static final String SelectContactFromPicker = "css=td[id^='DwtChooserButton']:contains('To:')";
 		public static final String AddContactFromPicker = "css=td[id^='ZmContactPicker_button']:contains('OK')";
-		
-		public static final String AddLocation = "css=td[id$='_title']:contains('Location:')";
-
+	
 		public static final String NextWeek = "css= td[id='zb__CAL__Nav__PAGE_FORWARD_left_icon']";
 		public static final String TodayButton = "css=td[id='zb__CLD__TODAY_title']";
 		public static final String TodayHighlighted = "css=div[class='calendar_heading_day_today']";
@@ -157,6 +155,8 @@ public class PageCalendar extends AbsTab {
 		//move appt
 		public static final String MoveToolbar = "css=td[id='zb__CLD__MOVE_MENU_left_icon']";	
 		public static final String MoveFolderOption = "css=div[class='ZmFolderChooser'] div[class='DwtTreeItemLevel1ChildDiv'] td[class='DwtTreeItem-Text']:contains('";  // append the foldername and close the parenthesis
+		public static final String LocationName= "css=div[class='DwtDialog'] div[id$='_content'] table tr td:nth-child(2) input";
+
 	}
 
 	public PageCalendar(AbsApplication application) {

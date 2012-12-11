@@ -3,7 +3,6 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Locators;
 
 public class DialogFindLocation extends DialogWarning {
 
@@ -14,6 +13,12 @@ public class DialogFindLocation extends DialogWarning {
 		super(new DialogWarningID(LocatorDivID), application, page);
 				
 		logger.info("new " + DialogFindLocation.class.getCanonicalName());
+	}
+	public static class Locators {
+
+		public static final String LocationPickerSerach="css=div[class='DwtDialog'] td[id$='_title']:contains('Search')";
+		public static final String SelectLocationFromPicker="css=div[class='DwtDialog'] td[id$='_title']:contains('Select')";
+		public static final String AddLocationFromPicker="css=div[class='DwtDialog']  td[id^='OK'] td[id$='_button2_title']";
 	}
 
 	@Override

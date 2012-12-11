@@ -502,7 +502,7 @@ public class Button {
 
 	public static final Button B_SEARCH_LOCATION = new Button("B_SEARCH_LOCATION");
 	public static final Button B_SELECT_LOCATION = new Button("B_SELECT_LOCATION");
-
+	public static final Button B_LOCATION = new Button("B_LOCATION");
 	// Calendar 
 	public static final Button B_CREATE_COPY= new Button("B_CREATE_COPY");
 	//// Admin Console
