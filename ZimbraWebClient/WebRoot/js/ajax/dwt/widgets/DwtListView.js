@@ -2067,6 +2067,10 @@ function(clickedEl, ev) {
 			var state = 0;
 			for (var i = 0; i < numEls; i++) {
 				el = els[i];
+				var item = this.getItemFromElement(el);
+				if (item === null) {
+					continue; //ignore separators
+				}
 				if (el == this._rightSelItem) {
 					this._rightSelItem = null;
 				}
