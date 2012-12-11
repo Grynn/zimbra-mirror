@@ -67,6 +67,7 @@ public class ModifyBySubjectBodyAndAttendees extends CalendarWorkWeekTest {
         apptForm.zFillField(Field.Attendees, apptAttendee2);
         apptForm.zFillField(Field.Body, modifiedApptBody);
         apptForm.zToolbarPressButton(Button.B_SEND);
+		SleepUtil.sleepLong(); //importFromSOAP fails due to fast execution
         
         // Use GetAppointmentRequest to verify the changes are saved
         AppointmentItem modifyAppt = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ modifiedApptSubject +")");
