@@ -323,33 +323,30 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException
 	 */
 	public void zClickAt(String locator, String coord) throws HarnessException {
-
-		// Check if the locator is present
-		if (!sIsElementPresent(locator)) {
-			logger.info("zClick(" + locator + ") element is not present");
-			throw new HarnessException("zClick(" + locator
-					+ ") element is not present");
-
-		}
+	    logger.info("zClick(" + locator + "," + coord + ")");
+	    // Check if the locator is present
+	    if (!sIsElementPresent(locator)) {
+		logger.info("zClick(" + locator + ") element is not present");
+		throw new HarnessException("zClick(" + locator
+			+ ") element is not present");
+	    }
+	    try{
 		if (ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...moveToElement:click()");
-			final WebElement we = getElement(locator);
-			final Actions builder = new Actions(webDriver());
-			Action action = builder.moveToElement(we)
-				    .click(we)
+		    logger.info("...WebDriver...moveToElement:click()");
+		    final WebElement we = getElement(locator);
+		    final Actions builder = new Actions(webDriver());
+		    Action action = builder.moveToElement(we).click(we)
 				    .build();
-			action.perform();
-			//Mouse mouse = ((HasInputDevices) webDriver()).getMouse();			
-		    //mouse.click(((Locatable)we).getCoordinates());
+		    action.perform();
+		    //Mouse mouse = ((HasInputDevices) webDriver()).getMouse();			
+		    //mouse.click(((Locatable)we).getCoordinates());		    
+		} else {
+		    this.sMouseDownAt(locator, coord);
+		    this.sMouseUpAt(locator, coord);
 		}
-		else if(ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
-			webDriverBackedSelenium().clickAt(locator, coord);
-		}else{
-			this.sMouseDownAt(locator, coord);
-			this.sMouseUpAt(locator, coord);
-		}
-		
-		logger.info("zClick(" + locator + "," + coord + ")");
+	    }catch(Exception ex){
+		throw new HarnessException("Unable to clickAt on locator " + locator, ex);
+	    }
 	}
 
 	/**
@@ -359,27 +356,27 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException
 	 */
 	public void zClick(String locator) throws HarnessException {
-
-		// Check if the locator is present
-		if (!sIsElementPresent(locator)) {
-			logger.info("zClick(" + locator + ") element is not present");
-			throw new HarnessException("zClick(" + locator
-					+ ") element is not present");
-
-		}
+	    logger.info("zClick(" + locator + ")");
+	    // Check if the locator is present
+	    if (!sIsElementPresent(locator)) {
+		logger.info("zClick(" + locator + ") element is not present");
+		throw new HarnessException("zClick(" + locator	+ ") element is not present");
+	    }
+	    try{
 		if (ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...click()");
-			WebElement we = getElement(locator);
-			Actions builder = new Actions(webDriver());
-			Action action = builder
-					.click(we)
+		    logger.info("...WebDriver...click()");
+		    WebElement we = getElement(locator);
+		    Actions builder = new Actions(webDriver());
+		    Action action = builder.click(we)
 				    .build();
-			action.perform();
+		    action.perform();		    
 		} else {
-			this.sMouseDown(locator);
-			this.sMouseUp(locator);
+		    this.sMouseDown(locator);
+		    this.sMouseUp(locator);
 		}
-		logger.info("zClick(" + locator + ")");
+	    }catch(Exception ex){
+		throw new HarnessException("Unable to click on locator " + locator, ex);
+	    }
 	}
 
 	/**
@@ -392,30 +389,31 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void zRightClickAt(String locator, String coord)
 			throws HarnessException {
-
-		// Check if the locator is present
-		if (!sIsElementPresent(locator)) {
-			logger.info("zRightClick(" + locator + ") element is not present");
-			throw new HarnessException("zRightClick(" + locator
+	    logger.info("zRightClickAt(" + locator + "," + coord + ")");
+	    // Check if the locator is present
+	    if (!sIsElementPresent(locator)) {
+		logger.info("zRightClickAt(" + locator + ") element is not present");
+		throw new HarnessException("zRightClickAt(" + locator
 					+ ") element is not present");
-		}
-		if (ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...moveToElement:contextClick()");
-			WebElement element = getElement(locator);
-			Actions builder = new Actions(webDriver());
-			Action rClick = builder
-					.moveToElement(element)
+	    }
+	    try{
+	    	if (ZimbraSeleniumProperties.isWebDriver()){
+	    	    logger.info("...WebDriver...moveToElement:contextClick()");
+	    	    WebElement element = getElement(locator);
+	    	    Actions builder = new Actions(webDriver());
+	    	    Action rClick = builder.moveToElement(element)
 				    .contextClick(element)
 				    .build();
-			rClick.perform();	
-			
-			//Mouse mouse = ((HasInputDevices) webDriver()).getMouse();			
-		    //mouse.contextClick(((Locatable)element).getCoordinates());
+	    	    rClick.perform();	
+	    	    //Mouse mouse = ((HasInputDevices) webDriver()).getMouse();			
+	    	    //mouse.contextClick(((Locatable)element).getCoordinates());		    
 		} else {				
-			this.sMouseDownRightAt(locator, coord);
-			this.sMouseUpRightAt(locator, coord);
+		    this.sMouseDownRightAt(locator, coord);
+		    this.sMouseUpRightAt(locator, coord);
 		}
-		logger.info("zRightClick(" + locator + "," + coord + ")");
+	    }catch(Exception ex){
+		throw new HarnessException("Unable to rightClickAt on locator " + locator, ex);
+	    }
 	}
 
 	/**
@@ -425,24 +423,27 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException
 	 */
 	public void zRightClick(String locator) throws HarnessException {
-
-		// Check if the locator is present
-		if (!sIsElementPresent(locator)) {
-			logger.info("zRightClick(" + locator + ") element is not present");
-			throw new HarnessException("zRightClick(" + locator
+	    logger.info("zRightClick(" + locator + ")");
+	    // Check if the locator is present
+	    if (!sIsElementPresent(locator)) {
+		logger.info("zRightClick(" + locator + ") element is not present");
+		throw new HarnessException("zRightClick(" + locator
 					+ ") element is not present");
-		}
+	    }
+	    try{
 		if (ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...contextClick()");
-			WebElement element = getElement(locator);
-			Actions builder = new Actions(webDriver());
-			Action rClick = builder.contextClick(element).build();
-			rClick.perform();
+		    logger.info("...WebDriver...contextClick()");
+		    WebElement element = getElement(locator);
+		    Actions builder = new Actions(webDriver());
+		    Action rClick = builder.contextClick(element).build();
+		    rClick.perform();		    
 		} else {
-			this.sMouseDownRight(locator);
-			this.sMouseUpRight(locator);
+		    this.sMouseDownRight(locator);
+		    this.sMouseUpRight(locator);
 		}
-		logger.info("zRightClick(" + locator + ")");
+	    }catch(Exception ex){
+		throw new HarnessException("Unable to rightClick on locator " + locator, ex);
+	    }
 	}
 
 	/**
@@ -909,25 +910,22 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.sClickAt(String locator, String coord)
 	 */
 	public void sClickAt(String locator, String coord) throws HarnessException {
-		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
+	    logger.info("clickAt(" + locator + "," + coord + ")");
+	    try {
+	    // Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
 		if (ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...moveToElement:click()");
-			WebElement we = getElement(locator);
-			Actions builder = new Actions(webDriver());
-			Action action = builder
-					.moveToElement(we)
-				    .click(we)
-				    .build();
-			action.perform();					
-		}	
-		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
-			webDriverBackedSelenium().clickAt(locator, coord);
-		}
-		else{
-			((DefaultSelenium) ClientSessionFactory.session().selenium()).clickAt(
+		    logger.info("...WebDriver...moveToElement:click()");
+		    WebElement we = getElement(locator);
+		    Actions builder = new Actions(webDriver());
+		    Action action = builder.moveToElement(we).click(we).build();
+		    action.perform();					
+		} else {
+		    ((DefaultSelenium) ClientSessionFactory.session().selenium()).clickAt(
 					locator, coord);
-		}
-		logger.info("clickAt(" + locator + "," + coord + ")");
+		}	
+	    } catch (Exception ex){
+		throw new HarnessException("Unable to clickAt on locator " + locator, ex);
+	    }
 	}
 
 	/**
@@ -935,67 +933,60 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException 
 	 */
 	public void sClick(String locator) throws HarnessException {
-		try {
-
-			// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
-			if (ZimbraSeleniumProperties.isWebDriver()){
-				logger.info("...WebDriver...click()");
-				WebElement we = getElement(locator);
-				we.click();
-			}
-			else if(ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
-				webDriverBackedSelenium().click(locator);
-			}
-			else{
-				((DefaultSelenium) ClientSessionFactory.session().selenium()).click(locator);
-			}
-			logger.info("click(" + locator + ")");
-
-		} catch (SeleniumException e){
-			throw new HarnessException(e);
+	    logger.info("click(" + locator + ")");
+	    try {
+		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
+		if (ZimbraSeleniumProperties.isWebDriver()){
+		    logger.info("...WebDriver...click()");
+		    WebElement we = getElement(locator);
+		    we.click();
+		} else {
+		    ((DefaultSelenium) ClientSessionFactory.session().selenium()).click(locator);
 		}
+	    } catch (Exception ex){
+		throw new HarnessException("Unable to click on locator " + locator, ex);
+	    }
 	}
 
 	/**
 	 * DefaultSelenium.close()
 	 */
 	public void sClose() throws HarnessException {
-		if (ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...close()");
-			webDriver().close();
-		}
-		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
-			webDriverBackedSelenium().close();
-		}
-		else{
-			ClientSessionFactory.session().selenium().close();
-		}
-		logger.info("close()");
+	    logger.info("close()");
+	    if (ZimbraSeleniumProperties.isWebDriver()){
+		logger.info("...WebDriver...close()");
+		webDriver().close();
+	    }else{
+		ClientSessionFactory.session().selenium().close();
+	    }		
 	}
 
 	/**
 	 * DefaultSelenium.doubleClick()
 	 */
 	public void sDoubleClick(String locator) throws HarnessException {
-		if (ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...doubleClick()");
-			Actions actions = new Actions(webDriver()); 
-			WebElement we = getElement(locator);			
-			Action doubleClick = actions.doubleClick(we).build();
-			doubleClick.perform();		    
-			//Mouse mouse = ((HasInputDevices) webDriver()).getMouse();			
-		   	//mouse.doubleClick(((Locatable)we).getCoordinates());
-			/*
+	    logger.info("doubleClick(" + locator + ")");
+	    try{
+		if (ZimbraSeleniumProperties.isWebDriver()){		    
+		    logger.info("...WebDriver...doubleClick()");
+		    Actions actions = new Actions(webDriver()); 
+		    WebElement we = getElement(locator);			
+		    Action doubleClick = actions.doubleClick(we).build();
+		    doubleClick.perform();		    
+		    //Mouse mouse = ((HasInputDevices) webDriver()).getMouse();			
+		    //mouse.doubleClick(((Locatable)we).getCoordinates());
+		    /*
 			executeScript("try{var evt = document.createEvent('MouseEvents');" +
-			        "evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null);" +
-			        "arguments[0].dispatchEvent(evt)}catch(err){return(err.message)};", we);
+		    	"evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null);" +
+		        "arguments[0].dispatchEvent(evt)}catch(err){return(err.message)};", we);
 			executeScript("arguments[0].fireEvent('ondblclick');", we);
-			*/
+		     */
 		}else{		
-			((DefaultSelenium) ClientSessionFactory.session().selenium())
-				.doubleClick(locator);
-			logger.info("doubleClick(" + locator + ")");
+		    ((DefaultSelenium) ClientSessionFactory.session().selenium()).doubleClick(locator);
 		}
+	    }catch(Exception ex){
+		throw new HarnessException("Unable to doubleclick on locator " + locator, ex);
+	    }
 	}
 
 	/**
@@ -1078,111 +1069,125 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException 
 	 */
 	public void sMouseDown(String locator) throws HarnessException {
+	    logger.info("mouseDown(" + locator + ")");
+	    try{
 		if(ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...mouseDown()");
-			WebElement we =  getElement(locator);
-			Mouse mouse = ((HasInputDevices)webDriver()).getMouse();
-			mouse.mouseDown(((RemoteWebElement)we).getCoordinates());
+		    logger.info("...WebDriver...mouseDown()");
+		    WebElement we =  getElement(locator);
+		    Mouse mouse = ((HasInputDevices)webDriver()).getMouse();
+		    mouse.mouseDown(((RemoteWebElement)we).getCoordinates());
 		}else{
-			ClientSessionFactory.session().selenium().mouseDown(locator);
-			logger.info("mouseDown(" + locator + ")");
+		    ClientSessionFactory.session().selenium().mouseDown(locator);			
 		}
+	    }catch(Exception ex){
+		throw new HarnessException("Unable to mouseDown on locator " + locator, ex);
+	    }
 	}
 
 	public void sMouseDownAt(String locator, String coordString) throws HarnessException {
-		try {
-			if(ZimbraSeleniumProperties.isWebDriver()){
-				logger.info("...WebDriver...mouseMove.MouseDown()");
-				//WebElement we = getElement(locator);
-				//Point p = ((Locatable)we).getLocationOnScreenOnceScrolledIntoView();
-				//p = p.moveBy((we.getSize().getWidth()/2), (we.getSize().getHeight()/2));
-				Coordinates co =  ((RemoteWebElement)getElement(locator)).getCoordinates();
-				Mouse mouse = ((HasInputDevices)webDriver()).getMouse();
-				mouse.mouseMove(co,0,0);
-				mouse.mouseDown(co);
-			}else{
-				ClientSessionFactory.session().selenium().mouseDownAt(locator, coordString);
-			}
-			logger.info("mouseDownAt(" + locator + ",'" + coordString + "')");
-			
-		} catch (SeleniumException e) {
-			throw new HarnessException(e);
+	    logger.info("mouseDownAt(" + locator + ",'" + coordString + "')");
+	    try {
+		if(ZimbraSeleniumProperties.isWebDriver()){
+		    logger.info("...WebDriver...mouseMove.MouseDown()");
+		    //WebElement we = getElement(locator);
+		    //Point p = ((Locatable)we).getLocationOnScreenOnceScrolledIntoView();
+		    //p = p.moveBy((we.getSize().getWidth()/2), (we.getSize().getHeight()/2));
+		    Coordinates co =  ((RemoteWebElement)getElement(locator)).getCoordinates();
+		    Mouse mouse = ((HasInputDevices)webDriver()).getMouse();
+		    mouse.mouseMove(co,0,0);
+		    mouse.mouseDown(co);
+		}else{
+		    ClientSessionFactory.session().selenium().mouseDownAt(locator, coordString);			    
 		}
+	    } catch (SeleniumException ex) {
+		throw new HarnessException("Unable to mouseDownAt on locator " + locator, ex);
+	    }
 	}
 
 	public void sMouseDownRightAt(String locator, String coordString) throws HarnessException {
+	    logger.info("mouseDownRightAt(" + locator + ",'" + coordString + "')");
+	    try {
 		if(ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...action.moveToElement.contextClick()");
-			WebElement we = getElement(locator);
-			Actions action = new Actions(webDriver());    
+		    logger.info("...WebDriver...action.moveToElement.contextClick()");
+		    WebElement we = getElement(locator);
+		    Actions action = new Actions(webDriver());    
 		    action.moveToElement(we,1,1).contextClick(we).build().perform();		   	
 		}else{
-			ClientSessionFactory.session().selenium().mouseDownRightAt(locator,
-				coordString);
-		}
-		logger.info("mouseDownRightAt(" + locator + ",'" + coordString + "')");
+		    ClientSessionFactory.session().selenium().mouseDownRightAt(locator,	coordString);
+		}	
+	    } catch (SeleniumException ex) {
+		throw new HarnessException("Unable to mouseDownRightAt on locator " + locator, ex);
+	    }
 	}
 
 	public void sMouseUpRightAt(String locator, String coordString) throws HarnessException {
+	    logger.info("mouseUpRightAt(" + locator + ",'" + coordString + "')");
+	    try {
 		if(ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...action.moveToElement.release()");
-			WebElement we = getElement(locator);
-			Actions action = new Actions(webDriver());    
-			action.moveToElement(we,0,0).release(we).build().perform();		   	
+		    logger.info("...WebDriver...action.moveToElement.release()");
+		    WebElement we = getElement(locator);
+		    Actions action = new Actions(webDriver());    
+		    action.moveToElement(we,0,0).release(we).build().perform();		   	
 		}else{
-			ClientSessionFactory.session().selenium().mouseUpRightAt(locator,
-				coordString);
+		    ClientSessionFactory.session().selenium().mouseUpRightAt(locator, coordString);
 		}
-		logger.info("mouseUpRightAt(" + locator + ",'" + coordString + "')");
+	    } catch (SeleniumException ex) {
+		throw new HarnessException("Unable to mouseUpRightAt on locator " + locator, ex);
+	    }		
 	}
 
 	/**
 	 * DefaultSelenium.mouseOver()
 	 */
 	public void sMouseOver(String locator) throws HarnessException {
-		if (ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...action.moveToElement()");
-			WebElement we = getElement(locator);
-			//Mouse mouse = ((HasInputDevices) webDriver()).getMouse();
-		   	//mouse.mouseMove(((Locatable)we).getCoordinates());
-		   	Actions action = new Actions(webDriver());    
-		    action.moveToElement(we).build().perform();		   	
+	    logger.info("mouseOver(" + locator + ")");
+	    try{
+	    	if (ZimbraSeleniumProperties.isWebDriver()){
+	    	    logger.info("...WebDriver...action.moveToElement()");
+	    	    WebElement we = getElement(locator);
+	    	    //Mouse mouse = ((HasInputDevices) webDriver()).getMouse();
+	    	    //mouse.mouseMove(((Locatable)we).getCoordinates());
+	    	    Actions action = new Actions(webDriver());    
+	    	    action.moveToElement(we).build().perform();	
+	    	    
+		} else{
+		    ClientSessionFactory.session().selenium().mouseOver(locator);
 		}
-		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
-			webDriverBackedSelenium().mouseOver(locator);
-		}
-		else{
-			ClientSessionFactory.session().selenium().mouseOver(locator);
-		}
-		logger.info("mouseOver(" + locator + ")");
+	    } catch (SeleniumException ex) {
+		throw new HarnessException("Unable to mouseOver on locator " + locator, ex);
+	    }
 	}
 
 	/**
 	 * DefaultSelenium.mouseOut()
 	 */
 	public void sMouseOut(String locator) throws HarnessException {
+	    logger.info("mouseOut(" + locator + ")");
+	    try{
 		if (ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...action.clickAndHold.moveByOffset()");
-			WebElement we = getElement(locator);
-			Actions action = new Actions(webDriver());    
-		    action.clickAndHold(we).moveByOffset(1,1).build().perform();		 
+		    logger.info("...WebDriver...action.clickAndHold.moveByOffset()");
+		    WebElement we = getElement(locator);
+		    Actions action = new Actions(webDriver());    
+		    action.clickAndHold(we).moveByOffset(1,1).build().perform();
 		}else{
-			ClientSessionFactory.session().selenium().mouseOut(locator);
+		    ClientSessionFactory.session().selenium().mouseOut(locator);
 		}
-		logger.info("mouseOut(" + locator + ")");
+	    } catch (SeleniumException ex) {
+		throw new HarnessException("Unable to mouseOut on locator " + locator, ex);
+	    }
 	}
 
 	/**
 	 * DefaultSelenium.refresh()
 	 */
 	public void sRefresh() throws HarnessException {
-		if (ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...navigate.refresh()");
-			webDriver().navigate().refresh();
-		}else{
-			ClientSessionFactory.session().selenium().refresh();
-		}
-		logger.info("refresh()");
+	    logger.info("refresh()");
+	    if (ZimbraSeleniumProperties.isWebDriver()){
+		logger.info("...WebDriver...navigate.refresh()");
+		webDriver().navigate().refresh();
+	    }else{
+		ClientSessionFactory.session().selenium().refresh();
+	    }		
 	}
 
 	/**
@@ -1190,93 +1195,113 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException 
 	 */
 	public void sMouseUp(String locator) throws HarnessException {
+	    logger.info("mouseUp(" + locator + ")");
+	    try{
 		if(ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...MouseUp()");
-			Coordinates co =  ((Locatable)getElement(locator)).getCoordinates();
-			Mouse mouse = ((HasInputDevices)webDriver()).getMouse();
-			mouse.mouseUp(co);
+		    logger.info("...WebDriver...MouseUp()");
+		    Coordinates co =  ((Locatable)getElement(locator)).getCoordinates();
+		    Mouse mouse = ((HasInputDevices)webDriver()).getMouse();
+		    mouse.mouseUp(co);
 		}else{
-			ClientSessionFactory.session().selenium().mouseUp(locator);
+		    ClientSessionFactory.session().selenium().mouseUp(locator);
 		}
-		logger.info("mouseUp(" + locator + ")");
+	    } catch (SeleniumException ex) {
+		throw new HarnessException("Unable to mouseUp on locator " + locator, ex);
+	    }
 	}
 
 	/**
 	 * DefaultSelenium.mouseMoveAt()
 	 */
 	public void sMouseMoveAt(String locator, String coordString) throws HarnessException {
+	    logger.info("mouseMoveAt(" + locator + ",'" + coordString + "')");
+	    try{
 		if(ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...action.moveToElement()");
-			WebElement we = getElement(locator);
-			Actions action = new Actions(webDriver());    
-			action.moveToElement(we,0,0).build().perform();		   	
+		    logger.info("...WebDriver...action.moveToElement()");
+		    WebElement we = getElement(locator);
+		    Actions action = new Actions(webDriver());    
+		    action.moveToElement(we,0,0).build().perform();
 		}else{
-			ClientSessionFactory.session().selenium().mouseMoveAt(locator,
-				coordString);
+		    ClientSessionFactory.session().selenium().mouseMoveAt(locator, coordString);
 		}
-		logger.info("mouseMoveAt(" + locator + ",'" + coordString + "')");
+	    } catch (SeleniumException ex) {
+		throw new HarnessException("Unable to mouseMoveAt on locator " + locator, ex);
+	    }
 	}
 
 	public void sMouseMove(String locator) throws HarnessException {
+	    logger.info("mouseMove(" + locator + ")");
+	    try{
 		if(ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...action.moveToElement()");
-			WebElement we = getElement(locator);
-			Actions action = new Actions(webDriver());    
-			action.moveToElement(we).build().perform();		   	
+		    logger.info("...WebDriver...action.moveToElement()");
+		    WebElement we = getElement(locator);
+		    Actions action = new Actions(webDriver());    
+		    action.moveToElement(we).build().perform();
+		
 		}else{
-			ClientSessionFactory.session().selenium().mouseMove(locator);
+		    ClientSessionFactory.session().selenium().mouseMove(locator);
 		}
-		logger.info("mouseMove(" + locator + ")");
+	    }catch(Exception ex){
+		throw new HarnessException("Unable to mouseMove on locator " + locator, ex);
+	    }
 	}
 
 	/**
 	 * DefaultSelenium.mouseUpAt()
 	 */
 	public void sMouseUpAt(String locator, String coordString) throws HarnessException {
-		try {
-			logger.info("mouseUpAt(" + locator + ",'" + coordString + ")'");
-			if(ZimbraSeleniumProperties.isWebDriver()){
-				logger.info("...WebDriver...mouseMove.MouseUp()");
-				Coordinates co =  ((RemoteWebElement)getElement(locator)).getCoordinates();
-				Mouse mouse = ((HasInputDevices)webDriver()).getMouse();
-				mouse.mouseMove(co,0,0);
-				mouse.mouseUp(co);
-			}else{
-				ClientSessionFactory.session().selenium().mouseUpAt(locator, coordString);
-			}
-		} catch (SeleniumException e) {
-			throw new HarnessException(e);
+	    logger.info("mouseUpAt(" + locator + ",'" + coordString + ")'");
+	    try {			
+		if(ZimbraSeleniumProperties.isWebDriver()){
+		    logger.info("...WebDriver...mouseMove.MouseUp()");
+		    Coordinates co =  ((RemoteWebElement)getElement(locator)).getCoordinates();
+		    Mouse mouse = ((HasInputDevices)webDriver()).getMouse();
+		    mouse.mouseMove(co,0,0);
+		    mouse.mouseUp(co);
+		}else{
+		    ClientSessionFactory.session().selenium().mouseUpAt(locator, coordString);
 		}
+	    } catch (SeleniumException ex) {
+		throw new HarnessException("Unable to mouseUpAt on locator " + locator, ex);
+	    }
 	}
 
 	/**
 	 * mouseDownRight()
 	 */
 	public void sMouseDownRight(String locator) throws HarnessException {
+	    logger.info("mouseDownRight(" + locator + ")");
+	    try {
 		if(ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...action.contextClick()");
-			WebElement we = getElement(locator);
-			Actions action = new Actions(webDriver());    
+		    logger.info("...WebDriver...action.contextClick()");
+		    WebElement we = getElement(locator);
+		    Actions action = new Actions(webDriver());    
 		    action.contextClick(we).build().perform();		   	
 		}else{
-			ClientSessionFactory.session().selenium().mouseDownRight(locator);
+		    ClientSessionFactory.session().selenium().mouseDownRight(locator);
 		}
-		logger.info("mouseDownRight(" + locator + ")");
+	    } catch (SeleniumException ex) {
+		throw new HarnessException("Unable to mouseDownRight on locator " + locator, ex);
+	    }		
 	}
 
 	/**
 	 * mouseUpRight()
 	 */
 	public void sMouseUpRight(String locator) throws HarnessException {
+	    logger.info("mouseUpRight(" + locator + ")");
+	    try {
 		if(ZimbraSeleniumProperties.isWebDriver()){
-			logger.info("...WebDriver...action.release()");
-			WebElement we = getElement(locator);
-			Actions action = new Actions(webDriver());    
-			action.release(we).build().perform();		   	
+		    logger.info("...WebDriver...action.release()");
+		    WebElement we = getElement(locator);
+		    Actions action = new Actions(webDriver());    
+		    action.release(we).build().perform();		   	
 		}else{
-			ClientSessionFactory.session().selenium().mouseUpRight(locator);
+		    ClientSessionFactory.session().selenium().mouseUpRight(locator);
 		}
-		logger.info("mouseUpRight(" + locator + ")");
+	    } catch (SeleniumException ex) {
+		throw new HarnessException("Unable to mouseUpRight on locator " + locator, ex);
+	    }
 	}
 
 	/**
@@ -1284,6 +1309,8 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException 
 	 */
 	public void sFocus(String locator) throws HarnessException {
+	    logger.info("focus(" + locator + ")");
+	    try {
 		if (ZimbraSeleniumProperties.isWebDriver()){ 
 			logger.info("...WebDriver...executeScript:focus()");
 			WebElement we = getElement(locator);
@@ -1291,14 +1318,12 @@ public abstract class AbsSeleniumObject {
 			if (cp.getBrowserName().equals(DesiredCapabilities.firefox().getBrowserName())||cp.getBrowserName().equals(DesiredCapabilities.chrome().getBrowserName())||cp.getBrowserName().equals(DesiredCapabilities.internetExplorer().getBrowserName())){
 				executeScript("arguments[0].focus();", we);  
 			}
+		}else{
+		    ClientSessionFactory.session().selenium().focus(locator);
 		}
-		else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()){
-			webDriverBackedSelenium().focus(locator);
-		}
-		else{
-			ClientSessionFactory.session().selenium().focus(locator);
-		}
-		logger.info("focus(" + locator + ")");
+	    } catch (SeleniumException ex) {
+		throw new HarnessException("Unable to focus on locator " + locator, ex);
+	    }
 	}
 
 	/**
@@ -2396,8 +2421,9 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sWindowMaximize() throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){
-			webDriver().manage().window().setPosition(new Point(0, 0));
-			webDriver().manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
+			//webDriver().manage().window().setPosition(new Point(0, 0));
+			//webDriver().manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
+		    	webDriver().manage().window().maximize();
 	
 		}else{
 			ClientSessionFactory.session().selenium().windowMaximize();
