@@ -17,8 +17,7 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 
 	public DeclineMeeting() {
 		logger.info("New "+ DeclineMeeting.class.getCanonicalName());
-
-
+		super.startingPage =  app.zPageMail;
 	}
 
 	/**
