@@ -168,6 +168,7 @@ public class Decline extends CalendarWorkWeekTest {
 		DialogConfirmationDeclineAppointment declineAppt = (DialogConfirmationDeclineAppointment) new DialogConfirmationDeclineAppointment(app, app.zPageCalendar);
 		declineAppt.zClickButton(Button.B_NOTIFY_ORGANIZER);
 		declineAppt.zClickButton(Button.B_YES);
+		SleepUtil.sleepVeryLong(); //psts returns wrong value without long delay
 		
 		ZAssert.assertEquals(app.zPageCalendar.zGetNeedsActionDropdownValue(), "Declined", "Verify 'Declined' value saved properly in the dropdown");
 		app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
@@ -175,8 +176,6 @@ public class Decline extends CalendarWorkWeekTest {
 		// Verify "Declined" value saved properly in the dropdown
 		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_OPEN_MENU, apptSubject);
 		ZAssert.assertEquals(app.zPageCalendar.zGetNeedsActionDropdownValue(), "Declined", "Verify 'Declined' value saved properly in the dropdown");
-		SleepUtil.sleepVeryLong(); //Attendee status changes from DE To NE
-		
 		
 		// ---------------- Verification at organizer & invitee side both -------------------------------------       
 

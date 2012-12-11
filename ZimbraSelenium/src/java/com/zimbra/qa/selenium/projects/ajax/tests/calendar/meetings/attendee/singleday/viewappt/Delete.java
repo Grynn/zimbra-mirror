@@ -146,7 +146,7 @@ public class Delete extends CalendarWorkWeekTest {
 		DialogConfirmationDeclineAppointment declineAppt = (DialogConfirmationDeclineAppointment) app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, Button.O_DELETE_MENU, apptSubject);
 		declineAppt.zClickButton(Button.B_NOTIFY_ORGANIZER);
 		declineAppt.zClickButton(Button.B_YES);
-		SleepUtil.sleepMedium();
+		SleepUtil.sleepVeryLong(); //psts returns wrong value without long delay
 		
 		// Verify appointment is deleted and read-only view closed
 		ZAssert.assertFalse(app.zPageCalendar.zGetViewApptLocator(), "Verify appointment read-only view closed");

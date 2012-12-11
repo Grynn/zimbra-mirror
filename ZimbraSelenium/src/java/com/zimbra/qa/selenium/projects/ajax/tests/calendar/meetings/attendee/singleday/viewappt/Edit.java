@@ -61,7 +61,6 @@ public class Edit extends CalendarWorkWeekTest {
 		// --------------- Login to attendee & open the invitation ----------------------------------------------------
 		DialogWarning dialog = (DialogWarning)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, Button.O_EDIT, apptSubject);
 		dialog.zClickButton(Button.B_OK);
-		app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
 		
 		FormApptNew form = new FormApptNew(app);
         form.zFillField(Field.Subject, newSubject);
