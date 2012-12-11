@@ -2421,9 +2421,9 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sWindowMaximize() throws HarnessException {
 		if (ZimbraSeleniumProperties.isWebDriver()){
-			//webDriver().manage().window().setPosition(new Point(0, 0));
-			//webDriver().manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
-		    	webDriver().manage().window().maximize();
+			webDriver().manage().window().setPosition(new Point(0, 0));
+			webDriver().manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
+		    	//webDriver().manage().window().maximize();
 	
 		}else{
 			ClientSessionFactory.session().selenium().windowMaximize();
