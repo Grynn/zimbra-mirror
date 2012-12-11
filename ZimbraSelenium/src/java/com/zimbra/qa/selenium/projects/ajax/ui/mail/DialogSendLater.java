@@ -11,7 +11,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsDialog;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 
 /**
@@ -245,14 +245,23 @@ public class DialogSendLater extends AbsDialog {
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
 		
-		// Seems that the client can't handle filling out the new mail form too quickly
-		// Click in the "To" fields, etc, to make sure the client is ready
-		this.sFocus(locator);
-		this.zClick(locator);
-		this.zWaitForBusyOverlay();
-
-		// Enter text
-		this.sType(locator, value);
+		if(ZimbraSeleniumProperties.isWebDriver()){
+			
+			this.clearField(locator);
+			this.sType(locator, value);
+			
+		} else {
+			
+			// Seems that the client can't handle filling out the new mail form too quickly
+			// Click in the "To" fields, etc, to make sure the client is ready
+			this.sFocus(locator);
+			this.zClick(locator);
+			this.zWaitForBusyOverlay();
+	
+			// Enter text
+			this.sType(locator, value);
+			
+		}
 		
 		this.zWaitForBusyOverlay();
 		
