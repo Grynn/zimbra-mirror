@@ -22,8 +22,8 @@ public class ShowOriginal extends CalendarWorkWeekTest {
 	public ShowOriginal() {
 		logger.info("New "+ ShowOriginal.class.getCanonicalName());
 
-		// All tests start at the Calendar page
-		super.startingPage = app.zPageCalendar;
+	    super.startingPage =  app.zPageCalendar;
+	    super.startingAccountPreferences = null;
 
 		// Make sure we are using an account with work week view
 		super.startingAccountPreferences = new HashMap<String, String>() {

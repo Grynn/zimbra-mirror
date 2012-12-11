@@ -14,8 +14,9 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 public class MoveMeeting extends CalendarWorkWeekTest {	
 	
 	public MoveMeeting() {
-		logger.info("New "+ MoveMeeting.class.getCanonicalName());
-		super.startingPage = app.zPageCalendar;
+		logger.info("New "+ MoveAppointment.class.getCanonicalName());
+	    super.startingPage =  app.zPageCalendar;
+	    super.startingAccountPreferences = null;
 	}
 
 	@Test(description = "Move meeting invite using toolbar menu as organizer",
@@ -28,7 +29,7 @@ public class MoveMeeting extends CalendarWorkWeekTest {
 		// Creating object for meeting data
 		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
 		String apptSubject,apptAttendee1;
-		String tz = ZTimeZone.TimeZoneEST.getID();
+		String name1 = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
 		
@@ -36,8 +37,9 @@ public class MoveMeeting extends CalendarWorkWeekTest {
 		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
+		String tz = ZTimeZone.TimeZoneEST.getID();
 		
-		String name1 = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		
 		app.zGetActiveAccount().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
 				+	  	"<folder name='"+ name1 +"' l='"+ root.getId() +"' view='appointment'/>"

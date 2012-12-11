@@ -1,6 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday;
 
 import java.util.Calendar;
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -11,7 +13,16 @@ public class ShowOriginal extends CalendarWorkWeekTest {
 
 	public ShowOriginal() {
 		logger.info("New "+ ShowOriginal.class.getCanonicalName());
-		super.startingPage = app.zPageCalendar;
+
+	    super.startingPage =  app.zPageCalendar;
+	    super.startingAccountPreferences = null;
+
+		// Make sure we are using an account with work week view
+		super.startingAccountPreferences = new HashMap<String, String>() {
+			private static final long serialVersionUID = -2913827779459595178L;
+		{
+		    put("zimbraPrefCalendarInitialView", "workWeek");
+		}};
 	}
 	
 	@Test(description = "check context menu for Show Original option and check of the its displayed", 
@@ -22,7 +33,7 @@ public class ShowOriginal extends CalendarWorkWeekTest {
 		String apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		String apptBody = ZimbraSeleniumProperties.getUniqueString();
 
-		Calendar now = this.calendarWeekDayUTC;
+		Calendar now = Calendar.getInstance();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 

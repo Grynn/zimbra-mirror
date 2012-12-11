@@ -15,13 +15,13 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 public class Reply extends CalendarWorkWeekTest {	
 	
 	public Reply() {
-		logger.info("New "+ Reply.class.getCanonicalName());
-		super.startingPage = app.zPageCalendar;
+		 logger.info("New "+ Reply.class.getCanonicalName());
+	     super.startingPage =  app.zPageCalendar;
+	     super.startingAccountPreferences = null;
 	}
 	
 	@Test(description = "Check Reply to a meeting is disabled for organizer ",
 			groups = { "functional" })
-			
 	public void Reply_01() throws HarnessException {
 		
 		// Create the appointment on the server

@@ -20,31 +20,28 @@ public class Move extends CalendarWorkWeekTest {
 			groups = { "functional" })
 
 	public void MoveMeeting_01() throws HarnessException {
-		
-		
 		//-- Data setup
-		
-		
+
 		// Creating object for meeting data
-		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
-		
 		String tz, apptSubject, apptBody, apptAttendee1;
-		tz = ZTimeZone.TimeZoneEST.getID();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
 		
 		// Absolute dates in UTC zone
 		Calendar now = this.calendarWeekDayUTC;
+		tz = ZTimeZone.TimeZoneEST.getID();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
+		// create folder to move appt to
 		String name1 = "folder" + ZimbraSeleniumProperties.getUniqueString();
-		
+		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
 		app.zGetActiveAccount().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
 				+	  	"<folder name='"+ name1 +"' l='"+ root.getId() +"' view='appointment'/>"
 				+	"</CreateFolderRequest>");
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 
 		FolderItem subfolder1 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name1);
 		ZAssert.assertNotNull(subfolder1, "Verify the first subfolder is available");

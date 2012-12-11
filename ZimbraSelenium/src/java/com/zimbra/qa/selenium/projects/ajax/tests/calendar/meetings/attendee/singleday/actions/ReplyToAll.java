@@ -12,17 +12,17 @@ public class ReplyToAll extends CalendarWorkWeekTest {
 	
 	public ReplyToAll() {
 		logger.info("New "+ ReplyToAll.class.getCanonicalName());
-		super.startingPage = app.zPageCalendar;
+	    super.startingPage =  app.zPageCalendar;
+	    super.startingAccountPreferences = null;
 	}
 
 	@Test(description = "Verify organizer and rest of the attendee receives message while one of the attendee replies to all",
 			groups = { "functional" })
-			
 	public void ReplyToAll_01() throws HarnessException {
 		
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 
-		Calendar now = this.calendarWeekDayUTC;
+		Calendar now = Calendar.getInstance();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 

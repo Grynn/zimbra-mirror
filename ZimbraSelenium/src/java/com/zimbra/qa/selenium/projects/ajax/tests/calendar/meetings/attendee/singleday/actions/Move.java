@@ -19,30 +19,28 @@ public class Move extends CalendarWorkWeekTest {
 	}
 
 	@Test(description = "Move meeting invite using context menu as attendee",
-			groups = { "functional" })
+			groups = { "functional12" })
 			
 	public void MoveMeeting_01() throws HarnessException {
-		
-		
 		//-- Data setup
-		
-		
 		// Creating object for meeting data
-		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
 		
 		String apptSubject;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
+		
 		// Absolute dates in UTC zone
 		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
+		// create folder to move appt to
+		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
 		String name1 = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		app.zGetActiveAccount().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
 				+	  	"<folder name='"+ name1 +"' l='"+ root.getId() +"' view='appointment'/>"
 				+	"</CreateFolderRequest>");
-
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		FolderItem subfolder1 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name1);
 		ZAssert.assertNotNull(subfolder1, "Verify the first subfolder is available");
 		
@@ -68,17 +66,15 @@ public class Move extends CalendarWorkWeekTest {
 
 		// Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+     
         // Select the appointment
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         
         // Right Click -> Move context menu
- 
         DialogMove dialog = (DialogMove)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, apptSubject);
 		dialog.zClickTreeFolder(subfolder1);
 		dialog.zClickButton(Button.B_OK);
-        
-		
+
 		//-- Server verification
 		AppointmentItem newAppointment = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
 		ZAssert.assertEquals(newAppointment.getFolder(), subfolder1.getId(), "Verify the appointment moved folders");
