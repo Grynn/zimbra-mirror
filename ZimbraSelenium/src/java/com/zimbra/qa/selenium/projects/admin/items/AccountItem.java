@@ -48,7 +48,7 @@ public class AccountItem implements IItem {
 			localName = emailAddress.split("@")[0];
 			domainName = emailAddress.split("@")[1];
 		} else {
-			localName = emailAddress;
+			localName = "a_" + emailAddress; //"a" is prefixed to make sure account appears at the top of manage list.
 			domainName = ZimbraSeleniumProperties.getStringProperty("testdomain");
 		}
 

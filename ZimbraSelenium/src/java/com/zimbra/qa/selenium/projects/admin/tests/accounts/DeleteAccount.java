@@ -131,6 +131,110 @@ public class DeleteAccount extends AdminCommonTest {
 
 	}
 
+	/**
+	 * Testcase : Delete a delegated admin account -- Manage Account View
+	 * Steps :
+	 * 1. Create a delegated admin account using SOAP.
+	 * 2. Go to Manage Account View.
+	 * 3. Select an Account.
+	 * 4. Delete an account using delete button in Gear box menu.
+	 * 5. Verify account is deleted using SOAP.
+	 * 
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Delete a delegated admin account -- Manage Account View",
+			groups = { "functional" })
+			public void DeleteAccount_03() throws HarnessException {
+
+		// Create a new account in the Admin Console using SOAP
+		AccountItem account = new AccountItem("delegated_admin" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<CreateAccountRequest xmlns='urn:zimbraAdmin'>"
+				+			"<name>" + account.getEmailAddress() + "</name>"
+				+			"<password>test123</password>"
+				+			"<a xmlns=\"\" n=\"zimbraIsDelegatedAdminAccount\">TRUE</a>"
+				+		"</CreateAccountRequest>");
+
+
+
+		// Refresh the account list
+		app.zPageManageAccounts.sClickAt(PageMain.Locators.REFRESH_BUTTON, "");
+
+		// Click on account to be deleted.
+		app.zPageManageAccounts.zListItem(Action.A_LEFTCLICK, account.getEmailAddress());
+		
+
+		// Click on Delete button
+		DialogForDeleteOperation dialog = (DialogForDeleteOperation) app.zPageManageAccounts.zToolbarPressPulldown(Button.B_GEAR_BOX, Button.O_DELETE);
+
+		// Click Yes in Confirmation dialog
+		dialog.zClickButton(Button.B_YES);
+
+		// Click Ok on "Delete Items" dialog
+		dialog.zClickButton(Button.B_OK);
+
+
+		// Verify the account exists in the ZCS
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<GetAccountRequest xmlns='urn:zimbraAdmin'>"
+				+			"<account by='name'>"+ account.getEmailAddress() +"</account>"
+				+		"</GetAccountRequest>");
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse/admin:account", 1); 
+		ZAssert.assertNull(response, "Verify the account is deleted successfully");
+	}
+
+	/**
+	 * Testcase : Delete a global admin account -- Manage Account View
+	 * Steps :
+	 * 1. Create a global admin account using SOAP.
+	 * 2. Go to Manage Account View.
+	 * 3. Select an Account.
+	 * 4. Delete an account using delete button in Gear box menu.
+	 * 5. Verify account is deleted using SOAP.
+	 * 
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Delete a global admin account -- Manage Account View",
+			groups = { "functional" })
+			public void DeleteAccount_04() throws HarnessException {
+
+		// Create a new account in the Admin Console using SOAP
+		AccountItem account = new AccountItem("global_admin" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<CreateAccountRequest xmlns='urn:zimbraAdmin'>"
+				+			"<name>" + account.getEmailAddress() + "</name>"
+				+			"<password>test123</password>"
+				+			"<a xmlns=\"\" n=\"zimbraIsAdminAccount\">TRUE</a>"
+				+		"</CreateAccountRequest>");
+
+
+
+		// Refresh the account list
+		app.zPageManageAccounts.sClickAt(PageMain.Locators.REFRESH_BUTTON, "");
+
+		// Click on account to be deleted.
+		app.zPageManageAccounts.zListItem(Action.A_LEFTCLICK, account.getEmailAddress());
+		
+
+		// Click on Delete button
+		DialogForDeleteOperation dialog = (DialogForDeleteOperation) app.zPageManageAccounts.zToolbarPressPulldown(Button.B_GEAR_BOX, Button.O_DELETE);
+
+		// Click Yes in Confirmation dialog
+		dialog.zClickButton(Button.B_YES);
+
+		// Click Ok on "Delete Items" dialog
+		dialog.zClickButton(Button.B_OK);
+
+
+		// Verify the account exists in the ZCS
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<GetAccountRequest xmlns='urn:zimbraAdmin'>"
+				+			"<account by='name'>"+ account.getEmailAddress() +"</account>"
+				+		"</GetAccountRequest>");
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse/admin:account", 1); 
+		ZAssert.assertNull(response, "Verify the account is deleted successfully");
+	}
+
 
 
 
@@ -147,7 +251,7 @@ public class DeleteAccount extends AdminCommonTest {
 	 */
 	@Test(	description = "Delete a basic account - Search List View",
 			groups = { "smoke" })
-			public void DeleteAccount_03() throws HarnessException {
+			public void DeleteAccount_05() throws HarnessException {
 
 		// Create a new account in the Admin Console using SOAP
 		AccountItem account = new AccountItem("email" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
@@ -201,7 +305,7 @@ public class DeleteAccount extends AdminCommonTest {
 	 */
 	@Test(	description = "Delete a basic account - Search List View/Right Click Menu",
 			groups = { "functional" })
-			public void DeleteAccount_04() throws HarnessException {
+			public void DeleteAccount_06() throws HarnessException {
 
 		// Create a new account in the Admin Console using SOAP
 		AccountItem account = new AccountItem("email" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
@@ -242,4 +346,5 @@ public class DeleteAccount extends AdminCommonTest {
 
 
 	}
+	
 }
