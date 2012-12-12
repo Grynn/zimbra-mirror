@@ -20,11 +20,11 @@ public class DistributionListItem implements IItem {
 	public DistributionListItem() {
 		super();
 		
-		distributionListLocalName = "dl" + ZimbraSeleniumProperties.getUniqueString();
+		distributionListLocalName = "a_dl" + ZimbraSeleniumProperties.getUniqueString();
 		distributionListDomainName = ZimbraSeleniumProperties.getStringProperty("testdomain");
 		//Id = null;
-		
 	}
+	
 	@Override
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
 		// TODO Auto-generated method stub
