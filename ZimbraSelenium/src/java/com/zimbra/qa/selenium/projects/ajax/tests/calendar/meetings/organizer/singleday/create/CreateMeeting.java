@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.singleday;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.singleday.create;
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
@@ -40,12 +40,6 @@ public class CreateMeeting extends CalendarWorkWeekTest {
 		// Compose appointment and send it to invitee
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
-		
-		// workaround
-		//String locator = "css=input[id$='_person_input']";
-		//apptForm.sType(locator, apptAttendee1);
-		//apptForm.sTypeKeys(locator, "13");
-		
 		apptForm.zSubmit();
 		
 		// Verify appointment exists on the server
@@ -95,17 +89,6 @@ public class CreateMeeting extends CalendarWorkWeekTest {
 		// Compose appointment and send it to invitee
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
-		
-		// workaround
-		//String locator = "css=input[id$='_person_input']";
-		//apptForm.sType(locator, apptAttendee1);
-		//apptForm.sTypeKeys(locator, "13");
-		
-		//apptForm.sClickAt(Locators.ShowOptionalLink, "");
-		//locator = "css=input[id$='_optional_input']";
-		//apptForm.sType(locator, apptOptional1);
-		//apptForm.sTypeKeys(locator, "13");
-		
 		apptForm.zSubmit();
 		
 		// Verify appointment exists on the server
