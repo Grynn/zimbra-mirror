@@ -18,12 +18,11 @@ public class MoveMeeting extends CalendarWorkWeekTest {
 	}
 
 	@Test(description = "Move meeting invite using toolbar menu as attendee",
-			groups = { "functional" })
+			groups = { "functional12" })
 			
 	public void MoveMeeting_01() throws HarnessException {
 
-		//-- Data setup
-
+		// Creating object for meeting data
 		String apptSubject;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		
@@ -32,21 +31,24 @@ public class MoveMeeting extends CalendarWorkWeekTest {
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
-		// crrate folder to move appt to
+		// create folder to move item to
 		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
 		String name1 = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		app.zGetActiveAccount().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
 				+	  	"<folder name='"+ name1 +"' l='"+ root.getId() +"' view='appointment'/>"
 				+	"</CreateFolderRequest>");
-
-		FolderItem subfolder1 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name1);
-		ZAssert.assertNotNull(subfolder1, "Verify the first subfolder is available");
-
+		
 		// Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-       
-		// Get meeting invite where it has 2 attendees
+        
+		FolderItem subfolder1 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name1);
+		ZAssert.assertNotNull(subfolder1, "Verify the first subfolder is available");
+		
+		// Refresh the view
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+	
+        // Get meeting invite where it has 2 attendees
 		ZimbraAccount.AccountA().soapSend(
 				"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
 				+		"<m>"
@@ -65,7 +67,6 @@ public class MoveMeeting extends CalendarWorkWeekTest {
 				+			"</mp>"
 				+		"</m>"
 				+	"</CreateAppointmentRequest>");        
-
 
 		// Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);

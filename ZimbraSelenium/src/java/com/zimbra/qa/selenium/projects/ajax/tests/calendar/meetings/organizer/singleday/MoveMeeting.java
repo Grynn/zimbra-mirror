@@ -14,22 +14,19 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 public class MoveMeeting extends CalendarWorkWeekTest {	
 	
 	public MoveMeeting() {
-		logger.info("New "+ MoveAppointment.class.getCanonicalName());
-	    super.startingPage =  app.zPageCalendar;
-	    super.startingAccountPreferences = null;
+		logger.info("New "+ MoveMeeting.class.getCanonicalName());
+		super.startingPage = app.zPageCalendar;
 	}
 
 	@Test(description = "Move meeting invite using toolbar menu as organizer",
-			groups = { "functional" })
+			groups = { "functional12" })
 			
 	public void MoveMeeting_01() throws HarnessException {
 
 		//-- Data setup
 
 		// Creating object for meeting data
-		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
 		String apptSubject,apptAttendee1;
-		String name1 = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
 		
@@ -39,7 +36,9 @@ public class MoveMeeting extends CalendarWorkWeekTest {
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		String tz = ZTimeZone.TimeZoneEST.getID();
 		
-		
+		// create folder data to move appt to
+		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
+		String name1 = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		app.zGetActiveAccount().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
 				+	  	"<folder name='"+ name1 +"' l='"+ root.getId() +"' view='appointment'/>"
@@ -48,6 +47,7 @@ public class MoveMeeting extends CalendarWorkWeekTest {
 		FolderItem subfolder1 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name1);
 		ZAssert.assertNotNull(subfolder1, "Verify the first subfolder is available");
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+		
 		// Create a meeting request from AccountA to the test account
 		app.zGetActiveAccount().soapSend(
                 "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
