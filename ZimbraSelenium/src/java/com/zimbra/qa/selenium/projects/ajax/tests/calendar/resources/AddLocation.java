@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.resources;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.resources;
 
 import java.awt.event.KeyEvent;
 import java.util.Calendar;

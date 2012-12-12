@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.resources.scheduler;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.resources.scheduler;
 
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
@@ -20,10 +20,10 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 
 @SuppressWarnings("unused")
-public class AddEquipment extends CalendarWorkWeekTest {	
+public class AddLocation extends CalendarWorkWeekTest {	
 	
-	public AddEquipment() {
-		logger.info("New "+ AddEquipment.class.getCanonicalName());
+	public AddLocation() {
+		logger.info("New "+ AddLocation.class.getCanonicalName());
 		super.startingPage = app.zPageCalendar;
 	}
 	
@@ -35,18 +35,19 @@ public class AddEquipment extends CalendarWorkWeekTest {
 	//			new Object[] { "VK_TAB", KeyEvent.VK_TAB },
 		};
 	}
-	@Test(description = "Add equipment from scheduler pane using keyboard Enter and Tab key",
+	@Test(description = "Add location from scheduler pane using keyboard Enter and Tab key",
 			groups = { "sanity" },
 			dataProvider = "DataProviderShortcutKeys")
-	public void AddEquipment_01(String name, int keyEvent) throws HarnessException {
+	public void AddLocation_01(String name, int keyEvent) throws HarnessException {
 		
 		// Create a meeting
 		AppointmentItem appt = new AppointmentItem();
-		ZimbraResource equipment = new ZimbraResource(ZimbraResource.Type.EQUIPMENT);
+		ZimbraResource location = new ZimbraResource(ZimbraResource.Type.LOCATION);
 			
 		String tz = ZTimeZone.TimeZoneEST.getID();
 		String apptSubject = ZimbraSeleniumProperties.getUniqueString();
-		String apptEquipment = equipment.EmailAddress;
+		String apptAttendee = ZimbraAccount.AccountA().EmailAddress;
+		String apptLocation = location.EmailAddress;
 		
 		// Absolute dates in UTC zone
 		Calendar now = this.calendarWeekDayUTC;
@@ -70,22 +71,22 @@ public class AddEquipment extends CalendarWorkWeekTest {
                "</CreateAppointmentRequest>");
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
-        // Add equipment using scheduler and send the appointment
+        // Add location using scheduler and send the appointment
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        apptForm.zAddEquipmentFromScheduler(apptEquipment, keyEvent);
-        ZAssert.assertTrue(apptForm.zVerifyEquipment(apptEquipment), "Verify equipment bubble after adding equipment from scheduler");
+        apptForm.zAddLocationFromScheduler(apptLocation, keyEvent);
+        ZAssert.assertTrue(apptForm.zVerifyLocation(apptLocation), "Verify location bubble after adding location from scheduler");
         apptForm.zToolbarPressButton(Button.B_SEND);
         SleepUtil.sleepVeryLong(); // test fails while checking free/busy status, waitForPostqueue is not sufficient here
         // Tried sleepLong() as well but although fails so using sleepVeryLong()
  
-        // Verify that equipment present in the appointment
+        // Verify that location present in the appointment
         AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
 		ZAssert.assertEquals(actual.getSubject(), apptSubject, "Subject: Verify the appointment data");
-		ZAssert.assertStringContains(actual.getEquipment(), apptEquipment, "Equipment: Verify the appointment data");
+		ZAssert.assertStringContains(actual.getLocation(), apptLocation, "Location: Verify the appointment data");
 		
-		// Verify equipment free/busy status
-		String equipmentStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptEquipment +"']", "ptst");
-		ZAssert.assertEquals(equipmentStatus, "AC", "Verify equipment free/busy status");
+		// Verify location free/busy status
+		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation +"']", "ptst");
+		ZAssert.assertEquals(locationStatus, "AC", "Verify location free/busy status");
 		
 	}
 	
