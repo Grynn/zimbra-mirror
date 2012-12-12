@@ -1186,6 +1186,7 @@ public class CSMigrationWrapper
             Log.err("Unable to initialize", accountName, value +"or verify if source mailbox exists.");
             Acct.LastProblemInfo = new ProblemInfo(accountName, value + " Or Verify if source mailbox exists.", ProblemInfo.TYPE_ERR);
             Acct.TotalErrors++;
+            //Acct.TotalErrors = Acct.MaxErrorCount;
             return;
         }
         else
@@ -1347,18 +1348,41 @@ public class CSMigrationWrapper
                 {
                     Dictionary<string, string> dict = new Dictionary<string, string>();
                     int bound0 = data.GetUpperBound(0);
-                    for (int i = 0; i <= bound0; i++)
+                    if (bound0 > 0)
                     {
-                        string Key = data[0, i];
-                        string Value = data[1, i];
+                        for (int i = 0; i <= bound0; i++)
+                        {
+                            string Key = data[0, i];
+                            string Value = data[1, i];
+                            try
+                            {
 
-                        dict.Add(Key, Value);
+                                dict.Add(Key, Value);
+                            }
+                            catch (Exception e)
+                            {
+                                string s = string.Format("Exception adding {0}/{1}: {2}", Key, Value, e.Message);
+                                Log.warn(s);
+                                // Console.WriteLine("{0}, {1}", so1, so2);
+                            }
+                        }
                     }
-                    api.AccountID = Acct.AccountID;
-                    api.AccountName = Acct.AccountName;
-                    int stat = api.AddRules(dict);
-                    Acct.migrationFolder.CurrentCountOfItems = 1;
-                }
+                        api.AccountID = Acct.AccountID;
+                        api.AccountName = Acct.AccountName;
+                        try
+                        {
+                            Log.info("Migrating Rules");
+                            int stat = api.AddRules(dict);
+                        }
+                        catch (Exception e)
+                        {
+                            Acct.TotalErrors++;
+                            Log.err("CSmigrationWrapper: Exception in AddRules ", e.Message);
+
+                        }
+                        Acct.migrationFolder.CurrentCountOfItems = 1;
+                    }
+                
             }
             else
             {
@@ -1395,7 +1419,16 @@ public class CSMigrationWrapper
                 if (!isPreview)
                 {
                     Log.info("Migrating Out of Office");
-                    api.AddOOO(ooo, isServer);
+                    try
+                    {
+
+                        api.AddOOO(ooo, isServer);
+                    }
+                    catch (Exception e)
+                    {
+                        Acct.TotalErrors++;
+                        Log.err("CSmigrationWrapper: Exception in AddOOO ", e.Message);
+                    }
                 }
             }
             else
