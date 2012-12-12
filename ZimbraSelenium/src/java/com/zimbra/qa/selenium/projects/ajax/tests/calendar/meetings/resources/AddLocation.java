@@ -125,8 +125,8 @@ public class AddLocation extends CalendarWorkWeekTest {
         dialogFindLocation.zClickButton(Button.B_SELECT_LOCATION);
         dialogFindLocation.zClickButton(Button.B_OK);
         apptForm.zToolbarPressButton(Button.B_SEND);
-        
-        SleepUtil.sleepSmall();
+        SleepUtil.sleepVeryLong(); // test fails while checking free/busy status, waitForPostqueue is not sufficient here
+        // Tried sleepLong() as well but although fails so using sleepVeryLong()
         
         // Verify location in the appointment is not null
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
