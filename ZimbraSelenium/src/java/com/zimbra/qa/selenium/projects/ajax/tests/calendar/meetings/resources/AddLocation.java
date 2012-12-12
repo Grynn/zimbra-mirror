@@ -83,7 +83,7 @@ public class AddLocation extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Search Location and add into existing meeting invite",
-			groups = { "functional12" })
+			groups = { "functional" })
 	public void AddLocation_02() throws HarnessException {
 		
 		ZimbraResource location = new ZimbraResource(ZimbraResource.Type.LOCATION);
