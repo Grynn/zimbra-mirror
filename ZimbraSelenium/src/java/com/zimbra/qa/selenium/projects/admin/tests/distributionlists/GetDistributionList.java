@@ -60,7 +60,88 @@ public class GetDistributionList extends AdminCommonTest {
 		}
 		ZAssert.assertNotNull(found, "Verify the dl is returned correctly");
 	}
-	
+		
+	/**
+	 * Testcase : Verify created admin dl is displayed in UI  -- Manage dl View
+	 * Steps :
+	 * 1. Create a admin dl using SOAP.
+	 * 2. Go to Manage dl View.
+	 * 3. Verify dl is present in the list
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Verify created admin dl is present in the list view",
+			groups = { "functional" })
+			public void GetDistributionList_02() throws HarnessException {
+
+		// Create a new dl in the Admin Console using SOAP
+		DistributionListItem dl = new DistributionListItem();
+		String dlEmailAddress=dl.getEmailAddress();
+
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<CreateDistributionListRequest xmlns='urn:zimbraAdmin'>"
+				+			"<name>" + dlEmailAddress + "</name>"
+				+			"<a xmlns='' n='zimbraIsAdminGroup'>TRUE</a>"
+				+		"</CreateDistributionListRequest>");
+
+		// Refresh the list
+		app.zPageManageDistributionList.sClickAt(PageMain.Locators.REFRESH_BUTTON, "");
+		
+		// Get the list of displayed accounts
+		List<AccountItem> accounts = app.zPageManageDistributionList.zListGetAccounts();
+		ZAssert.assertNotNull(accounts, "Verify the dl list is returned");
+
+		AccountItem found = null;
+		for (AccountItem a : accounts) {
+			logger.info("Looking for dl "+ dlEmailAddress + " found: "+ a.getGEmailAddress());
+			if ( dlEmailAddress.equals(a.getGEmailAddress()) ) {
+				found = a;
+				break;
+			}
+		}
+		ZAssert.assertNotNull(found, "Verify the dl is returned correctly");
+	}
+
+	/**
+	 * Testcase : Verify created dynamic admin dl is displayed in UI  -- Manage dl View
+	 * Steps :
+	 * 1. Create a dynamic admin dl using SOAP.
+	 * 2. Go to Manage dl View.
+	 * 3. Verify dl is present in the list
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Verify created dynamic admin dl is present in the list view",
+			groups = { "functional" })
+			public void GetDistributionList_03() throws HarnessException {
+
+		// Create a new dl in the Admin Console using SOAP
+		DistributionListItem dl = new DistributionListItem();
+		String dlEmailAddress=dl.getEmailAddress();
+
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<CreateDistributionListRequest xmlns='urn:zimbraAdmin' dynamic='1'>"
+				+			"<name>" + dlEmailAddress + "</name>"
+				+			"<a xmlns='' n='zimbraIsAdminGroup'>TRUE</a>"
+				+			"<a xmlns='' n='zimbraIsACLGroup'>TRUE</a>"
+				+		"</CreateDistributionListRequest>");
+
+		// Refresh the list
+		app.zPageManageDistributionList.sClickAt(PageMain.Locators.REFRESH_BUTTON, "");
+		
+		// Get the list of displayed accounts
+		List<AccountItem> accounts = app.zPageManageDistributionList.zListGetAccounts();
+		ZAssert.assertNotNull(accounts, "Verify the dl list is returned");
+
+		AccountItem found = null;
+		for (AccountItem a : accounts) {
+			logger.info("Looking for dl "+ dlEmailAddress + " found: "+ a.getGEmailAddress());
+			if ( dlEmailAddress.equals(a.getGEmailAddress()) ) {
+				found = a;
+				break;
+			}
+		}
+		ZAssert.assertNotNull(found, "Verify the dl is returned correctly");
+	}
+
 	/**
 	 * Testcase : Verify created dl is displayed in UI - Search view.
 	 * Steps :
@@ -71,7 +152,7 @@ public class GetDistributionList extends AdminCommonTest {
 	 */
 	@Test(	description = "Verify created dl is present in the list view  - Search view",
 			groups = { "functional" })
-			public void GetDistributionList_02() throws HarnessException {
+			public void GetDistributionList_04() throws HarnessException {
 
 		// Create a new dl in the Admin Console using SOAP
 		DistributionListItem dl = new DistributionListItem();

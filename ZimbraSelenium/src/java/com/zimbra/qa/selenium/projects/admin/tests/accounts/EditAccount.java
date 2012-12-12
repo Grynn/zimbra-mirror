@@ -141,7 +141,7 @@ public class EditAccount extends AdminCommonTest {
 				"<CreateAccountRequest xmlns='urn:zimbraAdmin'>"
 				+			"<name>" + account.getEmailAddress() + "</name>"
 				+			"<password>test123</password>"
-				+			"<a xmlns=\"\" n=\"zimbraIsDelegatedAdminAccount\">TRUE</a>"
+				+			"<a xmlns='' n='zimbraIsDelegatedAdminAccount'>TRUE</a>"
 				+		"</CreateAccountRequest>");
 
 		// Refresh the account list
@@ -192,7 +192,7 @@ public class EditAccount extends AdminCommonTest {
 				"<CreateAccountRequest xmlns='urn:zimbraAdmin'>"
 				+			"<name>" + account.getEmailAddress() + "</name>"
 				+			"<password>test123</password>"
-				+			"<a xmlns=\"\" n=\"zimbraIsAdminAccount\">TRUE</a>"
+				+			"<a xmlns='' n='zimbraIsAdminAccount'>TRUE</a>"
 				+		"</CreateAccountRequest>");
 
 		// Refresh the account list

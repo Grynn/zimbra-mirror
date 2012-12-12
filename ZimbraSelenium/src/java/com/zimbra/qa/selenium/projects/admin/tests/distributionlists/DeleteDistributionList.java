@@ -132,8 +132,8 @@ public class DeleteDistributionList extends AdminCommonTest {
 	 * 5. Verify dl is deleted using SOAP.
 	 * @throws HarnessException
 	 */
-	@Test(	description = "Verify delete operation for distribution list - Manage distribution list view",
-			groups = { "smoke" })
+	@Test(	description = "Verify delete operation for admin distribution list - Manage distribution list view",
+			groups = { "functional" })
 			public void DeleteDistributionList_03() throws HarnessException {
 
 		// Create a new dl in the Admin Console using SOAP
@@ -143,7 +143,7 @@ public class DeleteDistributionList extends AdminCommonTest {
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
 				"<CreateDistributionListRequest xmlns='urn:zimbraAdmin'>"
 				+			"<name>" + dlEmailAddress + "</name>"
-				+			"<a xmlns=\"\" n=\"zimbraIsAdminGroup\">"+"TRUE"+"</a>"
+				+			"<a xmlns='' n='zimbraIsAdminGroup'>TRUE</a>"
 				+		"</CreateDistributionListRequest>");
 
 		// Refresh list to populate account.
@@ -172,6 +172,59 @@ public class DeleteDistributionList extends AdminCommonTest {
 		ZAssert.assertNull(response, "Verify the distribution list is deleted successfully");
 
 	}
+	
+	/**
+	 * Testcase : Verify delete operation for dynamic admin DL - Manage distribution list view.
+	 * Steps :
+	 * 1. Create a dynamic admin DL using SOAP.
+	 * 2. Go to Manage dl View.
+	 * 3. Select an dl.
+	 * 4. Delete an dl using delete button in Gear box menu.
+	 * 5. Verify dl is deleted using SOAP.
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Verify delete operation for dynamic admin distribution list - Manage distribution list view",
+			groups = { "functional" })
+			public void DeleteDistributionList_04() throws HarnessException {
+
+		// Create a new dl in the Admin Console using SOAP
+		DistributionListItem dl = new DistributionListItem();
+		String dlEmailAddress=dl.getEmailAddress();
+
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<CreateDistributionListRequest xmlns='urn:zimbraAdmin' dynamic='1'>"
+				+			"<name>" + dlEmailAddress + "</name>"
+				+			"<a xmlns='' n='zimbraIsAdminGroup'>TRUE</a>"
+				+			"<a xmlns='' n='zimbraIsACLGroup'>TRUE</a>"
+				+		"</CreateDistributionListRequest>");
+		
+		// Refresh list to populate account.
+		app.zPageManageDistributionList.sClickAt(PageMain.Locators.REFRESH_BUTTON, "");
+
+		// Click on account to be deleted.
+		app.zPageManageDistributionList.zListItem(Action.A_LEFTCLICK, dl.getEmailAddress());
+
+		// Click on Delete button
+		DialogForDeleteOperation dialog = (DialogForDeleteOperation) app.zPageManageDistributionList.zToolbarPressPulldown(Button.B_GEAR_BOX, Button.O_DELETE);
+
+		// Click Yes in Confirmation dialog
+		dialog.zClickButton(Button.B_YES);
+
+		// Click Ok on "Delete Items" dialog
+		dialog.zClickButton(Button.B_OK);
+
+
+		// Verify the dl does not exists in the ZCS
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<GetDistributionListRequest xmlns='urn:zimbraAdmin'>" +
+				"<dl by='name'>"+dlEmailAddress+"</dl>"+
+		"</GetDistributionListRequest>");
+
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetDistributionListResponse/admin:dl", 1);
+		ZAssert.assertNull(response, "Verify the distribution list is deleted successfully");
+
+	}
+
 
 	
 	/**
@@ -186,7 +239,7 @@ public class DeleteDistributionList extends AdminCommonTest {
 	 */
 	@Test(	description = "Verify delete operation for distribution list - Search distribution list view",
 			groups = { "functional" })
-			public void DeleteDistributionList_04() throws HarnessException {
+			public void DeleteDistributionList_06() throws HarnessException {
 
 		// Create a new dl in the Admin Console using SOAP
 		DistributionListItem dl = new DistributionListItem();

@@ -150,7 +150,62 @@ public class EditDistributionList extends AdminCommonTest {
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
 				"<CreateDistributionListRequest xmlns='urn:zimbraAdmin'>"
 				+			"<name>" + dlEmailAddress + "</name>"
-				+			"<a xmlns=\"\" n=\"zimbraIsAdminGroup\">"+"TRUE"+"</a>"
+				+			"<a xmlns='' n='zimbraIsAdminGroup'>TRUE</a>"
+				+		"</CreateDistributionListRequest>");
+
+		// Refresh the list
+		app.zPageManageDistributionList.sClickAt(PageMain.Locators.REFRESH_BUTTON, "");
+		
+		// Click on distribution list to be deleted.
+		app.zPageManageDistributionList.zListItem(Action.A_LEFTCLICK, dl.getEmailAddress());
+		
+		// Click on Edit button
+		FormEditDistributionList form = (FormEditDistributionList) app.zPageManageDistributionList.zToolbarPressPulldown(Button.B_GEAR_BOX,Button.O_EDIT);
+		//FormEditDistributionList form = (FormEditDistributionList) app.zPageManageDistributionList.zToolbarPressPulldown(Button.B_GEAR_BOX, Button.O_EDIT);
+		
+		//Click on General Information tab.
+		form.zClickTreeItem(FormEditDistributionList.TreeItem.MEMBERS);
+
+		//Edit the name.
+		String editedName = "editedDL_" + ZimbraSeleniumProperties.getUniqueString();
+		form.setName(editedName);
+		
+		//Submit the form.
+		form.zSubmit();
+		
+		// Verify the dl exists in the ZCS
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<GetDistributionListRequest xmlns='urn:zimbraAdmin'>" +
+				"<dl by='name'>"+editedName+"@"+dl.getDomainName()+	"</dl>"+
+		"</GetDistributionListRequest>");
+
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetDistributionListResponse/admin:dl", 1);
+		ZAssert.assertNotNull(response, "Verify the distribution list is edited successfully");
+	}
+
+	/**
+	 * Testcase : Edit Dynamic Admin Distribution List name - Manage Distribution List view
+	 * Steps :
+	 * 1. Create a Dynamic admin dl using SOAP.
+	 * 2. Go to Manage dl View.
+	 * 3. Select a dl.
+	 * 4. Edit a dl using delete button in Gear box menu.
+	 * 5. Verify dl is edit using SOAP.
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Edit Dynamic Admin Distribution List name - Manage Distribution List view",
+			groups = { "functional" })
+			public void EditDistributionList_04() throws HarnessException {
+
+		// Create a new dl in the Admin Console using SOAP
+		DistributionListItem dl = new DistributionListItem();
+		String dlEmailAddress=dl.getEmailAddress();
+
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<CreateDistributionListRequest xmlns='urn:zimbraAdmin' dynamic='1'>"
+				+			"<name>" + dlEmailAddress + "</name>"
+				+			"<a xmlns='' n='zimbraIsAdminGroup'>TRUE</a>"
+				+			"<a xmlns='' n='zimbraIsACLGroup'>TRUE</a>"
 				+		"</CreateDistributionListRequest>");
 
 		// Refresh the list
@@ -196,7 +251,7 @@ public class EditDistributionList extends AdminCommonTest {
 	 */
 	@Test(	description = "Verify edit operation for distribution list - Search distribution list view",
 			groups = { "functional" })
-			public void EditDistributionList_04() throws HarnessException {
+			public void EditDistributionList_05() throws HarnessException {
 
 		// Create a new dl in the Admin Console using SOAP
 		DistributionListItem dl = new DistributionListItem();
@@ -254,7 +309,7 @@ public class EditDistributionList extends AdminCommonTest {
 	 */
 	@Test(	description = "Verify edit operation for distribution list - Search distribution list view + right click",
 			groups = { "functional" })
-			public void EditDistributionList_05() throws HarnessException {
+			public void EditDistributionList_06() throws HarnessException {
 
 		// Create a new dl in the Admin Console using SOAP
 		DistributionListItem dl = new DistributionListItem();

@@ -152,7 +152,7 @@ public class DeleteAccount extends AdminCommonTest {
 				"<CreateAccountRequest xmlns='urn:zimbraAdmin'>"
 				+			"<name>" + account.getEmailAddress() + "</name>"
 				+			"<password>test123</password>"
-				+			"<a xmlns=\"\" n=\"zimbraIsDelegatedAdminAccount\">TRUE</a>"
+				+			"<a xmlns='' n='zimbraIsDelegatedAdminAccount'>TRUE</a>"
 				+		"</CreateAccountRequest>");
 
 
@@ -204,7 +204,7 @@ public class DeleteAccount extends AdminCommonTest {
 				"<CreateAccountRequest xmlns='urn:zimbraAdmin'>"
 				+			"<name>" + account.getEmailAddress() + "</name>"
 				+			"<password>test123</password>"
-				+			"<a xmlns=\"\" n=\"zimbraIsAdminAccount\">TRUE</a>"
+				+			"<a xmlns='' n='zimbraIsAdminAccount'>TRUE</a>"
 				+		"</CreateAccountRequest>");
 
 
