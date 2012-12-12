@@ -701,7 +701,7 @@ public class FormMailNew extends AbsForm {
 
 					return;
 					
-				} else if (frames == 2) {
+				} else if (frames >= 2) {
 					// //
 					// HTML compose
 					// //
