@@ -32,7 +32,7 @@ public class AppointmentItem implements IItem {
 	protected boolean dIsAllDay = false;
 	protected boolean dIsPrivate = false;
 	protected boolean dHasAttachments = false;
-	
+	protected Element dMultipart = null;
 	// GUI values
 	protected String gSubject = null;
 	protected String gFragment = null;
@@ -58,6 +58,7 @@ public class AppointmentItem implements IItem {
 	protected boolean gHasAttachments = false;
 	protected String gStatus = null;
 	protected String TheLocator = null;
+	
 
 	public AppointmentItem() {	
 	}
@@ -147,7 +148,12 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 				appt.dOrganizer = oElement.getAttribute("a");
 				
 			}
-			
+			Element mpElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:mp");
+			if ( mpElement != null ) {
+				
+				// Get multipart
+				appt.dMultipart = mpElement;
+			}
 			// Parse the required attendees
 			ArrayList<String> attendees = new ArrayList<String>();
 			Element[] requiredElements = ZimbraAccount.SoapClient.selectNodes(m, "//mail:at[@role='REQ']");
@@ -296,6 +302,7 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 		sb.append("Is Tagged: ").append(dIsTagged).append('\n');
 		sb.append("Is Recurring: ").append(dRecurring).append('\n');		
 		sb.append("Has Attachments: ").append(dHasAttachments).append('\n');
+		sb.append("Multipart: ").append(dMultipart).append('\n');
 		return (sb.toString());
 	}
 
@@ -320,6 +327,7 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 		sb.append("Is Tagged: ").append(gIsTagged).append('\n');
 		sb.append("Is Recurring: ").append(gIsRecurring).append('\n');		
 		sb.append("Has Attachments: ").append(gHasAttachments).append('\n');
+		sb.append("Multipart: ").append(dMultipart).append('\n');
 		return (sb.toString());
 	}
 
@@ -664,8 +672,14 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 	public String getGStatus() {
 		return (gStatus);
 	}
-
-
+	
+	public void setGAttachmentId(Element AttachmentId) {
+		dMultipart = AttachmentId;
+	}
+	public Element getGMultipart() {
+		return (dMultipart);
+	}
+	
 	/**
 	 * Create a single-day appointment on the server
 	 * 
