@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -58,10 +57,18 @@ public class AutoCompleteQuickCompleteKeys extends PrefGroupMailByMessageTest {
 		// Auto complete a name
 		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, FirstName);
 		ZAssert.assertGreaterThan(entries.size(), 0, "Verify some results are returned");
-		//app.zPageMail.zKeyboardTypeString(",");
-		//workaround
-		SleepUtil.sleepSmall();
-		mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\188");
+
+		// Type ','
+		if  (ZimbraSeleniumProperties.isWebDriver()) {
+			
+		    mailform.sType("css=div>input[id^=zv__COMPOSE][id$=_to_control]", ",");
+		    
+		} else {
+			
+			SleepUtil.sleepSmall();
+		    mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\188");
+		    
+		}
 		
 		// Send the message
 		mailform.zSubmit();
@@ -94,10 +101,19 @@ public class AutoCompleteQuickCompleteKeys extends PrefGroupMailByMessageTest {
 		// Auto complete a name
 		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, FirstName);
 		ZAssert.assertGreaterThan(entries.size(), 0, "Verify some results are returned");
-		//app.zPageMail.zKeyboardTypeString(";");
-		//workaround
-		SleepUtil.sleepSmall();
-		mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\59");
+		
+		// Type ';'
+		if  (ZimbraSeleniumProperties.isWebDriver()) {
+			
+		    mailform.sType("css=div>input[id^=zv__COMPOSE][id$=_to_control]", ";");
+		    
+		} else {
+			
+			SleepUtil.sleepSmall();
+		    mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\59");
+		    
+		}
+
 		
 		// Send the message
 		mailform.zSubmit();
@@ -130,10 +146,19 @@ public class AutoCompleteQuickCompleteKeys extends PrefGroupMailByMessageTest {
 		// Auto complete a name
 		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, FirstName);
 		ZAssert.assertGreaterThan(entries.size(), 0, "Verify some results are returned");
-		//app.zPageMail.zKeyboardTypeString("	"); // Whitespace is 'tab' character
-		//workaround
-		SleepUtil.sleepSmall();
-		mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\9");
+		
+		// Type '	' (tab)
+		if  (ZimbraSeleniumProperties.isWebDriver()) {
+			
+		    mailform.sType("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "	");
+		    
+		} else {
+			
+			SleepUtil.sleepSmall();
+		    mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\9");
+		    
+		}
+
 		
 		// Send the message
 		mailform.zSubmit();

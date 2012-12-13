@@ -68,8 +68,18 @@ public class Cyrillic extends PrefGroupMailByMessageTest {
 		//mailform.zAutocompleteFillField(Field.To, ";");
 		//workaround
 		mailform.zAutocompleteFillField(Field.To, firstname);
-		SleepUtil.sleepSmall();
-		mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\59");
+
+		// Type ';'
+		if  (ZimbraSeleniumProperties.isWebDriver()) {
+			
+		    mailform.sType("css=div>input[id^=zv__COMPOSE][id$=_to_control]", ";");
+		    
+		} else {
+			
+			SleepUtil.sleepSmall();
+		    mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\59");
+		    
+		}
 
 		// Send the message
 		mailform.zSubmit();
@@ -114,8 +124,18 @@ public class Cyrillic extends PrefGroupMailByMessageTest {
 		//mailform.zAutocompleteFillField(Field.To, ";");
 		//workaround
 		mailform.zAutocompleteFillField(Field.To, contact.getPref("givenName"));
-		SleepUtil.sleepSmall();
-		mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\59");
+		
+		// Type ';'
+		if  (ZimbraSeleniumProperties.isWebDriver()) {
+			
+		    mailform.sType("css=div>input[id^=zv__COMPOSE][id$=_to_control]", ";");
+		    
+		} else {
+			
+			SleepUtil.sleepSmall();
+		    mailform.sKeyDown("css=div>input[id^=zv__COMPOSE][id$=_to_control]", "\\59");
+		    
+		}
 
 		// Send the message
 		mailform.zSubmit();
