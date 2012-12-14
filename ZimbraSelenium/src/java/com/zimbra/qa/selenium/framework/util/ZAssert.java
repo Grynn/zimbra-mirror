@@ -383,6 +383,38 @@ public class ZAssert {
 		
 	}
 
+	public static void assertNotMatches(String pattern, String input, String message) {
+		assertNotMatches(Pattern.compile(pattern), input, message);
+	}
+	
+	public static void assertNotMatches(Pattern pattern, String input, String message) {
+		trace(message);
+
+		TotalCountTests++;
+		CountTests++;
+		message = "assertNotMatches" + message;
+		String details = String.format("%s -- (%s not matches %s) [%s]", "assertNotMatches", pattern.toString(), input, message);
+		logger.info(details);
+		
+        try
+        {
+        	Matcher m = pattern.matcher(input);
+        	Assert.assertFalse(m.matches(), details);
+//        	Repository.testCaseVerification(message, String.valueOf(pattern),
+//               String.valueOf(input), true);
+        }
+        catch (AssertionError e)
+        {
+        	logger.error(e.getMessage(), e);
+//        	Repository.testCaseVerification(message, String.valueOf(pattern),
+//               String.valueOf(input), false);
+            throw e;
+        }
+        
+        CountPass++; TotalCountPass++;
+		
+	}
+
 	/**
 	 * Verify that "actual" contains "substring"
 	 * @param actual the actual text
