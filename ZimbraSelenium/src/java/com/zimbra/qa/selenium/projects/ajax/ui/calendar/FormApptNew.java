@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.SeparateWindowShowOriginal;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 
 /**
  * The <code>FormMailNew<code> object defines a compose new message view
@@ -84,6 +85,9 @@ public class FormApptNew extends AbsForm {
 		public static final String Ok_changes = "css=td[id='CHNG_DLG_ORG_1_button2_title']";
 		public static final String Cancel_changes = "css=td[id='CHNG_DLG_ORG_1_button1_title']";
 		public static final String AddLocation = "css=td[id$='_title']:contains('Location:')";
+		
+		public static final String AddAttendees = "css=td[id$='_title']:contains('Attendees:')";
+		
 	}
 
 	public static class Field {
@@ -401,6 +405,17 @@ public class FormApptNew extends AbsForm {
 		} else if (button == Button.B_LOCATION) {
 
 			locator = Locators.AddLocation;
+			this.sClickAt(locator, "");
+
+			this.zWaitForBusyOverlay();
+			page = new DialogFindLocation(this.MyApplication, pageCal);
+			return (page);
+
+			// FALL THROUGH
+
+		} else if (button == Button.B_TO) {
+
+			locator = Locators.AddAttendees;
 			this.sClickAt(locator, "");
 
 			this.zWaitForBusyOverlay();

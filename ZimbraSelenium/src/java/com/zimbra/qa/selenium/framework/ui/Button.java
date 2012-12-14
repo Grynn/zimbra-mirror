@@ -469,7 +469,7 @@ public class Button {
 	
 	public static final Button B_SEND_UPDATES_ONLY_TO_ADDED_OR_REMOVED_ATTENDEES = new Button("B_SEND_UPDATES_ONLY_TO_ADDED_OR_REMOVED_ATTENDEES");
 	public static final Button B_SEND_UPDATES_TO_ALL_ATTENDEES = new Button("B_SEND_UPDATES_TO_ALL_ATTENDEES");
-
+	public static final Button B_CHOOSE_CONTACT_FROM_PICKER= new Button("B_CHOOSE_CONTACT_FROM_PICKER");
 	// Calendar tree
 	public static final Button B_RELOAD = new Button("B_RELOAD");
 
@@ -531,8 +531,8 @@ public class Button {
 	public static Button B_MOVE_TO_CC = new Button("B_MOVE_TO_CC");
 	public static Button B_MOVE_TO_BCC = new Button("B_MOVE_TO_BCC");
 
-
-	
+	public static Button B_SEARCH_EQUIPMENT = new Button("B_SEARCH_EQUIPMENT");
+	public static Button B_SELECT_EQUIPMENT = new Button("B_SELECT_EQUIPMENT");
 	// Button properties
 	private final String ID;
 
