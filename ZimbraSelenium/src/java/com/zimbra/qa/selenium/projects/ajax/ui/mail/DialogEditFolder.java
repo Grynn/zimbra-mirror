@@ -4,7 +4,7 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShare;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareRevoke;
@@ -341,6 +341,10 @@ public class DialogEditFolder extends AbsDialog {
 		// Set the range
 		String locator = "css=div[id='FolderProperties'] input[id$='_keepValue']";
 		
+		if ( ZimbraSeleniumProperties.isWebDriver() ) {
+			this.clearField(locator);
+		}
+		
 		this.sType(locator, "" + value);
 		this.zWaitForBusyOverlay();
 		
@@ -457,6 +461,10 @@ public class DialogEditFolder extends AbsDialog {
 
 		// Set the range
 		String locator = "css=div[id='FolderProperties'] input[id$='_purgeValue']";
+		
+		if ( ZimbraSeleniumProperties.isWebDriver() ) {
+			this.clearField(locator);
+		}
 		
 		this.sType(locator, "" + value);
 		this.zWaitForBusyOverlay();
