@@ -88,7 +88,7 @@ public class AddLocation extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Add location to existing appointment and verify F/B",
-			groups = { "functional" })
+			groups = { "smoke" })
 	public void AddLocation_02() throws HarnessException {
 		
 		// Create a meeting
