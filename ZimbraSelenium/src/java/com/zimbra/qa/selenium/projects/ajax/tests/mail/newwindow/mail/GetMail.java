@@ -24,7 +24,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field;
 public class GetMail extends PrefGroupMailByMessageTest {
 	protected static Logger logger = LogManager.getLogger(GetMail.class);
 
-	boolean injected = false;
 	final String mimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email00";
 
 	public GetMail() throws HarnessException {
@@ -233,10 +232,8 @@ public class GetMail extends PrefGroupMailByMessageTest {
 		final String from = "from12996131112962@example.com";
 		final String sender = "sender12996131112962@example.com";
 
-		if ( !injected ) {
-			LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
-			injected = true;
-		}
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder + "/mime_wSender.txt"));
+
 
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), subject);
 		ZAssert.assertNotNull(mail, "Verify message is received");
@@ -264,15 +261,11 @@ public class GetMail extends PrefGroupMailByMessageTest {
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 			
 			// Verify the To, From, Subject, Body
-			//ZAssert.assertEquals(	window.zGetMailProperty(Field.OnBehalfOf), from, "Verify the On-Behalf-Of matches the 'From:' header");
-			/* TODO: ... debugging to be removed */
-			String fromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[id$='_com_zimbra_email'] span:contains(from)";
-			ZAssert.assertEquals(app.zPageMail.sGetText(fromLocator).trim(), from, "Verify the On-Behalf-Of matches the 'From:' header");
-
-			//ZAssert.assertEquals(	window.zGetMailProperty(Field.From), sender, "Verify the From matches the 'Sender:' header");
-			/* TODO: ... debugging to be removed */
-			String senderLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[id$='_com_zimbra_email'] span:contains(sender)";
-			ZAssert.assertEquals(app.zPageMail.sGetText(senderLocator).trim(), sender, "Verify the From matches the 'Sender:' header");
+			String actualOBO = window.zGetMailProperty(Field.OnBehalfOf);
+			ZAssert.assertEquals(actualOBO, from, "Verify the On-Behalf-Of matches the 'From:' header");
+			
+			String actualSender = window.zGetMailProperty(Field.From);
+			ZAssert.assertEquals(actualSender, sender, "Verify the From matches the 'Sender:' header");
 
 		} finally {
 			
@@ -297,10 +290,7 @@ public class GetMail extends PrefGroupMailByMessageTest {
 		final String from = "from13016959916873@example.com";
 		final String replyto = "replyto13016959916873@example.com";
 
-		if ( !injected ) {
-			LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
-			injected = true;
-		}
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder + "/mime_wReplyTo.txt"));
 
 
 		
@@ -329,15 +319,11 @@ public class GetMail extends PrefGroupMailByMessageTest {
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 			
 			// Verify the To, From, Subject, Body
-			//ZAssert.assertEquals(	window.zGetMailProperty(Field.ReplyTo), replyto, "Verify the Reply-To matches the 'Reply-To:' header");
-			/* TODO: ... debugging to be removed */
-			String replytoLocator = "css=div[id='zv__TV-main__MSG'] tr[id$='_reply to'] td.LabelColValue span[id$='_com_zimbra_email'] span:contains(replyto)";
-			ZAssert.assertEquals(app.zPageMail.sGetText(replytoLocator).trim(), replyto, "Verify the Reply-To matches the 'Reply-To:' header");
+			String actualReplyto = window.zGetMailProperty(Field.ReplyTo);
+			ZAssert.assertEquals(actualReplyto, replyto, "Verify the Reply-To matches the 'Reply-To:' header");
 
-			//ZAssert.assertEquals(	window.zGetMailProperty(Field.From), from, "Verify the From matches the 'From:' header");
-			/* TODO: ... debugging to be removed */
-			String fromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[id$='_com_zimbra_email'] span:contains(from)";
-			ZAssert.assertEquals(app.zPageMail.sGetText(fromLocator).trim(), from, "Verify the From matches the 'From:' header");
+			String actualFrom = window.zGetMailProperty(Field.From);
+			ZAssert.assertEquals(actualFrom, from, "Verify the From matches the 'From:' header");
 
 		} finally {
 			
@@ -361,10 +347,7 @@ public class GetMail extends PrefGroupMailByMessageTest {
 		final String from = "from13011239916873@example.com";
 		final String resentfrom = "resentfrom13016943216873@example.com";
 
-		if ( !injected ) {
-			LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
-			injected = true;
-		}
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder + "/mime_wResentFrom.txt"));
 
 
 		
@@ -392,15 +375,11 @@ public class GetMail extends PrefGroupMailByMessageTest {
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 			
 			// Verify the To, From, Subject, Body
-			//ZAssert.assertEquals(	window.zGetMailProperty(Field.ResentFrom), resentfrom, "Verify the Resent-From matches the 'Resent-From:' header");
-			/* TODO: ... debugging to be removed */
-			String resentfromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[id$='_com_zimbra_email'] span:contains(resentfrom)";
-			ZAssert.assertEquals(app.zPageMail.sGetText(resentfromLocator).trim(), resentfrom, "Verify the From matches the 'From:' header");
+			String actualResentFrom = window.zGetMailProperty(Field.ResentFrom);
+			ZAssert.assertEquals(actualResentFrom, resentfrom, "Verify the Resent-From matches the 'Resent-From:' header");
 
-			//ZAssert.assertEquals(	window.zGetMailProperty(Field.From), from, "Verify the From matches the 'From:' header");
-			/* TODO: ... debugging to be removed */
-			String fromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[id$='_com_zimbra_email'] span:contains(from)";
-			ZAssert.assertEquals(app.zPageMail.sGetText(fromLocator).trim(), from, "Verify the From matches the 'From:' header");
+			String actualFrom = window.zGetMailProperty(Field.From);
+			ZAssert.assertEquals(actualFrom, from, "Verify the From matches the 'From:' header");
 
 		} finally {
 			
