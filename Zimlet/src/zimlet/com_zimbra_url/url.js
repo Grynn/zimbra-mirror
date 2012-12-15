@@ -360,7 +360,6 @@ Com_Zimbra_Url.prototype._showYouTubeVideo =
 function(youTubeId, msgId) {
 	if (!youTubeId || !msgId) return;
 
-	var title = this._youTubeHash[youTubeId].title;
 	var el = document.getElementById("youtube-video_" + this._viewId + "_" + msgId);
 	var iframeEl = document.getElementById("youtube-iframe_" + this._viewId + "_" + msgId);
 	if (el) {
