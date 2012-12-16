@@ -2904,7 +2904,8 @@ public abstract class AbsSeleniumObject {
 		logger.info("...WebDriver...getAllWindowNames()");
 		
 		List<String> list = new ArrayList<String>();
-		WebDriver driver = webDriver();			
+		WebDriver driver = webDriver();	
+		String currentWindowHandle = driver.getWindowHandle();
 		try{
 			Set<String> windowHandles = driver.getWindowHandles(); 		
 			if (windowHandles!=null && !windowHandles.isEmpty()) {
@@ -2915,6 +2916,10 @@ public abstract class AbsSeleniumObject {
 		}catch(Exception ex){
 			logger.error(ex);
 		}
+		finally{
+		    String currentWindowName = driver.switchTo().window(currentWindowHandle).getTitle();
+		    logger.info("back to original window" + currentWindowName);
+		}
 		return list;
 	}
 	
@@ -2924,47 +2929,49 @@ public abstract class AbsSeleniumObject {
 		Set<String> handles = null;
 		String defaultContent;
 		boolean found = false;
-		if(name == null){
-		    defaultContent = driver.switchTo().defaultContent().getTitle();
-		    logger.info("selecting defaultContent()" + defaultContent);
-		    sWindowFocus();
-		}
-		
-		try{	
+		try{
+		    if(name == null || name.contentEquals("null")){
+			driver.switchTo().window(driver.getWindowHandles().iterator().next());
+			defaultContent = driver.switchTo().defaultContent().getTitle();
+			logger.info("selecting defaultContent()" + defaultContent);
+			sWindowFocus();
+			found = true;
+		    }else{
 			logger.info("handles size" );
 			SleepUtil.sleepSmall();
 			handles = driver.getWindowHandles();	
 			logger.info(" : " + handles.size());
 			if (handles != null && !handles.isEmpty()) {
-				String url = "";
-				String title = null;
-				for (String handle : handles) {
+			    String url = "";
+			    String title = null;
+			    for (String handle : handles) {
 					
-					logger.info("about to switch to handle: " + handle);
-					try{						
-						title = driver.switchTo().window(handle).getTitle();
-						logger.info("switched to title: " + title);											
-					}catch(Exception ex){
-						logger.error(ex);
-					}
-					url = driver.getCurrentUrl();
+				logger.info("about to switch to handle: " + handle);
+				try{						
+				    title = driver.switchTo().window(handle).getTitle();
+				    logger.info("switched to title: " + title);											
+				}catch(Exception ex){
+				    logger.error(ex);
+				}
+				url = driver.getCurrentUrl();
 					
-					if (title!=null && (title.contentEquals(name) || url.contains("/" + name + "?"))) {
-						found = true;
-						logger.info("found: " + title);
-						break;
-					}
-				}				
+				if (title!=null && (title.contentEquals(name) || url.contains("/" + name + "?"))) {
+				    found = true;
+				    logger.info("found: " + title);
+				    break;
+				}
+			    }				
 			}
+		    }
 		}catch(Exception ex){
 			logger.error(ex);
 		}
 		finally{
-			if(!found){
-				defaultContent = driver.switchTo().defaultContent().getTitle();
-				logger.info("back to defaultContent()" + defaultContent);
-				sWindowFocus();
-			}
+		    if(!found){
+			defaultContent = driver.switchTo().defaultContent().getTitle();
+			logger.info("back to defaultContent()" + defaultContent);
+			sWindowFocus();
+		    }
 		}
 		return found;
 	}
