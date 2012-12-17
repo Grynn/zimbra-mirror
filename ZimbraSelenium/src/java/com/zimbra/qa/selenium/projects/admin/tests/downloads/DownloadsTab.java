@@ -29,10 +29,10 @@ public class DownloadsTab extends AdminCommonTest {
 		"//a[contains(text(),'Zimbra Connector(64bits) for Outlook')]", // TODO: need to add unique ID
 		
 		// (User Instructions )
-		"//a[contains(text(),'User Instructions')]", // TODO: need to add unique ID
+		//"//a[contains(text(),'User Instructions')]", // TODO: need to add unique ID
 
 		// Zimbra Connector for Apple iSync
-		"//a[contains(text(),'Zimbra Connector for Apple iSync')]", // TODO: need to add unique ID
+		"//a[contains(text(),'Legacy ZCS Migration Wizard for Exchange')]", // TODO: need to add unique ID
 		
 	};
 	
@@ -50,16 +50,20 @@ public class DownloadsTab extends AdminCommonTest {
 		// These links appear on both NETWORK and FOSS
 		
 		// ZCS Migration Wizard for Exchange
-		"//a[contains(text(),'ZCS Migration Wizard for Exchange')]", // TODO: need to add unique ID
+		"//a[contains(text(),'ZCS Migration Wizard for Exchange/PST (32bits)')]", // TODO: need to add unique ID
+		
+		// ZCS Migration Wizard for Exchange
+		"//a[contains(text(),'ZCS Migration Wizard for Exchange/PST (64bits)')]", // TODO: need to add unique ID
+
 
 		// ZCS Migration Wizard for Domino
 		"//a[contains(text(),'ZCS Migration Wizard for Domino')]", // TODO: need to add unique ID
 
 		// PST Import Wizard
-		"//a[contains(text(),'PST Import Wizard')]", // TODO: need to add unique ID
+		"//a[contains(text(),'Legacy PST Import Wizard')]", // TODO: need to add unique ID
 
 		// PST Import Wizard (User Instructions)
-		"//a[contains(text(),'User Instructions')]", // TODO: need to add unique ID
+		//"//a[contains(text(),'User Instructions')]", // TODO: need to add unique ID
 
 	};
 

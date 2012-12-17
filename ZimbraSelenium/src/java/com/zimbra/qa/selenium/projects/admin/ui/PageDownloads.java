@@ -113,7 +113,7 @@ public class PageDownloads extends AbsTab {
 	public void zOpenIndexHTML() throws HarnessException {
 
 		String base = ZimbraSeleniumProperties.getBaseURL();
-		String path = "/zimbra/downloads/index.html";
+		String path = "/downloads/index.html";
 		String id = ZimbraSeleniumProperties.getUniqueString();
 		
 		this.sOpenWindow(base + path, id);
