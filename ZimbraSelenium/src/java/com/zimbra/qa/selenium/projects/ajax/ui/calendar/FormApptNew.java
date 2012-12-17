@@ -40,7 +40,6 @@ public class FormApptNew extends AbsForm {
 		
 		public static final String ShowOptionalLink = "css=td[id$='_show_optional']";
 		public static final String ShowEquipmentLink = "css=td[id$='_show_resources']";
-		//public static final String ShowEquipmentLink = "css=td[id$='_show_resources']:contains('Show Equipment')";
 		public static final String CustomizeLink = "css=div[id$='repeatDesc']:contains('Customize')";
 		public static final String ConfigureLink = "css=div[class='FakeAnchor']:contains('Configure')";
 		public static final String SuggestAtimeLink = "css=div[id$='_suggest_time']:contains('Suggest a time')";
