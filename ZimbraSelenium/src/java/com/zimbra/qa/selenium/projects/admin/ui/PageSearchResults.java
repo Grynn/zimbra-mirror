@@ -31,6 +31,8 @@ public class PageSearchResults extends AbsTab {
 		public static final String ALIAS = "ALIAS";
 		public static final String RESOURCE = "RESOURCE";
 		public static final String DISTRIBUTION_LIST = "Distribution List";
+		public static final String COS = "Cos";
+		public static final String DOMAIN = "Domain";
 	}
 	
 	public String typeOfObject = "";
@@ -180,6 +182,8 @@ public class PageSearchResults extends AbsTab {
 				page=new FormEditResource(this.MyApplication);
 			else if(typeOfObject.equals(TypeOfObject.ALIAS))
 				page=new FormEditAccount(this.MyApplication);
+			else if(typeOfObject.equals(TypeOfObject.COS))
+				page=new FormEditCos(this.MyApplication);
 
 	
 			// Make sure the button exists
@@ -260,7 +264,8 @@ public class PageSearchResults extends AbsTab {
 					page=new FormEditResource(this.MyApplication);
 				else if(typeOfObject.equals(TypeOfObject.ALIAS))
 					page=new FormEditAccount(this.MyApplication);
-
+				else if(typeOfObject.equals(TypeOfObject.COS))
+					page=new FormEditCos(this.MyApplication);
 			}else {
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
 			}
