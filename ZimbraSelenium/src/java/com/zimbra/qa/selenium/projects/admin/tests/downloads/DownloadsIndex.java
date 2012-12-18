@@ -180,10 +180,9 @@ public class DownloadsIndex extends AdminCommonTest {
 					connection = null;
 				}
 			}
-			app.zPageDownloads.zSeparateWindowClose(windowTitle);
 
 		}
-
+		app.zPageDownloads.zSeparateWindowClose(windowTitle);
 	}
 
 }
