@@ -33,7 +33,7 @@ public class CreateMeetingBySelectAttendees extends CalendarWorkWeekTest {
 	
 
 	@Test(description = "Create appt and Add attendee to existing appointment from contact picker",
-			groups = { "functional" })
+			groups = { "functional12" })
 	public void CreateMeetingBySelectAttendees_01() throws HarnessException {
 		
 		// Create a meeting
@@ -44,7 +44,7 @@ public class CreateMeetingBySelectAttendees extends CalendarWorkWeekTest {
 		Calendar now = this.calendarWeekDayUTC;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
-		String apptAttendee2 = ZimbraAccount.AccountB().EmailAddress;		
+		
 		
 		apptContent = ZimbraSeleniumProperties.getUniqueString();
 		appt.setSubject(apptSubject);
@@ -61,7 +61,7 @@ public class CreateMeetingBySelectAttendees extends CalendarWorkWeekTest {
         DialogFindAttendees dialogFindAttendees = (DialogFindAttendees) new DialogFindAttendees(app, app.zPageCalendar);
 
         // Type attendee name in search box & perform search
-        dialogFindAttendees.zType(Locators.ContactPickerSerachField, ZimbraAccount.AccountB().EmailAddress);
+        dialogFindAttendees.zType(Locators.ContactPickerSerachField, apptAttendee1);
         dialogFindAttendees.zClickButton(Button.B_SEARCH);
         dialogFindAttendees.zWaitForBusyOverlay();
         
@@ -75,11 +75,6 @@ public class CreateMeetingBySelectAttendees extends CalendarWorkWeekTest {
         apptForm.zToolbarPressButton(Button.B_SEND);
 		apptForm.zSubmit();
 
-        // Add attendee2 and resend the appointment
-        //FormApptNew apptForm2 = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        
-        apptForm.zToolbarPressButton(Button.B_TO);
-
         // Verify attendee1 receives meeting invitation message
 		ZimbraAccount.AccountA().soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
@@ -92,14 +87,14 @@ public class CreateMeetingBySelectAttendees extends CalendarWorkWeekTest {
 		// Verify that attendee2 present in the appointment
         AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
 		ZAssert.assertEquals(actual.getSubject(), apptSubject, "Subject: Verify the appointment data");
-		ZAssert.assertStringContains(actual.getAttendees(), apptAttendee2, "Attendees: Verify the appointment data");
+		ZAssert.assertStringContains(actual.getAttendees(), apptAttendee1, "Attendees: Verify the appointment data");
 		
 		// Verify appointment is present in attendee2's calendar
-		AppointmentItem addeddAttendee = AppointmentItem.importFromSOAP(ZimbraAccount.AccountB(), "subject:("+ apptSubject +")");
+		AppointmentItem addeddAttendee = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
 		ZAssert.assertNotNull(addeddAttendee, "Verify meeting invite is present in attendee2's calendar");
 		
 		// Verify attendee2 free/busy status
-		String attendee2Status = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptAttendee2 +"']", "ptst");
+		String attendee2Status = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptAttendee1 +"']", "ptst");
 		ZAssert.assertEquals(attendee2Status, "NE", "Verify attendee2 free/busy status");
 		
 	}
