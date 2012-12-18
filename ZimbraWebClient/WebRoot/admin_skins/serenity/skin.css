@@ -491,6 +491,10 @@ BODY {
     color: #cbd9e4;
 }
 
+.AboutScreen .copyright a {
+    color: #cbd9e4;
+}
+
 #IFDEF MSIE
 .AboutScreen .version {
     margin-top: -17px;

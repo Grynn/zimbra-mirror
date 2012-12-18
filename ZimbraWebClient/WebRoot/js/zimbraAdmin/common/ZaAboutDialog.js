@@ -29,7 +29,7 @@ ZaAboutDialog.prototype._createHtmlFromTemplate = function (templateId, data) {
     data.closeIcon = this.closeIcon ? this.closeIcon : "ImgAboutClose";
     var date = AjxDateFormat.getDateInstance().format(ZaServerVersionInfo.buildDate);
     data.version = AjxBuffer.concat(ZaMsg.splashScreenVersion, " ", ZaServerVersionInfo.version , " " , date);
-    data.copyright = ZaItem.getSplashScreenCopyright();
+    data.copyright = ZaItem.getAboutScreenCopyright();
     data.aboutBanner = "ImgAboutBanner";
     data.logoURL = ZaAppCtxt.getLogoURI();
     DwtComposite.prototype._createHtmlFromTemplate.call(this, templateId, data);

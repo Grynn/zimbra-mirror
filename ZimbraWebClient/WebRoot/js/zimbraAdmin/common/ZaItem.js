@@ -1054,6 +1054,22 @@ ZaItem.getZeroIsUnlimitedItem = function () {
     return item ;
 }
 
+/**
+ * Returns the copyright information for the about screen
+ *
+ * @return {string} copyright string with the end year information
+ */
+ZaItem.getAboutScreenCopyright = function() {
+    var date = new Date();
+    var curYear = date.getFullYear() + "";
+    return AjxMessageFormat.format(ZabMsg.aboutScreenCopyright, [curYear]);
+}
+
+/**
+ * Returns the copyright information for the login screen and the subsequent splash screen
+ *
+ * @return {string} copyright string with the end year information
+ */
 ZaItem.getSplashScreenCopyright = function() {
 	var date = new Date();
 	var curYear = date.getFullYear() + "";
