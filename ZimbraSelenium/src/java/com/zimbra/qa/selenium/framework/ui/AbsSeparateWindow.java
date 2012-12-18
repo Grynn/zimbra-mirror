@@ -1,6 +1,11 @@
 package com.zimbra.qa.selenium.framework.ui;
 
+import java.util.*;
+
 import org.apache.log4j.*;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.*;
+import org.openqa.selenium.interactions.Action;
 
 import com.thoughtworks.selenium.SeleniumException;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -415,6 +420,46 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 	}
 
+	/**
+	 * Click on a series of locators in sequence.
+	 * Because menus may be collapsed when switching windows, this method
+	 * allows a series of clicks to be executed.  Such as "pulldown actions", 
+	 * then "click spam".
+	 * 
+	 * NOTE: WebDriver specific
+	 */
+	public void sClick(List<String> locators) throws HarnessException {
+		logger.info(myPageName() + " sClick("+ Arrays.toString(locators.toArray()) +")");
+
+		/**
+		 * *** This method is WebDriver specific ***
+		 */
+
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			changeFocus();
+
+			for(String locator: locators) {
+				
+				super.sClick(locator);
+				super.zWaitForBusyOverlay();
+
+			}
+
+			// Wait for the SOAP request to finish
+			// zWaitForBusyOverlay();
+			SleepUtil.sleepVeryLong();
+
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+
+
+	}
+
+
+	
 	/* (non-Javadoc)
 	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#zClickAt(java.lang.String, java.lang.String)
 	 */
@@ -429,8 +474,20 @@ public abstract class AbsSeparateWindow extends AbsPage {
 			if ( !super.sIsElementPresent(locator) )
 				throw new HarnessException("locator not present: "+ locator);
 			
-			super.sMouseDownAt(locator, coord);
-			super.sMouseUpAt(locator, coord);
+			try {
+				if (ZimbraSeleniumProperties.isWebDriver()){
+					logger.info("...WebDriver...moveToElement:click()");
+					final WebElement we = getElement(locator);
+					final Actions builder = new Actions(webDriver());
+					Action action = builder.moveToElement(we).click(we).build();
+					action.perform();
+				} else {
+					this.sMouseDownAt(locator, coord);
+					this.sMouseUpAt(locator, coord);
+				}
+			}catch(Exception ex){
+				throw new HarnessException("Unable to clickAt on locator " + locator, ex);
+			}
 
 		} finally {
 			super.sSelectWindow(MainWindowID);

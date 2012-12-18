@@ -3,7 +3,7 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
-import java.util.List;
+import java.util.*;
 
 import com.zimbra.qa.selenium.framework.core.SeleniumService;
 import com.zimbra.qa.selenium.framework.items.MailItem;
@@ -455,16 +455,35 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 		}
 
 		// Default behavior
-		if ( pulldownLocator != null ) {
-						
-			zClickAt(pulldownLocator, "");
 
-			if ( optionLocator != null ) {
+		if ( ZimbraSeleniumProperties.isWebDriver() ) {
 
-				zClickAt(optionLocator, "");
-
-			}
+			// Webdriver
+			List<String> locators = new ArrayList<String>();
+			locators.add(pulldownLocator);
+			locators.add(optionLocator);
 			
+			// Click on:
+			// 1. pulldownLocator
+			// 2. optionLocator
+			//
+			this.sClick(locators);
+			
+		} else {
+			
+			// Selenium
+			if ( pulldownLocator != null ) {
+							
+				zClickAt(pulldownLocator, "");
+
+				if ( optionLocator != null ) {
+
+					zClickAt(optionLocator, "");
+
+				}
+				
+			}
+
 		}
 		
 		// Return the specified page, or null if not set

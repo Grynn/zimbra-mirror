@@ -6,8 +6,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 import java.util.*;
 
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning.DialogWarningID;
@@ -377,16 +376,29 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 		}
 		
 		
-		if (pulldownLocator != null) {
+		if ( ZimbraSeleniumProperties.isWebDriver() ) {
 
-			this.zClickAt(pulldownLocator,"");
-
-			if (optionLocator != null) {
-
-				this.zClickAt(optionLocator,"");
-
-			}
+			// Webdriver
+			List<String> locators = new ArrayList<String>();
+			locators.add(pulldownLocator);
+			locators.add(optionLocator);
 			
+			// Click on:
+			// 1. pulldownLocator
+			// 2. optionLocator
+			//
+			this.sClick(locators);
+			
+		} else {
+			
+			// Selenium
+			if (pulldownLocator != null) {
+				this.zClickAt(pulldownLocator,"");
+				if (optionLocator != null) {
+					this.zClickAt(optionLocator,"");
+				}
+			
+			}
 		}
 		
 		if ( page != null ) {
