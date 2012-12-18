@@ -33,7 +33,7 @@ public class CreateMeetingBySelectAttendees extends CalendarWorkWeekTest {
 	
 
 	@Test(description = "Create appt and Add attendee to existing appointment from contact picker",
-			groups = { "functional12" })
+			groups = { "functional" })
 	public void CreateMeetingBySelectAttendees_01() throws HarnessException {
 		
 		// Create a meeting
