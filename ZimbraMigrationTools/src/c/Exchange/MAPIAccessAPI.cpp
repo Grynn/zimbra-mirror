@@ -70,7 +70,8 @@ LONG WINAPI MAPIAccessAPI::UnhandledExceptionFilter(LPEXCEPTION_POINTERS pExPtrs
 	WCHAR strbuf[256];
 	wsprintf(strbuf,L"The application has requested the Runtime to terminate it in an unusual way.\nThe core dump would get generated in %s.",
        pwszTempPath);
-	MessageBox(NULL, strbuf, _T("Runtime Error"), MB_OK);
+	//MessageBox(NULL, strbuf, _T("Runtime Error"), MB_OK);
+	dloge(strbuf);
 	Zimbra::Util::FreeString(strOutMessage);
     return lRetVal;
 }
