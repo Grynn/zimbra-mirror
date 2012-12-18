@@ -148,6 +148,7 @@ public class Button {
 	public static final Button B_OPTIONS = new Button("B_OPTIONS");
 	public static final Button B_PRIORITY = new Button("B_PRIORITY");
 	public static final Button B_TO = new Button("B_TO");
+	public static final Button B_OPTIONAL= new Button("B_OPTIONAL");
 	public static final Button B_CC = new Button("B_CC");
 	public static final Button B_BCC = new Button("B_BCC");
 	public static final Button B_SHOWBCC = new Button("B_SHOWBCC");

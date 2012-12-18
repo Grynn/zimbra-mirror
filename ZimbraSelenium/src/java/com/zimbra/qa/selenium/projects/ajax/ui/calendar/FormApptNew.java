@@ -88,6 +88,7 @@ public class FormApptNew extends AbsForm {
 		public static final String addEquipment = "css=td[id$='_title']:contains('Equipment:')";
 
 		public static final String AddAttendees = "css=td[id$='_title']:contains('Attendees:')";
+		public static final String AddOptiponalAttendees = "css=td[id$='_title']:contains('Optional:')";
 		public static final String EquipmentName= "css=div[class='DwtDialog'] div[id$='_content'] table tr td:nth-child(2) input";
 
 	}
@@ -430,6 +431,17 @@ public class FormApptNew extends AbsForm {
 		else if (button == Button.B_TO) {
 
 			locator = Locators.AddAttendees;
+			this.sClickAt(locator, "");
+
+			this.zWaitForBusyOverlay();
+			page = new DialogFindLocation(this.MyApplication, pageCal);
+			return (page);
+
+			// FALL THROUGH
+
+		}else if (button == Button.B_OPTIONAL) {
+
+			locator = Locators.AddOptiponalAttendees;
 			this.sClickAt(locator, "");
 
 			this.zWaitForBusyOverlay();

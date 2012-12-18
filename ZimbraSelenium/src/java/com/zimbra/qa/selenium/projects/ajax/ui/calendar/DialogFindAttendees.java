@@ -21,7 +21,7 @@ public class DialogFindAttendees extends DialogWarning {
 		public static final String AddLocationFromPicker="css=div[class='DwtDialog']  td[id^='OK'] td[id$='_button2_title']";
 		
 		
-		public static final String ShowOptionaAttendees = "css= td#DWT273_show_optional.fakeAnchor";
+		public static final String ShowOptionalLink = "css=td[id$='_show_optional']";
 		public static final String ContactPickerSerachField = "id=ZmContactPicker_searchField";
 		public static final String ContactPickerSerachButton = "css=td[id$='_title']:contains('Search')";
 		public static final String ContactPickerFirstContact = "css=nobr";
