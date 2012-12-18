@@ -273,7 +273,8 @@ public class ZimbraURI {
 		if ( ZimbraSeleniumProperties.getAppType() == AppType.ADMIN ) {
 		
 			scheme = "https";
-			path = "/zimbraAdmin/";
+			//path = "/zimbraAdmin/";
+			path = "";
 			port = "7071";
 
 		}
