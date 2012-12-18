@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -2931,7 +2932,8 @@ public abstract class AbsSeleniumObject {
 		boolean found = false;
 		try{
 		    if(name == null || name.contentEquals("null")){
-			driver.switchTo().window(driver.getWindowHandles().iterator().next());
+			LinkedHashSet<String> windowHandles = new LinkedHashSet<String>(driver.getWindowHandles());
+			driver.switchTo().window(windowHandles.iterator().next());
 			defaultContent = driver.switchTo().defaultContent().getTitle();
 			logger.info("selecting defaultContent()" + defaultContent);
 			sWindowFocus();
