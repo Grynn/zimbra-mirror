@@ -223,7 +223,8 @@ public class FormMailNew extends AbsForm {
 		} else if ( button == Button.B_SHOWBCC) {
 
 			page = this;
-			locator = "xpath=//div[contains(@id,'zv__COMPOSE')]//a[contains(@id,'_toggle_bcc')]";
+			// locator = "xpath=//div[contains(@id,'zv__COMPOSE')]//a[contains(@id,'_toggle_bcc')]";
+			locator = "css=div[id^='zv__COMPOSE'] a[id$='_toggle_bcc']";
 
 			if ( zBccIsActive() )
 				return (this);
