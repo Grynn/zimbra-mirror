@@ -34,16 +34,11 @@ import org.junit.Test;
 public class WSDLSearchTest {
 
     private static ZcsPortType mailSvcEIF = null;
-    private static ZcsPortType nvMailSvcEIF = null;
-
-    // private final static String testAcctDomain = "wsdl.cal.example.test";
-    // private final static String testAcct = "wsdl1@" + testAcctDomain;
 
     @BeforeClass
     public static void init() throws Exception {
         Utility.setUpToAcceptAllHttpsServerCerts();
         mailSvcEIF = Utility.getZcsSvcEIF();
-        // nvMailSvcEIF = Utility.getNonValidatingZcsSvcEIF();
         oneTimeTearDown();
     }
 
@@ -54,8 +49,7 @@ public class WSDLSearchTest {
             // Utility.deleteAccountIfExists(testAcct);
             // Utility.deleteDomainIfExists(testAcctDomain);
         } catch (Exception ex) {
-            System.err.println("Exception " + ex.toString() + 
-            " thrown inside oneTimeTearDown");
+            System.err.println("Exception " + ex.toString() + " thrown inside oneTimeTearDown");
         }
     }
 
@@ -86,14 +80,11 @@ public class WSDLSearchTest {
         //          One of &apos;{&quot;urn:zimbraMail&quot;:inv, &quot;urn:zimbraMail&quot;:replies}&apos; is expected.
         //       Fortunately, non-validating accepts this.
         ZcsPortType myMailSvcEIF = mailSvcEIF;
-
-        Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)myMailSvcEIF,
-                "user1");
+        Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)myMailSvcEIF, "user1");
         testSearchResponse resp = myMailSvcEIF.searchRequest(req);
         Assert.assertNotNull("SearchResponse object", resp);
         Assert.assertEquals("SearchResponse sortBy", "none", resp.getSortBy());
-        Assert.assertEquals("SearchResponse offset", new Integer(0),
-                        resp.getOffset());
+        Assert.assertEquals("SearchResponse offset", new Integer(0), resp.getOffset());
         Assert.assertEquals("SearchResponse more", Boolean.FALSE, resp.isMore());
         Assert.assertNull("SearchResponse total", resp.getTotal());
         List <Object> hits = resp.getHitOrCOrM();
@@ -103,14 +94,24 @@ public class WSDLSearchTest {
             testAppointmentHitInfo ahi = (testAppointmentHitInfo) o;
             testCalOrganizer org = ahi.getOr();
             Assert.assertNotNull("SearchResponse/appt/or object", org);
-            Assert.assertEquals("SearchResponse/appt/or @a",
-                    "tom@example.zimbra.com", org.getA());
-            Assert.assertEquals("SearchResponse/appt/or @url",
-                    "tom@example.zimbra.com", org.getUrl());
-            Assert.assertEquals("SearchResponse/appt/or @d",
-                    "Tom", org.getD());
+            Assert.assertEquals("SearchResponse/appt/or @a", "tom@example.zimbra.com", org.getA());
+            Assert.assertEquals("SearchResponse/appt/or @url", "tom@example.zimbra.com", org.getUrl());
+            Assert.assertEquals("SearchResponse/appt/or @d", "Tom", org.getD());
         } else {
             Assert.fail("SearchResponse hit is NOT an AppointmentHitInfo");
         }
+    }
+
+    @Test
+    public void user1InboxSearch() throws Exception {
+        testSearchRequest req = new testSearchRequest();
+        req.setQuery("in:inbox cvs commit");
+        ZcsPortType myMailSvcEIF = mailSvcEIF;
+
+        Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)myMailSvcEIF, "user1");
+        testSearchResponse resp = myMailSvcEIF.searchRequest(req);
+        Assert.assertNotNull("SearchResponse object", resp);
+        List <Object> hits = resp.getHitOrCOrM();
+        Assert.assertEquals("SearchResponse number of hits", 5, hits.size());
     }
 }
