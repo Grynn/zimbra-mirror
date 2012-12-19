@@ -23,6 +23,7 @@ public class PageManageDomains extends AbsTab {
 		public static final String DOMAINS="zti__AppAdmin__CONFIGURATION__DOMAINS_textCell";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
 		public static final String NEW_MENU="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDomain']";
+		public static final String ADD_DOMAIN_ALIAS="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDomainAlias']";
 		public static final String HOME="Home";
 		public static final String CONFIGURE="Configure";
 		public static final String DOMAIN="Domains";
@@ -180,16 +181,21 @@ public class PageManageDomains extends AbsTab {
 		AbsPage page = null; // If set, this page will be returned
 
 		if (pulldown == Button.B_GEAR_BOX) {
+			pulldownLocator = Locators.GEAR_ICON; 
 
 			if (option == Button.O_NEW) {
 
-				pulldownLocator = Locators.GEAR_ICON; 
 				optionLocator = Locators.NEW_MENU;
 
 				page = new WizardCreateDomain(this);
 
 				// FALL THROUGH
 
+			} else if(option == Button.O_ADD_DOMAIN_ALIAS) {
+				optionLocator = Locators.ADD_DOMAIN_ALIAS;
+				
+				page = new WizardCreateDomainAlias(this);
+				
 			} else {
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
 			}

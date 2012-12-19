@@ -184,6 +184,8 @@ public class PageSearchResults extends AbsTab {
 				page=new FormEditAccount(this.MyApplication);
 			else if(typeOfObject.equals(TypeOfObject.COS))
 				page=new FormEditCos(this.MyApplication);
+			else if(typeOfObject.equals(TypeOfObject.DOMAIN))
+				page=new FormEditDomain(this.MyApplication);
 
 	
 			// Make sure the button exists
@@ -266,6 +268,9 @@ public class PageSearchResults extends AbsTab {
 					page=new FormEditAccount(this.MyApplication);
 				else if(typeOfObject.equals(TypeOfObject.COS))
 					page=new FormEditCos(this.MyApplication);
+				else if(typeOfObject.equals(TypeOfObject.DOMAIN))
+					page=new FormEditDomain(this.MyApplication);
+
 			}else {
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
 			}

@@ -73,10 +73,10 @@ public class EditCos extends AdminCommonTest {
 		// Verify the cos exists in the ZCS
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
 		"<GetCosRequest xmlns='urn:zimbraAdmin'>" +
-		                     "<cos by='name'>"+cos.getName()+"</cos>"+
+		                     "<cos by='name'>"+editedName+"</cos>"+
 		                   "</GetCosRequest>");
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetCosResponse/admin:cos", 1);
-		ZAssert.assertNull(response, "Verify the cos is edited successfully");	}
+		ZAssert.assertNotNull(response, "Verify the cos is edited successfully");	}
 	
 	/**
 	 * Testcase : Edit cos name -- right click 
@@ -124,10 +124,10 @@ public class EditCos extends AdminCommonTest {
 		// Verify the cos exists in the ZCS
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
 		"<GetCosRequest xmlns='urn:zimbraAdmin'>" +
-		                     "<cos by='name'>"+cos.getName()+"</cos>"+
+		                     "<cos by='name'>"+editedName+"</cos>"+
 		                   "</GetCosRequest>");
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetCosResponse/admin:cos", 1);
-		ZAssert.assertNull(response, "https://bugzilla.zimbra.com/show_bug.cgi?id=79304");
+		ZAssert.assertNotNull(response, "https://bugzilla.zimbra.com/show_bug.cgi?id=79304");
 	}
 
 }
