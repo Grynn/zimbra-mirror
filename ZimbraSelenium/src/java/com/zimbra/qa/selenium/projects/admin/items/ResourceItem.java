@@ -13,7 +13,7 @@ public class ResourceItem implements IItem {
 	public ResourceItem() {
 		super();
 
-		resourceLocalName = "resource" + ZimbraSeleniumProperties.getUniqueString();
+		resourceLocalName = "a_resource" + ZimbraSeleniumProperties.getUniqueString();
 		resourceDomainName = ZimbraSeleniumProperties.getStringProperty("testdomain");
 		resourceId = null;	
 	}

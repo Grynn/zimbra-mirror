@@ -19,7 +19,7 @@ public class CosItem implements IItem {
 	public CosItem() {
 		super();
 
-		cosName = "cos" + ZimbraSeleniumProperties.getUniqueString();
+		cosName = "a_cos" + ZimbraSeleniumProperties.getUniqueString();
 		Id = null;
 
 	}

@@ -13,7 +13,7 @@ public class DomainItem implements IItem {
 	public DomainItem() {
 		super();
 
-		domainName = "domain" + ZimbraSeleniumProperties.getUniqueString() + ".com";
+		domainName = "a_domain" + ZimbraSeleniumProperties.getUniqueString() + ".com";
 		Id = null;
 
 	}
