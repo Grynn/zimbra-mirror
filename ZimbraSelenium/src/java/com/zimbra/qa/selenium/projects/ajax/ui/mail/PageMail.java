@@ -5,12 +5,13 @@ package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
 import java.util.*;
 
+import org.openqa.selenium.*;
+
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
-//import com.zimbra.qa.selenium.projects.ajax.ui.preferences.trustedaddresses.DisplayTrustedAddress.Locators;
 
 
 
@@ -1388,15 +1389,25 @@ public class PageMail extends AbsTab {
 					this.MyApplication,
 					((AppAjaxClient)this.MyApplication).zPageMail);	
 
-			keyCode = "27";
-			zKeyDown(keyCode);
-			return page;
+			if ( ZimbraSeleniumProperties.isWebDriver() ) {
 
-			// By default, just type the shortcut and return null page
-			//		} else {
-			//			
-			//			throw new HarnessException("No logic for shortcut : "+ shortcut);
-			//			
+				WebElement we = getElement("css=div#z_banner");
+				we.sendKeys(Keys.ESCAPE);
+				this.zWaitForBusyOverlay();
+				
+			} else {
+
+				keyCode = "27";
+				zKeyDown(keyCode);
+				this.zWaitForBusyOverlay();
+
+			}
+
+			if ( page != null ) {
+				page.zWaitForActive();
+			}
+			
+			return page;
 		}
 
 
