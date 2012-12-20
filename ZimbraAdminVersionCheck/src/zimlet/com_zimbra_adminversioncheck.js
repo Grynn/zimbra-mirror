@@ -14,7 +14,10 @@ ZaVersionCheck.prototype = new ZaItem;
 ZaVersionCheck.prototype.constructor = ZaVersionCheck;
 ZaVersionCheck.prototype.errorMsg = "";
 ZaVersionCheck.prototype.isAvailable = false;
-ZaVersionCheck.downloadUrl = "http://www.zimbra.com/community/downloads.html";
+// URL to direct to downloads
+// TODO: Figure out if this can be moved to a properties file
+// OLD: ZaVersionCheck.downloadUrl = "http://www.zimbra.com/community/downloads.html";
+ZaVersionCheck.downloadUrl = "http://www.zimbra.com/downloads/ne-downloads.html";
 
 ZaItem.loadMethods["ZaVersionCheck"] = new Array();
 ZaItem.modifyMethods["ZaVersionCheck"] = new Array();
