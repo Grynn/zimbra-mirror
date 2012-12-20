@@ -510,6 +510,7 @@ public class Button {
 	
 	// Accounts buttons
 	public static final Button O_ACCOUNTS_ACCOUNT = new Button("O_ACCOUNTS_ACCOUNT");
+	public static final Button O_ADD_DOMAIN_ALIAS = new Button("O_ADD_DOMAIN_ALIAS");
 
 	// Distribution List  buttons
 	public static final Button O_DISTRIBUTIUONLISTS_DISTRIBUTIONLIST=new Button("O_DISTRIBUTIUONLISTS_DISTRIBUTIONLIST");
