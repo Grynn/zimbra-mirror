@@ -26,7 +26,7 @@ public class CloseModifyAppointment extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Close modifying appt and take action from warning dialog : Save Chnages and send updates", 
-			groups = { "functional12"})
+			groups = { "functional"})
 	public void ModifyAppointment_01() throws HarnessException {
 
 		// create appointment data 
@@ -77,7 +77,7 @@ public class CloseModifyAppointment extends CalendarWorkWeekTest {
         sendUpdateDialog.zClickButton(Button.B_OK);
         SleepUtil.sleepLong();
         
-        // check if an attendee is 
+        // check if an attendee is removed from appt and attendee gets update
        
         AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
 		ZAssert.assertEquals(actual.getSubject(), apptSubject, "Subject: Verify the appointment data");
@@ -85,7 +85,7 @@ public class CloseModifyAppointment extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Close modifying appt and take action from warning dialog : Discard and close", 
-			groups = { "functional12"})
+			groups = { "functional"})
 	public void ModifyAppointment_02() throws HarnessException {
 
 		// Creating object for appointment data
@@ -154,7 +154,7 @@ public class CloseModifyAppointment extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Close modifying appt and take action from warning dialog : Dont save But keep open", 
-			groups = { "functional12"})
+			groups = { "functional"})
 	public void ModifyAppointment_03() throws HarnessException {
 		// Creating object for appointment data
 		AppointmentItem appt = new AppointmentItem();
@@ -205,6 +205,7 @@ public class CloseModifyAppointment extends CalendarWorkWeekTest {
         confirmClose.zClickButton(Button.B_DONTSAVE_KEEP_OPEN);
         confirmClose.zClickButton(Button.B_OK);
         SleepUtil.sleepLong();     
+        
         // Use GetAppointmentRequest to verify the changes are saved
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ apptId +"'/>");
         AppointmentItem modifyAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
