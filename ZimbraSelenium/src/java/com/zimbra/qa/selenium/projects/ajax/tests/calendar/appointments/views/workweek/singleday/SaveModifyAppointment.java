@@ -26,7 +26,7 @@ public class SaveModifyAppointment extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Save modifying appt and take action from warning dialog : Save Chnages and send updates", 
-			groups = { "functional12"})
+			groups = { "functional"})
 	public void SaveModifyAppointment_01() throws HarnessException {
 
 		String tz, apptSubject, apptAttendee1,apptAttendee2;
@@ -83,7 +83,7 @@ public class SaveModifyAppointment extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Save modifying appt and take action from warning dialog : Discard and close", 
-			groups = { "functional12"})
+			groups = { "functional"})
 	public void SaveModifyAppointment_02() throws HarnessException {
 
 		// Creating object for appointment data
@@ -131,7 +131,6 @@ public class SaveModifyAppointment extends CalendarWorkWeekTest {
         FormApptNew apptForm = new FormApptNew(app);
         
         appt.setSubject(editApptSubject);
-       // appt.setContent(editApptBody);
         apptForm.zRemoveAttendee(apptAttendee2);
         apptForm.zToolbarPressButton(Button.B_SAVE);
         DialogConfirmModification confirmClose = (DialogConfirmModification) new DialogConfirmModification(app, app.zPageCalendar);
@@ -152,7 +151,7 @@ public class SaveModifyAppointment extends CalendarWorkWeekTest {
         ZAssert.assertNotEqual(oldPageName, newPageName, "the Page has been closed");
 	}
 	@Test(description = "Save modifying appt and take action from warning dialog : Dont save But keep open", 
-			groups = { "functional12"})
+			groups = { "functional"})
 	public void SaveModifyAppointment_03() throws HarnessException {
 		// Creating object for appointment data
 		AppointmentItem appt = new AppointmentItem();
@@ -198,13 +197,13 @@ public class SaveModifyAppointment extends CalendarWorkWeekTest {
         SleepUtil.sleepMedium();
         FormApptNew apptForm = new FormApptNew(app);
         appt.setSubject(editApptSubject);
-       // appt.setContent(editApptBody);
         apptForm.zRemoveAttendee(apptAttendee2);
         apptForm.zToolbarPressButton(Button.B_SAVE);
         DialogConfirmModification confirmClose = (DialogConfirmModification) new DialogConfirmModification(app, app.zPageCalendar);
         confirmClose.zClickButton(Button.B_DONTSAVE_KEEP_OPEN);
         confirmClose.zClickButton(Button.B_OK);
         SleepUtil.sleepLong();     
+       
         // Use GetAppointmentRequest to verify the changes are saved
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ apptId +"'/>");
         AppointmentItem modifyAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
