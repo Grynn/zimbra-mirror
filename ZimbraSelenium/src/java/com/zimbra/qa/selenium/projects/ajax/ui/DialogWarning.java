@@ -115,7 +115,7 @@ public class DialogWarning extends AbsDialog {
 
 		if ( button == Button.B_YES ) {
 
-			locator = buttonsTableLocator + " td[id^='Yes_'] td[id$='_title']";
+			locator = buttonsTableLocator + " td[id$='_button5_cell'] td[id$='_title']";
 
 			if(MyDivId.contains("css=div[class=DwtConfirmDialog]")){
 				page = 	new FormMailNew(this.MyApplication);
@@ -124,15 +124,15 @@ public class DialogWarning extends AbsDialog {
 
 		} else if ( button == Button.B_NO ) {
 
-			locator = buttonsTableLocator + " td[id^='No_'] td[id$='_title']";
+			locator = buttonsTableLocator + " td[id$='_button4_cell'] td[id$='_title']";
 
 		} else if ( button == Button.B_CANCEL ) {
 
-			locator = buttonsTableLocator + " td[id^='Cancel_'] td[id$='_title']";
+			locator = buttonsTableLocator + " td[id$='_button1_cell'] td[id$='_title']";
 
 		} else if (button == Button.B_OK) {
 
-			locator = buttonsTableLocator + " td[id^='OK_'] td[id$='_title']";
+			locator = buttonsTableLocator + " td[id$='_button2_cell'] td[id$='_title']";
 
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
