@@ -107,7 +107,8 @@ DwtDialog = function(params) {
 	this._buttonElementId = {};
 	for (var i = 0; i < this._buttonList.length; i++) {
 		var buttonId = this._buttonList[i];
-		this._buttonElementId[this._buttonList[i]] = params.id + "_button" + buttonId + "_cell";
+		//this._buttonElementId[this._buttonList[i]] = params.id + "_button" + buttonId + "_cell";
+		this._buttonElementId[buttonId] = this._buttonDesc[buttonId].label? this._buttonDesc[buttonId].label + "_" + Dwt.getNextId():Dwt.getNextId();
 	}
 
 	DwtBaseDialog.call(this, params);
