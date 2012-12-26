@@ -2530,6 +2530,19 @@ public abstract class AbsSeleniumObject {
 		throw new HarnessException(locator + " - wait for visisble timed out after " + wait + "s");		
 	}
 	
+	protected void typeKeys(Keys keys, String ... locators) throws HarnessException {
+	    if(locators != null && locators.length > 0){
+		logger.info("...WebDriver...sendKeys(Keys)");
+		for(String locator : locators) {			
+		    sendKeys(locator, keys);
+		}
+	    }else{
+		logger.info("...WebDriver...actions.sendKeys(Keys)");
+		Actions builder = new Actions(webDriver());
+		builder.sendKeys(keys).build().perform();		
+	    }
+	}
+	
 	private void sendKeys(String locator, CharSequence ... keyValues) throws HarnessException {
 		logger.info("...WebDriver...sendKeys()");
 		WebElement we = getElement(locator);
