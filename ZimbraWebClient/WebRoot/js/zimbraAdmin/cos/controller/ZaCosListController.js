@@ -15,7 +15,8 @@
 
 ZaCosListController = function(appCtxt, container) {
 	ZaListViewController.call(this, appCtxt, container,"ZaCosListController");
-	this.objType = ZaEvent.S_COS;	
+	this.objType = ZaEvent.S_COS;
+    this._defaultType = ZaItem.COS;
 	this._currentSortField = ZaCos.A_name;
 	this._currentPageNum = 1;
 	this._currentSortOrder = "1";
@@ -117,7 +118,7 @@ ZaController.initToolbarMethods["ZaCosListController"].push(ZaCosListController.
 //private and protected methods
 ZaCosListController.prototype._createUI = 
 function (openInNewTab, openInSearchTab) {
-	this._contentView = new ZaCosListView(this._container);
+	this._contentView = new ZaCosListView(this._container, this._defaultType);
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	// create the menu operations/listeners first	
     //this._initToolbar();

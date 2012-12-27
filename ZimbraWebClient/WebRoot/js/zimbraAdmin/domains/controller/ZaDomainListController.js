@@ -25,7 +25,8 @@ ZaDomainListController = function(appCtxt, container) {
 	this._currentQuery = ""
 	this._currentPageNum = 1;
 	this._currentSortField = ZaDomain.A_domainName;
-	this.objType = ZaEvent.S_DOMAIN;	
+	this.objType = ZaEvent.S_DOMAIN;
+    this._defaultType = ZaItem.DOMAIN;
 	this.RESULTSPERPAGE = ZaDomain.RESULTSPERPAGE; 
 	this.MAXSEARCHRESULTS = ZaDomain.MAXSEARCHRESULTS;	
 }
@@ -159,7 +160,7 @@ ZaController.initPopupMenuMethods["ZaDomainListController"].push(ZaDomainListCon
 //private and protected methods
 ZaDomainListController.prototype._createUI = 
 function (openInNewTab, openInSearchTab) {
-	this._contentView = new ZaDomainListView(this._container);
+	this._contentView = new ZaDomainListView(this._container, this._defaultType);
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	// create the menu operations/listeners first	
 	//always add Help and navigation buttons at the end of the toolbar    

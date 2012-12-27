@@ -21,10 +21,12 @@
 * @author Greg Solovyev
 **/
 
-ZaCosListView = function(parent) {
+ZaCosListView = function(parent, listType) {
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
-	
+
+    this._listType = listType;
+
 	var headerList = this._getHeaderList();
 	ZaListView.call(this, {
 		parent:parent, 
@@ -75,20 +77,24 @@ function(cos, no, isDragProxy) {
 
 
 	var cnt = this._headerList.length;
+
+    var dwtId = Dwt.getNextId();
+    var rowId = this._listType;
+
 	for(var i = 0; i < cnt; i++) {
 		var field = this._headerList[i]._field;
 		var cellWidth = this._getCellWidth(i, {});
 		if (field == "type") {
 		// type
-			html[idx++] = "<td width=" + this._headerList[i]._width + ">" + AjxImg.getImageHtml("COS") + "</td>";
+			html[idx++] = "<td id=\"" + rowId + "_data_type_" + dwtId + "\" width=" + this._headerList[i]._width + ">" + AjxImg.getImageHtml("COS") + "</td>";
 		} else if (field == ZaCos.A_name) {
 		// name
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = "<td id=\"" + rowId + "_data_name_" + dwtId + "\" align='left' width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(cos.name);
 			html[idx++] = "</nobr></td>";
 		} else if (field == ZaCos.A_description) {
 			// description
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = "<td id=\"" + rowId + "_data_desc_" + dwtId + "\" align='left' width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(ZaItem.getDescriptionValue (cos.attrs[ZaCos.A_description]));
 			html[idx++] = "</nobr></td>";	
 		}
