@@ -39,7 +39,10 @@ DynSelect_XFormItem.prototype.emptyText = "";
 DynSelect_XFormItem.prototype.cssClass = "dynselect";
 DynSelect_XFormItem.prototype.edited = false;
 DynSelect_XFormItem.prototype.focusable = true;
-DynSelect_XFormItem.LOAD_PAUSE = AjxEnv.isIE ? 500 : 250;	// delay between chunks
+// Make sure there's enough delay between keystroke pauses
+// TODO This is just a simple fix for now. A more complete and comprehensive fix is needed
+// OLD --- DynSelect_XFormItem.LOAD_PAUSE = AjxEnv.isIE ? 500 : 250;	// delay between chunks
+DynSelect_XFormItem.LOAD_PAUSE = 750; // delay between chunks
 DynSelect_XFormItem.prototype.initFormItem = function () {
 	// if we're dealing with an XFormChoices object...
 	var choices  = this.getChoices();
