@@ -49,9 +49,17 @@ public class AppAdminConsole extends AbsApplication {
 	// Monitoring
 	public PageManageServerStatus		zPageManageServerStatus = null;
 	public PageManageServerStats		zPageManageServerStats = null;
+	public PageManageServerStatistics	zPageManageServerStatistics = null;
+	public PageManageAdvancedStatistics	zPageManageAdvancedStatistics = null;
+	public PageManageMessageCount		zPageManageMessageCount = null;
+	public PageManageMessageVolume		zPageManageMessageVolume = null;
+	public PageManageAntiSpamAnitVirusActivity	zPageManageAntispamAntiVirusActivity = null;
+	public PageManageMobileSyncStatistics	zPageManageMobileSyncStatistics = null;
+	public PageManageMailQueues			zPageManageMailQueues = null;
+	
 	
 	// Tools
-	public PageManageMailQueues			zPageManageMailQueues = null;
+	
 	public PageEditMailQueue			zPageEditMailQueue = null;
 	public PageManageAccountMigration	zPageManageAccountMigration = null;
 	public PageManageCertificates		zPageManageCertificates = null;
@@ -169,6 +177,24 @@ public class AppAdminConsole extends AbsApplication {
 		
 		zPageManageServerStats = new PageManageServerStats(this);
 		pages.put(zPageManageServerStats.myPageName(), zPageManageServerStats);
+
+		zPageManageServerStatistics = new PageManageServerStatistics(this);
+		pages.put(zPageManageServerStatistics.myPageName(), zPageManageServerStatistics);
+
+		zPageManageAdvancedStatistics = new PageManageAdvancedStatistics(this);
+		pages.put(zPageManageAdvancedStatistics.myPageName(), zPageManageAdvancedStatistics);
+
+		zPageManageMessageCount = new PageManageMessageCount(this);
+		pages.put(zPageManageMessageCount.myPageName(), zPageManageMessageCount);
+
+		zPageManageMessageVolume = new PageManageMessageVolume(this);
+		pages.put(zPageManageMessageVolume.myPageName(), zPageManageMessageVolume);
+
+		zPageManageAntispamAntiVirusActivity = new PageManageAntiSpamAnitVirusActivity(this);
+		pages.put(zPageManageAntispamAntiVirusActivity.myPageName(), zPageManageAntispamAntiVirusActivity);
+
+		zPageManageMobileSyncStatistics = new PageManageMobileSyncStatistics(this);
+		pages.put(zPageManageMobileSyncStatistics.myPageName(), zPageManageMobileSyncStatistics);
 
 		
 		// Tools

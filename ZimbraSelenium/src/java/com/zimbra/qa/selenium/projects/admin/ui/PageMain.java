@@ -6,6 +6,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
 
 /**
@@ -105,11 +106,13 @@ public class PageMain extends AbsTab {
 		// Click on logout
 		sClickAt(Locators.zLogoffDropDownArrow,"");
 		sClickAt(Locators.zLogOff,"");
+		SleepUtil.sleepLong();
+		
 		
 		/**
 		 * Following WaitForPageToLoad() is needed to ensure successful log off operation.
 		 */
-		sWaitForPageToLoad();
+		//sWaitForPageToLoad();
 		// Sometimes there is a "confirm" popup.
 		// Disable it using zimbraPrefAdminConsoleWarnOnExit=FALSE
 		// This is the default configureation for the AdminConsoleAdmin() account

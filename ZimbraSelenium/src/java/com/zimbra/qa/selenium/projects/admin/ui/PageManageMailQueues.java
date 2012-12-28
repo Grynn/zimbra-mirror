@@ -16,6 +16,14 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
  *
  */
 public class PageManageMailQueues extends AbsTab {
+	
+	public static class Locators {
+		public static final String MONITOR_ICON="css=div.ImgMonitor";
+		public static final String MAIL_QUEUES="css=td:contains('Mail Queues')";
+		public static final String HOME="Home";
+		public static final String MONITOR="Monitor";
+		public static final String MAIL_QUEUES_TEXT="Mail Queues";
+	}
 
 	public PageManageMailQueues(AbsApplication application) {
 		super(application);
@@ -26,7 +34,17 @@ public class PageManageMailQueues extends AbsTab {
 	 */
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me");
+		// If the "Refresh" button is visible, assume the ServerStatus page is active
+
+		// Look for the Refresh Button
+		boolean present = sIsElementPresent(Locators.MAIL_QUEUES);
+		if ( !present ) {
+			logger.debug("isActive() present = "+ present);
+			return (false);
+		}
+		
+		logger.debug("isActive() = "+ true);
+		return (true);
 	}
 
 	/* (non-Javadoc)
@@ -42,7 +60,17 @@ public class PageManageMailQueues extends AbsTab {
 	 */
 	@Override
 	public void zNavigateTo() throws HarnessException {
-		throw new HarnessException("implement me");
+		if ( zIsActive() ) {
+			// This page is already active.
+			return;
+		}
+
+		// Click on Addresses -> Accounts
+		zClickAt(Locators.MONITOR_ICON,"");
+		sIsElementPresent(Locators.MAIL_QUEUES);
+		zClickAt(Locators.MAIL_QUEUES, "");
+
+		zWaitForActive();
 	}
 
 	@Override
@@ -78,4 +106,9 @@ public class PageManageMailQueues extends AbsTab {
 		return null;
 	}
 
+	public boolean zVerifyHeader (String header) throws HarnessException {
+		if(this.sIsElementPresent("css=span:contains('" + header + "')"))
+			return true;
+		return false;
+	}
 }

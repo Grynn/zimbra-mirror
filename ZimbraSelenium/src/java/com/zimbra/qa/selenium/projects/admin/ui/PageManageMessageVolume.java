@@ -15,17 +15,17 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public class PageManageServerStatus extends AbsTab {
+public class PageManageMessageVolume extends AbsTab {
 
 	public static class Locators {
 		public static final String MONITOR_ICON="css=div.ImgMonitor";
 		public static final String MAIL_QUEUES="css=td:contains('Mail Queues')";
 		public static final String HOME="Home";
 		public static final String MONITOR="Monitor";
-		public static final String SERVER_STATUS="Server Status";
+		public static final String MESSAGE_VOLUME="Message Volume";
 	}
 	
-	public PageManageServerStatus(AbsApplication application) {
+	public PageManageMessageVolume(AbsApplication application) {
 		super(application);
 	}
 
@@ -76,8 +76,8 @@ public class PageManageServerStatus extends AbsTab {
 
 		// Click on Addresses -> Accounts
 		zClickAt(Locators.MONITOR_ICON,"");
-		sIsElementPresent("css=td:contains('"+Locators.SERVER_STATUS+"')");
-		zClickAt("css=td:contains('"+Locators.SERVER_STATUS+"')", "");
+		sIsElementPresent("css=td:contains('"+Locators.MESSAGE_VOLUME+"')");
+		zClickAt("css=td:contains('"+Locators.MESSAGE_VOLUME+"')", "");
 
 		zWaitForActive();
 
