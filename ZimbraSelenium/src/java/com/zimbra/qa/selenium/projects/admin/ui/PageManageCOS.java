@@ -115,7 +115,7 @@ public class PageManageCOS extends AbsTab {
 			String locator;
 
 			// Email Address
-			locator = accountLocator + " td[id^='dl_data_emailaddress']";
+			locator = accountLocator + " td[id^='cos_data_name']";
 
 
 			if(this.sIsElementPresent(locator)) 
@@ -183,7 +183,7 @@ public class PageManageCOS extends AbsTab {
 
 			locator=Locators.RIGHT_CLICK_MENU_DELETE_BUTTON;
 
-			page = new DialogForDeleteOperation(this.MyApplication, null);
+			page = new DialogForDeleteOperationCos(this.MyApplication, null);
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
@@ -235,9 +235,10 @@ public class PageManageCOS extends AbsTab {
 				// FALL THROUGH
 
 			}   else if(option == Button.O_DELETE) {
+
 				optionLocator = Locators.DELETE_BUTTON;
 
-				page = new DialogForDeleteOperation(this.MyApplication,null);
+				page = new DialogForDeleteOperationCos(this.MyApplication,null);
 
 			}  else {
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);

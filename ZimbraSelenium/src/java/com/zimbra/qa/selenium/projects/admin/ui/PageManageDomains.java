@@ -27,6 +27,8 @@ public class PageManageDomains extends AbsTab {
 		public static final String HOME="Home";
 		public static final String CONFIGURE="Configure";
 		public static final String DOMAIN="Domains";
+		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
+		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
 	}
 
 	public PageManageDomains(AbsApplication application) {
@@ -91,8 +93,44 @@ public class PageManageDomains extends AbsTab {
 	@Override
 	public AbsPage zListItem(Action action, String item)
 			throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
+		logger.info(myPageName() + " zListItem("+ action +", "+ item +")");
+
+		tracer.trace(action +" on subject = "+ item);
+
+		AbsPage page = null;
+		SleepUtil.sleepSmall();
+
+		// How many items are in the table?
+		String rowsLocator = "css=div#zl__DOMAIN_MANAGE div[id$='__rows'] div[id^='zli__']";
+		int count = this.sGetCssCount(rowsLocator);
+		logger.debug(myPageName() + " zListGetAccounts: number of accounts: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			final String accountLocator = rowsLocator + ":nth-child("+i+")";
+			String locator;
+
+			// Email Address
+			locator = accountLocator + " td[id^='domain_data_name']";
+
+
+			if(this.sIsElementPresent(locator)) 
+			{
+				if(this.sGetText(locator).trim().equalsIgnoreCase(item)) 
+				{
+					if(action == Action.A_LEFTCLICK) {
+						zClick(locator);
+						break;
+					} else if(action == Action.A_RIGHTCLICK) {
+						zRightClick(locator);
+						break;
+					}
+
+				}
+				
+			}
+		}
+		return page;
 	}
 
 	@Override
@@ -137,7 +175,12 @@ public class PageManageDomains extends AbsTab {
 
 			// FALL THROUGH
 
-		} else {
+		} else if(button == Button.B_TREE_DELETE) {
+			locator = Locators.RIGHT_CLICK_MENU_DELETE_BUTTON;
+			
+			page = new DialogForDeleteOperationDomain(this.MyApplication,null);
+			
+		}else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
 
@@ -195,6 +238,11 @@ public class PageManageDomains extends AbsTab {
 				optionLocator = Locators.ADD_DOMAIN_ALIAS;
 				
 				page = new WizardCreateDomainAlias(this);
+				
+			} else if(option == Button.O_DELETE) {
+				optionLocator = Locators.DELETE_BUTTON;
+				
+				page = new DialogForDeleteOperationDomain(this.MyApplication,null);
 				
 			} else {
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
