@@ -20,7 +20,7 @@ public class CreateMeetingWithLocation extends CalendarWorkWeekTest {
 	
 	@Bugs(ids = "69132")
 	@Test(description = "Create simple meeting with location resource",
-			groups = { "sanity" })
+			groups = { "smoke" })
 	public void CreateMeetingWithSingleLocation_01() throws HarnessException {
 		
 		

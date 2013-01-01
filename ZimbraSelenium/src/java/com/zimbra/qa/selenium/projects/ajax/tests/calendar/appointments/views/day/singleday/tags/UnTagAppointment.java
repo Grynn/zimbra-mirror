@@ -41,7 +41,7 @@ public class UnTagAppointment extends AjaxCommonTest {
 
 	
 	@Test(description = "Untag an appointment using toolbar button in day view",
-			groups = { "sanity" })
+			groups = { "functional" })
 	public void UnTagAppointment_01() throws HarnessException {
 		
 		// Create objects

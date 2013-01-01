@@ -20,7 +20,7 @@ public class CreateMeetingWithEquipment extends CalendarWorkWeekTest {
 	
 	@Bugs(ids = "69132")
 	@Test(description = "Create simple meeting with equipment",
-			groups = { "sanity" })
+			groups = { "smoke" })
 	public void CreateMeetingWithEquipment_01() throws HarnessException {
 		
 		

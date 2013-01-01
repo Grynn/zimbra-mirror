@@ -36,7 +36,7 @@ public class AddEquipment extends CalendarWorkWeekTest {
 		};
 	}
 	@Test(description = "Add equipment from scheduler pane using keyboard Enter and Tab key",
-			groups = { "sanity" },
+			groups = { "smoke" },
 			dataProvider = "DataProviderShortcutKeys")
 	public void AddEquipment_01(String name, int keyEvent) throws HarnessException {
 		

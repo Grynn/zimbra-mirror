@@ -32,7 +32,7 @@ public class ModifyAppointment extends AjaxCommonTest {
 
 	@Test(
 			description = "Modify appointment with subject & body and verify it in day view", 
-			groups = { "sanity" }) // smoke
+			groups = { "smoke" })
 	public void ModifyAppointment_01() throws HarnessException {
 
 		// Creating object for appointment data

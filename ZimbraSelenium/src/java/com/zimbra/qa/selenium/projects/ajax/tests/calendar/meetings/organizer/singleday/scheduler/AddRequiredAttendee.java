@@ -36,7 +36,7 @@ public class AddRequiredAttendee extends CalendarWorkWeekTest {
 		};
 	}
 	@Test(description = "Add required attendee from scheduler pane using keyboard Enter and Tab key",
-			groups = { "sanity" },
+			groups = { "functional" },
 			dataProvider = "DataProviderShortcutKeys")
 	public void AddRequiredAttendee_01(String name, int keyEvent) throws HarnessException {
 		

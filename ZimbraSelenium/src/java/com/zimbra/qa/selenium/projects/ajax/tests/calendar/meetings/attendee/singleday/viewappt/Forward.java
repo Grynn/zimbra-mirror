@@ -19,7 +19,7 @@ public class Forward extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "View meeting invite by opening it and Forward the invitation to any other user",
-			groups = { "sanity" })
+			groups = { "smoke" })
 			
 	public void ForwardMeeting_01() throws HarnessException {
 				

@@ -33,7 +33,7 @@ public class MonthView extends CalendarWorkWeekTest {
 	}
 	
 	@Test(	description = "Verify quick add dialog opens after double/right clicking to any date slot in month view",
-			groups = { "sanity" },
+			groups = { "functional" },
 			dataProvider = "DataProviderQuickAdd")
 	
 	public void MonthView_01(Action option) throws HarnessException {

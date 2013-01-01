@@ -25,7 +25,7 @@ public class CreateCalendar extends AjaxCommonTest {
 
 
 	@Test(	description = "Create a new calendar by clicking 'new folder' on folder tree", 
-			groups = { "sanity" })
+			groups = { "functional" })
 	public void CreateCalendar_01() throws HarnessException {
 
 		
