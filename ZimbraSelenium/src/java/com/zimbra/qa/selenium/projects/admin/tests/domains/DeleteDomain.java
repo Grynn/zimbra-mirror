@@ -79,7 +79,7 @@ public class DeleteDomain extends AdminCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify delete domain operation",
-			groups = { "functiona" })
+			groups = { "functional" })
 			public void DeleteDomain_02() throws HarnessException {
 
 		// Create a new domain in the Admin Console using SOAP
@@ -124,7 +124,7 @@ public class DeleteDomain extends AdminCommonTest {
 	 */
 	@Test(	description = "Verify delete domain alias operation - Manage Domain list view",
 			groups = { "functional" })
-			public void DeleteDomainAlias_01() throws HarnessException {
+			public void DeleteDomain_03() throws HarnessException {
 		
 		
 		String targetDomain = ZimbraSeleniumProperties.getStringProperty("testdomain");
@@ -187,7 +187,7 @@ public class DeleteDomain extends AdminCommonTest {
 	 */
 	@Test(	description = "Verify delete domain operation --  Search List View",
 			groups = { "smoke" })
-			public void DeleteDomain_03() throws HarnessException {
+			public void DeleteDomain_04() throws HarnessException {
 
 		// Create a new domain in the Admin Console using SOAP
 		DomainItem domain = new DomainItem();
@@ -240,7 +240,7 @@ public class DeleteDomain extends AdminCommonTest {
 	 */
 	@Test(	description = "Verify delete domain operation",
 			groups = { "functional" })
-			public void DeleteDomain_04() throws HarnessException {
+			public void DeleteDomain_05() throws HarnessException {
 
 		// Create a new domain in the Admin Console using SOAP
 		DomainItem domain = new DomainItem();
@@ -292,7 +292,7 @@ public class DeleteDomain extends AdminCommonTest {
 	 */
 	@Test(	description = "Verify delete domain alias operation - Search list view",
 			groups = { "functional" })
-			public void DeleteDomainAlias_02() throws HarnessException {
+			public void DeleteDomain_06() throws HarnessException {
 		
 		
 		String targetDomain = ZimbraSeleniumProperties.getStringProperty("testdomain");
