@@ -28,7 +28,9 @@ public class PageManageDomains extends AbsTab {
 		public static final String CONFIGURE="Configure";
 		public static final String DOMAIN="Domains";
 		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
+		public static final String EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgEdit']";
 		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
+		public static final String RIGHT_CLICK_MENU_EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgEdit']";
 	}
 
 	public PageManageDomains(AbsApplication application) {
@@ -180,7 +182,12 @@ public class PageManageDomains extends AbsTab {
 			
 			page = new DialogForDeleteOperationDomain(this.MyApplication,null);
 			
-		}else {
+		} else if(button == Button.B_TREE_EDIT) {
+			locator = Locators.RIGHT_CLICK_MENU_EDIT_BUTTON;
+			
+			page=new FormEditDomain(this.MyApplication);
+			
+		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
 
@@ -199,8 +206,7 @@ public class PageManageDomains extends AbsTab {
 			SleepUtil.sleepMedium();
 		}
 
-		sMouseOut(locator);
-		return (page);
+	return (page);
 
 
 	}
@@ -243,6 +249,11 @@ public class PageManageDomains extends AbsTab {
 				optionLocator = Locators.DELETE_BUTTON;
 				
 				page = new DialogForDeleteOperationDomain(this.MyApplication,null);
+				
+			} else if(option == Button.O_EDIT) {
+				optionLocator = Locators.EDIT_BUTTON;
+				
+				page=new FormEditDomain(this.MyApplication);
 				
 			} else {
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
@@ -291,6 +302,5 @@ public class PageManageDomains extends AbsTab {
 			return true;
 		return false;
 	}
-
-
+	
 }
