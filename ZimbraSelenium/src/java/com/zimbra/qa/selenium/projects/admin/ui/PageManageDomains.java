@@ -32,6 +32,24 @@ public class PageManageDomains extends AbsTab {
 		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
 		public static final String RIGHT_CLICK_MENU_EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgEdit']";
 	}
+	
+	public static class TypeOfObject {
+		public static final String DOMAIN = "Domain";
+		public static final String DOMAIN_ALIAS = "Domain Alias";
+
+	}
+	
+	public String typeOfObject = "Domain";
+	
+
+	public String getType() {
+		return typeOfObject;
+	}
+
+	public void setType(String type) {
+		this.typeOfObject = type;
+	}
+
 
 	public PageManageDomains(AbsApplication application) {
 		super(application);
@@ -184,9 +202,12 @@ public class PageManageDomains extends AbsTab {
 			
 		} else if(button == Button.B_TREE_EDIT) {
 			locator = Locators.RIGHT_CLICK_MENU_EDIT_BUTTON;
-			
-			page=new FormEditDomain(this.MyApplication);
-			
+
+			if (typeOfObject.equals(TypeOfObject.DOMAIN)) 
+				page=new FormEditDomain(this.MyApplication);
+			else if (typeOfObject.equals(TypeOfObject.DOMAIN_ALIAS))
+				page=new WizardCreateDomainAlias(this);	
+
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
@@ -253,7 +274,10 @@ public class PageManageDomains extends AbsTab {
 			} else if(option == Button.O_EDIT) {
 				optionLocator = Locators.EDIT_BUTTON;
 				
-				page=new FormEditDomain(this.MyApplication);
+				if (typeOfObject.equals(TypeOfObject.DOMAIN)) 
+					page=new FormEditDomain(this.MyApplication);
+				else if (typeOfObject.equals(TypeOfObject.DOMAIN_ALIAS))
+					page=new WizardCreateDomainAlias(this);	
 				
 			} else {
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);

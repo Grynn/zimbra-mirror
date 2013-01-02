@@ -33,6 +33,7 @@ public class PageSearchResults extends AbsTab {
 		public static final String DISTRIBUTION_LIST = "Distribution List";
 		public static final String COS = "Cos";
 		public static final String DOMAIN = "Domain";
+		public static final String DOMAIN_ALIAS="Domain Alias";
 	}
 	
 	public String typeOfObject = "";
@@ -186,7 +187,8 @@ public class PageSearchResults extends AbsTab {
 				page=new FormEditCos(this.MyApplication);
 			else if(typeOfObject.equals(TypeOfObject.DOMAIN))
 				page=new FormEditDomain(this.MyApplication);
-
+			else if (typeOfObject.equals(TypeOfObject.DOMAIN_ALIAS))
+				page=new WizardCreateDomainAlias(this);
 	
 			// Make sure the button exists
 			if ( !this.sIsElementPresent(locator) )
@@ -270,7 +272,8 @@ public class PageSearchResults extends AbsTab {
 					page=new FormEditCos(this.MyApplication);
 				else if(typeOfObject.equals(TypeOfObject.DOMAIN))
 					page=new FormEditDomain(this.MyApplication);
-
+				else if (typeOfObject.equals(TypeOfObject.DOMAIN_ALIAS))
+					page=new WizardCreateDomainAlias(this);
 			}else {
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
 			}
