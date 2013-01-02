@@ -56,7 +56,7 @@ ResolverTracing       no
 Syslog                yes
 SyslogFacility        LOCAL0
 SyslogSuccess         no
-X-Header              yes
+SoftwareHeader        yes
 TemporaryDirectory    /opt/zimbra/data/tmp
 KeepTemporaryFiles    no
 MilterDebug           0
