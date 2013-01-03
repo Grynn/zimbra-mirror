@@ -58,7 +58,7 @@ public class AppointmentItem implements IItem {
 	protected boolean gHasAttachments = false;
 	protected String gStatus = null;
 	protected String TheLocator = null;
-	
+	protected String dAttendeeName = null;
 
 	public AppointmentItem() {	
 	}
@@ -680,6 +680,13 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 		return (dMultipart);
 	}
 	
+	public String getAttendeeName() {
+		return (dAttendeeName);
+	}
+	
+	public void setAttendeeName(String AttendeeName) {
+		dAttendeeName = AttendeeName;
+	}
 	/**
 	 * Create a single-day appointment on the server
 	 * 

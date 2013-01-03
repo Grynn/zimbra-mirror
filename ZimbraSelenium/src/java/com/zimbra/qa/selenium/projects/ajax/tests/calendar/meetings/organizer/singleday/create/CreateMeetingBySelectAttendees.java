@@ -60,13 +60,17 @@ public class CreateMeetingBySelectAttendees extends CalendarWorkWeekTest {
       
         DialogFindAttendees dialogFindAttendees = (DialogFindAttendees) new DialogFindAttendees(app, app.zPageCalendar);
 
+       
+      
         // Type attendee name in search box & perform search
-        dialogFindAttendees.zType(Locators.ContactPickerSerachField, apptAttendee1);
+        AppointmentItem apptSearchForm = new AppointmentItem();
+        apptSearchForm.setAttendeeName(apptAttendee1);
+        // fill the search form	
+        dialogFindAttendees.zFill(apptSearchForm);
+        // choose the contact and choose it
         dialogFindAttendees.zClickButton(Button.B_SEARCH);
         dialogFindAttendees.zWaitForBusyOverlay();
-        
-        // choose the contact and choose it
-        dialogFindAttendees.zClick(Locators.ContactPickerFirstContact);
+        dialogFindAttendees.zClickButton(Button.B_SELECT_FIRST_CONTACT);
         dialogFindAttendees.zClickButton(Button.B_CHOOSE_CONTACT_FROM_PICKER);
         dialogFindAttendees.zWaitForBusyOverlay();
         dialogFindAttendees.zClickButton(Button.B_OK);

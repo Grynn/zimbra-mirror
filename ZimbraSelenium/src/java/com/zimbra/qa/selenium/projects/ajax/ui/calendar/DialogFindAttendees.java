@@ -1,6 +1,10 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
+import com.zimbra.qa.selenium.framework.items.AppointmentItem;
+import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 
@@ -8,7 +12,8 @@ public class DialogFindAttendees extends DialogWarning {
 
 	// The ID for the main Dialog DIV
 	public static final String LocatorDivID = "SEND_UPDATES_DIALOG";
-		
+	
+	
 	public DialogFindAttendees(AbsApplication application, AbsTab page) {
 		super(new DialogWarningID(LocatorDivID), application, page);
 				
@@ -27,9 +32,26 @@ public class DialogFindAttendees extends DialogWarning {
 		public static final String ContactPickerFirstContact = "css=nobr";
 		public static final String SelectContactFromPicker = "css=td[id^='DwtChooserButton']:contains('To:')";
 		public static final String AddContactFromPicker = "css=td[id^='ZmContactPicker_button']:contains('OK')";
+		//public static final String AddContactFromPicker = "css=td[id='ZmContactPicker_button2_title']:contains('OK')";
 	
 	}
+	
+	public static class Field {
 
+		public static final Field ContactPickerSerachField = new Field("ContactPickerSerachField");
+		
+		private String field;
+
+		private Field(String name) {
+			field = name;
+		}
+
+		@Override
+		public String toString() {
+			return (field);
+		}
+
+	}
 	@Override
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton(" + button + ")");
@@ -67,12 +89,16 @@ public class DialogFindAttendees extends DialogWarning {
 			locator = Locators.SelectContactFromPicker;
 			page = null;
 			                              
+		} else if (button == Button.B_SELECT_FIRST_CONTACT) {
+
+			locator = Locators.ContactPickerFirstContact;
+			page = null;
+			                              
 		} else {
 			
 			return ( super.zClickButton(button) );
 
 		}
-		
 		// Make sure the locator was set
 		if (locator == null) {
 			throw new HarnessException("Button " + button + " not implemented");
@@ -103,6 +129,67 @@ public class DialogFindAttendees extends DialogWarning {
 
 		return (page);
 	}
+	public void zFill(IItem item) throws HarnessException {
+		logger.info(myPageName() + ".zFill(ZimbraItem)");
+		logger.info(item.prettyPrint());
 
+		// Make sure the item is a MailItem
+		if (!(item instanceof AppointmentItem)) {
+			throw new HarnessException(
+					"Invalid item type - must be AppointmentItem");
+		}
+
+		AppointmentItem appt = (AppointmentItem) item;
+
+		// Subject
+		if (appt.getAttendeeName() != null) {
+			zFillField(Field.ContactPickerSerachField, appt.getAttendeeName());
+		}
+
+
+
+	}
+	
+	public void zFillField(Field field, String value) throws HarnessException {
+
+		tracer.trace("Set " + field + " to " + value);
+
+		String locator = null;
+		// subject
+		  if (field == Field.ContactPickerSerachField) {
+
+			locator = Locators.ContactPickerSerachField;
+
+			// calendar folder
+		}  else {
+			throw new HarnessException("not implemented for field " + field);
+		}
+	
+		if (locator == null) {
+			throw new HarnessException("locator was null for field " + field);
+		}
+	
+		// Default behavior, enter value into locator field
+		//
+
+		// Make sure the button exists
+		if (!this.sIsElementPresent(locator))
+			throw new HarnessException("Field is not present field=" + field
+					+ " locator=" + locator);
+	
+		
+			if (ZimbraSeleniumProperties.isWebDriver()) {
+				this.sClickAt(locator, "");
+				this.clearField(locator);
+				this.sClickAt(locator, "");
+			}
+			this.sClickAt(locator, "");
+			this.sType(locator, value);
+			SleepUtil.sleepSmall();
+
+		this.zWaitForBusyOverlay();
+	}
+	
 }
+
 

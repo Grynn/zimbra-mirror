@@ -536,6 +536,8 @@ public class Button {
 	public static Button B_SEARCH_EQUIPMENT = new Button("B_SEARCH_EQUIPMENT");
 	public static Button B_SELECT_EQUIPMENT = new Button("B_SELECT_EQUIPMENT");
 	public static Button B_EQUIPMENT = new Button("B_EQUIPMENT");
+	public static Button B_SELECT_FIRST_CONTACT = new Button("B_SELECT_FIRST_CONTACT");
+	
 	// Button properties
 	private final String ID;
 
