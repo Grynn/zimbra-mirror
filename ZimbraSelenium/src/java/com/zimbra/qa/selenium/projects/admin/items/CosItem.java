@@ -34,6 +34,9 @@ public class CosItem implements IItem {
 		return cosName;
 	}
 
+	public void setCosName(String cosName) {
+		this.cosName = cosName;
+	}
 	public String getID() {
 		return (Id);
 	}

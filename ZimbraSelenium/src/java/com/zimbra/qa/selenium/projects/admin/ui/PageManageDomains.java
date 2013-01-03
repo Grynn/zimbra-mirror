@@ -3,6 +3,9 @@
  */
 package com.zimbra.qa.selenium.projects.admin.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
@@ -10,6 +13,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.projects.admin.items.DomainItem;
 
 
 /**
@@ -325,6 +329,54 @@ public class PageManageDomains extends AbsTab {
 		if(this.sIsElementPresent("css=span:contains('" + header + "')"))
 			return true;
 		return false;
+	}
+
+	/**
+	 * Return a list of all domain entries in the current view
+	 * @return
+	 * @throws HarnessException 
+	 * @throws HarnessException 
+	 */
+	public List<DomainItem> zListGetDomainList() throws HarnessException {
+
+		List<DomainItem> items = new ArrayList<DomainItem>();
+
+		// Make sure the button exists
+		if ( !this.sIsElementPresent("css=div[id='zl__DOMAIN_MANAGE'] div[id$='__rows']") )
+			throw new HarnessException("Account Rows is not present");
+
+		// How many items are in the table?
+		String rowsLocator = "//div[@id='zl__DOMAIN_MANAGE']//div[contains(@id, '__rows')]//div[contains(@id,'zli__')]";
+		int count = this.sGetXpathCount(rowsLocator);
+		logger.debug(myPageName() + " zListGetdomain: number of domain: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			final String domainLocator = rowsLocator + "["+ i +"]";
+			String locator;
+
+			DomainItem item = new DomainItem();
+
+			// Type (image)
+			// ImgAdminUser ImgAccount ImgSystemResource (others?)
+			locator = domainLocator + "//td[contains(@id,'domain_data_name')]";
+			if ( this.sIsElementPresent(locator) ) {
+				item.setName(this.sGetText(locator).trim());
+			}
+
+			// Display Name
+			// Status
+			// Lost Login Time
+			// Description
+
+
+			// Add the new item to the list
+			items.add(item);
+			logger.info(item.prettyPrint());
+		}
+
+		// Return the list of items
+		return (items);
 	}
 	
 }

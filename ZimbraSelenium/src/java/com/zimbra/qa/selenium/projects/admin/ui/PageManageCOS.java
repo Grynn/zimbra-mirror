@@ -320,18 +320,10 @@ public class PageManageCOS extends AbsTab {
 
 			CosItem item = new CosItem();
 
-			// Type (image)
-			// ImgAdminUser ImgAccount ImgSystemResource (others?)
-			locator = cosLocator + "//nobr";
-			if ( this.sIsElementPresent(locator) ) {
-				//item.setGAccountType(this.sGetAttribute("xpath=("+ locator + ")@class"));
-			}
-
-
 			// Email Address
-			locator = cosLocator + "//td[contains(@id, 'alias_data_emailaddress_')]";
+			locator = cosLocator + "//td[contains(@id,'cos_data_name')]";
 			if ( this.sIsElementPresent(locator) ) {
-//				item.setGEmailAddress(this.sGetText(locator).trim());
+				item.setCosName(this.sGetText(locator).trim());
 			}
 
 			// Display Name

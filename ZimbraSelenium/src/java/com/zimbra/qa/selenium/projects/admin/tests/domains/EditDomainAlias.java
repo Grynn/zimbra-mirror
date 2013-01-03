@@ -270,7 +270,6 @@ public class EditDomainAlias extends AdminCommonTest {
 				+	"<domain by='name'>" + domainAliasName + "</domain>"
 				+	"</GetDomainRequest>");
 
-
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetDomainResponse/admin:domain/admin:a[@n='zimbraMailCatchAllForwardingAddress']", 1);
 		ZAssert.assertStringContains(response.toString(), ZimbraSeleniumProperties.getStringProperty("server.host"), "http://bugzilla.zimbra.com/show_bug.cgi?id=79446");
 		

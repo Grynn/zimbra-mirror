@@ -29,6 +29,12 @@ public class DomainItem implements IItem {
 		// TODO Auto-generated method stub
 		return domainName;
 	}
+	
+	public void setName(String dName) {
+		// TODO Auto-generated method stub
+		domainName=dName;
+	}
+
 
 	@Override
 	public String prettyPrint() {

@@ -12,6 +12,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
 import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 import com.zimbra.qa.selenium.projects.admin.items.CosItem;
+import com.zimbra.qa.selenium.projects.admin.ui.PageMain;
 
 public class GetCos extends AdminCommonTest {
 	
@@ -21,6 +22,48 @@ public class GetCos extends AdminCommonTest {
 		//All tests starts at "Cos" page
 		super.startingPage=app.zPageManageCOS;
 	}
+	
+	/**
+	 * Testcase : Verify created cos is displayed in UI - Search list view.
+	 * Steps :
+	 * 1. Create a cos using SOAP.
+	 * 2. Search cos created in Step-1
+	 * 3. Verify cos is present in the list.
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Verify created cos is displayed in UI - Manage COS list view.",
+			groups = { "smoke" })
+			public void GetCos_01() throws HarnessException {
+
+		// Create a new cos in the Admin Console using SOAP
+		CosItem cos = new CosItem();
+		String cosName=cos.getName();
+
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<CreateCosRequest xmlns='urn:zimbraAdmin'>"
+				+			"<name>" + cosName + "</name>"
+				+		"</CreateCosRequest>");
+
+		// Refresh the account list
+		app.zPageManageCOS.sClickAt(PageMain.Locators.REFRESH_BUTTON, "");
+
+		// Get the list of displayed accounts
+		List<CosItem> cosList = app.zPageManageCOS.zListGetCos();
+		
+		ZAssert.assertNotNull(cosList, "Verify the cos list is returned");
+
+		CosItem found = null;
+		for (CosItem a : cosList) {
+			logger.info("Looking for cos "+ cosName + " found: "+ a.getName());
+			if ( cosName.equals(a.getName()) ) {
+				found = a;
+				break;
+			}
+		}
+		ZAssert.assertNotNull(found, "Verify the cos is returned correctly");
+
+	}
+
 	/**
 	 * Testcase : Verify created cos is displayed in UI - Search list view.
 	 * Steps :
@@ -31,7 +74,7 @@ public class GetCos extends AdminCommonTest {
 	 */
 	@Test(	description = "Verify created cos is displayed in UI - Search list view.",
 			groups = { "smoke" })
-			public void GetCos_01() throws HarnessException {
+			public void GetCos_02() throws HarnessException {
 
 		// Create a new cos in the Admin Console using SOAP
 		CosItem cos = new CosItem();

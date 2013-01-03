@@ -12,6 +12,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
 import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 import com.zimbra.qa.selenium.projects.admin.items.AliasItem;
+import com.zimbra.qa.selenium.projects.admin.ui.PageMain;
 
 public class GetAlias extends AdminCommonTest {
 
@@ -21,6 +22,54 @@ public class GetAlias extends AdminCommonTest {
 		//All test starts at alias page
 		super.startingPage=app.zPageManageAliases;		
 	}
+	
+	/**
+	 * Testcase : Verify delete alias operation  -- Manage alias View
+	 * Steps :
+	 * 1. Create an alias using SOAP.
+	 * 2. Go to Manage alias View.
+	 * 3. Select an alias.
+	 * 4. Delete an alias using delete button in Gear box menu.
+	 * 5. Verify alias is deleted using SOAP.
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Verify delete alias operation  -- Manage alias View",
+			groups = { "smoke" })
+			public void GetAlias_01() throws HarnessException {
+	
+		AccountItem target = new AccountItem("email" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
+		AccountItem.createUsingSOAP(target);
+	
+	
+		// Create a new account in the Admin Console using SOAP
+		AliasItem alias = new AliasItem();
+		String aliasEmailAddress=alias.getEmailAddress();
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<AddAccountAliasRequest xmlns='urn:zimbraAdmin'>"
+				+			"<id>" + target.getID() + "</id>"
+				+			"<alias>" + aliasEmailAddress + "</alias>"
+				+		"</AddAccountAliasRequest>");
+	
+		// Refresh the account list
+		app.zPageManageAliases.sClickAt(PageMain.Locators.REFRESH_BUTTON, "");
+	
+	
+		// Get the list of displayed accounts
+		List<AccountItem> accounts = app.zPageManageAliases.zListGetAccounts();
+		ZAssert.assertNotNull(accounts, "Verify the alias list is returned");
+	
+		AccountItem found = null;
+		for (AccountItem a : accounts) {
+			logger.info("Looking for alias "+ aliasEmailAddress + " found: "+ a.getGEmailAddress());
+			if ( aliasEmailAddress.equals(a.getGEmailAddress()) ) {
+				found = a;
+				break;
+			}
+		}
+		ZAssert.assertNotNull(found, "Verify alias is deleted successfully");
+	}
+
+	
 	/**
 	 * Testcase : Verify created alias is displayed in UI.
 	 * Steps :
@@ -30,7 +79,7 @@ public class GetAlias extends AdminCommonTest {
 	 */
 	@Test(	description = "Verify created alias is present in the list view",
 			groups = { "smoke" })
-			public void GetAlias_01() throws HarnessException {
+			public void GetAlias_02() throws HarnessException {
 
 		AccountItem target = new AccountItem("email" + ZimbraSeleniumProperties.getUniqueString(),ZimbraSeleniumProperties.getStringProperty("testdomain"));
 		AccountItem.createUsingSOAP(target);
@@ -51,8 +100,6 @@ public class GetAlias extends AdminCommonTest {
 		// Click search
 		app.zPageSearchResults.zToolbarPressButton(Button.B_SEARCH);
 
-
-
 		// Get the list of displayed accounts
 		List<AccountItem> accounts = app.zPageSearchResults.zListGetAccounts();
 		ZAssert.assertNotNull(accounts, "Verify the alias list is returned");
@@ -68,5 +115,5 @@ public class GetAlias extends AdminCommonTest {
 		ZAssert.assertNotNull(found, "See http://bugzilla.zimbra.com/show_bug.cgi?id=4704");
 
 	}
-
+	
 }

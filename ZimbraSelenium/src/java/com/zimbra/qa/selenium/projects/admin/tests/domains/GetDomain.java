@@ -12,6 +12,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
 import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 import com.zimbra.qa.selenium.projects.admin.items.DomainItem;
+import com.zimbra.qa.selenium.projects.admin.ui.PageMain;
 
 public class GetDomain extends AdminCommonTest {
 	public GetDomain() {
@@ -31,6 +32,103 @@ public class GetDomain extends AdminCommonTest {
 	@Test(	description = "Verify created domain is present in the domain list view",
 			groups = { "smoke" })
 	public void GetDomain_01() throws HarnessException {
+
+		// Create a new domain in the Admin Console using SOAP
+		DomainItem domain = new DomainItem();
+
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<CreateDomainRequest xmlns='urn:zimbraAdmin'>"
+				+			"<name>" + domain.getName() + "</name>"
+				+		"</CreateDomainRequest>");
+
+
+		// Refresh the domain list
+		app.zPageManageDomains.sClickAt(PageMain.Locators.REFRESH_BUTTON, "");
+		
+		// Get the list of displayed domains
+		List<DomainItem> accounts = app.zPageManageDomains.zListGetDomainList();
+		ZAssert.assertNotNull(accounts, "Verify the account list is returned");
+		
+		DomainItem found = null;
+		for (DomainItem a : accounts) {
+			logger.info("Looking for domain "+ domain.getName() + " found: "+ a.getName());
+			if ( domain.getName().equals(a.getName()) ) {
+				found = a;
+				break;
+			}
+		}
+		ZAssert.assertNotNull(found, "Verify the domain is found");
+
+	}
+
+	/**
+	 * Testcase : Verify get domain alias operation - Search list view.
+	 * Steps :
+	 * 1. Create domain alias using SOAP.
+	 * 2. Search created domain alias.
+	 * 3. Select the domain alias from gear box menu and select delete.
+	 * 4. Verify domain alias is deleted using SOAP.
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Verify delete domain alias operation - Search list view",
+			groups = { "functional" })
+			public void GetDomain_02() throws HarnessException {
+		
+		
+		String targetDomain = ZimbraSeleniumProperties.getStringProperty("testdomain");
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<GetDomainRequest xmlns='urn:zimbraAdmin'>"
+				+	"<domain by='name'>" + targetDomain + "</domain>"
+				+	"</GetDomainRequest>");
+
+		String targetDomainID=ZimbraAdminAccount.AdminConsoleAdmin().soapSelectValue("//admin:GetDomainResponse/admin:domain", "id").toString();
+		
+		
+		// Create a new domain alias in the Admin Console using SOAP
+		DomainItem alias = new DomainItem();
+		String domainAliasName=alias.getName();
+		
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<CreateDomainRequest xmlns='urn:zimbraAdmin'>"
+				+ "<name>"+domainAliasName+"</name>"
+				+ "<a n='zimbraDomainType'>alias</a>"
+				+ "<a n='zimbraDomainAliasTargetId'>"+targetDomainID+"</a>"
+				+ "<a n='description'>"+"domain alias of zqa-062.eng.vmware.com"+"</a>"
+				+ "<a n='zimbraMailCatchAllAddress'>@"+domainAliasName+"</a>" 
+				+ "<a  n='zimbraMailCatchAllForwardingAddress'>@"+targetDomain+"</a>"
+				+ "</CreateDomainRequest>");
+				
+		// Refresh the domain list
+		app.zPageManageDomains.sClickAt(PageMain.Locators.REFRESH_BUTTON, "");
+		
+		// Get the list of displayed domains
+		List<DomainItem> accounts = app.zPageManageDomains.zListGetDomainList();
+		ZAssert.assertNotNull(accounts, "Verify the account list is returned");
+		
+		DomainItem found = null;
+		for (DomainItem a : accounts) {
+			logger.info("Looking for domain "+ domainAliasName + " found: "+ a.getName());
+			if ( domainAliasName.equals(a.getName()) ) {
+				found = a;
+				break;
+			}
+		}
+		ZAssert.assertNotNull(found, "Verify the domain is found");
+
+	}
+
+
+	
+	/**
+	 * Testcase : Verify created domain is displayed in UI.
+	 * Steps :
+	 * 1. Create an domain using SOAP.
+	 * 2. Verify domain is present in the list.
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Verify created domain is present in the domain list view",
+			groups = { "smoke" })
+	public void GetDomain_03() throws HarnessException {
 
 		// Create a new domain in the Admin Console using SOAP
 		DomainItem domain = new DomainItem();
@@ -77,7 +175,7 @@ public class GetDomain extends AdminCommonTest {
 	 */
 	@Test(	description = "Verify delete domain alias operation - Search list view",
 			groups = { "functional" })
-			public void GetDomainAlias_01() throws HarnessException {
+			public void GetDomain_04() throws HarnessException {
 		
 		
 		String targetDomain = ZimbraSeleniumProperties.getStringProperty("testdomain");
