@@ -9,7 +9,7 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
-PATCH   :=
+PATCH   := patch -g0 -N -p1 < ../patches/ipv6.patch;
 
 ifdef BETA
 	include $(SENDMAIL_ROOT)/../beta_versions.def
