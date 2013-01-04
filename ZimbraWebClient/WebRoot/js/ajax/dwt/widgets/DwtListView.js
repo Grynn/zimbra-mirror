@@ -338,7 +338,7 @@ function(htmlArr, idx, headerCol, i, numCols, id, defaultColumnSort) {
 	if (headerCol._sortable && !headerCol._noSortArrow) {
 		var arrowIcon = this._bSortAsc ? "ColumnUpArrow" : "ColumnDownArrow";
 
-		htmlArr[idx++] = "<td align=right style='padding-right:2px' width=100% id='";
+		htmlArr[idx++] = "<td align=right style='padding-right:2px' width='8px' id='";
 		htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
 		htmlArr[idx++] = "'>";
 		var isDefault = (field == defaultColumnSort);
