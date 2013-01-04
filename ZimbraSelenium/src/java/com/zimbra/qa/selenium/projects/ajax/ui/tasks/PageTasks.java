@@ -5,7 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.tasks;
 
 import java.util.*;
 
-import com.thoughtworks.selenium.*;
+import com.thoughtworks.selenium.SeleniumException;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -492,12 +492,12 @@ public class PageTasks extends AbsTab {
 
 		} else if (button == Button.B_DELETE) {
 
-            Map<String, String> parms = new HashMap<String, String>();
-            parms.put(ZimbraDOM.KEYS.APP, ZimbraDOM.APP.APP_TASKS);
-            parms.put(ZimbraDOM.KEYS.COMPONENT_TYPE, ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON);
-            parms.put(ZimbraDOM.KEYS.COMPONENT_NAME, ZimbraDOM.COMPONENT_NAME.OP_DELETE);			
+			ZimbraDOM dom = new ZimbraDOM();
+			dom.accumulate(ZimbraDOM.KEYS.APP, ZimbraDOM.APP.APP_TASKS);
+			dom.accumulate(ZimbraDOM.KEYS.COMPONENT_TYPE, ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON);
+			dom.accumulate(ZimbraDOM.KEYS.COMPONENT_NAME, ZimbraDOM.COMPONENT_NAME.OP_DELETE);			
 			
-			locator = "css=div#"+ ZimbraDOM.getID(parms) + " td[id$='_title']";
+			locator = "css=div#"+ dom.getID() + " td[id$='_title']";
 			page = null;
 
 			// FALL THROUGH

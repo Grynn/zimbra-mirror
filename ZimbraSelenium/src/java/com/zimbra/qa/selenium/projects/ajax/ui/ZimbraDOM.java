@@ -3,14 +3,46 @@ package com.zimbra.qa.selenium.projects.ajax.ui;
 import java.util.*;
 
 import org.apache.log4j.*;
-import org.json.JSONObject;
+import org.json.*;
 
 import com.thoughtworks.selenium.SeleniumException;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
+
+/**
+ * This utility class helps the harness determine the dynamically generated
+ * DOM ID's.  Based on given paramenters, the DOM ID can be found using
+ * Zimbra app provided ZmId.lookup().
+ * 
+ * There are two ways to access the methods: instance and static
+ * 
+ * Using instance: create a ZimbraDOM, add the params, then getID(s)
+ * Using static: create a JSONObject, add the params, then ZimbraDOM.getID(JSON)
+ * 
+ * @author Matt Rhoades
+ *
+ */
 public class ZimbraDOM {
 	public static Logger logger = LogManager.getLogger(ZimbraDOM.class);
+
+	
+	////
+	// Hints:
+	//
+	// Use ZmId.showIds() in the firebug console to find all
+	// the currently defined IDs that can be returned
+	// using ZmId.lookup().
+	// 1. Open firefox with firebug
+	// 2. Login to Zimbra using ?dev=1
+	// 3. Execute test case
+	// 4. In firebug console, type ZmId.showIds()
+	// 5. In the zimbra debug window, the currently defined ID's will be shown
+	//
+	// Add any undefined values to the static definitions below.
+	//
+	////
+	
 	
 	public static class KEYS {
 		
@@ -26,6 +58,7 @@ public class ZimbraDOM {
 	public static class APP {
 	
 		public static final String APP_TASKS = "ZmId.APP_TASKS"; 
+		
 	}
 	
 	public static class COMPONENT_NAME {
@@ -66,7 +99,81 @@ public class ZimbraDOM {
 		
 	}
 
+	////
+	// BEGIN: instance methods
+	////
+	
+	
+	protected JSONObject MyJSON = null;
+	
+	/**
+	 * Create a new ZimbraDOM to determine a DOM ID
+	 */
+	public ZimbraDOM() {
+		MyJSON = new JSONObject();
+	}
+	
+	/**
+	 * Add a new parameter to narrow down the DOM search.  For example:
+	 *  to only look for DOM elements in the tasks app, use:
+	 *  accumulate(ZimbraDOM.KEYS.APP, ZimbraDOM.APP.APP_TASKS);
+	 *  to only look for buttons, use:
+	 *  accumulate(ZimbraDOM.KEYS.COMPONENT_TYPE, ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON);
+	 *  to only look for delete operations, use:
+	 *  accumulate(ZimbraDOM.KEYS.COMPONENT_NAME, ZimbraDOM.COMPONENT_NAME.OP_DELETE);			
+     *
+	 * @param key (ZimbraDOM.KEYS)
+	 * @param value (ZimbraDOM.COMPONENT_TYPE, ZimbraDOM.COMPONENT_NAME, etc.)
+	 * @return
+	 * @throws HarnessException
+	 */
+	public ZimbraDOM accumulate(String key, Object value) throws HarnessException {
+		try {
+			MyJSON.accumulate(key, value);
+			return (this);
+		} catch (JSONException e) {
+			throw new HarnessException(e);
+		}
+	}
+	
+	/**
+	 * Return the current DOM id that this ZimbraDOM points to
+	 * @return
+	 * @throws HarnessException if more than one DOM element is referenced 
+	 */
+	public String getID() throws HarnessException {
+		return (ZimbraDOM.getID(this.MyJSON));
+	}
+	
+	/**
+	 * Return the current list of DOM ids that this ZimbraDOM points to
+	 * @return
+	 * @throws HarnessException
+	 */
+	public List<String> getIDs() throws HarnessException {
+		return (ZimbraDOM.getIDs(this.MyJSON));
+	}
+	
+	////
+	// END: instance methods
+	////
 
+	
+	
+	
+	
+	////
+	// BEGIN: static methods
+	////
+
+	/**
+	 * Given a JSONObject with key/value pairs for ZmId.lookup(),
+	 * return the current DOM id that the JSONObject points to
+	 * 
+	 * @param json
+	 * @return
+	 * @throws HarnessException if more than one DOM element is referenced 
+	 */
 	public static String getID(JSONObject json) throws HarnessException {
 		logger.debug("getId()");
 		
@@ -81,6 +188,12 @@ public class ZimbraDOM {
 
 	}
 	
+	/**
+	 * Given a JSONObject with key/value pairs for ZmId.lookup(),
+	 * return the current list of DOM ids that the JSONObject points to
+	 * @return
+	 * @throws HarnessException
+	 */
 	public static List<String> getIDs(JSONObject json) throws HarnessException {
 		logger.debug("getIds()");
 		
@@ -91,28 +204,32 @@ public class ZimbraDOM {
 		return (ids);
 	}
 	
-	public static String getID(Map<String, String> parms) throws HarnessException {
-		return (getID(new JSONObject(parms)));
-	}
+	////
+	// END: static methods
+	////
+
+
 	
-	public static List<String> getIDs(Map<String, String> parms) throws HarnessException {
-		return (getIDs(new JSONObject(parms)));
-	}
 	
+	
+	
+	
+	
+	/**
+	 * Use selenium.getEval() to call ZmId.lookup()
+	 * @param parms a JSONObject to use, such as "ZmId.lookup(JSONObject)"
+	 * @return
+	 * @throws HarnessException on Selenium exception trying to call getEval()
+	 */
 	protected static String lookup(JSONObject parms) throws HarnessException {
 
 		String command = null;
 		
 		try {
 			
-			// The ZmId methods don't like the double quotes around the strings
-			// in the JSON object (which is the standard).  So, strip them.
-			//
-			String idParams = parms.toString().replaceAll("\"", "");
-			
 			StringBuilder js = new StringBuilder();
 			js.append("var ZmId = this.browserbot.getUserWindow().top.ZmId;");
-			js.append("var idParams = ").append(idParams).append(";");
+			js.append("var idParams = ").append(parms.toString().replace("\"", "")).append(";");
 			js.append("var domIds = ZmId.lookup(idParams);");
 			js.append("domIds;");			
 			command = js.toString();
@@ -128,4 +245,5 @@ public class ZimbraDOM {
 		}
 
 	}
+	
 }
