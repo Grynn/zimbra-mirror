@@ -110,7 +110,6 @@ public class DialogFindAttendees extends DialogWarning {
 					+ locator + " not present!");
 		}
 		this.sFocus(locator);
-		this.sGetCssCount(locator);
 		this.sClickAt(locator, "");
 		this.zWaitForBusyOverlay();
 		this.zWaitForBusyOverlay();
