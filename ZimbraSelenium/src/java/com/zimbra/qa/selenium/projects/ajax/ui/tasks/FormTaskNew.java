@@ -50,11 +50,13 @@ public class FormTaskNew extends AbsForm {
 		public static final String zBodyField = "css=body";
 		public static final String zNameField = "css=[id^=DWT4] [input$=]";
 		public static final String zEditNameField = "css=[class=DwtInputField] [input$=]";
-		public static final String zSaveTask = "css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='__SAVE_title']";
+		//public static final String zSaveTask = "css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='__SAVE_title']";
+		public static final String zSaveTask = "css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='_title']:contains('Save')";
 		//public static final String zTasksubjField = "//td[contains(@id,'zv__TKE1_subject')]/div/input";
 		public static final String zTasksubjField = "css=td[id$='_subject'] div input";
 		public static final String zTasksubjFieldDesktop = "//td[contains(@id,'_subject')]/div/input";
-		public static final String zCancelTask = "zb__TKE-1__CANCEL_left_icon";
+		//public static final String zCancelTask = "zb__TKE-1__CANCEL_left_icon";
+		public static final String zCancelTask = "css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='_title']:contains('Cancel')";
 		public static final String zTaskOptionDropDown = "css=div[id^='ztb__TKE'] div[id$='__COMPOSE_OPTIONS'] td[id$='__COMPOSE_OPTIONS_dropdown']>div";
 		public static final String zTaskFormatAsHtml="css=div[id$='_FORMAT_HTML']";
 		public static final String zTaskFormatAsText="css=div[id$='_FORMAT_TEXT']";
@@ -308,7 +310,8 @@ public class FormTaskNew extends AbsForm {
 
 		} else if (field == Field.Body) {
 			
-			locator = "css=div[id^='zv__TKE-'] textarea[id$='_content']";
+		//	locator = "css=div[id^='zv__TKE-'] textarea[id$='_content']";
+			locator = "css=div[class='ZmTaskEditView'] div[id$='_notes'] textarea[id$='_content']";
 			this.sFocus(locator);
 			this.zClick(locator);
 			zKeyboard.zTypeCharacters(value);
@@ -338,7 +341,9 @@ public class FormTaskNew extends AbsForm {
 				} else {
 					
 					
-					sSelectFrame("css=div[id^='zv__TKE-'] iframe[id$='_content_ifr']");
+					//sSelectFrame("css=div[id^='zv__TKE-'] iframe[id$='_content_ifr']");
+					sSelectFrame("css=div[class='ZmTaskEditView'] div[id$='_notes'] iframe[id$='_content_ifr']");
+					
 
 					locator = "css=body[id='tinymce']";
 					this.sFocus(locator);

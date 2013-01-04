@@ -414,7 +414,7 @@ public class GetTask extends AjaxCommonTest {
 		 */
 		
 		//Click Save
-		app.zPageTasks.zClickAt("css=td[id='zb__TKE-2__SAVE_title']", "0,0");
+		app.zPageTasks.zClickAt("css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='_title']:contains('Save')", "0,0");
 		
 		SleepUtil.sleepMedium();
 		
