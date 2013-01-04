@@ -492,13 +492,15 @@ public class PageTasks extends AbsTab {
 
 		} else if (button == Button.B_DELETE) {
 
-			locator = "css=div[id^='ztb__TKL'] tr[id^='ztb__TKL'] td[id$='_title']:contains('Delete')";
+            Map<String, String> parms = new HashMap<String, String>();
+            parms.put(ZimbraDOM.KEYS.APP, ZimbraDOM.APP.APP_TASKS);
+            parms.put(ZimbraDOM.KEYS.COMPONENT_TYPE, ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON);
+            parms.put(ZimbraDOM.KEYS.COMPONENT_NAME, ZimbraDOM.COMPONENT_NAME.OP_DELETE);			
+			
+			locator = "css=div#"+ ZimbraDOM.getID(parms) + " td[id$='_title']";
+			page = null;
 
-			// Check if the button is enabled
-			if (this.sIsElementPresent("css=td#" + locator + " div[class*=ZDisabledImage]")){ 
-				throw new HarnessException("Tried clicking on " + button
-						+ " but it was disabled " );}
-
+			// FALL THROUGH
 
 		} else if (button == Button.B_MOVE) {
 
