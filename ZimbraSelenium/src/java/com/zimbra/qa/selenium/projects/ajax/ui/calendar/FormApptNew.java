@@ -6,8 +6,6 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
-import com.zimbra.qa.selenium.projects.ajax.ui.SeparateWindowShowOriginal;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 
 /**
  * The <code>FormMailNew<code> object defines a compose new message view
@@ -291,6 +289,7 @@ public class FormApptNew extends AbsForm {
 				+ "')", "");
 		SleepUtil.sleepSmall();
 		this.zClickAt(Locators.DeleteZimletContextMenu, "");
+		this.zClickAt("css=input[id$='_location_input']", "");
 	}
 	
 	public void zVerifyDisabledControlInProposeNewTimeUI() throws HarnessException {
