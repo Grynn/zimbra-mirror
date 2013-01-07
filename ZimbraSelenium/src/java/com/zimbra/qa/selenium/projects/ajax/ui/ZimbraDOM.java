@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 import org.apache.log4j.*;
 import org.json.*;
@@ -43,6 +44,127 @@ public class ZimbraDOM {
 	//
 	////
 	
+	public static class JS_SHOW_IDS {
+	    public static Map<String, EnumMap<KEYS,String>> ids;
+	    
+	    private JS_SHOW_IDS(){		
+	    }
+	    
+	    public static enum KEYS {
+		app,
+		componentName,
+		componentType,
+		containingView,
+		skinComponent;		
+	    }
+	    
+	    public static final String SCRIPT = "var AjxUtil = this.browserbot.getUserWindow().top.AjxUtil; " +
+		"var AjxStringUtil = this.browserbot.getUserWindow().top.AjxStringUtil;" +
+		"var ZmId = this.browserbot.getUserWindow().top.ZmId;" +
+		"var ids = ZmId.lookup()," +
+		"len = ids.length," +
+		"backMap = ZmId._getBackMap()," +
+		"text = \"\\n\\n{\"," +
+		"i; " +
+		"for (i = 0; i < len; i++) " +
+		"{var id = ids[i].id;" +
+		"var params = ZmId._idHash[id];" +
+		"text += \"\\n\" + id + \":\" + params.description + \",\\n\";" +
+		"var paramNames = AjxUtil.keys(params).sort();" +
+		"for (var j = 0; j < paramNames.length; j++) " +
+		"{var paramName = paramNames[j];" +
+		"if (paramName === 'id' || paramName === 'description') {" +
+		"continue;" +
+		"}" +
+		"var value = params[paramName];" +
+		"if (!value) {" +
+		"continue;" +
+		"}" +
+		"value = backMap[value] ? \"ZmId.\" + backMap[value] : value;" +
+		"text += paramName + \":\" + value + \",\\n\";}text + \"}\\n\\n\"}";
+	
+
+	    public static String jsShowIds() throws HarnessException{
+		try {
+		    return ClientSessionFactory.session().selenium().getEval(SCRIPT);
+		} catch (Exception ex) {
+		      throw new HarnessException(ex);				
+		}
+	    }	    
+	
+	    public static Map<String, EnumMap<KEYS,String>> getMapFromScript() throws HarnessException{
+	  		final Map<String, EnumMap<KEYS,String>> map = new HashMap<String, EnumMap<KEYS,String>>(); 
+	  		String resp;
+	  		try {
+	  		    resp = jsShowIds().replaceAll("[\n\\{\\}]","");
+	  		    final List<String> args = Arrays.asList(resp.split(","));
+	  		    EnumMap<KEYS,String> emap = null;
+	  		    for(String arg : args){
+	  			final String[] arr = arg.trim().split(":");
+	  		        if(arr[0].startsWith("zcs")){
+	  		            	emap = new EnumMap<KEYS,String>(KEYS.class); 
+	  		      		map.put(arr[0],emap);
+	  		      		continue;
+	  		        }
+	  		      if(arr[0].contains("app")){
+	  			emap.put(KEYS.app, arr[1]);
+	  		      }else if(arr[0].contains("componentName")){
+	  			emap.put(KEYS.componentName, arr[1]);
+	  		      }else if(arr[0].contains("componentType")){
+	  			emap.put(KEYS.componentType, arr[1]);
+	  		      }else if(arr[0].contains("containingView")){
+	  			emap.put(KEYS.containingView, arr[1]);
+	  		      }else if(arr[0].contains("skinComponent")){
+	  			emap.put(KEYS.skinComponent, arr[1]);
+	  		      }
+	  		    }
+	  		      
+	  		  } catch (Exception ex) {
+	  		      throw new HarnessException(ex);				
+	  		  }
+	  		ids = map;
+	  		
+	  		return ids;
+	  	    }
+
+	    public static JSONObject getJsonFromScript() throws HarnessException{
+		final JSONObject jso = new JSONObject(); 
+		String resp;
+		try {
+		    resp = jsShowIds().replaceAll("[\n\\{\\}]","");
+		    final List<String> args = Arrays.asList(resp.split(","));
+		    for(String arg : args){
+		        String[] arr = arg.trim().split(":");
+		        jso.accumulate(arr[0], arr[1]);
+		    }		    
+		  } catch (Exception ex) {
+		      throw new HarnessException(ex);				
+		  }
+		return jso;
+	    }
+		        
+	    public static String getId(final String... params) throws HarnessException{
+		if(params == null || !(params.length > 0)){
+		    logger.info("...empty arguments list");
+		}
+		String id = null;
+		if(ids == null || ids.isEmpty()){
+		    ZimbraDOM.JS_SHOW_IDS.getMapFromScript();
+		}
+		
+		final Set<Entry<String, EnumMap<KEYS, String>>> set = ids.entrySet();
+		for(Entry <String, EnumMap<KEYS, String>> en : set){
+		    EnumMap<KEYS, String> emap = en.getValue();
+		    if(emap.values().containsAll(Arrays.asList(params))){
+			id = en.getKey();
+			logger.info("id = " + id);
+			break;
+		    }		    
+		}
+		return id;
+	    }
+	    
+	}
 	
 	public static class KEYS {
 		
