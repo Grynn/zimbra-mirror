@@ -1499,11 +1499,11 @@ public class PageCalendar extends AbsTab {
 		} else if (button == Button.B_SAVE) {
 			locator = Locators.SaveButton;
 			page = null;
+			SleepUtil.sleepSmall();
 			
 		} else if (button == Button.B_SEND) {
 			locator = Locators.SendButton;
 			page = null;
-			
 			SleepUtil.sleepMedium();
 			
 		} else if (button == Button.B_DELETE) {
