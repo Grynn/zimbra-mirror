@@ -44,31 +44,27 @@ public class ZimbraDOM {
 	//
 	////
 	
-	public static class JS_SHOW_IDS {
-	    public static Map<String, EnumMap<KEY,String>> ids;
+	public static Map<String, EnumMap<KEY,String>> ids;
 	    
-	    private JS_SHOW_IDS(){		
-	    }
-	    
-	    public static enum KEY {
-		app("app"),
-		componentName("componentName"),
-		componentType("componentType"),
-		containingView("containingView"),		
-		skinComponent("skinComponent");	
+	public static enum KEY {
+	    app("app"),
+	    componentName("componentName"),
+	    componentType("componentType"),
+	    containingView("containingView"),		
+	    skinComponent("skinComponent");	
 		
-		private String key;
+	    private String key;
 
-		private KEY(final String key) {
-			this.key = key;
-		}
-
-		public String getKEY() {
-			return key;
-		}
+	    private KEY(final String key) {
+		this.key = key;
 	    }
+
+	    public String getKEY() {
+		return key;
+	    }
+	}
 	    
-	    public static final String SCRIPT = "var AjxUtil = this.browserbot.getUserWindow().top.AjxUtil; " +
+	public static final String SCRIPT = "var AjxUtil = this.browserbot.getUserWindow().top.AjxUtil; " +
 		"var AjxStringUtil = this.browserbot.getUserWindow().top.AjxStringUtil;" +
 		"var ZmId = this.browserbot.getUserWindow().top.ZmId;" +
 		"var ids = ZmId.lookup()," +
@@ -93,95 +89,102 @@ public class ZimbraDOM {
 		"value = backMap[value] ? \"ZmId.\" + backMap[value] : value;" +
 		"text += paramName + \":\" + value + \",\\n\";}text + \"}\\n\\n\"}";
 	
-
-	    public static String jsShowIds() throws HarnessException{
-		try {
-		    return ClientSessionFactory.session().selenium().getEval(SCRIPT);
-		} catch (Exception ex) {
-		      throw new HarnessException(ex);				
-		}
-	    }	    
 	
-	    public static Map<String, EnumMap<KEY,String>> getMapFromScript() throws HarnessException{
-	  		final Map<String, EnumMap<KEY,String>> map = new HashMap<String, EnumMap<KEY,String>>(); 
-	  		String resp;
-	  		try {
-	  		    resp = jsShowIds().replaceAll("[\n\\{\\}]","");
-	  		    final List<String> args = Arrays.asList(resp.split(","));
-	  		    EnumMap<KEY,String> emap = null;
-	  		    for(String arg : args){
-	  			final String[] arr = arg.trim().split(":");
-	  		        if(arr[0].startsWith("zcs")){
-	  		            	emap = new EnumMap<KEY,String>(KEY.class); 
-	  		      		map.put(arr[0],emap);
-	  		      		continue;
-	  		        }
-	  		      if(arr[0].contains(KEY.app.getKEY())){
-	  			emap.put(KEY.app, arr[1]);
-	  		      }else if(arr[0].contains(KEY.componentName.getKEY())){
-	  			emap.put(KEY.componentName, arr[1]);
-	  		      }else if(arr[0].contains(KEY.componentType.getKEY())){
-	  			emap.put(KEY.componentType, arr[1]);
-	  		      }else if(arr[0].contains(KEY.containingView.getKEY())){
-	  			emap.put(KEY.containingView, arr[1]);
-	  		      }else if(arr[0].contains(KEY.skinComponent.getKEY())){
-	  			emap.put(KEY.skinComponent, arr[1]);
-	  		      }
-	  		    }
-	  		      
-	  		  } catch (Exception ex) {
-	  		      throw new HarnessException(ex);				
-	  		  }
-	  		ids = map;
-	  		
-	  		return ids;
-	  	    }
-
-	    public static JSONObject getJsonFromScript() throws HarnessException{
-		final JSONObject jso = new JSONObject(); 
-		String resp;
-		try {
-		    resp = jsShowIds().replaceAll("[\n\\{\\}]","");
-		    final List<String> args = Arrays.asList(resp.split(","));
-		    for(String arg : args){
-			final String[] arr = arg.trim().split(":");
-		        jso.accumulate(arr[0], arr[1]);
-		    }		    
-		  } catch (Exception ex) {
-		      throw new HarnessException(ex);				
-		  }
-		return jso;
+	public static String jsShowIds() throws HarnessException{
+	    try {
+		String response = 
+			ClientSessionFactory.session().selenium().getEval(SCRIPT);
+		    
+		logger.info("...showIds response: \n" + response);
+		    
+		return response;
+	    } catch (Exception ex) {
+		throw new HarnessException(ex);				
 	    }
+	}	    
+	
+	public static Map<String, EnumMap<KEY,String>> getMapFromScript() throws HarnessException{
+	    final Map<String, EnumMap<KEY,String>> map = new HashMap<String, EnumMap<KEY,String>>(); 
+	    String resp;
+	    try {
+		resp = jsShowIds().replaceAll("[\n\\{\\}]","");
+		final List<String> args = Arrays.asList(resp.split(","));
+		EnumMap<KEY,String> emap = null;
+		for(String arg : args){
+		    final String[] arr = arg.trim().split(":");
+		    if(arr[0].startsWith("zcs")){
+			emap = new EnumMap<KEY,String>(KEY.class); 
+			map.put(arr[0],emap);
+			continue;
+		    }
+		    if(arr[0].contains(KEY.app.getKEY())){
+			emap.put(KEY.app, arr[1]);
+		    }else if(arr[0].contains(KEY.componentName.getKEY())){
+			emap.put(KEY.componentName, arr[1]);
+		    }else if(arr[0].contains(KEY.componentType.getKEY())){
+			emap.put(KEY.componentType, arr[1]);
+		    }else if(arr[0].contains(KEY.containingView.getKEY())){
+			emap.put(KEY.containingView, arr[1]);
+		    }else if(arr[0].contains(KEY.skinComponent.getKEY())){
+			emap.put(KEY.skinComponent, arr[1]);
+		    }
+		}
+	    } catch (Exception ex) {
+		throw new HarnessException(ex);				
+	    }
+	    ids = map;
+	  		
+	    return ids;
+	}
+
+	public static JSONObject getJsonFromScript() throws HarnessException{
+	    final JSONObject jso = new JSONObject(); 
+	    String resp;
+	    try {
+		resp = jsShowIds().replaceAll("[\n\\{\\}]","");
+		final List<String> args = Arrays.asList(resp.split(","));
+		for(String arg : args){
+		    final String[] arr = arg.trim().split(":");
+		    jso.accumulate(arr[0], arr[1]);
+		}		    
+	    } catch (Exception ex) {
+		throw new HarnessException(ex);				
+	    }
+	    return jso;
+	}
 		        
-	    public static String getId(final String... params) throws HarnessException{
-		if(params == null || !(params.length > 0)){
-		    logger.info("...empty arguments list");
-		}
-		String id = null;
-		if(ids == null || ids.isEmpty()){
-		    ZimbraDOM.JS_SHOW_IDS.getMapFromScript();
-		}
+	public static String getIdFromMap(final String... params) throws HarnessException{
+	    if(params == null || !(params.length > 0)){
+		logger.info("...empty arguments list");
+	    }
+	    String id = null;
+	    if(ids == null || ids.isEmpty()){
+		getMapFromScript();
+	    }
 		
-		final Set<Entry<String, EnumMap<KEY, String>>> set = ids.entrySet();
-		for(Entry <String, EnumMap<KEY, String>> en : set){
-		    final EnumMap<KEY, String> emap = en.getValue();
-		    Collection<String> vals = emap.values();
-		    List<String> pars = Arrays.asList(params);
-		    if(vals.containsAll(pars)){
+	    final Set<Entry<String, EnumMap<KEY, String>>> set = ids.entrySet();
+	    for(Entry <String, EnumMap<KEY, String>> en : set){
+		final EnumMap<KEY, String> emap = en.getValue();
+		Collection<String> vals = emap.values();
+		List<String> pars = Arrays.asList(params);
+		if(vals.containsAll(pars)){
+		    if(id == null){
 			id = en.getKey();
 			logger.info("\n id = " + id + 
-				"\n params provided: " + pars +
-				"\n available values: " + vals);
+			    "\n params provided: " + pars +
+			    "\n available values: " + vals);
+		    }else{
+			logger.info("\n ...id: more than one matches");
 			break;
-		    }		    
-		}
-		if(id==null){
-		    logger.info("...id is null ");
-		}
-		return id;
+		    }
+		}		    
 	    }
-	    
+	    if(id==null){
+		logger.info("...id is null ");
+	    }
+	    return id;
 	}
+	    
 	
 	public static class KEYS {
 		
