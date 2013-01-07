@@ -45,17 +45,27 @@ public class ZimbraDOM {
 	////
 	
 	public static class JS_SHOW_IDS {
-	    public static Map<String, EnumMap<KEYS,String>> ids;
+	    public static Map<String, EnumMap<KEY,String>> ids;
 	    
 	    private JS_SHOW_IDS(){		
 	    }
 	    
-	    public static enum KEYS {
-		app,
-		componentName,
-		componentType,
-		containingView,
-		skinComponent;		
+	    public static enum KEY {
+		app("app"),
+		componentName("componentName"),
+		componentType("componentType"),
+		containingView("containingView"),		
+		skinComponent("skinComponent");	
+		
+		private String key;
+
+		private KEY(final String key) {
+			this.key = key;
+		}
+
+		public String getKEY() {
+			return key;
+		}
 	    }
 	    
 	    public static final String SCRIPT = "var AjxUtil = this.browserbot.getUserWindow().top.AjxUtil; " +
@@ -92,30 +102,30 @@ public class ZimbraDOM {
 		}
 	    }	    
 	
-	    public static Map<String, EnumMap<KEYS,String>> getMapFromScript() throws HarnessException{
-	  		final Map<String, EnumMap<KEYS,String>> map = new HashMap<String, EnumMap<KEYS,String>>(); 
+	    public static Map<String, EnumMap<KEY,String>> getMapFromScript() throws HarnessException{
+	  		final Map<String, EnumMap<KEY,String>> map = new HashMap<String, EnumMap<KEY,String>>(); 
 	  		String resp;
 	  		try {
 	  		    resp = jsShowIds().replaceAll("[\n\\{\\}]","");
 	  		    final List<String> args = Arrays.asList(resp.split(","));
-	  		    EnumMap<KEYS,String> emap = null;
+	  		    EnumMap<KEY,String> emap = null;
 	  		    for(String arg : args){
 	  			final String[] arr = arg.trim().split(":");
 	  		        if(arr[0].startsWith("zcs")){
-	  		            	emap = new EnumMap<KEYS,String>(KEYS.class); 
+	  		            	emap = new EnumMap<KEY,String>(KEY.class); 
 	  		      		map.put(arr[0],emap);
 	  		      		continue;
 	  		        }
-	  		      if(arr[0].contains("app")){
-	  			emap.put(KEYS.app, arr[1]);
-	  		      }else if(arr[0].contains("componentName")){
-	  			emap.put(KEYS.componentName, arr[1]);
-	  		      }else if(arr[0].contains("componentType")){
-	  			emap.put(KEYS.componentType, arr[1]);
-	  		      }else if(arr[0].contains("containingView")){
-	  			emap.put(KEYS.containingView, arr[1]);
-	  		      }else if(arr[0].contains("skinComponent")){
-	  			emap.put(KEYS.skinComponent, arr[1]);
+	  		      if(arr[0].contains(KEY.app.getKEY())){
+	  			emap.put(KEY.app, arr[1]);
+	  		      }else if(arr[0].contains(KEY.componentName.getKEY())){
+	  			emap.put(KEY.componentName, arr[1]);
+	  		      }else if(arr[0].contains(KEY.componentType.getKEY())){
+	  			emap.put(KEY.componentType, arr[1]);
+	  		      }else if(arr[0].contains(KEY.containingView.getKEY())){
+	  			emap.put(KEY.containingView, arr[1]);
+	  		      }else if(arr[0].contains(KEY.skinComponent.getKEY())){
+	  			emap.put(KEY.skinComponent, arr[1]);
 	  		      }
 	  		    }
 	  		      
@@ -134,7 +144,7 @@ public class ZimbraDOM {
 		    resp = jsShowIds().replaceAll("[\n\\{\\}]","");
 		    final List<String> args = Arrays.asList(resp.split(","));
 		    for(String arg : args){
-		        String[] arr = arg.trim().split(":");
+			final String[] arr = arg.trim().split(":");
 		        jso.accumulate(arr[0], arr[1]);
 		    }		    
 		  } catch (Exception ex) {
@@ -152,14 +162,21 @@ public class ZimbraDOM {
 		    ZimbraDOM.JS_SHOW_IDS.getMapFromScript();
 		}
 		
-		final Set<Entry<String, EnumMap<KEYS, String>>> set = ids.entrySet();
-		for(Entry <String, EnumMap<KEYS, String>> en : set){
-		    EnumMap<KEYS, String> emap = en.getValue();
-		    if(emap.values().containsAll(Arrays.asList(params))){
+		final Set<Entry<String, EnumMap<KEY, String>>> set = ids.entrySet();
+		for(Entry <String, EnumMap<KEY, String>> en : set){
+		    final EnumMap<KEY, String> emap = en.getValue();
+		    Collection<String> vals = emap.values();
+		    List<String> pars = Arrays.asList(params);
+		    if(vals.containsAll(pars)){
 			id = en.getKey();
-			logger.info("id = " + id);
+			logger.info("\n id = " + id + 
+				"\n params provided: " + pars +
+				"\n available values: " + vals);
 			break;
 		    }		    
+		}
+		if(id==null){
+		    logger.info("...id is null ");
 		}
 		return id;
 	    }
