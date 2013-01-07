@@ -2,25 +2,15 @@ package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
 import java.awt.event.KeyEvent;
 import java.util.*;
-import org.apache.commons.lang.StringUtils;
-import org.seleniumhq.jetty7.util.log.Log;
-
-import com.zimbra.common.util.SystemUtil;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
-import com.zimbra.qa.selenium.framework.items.ContactGroupItem;
-import com.zimbra.qa.selenium.framework.items.IItem;
-import com.zimbra.qa.selenium.framework.items.TagItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
-import com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday.actions.CreateACopy;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.unittest.TestUtil;
 
-@SuppressWarnings("unused")
 public class PageCalendar extends AbsTab {
 
 	public static class Locators {
@@ -60,7 +50,7 @@ public class PageCalendar extends AbsTab {
 		public static final String MoveMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_MOVE']";
 		public static final String TagAppointmentMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_TAG_MENU']";
 		public static final String TagAppointmentNewTagSubMenu = "id=calendar_newtag_title";
-		public static final String TagAppointmentRemoveTagSubMenu = "id=calendar_removetag_title";
+		public static final String TagAppointmentRemoveTagSubMenu = "css=div[id^='TAG_MENU'] div[id^='calendar_removetag'] td[id^='calendar_removetag'][class='ZWidgetTitle']";
 		public static final String ShowOriginalMenu = "css=div[id='zm__Calendar'] tr[id^='POPUP_SHOW_ORIG']";
 		public static final String ShowOriginalMenuOrg = "css=div[id='zm__Calendar'] tr[id='POPUP_SHOW_ORIG']";
 		public static final String QuickCommandsMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_QUICK_COMMANDS']";
@@ -800,7 +790,6 @@ public class PageCalendar extends AbsTab {
 		// Default behavior variables
 		String locator = null;
 		AbsPage page = null;
-		boolean waitForPostfix = false;
 		String optionLocator = null;
 		String subOptionLocator = null;
 
@@ -837,6 +826,8 @@ public class PageCalendar extends AbsTab {
 			this.zRightClickAt(locator, "");
 			this.zWaitForBusyOverlay();
 			SleepUtil.sleepSmall();
+			
+			boolean waitForPostfix;
 			
 			if ( (option == Button.O_DELETE) || (option == Button.O_CANCEL_MENU) ) {
 				
@@ -1640,7 +1631,7 @@ public class PageCalendar extends AbsTab {
 
 		// Default behavior, process the locator by clicking on it
 		//
-		this.zClickAt(locator, "");
+		this.sClickAt(locator, "");
 		
 		// Wait for the message to be delivered (if any)
 		Stafpostqueue sp = new Stafpostqueue();
@@ -1980,7 +1971,6 @@ public class PageCalendar extends AbsTab {
 
 		String divLocator = "css=div[id='zl__CLL__rows']";
 		String listLocator = divLocator +">div[id^='zli__CLL__']";
-		String rowLocator = null;
 
 		// Make sure the div exists
 		if ( !this.sIsElementPresent(divLocator) ) {
@@ -2260,8 +2250,6 @@ public class PageCalendar extends AbsTab {
 
 		String divLocator = "css=div#zv__CLM"; 
 		String itemsLocator = null;
-		String itemLocator = null;
-		String locator = null;
 
 		// Make sure the div exists
 		if ( !this.sIsElementPresent(divLocator) ) {

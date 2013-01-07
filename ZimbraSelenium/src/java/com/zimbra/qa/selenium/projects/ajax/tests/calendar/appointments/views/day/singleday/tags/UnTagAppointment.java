@@ -103,10 +103,12 @@ public class UnTagAppointment extends AjaxCommonTest {
 		tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tag1 +"']", "id");
 		app.zGetActiveAccount().soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>" + "<action id='" + apptId +"' op='tag' tn='"+ tag1 +"'/>" + "</ItemActionRequest>");
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        
+		SleepUtil.sleepMedium();
+		
 		// Remove tag from appointment using context menu
         app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, apptSubject);
         app.zPageCalendar.zMouseOver(Button.B_TAGAPPOINTMENTMENU);
+        SleepUtil.sleepSmall(); //reqires to select sub menu otherwise test fails here
         app.zPageCalendar.zToolbarPressButton(Button.O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU);
         SleepUtil.sleepSmall(); // give time to soap verification because it runs fast and test fails
         
