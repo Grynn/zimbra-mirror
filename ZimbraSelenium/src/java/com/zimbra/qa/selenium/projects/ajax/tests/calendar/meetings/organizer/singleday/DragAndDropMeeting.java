@@ -2,6 +2,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.s
 
 import java.util.HashMap;
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 
@@ -21,9 +23,9 @@ public class DragAndDropMeeting extends CalendarWorkWeekTest {
 		}};
 		
 	}
-	
+	@Bugs(ids = "77866")
 	@Test(description = "Drag and drop meeting to different date in month view",
-			groups = { "smoke" })
+			groups = { "functional" })
 			
 	public void DragAndDropMeeting_01() throws HarnessException {
 		
