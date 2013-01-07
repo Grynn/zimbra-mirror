@@ -58,7 +58,6 @@ public class Bug35365 extends CalendarWorkWeekTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
         // Cancel the appointment by modifying body value
