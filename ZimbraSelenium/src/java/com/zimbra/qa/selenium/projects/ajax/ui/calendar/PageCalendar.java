@@ -826,9 +826,8 @@ public class PageCalendar extends AbsTab {
 			this.zRightClickAt(locator, "");
 			this.zWaitForBusyOverlay();
 			SleepUtil.sleepSmall();
-			
+						
 			boolean waitForPostfix;
-			
 			if ( (option == Button.O_DELETE) || (option == Button.O_CANCEL_MENU) ) {
 				
 				optionLocator = Locators.CancelMenu;
@@ -882,8 +881,6 @@ public class PageCalendar extends AbsTab {
 				} else {	
 					page = new FormApptNew(this.MyApplication);
 				}
-				
-				waitForPostfix = false;
 				
 			} else if ( option == Button.O_ACCEPT_MENU ) {
 				
@@ -1131,6 +1128,7 @@ public class PageCalendar extends AbsTab {
 		} else if (action == Action.A_DOUBLECLICK) {
 			
 			this.sDoubleClick(locator);
+			SleepUtil.sleepSmall();
 			
 			if (option == Button.O_NEEDS_ACTION_MENU || option == Button.O_ACCEPTED_MENU || option == Button.O_TENTATIVE_MENU || option == Button.O_DECLINED_MENU) {
 				zWaitForElementAppear(Locators.NeedsActionButton_ViewAppt);
