@@ -557,9 +557,16 @@ public class PageTasks extends AbsTab {
 		} else if (button == Button.B_TASK_FILTERBY) {
 			throw new HarnessException("implement me");
 		} else if (button == Button.B_TASK_MARKCOMPLETED) {
-			locator= Locators.zMarkAsCompleted;		
-			page = null;
-			
+		    	String id = ZimbraDOM.getIdFromMap(
+		    		ZimbraDOM.APP.APP_TASKS, 
+		    		ZimbraDOM.COMPONENT_NAME.OP_MARK_AS_COMPLETED,
+		    		ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON,
+				ZimbraDOM.CONTAINING_VIEW.VIEW_TASKLIST,
+				ZimbraDOM.SKIN_COMPONENT.SKIN_APP_TOP_TOOLBAR);
+		    	
+			//locator = Locators.zMarkAsCompleted;
+			locator = "css=div#"+ id + " td[id$='_title']";
+			page = null;			
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
 		}
