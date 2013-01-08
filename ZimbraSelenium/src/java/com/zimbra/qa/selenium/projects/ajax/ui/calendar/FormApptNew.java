@@ -76,10 +76,7 @@ public class FormApptNew extends AbsForm {
 
 		public static final String SendUpdatesToAddedRemovedRadioButton = "css=div[class='DwtDialog'] div[id$='_content'] p table tr:nth-child(1) input";
 		public static final String SendUpdatesToAllRadioButton = "css=div[class='DwtDialog'] div[id$='_content'] p table tr:nth-child(2) input";
-
-		public static final String SaveNSendUpdates = "css=input[id$='_send']";
-		public static final String DontSaveNKeepOpen = "css=input[id$='_cancel']";
-		public static final String DiscardNClose = "css=input[id$='_discard']";
+		
 		public static final String Ok_changes = "css=td[id='CHNG_DLG_ORG_1_button2_title']";
 		public static final String Cancel_changes = "css=td[id='CHNG_DLG_ORG_1_button1_title']";
 		public static final String AddLocation = "css=td[id$='_title']:contains('Location:')";
