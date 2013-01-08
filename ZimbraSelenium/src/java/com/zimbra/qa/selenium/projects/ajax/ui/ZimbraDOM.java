@@ -92,10 +92,10 @@ public class ZimbraDOM {
 	
 	public static String jsShowIds() throws HarnessException{
 	    try {
-		String response = 
+		final String response = 
 			ClientSessionFactory.session().selenium().getEval(SCRIPT);
 		    
-		logger.info("...showIds response: \n" + response);
+		logger.info("\n...showIds response: " + response);
 		    
 		return response;
 	    } catch (Exception ex) {
@@ -154,34 +154,39 @@ public class ZimbraDOM {
 	}
 		        
 	public static String getIdFromMap(final String... params) throws HarnessException{
-	    if(params == null || !(params.length > 0)){
-		logger.info("...empty arguments list");
-	    }
 	    String id = null;
-	    if(ids == null || ids.isEmpty()){
-		getMapFromScript();
-	    }
-		
-	    final Set<Entry<String, EnumMap<KEY, String>>> set = ids.entrySet();
-	    for(Entry <String, EnumMap<KEY, String>> en : set){
-		final EnumMap<KEY, String> emap = en.getValue();
-		Collection<String> vals = emap.values();
-		List<String> pars = Arrays.asList(params);
-		if(vals.containsAll(pars)){
-		    if(id == null){
-			id = en.getKey();
-			logger.info("\n id = " + id + 
-			    "\n params provided: " + pars +
-			    "\n available values: " + vals);
-		    }else{
-			logger.info("\n ...id: more than one matches");
-			break;
-		    }
-		}		    
-	    }
-	    if(id==null){
-		logger.info("...id is null ");
-	    }
+	    if(params == null || !(params.length > 0)){
+		logger.info("...empty arguments list");		
+	    } else{		
+		if(ids == null || ids.isEmpty()){
+		    getMapFromScript();
+		}
+		final List<String> args = Arrays.asList(params);
+		final Set<Entry<String, EnumMap<KEY, String>>> set = ids.entrySet();
+		for(Entry <String, EnumMap<KEY, String>> en : set){
+		    final EnumMap<KEY, String> emap = en.getValue();
+		    final Collection<String> vals = emap.values();
+		    if(vals.containsAll(args)){
+			if(id == null){
+			    id = en.getKey();
+			    logger.info("\n id = " + id + 
+				    "\n params provided: " + args +
+				    "\n available values: " + vals);
+			    if(args.containsAll(vals)){
+				break;
+			    }
+			}else{
+			    logger.info("\n for provided params: " + args +
+				    "\n ...found more than one matches of id");
+			    break;
+			}
+		    }		    
+		}
+		if(id==null){
+		    logger.info("\n for provided params: " + args +
+			    "...id is null ");
+		}
+	    }	
 	    return id;
 	}
 	    

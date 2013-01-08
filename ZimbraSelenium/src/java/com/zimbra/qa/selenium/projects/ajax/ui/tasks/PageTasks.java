@@ -39,6 +39,7 @@ public class PageTasks extends AbsTab {
 		public static final String zNewTagMenuItem= "css=div[id='zb__NEW_MENU_NEW_TAG'] tr[id^='POPUP_'] td[id$='_title']";
 		//public static final String zMarkAsCompleted = "css=div#zb__TKL-main__MARK_AS_COMPLETED";
 		public static final String zMarkAsCompleted = "css=div[id^='ztb__TKL'] tr[id^='ztb__TKL'] td[id$='_title']:contains('Mark as Completed')";
+		public static String zMarkAsCompletedId = null;
 		public static final String zNewTaskMenuItem ="css=div[id='zb__NEW_MENU_NEW_TASK'] td[id$='_title']";
 		public static final String zNewTaskFolderMenuItem ="css=div[id='zb__NEW_MENU_NEW_TASK_FOLDER'] tr[id^='POPUP_'] td[id$='_title']";
 		public static final String zDeleteTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_DELETE']";
@@ -557,15 +558,16 @@ public class PageTasks extends AbsTab {
 		} else if (button == Button.B_TASK_FILTERBY) {
 			throw new HarnessException("implement me");
 		} else if (button == Button.B_TASK_MARKCOMPLETED) {
-		    	String id = ZimbraDOM.getIdFromMap(
+		    if(Locators.zMarkAsCompletedId == null){
+			Locators.zMarkAsCompletedId = ZimbraDOM.getIdFromMap(
 		    		ZimbraDOM.APP.APP_TASKS, 
 		    		ZimbraDOM.COMPONENT_NAME.OP_MARK_AS_COMPLETED,
 		    		ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON,
 				ZimbraDOM.CONTAINING_VIEW.VIEW_TASKLIST,
 				ZimbraDOM.SKIN_COMPONENT.SKIN_APP_TOP_TOOLBAR);
-		    	
-			//locator = Locators.zMarkAsCompleted;
-			locator = "css=div#"+ id + " td[id$='_title']";
+		    }
+		    //locator = Locators.zMarkAsCompleted;
+		    locator = "css=div#"+ Locators.zMarkAsCompletedId + " td[id$='_title']";
 			page = null;			
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
