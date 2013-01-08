@@ -1390,7 +1390,12 @@ public class ZimbraAPI
         writer.WriteAttributeString("method", "REQUEST");
         writer.WriteAttributeString("fb", appt["fb"]);
         writer.WriteAttributeString("transp", appt["transp"]);
-        writer.WriteAttributeString("allDay", appt["allDay"]);
+
+        if (appt["allDay"].Length > 0)
+            writer.WriteAttributeString("allDay", appt["allDay"]);
+        else
+            writer.WriteAttributeString("allDay", "0");
+        
         writer.WriteAttributeString("name", appt["name"]);
         writer.WriteAttributeString("loc", appt["loc"]);
         if (appt["class"].Length > 0)
