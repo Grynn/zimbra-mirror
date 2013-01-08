@@ -652,16 +652,27 @@ public class ZComposeUploaderBean {
         dfif.setRepository(new File(getTempDirectory()));
         upload = new ServletFileUpload(dfif);
         try {
+            long maxSize;
             if(limitByFileUploadMaxSize) {
-                upload.setSizeMax(Provisioning.getInstance().getLocalServer().getLongAttr(Provisioning.A_zimbraFileUploadMaxSize, DEFAULT_MAX_SIZE));
+                maxSize = Provisioning.getInstance().getLocalServer().getLongAttr(
+                                Provisioning.A_zimbraFileUploadMaxSize, DEFAULT_MAX_SIZE);
             } else {
-                upload.setSizeMax(Provisioning.getInstance().getConfig().getLongAttr(Provisioning.A_zimbraMtaMaxMessageSize, DEFAULT_MAX_SIZE));
+                maxSize = Provisioning.getInstance().getLocalServer().getLongAttr(
+                                Provisioning.A_zimbraMtaMaxMessageSize, DEFAULT_MAX_SIZE);
+                if (maxSize == 0) {
+                    /* zimbraMtaMaxMessageSize=0 means "no limit".
+                     * ServletFileUpload "sizeMax" uses "-1" to mean "no limit"
+                     */
+                    maxSize = -1;
+                }
             }
+            upload.setSizeMax(maxSize);
         } catch (ServiceException e) {
             if (ZimbraLog.webclient.isDebugEnabled()) {
-				ZimbraLog.webclient.debug("unable to read " +
-                        ((limitByFileUploadMaxSize) ? Provisioning.A_zimbraFileUploadMaxSize : Provisioning.A_zimbraMtaMaxMessageSize) + "attribute" + e.getMessage());
-			}
+                ZimbraLog.webclient.debug("unable to read " + ((limitByFileUploadMaxSize) ?
+                        Provisioning.A_zimbraFileUploadMaxSize : Provisioning.A_zimbraMtaMaxMessageSize) +
+                        "attribute" + e.getMessage());
+            }
         }
         return upload;
     }
