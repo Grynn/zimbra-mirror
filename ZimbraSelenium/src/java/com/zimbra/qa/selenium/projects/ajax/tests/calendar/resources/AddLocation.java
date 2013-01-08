@@ -32,12 +32,17 @@ public class AddLocation extends CalendarWorkWeekTest {
 	public void AddLocation_01() throws HarnessException {
 		
 		ZimbraResource location = new ZimbraResource(ZimbraResource.Type.LOCATION);
-	
+		
 		String tz = ZTimeZone.TimeZoneEST.getID();
 		String apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		String apptAttendee = ZimbraAccount.AccountA().EmailAddress;
 		String apptLocation1 = location.EmailAddress;
-        SleepUtil.sleepSmall();
+		
+		// Sync the GAL to put the resource account into the GAL list
+		ZimbraDomain domain = new ZimbraDomain(location.EmailAddress.split("@")[1]);
+		domain.exists();
+		domain.syncGalAccount();
+
     	AppointmentItem appt = new AppointmentItem();
 		// Absolute dates in UTC zone
 		Calendar now = this.calendarWeekDayUTC;
