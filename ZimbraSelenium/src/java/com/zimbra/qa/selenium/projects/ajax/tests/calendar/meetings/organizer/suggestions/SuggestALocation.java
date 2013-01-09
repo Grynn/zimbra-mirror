@@ -1,24 +1,13 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.suggestions;
 
-import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import org.testng.annotations.*;
-import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDeleteOrganizer;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogSendUpdatetoAttendees;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 
-@SuppressWarnings("unused")
 public class SuggestALocation extends CalendarWorkWeekTest {	
 	
 	public SuggestALocation() {
@@ -60,7 +49,6 @@ public class SuggestALocation extends CalendarWorkWeekTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
         // Select the location from suggested location pane
@@ -71,6 +59,7 @@ public class SuggestALocation extends CalendarWorkWeekTest {
         // Verify 'free' location appears in suggested locations pane
         ZAssert.assertEquals(apptForm.zVerifyLocation(apptLocation), true, "Verify 'free' location appear in suggested locations pane");
         apptForm.zToolbarPressButton(Button.B_SEND);
+        SleepUtil.sleepLong(); //location shows NE instead of AC without sleep
         
         // Verify location in the appointment
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
