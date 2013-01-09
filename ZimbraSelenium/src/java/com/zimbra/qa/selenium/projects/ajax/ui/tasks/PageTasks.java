@@ -494,12 +494,12 @@ public class PageTasks extends AbsTab {
 
 		} else if (button == Button.B_DELETE) {
 
-			ZimbraDOM dom = new ZimbraDOM();
-			dom.accumulate(ZimbraDOM.KEYS.APP, ZimbraDOM.APP.APP_TASKS);
-			dom.accumulate(ZimbraDOM.KEYS.COMPONENT_TYPE, ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON);
-			dom.accumulate(ZimbraDOM.KEYS.COMPONENT_NAME, ZimbraDOM.COMPONENT_NAME.OP_DELETE);			
+			String id = ZimbraDOM.getID(
+					ZimbraDOM.APP.APP_TASKS,
+					ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON,
+					ZimbraDOM.COMPONENT_NAME.OP_DELETE);
 			
-			locator = "css=div#"+ dom.getID() + " td[id$='_title']";
+			locator = "css=div#"+ id + " td[id$='_title']";
 			page = null;
 
 			// FALL THROUGH
@@ -560,7 +560,7 @@ public class PageTasks extends AbsTab {
 			throw new HarnessException("implement me");
 		} else if (button == Button.B_TASK_MARKCOMPLETED) {
 		    if(Locators.zMarkAsCompletedId == null){
-			Locators.zMarkAsCompletedId = ZimbraDOM.getIdFromMap(
+			Locators.zMarkAsCompletedId = ZimbraDOM.getID(
 		    		ZimbraDOM.APP.APP_TASKS, 
 		    		ZimbraDOM.COMPONENT_NAME.OP_MARK_AS_COMPLETED,
 		    		ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON,
@@ -698,7 +698,7 @@ public class PageTasks extends AbsTab {
 			
 			if(option==Button.O_TASK_TODOLIST){
 			    if(Locators.zFilterByTaskDropDownId == null){
-				Locators.zFilterByTaskDropDownId = ZimbraDOM.getIdFromMap(
+				Locators.zFilterByTaskDropDownId = ZimbraDOM.getID(
 			    		ZimbraDOM.APP.APP_TASKS, 
 			    		ZimbraDOM.COMPONENT_NAME.OP_VIEW_MENU,
 			    		ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON,

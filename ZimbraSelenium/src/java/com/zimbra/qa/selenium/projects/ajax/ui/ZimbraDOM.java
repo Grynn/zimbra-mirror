@@ -65,7 +65,7 @@ public class ZimbraDOM {
 	    }
 	}
 	    
-	public static final String SCRIPT = "var AjxUtil = this.browserbot.getUserWindow().top.AjxUtil; " +
+	private static final String SCRIPT = "var AjxUtil = this.browserbot.getUserWindow().top.AjxUtil; " +
 		"var AjxStringUtil = this.browserbot.getUserWindow().top.AjxStringUtil;" +
 		"var ZmId = this.browserbot.getUserWindow().top.ZmId;" +
 		"var ids = ZmId.lookup()," +
@@ -90,25 +90,43 @@ public class ZimbraDOM {
 		"value = backMap[value] ? \"ZmId.\" + backMap[value] : value;" +
 		"text += paramName + \":\" + value + \",\\n\";}text + \"}\\n\\n\"}";
 	
+	/**
+	 * Use selenium.getEval() to call ZmId.lookup()
+	 * @param parms a JSONObject to use, such as "ZmId.lookup(JSONObject)"
+	 * @return
+	 * @throws HarnessException on Selenium exception trying to call getEval()
+	 */
+	protected static String lookup(JSONObject parms) throws HarnessException {
+
+		String command = null;
+		
+		try {
+			
+			StringBuilder js = new StringBuilder();
+			js.append("var ZmId = this.browserbot.getUserWindow().top.ZmId;");
+			js.append("var idParams = ").append(parms.toString().replace("\"", "")).append(";");
+			js.append("var domIds = ZmId.lookup(idParams);");
+			js.append("domIds;");			
+			command = js.toString();
+			
+			logger.debug("Selenium.getEval("+ command +")");
+			String value = ClientSessionFactory.session().selenium().getEval(command);
+			logger.info("Selenium.getEval("+ command +") = "+ value);
+			
+			return (value);
+
+		} catch (SeleniumException e) {
+			throw new HarnessException("Selenium.getEval("+ command +") threw SeleniumException", e);
+		}
+
+	}
 	
-	public static String jsShowIds() throws HarnessException{
-	    try {
-		final String response = 
-			ClientSessionFactory.session().selenium().getEval(SCRIPT);
-		    
-		logger.info("\n...showIds response: " + response);
-		    
-		return response;
-	    } catch (Exception ex) {
-		throw new HarnessException(ex);				
-	    }
-	}	    
-	
-	public static Map<String, EnumMap<KEY,String>> getMapFromScript() throws HarnessException{
+
+	private static Map<String, EnumMap<KEY,String>> getMapFromScript() throws HarnessException{
 	    final Map<String, EnumMap<KEY,String>> map = new HashMap<String, EnumMap<KEY,String>>(); 
 	    String resp;
 	    try {
-		resp = jsShowIds().replaceAll("[\n\\{\\}]","");
+		resp = showIDs().replaceAll("[\n\\{\\}]","");
 		final List<String> args = Arrays.asList(resp.split(","));
 		EnumMap<KEY,String> emap = null;
 		for(String arg : args){
@@ -140,80 +158,7 @@ public class ZimbraDOM {
 	    return ids;
 	}
 
-	public static JSONObject getJsonFromScript() throws HarnessException{
-	    final JSONObject jso = new JSONObject(); 
-	    String resp;
-	    try {
-		resp = jsShowIds().replaceAll("[\n\\{\\}]","");
-		final List<String> args = Arrays.asList(resp.split(","));
-		for(String arg : args){
-		    final String[] arr = arg.trim().split(":");
-		    jso.accumulate(arr[0], arr[1]);
-		}		    
-	    } catch (Exception ex) {
-		throw new HarnessException(ex);				
-	    }
-	    return jso;
-	}
-		        
-	public static String getIdFromMap(final String... params) throws HarnessException{
-	    String id = null;
-	    if(params == null || !(params.length > 0)){
-		logger.info("...empty arguments list");		
-	    } else{		
-		if(ids == null || ids.isEmpty()){
-		    getMapFromScript();
-		}
-		final List<String> args = Arrays.asList(params);
-		int i = 0;
-		while(i < 2){
-		    final Set<Entry<String, EnumMap<KEY, String>>> set = ids.entrySet();
-		    for(Entry <String, EnumMap<KEY, String>> en : set){
-			final EnumMap<KEY, String> emap = en.getValue();
-			final Collection<String> vals = emap.values();
-			if(vals.containsAll(args)){
-			    if(id == null){
-				id = en.getKey();
-				logger.info("\n id = " + id + 
-				    "\n params provided: " + args +
-				    "\n available values: " + vals);
-				if(args.containsAll(vals)){
-				    break;
-				}
-			    }else{
-				logger.info("\n for provided params: " + args +
-				    "\n ...found more than one matches of id");
-				break;
-			    }
-			}		    
-		    }
-		    if(id==null){
-			if(i < 1){
-			    getMapFromScript();
-			}else{
-			    logger.info("\n for provided params: " + args +
-				    "...id is null ");
-			}
-			i++;
-		    }else{
-			break;
-		    }
-		}
-	    }	
-	    return id;
-	}
-	    
 	
-	public static class KEYS {
-		
-		public static final String APP = "app";
-		public static final String COMPONENT_NAME = "componentName";
-		public static final String COMPONENT_TYPE = "componentType";
-		public static final String CONTAINING_VIEW = "containingView";
-		public static final String SKIN_COMPONENT = "skinComponent";
-		public static final String SEQUENCE = "sequence";
-		
-	}
 	
 	
 	public static class APP {
@@ -267,7 +212,7 @@ public class ZimbraDOM {
 	}
 
 	////
-	// BEGIN: instance methods
+	// BEGIN: object methods
 	////
 	
 	
@@ -289,14 +234,14 @@ public class ZimbraDOM {
 	 *  to only look for delete operations, use:
 	 *  accumulate(ZimbraDOM.KEYS.COMPONENT_NAME, ZimbraDOM.COMPONENT_NAME.OP_DELETE);			
      *
-	 * @param key (ZimbraDOM.KEYS)
+	 * @param key. (ZimbraDOM.KEYS)
 	 * @param value (ZimbraDOM.COMPONENT_TYPE, ZimbraDOM.COMPONENT_NAME, etc.)
 	 * @return
 	 * @throws HarnessException
 	 */
-	public ZimbraDOM accumulate(String key, Object value) throws HarnessException {
+	public ZimbraDOM accumulate(KEY key, Object value) throws HarnessException {
 		try {
-			MyJSON.accumulate(key, value);
+			MyJSON.accumulate(key.getKEY(), value);
 			return (this);
 		} catch (JSONException e) {
 			throw new HarnessException(e);
@@ -309,7 +254,11 @@ public class ZimbraDOM {
 	 * @throws HarnessException if more than one DOM element is referenced 
 	 */
 	public String getID() throws HarnessException {
-		return (ZimbraDOM.getID(this.MyJSON));
+		List<String> ids = ZimbraDOM.getIDs(this.MyJSON);
+		if ( ids == null || ids.size() != 1 ) {
+			throw new HarnessException("Incorrect number of matches.  Expected 1, got: "+ ids.size());
+		}
+		return (ids.get(0));
 	}
 	
 	/**
@@ -322,7 +271,7 @@ public class ZimbraDOM {
 	}
 	
 	////
-	// END: instance methods
+	// END: object methods
 	////
 
 	
@@ -333,35 +282,93 @@ public class ZimbraDOM {
 	// BEGIN: static methods
 	////
 
+
 	/**
-	 * Given a JSONObject with key/value pairs for ZmId.lookup(),
-	 * return the current DOM id that the JSONObject points to
+	 * For debugging.  Log the current IDs to the info log.
+	 * @return
+	 * @throws HarnessException
+	 */
+	public static String showIDs() throws HarnessException{
+		try {
+			final String response = 
+				ClientSessionFactory.session().selenium().getEval(SCRIPT);
+
+			logger.info("\n...showIds response: " + response);
+
+			return response;
+		} catch (Exception ex) {
+			throw new HarnessException(ex);				
+		}
+	}	    
+	
+
+	/**
+	 * Given a list of parameters for ZmId.lookup(),
+	 * return the current DOM id that match the list
 	 * 
 	 * @param json
 	 * @return
 	 * @throws HarnessException if more than one DOM element is referenced 
 	 */
-	public static String getID(JSONObject json) throws HarnessException {
-		logger.debug("getId()");
-		
-		List<String> ids = getIDs(json);
-		if ( ids.size() == 1 ) {
-			String id = ids.get(0);
-			logger.info("getId() = "+ id);
-			return (id);
+	public static String getID(final String... params) throws HarnessException{
+	    String id = null;
+	    if(params == null || !(params.length > 0)){
+		logger.info("...empty arguments list");		
+	    } else{		
+		if(ids == null || ids.isEmpty()){
+		    getMapFromScript();
 		}
-		
-		throw new HarnessException("Incorrect number of matches.  Expected 1, got: "+ ids.size());
-
+		final List<String> args = Arrays.asList(params);
+		int i = 0;
+		while(i < 2){
+		    final Set<Entry<String, EnumMap<KEY, String>>> set = ids.entrySet();
+		    for(Entry <String, EnumMap<KEY, String>> en : set){
+			final EnumMap<KEY, String> emap = en.getValue();
+			final Collection<String> vals = emap.values();
+			if(vals.containsAll(args)){
+			    if(id == null){
+				id = en.getKey();
+				logger.info("\n id = " + id + 
+				    "\n params provided: " + args +
+				    "\n available values: " + vals);
+				if(args.containsAll(vals)){
+				    break;
+				}
+			    }else{
+				logger.info("\n for provided params: " + args +
+				    "\n ...found more than one matches of id");
+				break;
+			    }
+			}		    
+		    }
+		    if(id==null){
+			if(i < 1){
+			    getMapFromScript();
+			}else{
+			    logger.info("\n for provided params: " + args +
+				    "...id is null ");
+			}
+			i++;
+		    }else{
+			break;
+		    }
+		}
+	    }	
+	    return id;
 	}
-	
+	    
+
 	/**
 	 * Given a JSONObject with key/value pairs for ZmId.lookup(),
 	 * return the current list of DOM ids that the JSONObject points to
+	 * 
+	 * TBD: should this be public?
+	 * TBD: should this be converted as getID is implemented using a list of String arguments?
+	 * 
 	 * @return
 	 * @throws HarnessException
 	 */
-	public static List<String> getIDs(JSONObject json) throws HarnessException {
+	private static List<String> getIDs(JSONObject json) throws HarnessException {
 		logger.debug("getIds()");
 		
 		// The lookup method returns a comma separated list of matching DOM ids
@@ -381,36 +388,5 @@ public class ZimbraDOM {
 	
 	
 	
-	
-	/**
-	 * Use selenium.getEval() to call ZmId.lookup()
-	 * @param parms a JSONObject to use, such as "ZmId.lookup(JSONObject)"
-	 * @return
-	 * @throws HarnessException on Selenium exception trying to call getEval()
-	 */
-	protected static String lookup(JSONObject parms) throws HarnessException {
-
-		String command = null;
-		
-		try {
-			
-			StringBuilder js = new StringBuilder();
-			js.append("var ZmId = this.browserbot.getUserWindow().top.ZmId;");
-			js.append("var idParams = ").append(parms.toString().replace("\"", "")).append(";");
-			js.append("var domIds = ZmId.lookup(idParams);");
-			js.append("domIds;");			
-			command = js.toString();
-			
-			logger.debug("Selenium.getEval("+ command +")");
-			String value = ClientSessionFactory.session().selenium().getEval(command);
-			logger.info("Selenium.getEval("+ command +") = "+ value);
-			
-			return (value);
-
-		} catch (SeleniumException e) {
-			throw new HarnessException("Selenium.getEval("+ command +") threw SeleniumException", e);
-		}
-
-	}
 	
 }
