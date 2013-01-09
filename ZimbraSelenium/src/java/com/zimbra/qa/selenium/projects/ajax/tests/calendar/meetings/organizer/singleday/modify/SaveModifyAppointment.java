@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.views.workweek.singleday;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.singleday.modify;
 
 import java.util.Calendar;
 
@@ -22,23 +22,26 @@ public class SaveModifyAppointment extends CalendarWorkWeekTest {
 	
 	public SaveModifyAppointment() {
 		logger.info("New " + SaveModifyAppointment.class.getCanonicalName());
-
+		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(description = "Save modifying appt and take action from warning dialog : Save Chnages and send updates", 
 			groups = { "functional"})
 	public void SaveModifyAppointment_01() throws HarnessException {
-
+		
+		// Create appointment data 
 		String tz, apptSubject, apptAttendee1,apptAttendee2;
 		tz = ZTimeZone.TimeZoneEST.getID();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
         apptAttendee2 = ZimbraAccount.AccountB().EmailAddress;
-		// Absolute dates in UTC zone
+		
+        // Absolute dates in UTC zone
 		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
+		// Create appointment 
 		app.zGetActiveAccount().soapSend(
                 "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
                      "<m>"+
@@ -57,13 +60,8 @@ public class SaveModifyAppointment extends CalendarWorkWeekTest {
                      "</m>" +
                "</CreateAppointmentRequest>");
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-
-
-        // Switch to work week view
-        app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-
-     // Create appointment with attendee
+        
+        // Remove attendee and Save the appt
         app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
         SleepUtil.sleepMedium();
         FormApptNew apptForm = new FormApptNew(app);
@@ -75,11 +73,23 @@ public class SaveModifyAppointment extends CalendarWorkWeekTest {
         sendUpdateDialog.zClickButton(Button.B_OK);
         SleepUtil.sleepLong();
         
-        // check if an attendee 
-       
+        // Verify if an attendee is removed from appt and attendee gets update
         AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
 		ZAssert.assertEquals(actual.getSubject(), apptSubject, "Subject: Verify the appointment data");
 		ZAssert.assertStringDoesNotContain(actual.getAttendees(), apptAttendee2, "Attendees: Verify the appointment data");
+		
+		// Verify attendee2 receives cancellation message
+		ZimbraAccount.AccountB().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>subject:" + (char)34 + "Cancelled: " + apptSubject + (char)34 + "</query>"
+			+	"</SearchRequest>");
+		String id = ZimbraAccount.AccountB().soapSelectValue("//mail:m", "id");
+		ZAssert.assertNotNull(id, "Verify attendee2 receives cancelled meeting message");
+		
+		// Verify appointment is deleted from attendee2's calendar
+		AppointmentItem removedAttendee = AppointmentItem.importFromSOAP(ZimbraAccount.AccountB(), "subject:("+ apptSubject +")");
+		ZAssert.assertNull(removedAttendee, "Verify meeting is deleted from attendee2's calendar");
+		
 	}
 	
 	@Test(description = "Save modifying appt and take action from warning dialog : Discard and close", 
@@ -124,43 +134,51 @@ public class SaveModifyAppointment extends CalendarWorkWeekTest {
         // Switch to work week view
         app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-
-        // Open appointment & modify subject, body and save it
-        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        SleepUtil.sleepMedium();
-        FormApptNew apptForm = new FormApptNew(app);
         
+        // Open appointment & modify subject, remove attendee &  Save it
+        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
+        FormApptNew apptForm = new FormApptNew(app);
         appt.setSubject(editApptSubject);
         apptForm.zRemoveAttendee(apptAttendee2);
         apptForm.zToolbarPressButton(Button.B_SAVE);
+        
         DialogConfirmModification confirmClose = (DialogConfirmModification) new DialogConfirmModification(app, app.zPageCalendar);
-        String  oldPageName= app.zPageCalendar.sGetTitle();
-   
         confirmClose.zClickButton(Button.B_DISCARD_CLOSE);
         confirmClose.zClickButton(Button.B_OK);
         SleepUtil.sleepSmall();
         
+        // Verify 'Save Appointment' dialog is closed
+        ZAssert.assertFalse(confirmClose.zIsActive(), "Verify 'Save Appointment' dialog is closed");
+       
+        // Verify new appt page has been closed
+        ZAssert.assertTrue(apptForm.zVerifyNewApptTabClosed(), "Verify new appt page has been closed");
+         
         // Use GetAppointmentRequest to verify the changes are saved
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ apptId +"'/>");
         AppointmentItem modifyAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
-
-        // check if appt still has old subject and not the modified subject 
+ 
+        // Verify that appointment subject is not modified
         ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:comp", "name", apptSubject), true, "");
-        ZAssert.assertStringContains(modifyAppt.getAttendees(), apptAttendee1, "Attendees: Verify modified attendees");
-        String  newPageName= app.zPageCalendar.sGetTitle();
-        ZAssert.assertNotEqual(oldPageName, newPageName, "the Page has been closed");
+        
+        // Verify meeting attendees remains as it is
+        ZAssert.assertStringContains(modifyAppt.getAttendees(), apptAttendee2, "Attendees: Verify attendee1 is present in the meeting invite");
+        ZAssert.assertStringContains(modifyAppt.getAttendees(), apptAttendee1, "Attendees: Verify attendee2 is present in the meeting invite");
 	}
+	
 	@Test(description = "Save modifying appt and take action from warning dialog : Dont save But keep open", 
 			groups = { "functional"})
 	public void SaveModifyAppointment_03() throws HarnessException {
+		
 		// Creating object for appointment data
 		AppointmentItem appt = new AppointmentItem();
 		String tz, apptSubject, apptAttendee1,apptAttendee2,editApptSubject;
 		tz = ZTimeZone.TimeZoneEST.getID();
+		
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		editApptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptAttendee1 = ZimbraAccount.AccountA().EmailAddress;
         apptAttendee2 = ZimbraAccount.AccountB().EmailAddress;
+        
 		// Absolute dates in UTC zone
 		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
@@ -184,34 +202,34 @@ public class SaveModifyAppointment extends CalendarWorkWeekTest {
                      "</m>" +
                "</CreateAppointmentRequest>");
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-
-
         String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
     
-        // Switch to work week view
-        app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-
-     // Create appointment with attendee
+        // Try to remove attendee and press close button
         app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
         SleepUtil.sleepMedium();
         FormApptNew apptForm = new FormApptNew(app);
         appt.setSubject(editApptSubject);
         apptForm.zRemoveAttendee(apptAttendee2);
         apptForm.zToolbarPressButton(Button.B_SAVE);
+        
         DialogConfirmModification confirmClose = (DialogConfirmModification) new DialogConfirmModification(app, app.zPageCalendar);
         confirmClose.zClickButton(Button.B_DONTSAVE_KEEP_OPEN);
         confirmClose.zClickButton(Button.B_OK);
-        SleepUtil.sleepLong();     
+
+        // Verify 'Save Appointment' dialog is closed
+        ZAssert.assertFalse(confirmClose.zIsActive(), "Verify 'Save Appointment' dialog is closed");
        
-        // Use GetAppointmentRequest to verify the changes are saved
+        // Verify new appt page is still open
+        ZAssert.assertFalse(apptForm.zVerifyNewApptTabClosed(), "Verify new appt page is still open");
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ apptId +"'/>");
         AppointmentItem modifyAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
-
-        // check if appt still has old subject and not the modified subject 
+ 
+        // Verify that appointment subject is not modified
         ZAssert.assertEquals(app.zGetActiveAccount().soapMatch("//mail:GetAppointmentResponse//mail:comp", "name", apptSubject), true, "");
-        ZAssert.assertStringContains(modifyAppt.getAttendees(), apptAttendee1, "Attendees: Verify modified attendees");
-        ZAssert.assertEquals(app.zPageCalendar.sGetTitle(),"Zimbra: Appointment" , "make sure appointment window is open");
+        
+        // Verify meeting attendees remains as it is
+        ZAssert.assertStringContains(modifyAppt.getAttendees(), apptAttendee2, "Attendees: Verify attendee1 is present in the meeting invite");
+        ZAssert.assertStringContains(modifyAppt.getAttendees(), apptAttendee1, "Attendees: Verify attendee2 is present in the meeting invite");
 	}
 	
 	
