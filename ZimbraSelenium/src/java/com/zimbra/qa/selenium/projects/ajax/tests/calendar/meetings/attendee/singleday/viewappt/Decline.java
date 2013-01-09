@@ -124,7 +124,7 @@ public class Decline extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "View meeting invite by opening it and Decline the invitation by selecting 'Notify organizer'", 
-			groups = { "smoke" })
+			groups = { "functional" })
 			
 	public void DeclineMeeting_02() throws HarnessException {
 
@@ -160,7 +160,9 @@ public class Decline extends CalendarWorkWeekTest {
 		// --------------- Login to attendee & decline invitation ----------------------------------------------------
 
 		// Refresh the view
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		app.zPageMail.zToolbarPressButton(Button.B_REFRESH);
+		SleepUtil.sleepMedium();
+		
 		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, Button.O_DECLINED_MENU, apptSubject);
 		app.zPageCalendar.zToolbarPressButton(Button.B_SAVE);
 		
@@ -169,9 +171,6 @@ public class Decline extends CalendarWorkWeekTest {
 		declineAppt.zClickButton(Button.B_NOTIFY_ORGANIZER);
 		declineAppt.zClickButton(Button.B_YES);
 		SleepUtil.sleepVeryLong(); //psts returns wrong value without long delay
-		
-		ZAssert.assertEquals(app.zPageCalendar.zGetNeedsActionDropdownValue(), "Declined", "Verify 'Declined' value saved properly in the dropdown");
-		app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
 		
 		// Verify "Declined" value saved properly in the dropdown
 		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_OPEN_MENU, apptSubject);

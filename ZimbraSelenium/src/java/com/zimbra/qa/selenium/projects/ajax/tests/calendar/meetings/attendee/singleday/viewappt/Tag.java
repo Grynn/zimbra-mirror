@@ -52,13 +52,13 @@ public class Tag extends CalendarWorkWeekTest {
 				+			"</mp>"
 				+		"</m>"
 				+	"</CreateAppointmentRequest>");
+		app.zPageMail.zToolbarPressButton(Button.B_REFRESH);
 		
 		ZimbraAccount.AccountA().soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-10).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(10).toMillis() +"'>"
 			+		"<query>subject:("+ apptSubject + ")" + " " + "content:(" + apptBody +")</query>"
 			+	"</SearchRequest>");
 		String apptId = ZimbraAccount.AccountA().soapSelectValue("//mail:appt", "invId");
-		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// --------------- Login to attendee & accept invitation ----------------------------------------------------
 		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, Button.O_NEW_TAG, apptSubject);
@@ -74,6 +74,12 @@ public class Tag extends CalendarWorkWeekTest {
         //ZAssert.assertTrue(app.zPageCalendar.zVerifyTagBubble(tag), "Verify tag bubble exists in read-only appt view");
         app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
         
+        app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-10).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(10).toMillis() +"'>"
+			+		"<query>subject:("+ apptSubject + ")" + " " + "content:(" + apptBody +")</query>"
+			+	"</SearchRequest>");
+		apptId = app.zGetActiveAccount().soapSelectValue("//mail:appt", "invId");
+		
         // Verify applied tag for appointment
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest xmlns='urn:zimbraMail' id='" + apptId + "'/>");
         ZAssert.assertEquals(app.zGetActiveAccount().soapSelectValue("//mail:appt", "t"), tagID, "Verify the appointment is tagged with the correct tag");
@@ -135,6 +141,12 @@ public class Tag extends CalendarWorkWeekTest {
 		// http://bugzilla.zimbra.com/show_bug.cgi?id=79016 - Tag dropdown shows blank DWT on first time double clicking to read only appointment 
         //ZAssert.assertTrue(app.zPageCalendar.zVerifyTagBubble(tag), "Verify tag bubble exists in read-only appt view");
         app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
+        
+        app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-10).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(10).toMillis() +"'>"
+			+		"<query>subject:("+ apptSubject + ")" + " " + "content:(" + apptBody +")</query>"
+			+	"</SearchRequest>");
+		apptId = app.zGetActiveAccount().soapSelectValue("//mail:appt", "invId");
         
         // Verify applied tag for appointment
         app.zGetActiveAccount().soapSend("<GetAppointmentRequest xmlns='urn:zimbraMail' id='" + apptId + "'/>");
