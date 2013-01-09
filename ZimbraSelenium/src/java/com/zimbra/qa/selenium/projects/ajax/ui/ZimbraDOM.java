@@ -51,7 +51,8 @@ public class ZimbraDOM {
 	    componentName("componentName"),
 	    componentType("componentType"),
 	    containingView("containingView"),		
-	    skinComponent("skinComponent");	
+	    skinComponent("skinComponent"),
+	    sequence("sequence");	
 		
 	    private String key;
 
@@ -127,6 +128,8 @@ public class ZimbraDOM {
 			emap.put(KEY.containingView, arr[1]);
 		    }else if(arr[0].contains(KEY.skinComponent.getKEY())){
 			emap.put(KEY.skinComponent, arr[1]);
+		    }else if(arr[0].contains(KEY.sequence.getKEY())){
+			emap.put(KEY.sequence, arr[1]);
 		    }
 		}
 	    } catch (Exception ex) {
@@ -162,29 +165,39 @@ public class ZimbraDOM {
 		    getMapFromScript();
 		}
 		final List<String> args = Arrays.asList(params);
-		final Set<Entry<String, EnumMap<KEY, String>>> set = ids.entrySet();
-		for(Entry <String, EnumMap<KEY, String>> en : set){
-		    final EnumMap<KEY, String> emap = en.getValue();
-		    final Collection<String> vals = emap.values();
-		    if(vals.containsAll(args)){
-			if(id == null){
-			    id = en.getKey();
-			    logger.info("\n id = " + id + 
+		int i = 0;
+		while(i < 2){
+		    final Set<Entry<String, EnumMap<KEY, String>>> set = ids.entrySet();
+		    for(Entry <String, EnumMap<KEY, String>> en : set){
+			final EnumMap<KEY, String> emap = en.getValue();
+			final Collection<String> vals = emap.values();
+			if(vals.containsAll(args)){
+			    if(id == null){
+				id = en.getKey();
+				logger.info("\n id = " + id + 
 				    "\n params provided: " + args +
 				    "\n available values: " + vals);
-			    if(args.containsAll(vals)){
+				if(args.containsAll(vals)){
+				    break;
+				}
+			    }else{
+				logger.info("\n for provided params: " + args +
+				    "\n ...found more than one matches of id");
 				break;
 			    }
+			}		    
+		    }
+		    if(id==null){
+			if(i < 1){
+			    getMapFromScript();
 			}else{
 			    logger.info("\n for provided params: " + args +
-				    "\n ...found more than one matches of id");
-			    break;
+				    "...id is null ");
 			}
-		    }		    
-		}
-		if(id==null){
-		    logger.info("\n for provided params: " + args +
-			    "...id is null ");
+			i++;
+		    }else{
+			break;
+		    }
 		}
 	    }	
 	    return id;
@@ -198,6 +211,7 @@ public class ZimbraDOM {
 		public static final String COMPONENT_TYPE = "componentType";
 		public static final String CONTAINING_VIEW = "containingView";
 		public static final String SKIN_COMPONENT = "skinComponent";
+		public static final String SEQUENCE = "sequence";
 		
 	}
 	
@@ -217,6 +231,7 @@ public class ZimbraDOM {
 		public static final String OP_PRINT = "ZmId.OP_PRINT";
 		public static final String OP_MARK_AS_COMPLETED = "ZmId.OP_MARK_AS_COMPLETED";
 		public static final String OP_CLOSE = "ZmId.OP_CLOSE";
+		public static final String OP_COMPOSE_OPTIONS = "ZmId.OP_COMPOSE_OPTIONS";
 		
 		public static final String OP_MOVE_MENU = "ZmId.OP_MOVE_MENU";
 		public static final String OP_TAG_MENU = "ZmId.OP_TAG_MENU";
@@ -236,6 +251,7 @@ public class ZimbraDOM {
 	public static class CONTAINING_VIEW {
 		
 		public static final String VIEW_TASKLIST = "ZmId.VIEW_TASKLIST";
+		public static final String VIEW_TASKEDIT = "ZmId.VIEW_TASKEDIT";
 		
 	}
 
@@ -244,6 +260,10 @@ public class ZimbraDOM {
 		public static final String SKIN_APP_MAIN = "ZmId.SKIN_APP_MAIN";
 		public static final String SKIN_APP_TOP_TOOLBAR = "ZmId.SKIN_APP_TOP_TOOLBAR";
 		
+	}
+	
+	public static class SEQUENCE {
+	    public static final String ONE = "1";
 	}
 
 	////
