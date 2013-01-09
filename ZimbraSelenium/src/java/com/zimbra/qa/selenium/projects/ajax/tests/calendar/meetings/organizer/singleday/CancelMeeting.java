@@ -20,7 +20,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 		super.startingPage = app.zPageCalendar;
 	}
 	
-	@Bugs(ids = "69132,77548")
+	@Bugs(ids = "69132")
 	@Test(description = "Cancel meeting using Delete toolbar button",
 			groups = { "smoke" })
 			
@@ -58,8 +58,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
-        
+		
 		
 		//-- GUI actions
 		
@@ -136,8 +135,6 @@ public class CancelMeeting extends CalendarWorkWeekTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
-        
 		
 		
 		//-- GUI actions
@@ -207,11 +204,8 @@ public class CancelMeeting extends CalendarWorkWeekTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
-        
-        
-		
-		
+     
+        		
 		//-- GUI actions
 		
 		
@@ -276,8 +270,6 @@ public class CancelMeeting extends CalendarWorkWeekTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
-
 		
 		
 		//-- GUI actions
@@ -358,9 +350,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
                      "<su>"+ apptSubject +"</su>" +
                      "</m>" +
                "</CreateAppointmentRequest>");
-		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse", "apptId");
-
-		
+	
 		
 		//-- GUI actions
 		
