@@ -98,9 +98,8 @@ public class ZimbraResource extends ZimbraAccount {
 			} else {
 				ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:calresource", "id");
 				ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:calresource/admin:a[@n='zimbraMailHost']", null);
-			}
-			
-
+				forceSyncGal();
+			}	
 			
 		} catch (HarnessException e) {
 			logger.error("Unable to provision account: "+ EmailAddress, e);
@@ -110,4 +109,14 @@ public class ZimbraResource extends ZimbraAccount {
 		return (this);
 	}
 	
+	public void forceSyncGal(){
+		try{
+			ZimbraDomain domain = new ZimbraDomain(EmailAddress.split("@")[1]);
+			domain.exists();
+			domain.syncGalAccount();
+		} catch (HarnessException e) {
+			logger.error("Unable to force sync GAL: "+ EmailAddress, e);
+		}
+		
+	}
 }

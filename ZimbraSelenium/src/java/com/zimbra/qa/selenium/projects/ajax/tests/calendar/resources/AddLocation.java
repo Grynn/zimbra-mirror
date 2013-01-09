@@ -37,13 +37,8 @@ public class AddLocation extends CalendarWorkWeekTest {
 		String apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		String apptAttendee = ZimbraAccount.AccountA().EmailAddress;
 		String apptLocation1 = location.EmailAddress;
-		
-		// Sync the GAL to put the resource account into the GAL list
-		ZimbraDomain domain = new ZimbraDomain(location.EmailAddress.split("@")[1]);
-		domain.exists();
-		domain.syncGalAccount();
-
     	AppointmentItem appt = new AppointmentItem();
+    	
 		// Absolute dates in UTC zone
 		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 15, 0, 0);

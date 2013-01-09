@@ -80,12 +80,7 @@ public class AddEquipment extends CalendarWorkWeekTest {
 		ZimbraResource equipment = new ZimbraResource(ZimbraResource.Type.EQUIPMENT);
 		String apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		String apptEquipment = equipment.EmailAddress;
-	
-		// Sync the GAL to put the resource account into the GAL list
-		ZimbraDomain domain = new ZimbraDomain(equipment.EmailAddress.split("@")[1]);
-		domain.exists();
-		domain.syncGalAccount();
-
+		
 		// Absolute dates in UTC zone
 		String tz = ZTimeZone.TimeZoneEST.getID();
 		Calendar now = this.calendarWeekDayUTC;
