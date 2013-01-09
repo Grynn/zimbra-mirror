@@ -867,15 +867,13 @@ public class PageCalendar extends AbsTab {
 				optionLocator = Locators.OpenMenu;
 				
 				if ( optionLocator != null ) {
-
 					this.zClickAt(optionLocator, "");
-					zWaitForElementAppear(Locators.NeedsActionButton_ViewAppt);
-					SleepUtil.sleepSmall();
-
+					SleepUtil.sleepMedium();
 				}
 				
 				if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday.actions.Open.organizerTest == false ||
-						com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday.viewappt.Close.organizerTest == false) {
+						com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday.viewappt.Close.organizerTest == false ||
+						com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday.actions.Open.organizerTest == false) {
 					page = null;
 				} else {	
 					page = new FormApptNew(this.MyApplication);

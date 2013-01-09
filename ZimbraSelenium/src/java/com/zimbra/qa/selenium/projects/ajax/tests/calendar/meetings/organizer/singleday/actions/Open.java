@@ -1,22 +1,12 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.singleday.actions;
 
 import java.util.Calendar;
-
 import org.testng.annotations.Test;
-
-import com.zimbra.qa.selenium.framework.core.Bugs;
-import com.zimbra.qa.selenium.framework.items.AppointmentItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
-
-@SuppressWarnings("unused")
 public class Open extends CalendarWorkWeekTest {
 
 	public Open() {
@@ -29,9 +19,10 @@ public class Open extends CalendarWorkWeekTest {
 			groups = { "smoke" })
 	public void OpenMeeting_01() throws HarnessException {
 		
+		organizerTest = false;
+		
 		// Creating object for meeting data
 		organizerTest = true;
-		AppointmentItem appt = new AppointmentItem();
 		ZimbraResource location = new ZimbraResource(ZimbraResource.Type.LOCATION);
 		ZimbraResource equipment = new ZimbraResource(ZimbraResource.Type.EQUIPMENT);
 		
