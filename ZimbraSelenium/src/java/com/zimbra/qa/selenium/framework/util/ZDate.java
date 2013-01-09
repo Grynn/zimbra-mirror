@@ -258,7 +258,11 @@ public class ZDate {
 	public String toyyyyMMddTHHmmss() throws HarnessException {
 		return (format("yyyyMMdd'T'HHmmss"));
 	}
-
+	
+	public String toyyyyMMddT() throws HarnessException {
+		return (format("yyyyMMdd'T'"));
+	}
+	
 	public String toMMM_dC_yyyy() throws HarnessException {
 		return (format("MMM d, yyyy"));
 	}
