@@ -32,7 +32,7 @@ public class QuickAddAppointment extends AbsTab {
 		public static final String ReminderDropdownQuickAdd = "css=div[class='DwtDialog'] td[id$='_reminderSelect']";
 		public static final String OKButtonQuickAdd = "css=div[class='DwtDialog'] td[id$='_button2_title']:contains(" + "'OK'" + ")";
 		public static final String CancelButtonQuickAdd = "css=div[class='DwtDialog'] td[id$='_button1_title']:contains(" + "'Cancel'" + ")";
-		public static final String MoreDetailsButtonQuickAdd = "css=div[class='DwtDialog'] td[id$='_button14_title']";
+		public static final String MoreDetailsButtonQuickAdd = "css=div[class='DwtDialog'] div[id$='_buttons'] td[id^='More Details..._DWT'] td[id$='_title']";
 		
 		public static final String NoneMenuItem = "css=div[id*='_Menu'] div[id^='NON'] td[id$='title']:contains('None')";
 		public static final String NoneButton = "css=td[id$='_title']:contains('None')";
