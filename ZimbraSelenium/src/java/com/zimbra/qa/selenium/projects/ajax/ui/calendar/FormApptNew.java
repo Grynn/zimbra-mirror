@@ -286,9 +286,9 @@ public class FormApptNew extends AbsForm {
 								// actions
 		this.zRightClickAt("css=td[id$='_location'] span:contains('" + location
 				+ "')", "");
-		SleepUtil.sleepSmall();
 		this.zClickAt(Locators.DeleteZimletContextMenu, "");
 		this.zClickAt("css=input[id$='_location_input']", "");
+		SleepUtil.sleepMedium();
 	}
 	
 	public void zVerifyDisabledControlInProposeNewTimeUI() throws HarnessException {

@@ -55,6 +55,7 @@ public class RemoveLocation extends CalendarWorkWeekTest {
                      		"<at cutype='RES' a='" + apptLocation + "' rsvp='1' role='REQ' url='" + apptLocation + "' ptst='AC'/>" +
                      	"</inv>" +
                      	"<e a='"+ ZimbraAccount.AccountA().EmailAddress +"' t='t'/>" +
+                     	"<e a='"+ apptLocation +"' t='t'/>" +
                      	"<mp content-type='text/plain'>" +
                      		"<content>"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
                      	"</mp>" +
