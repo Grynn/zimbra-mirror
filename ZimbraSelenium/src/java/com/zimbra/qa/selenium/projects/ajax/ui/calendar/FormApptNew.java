@@ -371,8 +371,13 @@ public class FormApptNew extends AbsForm {
 
 		} else if (button == Button.B_10AM) {
 
+			SleepUtil.sleepMedium();
 			locator = Locators.SuggestATime10AM;
-			page = null;
+			
+			if (this.sIsElementPresent(locator) == false) {
+				this.sClickAt(Locators.ShowTimesAnywayLink, "");
+				return null;
+			}
 
 			// FALL THROUGH
 
