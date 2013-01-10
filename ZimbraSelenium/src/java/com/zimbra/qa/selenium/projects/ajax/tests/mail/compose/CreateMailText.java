@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose;
 
+import java.util.ArrayList;
+
 import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.*;
@@ -251,6 +253,48 @@ public class CreateMailText extends PrefGroupMailByMessageTest {
 		
 		
 	}
+
+	@Test(	description = "Send a mail to 100 recipients",
+			groups = { "deprecated" } // The harness doesn't handle the postqueue for such a large message
+		)
+	public void CreateMailText_06() throws HarnessException {
+		
+		//-- Data
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+
+		// Create 100 accounts
+		StringBuilder destination = new StringBuilder(ZimbraAccount.AccountA().EmailAddress);
+		ArrayList<ZimbraAccount> destinations = new ArrayList<ZimbraAccount>();
+		for(int i=0;i<100;i++) {
+			ZimbraAccount account = new ZimbraAccount();
+			account.provision();
+			destinations.add(account);
+			destination.append("; ").append(account.EmailAddress);
+		}
+		
+
+		//-- GUI steps
+		
+		// Open the new mail form
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
+		ZAssert.assertNotNull(mailform, "Verify the new form opened");
+
+		mailform.zFillField(Field.Subject, subject);
+		mailform.zFillField(Field.Body, "body" + ZimbraSeleniumProperties.getUniqueString());
+		mailform.zFillField(Field.To, destination.toString());
+		
+		mailform.zSubmit();
+		
+		
+		//-- Verification
+		
+
+		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
+		ZAssert.assertNotNull(received, "Verify the message is received");
+
+		
+	}
+
 
 
 }
