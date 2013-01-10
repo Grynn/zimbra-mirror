@@ -73,27 +73,24 @@ public class ModifyBySelectAttendees extends CalendarWorkWeekTest {
 			+	"</SearchRequest>");
 		String id = ZimbraAccount.AccountA().soapSelectValue("//mail:m", "id");
         
-        // Add attendee2 and resend the appointment
+        // Add attendee2 to existing appt from 'Select Address' dialog and resend the appointment
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        
         apptForm.zToolbarPressButton(Button.B_TO);
-      
+   
         DialogFindAttendees dialogFindAttendees = (DialogFindAttendees) new DialogFindAttendees(app, app.zPageCalendar);
-
-        // Type attendee name in search box & perform search
         dialogFindAttendees.zType(Locators.ContactPickerSerachField, ZimbraAccount.AccountB().EmailAddress);
         dialogFindAttendees.zClickButton(Button.B_SEARCH);
         dialogFindAttendees.zWaitForBusyOverlay();
-        
-        // choose the contact and choose it
         dialogFindAttendees.zClick(Locators.ContactPickerFirstContact);
         dialogFindAttendees.zClickButton(Button.B_CHOOSE_CONTACT_FROM_PICKER);
         dialogFindAttendees.zWaitForBusyOverlay();
         dialogFindAttendees.zClickButton(Button.B_OK);
-;
-        // send the modified appt
+        
+        // Send the modified appt
         apptForm.zToolbarPressButton(Button.B_SEND);
-      
+        SleepUtil.sleepVeryLong();// test fails while checking free/busy status, waitForPostqueue is not sufficient here
+        // Tried sleepLong() as well but it still fails so using sleepVeryLong()
+
         
         // Verify attendee1 receives meeting invitation message
 		ZimbraAccount.AccountA().soapSend(
