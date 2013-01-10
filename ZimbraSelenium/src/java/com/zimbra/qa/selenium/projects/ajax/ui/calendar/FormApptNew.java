@@ -47,7 +47,8 @@ public class FormApptNew extends AbsForm {
 				+ locatorValue + "')";
 		public static final String ShowSchedulerLink = "css=div[id$='_scheduleButton']:contains('Show')";
 		public static final String HideSchedulerLink = "css=div[id$='_scheduleButton']:contains('Hide')";
-		public static final String SelectLocationBySuggestingTime_11AM = "css=div[class='ZmSuggestBody'] table tr:contains('11:00 AM') td:nth-child(4) div[class='ImgLocationGreen']";
+		public static final String SelectFirstFreeTimeFromSuggestTimePane = "css=div[id$='_suggest_view'] table:nth-child(2) tbody tr td:nth-child(2)";
+		public static final String ShowTimesAnywayLink = "css=div[id$='_suggest_view'] div[class='NoSuggestions'] span[id$='showall']";
 
 		public static final String Button_Send = "css=div[id^='ztb__APPT-'] td[id$='_SEND_INVITE_title']";
 		public static final String Button_Save = "css=div[id^='ztb__APPT-'] td[id$='_SAVE_title']";
@@ -383,10 +384,16 @@ public class FormApptNew extends AbsForm {
 
 			// FALL THROUGH
 
-		} else if (button == Button.B_SelectLocationBySuggestingTime_11AM) {
-
-			locator = Locators.SelectLocationBySuggestingTime_11AM;
+		} else if (button == Button.B_SELECT_FIRST_FREE_TIME_FROM_SUGGEST_PANE) {
+			
 			SleepUtil.sleepMedium();
+			locator = Locators.SelectFirstFreeTimeFromSuggestTimePane;
+			
+			if (this.sIsElementPresent(locator) == false) {
+				this.sClickAt(Locators.ShowTimesAnywayLink, "");
+				return null;
+			}
+			
 			page = null;
 
 		} else if (button == Button.B_SHOW) {

@@ -390,7 +390,7 @@ public class Button {
 	public static final Button B_SUGGESTATIME = new Button("B_SUGGESTATIME");
 	public static final Button B_SUGGESTALOCATION = new Button("B_SUGGESTALOCATION");
 	public static final Button B_10AM = new Button("B_10AM");
-	public static final Button B_SelectLocationBySuggestingTime_11AM = new Button("B_SelectLocationBySuggestingTime_11AM");	
+	public static final Button B_SELECT_FIRST_FREE_TIME_FROM_SUGGEST_PANE = new Button("B_SELECT_FIRST_FREE_TIME_FROM_SUGGEST_PANE");	
 	public static final Button B_SUGGESTEDLOCATION = new Button("B_SUGGESTEDLOCATION");
 	public static final Button B_TAGAPPOINTMENTMENU = new Button("B_TAGAPPOINTMENTMENU");
 	public static final Button B_LOCATIONMENU = new Button("B_LOCATIONMENU");
