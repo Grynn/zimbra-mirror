@@ -19,7 +19,7 @@ public abstract class AbsToaster extends AbsSeleniumObject {
 		
 		public static final String ToastTextLocatorCSS   = ToastDivContainerCSS + " div[id='z_toast_text']";
 
-		public static final String ToastUndoLocatorCSS = ToastDivContainerCSS + " div[id='z_toast_text'] a";
+		public static final String ToastUndoLocatorCSS = ToastDivContainerCSS + " a.undo";
 		
 
 	}
@@ -74,15 +74,6 @@ public abstract class AbsToaster extends AbsSeleniumObject {
 		sClick(Locators.ToastUndoLocatorCSS);
 		zWaitForBusyOverlay();
 	}
-	
-    public boolean isContainedText(String text) throws HarnessException {
-    	return zGetToastMessage().contains(text);    
-    }
-    
-    public boolean isContainedLink(String innerText) throws HarnessException {
-    	//TODO fill in later
-    	throw new HarnessException("fill in later");
-    }
 	
     public boolean zIsActive() throws HarnessException {        
     	return zIsVisiblePerPosition(Locators.ToastDivContainerCSS,0,0);
@@ -139,9 +130,6 @@ public abstract class AbsToaster extends AbsSeleniumObject {
 		throw new HarnessException("Toaster never closed");
 	}
 	
-    public boolean clickLink(String innerText) throws HarnessException {
-    	throw new HarnessException("fill in later");
-    }
     
 
 
