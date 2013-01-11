@@ -181,6 +181,7 @@ public class ZimbraDOM {
 		public static final String OP_MOVE_MENU = "ZmId.OP_MOVE_MENU";
 		public static final String OP_TAG_MENU = "ZmId.OP_TAG_MENU";
 		public static final String OP_VIEW_MENU = "ZmId.OP_VIEW_MENU";
+		public static final String OP_ATTACHMENT = "ZmId.OP_ATTACHMENT";
 		
 		public static final String SEP = "SEP";
 
