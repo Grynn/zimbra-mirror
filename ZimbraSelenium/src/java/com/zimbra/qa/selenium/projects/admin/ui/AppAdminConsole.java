@@ -62,6 +62,7 @@ public class AppAdminConsole extends AbsApplication {
 	
 	public PageEditMailQueue			zPageEditMailQueue = null;
 	public PageManageAccountMigration	zPageManageAccountMigration = null;
+	public PageManageSearch				zPageManageSearch = null;
 	public PageManageCertificates		zPageManageCertificates = null;
 	public PageManageClientUpload		zPageManageClientUpload = null;
 	public PageEditCertificate			zPageEditCertificate = null;
@@ -168,6 +169,9 @@ public class AppAdminConsole extends AbsApplication {
 		
 		zPageManageVoiceChatService = new PageManageVoiceChatService(this);
 		pages.put(zPageManageVoiceChatService.myPageName(), zPageManageVoiceChatService);
+
+		zPageManageSearch = new PageManageSearch(this);
+		pages.put(zPageManageSearch.myPageName(), zPageManageSearch);
 
 		
 		// Monitoring

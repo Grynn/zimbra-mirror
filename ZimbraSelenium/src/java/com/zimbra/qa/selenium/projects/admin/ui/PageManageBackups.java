@@ -18,8 +18,20 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 public class PageManageBackups extends AbsTab {
 	
 	public static class Locators {
+		public static final String GEAR_ICON="css=div.ImgConfigure";
+		public static final String VIEW="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgProperties']";
+		public static final String BACKUP="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgBackup']";
+		public static final String RESTORE="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgRestoreMailbox']";
+		public static final String CONFIGURE="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgAdvancedTools']";
+		public static final String REFRESH="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgRefresh']";
+			
+		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
+		public static final String EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgEdit']";
+		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON="css=div[id^='zm__ACLV__MENU_POP'] div[class='ImgDelete']";
+		public static final String RIGHT_CLICK_MENU_EDIT_BUTTON="css=div[id^='zm__ACLV__MENU_POP'] div[class='ImgEdit']";
+
+		
 		public static final String TOOLS_AND_MIGRATION_ICON="css=div.ImgToolsAndMigration";
-		public static final String BACKUP="css=div[id^='zti__AppAdmin__magHV__BackUpHV'][id$='div']";
 		public static final String HOME="Home";
 		public static final String TOOLS_AND_MIGRATION="Tools and Migration";
 		public static final String BACKUPS="Backups";
