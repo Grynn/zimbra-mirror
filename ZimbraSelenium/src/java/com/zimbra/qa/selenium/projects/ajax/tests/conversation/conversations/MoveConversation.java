@@ -62,7 +62,8 @@ public class MoveConversation extends PrefGroupMailByConversationTest {
 		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox));
+
 		// Select the item
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, c.getSubject());
 		
@@ -110,7 +111,8 @@ public class MoveConversation extends PrefGroupMailByConversationTest {
 		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox));
+
 		// Select the item
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, c.getSubject());
 		
@@ -155,7 +157,8 @@ public class MoveConversation extends PrefGroupMailByConversationTest {
 		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox));
+
 		// Select the item
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, c.getSubject());
 		
@@ -211,7 +214,8 @@ public class MoveConversation extends PrefGroupMailByConversationTest {
 		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox));
+
 		// Click the subfolder in the tree
 		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, subfolder);
 
@@ -258,7 +262,8 @@ public class MoveConversation extends PrefGroupMailByConversationTest {
 		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox));
+
 		// Select the item
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, c.getSubject());
 		
@@ -352,7 +357,8 @@ public class MoveConversation extends PrefGroupMailByConversationTest {
 		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox));
+
 		// Select the item
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, c.getSubject());
 		
