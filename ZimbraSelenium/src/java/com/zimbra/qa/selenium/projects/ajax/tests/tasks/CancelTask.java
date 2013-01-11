@@ -136,7 +136,8 @@ public class CancelTask extends AjaxCommonTest {
 		//Click NEW button
 		app.zPageTasks.zClickAt(Locators.zNewTask,"");
 		SleepUtil.sleepMedium();
-		app.zPageTasks.zClickAt(Locators.zAttachButton, "");
+		app.zPageTasks.zToolbarPressButton(Button.B_Attachment);
+		//app.zPageTasks.zClickAt(Locators.zAttachButton, "");
 		SleepUtil.sleepMedium();
 		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zAttachmentInputBox),"Verify Attachment input box ");		 
 		app.zPageTasks.zClickAt(FormTaskNew.Locators.zCancelTask,"");
@@ -145,7 +146,8 @@ public class CancelTask extends AjaxCommonTest {
 		//2nd attempt
 		app.zPageTasks.zClickAt(Locators.zNewTask,"");
 		SleepUtil.sleepMedium();
-		app.zPageTasks.zClickAt(Locators.zAttachButton, "");	
+		app.zPageTasks.zToolbarPressButton(Button.B_Attachment);
+		//app.zPageTasks.zClickAt(Locators.zAttachButton, "");	
 		SleepUtil.sleepMedium();
 		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zAttachmentInputBox),"Verify Attachment input box ");		 
 		app.zPageTasks.zClickAt(FormTaskNew.Locators.zCancelTask,"");
