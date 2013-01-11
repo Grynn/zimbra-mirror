@@ -245,7 +245,6 @@
                     <include name="**/*Test.java"/>
                     <exclude name="**/*ITest.java"/>
                     <exclude name="**/Abstract*Test.java"/>
-                    <exclude name="**/MailboxTest.java"/>
                 </fileset>
             </batchtest>
         </junit>
@@ -265,7 +264,8 @@
         <delete dir="${single.test.dir}" quiet="true"/>
         <mkdir dir="${single.test.dir}/output"/>
         <mkdir dir="${single.test.dir}/report"/>
-        <junit printsummary="on" failureproperty="junit.failure" tempdir="${single.test.dir}">
+        <copy file="${test.src.dir}/log4j-test.properties" tofile="${test.classes.dir}/log4j.properties" failonerror="false"/>
+        <junit printsummary="on" showoutput="true" failureproperty="junit.failure" tempdir="${single.test.dir}">
             <classpath refid="class.path"/>
             <classpath path="${test.classes.dir}"/>
             <assertions><enable/></assertions>
