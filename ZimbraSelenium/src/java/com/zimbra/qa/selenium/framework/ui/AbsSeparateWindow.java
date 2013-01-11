@@ -420,6 +420,44 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#sMouseDown(java.lang.String)
+	 */
+	public void sMouseDownAt(String locator, String coord) throws HarnessException {
+		logger.info(myPageName() + " sMouseDownAt("+ locator +", "+ coord +")");
+		
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			changeFocus();
+
+			super.sMouseDownAt(locator, coord);
+			
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+
+	}
+
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#sMouseUp(java.lang.String)
+	 */
+	public void sMouseUpAt(String locator, String coord) throws HarnessException {
+		logger.info(myPageName() + " sMouseUpAt("+ locator +", "+ coord +")");
+		
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			changeFocus();
+
+			super.sMouseUpAt(locator, coord);
+			
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+
+	}
+
 	/**
 	 * Click on a series of locators in sequence.
 	 * Because menus may be collapsed when switching windows, this method

@@ -75,7 +75,7 @@ public class SeparateWindowDialogRedirect extends AbsDialogSeparateWindow {
 		// Seems that the client can't handle filling out the new mail form too quickly
 		// Click in the "To" fields, etc, to make sure the client is ready
 		MyWindow.sFocus(locator);
-		MyWindow.zClick(locator);
+		MyWindow.zClickAt(locator, "");
 		MyWindow.zWaitForBusyOverlay();
 
 		// Enter text
@@ -98,7 +98,7 @@ public class SeparateWindowDialogRedirect extends AbsDialogSeparateWindow {
 
 			locator = Locators.ButtonOkButtonLocator;
 
-			MyWindow.zClick(locator);
+			MyWindow.zClickAt(locator, "");
 
 			MyWindow.zWaitForBusyOverlay();
 
@@ -133,7 +133,7 @@ public class SeparateWindowDialogRedirect extends AbsDialogSeparateWindow {
 			throw new HarnessException("Button "+ button +" locator "+ locator +" not present!");
 		}
 
-		MyWindow.zClick(locator);
+		MyWindow.zClickAt(locator, "");
 
 		MyWindow.zWaitForBusyOverlay();
 
