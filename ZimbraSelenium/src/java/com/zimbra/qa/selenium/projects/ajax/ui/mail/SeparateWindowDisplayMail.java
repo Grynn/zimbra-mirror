@@ -649,7 +649,7 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("locator is not present for button "+ button +" : "+ locator);
 		
-		this.zClick(locator);
+		this.zClickAt(locator, "");
 		
 		this.zWaitForBusyOverlay();
 
