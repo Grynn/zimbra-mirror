@@ -99,6 +99,7 @@ ZaZimbraAdmin._SERVER_STATUS_VIEW =  ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SERVER_STATISTICS_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SERVER_STATISTICS_TAB_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SERVER_LIST_FOR_STATISTICS_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._HELP_CENTER_HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 
 ZaZimbraAdmin._HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._XFORM_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
@@ -895,8 +896,6 @@ function(ev) {
 		ZaApp.getInstance().getHelpViewController().show();
 	}
 
-    var historyObject = new ZaHistory("HelpView", undefined, undefined, false, new AjxCallback(this, this._helpListener));
-    this._historyMgr.addHistory(historyObject);
 }
 
 ZaZimbraAdmin.prototype._dwListener = 

@@ -394,9 +394,7 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
                         {type:_CELL_SPACER_},
                         {type:_DWT_IMAGE_, value: "ImgRemoveLineUp", containerCssStyle:"cursor: pointer;", cssStyle:"position:static;display:none;",  onClick:ZaHomeXFormView.onCloseSetup}
                     ]},
-                    {type:_SETUPGROUP_, colSpan: "*", headerLabels: labelChoices, contentItems: contentChoices},
-                    {type:_OUTPUT_, value: ZabMsg.LBL_HomeHelpCenter, colSpan: "*", align:_RIGHT_, onClick: ZaHomeXFormView.onHelpLink,
-                        containerCssClass:"ZaLinkedItem"}
+                    {type:_SETUPGROUP_, colSpan: "*", headerLabels: labelChoices, contentItems: contentChoices}
                 ]}
             ]}
         ]
