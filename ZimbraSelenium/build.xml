@@ -247,7 +247,7 @@
 		</java>
 	</target>
 
-	<target name="Run-ExecuteHarnessMain - Sum Tests" depends="jar" description="Count all tests to be run per specified arguments">
+	<target name="Sum-ExecuteHarnessMain" depends="jar" description="Count all tests to be run per specified arguments">
 		<property name="jarfile" value="${dist.lib.dir}/zimbraselenium.jar"/>
 		<property name="pattern" value="ajax.tests"/>
 		<property name="groups" value="always,sanity"/>
