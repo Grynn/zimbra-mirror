@@ -3,7 +3,6 @@ package com.zimbra.qa.selenium.projects.ajax.tests.preferences.mail.signatures;
 import org.testng.annotations.Test;
 
 
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.SignatureItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -63,6 +62,7 @@ public class CreateSignature extends AjaxCommonTest {
 		//select html format from drop down
 		signew.zSelectFormat("html");
 		//Reason:With "?dev=1&debug=0", Tinymce editor in HTML mode takes more time to load 
+		//commented out incompatible to webdriver reference
 		//if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
 			SleepUtil.sleepVeryLong();
 		//}
