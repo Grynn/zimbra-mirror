@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.TaskItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -87,11 +86,12 @@ public class EditHtmlTask extends AjaxCommonTest{
 		// Click edit
 		FormTaskNew taskedit = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_EDIT);
 		//Reason:With "?dev=1&debug=0", Tinymce editor in HTML mode takes more time to load 
-		if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
+		//removing incompatible to webdriver refernece
+		//if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
 			SleepUtil.sleepVeryLong();
-		}else{
-			SleepUtil.sleepMedium();
-		}
+		//}else{
+		//	SleepUtil.sleepMedium();
+		//}
 		//Fill new subject in subject field
 		taskedit.zFillField(Field.Subject, editSubject);
 		taskedit.zFillField(Field.HtmlBody, editTaskHtmlbody);
@@ -299,11 +299,12 @@ public class EditHtmlTask extends AjaxCommonTest{
 		FormTaskNew taskedit = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_EDIT);
 		
 		//Reason:With "?dev=1&debug=0", Tinymce editor in HTML mode takes more time to load 
-		if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
+		//removing incompatible to webdriver refernece
+		//if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
 			SleepUtil.sleepVeryLong();
-		}else{
-			SleepUtil.sleepMedium();
-		}
+		//}else{
+		//	SleepUtil.sleepMedium();
+		//}
 		DialogWarning dialogWarning = (DialogWarning)  taskedit.zToolbarPressPulldown(Button.B_OPTIONS, Button.O_OPTION_FORMAT_AS_TEXT);
 		ZAssert.assertNotNull(dialogWarning, "Verify the dialog is returned");
 		String text = "Switching to text will discard all HTML formatting. Continue?";

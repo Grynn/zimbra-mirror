@@ -5,7 +5,6 @@ import java.util.*;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -348,7 +347,7 @@ public class GetTask extends AjaxCommonTest {
 	 */
 	@Bugs(ids="63357")
 	@Test(	description = "Task list view fields (Percentage) are not updated after editing ",
-			groups = { "smoke" })
+			groups = { "xsmoke" })
 	public void GetTask_06() throws HarnessException {
 		
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
@@ -398,11 +397,12 @@ public class GetTask extends AjaxCommonTest {
 		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
 		
 		//Reason:With "?dev=1&debug=0", Tinymce editor in HTML mode takes more time to load
-		if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
+		//removing incompatible to webdriver refernece
+		//if(ClientSessionFactory.session().selenium().getEval("window.tinyMCE").equalsIgnoreCase("null")){
 			SleepUtil.sleepVeryLong();
-		}else{
-			SleepUtil.sleepMedium();
-		}
+		//}else{
+		//	SleepUtil.sleepMedium();
+		//}
 		// Fill out the resulting form
 		taskNew.zFillField(com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field.Subject, newsubject);
 		taskNew.zFillField(com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field.Body, newcontent);

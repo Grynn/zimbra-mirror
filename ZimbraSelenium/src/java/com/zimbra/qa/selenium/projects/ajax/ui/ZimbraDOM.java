@@ -5,10 +5,11 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.*;
 import org.json.*;
-
 import com.thoughtworks.selenium.SeleniumException;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import org.openqa.selenium.JavascriptExecutor;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 
 /**
@@ -65,9 +66,7 @@ public class ZimbraDOM {
 	    }
 	}
 	    
-	private static final String SCRIPT = "var AjxUtil = this.browserbot.getUserWindow().top.AjxUtil; " +
-		"var AjxStringUtil = this.browserbot.getUserWindow().top.AjxStringUtil;" +
-		"var ZmId = this.browserbot.getUserWindow().top.ZmId;" +
+	private static final String PART = 
 		"var ids = ZmId.lookup()," +
 		"len = ids.length," +
 		"backMap = ZmId._getBackMap()," +
@@ -89,6 +88,21 @@ public class ZimbraDOM {
 		"}" +
 		"value = backMap[value] ? \"ZmId.\" + backMap[value] : value;" +
 		"text += paramName + \":\" + value + \",\\n\";}text + \"}\\n\\n\"}";
+	
+	private static final String SCRIPT;
+	
+	static{
+	    if(ZimbraSeleniumProperties.isWebDriver()){
+	       	SCRIPT = "var AjxUtil = top.AjxUtil; " +
+	       		 "var AjxStringUtil = top.AjxStringUtil;" +
+			 "var ZmId = top.ZmId;" + PART + "return text";
+	     
+	    }else{	
+		SCRIPT = "var AjxUtil = this.browserbot.getUserWindow().top.AjxUtil; " +
+			 "var AjxStringUtil = this.browserbot.getUserWindow().top.AjxStringUtil;" +
+			 "var ZmId = this.browserbot.getUserWindow().top.ZmId;" + PART;			
+	    }	  
+	}
 	
 	/**
 	 * Use selenium.getEval() to call ZmId.lookup()
@@ -291,8 +305,13 @@ public class ZimbraDOM {
 	 */
 	public static String showIDs() throws HarnessException{
 		try {
-			final String response = 
-				ClientSessionFactory.session().selenium().getEval(SCRIPT);
+			final String response;
+			if(ZimbraSeleniumProperties.isWebDriver()){
+			    response = ((JavascriptExecutor)ClientSessionFactory.session().webDriver()).executeScript
+				    (SCRIPT).toString();
+			}else{
+			    response = ClientSessionFactory.session().selenium().getEval(SCRIPT);
+    			}
 
 			logger.info("\n...showIds response: " + response);
 
