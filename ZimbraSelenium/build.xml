@@ -247,13 +247,13 @@
 		</java>
 	</target>
 
-	<target name="Run-ExecuteHarnessMain (dev)" depends="jar" description="Run all tests per specified arguments">
+	<target name="Run-ExecuteHarnessMain - Sum Tests" depends="jar" description="Count all tests to be run per specified arguments">
 		<property name="jarfile" value="${dist.lib.dir}/zimbraselenium.jar"/>
 		<property name="pattern" value="ajax.tests"/>
 		<property name="groups" value="always,sanity"/>
 		<echo>Executing ...</echo>
 		<java classname="com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain"          classpathref="class.path"          fork="true" failonerror="true">
-			<arg line="-d -j '${jarfile}' -p ${pattern} -g ${groups} -l conf/log4j.properties "/>				
+			<arg line="-s -j '${jarfile}' -p ${pattern} -g ${groups} -l conf/log4j.properties "/>				
 		</java>
 	</target>
 

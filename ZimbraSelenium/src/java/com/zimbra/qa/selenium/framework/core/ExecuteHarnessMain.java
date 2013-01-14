@@ -6,6 +6,7 @@ package com.zimbra.qa.selenium.framework.core;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
@@ -68,6 +69,12 @@ public class ExecuteHarnessMain {
 	public ExecuteHarnessMain() {
 		
 	}
+	
+	/**
+	 * If '-s' is specified, do a query on how many test cases match the filters
+	 */
+	public static boolean DO_TEST_CASE_SUM = false;
+	
 	/**
 	 * This token must appear in the class package name.
 	 * The next subpackage after the token is the TestNG test name
@@ -505,7 +512,78 @@ public class ExecuteHarnessMain {
 		}
 	}
 	
+	/**
+	 * Count the number of test cases that match the given filters.  Return
+	 * a list of test case objectives, plus the total number of matches.
+	 * @return
+	 * @throws HarnessException 
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 */
+	public String sumTestCounts() throws FileNotFoundException, IOException, HarnessException {
+		logger.debug("sumTestCounts");
+		
+		StringBuilder sb = new StringBuilder();	// A list of test method objectives
+		int sum = 0; 		// The total number of test methods that would be executed
 
+		
+		
+		// Search through the jar for all methods that match the execution
+		// arguments
+		
+		
+		List<String> classes = ExecuteHarnessMain.getClassesFromJar(new File(jarfilename), (classfilter == null ? null : Pattern.compile(classfilter)),excludefilter);
+		
+		for(String s : classes) {
+			
+			try {
+				
+				Class<?> c = Class.forName(s);
+				logger.debug("sumTestCounts: checking class: "+ c.getCanonicalName());
+								
+				for (Method m : Arrays.asList(c.getDeclaredMethods())) {
+					
+					logger.debug("sumTestCounts: checking method: "+ m.getName());
+					
+					for (Annotation a : Arrays.asList(m.getAnnotations())) {
+					
+						logger.debug("sumTestCounts: checking annotation: "+ a.toString());
+
+						if ( a instanceof org.testng.annotations.Test) {
+							
+							org.testng.annotations.Test t = (org.testng.annotations.Test)a;
+							
+							// Check the groups to make sure they match
+							for ( String g : Arrays.asList(t.groups()) ) {
+								
+								if (this.groups.contains(g)) {
+									
+									logger.debug("sumTestCounts: matched: "+ g);
+
+									sb.append(++sum).append(": ").append(t.description()).append('\n');
+									continue; // for (Annotation a ...
+									
+								}
+							}
+							
+						}
+					
+					}
+					
+				}
+			
+			} catch (ClassNotFoundException e) {
+				logger.warn("sumTestCounts: Unable to find class", e);
+			}
+
+		}
+		
+		logger.debug("sumTestCounts: found: "+ sum);
+		
+		sb.append("Number of matching test cases: "+ sum);
+		return (sb.toString());
+
+	}
 
 	/**
 	 * This class checks for the Zimbra error dialog after each test
@@ -883,6 +961,7 @@ public class ExecuteHarnessMain {
         options.addOption(new Option("o", "output", true, "output foldername"));
         options.addOption(new Option("w", "working", true, "current working foldername"));
         options.addOption(new Option("c", "config", true, "dynamic setting config properties i.e browser, server, locale... ( -c 'locale=en_US,browser=firefox' "));
+        options.addOption(new Option("s", "sum", false, "run harness in mode to count the number of matching test cases"));
 
         options.addOption(new Option("e", "exclude", true, "exclude pattern  "));
         options.addOption(new Option("eg", "exclude_groups", true, "comma separated list of groups to exclude when execute (skip)"));
@@ -902,7 +981,9 @@ public class ExecuteHarnessMain {
 	        }
 
 	     
-
+	        if ( cmd.hasOption('s') ) {
+	        	DO_TEST_CASE_SUM = true;
+	        }
 	        
 	        if ( cmd.hasOption('c') ) {
 	        	
@@ -1015,12 +1096,18 @@ public class ExecuteHarnessMain {
 
 			// Create the harness object and execute it
 			ExecuteHarnessMain harness = new ExecuteHarnessMain();
-			if ( harness.parseArgs(args) ) { 
-				result = harness.execute();
+			if ( harness.parseArgs(args) ) {
+				if ( DO_TEST_CASE_SUM  ) {
+					result = harness.sumTestCounts();
+				} else {
+					result = harness.execute();
+				}
 			}
 			
 		} catch (Exception e) {
 			logger.error(e, e);
+		} finally {
+			DO_TEST_CASE_SUM = false;
 		}
 		
 		logger.info(result);
