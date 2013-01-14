@@ -347,7 +347,7 @@ public class GetTask extends AjaxCommonTest {
 	 */
 	@Bugs(ids="63357")
 	@Test(	description = "Task list view fields (Percentage) are not updated after editing ",
-			groups = { "xsmoke" })
+			groups = { "smoke" })
 	public void GetTask_06() throws HarnessException {
 		
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
