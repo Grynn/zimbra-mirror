@@ -1,0 +1,190 @@
+diff --git a/opendkim/opendkim.c b/opendkim/opendkim.c
+index e795de5..53e6927 100644
+--- a/opendkim/opendkim.c
++++ b/opendkim/opendkim.c
+@@ -7002,7 +7002,7 @@ dkimf_config_load(struct config *data, struct dkimf_config *conf,
+ 	{
+ 		(void) config_get(data, "InternalHosts", &str, sizeof str);
+ 	}
+-	if (str != NULL && !testmode)
++	if (str != NULL)
+ 	{
+ 		int status;
+ 		char *dberr = NULL;
+diff --git a/opendkim/opendkim.conf.5.in b/opendkim/opendkim.conf.5.in
+index 0009c21..cc4a85d 100644
+--- a/opendkim/opendkim.conf.5.in
++++ b/opendkim/opendkim.conf.5.in
+@@ -820,10 +820,12 @@ CIDR-style IP specification (e.g. "192.168.1.0/24").  An entry beginning
+ with a bang ("!") character means "not", allowing exclusions of specific
+ hosts that are otherwise members of larger sets.  Host and domain names are 
+ matched first, then the IP or IPv6 address depending on the connection 
+-type. More precise entries are preferred over less precise ones, i.e. 
++type.  More precise entries are preferred over less precise ones, i.e. 
+ "192.168.1.1" will match before "!192.168.1.0/24".  The text form of IPv6 
+ addresses will be forced to lowercase when queried (RFC5952), so the contents
+-of this data set should also use lowercase.
++of this data set should also use lowercase.  The IP address portion of an
++entry may optionally contain square brackets; both forms (with and without)
++will be checked.
+ 
+ .TP
+ .I PidFile (string)
+diff --git a/opendkim/util.c b/opendkim/util.c
+index b4ea98f..4a739fb 100644
+--- a/opendkim/util.c
++++ b/opendkim/util.c
+@@ -445,6 +445,7 @@ dkimf_checkip(DKIMF_DB db, struct sockaddr *ip)
+ 		int status;
+ 		int bits;
+ 		size_t dst_len;
++		size_t iplen;
+ 		char *dst;
+ 		struct sockaddr_in6 sin6;
+ 		struct in6_addr addr;
+@@ -461,6 +462,7 @@ dkimf_checkip(DKIMF_DB db, struct sockaddr *ip)
+ 
+ 		inet_ntop(AF_INET6, &addr, dst, dst_len);
+ 		dkimf_lowercase((u_char *) dst);
++		iplen = strlen(dst);
+ 
+ 		exists = FALSE;
+ 
+@@ -477,6 +479,24 @@ dkimf_checkip(DKIMF_DB db, struct sockaddr *ip)
+ 		if (exists)
+ 			return TRUE;
+ 
++		/* try it with square brackets */
++		memmove(&ipbuf[2], &ipbuf[1], iplen + 1);
++		ipbuf[1] = '[';
++		ipbuf[iplen + 2] = ']';
++
++		status = dkimf_db_get(db, ipbuf, 0, NULL, 0, &exists);
++		if (status != 0)
++			return FALSE;
++		if (exists)
++			return FALSE;
++
++		status = dkimf_db_get(db, &ipbuf[1], 0, NULL, 0,
++		                      &exists);
++		if (status != 0)
++			return FALSE;
++		if (exists)
++			return TRUE;
++
+ 		/* iterate over possible bitwise expressions */
+ 		for (bits = 0; bits <= 128; bits++)
+ 		{
+@@ -491,6 +511,7 @@ dkimf_checkip(DKIMF_DB db, struct sockaddr *ip)
+ 
+ 			inet_ntop(AF_INET6, &addr, dst, dst_len);
+ 			dkimf_lowercase((u_char *) dst);
++			iplen = strlen(dst);
+ 
+ 			sz = strlcat(ipbuf, "/", sizeof ipbuf);
+ 			if (sz >= sizeof ipbuf)
+@@ -518,6 +539,38 @@ dkimf_checkip(DKIMF_DB db, struct sockaddr *ip)
+ 			else if (exists)
+ 				return TRUE;
+ 
++			/* try it with square brackets */
++			memmove(&ipbuf[2], &ipbuf[1], iplen + 1);
++			ipbuf[1] = '[';
++			ipbuf[iplen + 2] = ']';
++			ipbuf[iplen + 3] = '\0';
++
++			sz = strlcat(ipbuf, "/", sizeof ipbuf);
++			if (sz >= sizeof ipbuf)
++				return FALSE;
++
++			dst = &ipbuf[sz];
++			dst_len = sizeof ipbuf - sz;
++
++			sz = snprintf(dst, dst_len, "%d", 128 - bits);
++			if (sz >= sizeof ipbuf)
++				return FALSE;
++
++			exists = FALSE;
++
++			status = dkimf_db_get(db, ipbuf, 0, NULL, 0, &exists);
++			if (status != 0)
++				return FALSE;
++			if (exists)
++				return FALSE;
++
++			status = dkimf_db_get(db, &ipbuf[1], 0, NULL, 0,
++			                      &exists);
++			if (status != 0)
++				return FALSE;
++			if (exists)
++				return TRUE;
++
+ 			/* flip off a bit */
+ 			if (bits != 128)
+ 			{
+@@ -538,6 +591,7 @@ dkimf_checkip(DKIMF_DB db, struct sockaddr *ip)
+ 		int c;
+ 		int status;
+ 		int bits;
++		size_t iplen;
+ 		struct in_addr addr;
+ 		struct in_addr mask;
+ 		struct sockaddr_in sin;
+@@ -562,6 +616,24 @@ dkimf_checkip(DKIMF_DB db, struct sockaddr *ip)
+ 		if (exists)
+ 			return TRUE;
+ 
++		/* try it with square brackets */
++		memmove(&ipbuf[2], &ipbuf[1], strlen(&ipbuf[1]) + 1);
++		ipbuf[1] = '[';
++		ipbuf[strlen(ipbuf)] = ']';
++
++		status = dkimf_db_get(db, ipbuf, 0, NULL, 0, &exists);
++		if (status != 0)
++			return FALSE;
++		if (exists)
++			return FALSE;
++
++		status = dkimf_db_get(db, &ipbuf[1], 0, NULL, 0,
++		                      &exists);
++		if (status != 0)
++			return FALSE;
++		if (exists)
++			return TRUE;
++
+ 		/* iterate over possible bitwise expressions */
+ 		for (bits = 32; bits >= 0; bits--)
+ 		{
+@@ -582,6 +654,7 @@ dkimf_checkip(DKIMF_DB db, struct sockaddr *ip)
+ 			ipbuf[0] = '!';
+ 			(void) dkimf_inet_ntoa(addr, &ipbuf[1],
+ 			                       sizeof ipbuf - 1);
++			iplen = strlen(&ipbuf[1]);
+ 			c = strlen(ipbuf);
+ 			ipbuf[c] = '/';
+ 			c++;
+@@ -602,12 +675,16 @@ dkimf_checkip(DKIMF_DB db, struct sockaddr *ip)
+ 			if (exists)
+ 				return TRUE;
+ 
+-			(void) dkimf_inet_ntoa(mask, &ipbuf[c],
+-			                       sizeof ipbuf - c);
+-		
++			/* try it with square brackets */
++			memmove(&ipbuf[2], &ipbuf[1], strlen(&ipbuf[1]) + 1);
++			ipbuf[1] = '[';
++			ipbuf[iplen + 2] = ']';
++			ipbuf[iplen + 3] = '/';
++			snprintf(&ipbuf[iplen + 4], sizeof ipbuf - iplen - 4,
++			         "%d", bits);
++
+ 			exists = FALSE;
+-			status = dkimf_db_get(db, ipbuf, 0, NULL, 0,
+-			                      &exists);
++			status = dkimf_db_get(db, ipbuf, 0, NULL, 0, &exists);
+ 			if (status != 0)
+ 				return FALSE;
+ 			if (exists)
+-- 
+1.7.4.1
+
