@@ -110,6 +110,9 @@ DwtControl = function(params) {
 	 */
 	this._disposed = false;
 
+	// set to true for an event type to override default behavior of swallowing the event
+	this._propagateEvent = {};
+
  	if (!parent) { return; }
 
 	/** CSS class name
@@ -206,9 +209,6 @@ DwtControl = function(params) {
 	// set to true to ignore OVER and OUT mouse events between elements in the same control
 	this._ignoreInternalOverOut = false;
 	
-	// set to true for an event type to override default behavior of swallowing the event
-	this._propagateEvent = {};
-
 	// override this control's default template
 	this.TEMPLATE = params.template || this.TEMPLATE;
 };
