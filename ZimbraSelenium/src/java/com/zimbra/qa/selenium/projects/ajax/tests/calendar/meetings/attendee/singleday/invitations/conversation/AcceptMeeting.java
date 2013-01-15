@@ -52,7 +52,7 @@ public class AcceptMeeting extends CalendarWorkWeekTest {
 	@Bugs(ids = "69132")
 	@Test(
 			description = "Accept a meeting using Accept button from invitation message", 
-			groups = { "smoke" })
+			groups = { "sanity" })
 	public void AcceptMeeting_01() throws HarnessException {
 
 		// ------------------------ Test data ------------------------------------
