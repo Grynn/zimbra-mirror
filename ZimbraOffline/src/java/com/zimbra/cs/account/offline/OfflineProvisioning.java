@@ -1416,6 +1416,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         Map<String,Object> attrs = null;
         DbOfflineDirectory.GranterEntry granter = null;
         if (keyType == AccountBy.id) {
+            if (key.equals(LOCAL_ACCOUNT_ID) && localAccount != null) {
+                return getLocalAccount();
+            }
             if ((acct = mAccountCache.getById(key)) == null) {
                 if (zimbraAdminAccount != null && key.equals(zimbraAdminAccount.getId())) {
                     acct = zimbraAdminAccount;
@@ -1427,8 +1430,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 }
             }
         } else if (keyType == AccountBy.name) {
-            if (key.equals(LOCAL_ACCOUNT_NAME))
+            if (key.equals(LOCAL_ACCOUNT_NAME)) {
                 return getLocalAccount();
+            }
             if ((acct = mAccountCache.getByName(key)) == null) {
                 attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_offlineDn, key);
 
