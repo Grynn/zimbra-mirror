@@ -3,23 +3,13 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.resources.scheduler;
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import org.testng.annotations.*;
-
-import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDeleteOrganizer;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogSendUpdatetoAttendees;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 
-@SuppressWarnings("unused")
 public class AddLocation extends CalendarWorkWeekTest {	
 	
 	public AddLocation() {
@@ -36,17 +26,15 @@ public class AddLocation extends CalendarWorkWeekTest {
 		};
 	}
 	@Test(description = "Add location from scheduler pane using keyboard Enter and Tab key",
-			groups = { "smoke" },
+			groups = { "functional" },
 			dataProvider = "DataProviderShortcutKeys")
 	public void AddLocation_01(String name, int keyEvent) throws HarnessException {
 		
 		// Create a meeting
-		AppointmentItem appt = new AppointmentItem();
 		ZimbraResource location = new ZimbraResource(ZimbraResource.Type.LOCATION);
 			
 		String tz = ZTimeZone.TimeZoneEST.getID();
 		String apptSubject = ZimbraSeleniumProperties.getUniqueString();
-		String apptAttendee = ZimbraAccount.AccountA().EmailAddress;
 		String apptLocation = location.EmailAddress;
 		
 		// Absolute dates in UTC zone
