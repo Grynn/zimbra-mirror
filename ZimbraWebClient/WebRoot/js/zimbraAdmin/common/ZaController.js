@@ -452,13 +452,9 @@ function(username, password) {
 		this.auth = new ZaAuthenticate(this._appCtxt);
 		this.auth.execute(username, password,callback);
 	} catch (ex) {
-		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED) {
+		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED || ex.code == ZmCsfeException.SVC_PERM_DENIED ) {
 			this._showLoginDialog(false);
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_FAILED);
-			return;
-		} else if(ex.code == ZmCsfeException.SVC_PERM_DENIED) {
-			this._showLoginDialog(false);
-			this._loginDialog.setError(ZaMsg.ERROR_AUTH_NO_ADMIN_RIGHTS);
 			return;
 		} else if (ex.code == ZmCsfeException.ACCT_CHANGE_PASSWORD) {
 			this._showLoginDialog(true);
@@ -493,15 +489,10 @@ function (resp) {
 	//if login failed - hide splash screen, show login dialog
 	if(resp.isException && resp.isException()) {
 		var ex = resp.getException();
-		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED) 
+		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED || ex.code == ZmCsfeException.SVC_PERM_DENIED)
 		{
 			this._showLoginDialog(false);
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_FAILED);
-			this._loginDialog.clearPassword();
-			return;
-		} else if(ex.code == ZmCsfeException.SVC_PERM_DENIED) {
-			this._showLoginDialog(false);			
-			this._loginDialog.setError(ZaMsg.ERROR_AUTH_NO_ADMIN_RIGHTS);
 			this._loginDialog.clearPassword();
 			return;
 		} else if (ex.code == ZmCsfeException.ACCT_CHANGE_PASSWORD) {
