@@ -27,7 +27,7 @@ public class CreateAppointment extends AjaxCommonTest {
 
 	
 	@Test(	description = "Create a basic appointment without an attendee in day view",
-			groups = { "sanity" }
+			groups = { "smoke" }
 	)
 	public void CreateAppointment_01() throws HarnessException {
 		

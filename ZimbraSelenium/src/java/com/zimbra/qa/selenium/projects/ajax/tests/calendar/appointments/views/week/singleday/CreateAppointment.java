@@ -29,7 +29,7 @@ public class CreateAppointment extends CalendarWorkWeekTest {
 
 	
 	@Test(	description = "Create a basic appointment without an attendee in week view",
-			groups = { "sanity" }
+			groups = { "smoke" }
 	)
 	public void CreateAppointment_01() throws HarnessException {
 		

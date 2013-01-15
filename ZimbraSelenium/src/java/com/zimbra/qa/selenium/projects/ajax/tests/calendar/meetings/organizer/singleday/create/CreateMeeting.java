@@ -18,7 +18,7 @@ public class CreateMeeting extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Create a basic meeting with attendee",
-			groups = { "smoke" })
+			groups = { "sanity" })
 			
 	public void CreateMeeting_01() throws HarnessException {
 		
