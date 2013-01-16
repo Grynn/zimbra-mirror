@@ -1447,6 +1447,17 @@ public class ZimbraAPI
             if (appt["orName"].Length > 0)
             {
                 theOrganizer = appt["orName"];
+
+                /*int idxOrg = theOrganizer.IndexOf("@");
+                if (idxOrg == -1)  // can happen if no recip table
+                {
+                    int idxAcct = AccountName.IndexOf("@");
+                    string Name = AccountName.Substring(0, idxAcct);
+                    if (Name == appt["orName"])
+                    {
+                        theOrganizer = AccountName;
+                    }
+                }*/
             }
             else
             {
@@ -2380,6 +2391,7 @@ public class ZimbraAPI
 
         writer.WriteStartElement("filterRule");
         string[] tokens = rules[filterRuleDictName].Split(',');
+        //string[] tokens = rules[filterRuleDictName].Split(';');
         writer.WriteAttributeString(tokens.GetValue(0).ToString(), tokens.GetValue(1).ToString());
         writer.WriteAttributeString(tokens.GetValue(2).ToString(), tokens.GetValue(3).ToString());
 
@@ -2867,6 +2879,13 @@ public class ZimbraAPI
     {
         int idxAcc = AccountName.IndexOf("@");
         int idxOrg = theOrganizer.IndexOf("@");
+        if (idxOrg == -1)
+        {
+            int idxCN = theOrganizer.LastIndexOf("CN=");
+            string Name = theOrganizer.Substring((idxCN +3));
+            string nameAcc1 = AccountName.Substring(0, idxAcc);
+            return ((nameAcc1.ToUpper() == Name) || (AccountID.ToUpper() == Name));
+        }
         if ((idxAcc == -1) || (idxOrg == -1))   // can happen if no recip table
         {
             return false;

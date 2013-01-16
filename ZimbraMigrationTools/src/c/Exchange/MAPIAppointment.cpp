@@ -911,6 +911,11 @@ HRESULT MAPIAppointment::SetOrganizerAndAttendees()
                     {
 		        m_pOrganizerAddr = pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].Value.lpszW;
                     }
+					if(lstrcmpiW(m_pOrganizerAddr.c_str(),L"") == 0) 
+				{
+					 if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_EMAIL_ADDRESS].ulPropTag) != PT_ERROR)
+				   m_pOrganizerAddr = pRecipRows->aRow[iRow].lpProps[AT_EMAIL_ADDRESS].Value.lpszW;
+				}
 		}
 		else
 		{
