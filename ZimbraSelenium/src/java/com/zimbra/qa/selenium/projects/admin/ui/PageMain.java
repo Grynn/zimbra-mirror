@@ -21,7 +21,7 @@ public class PageMain extends AbsTab {
 		public static final String zSkinContainerUsername	= "xpath=//*[@id='skin_container_username']";
 		//public static final String zSkinContainerLogoff		= "css=table[class='skin_table'] span[onclick='ZaZimbraAdmin.logOff();']";
 		public static final String zLogoffDropDownArrow		="css=div.ImgNodeExpandedWhite";
-		public static final String zLogOff = "css=div.ImgLogoff";
+		public static final String zLogOff = "zmi__ZA_LOGOFF__LOGOFF_title";
 		public static final String zSkinContainerHelp		= "xpath=//*[@id='skin_container_help']";
 		public static final String zSkinContainerDW			= "xpath=//*[@id='skin_container_dw']";
 		public static final String REFRESH_BUTTON = "css=div.ImgSearchRefreshWhite";

@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -47,6 +48,7 @@ public class GetAccount extends AdminCommonTest {
 		
 		// Refresh the account list
 		app.zPageManageAccounts.sClickAt(PageMain.Locators.REFRESH_BUTTON, "");
+		SleepUtil.sleepMedium();
 
 		
 		// Get the list of displayed accounts
@@ -88,6 +90,7 @@ public class GetAccount extends AdminCommonTest {
 		
 		// Refresh the account list
 		app.zPageManageAccounts.sClickAt(PageMain.Locators.REFRESH_BUTTON, "");
+		SleepUtil.sleepMedium();
 
 		
 		// Get the list of displayed accounts
@@ -130,6 +133,7 @@ public class GetAccount extends AdminCommonTest {
 		
 		// Refresh the account list
 		app.zPageManageAccounts.sClickAt(PageMain.Locators.REFRESH_BUTTON, "");
+		SleepUtil.sleepMedium();
 
 		
 		// Get the list of displayed accounts
