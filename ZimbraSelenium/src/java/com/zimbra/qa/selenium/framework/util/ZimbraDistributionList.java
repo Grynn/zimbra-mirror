@@ -9,6 +9,7 @@ public class ZimbraDistributionList {
 	public String DisplayName = null;
 	public String EmailAddress = null;
 	public String Password = null;
+	public ZimbraDomain Domain = null;
 
 	public ZimbraDistributionList() {
 		this(null, null);
@@ -39,16 +40,8 @@ public class ZimbraDistributionList {
 		try {
 
 			// Make sure domain exists
-			String domain = EmailAddress.split("@")[1];
-
-
-			// If the domain does not exist, create it
-			ZimbraAdminAccount.GlobalAdmin().soapSend(
-						"<CreateDomainRequest xmlns='urn:zimbraAdmin'>"
-					+		"<name>"+ domain +"</name>"
-					+	"</CreateDomainRequest>");
-
-
+			Domain = new ZimbraDomain( EmailAddress.split("@")[1]);
+			Domain.provision();
 
 
 			// Create the account
@@ -71,6 +64,14 @@ public class ZimbraDistributionList {
 //
 //			}
 			
+			// Need to sync the GSA
+			Domain.syncGalAccount();
+			
+			// Need to flush galgroup cache after creating a new DL (https://bugzilla.zimbra.com/show_bug.cgi?id=78970#c7)
+			ZimbraAdminAccount.GlobalAdmin().soapSend(
+					"<FlushCacheRequest  xmlns='urn:zimbraAdmin'>" +
+						"<cache type='galgroup'/>" +
+	            	"</FlushCacheRequest>");
 
 		} catch (HarnessException e) {
 
@@ -99,6 +100,15 @@ public class ZimbraDistributionList {
 				+		"<id>"+ this.ZimbraId +"</id>"
 				+		"<dlm>"+ email +"</dlm>"
 				+	"</AddDistributionListMemberRequest>");
+
+		// Sync the GSA
+		Domain.syncGalAccount();
+		
+		// Need to flush galgroup cache after creating a new DL (https://bugzilla.zimbra.com/show_bug.cgi?id=78970#c7)
+		ZimbraAdminAccount.GlobalAdmin().soapSend(
+				"<FlushCacheRequest  xmlns='urn:zimbraAdmin'>" +
+					"<cache type='galgroup'/>" +
+            	"</FlushCacheRequest>");
 
 		return (this);
 	}
