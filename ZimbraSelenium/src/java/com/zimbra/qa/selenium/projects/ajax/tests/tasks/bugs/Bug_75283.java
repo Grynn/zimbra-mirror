@@ -16,6 +16,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.tasks.PageTasks.Locators;
 
 
 public class Bug_75283 extends AjaxCommonTest {
@@ -108,12 +109,12 @@ public class Bug_75283 extends AjaxCommonTest {
 		app.zPageTasks.zListItem(Action.A_DOUBLECLICK, subject);
 
 		SleepUtil.sleepMedium();		
-		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Locators.zCancelTask), "Verify Close button is there");
+		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zCloseButton), "Verify Close button is there");
 
 		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent("css=div[class='ZmTaskEditView'] tr[id$='_attachment_container'] div td a[class='AttLink']:contains('"+fileName+"')")," Verify only one Attachment present");
 		ZAssert.assertFalse(app.zPageTasks.sIsElementPresent("xpath=//div[contains(@class,'ZmTaskEditView')]//tr[contains(@id,'_attachment_container')]/td/fieldset/form/div/div[2]"),"Verify Duplicate attachment is not present");
 
-		app.zPageTasks.zClickAt(com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Locators.zCancelTask, "0,0");
+		app.zPageTasks.zClickAt(Locators.zCloseButton, "0,0");
 		//After closing Task list view should show.
 		ZAssert.assertTrue(app.zPageTasks.sGetEval("window.appCtxt.getCurrentViewType()").equalsIgnoreCase("TKL"),"Verify List view is open");
 
@@ -123,13 +124,13 @@ public class Bug_75283 extends AjaxCommonTest {
 		app.zPageTasks.zListItem(Action.A_DOUBLECLICK, subject);
 
 		SleepUtil.sleepMedium();		
-		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Locators.zCancelTask), "Verify Close button is there");
+		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zCloseButton), "Verify Close button is there");
 
 		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent("css=div[class='ZmTaskEditView'] tr[id$='_attachment_container'] div td a[class='AttLink']:contains('"+fileName+"')")," Verify only one Attachment present");
 		ZAssert.assertFalse(app.zPageTasks.sIsElementPresent("xpath=//div[contains(@class,'ZmTaskEditView')]//tr[contains(@id,'_attachment_container')]/td/fieldset/form/div/div[2]"),"Verify Duplicate attachment is not present");
 
 		//Close Edit window
-		app.zPageTasks.zClickAt(com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Locators.zCancelTask, "0,0");
+		app.zPageTasks.zClickAt(Locators.zCloseButton, "0,0");
 
 		//After closing Task list view should show.
 		ZAssert.assertTrue(app.zPageTasks.sGetEval("window.appCtxt.getCurrentViewType()").equalsIgnoreCase("TKL"),"Verify List view is open");
@@ -139,7 +140,7 @@ public class Bug_75283 extends AjaxCommonTest {
 		app.zPageTasks.zListItem(Action.A_DOUBLECLICK, subject);
 
 		SleepUtil.sleepMedium();		
-		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Locators.zCancelTask), "Verify Close button is there");
+		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zCloseButton), "Verify Close button is there");
 
 		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent("css=div[class='ZmTaskEditView'] tr[id$='_attachment_container'] div td a[class='AttLink']:contains('"+fileName+"')")," Verify only one Attachment present");
 		ZAssert.assertFalse(app.zPageTasks.sIsElementPresent("xpath=//div[contains(@class,'ZmTaskEditView')]//tr[contains(@id,'_attachment_container')]/td/fieldset/form/div/div[2]"),"Verify Duplicate attachment is not present");
