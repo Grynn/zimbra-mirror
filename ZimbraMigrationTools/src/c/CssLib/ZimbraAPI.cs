@@ -988,7 +988,8 @@ public class ZimbraAPI
                     if (nam.CompareTo("dlist") == 0)
                     {
                         IsGroup = true;
-                        string[] tokens = contact["dlist"].Split(',');
+                        //string[] tokens = contact["dlist"].Split(',');
+                        string[] tokens = contact["dlist"].Split(';');
 
                         if (tokens.Length > 0)
                         {

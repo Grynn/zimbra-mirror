@@ -645,7 +645,7 @@ HRESULT MAPIContact::Init()
                     if (bFirst)
                         bFirst = false;
                     else
-                        dlist += L",";
+                        dlist += L";";//dlist += L",";
                     dlist += user;
                 }
                 pUser->Release();
