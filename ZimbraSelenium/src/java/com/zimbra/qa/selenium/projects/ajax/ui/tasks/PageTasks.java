@@ -544,7 +544,8 @@ public class PageTasks extends AbsTab{
 			throw new HarnessException("implement Print dialog");
 
 		} else if (button == Button.B_SAVE) {
-			locator = "css=div[id^='ztb__TKE'] div[id$='__SAVE']";
+			//locator = "css=div[id^='ztb__TKE'] div[id$='__SAVE']";
+			locator="css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='_title']:contains('Save')";
 			page = null;
 			//page = new FormTaskNew(this.MyApplication);
 

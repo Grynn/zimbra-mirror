@@ -154,7 +154,7 @@ public class CreateHtmlTask extends AjaxCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(description = "Create new Html task using keyboard shortcut 'NK'- Verify through Soap", groups = { "smoke" })
-	public void CreateTask_04() throws HarnessException {
+	public void CreateHtmlTask_04() throws HarnessException {
 
 		Shortcut shortcut = Shortcut.S_NEWTASK;
 		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
@@ -187,7 +187,7 @@ public class CreateHtmlTask extends AjaxCommonTest {
 
 	@Test(	description = "Create Html Tasks, using 'Right Click' Html Mail subject -> 'Create Task'-Verify through Soap",
 			groups = { "smoke" })
-	public void CreateTask_05() throws HarnessException {
+	public void CreateHtmlTask_05() throws HarnessException {
 
 		app.zPageMail.zNavigateTo();
 		
@@ -244,7 +244,7 @@ public class CreateHtmlTask extends AjaxCommonTest {
 	}
 	
 	@Test(description = "Create Html task with attachment through RestUtil - verify through GUI", groups = { "smoke" })
-	public void CreateTask_06() throws HarnessException {
+	public void CreateHtmlTask_06() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 		FolderItem taskFolder = FolderItem.importFromSOAP(account, SystemFolder.Tasks);
 
@@ -292,7 +292,7 @@ public class CreateHtmlTask extends AjaxCommonTest {
 	}
 	
 	@Test(description = "Create Html task with attachment through RestUtil - verify through Soap", groups = { "smoke" })
-	public void CreateTask_07() throws HarnessException {
+	public void CreateHtmlTask_07() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 		FolderItem taskFolder = FolderItem.importFromSOAP(account, SystemFolder.Tasks);
 
