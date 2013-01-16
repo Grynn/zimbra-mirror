@@ -17,10 +17,10 @@ import com.zimbra.qa.selenium.projects.ajax.ui.*;
  * @author Matt Rhoades
  * 
  */
-public class PageTasks extends AbsTab {
-
+public class PageTasks extends AbsTab{
+	
 	public static class Locators {
-
+		
 		public static final String zl__TKL__rowsID = "zl__TKL__rows";
 		public static final String _newTaskBannerID = "_newTaskBannerId";
 		public static final String _upComingTaskListHdrID = "_upComingTaskListHdr";
@@ -60,13 +60,19 @@ public class PageTasks extends AbsTab {
 		//public static final String zPrintTaskDropDown="css=td#zcs8_dropdown>div";
 
 		public static final String zPrintTaskFolder ="css=tr[id='POPUP_PRINT_TASKFOLDER'] td[id$='_title']";
-		public static final String zCloseButton = "css=div[id='zb__TKV__CLOSE']";
+		//public static final String zCloseButton = "css=div[id='zb__TKV__CLOSE']";
+		public static final String zCloseButton="css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='_title']:contains('Close')";
 		//public static final String zAttachButton = "css=div[id^='zb__TKE'] td[id$='__ATTACHMENT_left_icon']>div";
 		//public static final String zAttachButton = "css=div[id^='ztb__TKE'] td[id='zcs18_left_icon']>div";
 		public static final String zAttachmentInputBox = "css=input[name='__calAttUpload__']";		
 		public static final String zAttachmentsLabel = "css=div[id='zv__TKL-main'] div[class='ZmMailMsgView'] td[class='LabelColName']:contains('Attachments')";
 		public static final String zEditButton= "css=div[id^='ztb__TKL'] tr[id^='ztb__TKL'] td[id$='_title']:contains('Edit')";
 		public static final String zEditAttachmentCheckbox="css=div[class='ZmTaskEditView'] tr[id$='_attachment_container'] input[type='checkbox']";
+		//Id's from Shared window
+		
+		public static final String zCloseButton_Shared="css=div[id^='ztb__TKV']  tr[id^='ztb__TKV'] td[id$='_title']:contains('Close')";
+		
+		
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -120,7 +126,7 @@ public class PageTasks extends AbsTab {
 	 */
 	@Override
 	public void zNavigateTo() throws HarnessException {
-
+		
 		// Check if this page is already active.
 		if (zIsActive()) {
 			return;
@@ -544,6 +550,12 @@ public class PageTasks extends AbsTab {
 
 		}else if (button == Button.B_CLOSE) {
 			locator = Locators.zCloseButton;
+			page = null;
+			//page = new FormTaskNew(this.MyApplication);
+
+		}
+		else if (button == Button.B_CLOSE_SHARED) {
+			locator = Locators.zCloseButton_Shared;
 			page = null;
 			//page = new FormTaskNew(this.MyApplication);
 
@@ -1177,6 +1189,19 @@ public class PageTasks extends AbsTab {
 		}
 
 	}
+	
+	
+	public boolean zVerifyDisabled(String  buttonID)throws HarnessException{
+		if(buttonID=="DeleteButton"){
+			return this.sIsElementPresent("css=div[id='"+ZimbraDOM.getID(ZimbraDOM.APP.APP_TASKS, ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON, ZimbraDOM.COMPONENT_NAME.OP_DELETE)+"'].ZDisabled");
+		}else if(buttonID=="EditButton"){
+			return this.sIsElementPresent("css=div[id='"+ZimbraDOM.getID(ZimbraDOM.APP.APP_TASKS, ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON, ZimbraDOM.COMPONENT_NAME.OP_EDIT)+"'].ZDisabled");
+		}else if(buttonID=="MoveButton"){
+			return this.sIsElementPresent("css=div[id='"+ZimbraDOM.getID(ZimbraDOM.APP.APP_TASKS, ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON, ZimbraDOM.COMPONENT_NAME.OP_MOVE_MENU)+"'].ZDisabled");
+		}else{
+			return false;
+		}
 
+	}
 
 }
