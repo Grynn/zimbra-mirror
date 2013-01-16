@@ -57,7 +57,6 @@ DwtListView = function(params) {
         var headHtml = document.getElementById(headId);
         this._listColDiv = document.createElement("div");
         this._listColDiv.id = DwtId.getListViewId(this._view, DwtId.LIST_VIEW_HEADERS);
-        this._listColDiv.className = "DwtListView-ColHeader";
         headHtml.appendChild(this._listColDiv);
 
         var colHtml = document.getElementById(colId);
@@ -204,7 +203,7 @@ function(enabled) {
 };
 
 DwtListView.prototype.createHeaderHtml =
-function(defaultColumnSort) {
+function(defaultColumnSort, isColumnHeaderTableFixed) {
 	// does this list view have headers or have they already been created?
 	if (!this._headerList || this.headerColCreated) { return; }
 
@@ -241,6 +240,7 @@ function(defaultColumnSort) {
 	htmlArr[idx++] = "</tr></table>";
 
 	this._listColDiv.innerHTML = htmlArr.join("");
+	this._listColDiv.className = "DwtListView-ColHeader" + (isColumnHeaderTableFixed ? " FixedColumnHeaderTables" : "");
 
 	// for each sortable column, sets its identifier
 	var numResizeable = 0, resizeableCol;
