@@ -78,7 +78,7 @@ public class AdminCommonTest {
 			ClientSessionFactory.session().selenium().windowMaximize();
 			ClientSessionFactory.session().selenium().windowFocus();
 			ClientSessionFactory.session().selenium().allowNativeXpath("true");
-			ClientSessionFactory.session().selenium().setTimeout("30000");
+			ClientSessionFactory.session().selenium().setTimeout("60000");
 			ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getBaseURL());
 			
 		} catch (SeleniumException e) {
