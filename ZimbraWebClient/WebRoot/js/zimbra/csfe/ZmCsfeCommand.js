@@ -410,16 +410,16 @@ function(params) {
 	if (!params.noAuthToken) {
 		var authToken = params.authToken || ZmCsfeCommand.getAuthToken();
 		if (!authToken) {
-			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
+			throw new ZmCsfeException(ZMsg.authTokenRequired, ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
 		}
 		if (ZmCsfeCommand._curAuthToken && !params.skipAuthCheck && 
 			(params.resend != ZmCsfeCommand.REAUTH) && (authToken != ZmCsfeCommand._curAuthToken)) {
-			throw new ZmCsfeException("AuthToken has changed", ZmCsfeException.AUTH_TOKEN_CHANGED, params.methodNameStr);
+			throw new ZmCsfeException(ZMsg.authTokenChanged, ZmCsfeException.AUTH_TOKEN_CHANGED, params.methodNameStr);
 		}
 		context.authToken = ZmCsfeCommand._curAuthToken = authToken;
 	}
 	else if (ZmCsfeCommand.noAuth) {
-		throw new ZmCsfeException("Auth required", ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
+		throw new ZmCsfeException(ZMsg.authRequired, ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
 	}
 
 	AjxDebug.logSoapMessage(params);
@@ -506,11 +506,11 @@ function(params) {
 	if (!params.noAuthToken) {
 		var authToken = params.authToken || ZmCsfeCommand.getAuthToken();
 		if (!authToken) {
-			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
+			throw new ZmCsfeException(ZMsg.authTokenRequired, ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
 		}
 		if (ZmCsfeCommand._curAuthToken && !params.skipAuthCheck && 
 			(params.resend != ZmCsfeCommand.REAUTH) && (authToken != ZmCsfeCommand._curAuthToken)) {
-			throw new ZmCsfeException("AuthToken has changed", ZmCsfeException.AUTH_TOKEN_CHANGED, params.methodNameStr);
+			throw new ZmCsfeException(ZMsg.authTokenChanged, ZmCsfeException.AUTH_TOKEN_CHANGED, params.methodNameStr);
 		}
 		ZmCsfeCommand._curAuthToken = authToken;
 		if (params.resend == ZmCsfeCommand.REAUTH) {
@@ -534,7 +534,7 @@ function(params) {
 		}
 	}
 	else if (ZmCsfeCommand.noAuth && !params.ignoreAuthToken) {
-		throw new ZmCsfeException("Auth required", ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
+		throw new ZmCsfeException(ZMsg.authRequired, ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
 	}
 
 	AjxDebug.logSoapMessage(params);
