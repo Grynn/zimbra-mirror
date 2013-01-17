@@ -1618,8 +1618,8 @@ function(startColor, endColor, direction) {
         gradient.field = "filter";
         gradient.name  = "DXImageTransform.Microsoft.Gradient";
         gradient.css   = "progid:" + gradient.name + "(" +
-                         "GradientType=" + cssDirection + ",startColorstr='" + startColor +
-                         "',endColorstr='" + endColor + "')";
+                         "GradientType=" + cssDirection + ",startColorstr=" + startColor +
+                         ",endColorstr=" + endColor + "); zoom:1;";
     } else if (AjxEnv.isFirefox3_6up) {
         cssDirection = (direction == 'v') ? 'top' : 'left';
         gradient.field = "background";
