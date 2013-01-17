@@ -161,7 +161,13 @@ Com_Zimbra_Url.prototype.clicked = function(){
 };
 
 Com_Zimbra_Url.prototype._showUrlThumbnail = function(url, canvas){
-	canvas.innerHTML = "<b>URL:</b> " + AjxStringUtil.htmlEncode(decodeURI(url));
+	var decodedURI = AjxStringUtil.urlDecode(url);
+	if (decodedURI && decodedURI !== "") {
+		canvas.innerHTML = "<b>" + ZmMsg.urlLabel + "</b> " + AjxStringUtil.htmlEncode(decodedURI);
+	}
+	else if (decodedURI === "") {
+		canvas.innerHTML = "<b>" + ZmMsg.urlLabel + "</b> " + AjxStringUtil.htmlEncode(url);
+	}
 };
 
 Com_Zimbra_Url.prototype._showFreeThumbnail = function(url, canvas) {
