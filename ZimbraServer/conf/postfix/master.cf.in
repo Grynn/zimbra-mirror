@@ -12,12 +12,29 @@ smtp      inet  n       -       n       -       -       smtpd
 	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10029
 	-o smtpd_tls_wrappermode=yes 
 	-o smtpd_sasl_auth_enable=yes
+	-o smtpd_client_restrictions=
+	-o smtpd_data_restrictions=
+	-o smtpd_end_of_data_restrictions=
+	-o smtpd_helo_restrictions=
+	-o smtpd_recipient_restrictions=
+	-o smtpd_relay_restrictions=permit_sasl_authenticated,reject_unauth_destination
+	-o smtpd_sender_restrictions=
+	-o syslog_name=postfix/smtps
+	-o milter_macro_daemon_name=ORIGINATING
 submission inet n      -       n       -       -       smtpd
 	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10029
 	-o smtpd_etrn_restrictions=reject
 	-o smtpd_sasl_auth_enable=%%zimbraMtaSaslAuthEnable%%
-	-o smtpd_client_restrictions=permit_sasl_authenticated,reject
 	-o smtpd_tls_security_level=%%zimbraMtaTlsSecurityLevel%%
+	-o smtpd_client_restrictions=permit_sasl_authenticated,reject
+	-o smtpd_data_restrictions=
+	-o smtpd_end_of_data_restrictions=
+	-o smtpd_helo_restrictions=
+	-o smtpd_recipient_restrictions=
+	-o smtpd_relay_restrictions=permit_sasl_authenticated,reject_unauth_destination
+	-o smtpd_sender_restrictions=
+	-o syslog_name=postfix/submission
+	-o milter_macro_daemon_name=ORIGINATING
 scan      unix  -       -       n       -       10      smtp
 	-o smtp_send_xforward_command=yes
 	-o disable_mime_output_conversion=yes
@@ -92,7 +109,7 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o smtp_send_xforward_command=yes
 	-o disable_dns_lookups=yes
 	-o max_use=20
-%%zimbraLocalBindAddress%%:10025 inet n  -       n       -       -  smtpd
+[%%zimbraLocalBindAddress%%]:10025 inet n  -       n       -       -  smtpd
 	-o content_filter=
 	-o local_recipient_maps=
 	-o virtual_mailbox_maps=
@@ -101,9 +118,12 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o smtpd_restriction_classes=
 	-o smtpd_delay_reject=no
 	-o smtpd_client_restrictions=permit_mynetworks,reject
+	-o smtpd_data_restrictions=
+	-o smtpd_end_of_data_restrictions=
 	-o smtpd_helo_restrictions=
 	-o smtpd_milters=
 	-o smtpd_sender_restrictions=
+	-o smtpd_relay_restrictions=
 	-o smtpd_recipient_restrictions=permit_mynetworks,reject
 	-o mynetworks_style=host
 	-o mynetworks=127.0.0.0/8,[::1]/128
@@ -116,5 +136,18 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o receive_override_options=no_header_body_checks,no_unknown_recipient_checks,no_address_mappings
 	-o local_header_rewrite_clients=
 [%%zimbraLocalBindAddress%%]:10029 inet n - n - - smtpd
+	-o content_filter=
+	-o local_recipient_maps=
+	-o virtual_mailbox_maps=
+	-o virtual_alias_maps=
+	-o relay_recipient_maps=
+	-o smtpd_restriction_classes=
+	-o smtpd_delay_reject=no
 	-o smtpd_milters=inet:localhost:8465
+	-o smtpd_client_restrictions=permit_mynetworks,reject
 	-o smtpd_sender_restrictions=
+	-o smtpd_helo_restrictions=
+	-o smtpd_recipient_restrictions=permit_mynetworks,reject
+	-o smtpd_relay_restrictions=
+	-o smtpd_data_restrictions=
+	-o smtpd_end_of_data_restrictions=
