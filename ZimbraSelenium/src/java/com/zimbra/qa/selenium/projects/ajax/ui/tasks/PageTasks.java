@@ -58,19 +58,12 @@ public class PageTasks extends AbsTab{
 		public static final String zPrintTaskMenuItem ="css=div[id='zm__Tasks'] tr[id^='POPUP_PRINT_TASK'] td[id$='_title']";
 		public static String zPrintTaskDropDownId = null;
 		//public static final String zPrintTaskDropDown="css=td#zcs8_dropdown>div";
-
 		public static final String zPrintTaskFolder ="css=tr[id='POPUP_PRINT_TASKFOLDER'] td[id$='_title']";
-		//public static final String zCloseButton = "css=div[id='zb__TKV__CLOSE']";
-		public static final String zCloseButton="css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='_title']:contains('Close')";
-		//public static final String zAttachButton = "css=div[id^='zb__TKE'] td[id$='__ATTACHMENT_left_icon']>div";
-		//public static final String zAttachButton = "css=div[id^='ztb__TKE'] td[id='zcs18_left_icon']>div";
+		public static final String zCloseButton="css=div[id^='ztb__TKV']  tr[id^='ztb__TKV'] td[id$='_title']:contains('Close')";
 		public static final String zAttachmentInputBox = "css=input[name='__calAttUpload__']";		
 		public static final String zAttachmentsLabel = "css=div[id='zv__TKL-main'] div[class='ZmMailMsgView'] td[class='LabelColName']:contains('Attachments')";
 		public static final String zEditButton= "css=div[id^='ztb__TKL'] tr[id^='ztb__TKL'] td[id$='_title']:contains('Edit')";
 		public static final String zEditAttachmentCheckbox="css=div[class='ZmTaskEditView'] tr[id$='_attachment_container'] input[type='checkbox']";
-		//Id's from Shared window
-		
-		public static final String zCloseButton_Shared="css=div[id^='ztb__TKV']  tr[id^='ztb__TKV'] td[id$='_title']:contains('Close')";
 		
 		
 	}
@@ -528,37 +521,24 @@ public class PageTasks extends AbsTab{
 			// FALL THROUGH
 
 		}else if (button == Button.B_MOVE) {
-
 			locator = "zb__TKL-main__MOVE_left_icon";
-
-
 			page = new DialogMove(this.MyApplication,this);
-
-			// FALL THROUGH
 
 		} else if (button == Button.B_PRINT) {
 
 			locator = "zb__TKL-main__PRINT_left_icon";
-
 			page = null; // TODO
 			throw new HarnessException("implement Print dialog");
 
 		} else if (button == Button.B_SAVE) {
-			//locator = "css=div[id^='ztb__TKE'] div[id$='__SAVE']";
 			locator="css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='_title']:contains('Save')";
 			page = null;
-			//page = new FormTaskNew(this.MyApplication);
+			
 
 		}else if (button == Button.B_CLOSE) {
 			locator = Locators.zCloseButton;
 			page = null;
-			//page = new FormTaskNew(this.MyApplication);
-
-		}
-		else if (button == Button.B_CLOSE_SHARED) {
-			locator = Locators.zCloseButton_Shared;
-			page = null;
-			//page = new FormTaskNew(this.MyApplication);
+			
 
 		}else if (button == Button.B_TAG) {
 

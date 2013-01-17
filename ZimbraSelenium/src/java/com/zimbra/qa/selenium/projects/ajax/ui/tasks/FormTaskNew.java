@@ -59,9 +59,8 @@ public class FormTaskNew extends AbsForm {
 		public static final String zCancelTask = "css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='_title']:contains('Cancel')";
 		public static final String zTaskOptionDropDown = "css=div[id^='ztb__TKE'] div[id$='__COMPOSE_OPTIONS'] td[id$='__COMPOSE_OPTIONS_dropdown']>div";
 		public static final String zTaskFormatAsHtml="css=div[id$='_FORMAT_HTML']";
-		public static final String zTaskFormatAsText="css=div[id$='_FORMAT_TEXT']";
-	
-		
+		public static final String zTaskFormatAsText="css=div[id$='_FORMAT_TEXT']";	
+		public static final String zCloseButton="css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='_title']:contains('Close')";
 	}
 
 	public static class Field {

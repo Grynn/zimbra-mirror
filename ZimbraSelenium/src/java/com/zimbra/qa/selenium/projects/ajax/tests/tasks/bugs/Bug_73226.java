@@ -119,9 +119,9 @@ public class Bug_73226 extends AjaxCommonTest {
 		SleepUtil.sleepMedium();		
 		//Verify Full task view along with Close button
 		ZAssert.assertTrue(app.zPageTasks.sGetEval("window.appCtxt.getCurrentViewType()").equalsIgnoreCase("TKV"),"Verify Full Pane view is open");
-		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zCloseButton_Shared), "Verify Close button is there");
+		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zCloseButton), "Verify Close button is there");
 
-		app.zPageTasks.zToolbarPressButton(Button.B_CLOSE_SHARED);
+		app.zPageTasks.zToolbarPressButton(Button.B_CLOSE);
 
 		//After closing Task list view should show.
 		ZAssert.assertTrue(app.zPageTasks.sGetEval("window.appCtxt.getCurrentViewType()").equalsIgnoreCase("TKL"),"Verify List view is open");
