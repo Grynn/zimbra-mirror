@@ -13,37 +13,83 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * @deprecated
+ *
+ * @see ZaBaseModel, ZaUIHelper
+ *
+ */
 ZaModel = function(init) {
  	if (arguments.length == 0) return;
 	this._evtMgr = new AjxEventMgr();
 }
 
+/**
+ * @deprecated
+ *
+ */
 ZaModel.getBooleanChoices = function () {
     return [{value:"TRUE", label:ZaMsg.Yes}, {value:"FALSE", label:ZaMsg.No}, {value:null, label:ZaMsg.No}];
 }
-ZaModel.BOOLEAN_CHOICES= ZaModel.getBooleanChoices ; 
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.BOOLEAN_AS_STRING_OPTIONS
+ *
+ */
+ZaModel.BOOLEAN_CHOICES= ZaModel.getBooleanChoices ;
 
+/**
+ * @deprecated
+ *
+ */
 ZaModel.getBooleanChoices1 = function () {
     return [{value:true, label:ZaMsg.Yes}, {value:false, label:ZaMsg.No}, {value:null, label:ZaMsg.No}];    
 }
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.BOOLEAN_OPTIONS
+ *
+ */
 ZaModel.BOOLEAN_CHOICES1= ZaModel.getBooleanChoices1 ;
 
+/**
+ * @deprecated
+ *
+ */
 ZaModel.getBooleanChoices2 = function () {
     return [{value:"1", label:ZaMsg.Yes}, {value:"0", label:ZaMsg.No}, {value:null, label:ZaMsg.No}];
 }
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.BOOLEAN_AS_NUMBER_OPTIONS
+ */
 ZaModel.BOOLEAN_CHOICES2= ZaModel.getBooleanChoices2 ;
 
+/**
+ * @deprecated
+ *
+ */
 ZaModel.getAllowChoices = function () {
 	return [{value:"1", label: ZaMsg.Yes},
             {value:"0", label: ZaMsg.No},
             {value:"-1", label: ZaMsg.Ignored},
             {value: null, label: ZaMsg.No}];  
 }
-
+/**
+ * @deprecated
+ *
+ */
 ZaModel.ALLOW_CHOICES = ZaModel.getAllowChoices;
 
-
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.FONT_SIZE_IN_PT_OPTIONS
+ *
+ */
 ZaModel.FONT_SIZE_CHOICES = [
 	{value:"8pt", label: "8pt"},
 	{value:"10pt", label: "10pt"},
@@ -53,6 +99,10 @@ ZaModel.FONT_SIZE_CHOICES = [
 	{value:"24pt", label: "24pt"},
 	{value:"36pt", label: "36pt"}];
 
+/**
+ * @deprecated
+ *
+ */
 ZaModel.getFontFamilyChoices = function() {
 	return [
 		{label:ZaMsg.LBL_fontFamilySansSerif,		value:"arial, helvetica, sans-serif" },
@@ -69,20 +119,49 @@ ZaModel.getFontFamilyChoices = function() {
 	    {label:ZaMsg.LBL_fontFamilyWide,      		value:"verdana, helvetica, sans-serif" }
 	];
 }
-
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.FONT_FAMILY_OPTIONS
+ *
+ */
 ZaModel.FONT_FAMILY_CHOICES = ZaModel.getFontFamilyChoices;
 
+/**
+ * @deprecated
+ *
+ */
 ZaModel.getComposeFormatChoices =   function () {
     return [{value:"text", label:ZaMsg.Text}, {value:"html", label:ZaMsg.HTML}];
 }
-
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.COMPOSE_MAIL_FORMAT_OPTIONS
+ *
+ */
 ZaModel.COMPOSE_FORMAT_CHOICES = ZaModel.getComposeFormatChoices ;
 
+/**
+ * @deprecated
+ *
+ */
 ZaModel.SEND_READ_RECEIPT_ALWAYS = "always";
+/**
+ * @deprecated
+ *
+ */
 ZaModel.SEND_READ_RECEIPT_NEVER = "never";
+/**
+ * @deprecated
+ *
+ */
 ZaModel.SEND_READ_RECEIPT_PROMPT = "prompt";
 
-
+/**
+ * @deprecated
+ *
+ */
 ZaModel.getSendReadReceiptByChoices = function() {
      return [
         {value:ZaModel.SEND_READ_RECEIPT_ALWAYS,label:ZaMsg.SEND_READ_RECEIPT_ALWAYS},
@@ -90,28 +169,87 @@ ZaModel.getSendReadReceiptByChoices = function() {
         {value:ZaModel.SEND_READ_RECEIPT_PROMPT,label:ZaMsg.SEND_READ_RECEIPT_PROMPT}
     ];
 }
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.SEND_READ_RECEIPT_OPTIONS
+ *
+ */
 ZaModel.SEND_READ_RECEPIT_CHOICES = ZaModel.getSendReadReceiptByChoices;
 
+/**
+ * @deprecated
+ *
+ */
 ZaModel.getGroupMailByChoices = function () {
     return [{value:"conversation", label:ZaMsg.Conversation}, {value:"message", label:ZaMsg.Message}];
 }
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.GROUP_MAIL_BY_OPTIONS
+ */
 ZaModel.GROUP_MAIL_BY_CHOICES = ZaModel.getGroupMailByChoices ;
 
+/**
+ * @deprecated
+ *
+ */
 ZaModel.getSignatureStyleChoices = function () {
     return [{value:"outlook", label:ZaMsg.No}, {value:"internet", label:ZaMsg.Yes}];
 }
+/**
+ * @deprecated
+ *
+ */
 ZaModel.SIGNATURE_STYLE_CHOICES = ZaModel.getSignatureStyleChoices ;
 
+/**
+ * @deprecated
+ *
+ */
 ZaModel.getReminderChoices = function () {
     return [{value:"0",label:ZaMsg.never},{value:1,label:"1"},{value:5,label:"5"},{value:10,label:"10"},{value:15,label:"15"},{value:20,label:"20"},{value:25,label:"25"},{value:30,label:"30"},{value:45,label:"45"},{value:50,label:"50"},{value:55,label:"55"},{value:60,label:"60"}];
 }
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.REMINDER_OPTIONS
+ *
+ */
 ZaModel.REMINDER_CHOICES = ZaModel.getReminderChoices ;
 
+/**
+ * @deprecated
+ *
+ */
 ZaModel.ErrorCode = "code";
+/**
+ * @deprecated
+ *
+ */
 ZaModel.ErrorMessage = "error_message";
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.CURRENT_STEP
+ *
+ */
 ZaModel.currentStep = "currentStep";
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.CURRENT_TAB
+ *
+ */
 ZaModel.currentTab = "currentTab";
 
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.TIME_DHMS_OPTIONS
+ *
+ */
 ZaModel.getTimeChoices = function () {
     return [
             {value:"d", label:AjxMsg.days},
@@ -121,6 +259,12 @@ ZaModel.getTimeChoices = function () {
            ];
 }
 
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.TIME_DH_OPTIONS
+ *
+ */
 ZaModel.getTimeChoices1 = function () {
     return [
  				{value:"d", label:AjxMsg.days},
@@ -128,6 +272,12 @@ ZaModel.getTimeChoices1 = function () {
             ];
 }
 
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.TIME_DWMY_OPTIONS
+ *
+ */
 ZaModel.getLongTimeChoices = function () {
     return [
         {value:"d", label:AjxMsg.days},
@@ -137,22 +287,43 @@ ZaModel.getLongTimeChoices = function () {
     ];
 }
 
-ZaModel.prototype.toString = 
+/**
+ * @deprecated
+ *
+ */
+ZaModel.prototype.toString =
 function() {
 	return "ZaModel";
 }
 
-ZaModel.prototype.addChangeListener = 
+/**
+ * @deprecated
+ *
+ * @see ZaBaseModel.addChangeListener
+ *
+ */
+ZaModel.prototype.addChangeListener =
 function(listener) {
 	return this._evtMgr.addListener(ZaEvent.L_MODIFY, listener);
 }
 
-ZaModel.prototype.removeChangeListener = 
+/**
+ * @deprecated
+ *
+ * @see ZaBaseModel.removeChangeListener
+ *
+ */
+ZaModel.prototype.removeChangeListener =
 function(listener) {
 	return this._evtMgr.removeListener(ZaEvent.L_MODIFY, listener);    	
 }
 
-
+/**
+ * @deprecated
+ *
+ * @see ZaUIHelper.getUnrecognizedChoiceValue
+ *
+ */
 ZaModel.setUnrecoganizedChoiceValue = function (v, choices) {
 	var new_v = ZaMsg.VALUE_UNRECOGNIZED;
 	var myChoices = choices ;
