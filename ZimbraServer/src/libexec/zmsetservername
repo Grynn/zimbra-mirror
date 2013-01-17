@@ -80,7 +80,7 @@ if (!$force) {
     my $iaddr=splice(@a,4);
     if (!defined($iaddr)) {
       print "Error: Hostname $newServerName is not resolvable via /etc/hosts or DNS.\n";
-      exit 0;
+      exit 1;
     }
   }
 }
