@@ -566,7 +566,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
             else if (ft == 3)
             {
                 ApptItemData apptData;
-				dlog.err("Mapiaccess->getItem  ApptItemData ");
+				dlog.trace("Mapiaccess->getItem  ApptItemData ");
 
                 ret = maapi->GetItem(ItemID, apptData);
                 if((ret != NULL))

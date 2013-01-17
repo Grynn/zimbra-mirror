@@ -23,12 +23,15 @@ MAPIAppointmentException::MAPIAppointmentException(HRESULT hrErrCode, LPCWSTR lp
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //bool MAPIAppointment::m_bNamedPropsInitialized = false;
 
-MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session,  Zimbra::MAPI::MAPIMessage &mMessage, int exceptionType)
+MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session, Zimbra::MAPI::MAPIStore &store, Zimbra::MAPI::MAPIMessage &mMessage, int exceptionType)
                                 : MAPIRfc2445 (session, mMessage)
 {
+	m_mapiStore = &store;
     m_iExceptionType = exceptionType;
     SetExceptionType(exceptionType);
-
+	pInvTz = NULL;
+	_pTzString = NULL;
+	
     //if (MAPIAppointment::m_bNamedPropsInitialized == false)
     //{
 	pr_clean_global_objid = 0;
@@ -186,7 +189,19 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     ULONG cVals = 0;
     bool bAllday = false;
     m_bHasAttachments = false;
-    m_bIsRecurring = false;
+    m_bIsRecurring = false;	
+
+	// get the zimbra appt wrapper around the mapi message
+ 	Zimbra::Mapi::Appt appt(m_pMessage, m_mapiStore->GetInternalMAPIStore());
+
+    // save off the default timezone info for this appointment
+    hr = appt.GetTimezone(_olkTz, &_pTzString);
+	if (SUCCEEDED(hr))
+    {
+		// get the timezone info for this appt
+		pInvTz= new Zimbra::Mail::TimeZone(_pTzString);
+		pInvTz->Initialize(_olkTz, _pTzString);
+	}
 
     if (FAILED(hr = m_pMessage->GetProps((LPSPropTagArray) & appointmentProps, fMapiUnicode, &cVals,
             &m_pPropVals)))
@@ -319,12 +334,16 @@ void MAPIAppointment::SetTimezoneId(LPTSTR pStr)
 	return 0;
     }
 
-    // Set Timezone info
+	// Set Timezone info
     SYSTEMTIME stdTime;
     SYSTEMTIME dsTime;
-    const Zimbra::Mail::TimeZone &tzone = recur.GetTimeZone();
-    m_timezone.id = m_pTimezoneId;  // don't use m_timezone.id = tzone.GetId()
-    IntToWstring(tzone.GetStandardOffset(), m_timezone.standardOffset);
+	Zimbra::Mail::TimeZone tmpz =  recur.GetTimeZone();
+	if(pInvTz)
+		tmpz= *pInvTz;
+	const Zimbra::Mail::TimeZone &tzone= tmpz;
+	
+	m_timezone.id = m_pTimezoneId;  // don't use m_timezone.id = tzone.GetId()
+	IntToWstring(tzone.GetStandardOffset(), m_timezone.standardOffset);
     IntToWstring(tzone.GetDaylightOffset(), m_timezone.daylightOffset);
     tzone.GetStandardStart(stdTime);
     tzone.GetDaylightStart(dsTime);
@@ -491,14 +510,14 @@ void MAPIAppointment::SetExceptions()
             if (lpExceptionMessage.get() != NULL)
             {
                 exMAPIMsg.Initialize(lpExceptionMessage.get(), *m_session);
-                MAPIAppointment* pEx = new MAPIAppointment(*m_session, exMAPIMsg, NORMAL_EXCEPTION);   // delete done in CMapiAccessWrap::GetData
+                MAPIAppointment* pEx = new MAPIAppointment(*m_session, *m_mapiStore, exMAPIMsg, NORMAL_EXCEPTION);   // delete done in CMapiAccessWrap::GetData
                 FillInExceptionAppt(pEx, lpException);
                 m_vExceptions.push_back(pEx);
             }
         }
         else
         {
-            MAPIAppointment* pEx = new MAPIAppointment(*m_session, *m_mapiMessage, CANCEL_EXCEPTION);
+            MAPIAppointment* pEx = new MAPIAppointment(*m_session, *m_mapiStore, *m_mapiMessage, CANCEL_EXCEPTION);
             FillInCancelException(pEx, ftOrigDate);
             m_vExceptions.push_back(pEx);
         }
@@ -647,7 +666,8 @@ void MAPIAppointment::SetStartDate(FILETIME ft)
     if ((m_bIsRecurring) || (m_iExceptionType == NORMAL_EXCEPTION))
     {
 	TIME_ZONE_INFORMATION localTimeZone = {0};
-	GetTimeZoneInformation(&localTimeZone);	
+	pInvTz->PopulateTimeZoneInfo(localTimeZone);
+	//GetTimeZoneInformation(&localTimeZone);	
 	bUseLocal = SystemTimeToTzSpecificLocalTime(&localTimeZone, &st, &localst);
     }
     m_pStartDate = (bUseLocal) ? Zimbra::Util::FormatSystemTime(localst, FALSE, TRUE)
@@ -684,7 +704,8 @@ void MAPIAppointment::SetEndDate(FILETIME ft, bool bAllday)
 	if ((m_bIsRecurring) || (m_iExceptionType == NORMAL_EXCEPTION))
 	{
 	    TIME_ZONE_INFORMATION localTimeZone = {0};
-	    GetTimeZoneInformation(&localTimeZone);	
+	    //GetTimeZoneInformation(&localTimeZone);	
+		pInvTz->PopulateTimeZoneInfo(localTimeZone);
 	    bUseLocal = SystemTimeToTzSpecificLocalTime(&localTimeZone, &st, &localst);
 	}
     }

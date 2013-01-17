@@ -388,6 +388,7 @@ LPCWSTR MAPIAccessAPI::_InitializeUser()
                 __FILE__, __LINE__);
 			Zimbra::Util::CopyString(lpwstrRetVal, L"MAPIAccessAPI::Initialize() Failed");
 		}
+		Zimbra::Mapi::NamedPropsManager::SetNamedProps(m_userStore->GetInternalMAPIStore());
     }
     catch (GenericException &ge)
     {
@@ -918,13 +919,16 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
         }
         else if (msg.ItemType() == ZT_APPOINTMENTS)
         {
-            MAPIAppointment mapiappointment(*m_zmmapisession, msg, NO_EXCEPTION);
+            MAPIAppointment mapiappointment(*m_zmmapisession, *m_userStore ,msg, NO_EXCEPTION);
             ApptItemData *ad = (ApptItemData *)&itemData;
             ad->Subject = mapiappointment.GetSubject();
             ad->Name = mapiappointment.GetSubject();
+			dlogi(L"Subject: ",ad->Subject.c_str());
             ad->StartDate = mapiappointment.GetStartDate();
+			dlogi(L"StartDate: ",ad->StartDate.c_str());
             ad->CalFilterDate = mapiappointment.GetCalFilterDate();
             ad->EndDate = mapiappointment.GetEndDate();
+			dlogi("EndDate: ",ad->EndDate.c_str());
             ad->Location = mapiappointment.GetLocation();
             ad->PartStat = mapiappointment.GetResponseStatus();
 			ad->CurrStat = mapiappointment.GetCurrentStatus();
