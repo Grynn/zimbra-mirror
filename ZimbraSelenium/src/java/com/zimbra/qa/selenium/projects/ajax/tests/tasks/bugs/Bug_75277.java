@@ -116,7 +116,7 @@ public class Bug_75277 extends AjaxCommonTest {
 		SleepUtil.sleepMedium();		
 		//Verify Full task view along with Close button
 		ZAssert.assertTrue(app.zPageTasks.sGetEval("window.appCtxt.getCurrentViewType()").equalsIgnoreCase("TKV"),"Verify Full Pane view is open");
-		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zCloseButton_Shared), "Verify Close button is there");
+		ZAssert.assertTrue(app.zPageTasks.sIsElementPresent(Locators.zCloseButton), "Verify Close button is there");
 
 
 		//Closing window using Esc shortcut key
