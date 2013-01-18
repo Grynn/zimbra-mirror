@@ -261,7 +261,7 @@ NET_SERVER := \
 	Net-Server-2.005
 
 PERL_LDAP := \
-	perl-ldap-0.50
+	perl-ldap-0.52
 
 DBD_PERL_LIBS 	:= \
 	DBD-mysql-4.022
