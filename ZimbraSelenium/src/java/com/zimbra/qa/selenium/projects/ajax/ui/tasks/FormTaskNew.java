@@ -57,7 +57,7 @@ public class FormTaskNew extends AbsForm {
 		public static final String zTasksubjFieldDesktop = "//td[contains(@id,'_subject')]/div/input";
 		//public static final String zCancelTask = "zb__TKE-1__CANCEL_left_icon";
 		public static final String zCancelTask = "css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='_title']:contains('Cancel')";
-		public static final String zTaskOptionDropDown = "css=div[id^='ztb__TKE'] div[id$='__COMPOSE_OPTIONS'] td[id$='__COMPOSE_OPTIONS_dropdown']>div";
+	//	public static final String zTaskOptionDropDown = "css=div[id^='ztb__TKE'] div[id$='__COMPOSE_OPTIONS'] td[id$='__COMPOSE_OPTIONS_dropdown']>div";
 		public static final String zTaskFormatAsHtml="css=div[id$='_FORMAT_HTML']";
 		public static final String zTaskFormatAsText="css=div[id$='_FORMAT_TEXT']";	
 		public static final String zCloseButton="css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='_title']:contains('Close')";
@@ -230,20 +230,35 @@ public class FormTaskNew extends AbsForm {
 		}else if(pulldown==Button.B_OPTIONS){ 
 			if(option==Button.O_OPTION_FORMAT_AS_HTML){
 				
-				pulldownLocator=Locators.zTaskOptionDropDown;
+				String zTaskOptionDropDown = ZimbraDOM.getID(
+						ZimbraDOM.APP.APP_TASKS,
+						ZimbraDOM.COMPONENT_NAME.OP_COMPOSE_OPTIONS,
+						ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON);	
+				
+				pulldownLocator = "css=div#" + zTaskOptionDropDown + " td[id$='_dropdown']";
+				//pulldownLocator=Locators.zTaskOptionDropDown;
+				
 				optionLocator=Locators.zTaskFormatAsHtml;
 				page=this;
 				
 			}else if(option==Button.O_OPTION_FORMAT_AS_TEXT){
-				pulldownLocator=Locators.zTaskOptionDropDown;
+				//pulldownLocator=Locators.zTaskOptionDropDown;
+
+				String zTaskOptionDropDown = ZimbraDOM.getID(
+						ZimbraDOM.APP.APP_TASKS,
+						ZimbraDOM.COMPONENT_NAME.OP_COMPOSE_OPTIONS,
+						ZimbraDOM.COMPONENT_TYPE.WIDGET_BUTTON);
+				
+				pulldownLocator = "css=div#" + zTaskOptionDropDown + " td[id$='_dropdown']";
 				optionLocator=Locators.zTaskFormatAsText;
+				
 				page = new DialogWarning(
 						DialogWarning.DialogWarningID.SwitchingToTextWillDiscardHtmlFormatting,
 						this.MyApplication,
 						((AppAjaxClient)this.MyApplication).zPageTasks);
 
 			}
-			
+
 			
 		}else {
 		
