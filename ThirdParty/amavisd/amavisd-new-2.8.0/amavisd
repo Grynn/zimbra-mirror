@@ -25447,6 +25447,8 @@ sub auto_learn {
   for my $as (@{$self->{scanners_list}}) {
     my($scanner_obj,$scanner_name) = @$as;
     next if !$scanner_obj || !$scanner_obj->UNIVERSAL::can('auto_learn');
+    next if !$scanner_obj->UNIVERSAL::can('can_auto_learn') ||
+            !$scanner_obj->can_auto_learn;
 
     # learn-on-error logic: what was the final outcome
     my($min_spam_level, $max_spam_level) =
@@ -25727,6 +25729,12 @@ sub check {
 sub auto_learn {
   my($self,$msginfo,$learn_as) = @_;
   $self->check_or_learn($msginfo,$learn_as);
+}
+
+sub can_auto_learn {
+  my($self) = @_;
+  my $opt = $self->{options};
+  $opt && defined $opt->{'learn_ham'} && defined $opt->{'learn_spam'};
 }
 
 # pass a mail message to an external (spam checking) program,
