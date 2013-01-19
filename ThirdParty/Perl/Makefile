@@ -21,9 +21,6 @@ DEST_DIR		:= $(PERL_ROOT)/zimbramon
 DEST_LIB_DIR	:= $(DEST_DIR)/lib
 DEST_BIN_DIR	:= $(DEST_DIR)/bin
 
-MODULE_UPLEVEL	:= Sub::Uplevel
-MODULE_WWW	:= LWP::Protocol::https
-MODULE_NETADDR_IP	:= NetAddr::IP
 MODULE_EXTUTIL_MAKEMAKER	:= \
 	ExtUtils::MakeMaker \
 	CPAN::Meta::YAML \
@@ -34,61 +31,9 @@ MODULE_EXTUTIL_MAKEMAKER	:= \
 	JSON::PP::Compat5006 \
 	File::Copy::Recursive \
 	version \
+	CPAN::Meta::Requirements \
 	CPAN::Meta \
 	ExtUtils::MakeMaker
-
-LWP_LIBS        := \
-	Mozilla::CA \
-	LWP::MediaTypes \
-	Encode::Locale \
-	HTTP::Date \
-	HTTP::Message \
-	HTTP::Negotiate \
-	File::Listing \
-	HTTP::Daemon \
-	HTTP::Cookies \
-	WWW::RobotRules \
-	LWP::UserAgent
-
-MODULE_BUILD_LIBS       := \
-	Locale::Maketext::Simple \
-	Params::Check \
-	Module::Load \
-	Module::CoreList \
-	Module::Load::Conditional \
-	IPC::Cmd \
-	ExtUtils::CBuilder \
-	S/SM/SMUELLER/ExtUtils-ParseXS-3.15.tar.gz \
-	Test::Harness \
-	D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz
-
-ifeq (RHEL4,$(findstring RHEL4,$(BUILD_PLATFORM)))
-	MODULE_UPLEVEL	:= D/DA/DAGOLDEN/Sub-Uplevel-0.22.tar.gz
-	MODULE_BUILD_LIBS	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
-	MODULE_WWW	:= G/GA/GAAS/libwww-perl-5.837.tar.gz
-	MODULE_NETADDR_IP	:= M/MI/MIKER/NetAddr-IP-4.040.tar.gz
-	MODULE_EXTUTIL_MAKEMAKER	:=  \
-		ExtUtils::Manifest \
-		ExtUtils::Command \
-		ExtUtils::Installed \
-		ExtUtils::Packlist \
-		ExtUtils::Install \
-		version \
-		M/MS/MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz
-	LWP_LIBS	:=
-endif
-
-ifeq (RHEL5,$(findstring RHEL5,$(BUILD_PLATFORM)))
-	MODULE_BUILD_LIBS	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
-endif
-
-ifeq (SLES10_64,$(findstring SLES10_64,$(BUILD_PLATFORM)))
-	MODULE_BUILD_LIBS	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
-endif
-
-ifeq (UBUNTU8,$(findstring UBUNTU8,$(BUILD_PLATFORM)))
-	MODULE_BUILD_LIBS	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
-endif
 
 LOGFILE ?= ThirdParty-Perllibs.log
 
@@ -129,11 +74,36 @@ SASL_INCLUDE	:= $(ZIMBRA_HOME)/cyrus-sasl/include
 
 # Order is important here
 PRE_PERL_LIBS	:= \
+	Test::Requires \
+	Try::Tiny \
+	Test::Fatal \
+	Params::Util \
+	List::MoreUtils \
+	Sub::Install \
+	Package::DeprecationManager \
+	Package::Stash::XS \
+	Test::Simple \
+	Data::OptList \
+	Sub::Exporter \
+	MRO::Compat \
+	Task::Weaken \
+	Class::Load::XS \
+	Eval::Closure \
+	Dist::CheckConflicts \
+	Package::Stash \
+	Module::Runtime \
+	Module::Implementation \
+	Class::Load \
+	Sub::Name \
+	Carp \
+	Sub::Exporter::Progressive \
+	Devel::GlobalDestruction \
 	Moose \
+	Test::Tester \
+	Test::NoWarnings \
 	Array::Compare \
 	Tree::DAG_Node \
-	Test::Simple \
-	$(MODULE_UPLEVEL) \
+	Sub::Uplevel \
 	Test::Exception \
 	Test::Warn
 
@@ -160,23 +130,42 @@ PERL_LIBS 	:= \
 	Net::SMTP \
 	Proc::ProcessTable \
 	HTTP::Parser \
-	$(LWP_LIBS) \
-	$(MODULE_WWW) \
+	Mozilla::CA \
+	LWP::MediaTypes \
+	Encode::Locale \
+	HTTP::Date \
+	IO::HTML \
+	HTTP::Message \
+	HTTP::Negotiate \
+	File::Listing \
+	HTTP::Daemon \
+	HTTP::Cookies \
+	WWW::RobotRules \
+	LWP::UserAgent \
+	LWP::Protocol::https \
 	IO::Stringy \
 	E/ER/ERYQ/MIME-Lite-2.117.tar.gz \
-	$(MODULE_BUILD_LIBS) \
+	Locale::Maketext::Simple \
+	Params::Check \
+	Module::Load \
+	Module::CoreList \
+	Module::Metadata \
+	Module::Load::Conditional \
+	IPC::Cmd \
+	Perl::OSType \
+	ExtUtils::CBuilder \
+	S/SM/SMUELLER/ExtUtils-ParseXS-3.15.tar.gz \
+	Test::Harness \
+	D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz \
 	Date::Parse \
 	Pod::Escapes \
 	Pod::Simple \
 	Test::Pod \
 	Mail::Mailer \
 	Convert::BinHex \
-	Test::Tester \
-	Test::NoWarnings \
 	Test::Deep \
 	File::Temp \
 	D/DS/DSKOLL/MIME-tools-5.502.tar.gz \
-	Task::Weaken \
 	Class::Inspector \
 	SOAP::Lite \
 	Net::Telnet \
@@ -190,6 +179,7 @@ PERL_LIBS 	:= \
 	Test::Pod::Coverage \
 	S/SB/SBECK/Date-Manip-5.56.tar.gz \
 	Time::HiRes \
+	Math::BigInt \
 	Convert::ASN1 \
 	Unix::Syslog \
 	Parallel::ForkManager \
@@ -211,13 +201,13 @@ PERL_LIBS 	:= \
 	Archive::Zip  \
 	Error \
 	Mail::DKIM \
-	K/KH/KHAMPTON/XML-SAX-Base-1.04.tar.gz \
+	G/GR/GRANTM/XML-SAX-Base-1.08.tar.gz \
 	XML::NamespaceSupport \
 	XML::SAX \
 	XML::SAX::Expat \
 	G/GR/GRANTM/XML-Simple-2.20.tar.gz \
 	IO::Socket::INET6 \
-	$(MODULE_NETADDR_IP) \
+	NetAddr::IP \
 	IO::Socket::IP \
 	Net::DNS::Resolver::Programmable \
 	Geography::Countries \
