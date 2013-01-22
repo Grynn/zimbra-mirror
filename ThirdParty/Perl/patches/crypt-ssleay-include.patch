@@ -1,0 +1,11 @@
+--- Crypt-SSLeay-0.64/Makefile.PL.orig	2013-01-22 12:55:32.000000000 -0800
++++ Crypt-SSLeay-0.64/Makefile.PL	2013-01-22 12:55:54.000000000 -0800
+@@ -40,6 +40,8 @@
+ 
+     LIBS => [q{-lz -lssl -lcrypto -lssl32 -lssleay32 -leay32}],
+ 
++    'INC'               => '', # e.g., '-I/usr/include/other'
++
+     ($opt_static ? (LINK_TYPE => 'static') : ()),
+ 
+     BUILD_REQUIRES => {
