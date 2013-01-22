@@ -62,14 +62,15 @@ public class NavigateToToday extends CalendarWorkWeekTest {
         // Make sure view shows todays date
         String today = todaysDate.replaceAll(",", "");
         Date d = new Date();
-        String mydate = null;
-       if(d.toString().charAt(8) == '0')
-       {
-    	   String ad = d.toString().substring(8, 9);
-    	   if(ad.charAt(0)== '0'){
-    		   mydate = d.toString().substring(0,7) + " " + d.toString().charAt(9);
-    	   }   
-       }
+        String mydate = d.toString().substring(0,10);
+	      
+        if(d.toString().charAt(8) == '0'){
+	    	   String ad = d.toString().substring(8, 9);
+	    	   if(ad.charAt(0)== '0'){
+	    		   mydate = d.toString().substring(0,7) + " " + d.toString().charAt(9);
+	    	   }   
+	       }
+        
        ZAssert.assertEquals(today, mydate , "todays date is presnt in the view");
 	}
 	
@@ -114,7 +115,7 @@ public class NavigateToToday extends CalendarWorkWeekTest {
         // Make sure view shows todays date
         String today = todaysDate.replaceAll(",", "");
         Date d = new Date();
-        String mydate = null;
+        String mydate = d.toString().substring(0,10);
         
        if(d.toString().charAt(8) == '0')
        {
