@@ -23,10 +23,10 @@ public class DownloadsTab extends AdminCommonTest {
 		"//a[contains(text(),'Zimbra Connector for Outlook Branding MSI')]", // TODO: need to add unique ID
 		
 		// Zimbra Connector(32bits) for Outlook
-		"//a[contains(text(),'Zimbra Connector(32bits) for Outlook')]", // TODO: need to add unique ID
+		"//a[contains(text(),'Zimbra Connector for Outlook (32bit)')]", // TODO: need to add unique ID
 		
 		// Zimbra Connector(64bits) for Outlook
-		"//a[contains(text(),'Zimbra Connector(64bits) for Outlook')]", // TODO: need to add unique ID
+		"//a[contains(text(),'Zimbra Connector for Outlook (64bit)')]", // TODO: need to add unique ID
 		
 		// (User Instructions )
 		//"//a[contains(text(),'User Instructions')]", // TODO: need to add unique ID
@@ -50,10 +50,10 @@ public class DownloadsTab extends AdminCommonTest {
 		// These links appear on both NETWORK and FOSS
 		
 		// ZCS Migration Wizard for Exchange
-		"//a[contains(text(),'ZCS Migration Wizard for Exchange/PST (32bits)')]", // TODO: need to add unique ID
+		"//a[contains(text(),'ZCS Migration Wizard for Exchange/PST (32bit)')]", // TODO: need to add unique ID
 		
 		// ZCS Migration Wizard for Exchange
-		"//a[contains(text(),'ZCS Migration Wizard for Exchange/PST (64bits)')]", // TODO: need to add unique ID
+		"//a[contains(text(),'ZCS Migration Wizard for Exchange/PST (64bit)')]", // TODO: need to add unique ID
 
 
 		// ZCS Migration Wizard for Domino
