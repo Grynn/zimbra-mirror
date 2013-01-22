@@ -234,12 +234,16 @@ function() {
 	return [
 		"<div class='mailArchivePrefDialog'>",
 		"<table class='ZPropertySheet' cellspacing='6'>",
-		"<tr><td>" + this.getMessage("archiveFolderPrefLabel") + "</td><td id='ARCHIVE_ZIMLET_FOLDER'></td></tr>" +
-		"<tr><td>" + this.getMessage("archiveHideDeleteButton") + ": </td>",
-		"<td><input id='archiveHideDelete1' name='archiveHideDelete' value='true' " + hideDelete + " type='radio'/>" + this.getMessage("archiveYes"),
-		"<input id='archiveHideDelete2' name='archiveHideDelete' value='false' " + noHideDelete + " type='radio'/>" + this.getMessage("archiveNo") + "</td>",
-		"</tr>"  +
-		"</table>" +
+		"<tr><td style='text-align:right;'>" + this.getMessage("archiveFolderPrefLabel") + ": </td><td id='ARCHIVE_ZIMLET_FOLDER'></td></tr>" +
+		"<tr><td style='text-align:right;'>" + this.getMessage("archiveHideDeleteButton") + ": </td><td>",
+		"<table class='ZRadioButtonTable'><tr>",
+        "<td><input id='archiveHideDelete2' name='archiveHideDelete' value='false' " + noHideDelete + " type='radio'/></td>",
+        "<td><label style='margin-right:1em;'>" + this.getMessage("archiveNo") + "</label></td>",
+        "<td><input id='archiveHideDelete1' name='archiveHideDelete' value='true' " + hideDelete + " type='radio'/></td>",
+        "<td><label>" + this.getMessage("archiveYes") + "</label></td>",
+        "</tr></table>",
+		"</td></tr>",
+		"</table>",
 		"</div>"
 	].join("");
 };
