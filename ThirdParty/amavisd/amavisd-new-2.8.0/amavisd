@@ -18506,7 +18506,7 @@ sub do_search {
     if ($err !~ /^LDAP_/) {
       die "do_search: $err";
     } elsif ($error_name !~ /^LDAP_(?:BUSY|UNAVAILABLE|UNWILLING_TO_PERFORM|
-                             TIMEOUT|SERVER_DOWN|CONNECT_ERROR|OTHER)\z/x) {
+                             TIMEOUT|SERVER_DOWN|CONNECT_ERROR|OTHER|LOCAL_ERROR|OPERATIONS_ERROR)\z/x) {
       die "do_search: failed: $error_name\n";
     } else {  # LDAP related error, worth retrying
       do_log(0, "NOTICE: do_search: trying again: %s", $error_name);
