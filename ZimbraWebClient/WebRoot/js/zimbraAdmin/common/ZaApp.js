@@ -817,7 +817,11 @@ ZaApp.prototype.getSkinChoices =
 function (skins) {
     var skinChoices = [];
     for (var i = 0; i < skins.length; i++) {
-        skinChoices.push ({label: ZaMsg['theme-' + skins[i]], value: skins[i]});
+        var skin = skins[i];
+        skinChoices.push({
+            label: AjxStringUtil.htmlEncode(ZaMsg['theme-' + skin] || skin.substr(0, 1).toUpperCase() + skin.substr(1)),
+            value: skin
+        });
     }
     return skinChoices;
 }
