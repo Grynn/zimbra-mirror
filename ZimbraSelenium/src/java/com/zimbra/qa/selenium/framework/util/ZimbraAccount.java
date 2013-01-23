@@ -266,13 +266,65 @@ public class ZimbraAccount {
 		put("zimbraPrefWarnOnExit","FALSE");
 	}};
 
+	/**
+	 * Determines if the account already exists
+	 * If yes, then the account settings are reset based on the GetAccountResponse
+	 * @throws HarnessException 
+	 */
+	public boolean exists() throws HarnessException {
+	
+		// Check if the account exists
+		ZimbraAdminAccount.GlobalAdmin().soapSend(
+				"<GetAccountRequest xmlns='urn:zimbraAdmin'>"
+				+		"<account by='name'>"+ EmailAddress + "</account>"
+				+	"</GetAccountRequest>");
+		
+		Element[] getAccountResponse = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//admin:GetAccountResponse");
+
+
+		if ( (getAccountResponse == null) || (getAccountResponse.length == 0) ) {
+			
+			logger.debug("Account does not exist");
+			return (false);
+			
+		}
+		
+
+		// Reset the account settings based on the response
+		ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
+		ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
+		ZimbraPrefLocale = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraPrefLocale']", null);
+
+		// If pref is not set, then use default
+		if ( (ZimbraPrefLocale == null) || ZimbraPrefLocale.trim().equals("") ) {
+			ZimbraPrefLocale = Locale.getDefault().toString();
+		}
+
+		// If the adminHost value is set, use that value for the ZimbraMailHost
+		String adminHost = ZimbraSeleniumProperties.getStringProperty("adminHost", null);
+		if ( adminHost != null ) {
+			ZimbraMailHost = adminHost;
+		}
+		
+		return (true);
+	}
 
 	/**
 	 * Creates the account on the ZCS using CreateAccountRequest
 	 */
 	public ZimbraAccount provision() {
+		
 		try {
 
+			// Check if the account already exists
+			// If yes, don't provision again
+			//
+			if ( exists() ) {
+				logger.info(EmailAddress + " already exists.  Not provisioning again.");
+				return (this);
+			}
+
+			
 			
 			// Make sure domain exists
 			ZimbraDomain domain = new ZimbraDomain( EmailAddress.split("@")[1]);
@@ -310,40 +362,29 @@ public class ZimbraAccount {
 					
 				}
 				
+				throw new HarnessException("Unknown error when provisioning account");
 				
-				logger.error("Error occured during account provisioning, perhaps account already exists: "+ EmailAddress);
-				ZimbraAdminAccount.GlobalAdmin().soapSend(
-						"<GetAccountRequest xmlns='urn:zimbraAdmin'>"
-						+		"<account by='name'>"+ EmailAddress + "</account>"
-						+	"</GetAccountRequest>");
-
-				Element[] getAccountResponse = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//admin:GetAccountResponse");
-
-
-				if ( (getAccountResponse == null) || (getAccountResponse.length == 0)) {
-
-					logger.error("Error occured during get account provisioning.  Now I'm really confused");
-
-				} else {
-
-					ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
-					ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
-					ZimbraPrefLocale = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraPrefLocale']", null);
-
-				}
-			} else {
-
-				ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
-				ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
-				ZimbraPrefLocale = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraPrefLocale']", null);
-
-
 			}
+			
 
+			// Set the account settings based on the response
+			ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
+			ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
+			ZimbraPrefLocale = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraPrefLocale']", null);
+
+
+			// If pref is not set, then use default
 			if ( (ZimbraPrefLocale == null) || ZimbraPrefLocale.trim().equals("") ) {
 				ZimbraPrefLocale = Locale.getDefault().toString();
 			}
 
+			// If the adminHost value is set, use that value for the ZimbraMailHost
+			String adminHost = ZimbraSeleniumProperties.getStringProperty("adminHost", null);
+			if ( adminHost != null ) {
+				ZimbraMailHost = adminHost;
+			}
+
+			// If SOAP trace logging is specified, turn it on
 			if ( ZimbraSeleniumProperties.getStringProperty("soap.trace.enabled", "false").toLowerCase().equals("true") ) {
 				
 				ZimbraAdminAccount.GlobalAdmin().soapSend(
@@ -354,7 +395,6 @@ public class ZimbraAccount {
 
 			}
 			
-
 			
 			// Sync the GAL to put the account into the list
 			domain.syncGalAccount();
