@@ -77,12 +77,13 @@ PRE_PERL_LIBS	:= \
 	Test::Requires \
 	Try::Tiny \
 	Test::Fatal \
+	Test::Simple \
+	$(MODULE_EXTUTIL_MAKEMAKER) \
 	Params::Util \
 	List::MoreUtils \
 	Sub::Install \
 	Package::DeprecationManager \
 	Package::Stash::XS \
-	Test::Simple \
 	Data::OptList \
 	Sub::Exporter \
 	MRO::Compat \
@@ -102,6 +103,7 @@ PRE_PERL_LIBS	:= \
 	Test::Tester \
 	Test::NoWarnings \
 	Array::Compare \
+	Test::Pod \
 	Tree::DAG_Node \
 	Sub::Uplevel \
 	Test::Exception \
@@ -114,7 +116,6 @@ PERL_LIBS 	:= \
 	Scalar::Util \
 	IO::Socket::SSL \
 	Socket6 \
-	$(MODULE_EXTUTIL_MAKEMAKER) \
 	DBI \
 	Compress::Raw::Bzip2 \
 	Compress::Raw::Zlib \
@@ -157,10 +158,10 @@ PERL_LIBS 	:= \
 	S/SM/SMUELLER/ExtUtils-ParseXS-3.15.tar.gz \
 	Test::Harness \
 	D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz \
+	Class::Load::XS \
 	Date::Parse \
 	Pod::Escapes \
 	Pod::Simple \
-	Test::Pod \
 	Mail::Mailer \
 	Convert::BinHex \
 	Test::Deep \
