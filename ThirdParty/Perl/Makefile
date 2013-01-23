@@ -88,13 +88,13 @@ PRE_PERL_LIBS	:= \
 	Sub::Exporter \
 	MRO::Compat \
 	Task::Weaken \
-	Class::Load::XS \
 	Eval::Closure \
 	Dist::CheckConflicts \
 	Package::Stash \
 	Module::Runtime \
 	Module::Implementation \
 	Class::Load \
+	Class::Load::XS \
 	Sub::Name \
 	Carp \
 	Sub::Exporter::Progressive \
