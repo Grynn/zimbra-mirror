@@ -96,6 +96,8 @@ PRE_PERL_LIBS	:= \
 	Class::Load \
 	Perl::OSType \
 	Module::Metadata \
+	ExtUtils::CBuilder \
+	S/SM/SMUELLER/ExtUtils-ParseXS-3.15.tar.gz \
 	Module::Build \
 	Class::Load::XS \
 	Sub::Name \
@@ -155,8 +157,6 @@ PERL_LIBS 	:= \
 	Module::CoreList \
 	Module::Load::Conditional \
 	IPC::Cmd \
-	ExtUtils::CBuilder \
-	S/SM/SMUELLER/ExtUtils-ParseXS-3.15.tar.gz \
 	Test::Harness \
 	Date::Parse \
 	Pod::Escapes \
