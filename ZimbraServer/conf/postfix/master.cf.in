@@ -136,7 +136,6 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o receive_override_options=no_header_body_checks,no_unknown_recipient_checks,no_address_mappings
 	-o local_header_rewrite_clients=
 [%%zimbraLocalBindAddress%%]:10029 inet n - n - - smtpd
-	-o content_filter=
 	-o local_recipient_maps=
 	-o virtual_mailbox_maps=
 	-o virtual_alias_maps=
@@ -151,3 +150,4 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o smtpd_relay_restrictions=
 	-o smtpd_data_restrictions=
 	-o smtpd_end_of_data_restrictions=
+%%uncomment SERVICE:antispam%%	-o content_filter=smtp-amavis:[%%zimbraLocalBindAddress%%]:10032

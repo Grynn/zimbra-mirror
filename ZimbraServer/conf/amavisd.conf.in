@@ -93,6 +93,7 @@ $policy_bank{'MYNETS'} = {   # mail originating from @mynetworks
 # it is up to MTA to re-route mail from authenticated roaming users or
 # from internal hosts to a dedicated TCP port (such as 10026) for filtering
 $interface_policy{'10026'} = 'ORIGINATING';
+$interface_policy{'10032'} = 'ORIGINATIG_POST';
 
 $policy_bank{'ORIGINATING'} = {  # mail supposedly originating from our users
   originating => 1,  # declare that mail was submitted by our smtp client
@@ -101,13 +102,28 @@ $policy_bank{'ORIGINATING'} = {  # mail supposedly originating from our users
   virus_admin_maps => ['@@av_notify_user@@'],
   spam_admin_maps  => ['@@av_notify_user@@'],
   warnbadhsender   => 0,
-  %%uncomment LOCAL:amavis_originating_bypass_sa%%bypass_spam_checks_maps   => [1], # don't spam-check internal mail
+  bypass_spam_checks_maps   => [1], # don't spam-check internal mail
   # forward to a smtpd service providing DKIM signing service
   forward_method => 'smtp:[%%zimbraLocalBindAddress%%]:10029',
   # force MTA conversion to 7-bit (e.g. before DKIM signing)
   smtpd_discard_ehlo_keywords => ['8BITMIME'],
   bypass_banned_checks_maps => [0],  # allow sending any file names and types
   terminate_dsn_on_notify_success => 0,  # don't remove NOTIFY=SUCCESS option
+};
+
+$policy_bank{'ORIGINATING_POST'} = { # Post DKIM we need to run SA
+  originating => 0,
+  # notify administrator of locally originating malware
+  virus_admin_maps => ['@@av_notify_user@@'],
+  spam_admin_maps  => ['@@av_notify_user@@'],
+  warnbadhsender   => 0,
+  %%uncomment LOCAL:amavis_originating_bypass_sa%%bypass_spam_checks_maps   => [1], # don't spam-check internal mail if desired
+  bypass_virus_checks_maps => [1], # Don't check AV a second time
+  # force MTA conversion to 7-bit (e.g. before DKIM signing)
+  smtpd_discard_ehlo_keywords => ['8BITMIME'],
+  bypass_banned_checks_maps => [0],  # allow sending any file names and types
+  terminate_dsn_on_notify_success => 0,  # don't remove NOTIFY=SUCCESS option
+  $archive_quarantine_method = undef, # Don't run archiving a second time
 };
 
 $interface_policy{'SOCK'} = 'AM.PDP-SOCK'; # only applies with $unix_socketname
