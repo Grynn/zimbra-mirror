@@ -21,20 +21,6 @@ DEST_DIR		:= $(PERL_ROOT)/zimbramon
 DEST_LIB_DIR	:= $(DEST_DIR)/lib
 DEST_BIN_DIR	:= $(DEST_DIR)/bin
 
-MODULE_EXTUTIL_MAKEMAKER	:= \
-	ExtUtils::MakeMaker \
-	CPAN::Meta::YAML \
-	JSON::PP \
-	Parse::CPAN::Meta \
-	Version::Requirements \
-	ExtUtils::Manifest \
-	JSON::PP::Compat5006 \
-	File::Copy::Recursive \
-	version \
-	CPAN::Meta::Requirements \
-	CPAN::Meta \
-	ExtUtils::MakeMaker
-
 LOGFILE ?= ThirdParty-Perllibs.log
 
 PERL_VERSION :=	$(shell /usr/bin/perl -e 'print "$$]"')
@@ -78,7 +64,18 @@ PRE_PERL_LIBS	:= \
 	Try::Tiny \
 	Test::Fatal \
 	Test::Simple \
-	$(MODULE_EXTUTIL_MAKEMAKER) \
+	ExtUtils::MakeMaker \
+	CPAN::Meta::YAML \
+	JSON::PP \
+	Parse::CPAN::Meta \
+	Version::Requirements \
+	ExtUtils::Manifest \
+	JSON::PP::Compat5006 \
+	File::Copy::Recursive \
+	version \
+	CPAN::Meta::Requirements \
+	CPAN::Meta \
+	ExtUtils::MakeMaker
 	Params::Util \
 	List::MoreUtils \
 	Sub::Install \
@@ -98,6 +95,7 @@ PRE_PERL_LIBS	:= \
 	Module::Metadata \
 	ExtUtils::CBuilder \
 	S/SM/SMUELLER/ExtUtils-ParseXS-3.15.tar.gz \
+	Test::Harness \
 	Module::Build \
 	Class::Load::XS \
 	Sub::Name \
@@ -157,7 +155,6 @@ PERL_LIBS 	:= \
 	Module::CoreList \
 	Module::Load::Conditional \
 	IPC::Cmd \
-	Test::Harness \
 	Date::Parse \
 	Pod::Escapes \
 	Pod::Simple \
