@@ -278,6 +278,43 @@ public class PageCalendar extends AbsTab {
 		}	
 	}
 	
+	public boolean zVerifyDisabledControl(Button buttonName) throws HarnessException {
+		
+		if (buttonName.equals(Button.B_DELETE_DISABLED)) {
+			return sIsElementPresent("css=div[id='zb__CLD__DELETE'].ZDisabled");
+		
+		} else if (buttonName.equals(Button.O_REINVITE_ATTENDEES_DISABLED)) {
+			return sIsElementPresent("css=div[id='zm__Calendar'] div[id='REINVITE_ATTENDEES'].ZDisabled");
+		} else if (buttonName.equals(Button.O_FORWARD_DISABLED)) {
+			return sIsElementPresent("css=div[id='zm__Calendar'] div[id^='FORWARD_APPT'].ZDisabled");
+		} else if (buttonName.equals(Button.O_DELETE_DISABLED)) {
+			return sIsElementPresent("css=div[id='zm__Calendar'] div[id='DELETE'].ZDisabled");
+		} else if (buttonName.equals(Button.O_MOVE_DISABLED)) {
+			return sIsElementPresent("css=div[id='zm__Calendar'] div[id^='MOVE'].ZDisabled");
+		} else if (buttonName.equals(Button.O_TAG_APPOINTMENT_DISABLED)) {
+			return sIsElementPresent("css=div[id='zm__Calendar'] div[id='TAG_MENU'].ZDisabled");
+		
+		} else if (buttonName.equals(Button.B_TAG_APPOINTMENT_DISABLED_READONLY_APPT)) {
+			return sIsElementPresent("css=div[id='ztb__APPTRO-1'] div[id^='zb__APPTRO-1'][id$='TAG_MENU'].ZDisabled");
+		} else if (buttonName.equals(Button.B_SAVE_DISABLED_READONLY_APPT)) {
+			return sIsElementPresent("css=div[id='ztb__APPTRO-1'] div[id^='zb__APPTRO-1'][id$='SAVE'].ZDisabled");
+		} else if (buttonName.equals(Button.B_ACCEPTED_DISABLED_READONLY_APPT)) {
+			return sIsElementPresent("css=div[class='ZmMailMsgView'] td[id$='_responseActionSelectCell'] div.ZDisabled");	
+			
+		} else if (buttonName.equals(Button.O_EDIT_DISABLED_READONLY_APPT)) {
+			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id='EDIT'].ZDisabled");
+		} else if (buttonName.equals(Button.O_FORWARD_DISABLED_READONLY_APPT)) {
+			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id='FORWARD_APPT'].ZDisabled");
+		} else if (buttonName.equals(Button.O_PROPOSE_NEW_TIME_DISABLED_READONLY_APPT)) {
+			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id='PROPOSE_NEW_TIME'].ZDisabled");
+		} else if (buttonName.equals(Button.O_DELETE_DISABLED_READONLY_APPT)) {
+			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id='DELETE'].ZDisabled");
+		
+		} else {
+			return false;
+		}
+	}
+	
 	private AbsPage zListItemListView(Action action, String subject) throws HarnessException {
 		logger.info(myPageName() + " zListItemListView("+ action +", "+ subject +")");
 
@@ -484,7 +521,11 @@ public class PageCalendar extends AbsTab {
 			this.sDoubleClick(locator);
 			this.zWaitForBusyOverlay();
 			
-			page = new FormApptNew(this.MyApplication);
+			if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.mountpoints.viewer.viewappt.VerifyDisabledUI.organizerTest == false) {
+				page = null;
+			} else {	
+				page = new FormApptNew(this.MyApplication);
+			}
 			SleepUtil.sleepMedium();
 
 			// FALL THROUGH
@@ -498,6 +539,7 @@ public class PageCalendar extends AbsTab {
 			page.zWaitForActive();
 		}
 
+		SleepUtil.sleepSmall();
 		return (page);
 	}
 
@@ -1589,6 +1631,11 @@ public class PageCalendar extends AbsTab {
 		} else if (button == Button.O_MOVE_MENU) {
 	
 			locator = Locators.MoveToolbar;
+			page = null;
+		
+		} else if (button == Button.B_ACTIONS) {
+			
+			locator = Locators.ActionsButton_ViewAppt;
 			page = null;
 			
 		} 

@@ -409,6 +409,20 @@ public class Button {
 	public static final Button O_LISTVIEW_NEWTAG = new Button("O_LISTVIEW_NEWTAG");
 	public static final Button O_LISTVIEW_REMOVETAG = new Button("O_LISTVIEW_REMOVETAG");
 	
+	public static final Button B_DELETE_DISABLED = new Button("B_DELETE_DISABLED");
+	public static final Button O_DELETE_DISABLED = new Button("O_DELETE_DISABLED");
+	public static final Button O_REINVITE_ATTENDEES_DISABLED = new Button("O_REINVITE_ATTENDEES_DISABLED");
+	public static final Button O_FORWARD_DISABLED = new Button("O_FORWARD_DISABLED");	
+	public static final Button O_MOVE_DISABLED = new Button("O_MOVE_DISABLED");
+	public static final Button O_TAG_APPOINTMENT_DISABLED = new Button("O_TAG_APPOINTMENT_DISABLED");
+	public static final Button B_TAG_APPOINTMENT_DISABLED_READONLY_APPT = new Button("B_TAG_APPOINTMENT_DISABLED_READONLY_APPT");
+	public static final Button B_SAVE_DISABLED_READONLY_APPT = new Button("B_SAVE_DISABLED_READONLY_APPT");
+	public static final Button B_ACCEPTED_DISABLED_READONLY_APPT = new Button("B_ACCEPTED_DISABLED_READONLY_APPT");
+	public static final Button O_EDIT_DISABLED_READONLY_APPT = new Button("O_EDIT_DISABLED_READONLY_APPT");
+	public static final Button O_FORWARD_DISABLED_READONLY_APPT = new Button("O_FORWARD_DISABLED_READONLY_APPT");
+	public static final Button O_PROPOSE_NEW_TIME_DISABLED_READONLY_APPT = new Button("O_PROPOSE_NEW_TIME_DISABLED_READONLY_APPT");
+	public static final Button O_DELETE_DISABLED_READONLY_APPT = new Button("O_DELETE_DISABLED_READONLY_APPT");	
+	
 	public static final Button O_VIEW_DAY_MENU = new Button("O_VIEW_DAY_MENU");
 	public static final Button O_VIEW_WORK_WEEK_MENU = new Button("O_VIEW_WORK_WEEK_MENU");
 	public static final Button O_VIEW_WEEK_MENU = new Button("O_VIEW_WEEK_MENU");

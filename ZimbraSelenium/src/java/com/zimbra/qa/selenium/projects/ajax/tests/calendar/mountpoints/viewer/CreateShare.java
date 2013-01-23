@@ -1,31 +1,25 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.mountpoints;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.mountpoints.viewer;
 
 import org.testng.annotations.Test;
-
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShare;
 
-
-public class CreateShare extends AjaxCommonTest  {
+public class CreateShare extends CalendarWorkWeekTest  {
 
 	public CreateShare() {
 		logger.info("New "+ CreateShare.class.getCanonicalName());
-		
-		// All tests start at the login page
 		super.startingPage = app.zPageCalendar;
-		super.startingAccountPreferences = null;
-
 	}
 	
-	@Test(	description = "Share a calendar - Viewer",
+	@Test(	description = "Share calendar folder with viewer rights",
 			groups = { "smoke" })
+			
 	public void CreateShare_01() throws HarnessException {
 		
 		String calendarname = "calendar" + ZimbraSeleniumProperties.getUniqueString();
-
 
 		// Create a calendar
 		app.zGetActiveAccount().soapSend(
@@ -37,12 +31,9 @@ public class CreateShare extends AjaxCommonTest  {
 		FolderItem calendar = FolderItem.importFromSOAP(app.zGetActiveAccount(), calendarname);
 		ZAssert.assertNotNull(calendar, "Verify the folder exists on the server");
 
-		
-		
 		// Need to do Refresh to see folder in the list 
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
-
 		// Right click on folder, select "Share"
 		DialogShare dialog = (DialogShare)app.zTreeCalendar.zTreeItem(Action.A_RIGHTCLICK, Button.B_SHARE, calendar);
 		ZAssert.assertNotNull(dialog, "Verify the sharing dialog pops up");
@@ -75,8 +66,5 @@ public class CreateShare extends AjaxCommonTest  {
 		ZAssert.assertEquals(granteeType, "usr", "Verify the grantee type is 'user'");
 
 	}
-
-	
-	
 
 }

@@ -17,6 +17,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogDeleteTag.DialogDeleteTagID;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
@@ -28,7 +29,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder;
  * @author zimbra
  *
  */
-@SuppressWarnings("unused")
 public class TreeCalendar extends AbsTree {
 
 	public static class Locators {
@@ -218,10 +218,7 @@ public class TreeCalendar extends AbsTree {
 		tracer.trace("processing " + folder.getName());
 		
 		String optionLocator = null;
-		String actionLocator = null;
-		
 		optionLocator = "css=div[id='ztih__main_Calendar__TAG'] td[id*='zti__main_Calendar__']:contains('" + folder.getName() + "')";
-		actionLocator = "css=div[id='ztih__main_Calendar__TAG'] td[id*='zti__main_Calendar__']:contains('" + folder.getName() + "')";
 
 		if (optionLocator == null)
 			throw new HarnessException("option locator is null for option " + option);
@@ -552,7 +549,29 @@ public class TreeCalendar extends AbsTree {
 
 		throw new HarnessException("Must use FolderItem or SavedSearchFolderItem or ZimletItem as argument, but was "+ folder.getClass());
 	}
-
+	
+	public void zSelectMountedFolder(String folderName) throws HarnessException {
+		
+		tracer.trace("Click on folder "+ folderName);
+		
+		SleepUtil.sleepSmall();
+		this.sClickAt("css=div[id='main_Calendar-parent-CALENDAR'] div[id^='zti__main_Calendar__'] td[id$='_textCell']:contains('" + folderName + "')", "");
+		this.sClickAt("css=div[id='main_Calendar-parent-CALENDAR'] div[id^='zti__main_Calendar__'][class^='DwtTreeItem-selected'] td[id$='_checkboxCell'] div[class='ImgMenuCheck']", "");
+		this.zWaitForBusyOverlay();
+		SleepUtil.sleepLong(); //Let calendar UI refresh
+	}
+	
+	public void zDeSelectCalendarFolder(String folderName) throws HarnessException {
+		
+		tracer.trace("Click on folder "+ folderName);
+		
+		SleepUtil.sleepSmall();
+		this.sClickAt("css=div[id='main_Calendar-parent-CALENDAR'] div[id^='zti__main_Calendar__'] td[id$='_textCell']:contains('" + folderName + "')", "");
+		this.sClickAt("css=div[id='main_Calendar-parent-CALENDAR'] div[id^='zti__main_Calendar__'][class^='DwtTreeItem-selected'] td[id$='_checkboxCell'] div[class='ImgMenuCheck']", "");
+		this.zWaitForBusyOverlay();
+		SleepUtil.sleepMedium(); //Let calendar UI refresh
+	}
+	
 	@Override
 	public AbsPage zTreeItem(Action action, Button option, IItem folder) throws HarnessException {
 
