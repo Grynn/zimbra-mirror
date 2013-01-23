@@ -24,6 +24,8 @@ public class ModifyBySubjectBodyAndAttendees extends CalendarWorkWeekTest {
 	public void ModifyMeetingBySubjectBodyAndAttendees_01() throws HarnessException {
 		
 		// Creating object for meeting data
+		organizerTest = true;
+		
 		String tz, apptSubject, apptBody, apptAttendee1, modifiedApptSubject, modifiedApptBody, apptAttendee2;
 		tz = ZTimeZone.TimeZoneEST.getID();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
@@ -61,13 +63,11 @@ public class ModifyBySubjectBodyAndAttendees extends CalendarWorkWeekTest {
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        ZAssert.assertNotNull(apptForm, "Verify the modify appointment form opened");
-        
         apptForm.zFillField(Field.Subject, modifiedApptSubject);
         apptForm.zFillField(Field.Attendees, apptAttendee2);
         apptForm.zFillField(Field.Body, modifiedApptBody);
         apptForm.zToolbarPressButton(Button.B_SEND);
-		SleepUtil.sleepLong(); //importFromSOAP fails due to fast execution
+		SleepUtil.sleepVeryLong(); //importFromSOAP fails due to fast execution
         
         // Use GetAppointmentRequest to verify the changes are saved
         AppointmentItem modifyAppt = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ modifiedApptSubject +")");
