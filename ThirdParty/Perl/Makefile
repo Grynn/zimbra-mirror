@@ -94,6 +94,9 @@ PRE_PERL_LIBS	:= \
 	Module::Runtime \
 	Module::Implementation \
 	Class::Load \
+	Perl::OSType \
+	Module::Metadata \
+	Module::Build \
 	Class::Load::XS \
 	Sub::Name \
 	Carp \
@@ -150,15 +153,11 @@ PERL_LIBS 	:= \
 	Params::Check \
 	Module::Load \
 	Module::CoreList \
-	Module::Metadata \
 	Module::Load::Conditional \
 	IPC::Cmd \
-	Perl::OSType \
 	ExtUtils::CBuilder \
 	S/SM/SMUELLER/ExtUtils-ParseXS-3.15.tar.gz \
 	Test::Harness \
-	D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz \
-	Class::Load::XS \
 	Date::Parse \
 	Pod::Escapes \
 	Pod::Simple \
