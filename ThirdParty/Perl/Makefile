@@ -200,7 +200,7 @@ PERL_LIBS 	:= \
 	Archive::Zip  \
 	Error \
 	Mail::DKIM \
-	G/GR/GRANTM/XML-SAX-Base-1.08.tar.gz \
+	XML::SAX::Base \
 	XML::NamespaceSupport \
 	XML::SAX \
 	XML::SAX::Expat \
