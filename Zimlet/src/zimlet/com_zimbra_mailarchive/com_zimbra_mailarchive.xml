@@ -1,8 +1,8 @@
-<zimlet name="com_zimbra_mailarchive" version="0.2" label="${msg.label}" description="${msg.description}" target="main view-window">
+<zimlet name="com_zimbra_mailarchive" version="0.3" label="${msg.label}" description="${msg.description}" target="main view-window">
   <include>mailarchive.js</include>
   <includeCSS>mailarchive.css</includeCSS>
   <handlerObject>ZmArchiveZimlet</handlerObject>
     <zimletPanelItem label="${msg.label}" icon="archiveZimletIcon">
-        <toolTipText>${msg.description}</toolTipText>
+        <toolTipText>${msg.archivePanelToolTip}</toolTipText>
     </zimletPanelItem>  
 </zimlet>

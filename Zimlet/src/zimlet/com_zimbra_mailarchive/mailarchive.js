@@ -112,9 +112,6 @@ function(app, toolbar, controller, viewId) {
 	//conversation-list-view or conversation-view or traditional-view(aka message-view)
 	var viewType = appCtxt.getViewTypeFromId(viewId);
 	if (viewType == ZmId.VIEW_CONVLIST || viewType == ZmId.VIEW_CONV || viewType == ZmId.VIEW_TRAD || viewType == ZmId.VIEW_MSG) {
-		//if (this._hideDeletePref) {
-		//	this._hideDeleteButton(toolbar);
-		//}
 		var buttonIndex = 0;
 		for (var i = 0, count = toolbar.opList.length; i < count; i++) {
 			if (toolbar.opList[i] == ZmOperation.DELETE ||toolbar.opList[i] == ZmOperation.DELETE_MENU) {
@@ -157,10 +154,17 @@ function(result) {
 	try {
 		var response = result.getResponse().BatchResponse.GetMailboxMetadataResponse[0];
 		if (response.meta && response.meta[0] && response.meta[0]._attrs ) {
-			this._hideDeletePref = response.meta[0]._attrs["hideDeleteButton"];
-			if (this._hideDeletePref) {
-				this._hideDeleteButton();
+			var hideDeletePref = response.meta[0]._attrs["hideDeleteButton"];
+			if (!hideDeletePref) {
+				this._hideDeletePref = false;
 			}
+			else if (hideDeletePref == "false") {
+				this._hideDeletePref = false;
+			}
+			else {
+				this._hideDeletePref = true;
+			}
+			this._hideDeleteButton(this._hideDeletePref);
 			this._archiveFolderId = response.meta[0]._attrs["archivedFolder"];
 			if (this._archiveFolderId == -1) {
 				this._archiveFolderId = null;
@@ -238,9 +242,9 @@ function() {
 		"<tr><td style='text-align:right;'>" + this.getMessage("archiveHideDeleteButton") + ": </td><td>",
 		"<table class='ZRadioButtonTable'><tr>",
         "<td><input id='archiveHideDelete2' name='archiveHideDelete' value='false' " + noHideDelete + " type='radio'/></td>",
-        "<td><label style='margin-right:1em;'>" + this.getMessage("archiveNo") + "</label></td>",
+        "<td><label style='margin-right:1em;' for='archiveHideDelete2'>" + this.getMessage("archiveNo") + "</label></td>",
         "<td><input id='archiveHideDelete1' name='archiveHideDelete' value='true' " + hideDelete + " type='radio'/></td>",
-        "<td><label>" + this.getMessage("archiveYes") + "</label></td>",
+        "<td><label for='archiveHideDelete1'>" + this.getMessage("archiveYes") + "</label></td>",
         "</tr></table>",
 		"</td></tr>",
 		"</table>",
@@ -256,18 +260,24 @@ function(organizer, zimlet) {
 
 ZmArchiveZimlet.prototype._okPreferenceBtnListener =
 function() {
+	if (!this._archiveFolderId) {
+		var dlg = appCtxt.getMsgDialog();
+		dlg.reset();
+		dlg.setMessage(this.getMessage("archiveMustChooseFolder"), DwtMessageDialog.WARNING_STYLE);
+		dlg.popup();
+		return;
+	}
+	var hideDelete = document.getElementById("archiveHideDelete1").checked;
+	var noHideDelete = document.getElementById("archiveHideDelete2").checked;
 	this._preferenceDialog.popdown();
 	
-	var hideDeletePref1 = document.getElementById("archiveHideDelete1").checked;
-	var hideDeletePref2 = document.getElementById("archiveHideDelete2").checked;
-
-	if (hideDeletePref1 && this._hideDeletePref) {
+	if (hideDelete && this._hideDeletePref) {
 		return;
 	}
-	if (hideDeletePref2 && !this._hideDeletePref) {
+	if (noHideDelete && !this._hideDeletePref) {
 		return;
 	}
-	this._hideDeletePref = hideDeletePref1 ? hideDeletePref1 : !hideDeletePref2;
+	this._hideDeletePref = hideDelete ? true : false;
 	var keyVal = [];
 	keyVal["hideDeleteButton"] = this._hideDeletePref;
 	keyVal["archivedFolder"] = this._archiveFolderId;
@@ -277,10 +287,12 @@ function() {
 
 ZmArchiveZimlet.prototype._hideDeleteButton = 
 function(display) {
-	var style = display ? "inline-block" : "none";
+	var style = display ? "none" : "inline-block";
+	var app = appCtxt.getApp(ZmApp.MAIL);
 	if (appCtxt.getCurrentAppName() === ZmApp.MAIL) {
 		var mlc = appCtxt.getCurrentApp().getMailListController();
 		var toolbar = mlc._toolbar[appCtxt.getCurrentViewId()];
+		if (!toolbar) { return; }
 		var deleteBtn = toolbar.getButton(ZmOperation.DELETE) || toolbar.getButton(ZmOperation.DELETE_MENU);
 		if(deleteBtn) {
 			deleteBtn.getHtmlElement().style.display = style;
@@ -290,11 +302,14 @@ function(display) {
 
 ZmArchiveZimlet.prototype._handleSetArchivePrefs = 
 function() {
-	if (this._hideDeletePref) {
-		this._hideDeleteButton();
-	}
-	else {
-		this._hideDeleteButton(true);
-	}
+	this._hideDeleteButton(this._hideDeletePref);
 	appCtxt.getAppController().setStatusMsg(this.getMessage("archiveZimletPrefsSaved"), ZmStatusView.LEVEL_INFO);
+};
+
+ZmArchiveZimlet.prototype.onSelectApp = 
+function(appId) {
+	if (appId == ZmApp.MAIL && this._hideDeletePref != null && !this.mailAlreadyLoaded)  {
+		this._hideDeleteButton(this._hideDeletePref);
+		this.mailAlreadyLoaded = true;
+	}
 };
