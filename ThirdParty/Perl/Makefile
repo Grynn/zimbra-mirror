@@ -148,7 +148,7 @@ PERL_LIBS 	:= \
 	LWP::UserAgent \
 	LWP::Protocol::https \
 	IO::Stringy \
-	E/ER/ERYQ/MIME-Lite-2.117.tar.gz \
+	MIME::Lite \
 	Locale::Maketext::Simple \
 	Params::Check \
 	Module::Load \
