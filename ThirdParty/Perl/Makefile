@@ -148,6 +148,8 @@ PERL_LIBS 	:= \
 	LWP::UserAgent \
 	LWP::Protocol::https \
 	IO::Stringy \
+	Mail::Mailer \
+	MIME::Types \
 	MIME::Lite \
 	Locale::Maketext::Simple \
 	Params::Check \
@@ -158,7 +160,6 @@ PERL_LIBS 	:= \
 	Date::Parse \
 	Pod::Escapes \
 	Pod::Simple \
-	Mail::Mailer \
 	Convert::BinHex \
 	Test::Deep \
 	File::Temp \
