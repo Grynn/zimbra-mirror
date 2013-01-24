@@ -75,7 +75,7 @@ PRE_PERL_LIBS	:= \
 	version \
 	CPAN::Meta::Requirements \
 	CPAN::Meta \
-	ExtUtils::MakeMaker
+	ExtUtils::MakeMaker \
 	Params::Util \
 	List::MoreUtils \
 	Sub::Install \
