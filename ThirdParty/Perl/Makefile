@@ -94,7 +94,7 @@ PRE_PERL_LIBS	:= \
 	Perl::OSType \
 	Module::Metadata \
 	ExtUtils::CBuilder \
-	S/SM/SMUELLER/ExtUtils-ParseXS-3.15.tar.gz \
+	ExtUtils::ParseXS \
 	Test::Harness \
 	Module::Build \
 	Class::Load::XS \
@@ -163,7 +163,7 @@ PERL_LIBS 	:= \
 	Convert::BinHex \
 	Test::Deep \
 	File::Temp \
-	D/DS/DSKOLL/MIME-tools-5.502.tar.gz \
+	MIME::Tools \
 	Class::Inspector \
 	SOAP::Lite \
 	Net::Telnet \
@@ -204,7 +204,7 @@ PERL_LIBS 	:= \
 	XML::NamespaceSupport \
 	XML::SAX \
 	XML::SAX::Expat \
-	G/GR/GRANTM/XML-Simple-2.20.tar.gz \
+	XML::Simple \
 	IO::Socket::INET6 \
 	NetAddr::IP \
 	IO::Socket::IP \
@@ -214,7 +214,7 @@ PERL_LIBS 	:= \
 	DBD::SQLite
 
 NET_SSLeay := \
-	Net-SSLeay-1.49
+	Net-SSLeay-1.52
 
 CRYPT_SSLeay := \
 	Crypt-SSLeay-0.64
