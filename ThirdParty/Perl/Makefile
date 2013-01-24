@@ -174,7 +174,7 @@ PERL_LIBS 	:= \
 	Devel::Symdump \
 	Pod::Coverage \
 	Test::Pod::Coverage \
-	S/SB/SBECK/Date-Manip-5.56.tar.gz \
+	Date::Manip \
 	Time::HiRes \
 	Math::BigInt \
 	Convert::ASN1 \
