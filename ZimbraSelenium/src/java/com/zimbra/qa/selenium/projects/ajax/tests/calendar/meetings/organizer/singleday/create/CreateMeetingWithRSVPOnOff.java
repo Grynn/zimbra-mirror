@@ -138,6 +138,7 @@ public class CreateMeetingWithRSVPOnOff extends CalendarWorkWeekTest {
 		SleepUtil.sleepMedium(); // let the mails sync , tried sleepSmall() but it fails
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
 		display.zPressButton(Button.B_ACCEPT);
+		SleepUtil.sleepSmall(); 
 		
 		// Organizer: Search for the appointment (InvId)
 		organizer.soapSend(
