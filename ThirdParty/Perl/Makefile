@@ -174,6 +174,7 @@ PERL_LIBS 	:= \
 	Devel::Symdump \
 	Pod::Coverage \
 	Test::Pod::Coverage \
+	Test::Inter \
 	Date::Manip \
 	Time::HiRes \
 	Math::BigInt \
