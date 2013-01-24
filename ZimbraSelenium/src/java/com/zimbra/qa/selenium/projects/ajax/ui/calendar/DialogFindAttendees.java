@@ -32,8 +32,8 @@ public class DialogFindAttendees extends DialogWarning {
 		public static final String ContactPickerFirstContact = "css=nobr";
 		public static final String SelectContactFromPicker = "css=td[id^='DwtChooserButton']:contains('To:')";
 		public static final String AddContactFromPicker = "css=td[id^='ZmContactPicker_button']:contains('OK')";
-		//public static final String AddContactFromPicker = "css=td[id='ZmContactPicker_button2_title']:contains('OK')";
-	
+		public static final String MessageHeader = "css= div[class='MsgHeader']:contains('";
+		
 	}
 	
 	public static class Field {
