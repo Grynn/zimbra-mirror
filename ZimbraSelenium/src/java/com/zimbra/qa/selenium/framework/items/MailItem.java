@@ -407,8 +407,10 @@ public class MailItem implements IItem {
 			sb.append(dFromRecipient.prettyPrint());
 		}
 		sb.append("tn: ");
-		for ( String tn : getTagNames() ) {
-			sb.append(tn).append(", ");
+		if ( getTagNames() != null ) {
+			for ( String tn : getTagNames() ) {
+				sb.append(tn).append(", ");
+			}
 		}
 		sb.append("\n");
 		if ( (dAutoSendTime != null) && (dAutoSendTime.trim().length() != 0) ) {
