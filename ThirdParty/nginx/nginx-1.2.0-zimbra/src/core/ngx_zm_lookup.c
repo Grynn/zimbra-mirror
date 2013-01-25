@@ -1322,6 +1322,7 @@ ngx_zm_lookup_process_response_headers(ngx_zm_lookup_ctx_t *ctx)
     ngx_zm_lookup_work_t         *work;
     ngx_str_t                     addr; /* route ipaddr */
     ngx_str_t                     port; /* route port   */
+    ngx_flag_t                    isCacheAlias;  /* whether to cache alias for the auth account */
 
     zlcf = (ngx_zm_lookup_conf_t *)ngx_get_conf(ngx_cycle->conf_ctx, ngx_zm_lookup_module);
 
@@ -1410,6 +1411,27 @@ ngx_zm_lookup_process_response_headers(ngx_zm_lookup_ctx_t *ctx)
                 continue;
             }
 
+            if (len == sizeof("Auth-Cache-Alias") - 1
+                && ngx_strncasecmp(ctx->header_name_start,
+                                   (u_char *) "Auth-Cache-Alias",
+                                   sizeof("Auth-Cache-Alias") - 1)
+                   == 0)
+            {
+                len = ctx->header_end - ctx->header_start;
+
+                if (len == 4
+                    && ctx->header_start[0] == 'T'
+                    && ctx->header_start[1] == 'R'
+                    && ctx->header_start[2] == 'U'
+                    && ctx->header_start[3] == 'E')
+                {
+                    /* cache the alias if True*/
+                    isCacheAlias = 1;
+                } else {
+                    isCacheAlias = 0;
+                }
+                continue;
+            }
             if (len == sizeof("Auth-User") - 1
                 && ngx_strncasecmp(ctx->header_name_start,
                                    (u_char *) "Auth-User",
@@ -1542,8 +1564,9 @@ ngx_zm_lookup_process_response_headers(ngx_zm_lookup_ctx_t *ctx)
                                ctx->work->auth_method != ZM_AUTHMETH_CERTAUTH) {
                                /* add alias-->account && account-->route caching */
                                if (ctx->work->alias_check_stat != ZM_ALIAS_FOUND &&
-                                   ctx->work->alias_check_stat != ZM_ALIAS_IGNORED) {
+                                   ctx->work->alias_check_stat != ZM_ALIAS_IGNORED && isCacheAlias) {
                                    /* only cache alias-->account when the account is unavailable from cache */
+                                   /* cache alias-->account with default domain */
                                    ngx_zm_lookup_cache_alias(ctx, work->username, work->account_name);
                                }
 

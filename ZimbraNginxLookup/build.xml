@@ -23,7 +23,7 @@
 	<target name="compile">
 		<ant dir="${common.dir}" target="jar" inheritAll="false" />
 		<mkdir dir="${build.classes.dir}"/>
-		<javac destdir="${build.classes.dir}" srcdir="${src.java.dir}" debug="false" classpathref="class.path">
+		<javac destdir="${build.classes.dir}" srcdir="${src.java.dir}" debug="true" classpathref="class.path">
 			<include name="**/*.java"/>
 		</javac>
 	</target>

@@ -36,6 +36,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.CacheExtension;
 import com.zimbra.cs.account.Config;
@@ -165,10 +166,11 @@ public class NginxLookupExtension implements ZimbraExtension {
         public static final String AUTH_ADMIN_PASS    = "Auth-Admin-Pass";
         
         /* resp headers */
-        public static final String AUTH_STATUS = "Auth-Status";
-        public static final String AUTH_SERVER = "Auth-Server";
-        public static final String AUTH_PORT   = "Auth-Port";
-        public static final String AUTH_WAIT   = "Auth-Wait";
+        public static final String AUTH_STATUS      = "Auth-Status";
+        public static final String AUTH_SERVER      = "Auth-Server";
+        public static final String AUTH_PORT        = "Auth-Port";
+        public static final String AUTH_WAIT        = "Auth-Wait";
+        public static final String AUTH_CACHE_ALIAS = "Auth-Cache-Alias";
 
         public static final long DEFAULT_WAIT_INTERVAL = 10;
 
@@ -915,7 +917,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                     //       alias or a name with domain alias.
                     //
                     authUserWithRealDomainName = prov.getEmailAddrByDomainAlias(authUser);
-                    
+
                     if (authUserWithRealDomainName != null) {
                         ZimbraLog.nginxlookup.debug("retrying with resolved domain alias: " + authUserWithRealDomainName);
                         try {
@@ -1101,10 +1103,9 @@ public class NginxLookupExtension implements ZimbraExtension {
          *                     user name, (usually) with a domain suffix added
          */
         private void sendResult(NginxLookupRequest req, String addr, String port, String authUser) throws UnknownHostException {
-            
             ZimbraLog.nginxlookup.debug("mailhost=" + addr);
             ZimbraLog.nginxlookup.debug("port=" + port);
-            
+
             HttpServletResponse resp = req.httpResp;
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.addHeader(AUTH_STATUS, "OK");
@@ -1117,6 +1118,18 @@ public class NginxLookupExtension implements ZimbraExtension {
                 authUser = authUser.replace(" ", "%20");
                 authUser = authUser.replace("%", "%25");
                 resp.addHeader(AUTH_USER, authUser);
+            }
+
+            try {
+                if (StringUtil.equal(prov.getDomainByEmailAddr(authUser).getName(), 
+                        prov.getConfig().getDefaultDomainName())) {
+                    resp.addHeader(AUTH_CACHE_ALIAS, "TRUE");
+                } else {
+                    resp.addHeader(AUTH_CACHE_ALIAS, "FALSE");
+                }
+            } catch (ServiceException e) {
+                // turn off alias cache if authUser is empty or if any error
+                resp.addHeader(AUTH_CACHE_ALIAS, "FALSE");
             }
 
             if (req.authMethod.equalsIgnoreCase(AUTHMETH_GSSAPI)) {
