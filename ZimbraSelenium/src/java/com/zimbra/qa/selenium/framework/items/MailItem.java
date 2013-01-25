@@ -281,7 +281,7 @@ public class MailItem implements IItem {
 			// Set the ID
 			mail.setId(m.getAttribute("id", null));
 			mail.setFlags(m.getAttribute("f", ""));
-			mail.setTagNames(Arrays.asList(m.getAttribute("tn", null)));
+			mail.setTagNames(Arrays.asList(m.getAttribute("tn", "").split(",")));
 			mail.setAutoSendTime(m.getAttribute("autoSendTime", null));
 
 			mail.dFolderId = m.getAttribute("l", null);
