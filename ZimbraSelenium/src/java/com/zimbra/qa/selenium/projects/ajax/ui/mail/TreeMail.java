@@ -273,7 +273,7 @@ public class TreeMail extends AbsTree {
 		}  else if (option == Button.B_EDIT) {
 
 			optionLocator += " div[id^='EDIT_PROPS'] td[id$='_title']";
-			page = new DialogMove(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+			page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
 
 		}  else if (option == Button.B_MOVE) {
 
