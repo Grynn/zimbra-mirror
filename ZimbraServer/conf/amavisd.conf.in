@@ -93,7 +93,7 @@ $policy_bank{'MYNETS'} = {   # mail originating from @mynetworks
 # it is up to MTA to re-route mail from authenticated roaming users or
 # from internal hosts to a dedicated TCP port (such as 10026) for filtering
 $interface_policy{'10026'} = 'ORIGINATING';
-$interface_policy{'10032'} = 'ORIGINATIG_POST';
+$interface_policy{'10032'} = 'ORIGINATING_POST';
 
 $policy_bank{'ORIGINATING'} = {  # mail supposedly originating from our users
   originating => 1,  # declare that mail was submitted by our smtp client
