@@ -7,11 +7,11 @@ import org.testng.annotations.*;
 
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.Bugs;
-import com.zimbra.qa.selenium.framework.items.MailItem;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 public class DeleteMail extends PrefGroupMailByMessageTest {
@@ -476,6 +476,207 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 		
 	}
 
+	@Test(	description = "Delete a mail from trash - confirm warning dialog",
+			groups = { "functional" })
+	public void DeleteMailFromTrash_01() throws HarnessException {
+		
+		
+		//-- DATA setup
+		//
+		
+		// Create the message data to be sent
+		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Trash);
+		
+		// Add a message to the trash
+		app.zGetActiveAccount().soapSend(
+					"<AddMsgRequest xmlns='urn:zimbraMail'>"
+        		+		"<m l='"+ trash.getId() +"' >"
+            	+			"<content>From: foo@foo.com\n"
+            	+				"To: foo@foo.com \n"
+            	+				"Subject: "+ subject +"\n"
+            	+				"MIME-Version: 1.0 \n"
+            	+				"Content-Type: text/plain; charset=utf-8 \n"
+            	+				"Content-Transfer-Encoding: 7bit\n"
+            	+				"\n"
+            	+				"simple text string in the body\n"
+            	+			"</content>"
+            	+		"</m>"
+				+	"</AddMsgRequest>");
 
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "is:anywhere subject:("+ subject +")");
+		
+		
+		//-- GUI Actions
+		//
+		
+		try {
+			
+		
+			// Click Get Mail button
+			app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+					
+			// Select the trash
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, trash);
+	
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			
+			// Click delete
+			app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+			
+		
+			// Warning dialog will appear
+			DialogWarning dialog = new DialogWarning(DialogWarning.DialogWarningID.PermanentlyDeleteTheItem,
+											app,
+											((AppAjaxClient) app).zPageMail);
+			ZAssert.assertTrue(dialog.zIsActive(), "Verify the warning dialog opens");
+			dialog.zClickButton(Button.B_OK);
+		
+		} finally {
+		
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
+		
+		//-- VERIFICATION
+		//
+		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "is:anywhere subject:("+ subject +")");
+		ZAssert.assertNull(mail, "Verify the message no longer exists in the mailbox");
+
+
+	}
+
+	@Test(	description = "Delete multiple messages (3) from trash by select and toolbar delete - confirm warning dialog",
+			groups = { "functional" })
+	public void DeleteMailFromTrash_02() throws HarnessException {
+		
+		
+		//-- DATA setup
+		//
+		
+		
+		// Create the message data to be sent
+		String subject1 = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		String subject2 = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		String subject3 = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Trash);
+
+		// Add a message to the trash
+		app.zGetActiveAccount().soapSend(
+					"<AddMsgRequest xmlns='urn:zimbraMail'>"
+        		+		"<m l='"+ trash.getId() +"' >"
+            	+			"<content>From: foo@foo.com\n"
+            	+				"To: foo@foo.com \n"
+            	+				"Subject: "+ subject1 +"\n"
+            	+				"MIME-Version: 1.0 \n"
+            	+				"Content-Type: text/plain; charset=utf-8 \n"
+            	+				"Content-Transfer-Encoding: 7bit\n"
+            	+				"\n"
+            	+				"simple text string in the body\n"
+            	+			"</content>"
+            	+		"</m>"
+				+	"</AddMsgRequest>");
+
+		// Add a message to the trash
+		app.zGetActiveAccount().soapSend(
+					"<AddMsgRequest xmlns='urn:zimbraMail'>"
+        		+		"<m l='"+ trash.getId() +"' >"
+            	+			"<content>From: foo@foo.com\n"
+            	+				"To: foo@foo.com \n"
+            	+				"Subject: "+ subject2 +"\n"
+            	+				"MIME-Version: 1.0 \n"
+            	+				"Content-Type: text/plain; charset=utf-8 \n"
+            	+				"Content-Transfer-Encoding: 7bit\n"
+            	+				"\n"
+            	+				"simple text string in the body\n"
+            	+			"</content>"
+            	+		"</m>"
+				+	"</AddMsgRequest>");
+
+		// Add a message to the trash
+		app.zGetActiveAccount().soapSend(
+					"<AddMsgRequest xmlns='urn:zimbraMail'>"
+        		+		"<m l='"+ trash.getId() +"' >"
+            	+			"<content>From: foo@foo.com\n"
+            	+				"To: foo@foo.com \n"
+            	+				"Subject: "+ subject3 +"\n"
+            	+				"MIME-Version: 1.0 \n"
+            	+				"Content-Type: text/plain; charset=utf-8 \n"
+            	+				"Content-Transfer-Encoding: 7bit\n"
+            	+				"\n"
+            	+				"simple text string in the body\n"
+            	+			"</content>"
+            	+		"</m>"
+				+	"</AddMsgRequest>");
+
+		// Import each message into MailItem objects
+		MailItem mail1 = MailItem.importFromSOAP(app.zGetActiveAccount(), "is:anywhere subject:("+ subject1 +")");
+		MailItem mail2 = MailItem.importFromSOAP(app.zGetActiveAccount(), "is:anywhere subject:("+ subject2 +")");
+		MailItem mail3 = MailItem.importFromSOAP(app.zGetActiveAccount(), "is:anywhere subject:("+ subject3 +")");
+		
+		
+		//-- GUI Steps
+		//
+		
+		try {
+			
+			// Click Get Mail button
+			app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+					
+			// Select the trash
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, trash);
+	
+			// Select all three items
+			app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, mail1.dSubject);
+			app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, mail2.dSubject);
+			app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, mail3.dSubject);
+			
+			// Click delete
+			app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+			
+		
+			// Warning dialog will appear
+			DialogWarning dialog = new DialogWarning(DialogWarning.DialogWarningID.PermanentlyDeleteTheItem,
+											app,
+											((AppAjaxClient) app).zPageMail);
+			ZAssert.assertTrue(dialog.zIsActive(), "Verify the warning dialog opens");
+			dialog.zClickButton(Button.B_OK);
+
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
+		
+		//-- VERIFICATION 
+		//
+		
+		List<MailItem> messages = app.zPageMail.zListGetMessages();
+		ZAssert.assertNotNull(messages, "Verify the message list exists");
+
+		MailItem found1 = null;
+		MailItem found2 = null;
+		MailItem found3 = null;
+		for (MailItem m : messages) {
+			logger.info("Subject: looking at: "+ m.gSubject);
+			if ( mail1.dSubject.equals(m.gSubject) ) {
+				found1 = m;
+			}
+			if ( mail2.dSubject.equals(m.gSubject) ) {
+				found2 = m;
+			}
+			if ( mail3.dSubject.equals(m.gSubject) ) {
+				found3 = m;
+			}
+		}
+		ZAssert.assertNull(found1, "Verify the message "+ mail1.dSubject +" is no longer in the inbox");
+		ZAssert.assertNull(found2, "Verify the message "+ mail2.dSubject +" is no longer in the inbox");
+		ZAssert.assertNull(found3, "Verify the message "+ mail3.dSubject +" is no longer in the inbox");
+
+		
+	}
 
 }
