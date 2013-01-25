@@ -18414,7 +18414,6 @@ sub connect_to_ldap {
                             localaddr => $self->{localaddr},
                             port    => $self->{port},
                             scheme  => $self->{scheme},
-                            inet6   => $self->{inet6},
                             version => $self->{version},
                             timeout => $self->{timeout},
                             );
