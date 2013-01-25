@@ -4,9 +4,7 @@
 package com.zimbra.qa.selenium.framework.items;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -90,6 +88,11 @@ public class MailItem implements IItem {
 	 * The flags associated with this mail (see soap.txt for details)
 	 */
 	public String dFlags;
+	
+	/**
+	 * The tag names (tn attribute) associated with this mail (see soap.txt for details)
+	 */
+	public List<String> dTagNames;
 	
 	/**
 	 * The autoSaveTime associated with this draft) (see soap.txt for details)
@@ -219,6 +222,24 @@ public class MailItem implements IItem {
 		return (dFlags);
 	}
 	
+	/**
+	 * Add a list of tags to this message
+	 * @param tn - A list of tag names to add
+	 * @return the list of tag names
+	 */
+	public List<String> setTagNames(List<String> tn) {
+		dTagNames = tn;
+		return (dTagNames);
+	}
+	
+	/**
+	 * Get the list of tags on this message
+	 * @return the list of tag names
+	 */
+	public List<String> getTagNames() {
+		return (dTagNames);
+	}
+	
 	public String getAutoSendTime() {
 		return (dAutoSendTime);
 	}
@@ -260,6 +281,7 @@ public class MailItem implements IItem {
 			// Set the ID
 			mail.setId(m.getAttribute("id", null));
 			mail.setFlags(m.getAttribute("f", ""));
+			mail.setTagNames(Arrays.asList(m.getAttribute("tn", null)));
 			mail.setAutoSendTime(m.getAttribute("autoSendTime", null));
 
 			mail.dFolderId = m.getAttribute("l", null);
@@ -384,6 +406,11 @@ public class MailItem implements IItem {
 		if ( dFromRecipient != null ) {
 			sb.append(dFromRecipient.prettyPrint());
 		}
+		sb.append("tn: ");
+		for ( String tn : getTagNames() ) {
+			sb.append(tn).append(", ");
+		}
+		sb.append("\n");
 		if ( (dAutoSendTime != null) && (dAutoSendTime.trim().length() != 0) ) {
 			sb.append("autoSaveTime: ");
 			sb.append(dAutoSendTime);

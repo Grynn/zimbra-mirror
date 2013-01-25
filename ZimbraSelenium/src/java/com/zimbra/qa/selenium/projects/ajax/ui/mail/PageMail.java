@@ -1366,6 +1366,12 @@ public class PageMail extends AbsTab {
 			//page = new FormMailNew(this.MyApplication);
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
 
+		}else if ( (shortcut == Shortcut.S_MAIL_TAG) ){
+
+			// "New Message" shortcuts result in a compose form opening
+			//page = new FormMailNew(this.MyApplication);
+			page = new DialogTagPicker(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
 		}else if ( (shortcut == Shortcut.S_NEWFOLDER) ){
 
 			// "New Message" shortcuts result in a compose form opening
