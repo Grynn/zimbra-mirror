@@ -173,6 +173,7 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o smtpd_data_restrictions=
 	-o mynetworks=127.0.0.0/8,[::1]/128
 	-o receive_override_options=no_unknown_recipient_checks
+	-o syslog_name=postfix/reinject
 
 [%%zimbraLocalBindAddress%%]:10029 inet n  -       n       -       -  smtpd
 	-o smtpd_client_restrictions=
@@ -184,3 +185,4 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o smtpd_data_restrictions=
 	-o mynetworks=127.0.0.0/8,[::1]/128
 	-o receive_override_options=no_unknown_recipient_checks
+	-o syslog_name=postfix/archive
