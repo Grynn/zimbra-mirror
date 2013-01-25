@@ -123,7 +123,7 @@ $policy_bank{'ORIGINATING_POST'} = { # Post DKIM we need to run SA
   smtpd_discard_ehlo_keywords => ['8BITMIME'],
   bypass_banned_checks_maps => [0],  # allow sending any file names and types
   terminate_dsn_on_notify_success => 0,  # don't remove NOTIFY=SUCCESS option
-  $archive_quarantine_method = undef, # Don't run archiving a second time
+  archive_quarantine_method => undef, # Don't run archiving a second time
 };
 
 $interface_policy{'SOCK'} = 'AM.PDP-SOCK'; # only applies with $unix_socketname
