@@ -17,8 +17,9 @@
  */
 
 //Zimlet Class
-function ZmArchiveZimlet() {
-}
+ZmArchiveZimlet = function() {
+	this._msgMap = {};
+};
 
 //Make Zimlet class a subclass of ZmZimletBase class - this makes a Zimlet a Zimlet
 ZmArchiveZimlet.prototype = new ZmZimletBase();
@@ -90,8 +91,7 @@ function(postCallback, organizer) {
 	if (organizer) {
 		this._archiveFolder = organizer;
 		this._archiveFolderId = organizer.id;
-		var keyVal = [];
-		keyVal["archivedFolder"] = this._archiveFolderId;
+		var keyVal = this._getMetaKeyVal();
 		this.metaData.set("archiveZimlet", keyVal, null, this._saveAccPrefsHandler.bind(this), null, true);
 	}
 	if (postCallback) {
@@ -147,6 +147,30 @@ function(app, toolbar, controller, viewId) {
 			}
 		}
 	}
+	else if (viewId.indexOf("COMPOSE") >= 0 && this._archiveFolderId) {
+		var buttonArgs = {
+			text: this.getMessage("sendAndArchiveButton"),
+			tooltip: this.getMessage("sendAndArchiveTooltip"),
+			index: 0,
+			image: "archiveZimletIcon",
+			showImageInToolbar: false,
+			showTextInToolbar: true,
+			enabled: true
+		};
+		if (!toolbar.getOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID") && controller._action != ZmId.OP_NEW_MESSAGE && this._showSendAndArchive) {
+			var button = toolbar.createOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID", buttonArgs);
+			button.addSelectionListener(new AjxListener(this, this.sendAndArchiveListener, [button]));
+		}
+		else if (toolbar.getOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID")){
+			var button = toolbar.getOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID");
+			var visible = false;
+			if (this._showSendAndArchive) {
+				visible = controller._action != ZmId.OP_NEW_MESSAGE;
+			}
+			button.setEnabled(true);
+			button.setVisible(visible);
+		}
+	}
 };
 
 ZmArchiveZimlet.prototype._handleGetMetaData = 
@@ -165,6 +189,18 @@ function(result) {
 				this._hideDeletePref = true;
 			}
 			this._hideDeleteButton(this._hideDeletePref);
+			
+			var showSendAndArchive = response.meta[0]._attrs["showSendAndArchive"];
+			if (!showSendAndArchive) {
+				this._showSendAndArchive = false;
+			}
+			else if (showSendAndArchive == "false") {
+				this._showSendAndArchive = false;
+			}
+			else {
+				this._showSendAndArchive = true;
+			}
+			
 			this._archiveFolderId = response.meta[0]._attrs["archivedFolder"];
 			if (this._archiveFolderId == -1) {
 				this._archiveFolderId = null;
@@ -189,7 +225,7 @@ ZmArchiveZimlet.prototype._clearArchivedFolder =
 function() {
 	this._archiveFolder = null;
 	this._achiveFolderId = null;
-	var keyVal = [];
+	var keyVal = this._getMetaKeyVal();
 	keyVal["archivedFolder"] = -1;
 	this.metaData.set("archiveZimlet", keyVal, null, new AjxCallback(this, this._handleClearArchivedFolder), null, true);
 };
@@ -234,6 +270,9 @@ ZmArchiveZimlet.prototype._createPrefView =
 function() {
 	var hideDelete = this._hideDeletePref ? "checked" : "";
 	var noHideDelete = this._hideDeletePref ? "" : "checked";
+	
+	var hideSendAndArchive = this._showSendAndArchive ? "" : "checked";
+	var showSendAndArchive = this._showSendAndArchive ? "checked" : "";
 
 	return [
 		"<div class='mailArchivePrefDialog'>",
@@ -242,10 +281,17 @@ function() {
 		"<tr><td style='text-align:right;'>" + this.getMessage("archiveHideDeleteButton") + ": </td><td>",
 		"<table class='ZRadioButtonTable'><tr>",
         "<td><input id='archiveHideDelete2' name='archiveHideDelete' value='false' " + noHideDelete + " type='radio'/></td>",
-        "<td><label style='margin-right:1em;' for='archiveHideDelete2'>" + this.getMessage("archiveNo") + "</label></td>",
+        "<td><label style='margin-right:1em;' for='archiveHideDelete2'>" + this.getMessage("archiveShow") + "</label></td>",
         "<td><input id='archiveHideDelete1' name='archiveHideDelete' value='true' " + hideDelete + " type='radio'/></td>",
-        "<td><label for='archiveHideDelete1'>" + this.getMessage("archiveYes") + "</label></td>",
+        "<td><label for='archiveHideDelete1'>" + this.getMessage("archiveHide") + "</label></td>",
         "</tr></table>",
+		"<tr><td style='text-align:right;'>" + this.getMessage("sendAndArchiveLabel") + ":</td><td>",
+		"<table class='ZRadioButtonTable'><tr>",
+		"<td><input id='sendAndArchive2' name='sendAndArchive' value='true' " + showSendAndArchive + " type='radio'/></td>",
+		"<td><label style='margin-right:1em;' for='sendAndArchive1'>" + this.getMessage("archiveShow") + "</label></td>",
+		"<td><input id='sendAndArchive1' name='sendAndArchive' value='false' " + hideSendAndArchive + " type='radio'/></td>",
+		"<td><label for='sendAndArchive1'>" + this.getMessage("archiveHide") + "</label></td>",
+		"</tr></table>",	
 		"</td></tr>",
 		"</table>",
 		"</div>"
@@ -267,20 +313,26 @@ function() {
 		dlg.popup();
 		return;
 	}
+	var origHideDelete = this._hideDeletePref;
+	var origShowSendAndArchive = this._showSendAndArchive;
 	var hideDelete = document.getElementById("archiveHideDelete1").checked;
 	var noHideDelete = document.getElementById("archiveHideDelete2").checked;
+
+	var showSendAndArchive = document.getElementById("sendAndArchive2").checked;
+	var hideSendAndArchive = document.getElementById("sendAndArchive1").checked;
+
+	
 	this._preferenceDialog.popdown();
 	
-	if (hideDelete && this._hideDeletePref) {
-		return;
-	}
-	if (noHideDelete && !this._hideDeletePref) {
-		return;
-	}
 	this._hideDeletePref = hideDelete ? true : false;
-	var keyVal = [];
-	keyVal["hideDeleteButton"] = this._hideDeletePref;
-	keyVal["archivedFolder"] = this._archiveFolderId;
+	this._showSendAndArchive = showSendAndArchive ? true : false;
+	
+	if (origHideDelete == this._hideDeletePref && origShowSendAndArchive == this._showSendAndArchive) {
+		return;
+	}
+	
+	var keyVal = this._getMetaKeyVal();
+	
 	this.metaData.set("archiveZimlet", keyVal, null, new AjxCallback(this, this._handleSetArchivePrefs), null, true);
 
 };
@@ -312,4 +364,49 @@ function(appId) {
 		this._hideDeleteButton(this._hideDeletePref);
 		this.mailAlreadyLoaded = true;
 	}
+};
+
+ZmArchiveZimlet.prototype.sendAndArchiveListener = 
+function(button) {
+	if (button) {
+		button.setEnabled(false);
+	}
+	var cc = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
+	//var callback = new AjxCallback (this,this._handleArchive);
+	this._msgMap[cc._msg.id] = true;
+	cc.sendMsg();
+	//cc.sendMsg(null, null, callback);
+};
+
+ZmArchiveZimlet.prototype._handleArchive = 
+function(result) {
+	//get the ID from the response
+	if (result && result.Body && result.Body.SendMsgResponse && result.Body.SendMsgResponse.m) {
+		var msgId = result.Body.SendMsgResponse.m[0].id;
+		this._msgMap[msgId] = true;
+	}
+	
+};
+
+ZmArchiveZimlet.prototype.onSendMsgSuccess = function(controller, msg) {
+	var id = msg.id || (msg._origMsg && msg._origMsg.id);
+	var cid = msg.cid || (msg._origMsg && msg._origMsg.cid);
+	if (this._msgMap[id]) {
+		var m = appCtxt.getById(id);
+		var conv = cid ? appCtxt.getById(cid) : null;
+		var obj = conv ? conv : m;
+		if (obj) {
+			obj.list.moveItems({items:obj, folder:this._archiveFolder});
+		}
+		delete this._msgMap[id];
+	}
+};
+
+ZmArchiveZimlet.prototype._getMetaKeyVal = 
+function() {
+	var keyVal = [];
+	keyVal["hideDeleteButton"] = this._hideDeletePref ? "true" : "false";
+	keyVal["showSendAndArchive"] = this._showSendAndArchive ? "true" : "false";
+	keyVal["archivedFolder"] = this._archiveFolderId;
+	return keyVal;
 };
