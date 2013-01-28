@@ -39,12 +39,43 @@ public class GetZimlets extends AjaxCommonTest {
 		// Get how many rows there are
 		int count = app.zPagePreferences.sGetCssCount(locator + ">div[id^='zli__']");
 		
-		// IronMaiden: 5 zimlets - LinkedIn, Phone, Search Highlighter, Webex, Zimbra Social
-		// IronMaiden: Bug 50123: 3 zimlets - Phone, Search Highlighter, Webex, Y-Emoticons
+		// IronMaiden: 8 zimlets in NETWORK
+		//	Cisco Click2Call
+		//	Mitel Click2Call
+		//	Phone
+		//	SearchHighlighter
+		//	Secure Email
+		//	Voice Preferences
+		//	WebEx
+		//	Yahoo! Emoticons
+		// IronMaiden: 4 zimlets in FOSS
+		//	Phone
+		//	SearchHighlighter
+		//	WebEx
+		//	Yahoo! Emoticons
+		//
+		// JudasPriest: 9 zimlets in NETWORK
+		//	Archive
+		//	Cisco Click2Call
+		//	Mitel Click2Call
+		//	Phone
+		//	SearchHighlighter
+		//	Secure Email
+		//	Voice Preferences
+		//	WebEx
+		//	Yahoo! Emoticons
+		//
+		// JudasPriest: 5 zimlets in FOSS
+		//	Archive
+		//	Phone
+		//	SearchHighlighter
+		//	WebEx
+		//	Yahoo! Emoticons
+		//
 		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
-		    ZAssert.assertEquals(count, 4, "Verify 4 zimlets are shown in the preferences page");
+		    ZAssert.assertEquals(count, 5, "Verify 5 zimlets are shown in the preferences page");
 		}else{
-		    ZAssert.assertEquals(count, 8, "Verify 8 zimlets are shown in the preferences page");
+		    ZAssert.assertEquals(count, 9, "Verify 9 zimlets are shown in the preferences page");
 		}
 	}
 	
