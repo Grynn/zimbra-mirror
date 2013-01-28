@@ -348,6 +348,24 @@ public class PageMail extends AbsTab {
 
 			locator = "id='"+ Locators.zTagMenuDropdownBtnID +"'";
 
+		} else if ( button == Button.B_ARCHIVE ) {
+
+			// If 'Archive' is not initialized, a 'folder chooser'
+			// dialog will open.  However, we cannot define it here,
+			// because if 'Archive' has been initialized, then
+			// the chooser will not appear.
+			//
+			// The test case must create the page dialog object.
+			//
+			page = null;
+			locator = "css=div[id$='__ARCHIVE_ZIMLET_BUTTON_ID'] td[id$='_title']";
+
+			if ( !this.sIsElementPresent(locator) ) {
+				throw new HarnessException("Archive icon not present "+ button);
+			}
+
+			// FALL THROUGH
+
 		} else if ( button == Button.B_NEWWINDOW ) {
 
 			// 8.0: http://bugzilla.zimbra.com/show_bug.cgi?id=73721

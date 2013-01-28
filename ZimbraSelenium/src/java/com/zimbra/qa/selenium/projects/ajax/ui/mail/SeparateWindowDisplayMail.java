@@ -244,6 +244,13 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 			locator = container + " div[id$='__SPAM'] td[id$='_title']";
 			page = null;
 
+		} else if ( button == Button.B_ARCHIVE ) {
+
+			locator = container + " div[id$='__ARCHIVE_ZIMLET_BUTTON_ID'] td[id$='_title']";
+			page = null;
+
+			// FALL THROUGH
+
 		} else {
 			
 			throw new HarnessException("no logic defined for button "+ button);

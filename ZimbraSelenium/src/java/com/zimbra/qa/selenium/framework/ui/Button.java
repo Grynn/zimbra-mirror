@@ -108,6 +108,7 @@ public class Button {
 	public static final Button B_RESPORTNOTSPAM = new Button("B_RESPORTNOTSPAM");
 	public static final Button B_NEWWINDOW = new Button("B_NEWWINDOW");
 	public static final Button B_LISTVIEW = new Button("B_LISTVIEW");
+	public static final Button B_ARCHIVE = new Button("B_ARCHIVE");
 
 	public static final Button O_LISTVIEW_BYCONVERSATION = new Button("O_LISTVIEW_BYCONVERSATION");
 	public static final Button O_LISTVIEW_BYMESSAGE = new Button("O_LISTVIEW_BYMESSAGE");
