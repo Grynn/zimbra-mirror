@@ -157,7 +157,7 @@ function(app, toolbar, controller, viewId) {
 			showTextInToolbar: true,
 			enabled: true
 		};
-		if (!toolbar.getOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID") && controller._action != ZmId.OP_NEW_MESSAGE && this._showSendAndArchive) {
+		if (!toolbar.getOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID") && this.isActionForArchive(controller._action) && this._showSendAndArchive) {
 			var button = toolbar.createOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID", buttonArgs);
 			button.addSelectionListener(new AjxListener(this, this.sendAndArchiveListener, [button]));
 		}
@@ -165,11 +165,23 @@ function(app, toolbar, controller, viewId) {
 			var button = toolbar.getOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID");
 			var visible = false;
 			if (this._showSendAndArchive) {
-				visible = controller._action != ZmId.OP_NEW_MESSAGE;
+				visible = this.isActionForArchive(controller._action);
 			}
 			button.setEnabled(true);
 			button.setVisible(visible);
 		}
+	}
+};
+
+ZmArchiveZimlet.prototype.isActionForArchive = 
+function(action) {
+	if (!action) {
+		return false;
+	}
+	
+	if (action == ZmId.OP_REPLY || action == ZmId.OP_REPLY || action == ZmId.OP_REPLY_BY_EMAIL || action == ZmId.OP_REPLY_ALL || action == ZmId.OP_FORWARD ||
+	    action == ZmId.OP_FORWARD_ATT  || action == ZmId.OP_FORWARD_INLINE || action == ZmId.OP_FORWARD_BY_EMAIL || action == ZmId.OP_FORWARD_INLINE) {
+		return true;
 	}
 };
 
@@ -395,7 +407,7 @@ ZmArchiveZimlet.prototype.onSendMsgSuccess = function(controller, msg) {
 		var m = appCtxt.getById(id);
 		var conv = cid ? appCtxt.getById(cid) : null;
 		var obj = conv ? conv : m;
-		if (obj) {
+		if (obj && obj.list && obj.list.moveItems) {
 			obj.list.moveItems({items:obj, folder:this._archiveFolder});
 		}
 		delete this._msgMap[id];
