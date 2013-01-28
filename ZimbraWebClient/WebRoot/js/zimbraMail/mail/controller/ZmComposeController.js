@@ -2190,8 +2190,12 @@ function(callback){
 
 ZmComposeController.prototype._processDataURIImages = function(imgArray, length, callback){
 
+    if (!window.atob) {
+        return;
+    }
+
     var BlobBuilder = window.MozBlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder || window.BlobBuilder;
-    if(!BlobBuilder || !window.atob){
+    if (!(BlobBuilder || window.Blob)) {
         return;
     }
 
@@ -2229,13 +2233,19 @@ ZmComposeController.prototype._processDataURIImages = function(imgArray, length,
                     for (var i = 0; i < byteStringLength; i++) {
                         ia[i] = byteString.charCodeAt(i);
                     }
+                    var blob;
                     // write the ArrayBuffer to a blob, and you're done
-                    var blobbuilder = new BlobBuilder();
-                    blobbuilder.append(ab);
+                    if (window.Blob) {
+                        blob = new Blob([ab], {"type" : mimeString});
+                    }
+                    else {
+                        var blobbuilder = new BlobBuilder();
+                        blobbuilder.append(ab);
 
-                    var blob = blobbuilder.getBlob(mimeString);
-                    blob.type = mimeString;
-                    blob.name = blob.name || new Date().getTime();
+                        blob = blobbuilder.getBlob(mimeString);
+                        blob.type = mimeString;
+                        blob.name = blob.name || new Date().getTime();
+                    }
                     return blob;
                 }
             }
