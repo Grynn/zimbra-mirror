@@ -1,0 +1,60 @@
+--- perl-ldap-0.53/lib/Net/LDAP.pm.orig	2013-01-28 10:13:04.957104580 -0800
++++ perl-ldap-0.53/lib/Net/LDAP.pm	2013-01-28 10:34:06.077107294 -0800
+@@ -5,7 +5,7 @@
+ package Net::LDAP;
+ 
+ use strict;
+-use Socket qw(AF_INET AF_INET6 AF_UNSPEC SOL_SOCKET SO_KEEPALIVE);
++use Socket qw(AF_INET AF_INET6 AF_UNSPEC SOL_SOCKET SO_KEEPALIVE IPPROTO_TCP);
+ use IO::Socket;
+ use IO::Select;
+ use Tie::Hash;
+@@ -29,6 +29,11 @@
+ 			);
+ 
+ use constant CAN_IPV6 => eval { require IO::Socket::INET6 } ? 1 : 0;
++use constant CAN_LINUX => eval { require Socket::Linux } ? 1 : 0;
++
++if (CAN_LINUX) {
++  use Socket::Linux qw(TCP_KEEPINTVL TCP_KEEPIDLE TCP_KEEPCNT);
++}
+ 
+ our $VERSION 	= '0.53';
+ our @ISA     	= qw(Tie::StdHash Net::LDAP::Extra);
+@@ -122,6 +127,14 @@
+   $obj->{net_ldap_socket}->setsockopt(SOL_SOCKET, SO_KEEPALIVE, $arg->{keepalive} ? 1 : 0)
+     if (defined($arg->{keepalive}));
+ 
++  if (CAN_LINUX) {
++    $obj->{net_ldap_socket}->setsockopt(IPPROTO_TCP, TCP_KEEPIDLE, $arg->{keepalive_idle})
++      if (defined($arg->{keepalive_idle}));
++    $obj->{net_ldap_socket}->setsockopt(IPPROTO_TCP, TCP_KEEPINTVL, $arg->{keepalive_interval})
++      if (defined($arg->{keepalive_interval}));
++    $obj->{net_ldap_socket}->setsockopt(IPPROTO_TCP, TCP_KEEPCNT, $arg->{keepalive_count})
++      if (defined($arg->{keepalive_count}));
++  }
+   $obj->{net_ldap_resp}    = {};
+   $obj->{net_ldap_version} = $arg->{version} || $LDAP_VERSION;
+   $obj->{net_ldap_async}   = $arg->{async} ? 1 : 0;
+--- perl-ldap-0.53/lib/Net/LDAP.pod.orig	2013-01-26 09:19:02.000000000 -0800
++++ perl-ldap-0.53/lib/Net/LDAP.pod	2013-01-28 10:46:24.657106331 -0800
+@@ -97,6 +97,19 @@
+ 
+ Failures in changing the socket's SO_KEEPALIVE option are ignored.
+ 
++=item keepalive_idle =E<gt> N
++The time (in seconds) the connection needs to remain idle before TCP
++starts sending keepalive probes, if the socket option SO_KEEPALIVE has
++been set on this socket.  Only works if Socket::Linux is available.
++
++=item keepalive_interval =E<gt> N
++The time (in seconds) between individual keepalive probes. Only works
++if Socket::Linux is available.
++
++=item keepalive_count =E<gt> N
++The maximum number of keepalive probes TCP should send before dropping
++the connection. Only works if Socket::Linux is available.
++
+ =item timeout =E<gt> N
+ 
+ Timeout passed to L<IO::Socket> when connecting the remote server.

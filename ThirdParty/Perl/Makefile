@@ -325,6 +325,7 @@ build:
 	@for lib in $(PERL_LDAP); do \
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
+		patch -g0 -N -p1 < $(PERL_ROOT)/patches/net-ldap-keepalive.patch; \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
