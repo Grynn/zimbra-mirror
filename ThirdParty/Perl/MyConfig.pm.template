@@ -30,7 +30,7 @@ $CPAN::Config = {
   'mbuild_arg' => q[],
   'mbuild_install_arg' => q[],
   'mbuild_install_build_command' => q[./Build],
-  'mbuildpl_arg' => q[],
+  'mbuildpl_arg' => q[--install_base=@@BUILD_ROOT@@/zimbramon],
   'ncftp' => q[],
   'ncftpget' => q[],
   'no_proxy' => q[],
