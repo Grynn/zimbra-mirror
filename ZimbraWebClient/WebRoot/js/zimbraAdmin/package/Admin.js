@@ -19,22 +19,29 @@
  * <p><u>Format</u>: Similar convention to that of Java Package names relative to
  * JavaScript source location.</p>
  *
+ * <p><b>NOTE</b>: Comments should be in a line of their own. NO comments are allowed
+ * after the semicolon ';' as the java parser doesn't recognise the same.</p>
+ *
  */
 // ==================================================================================
 // ==================================================================================
 // ==================================================================================
 // HELPER CLASSES
 //
-AjxPackage.require("zimbraAdmin.helper.ZaHelper");      // ZaUtil
-AjxPackage.require("zimbraAdmin.helper.ZaUIHelper");    // ZaUtil, ZaModel
-// AjxPackage.require("zimbraAdmin.common.ZaEvent");    // TODO: Uncomment
+// Replaces ZaUtil
+AjxPackage.require("zimbraAdmin.helper.ZaHelper");
+// Replaces ZaUtil, ZaModel
+AjxPackage.require("zimbraAdmin.helper.ZaUIHelper");
+// TODO: Uncomment
+// AjxPackage.require("zimbraAdmin.common.ZaEvent");
 
 // ==================================================================================
 // ==================================================================================
 // ==================================================================================
 // BASE CLASSES
 //
-AjxPackage.require("zimbraAdmin.model.ZaBaseModel");    // ZaModel
+// Replaces ZaModel
+AjxPackage.require("zimbraAdmin.model.ZaBaseModel");
 
 // ==================================================================================
 // ==================================================================================
