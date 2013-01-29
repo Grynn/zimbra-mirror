@@ -110,6 +110,7 @@ function() {
 ZmArchiveZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
 	//conversation-list-view or conversation-view or traditional-view(aka message-view)
+	if(appCtxt.isChildWindow) { return; }
 	var viewType = appCtxt.getViewTypeFromId(viewId);
 	if (viewType == ZmId.VIEW_CONVLIST || viewType == ZmId.VIEW_CONV || viewType == ZmId.VIEW_TRAD || viewType == ZmId.VIEW_MSG) {
 		var buttonIndex = 0;
