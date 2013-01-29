@@ -30,8 +30,8 @@
 +      if (defined($arg->{keepalive_idle}));
 +    $obj->{net_ldap_socket}->setsockopt(IPPROTO_TCP, TCP_KEEPINTVL, $arg->{keepalive_interval})
 +      if (defined($arg->{keepalive_interval}));
-+    $obj->{net_ldap_socket}->setsockopt(IPPROTO_TCP, TCP_KEEPCNT, $arg->{keepalive_count})
-+      if (defined($arg->{keepalive_count}));
++    $obj->{net_ldap_socket}->setsockopt(IPPROTO_TCP, TCP_KEEPCNT, $arg->{keepalive_probe})
++      if (defined($arg->{keepalive_probe}));
 +  }
    $obj->{net_ldap_resp}    = {};
    $obj->{net_ldap_version} = $arg->{version} || $LDAP_VERSION;
@@ -51,7 +51,7 @@
 +The time (in seconds) between individual keepalive probes. Only works
 +if Socket::Linux is available.
 +
-+=item keepalive_count =E<gt> N
++=item keepalive_probe =E<gt> N
 +The maximum number of keepalive probes TCP should send before dropping
 +the connection. Only works if Socket::Linux is available.
 +
