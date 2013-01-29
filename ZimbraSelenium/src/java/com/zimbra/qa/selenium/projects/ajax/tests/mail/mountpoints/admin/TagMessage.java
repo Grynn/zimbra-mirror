@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -124,7 +125,7 @@ public class TagMessage extends PrefGroupMailByMessageTest {
 
 	}
 
-	
+	@Bugs(ids="79948")
 	@Test(	description = "Verify success on Tag (keyboard='t') a shared mail (admin share)",
 			groups = { "functional" })
 	public void TagMessage_02() throws HarnessException {
@@ -218,12 +219,10 @@ public class TagMessage extends PrefGroupMailByMessageTest {
 				break;
 			}
 		}
-		ZAssert.assertTrue(
-				found, 
-				"Verify the message contains the tag: " + 
-				Arrays.toString(mail.getTagNames().toArray()) + 
-				" contains " + 
-				tag.getName());
+		ZAssert.assertTrue(found, "Verify the message contains the tag: "
+				+ Arrays.toString(mail.getTagNames().toArray()) + " contains "
+				+ tag.getName()
+				+ "https://bugzilla.zimbra.com/show_bug.cgi?id=79948");
 		
 	}
 
