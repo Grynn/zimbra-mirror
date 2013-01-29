@@ -18416,6 +18416,10 @@ sub connect_to_ldap {
                             scheme  => $self->{scheme},
                             version => $self->{version},
                             timeout => $self->{timeout},
+                            keepalive => 1,
+                            keepalive_idle => 240,
+                            keepalive_interval => 30,
+                            keepalive_probe => 10,
                             );
   if (!$ldap) {  # connect failed
     do_log(-1,"connect_to_ldap: unable to connect to host %s", $hostlist);
