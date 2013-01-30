@@ -37,6 +37,9 @@ UnknownPersonSlide.PHOTO_PARENT_ID = "unkownPerson_photoBGDiv";
 UnknownPersonSlide.TEXT_DIV_ID = "unkownPerson_TextDiv";
 UnknownPersonSlide.DOMAIN = "";
 
+UnknownPersonSlide.WIDTH = 65;
+UnknownPersonSlide.HEIGHT = 80;
+
 /**
 * Implement onEmailHoverOver to get notified by Email tooltip zimlet.
 * This function registers UnkownPerson Zimlet as a subscriber Zimlet
@@ -129,11 +132,11 @@ function(img) {
 	if (this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN) != -1) {
 		img.onclick =  AjxCallback.simpleClosure(this._handleProfileImageClick, this); 
 		img.style.cursor = "pointer";
-		img.style.maxHeight = "80px";
-		img.style.maxWidth = "65px";
+		img.style.maxHeight = UnknownPersonSlide.HEIGHT + "px";
+		img.style.maxWidth = UnknownPersonSlide.WIDTH + "px";
 	}
 	if (AjxEnv.isIE) {
-		img.height = 80;
+		img.height = UnknownPersonSlide.HEIGHT;
 	}
 };
 
@@ -281,13 +284,13 @@ function(response, contact) {
     id = id || contact && contact.id;
 
     if (image){
-       imgUrl = contact && contact.getImageUrl();
+       imgUrl = contact && contact.getImageUrl(UnknownPersonSlide.WIDTH);
     }
     else if (imagepart){
         // Low level code to construct the image URL due to bug 73146 - Contacts call does not return the image information
         // TODO - fix this to a non-low level code
         var msgFetchUrl = appCtxt.get(ZmSetting.CSFE_MSG_FETCHER_URI);
-        imgUrl =  [msgFetchUrl, "&id=", id, "&part=", imagepart, "&t=", (new Date()).getTime()].join("");
+        imgUrl =  [msgFetchUrl, "&id=", id, "&part=", imagepart, "&max_width=", UnknownPersonSlide.WIDTH ,"&t=", (new Date()).getTime()].join("");
     }
 	this._setProfileImage(imgUrl);
 	this._setContactDetails(attrs);
@@ -455,10 +458,8 @@ function(imgUrl) {
 		this._handleImgLoadFailure();
 		return;
 	}
-    div.width = 65;
-	div.height = 80;
-	div.style.width = 65;
-	div.style.height = 80;
+	div.width = div.style.width = UnknownPersonSlide.WIDTH;
+	div.height = div.style.height = UnknownPersonSlide.HEIGHT;
 
 	var img = new Image();
     img.src = imgUrl;
