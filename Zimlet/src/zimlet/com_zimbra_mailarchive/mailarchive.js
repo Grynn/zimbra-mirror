@@ -79,7 +79,7 @@ ZmArchiveZimlet.prototype._chooseArchiveFolder =
 function(postCallback) {
 	var dialog = appCtxt.getChooseFolderDialog();
 	dialog.registerCallback(DwtDialog.OK_BUTTON, new AjxCallback(this, this._handleChooseFolder, postCallback));
-	var params = {overviewId: dialog.getOverviewId(ZmApp.MAIL), appName:ZmApp.MAIL, skipReadOnly:true, skipRemote:false,};
+	var params = {overviewId: dialog.getOverviewId(ZmApp.MAIL), appName:ZmApp.MAIL, skipReadOnly:true, skipRemote:false};
 	dialog.popup(params);
 };
 
