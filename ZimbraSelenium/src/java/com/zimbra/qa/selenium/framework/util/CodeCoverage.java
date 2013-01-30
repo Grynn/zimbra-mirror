@@ -254,9 +254,23 @@ public class CodeCoverage {
 				// First time in, just initialize the object
 				logger.debug("initalizing coverage object");
 				try {
+					
 					cumulativeCoverage = (JSONObject) JSONSerializer.toJSON(ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT));
-				} catch (net.sf.json.JSONException e) {
+					
+				} catch (JSONException e) {
+					
+					/*
 					throw new HarnessException("JSON = ("+ ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT) +")", e);
+					*/
+					
+					// If there is invalid JSON, just log the error and JSON object and return
+					// Don't disable coverage.  Will it recover in the next test case?
+					// Don't throw the exception, that makes the test case appear as 'failed'
+					//
+					logger.error("JSONException: ["+ ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT) +"]", e);
+					cumulativeCoverage = null;
+					return;
+
 				}
 				
 				// Log coverage statistics
@@ -278,10 +292,19 @@ public class CodeCoverage {
 
 			} catch (JSONException e) {
 				
+				/*
 				logger.error("Unable to calculate code coverage.  Disabling code coverage", e);
 				logger.error(ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT));
 				isDisabled = true;
 				throw e;
+				*/
+				
+				// If there is invalid JSON, just log the error and JSON object and return
+				// Don't disable coverage.  Will it recover in the next test case?
+				// Don't throw the exception, that makes the test case appear as 'failed'
+				//
+				logger.error("JSONException: ["+ ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT) +"]", e);
+				return;
 
 			}
 			
