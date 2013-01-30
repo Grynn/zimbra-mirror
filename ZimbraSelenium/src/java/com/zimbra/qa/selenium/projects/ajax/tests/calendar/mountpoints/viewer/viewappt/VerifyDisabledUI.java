@@ -78,7 +78,7 @@ public class VerifyDisabledUI extends CalendarWorkWeekTest {
 		app.zTreeCalendar.zSelectMountedFolder(mountpointname);
 		
 		// Verify Save, Tag, Accepted, Edit, Forward, Delete, Propose New Time & Delete menus are disabled
-		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
+		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_OPEN_MENU, apptSubject);
 		ZAssert.assertTrue(app.zPageCalendar.zVerifyDisabledControl(Button.B_SAVE_DISABLED_READONLY_APPT), "Verify Save button is disabled");
 		ZAssert.assertTrue(app.zPageCalendar.zVerifyDisabledControl(Button.B_TAG_APPOINTMENT_DISABLED_READONLY_APPT), "Verify Tag button is disabled");
 		ZAssert.assertTrue(app.zPageCalendar.zVerifyDisabledControl(Button.B_ACCEPTED_DISABLED_READONLY_APPT), "Verify Accepted button is disabled");
