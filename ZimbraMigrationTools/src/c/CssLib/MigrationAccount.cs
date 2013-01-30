@@ -152,6 +152,11 @@ public class MigrationAccount
             lastProblemInfo = value;
         }
     }
+    public bool IsValid
+    {
+        get { return IsValidAccount; }
+        set { IsValidAccount = value; }
+    }
 
     private string accountName;
     private int accountNum;
@@ -166,6 +171,9 @@ public class MigrationAccount
     private int totalSent;
     private int totalTasks;
     private int totalWarnings;
+    private bool IsValidAccount;
+
+    
 }
 
 public class MigrationFolder
