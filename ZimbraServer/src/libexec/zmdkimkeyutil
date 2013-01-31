@@ -208,8 +208,12 @@ if($add) {
   if ($size == 0) {
     if (!($selector)) {
       print "No DKIM Information for domain $domain\n";
+      $ldap->unbind;
+      exit(1);
     } else {
       print "No DKIM Information for Selector $selector\n";
+      $ldap->unbind;
+      exit(1);
     }
   } else {
     my $entry=$mesg->entry($size-1);
