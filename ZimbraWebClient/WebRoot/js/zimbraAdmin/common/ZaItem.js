@@ -1033,6 +1033,35 @@ ZaItem.hasAnyRight = function (rights, instance) {
 }
 XFormItem.prototype.hasAnyRight = ZaItem.hasAnyRight;
 
+ZaItem.adminHasAnyRight = function (rights) {
+    if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+        return true;
+    }
+
+    if (!rights) {
+        return true;
+    }
+
+    if (!rights instanceof Array) {
+        rights = [rights];
+    }
+
+    var adminAccount = new ZaAccount();
+    adminAccount.load(null, ZaZimbraAdmin.currentAdminId, false, true);
+
+    if (!adminAccount.rights) {
+        return false;
+    }
+
+    for (var i = 0; i < rights.length; i++) {
+        if (adminAccount.rights[rights[i]] === true) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 ZaItem.formatServerTime = function(serverStr) {
 	if(serverStr) {
 		var ajxTKServerStr = serverStr.substring(0,8) + "T" + serverStr.substring(8) ;

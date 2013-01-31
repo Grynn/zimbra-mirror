@@ -721,7 +721,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 	}	
 	var passwordGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_wiz_password_group", 
 		numCols:2,visibilityChecks:[
-            [ZaItem.hasAnyRight,[ZaAccount.SET_PASSWORD_RIGHT, ZaAccount.CHANGE_PASSWORD_RIGHT]],
+            [ZaItem.adminHasAnyRight,[ZaAccount.SET_PASSWORD_RIGHT, ZaAccount.CHANGE_PASSWORD_RIGHT]],
             [XForm.checkInstanceValueNot,ZaAccount.A2_isExternalAuth,true]],
         visibilityChangeEventSources:[ZaAccount.A2_isExternalAuth],
 		items:[
