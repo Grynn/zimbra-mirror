@@ -37,13 +37,13 @@ admin_dir=${mailboxd_directory}/webapps/zimbraAdmin/WEB-INF/classes/messages
 zmsg=${admin_dir}/ZaMsg.properties
 
 if [ -d "${download_dir}" ]; then
-  ZCO_32BIT=$(cd ${download_dir}; ls -tr1 ZimbraConnectorOLK*x86.msi 2>/dev/null | head -1)
-  ZCO_64BIT=$(cd ${download_dir}; ls -tr1 ZimbraConnectorOLK*x64.msi 2>/dev/null | head -1)
-  PST_IMPORT=$(cd ${download_dir}; ls -tr1 ZCSPSTImportWizard* 2>/dev/null | head -1)
-  EXCHANGE_MIG_WIZARD=$(cd ${download_dir}; ls -tr1 ZCSExchangeMigrationWizard* 2>/dev/null | head -1)
-  DOMINO_MIG_WIZARD=$(cd ${download_dir}; ls -tr1 ZCSDominoMigrationWizard* 2>/dev/null | head -1)
-  GENERAL_MIG_WIZARD_32BIT=$(cd ${download_dir}; ls -tr1 ZimbraMigration_*_x86.zip 2>/dev/null | head -1)
-  GENERAL_MIG_WIZARD_64BIT=$(cd ${download_dir}; ls -tr1 ZimbraMigration_*_x64.zip 2>/dev/null | head -1)
+  ZCO_32BIT=$(cd ${download_dir}; ls -tr1 ZimbraConnectorOLK*x86.msi 2>/dev/null | tail -1)
+  ZCO_64BIT=$(cd ${download_dir}; ls -tr1 ZimbraConnectorOLK*x64.msi 2>/dev/null | tail -1)
+  PST_IMPORT=$(cd ${download_dir}; ls -tr1 ZCSPSTImportWizard* 2>/dev/null | tail -1)
+  EXCHANGE_MIG_WIZARD=$(cd ${download_dir}; ls -tr1 ZCSExchangeMigrationWizard* 2>/dev/null | tail -1)
+  DOMINO_MIG_WIZARD=$(cd ${download_dir}; ls -tr1 ZCSDominoMigrationWizard* 2>/dev/null | tail -1)
+  GENERAL_MIG_WIZARD_32BIT=$(cd ${download_dir}; ls -tr1 ZimbraMigration_*_x86.zip 2>/dev/null | tail -1)
+  GENERAL_MIG_WIZARD_64BIT=$(cd ${download_dir}; ls -tr1 ZimbraMigration_*_x64.zip 2>/dev/null | tail -1)
 
   cat ${index}.in | \
     sed -e "s/@@ZCO_32BIT@@/${ZCO_32BIT}/" \
