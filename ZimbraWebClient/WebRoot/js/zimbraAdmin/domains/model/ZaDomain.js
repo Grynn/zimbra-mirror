@@ -3028,7 +3028,8 @@ ZaDomain.getEffectiveDomainList = function(adminId) {
 
 ZaDomain.prototype.countAllAccounts = function() {
 	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", ZaZimbraAdmin.URN, null);
-	soapDoc.getMethod().setAttribute("limit", "1");
+    soapDoc.getMethod().setAttribute("maxResults", "0");
+	soapDoc.getMethod().setAttribute("limit", "-1");
 	var query = "";
     var types = [ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.ALIASES, ZaSearch.RESOURCES];
 
