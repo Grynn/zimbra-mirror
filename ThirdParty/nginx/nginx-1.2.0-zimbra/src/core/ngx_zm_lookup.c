@@ -121,6 +121,13 @@ static ngx_command_t ngx_zm_lookup_commands[] =
       offsetof(ngx_zm_lookup_conf_t, allow_unqualified),
       NULL },
 
+    { ngx_string("zm_prefix_url"),
+      NGX_ZM_LOOKUP_CONF|NGX_DIRECT_CONF|NGX_CONF_TAKE1,
+      ngx_conf_set_str_slot,
+      0,
+      offsetof(ngx_zm_lookup_conf_t, url),
+      NULL },
+
     ngx_null_command
 };
 
@@ -168,6 +175,9 @@ static const ngx_str_t ERRMSG[] = {
 /*There is no need to send real password for now */
 static const ngx_str_t
 ngx_zm_lookup_password_placeholder = ngx_string("_password_");
+
+static const ngx_str_t
+ngx_zm_prefix_url = ngx_string("/");
 
 ngx_module_t ngx_zm_lookup_module =
 {
@@ -234,7 +244,7 @@ ngx_zm_lookup_create_conf(ngx_cycle_t *cycle)
     zlcf->allow_unqualified = NGX_CONF_UNSET;
     ngx_str_null(&zlcf->master_auth_username);
     ngx_str_null(&zlcf->master_auth_password);
-
+    ngx_str_null(&zlcf->url);
     ngx_log_error(NGX_LOG_DEBUG_ZIMBRA, cycle->log, 0,
         "zm lookup configuration created");
     return zlcf;
@@ -272,6 +282,10 @@ ngx_zm_lookup_init_conf(ngx_cycle_t *cycle, void *conf)
 
     if (zlcf->master_auth_password.data == NULL) {
         zlcf->master_auth_password = ngx_zm_lookup_password_placeholder;
+    }
+
+    if (zlcf->url.data == NULL) {
+        zlcf->url = ngx_zm_prefix_url;
     }
 
     ngx_log_error(NGX_LOG_DEBUG_ZIMBRA,cycle->log, 0,

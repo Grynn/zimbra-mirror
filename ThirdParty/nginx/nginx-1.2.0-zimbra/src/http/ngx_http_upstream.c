@@ -8,6 +8,7 @@
 #include <ngx_config.h>
 #include <ngx_core.h>
 #include <ngx_http.h>
+#include <ngx_zm_lookup.h>
 
 
 #if (NGX_HTTP_CACHE)
@@ -2821,6 +2822,7 @@ ngx_http_upstream_next(ngx_http_request_t *r, ngx_http_upstream_t *u,
     ngx_uint_t ft_type)
 {
     ngx_uint_t  status, state;
+    ngx_zm_lookup_conf_t  *zlcf;
 
     ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
                    "http next upstream, %xi", ft_type);
@@ -2885,7 +2887,13 @@ ngx_http_upstream_next(ngx_http_request_t *r, ngx_http_upstream_t *u,
     if (status) {
         u->state->status = status;
 
-        if (u->peer.tries == 0 || !(u->conf->next_upstream & ft_type)) {
+        zlcf = (ngx_zm_lookup_conf_t *)
+                ngx_get_conf (ngx_cycle->conf_ctx, ngx_zm_lookup_module);
+
+        if (u->peer.tries == 0 || !(u->conf->next_upstream & ft_type) ||
+                (r->method == NGX_HTTP_POST && !((r->uri.len == 1 &&
+                        r->uri.data[r->uri.len - 1] == '/') ||
+                        (ngx_strcasecmp(r->uri.data, zlcf->url.data) == 0)))) {
 
 #if (NGX_HTTP_CACHE)
 

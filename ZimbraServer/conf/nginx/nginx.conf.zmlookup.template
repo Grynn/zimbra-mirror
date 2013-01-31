@@ -37,4 +37,7 @@ zm_lookup {
     # <login name>@<client ip>
     #
     zm_lookup_allow_unqualified   ${zmlookup.unqual};
+
+    # URL prefix for the upstream server
+    zm_prefix_url ${zmprefix.url};
 }

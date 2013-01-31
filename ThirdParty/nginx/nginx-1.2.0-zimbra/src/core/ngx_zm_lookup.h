@@ -33,6 +33,7 @@ typedef struct {
     ngx_msec_t      timeout;        /* timeout to fetch the result from nginx lookup handler (in ms) */
     ngx_str_t       master_auth_username;
     ngx_str_t       master_auth_password;
+    ngx_str_t       url;
     ngx_flag_t      caching;        /* whether to add and check the alias/route in memcache */
     ngx_flag_t      allow_unqualified; /* whether to append client ip to the "account-->route" caching key,
                                           when the alias part is an unqualified name*/
@@ -84,6 +85,8 @@ struct ngx_zm_lookup_work_s {
 };
 
 typedef struct ngx_zm_lookup_work_s ngx_zm_lookup_work_t;
+
+extern ngx_module_t ngx_zm_lookup_module;
 
 struct ngx_zm_lookup_ctx_s;
 
