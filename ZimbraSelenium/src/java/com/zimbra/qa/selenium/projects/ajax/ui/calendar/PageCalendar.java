@@ -520,12 +520,8 @@ public class PageCalendar extends AbsTab {
 			
 			this.sDoubleClick(locator);
 			this.zWaitForBusyOverlay();
-			
-			if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.mountpoints.viewer.viewappt.VerifyDisabledUI.organizerTest == false) {
-				page = null;
-			} else {	
-				page = new FormApptNew(this.MyApplication);
-			}
+			page = new FormApptNew(this.MyApplication);
+
 			SleepUtil.sleepMedium();
 
 			// FALL THROUGH
@@ -539,7 +535,6 @@ public class PageCalendar extends AbsTab {
 			page.zWaitForActive();
 		}
 
-		SleepUtil.sleepSmall();
 		return (page);
 	}
 

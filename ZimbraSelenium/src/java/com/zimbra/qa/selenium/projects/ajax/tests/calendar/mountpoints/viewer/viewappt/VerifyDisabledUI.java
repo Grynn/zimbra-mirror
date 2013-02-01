@@ -19,8 +19,6 @@ public class VerifyDisabledUI extends CalendarWorkWeekTest {
 			
 	public void VerifyDisabledUI_01() throws HarnessException {
 		
-		organizerTest = false;
-		
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 		String apptBody = ZimbraSeleniumProperties.getUniqueString();
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();
