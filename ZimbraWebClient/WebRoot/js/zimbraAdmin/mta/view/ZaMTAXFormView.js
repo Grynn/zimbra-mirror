@@ -199,7 +199,7 @@ ZaMTAXFormView.actionButtonListener = function (action) {
 		break;
 	}		
 	var view = form.parent;
-	view.selectActionDialog = ZaApp.getInstance().dialogs["selectActionDialog"] = new ZaMTAActionDialog(ZaApp.getInstance().getAppCtxt().getShell(),dlgTitle);	
+	view.selectActionDialog = ZaApp.getInstance().dialogs["selectActionDialog"] = new ZaMTAActionDialog(ZaApp.getInstance().getAppCtxt().getShell(),dlgTitle,instance);
 	obj[ZaMTAActionDialog.MSG_IDS] = instance[qName][ZaMTA.MsgIDS];
 	obj[ZaMTAActionDialog.FLTR_ITEMS] = instance[qName][ZaMTA.A_selection_cache];	
 	obj[ZaMTAActionDialog.ANSWER] = ZaMTAActionDialog.SELECTED_MSGS; //default is selected messages
