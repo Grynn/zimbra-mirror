@@ -417,6 +417,19 @@ public class OptionsViewModel: BaseViewModel
             OnPropertyChanged(new PropertyChangedEventArgs("SpecialCharReplace"));
         }
     }
+    public string CSVDelimiter
+    {
+        get { return m_config.AdvancedImportOptions.CSVDelimiter; }
+        set
+        {
+            if (value == m_config.AdvancedImportOptions.CSVDelimiter)
+                return;
+            m_config.AdvancedImportOptions.CSVDelimiter = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("CSVDelimiter"));
+        }
+    }
+   
     private string placeholderstring;
     public string Placeholderstring {
         get { return placeholderstring; }

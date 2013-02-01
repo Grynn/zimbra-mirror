@@ -220,6 +220,7 @@ public class BaseViewModel: INotifyPropertyChanged
             : "";
 
         m_config.AdvancedImportOptions.SpecialCharReplace = optionsModel.SpecialCharReplace;
+        m_config.AdvancedImportOptions.CSVDelimiter = optionsModel.CSVDelimiter;
         // deal with skip folders
         m_config.AdvancedImportOptions.IsSkipFolders = optionsModel.IsSkipFolders;
         if (optionsModel.IsSkipFolders)

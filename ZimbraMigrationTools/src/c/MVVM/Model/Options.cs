@@ -99,6 +99,14 @@ public class AdvancedImportOptions
         set { m_SpecialCharReplace = value; }
     }
 
+    private string m_CSVDelimiter;
+
+    public string CSVDelimiter
+    {
+        get { return m_CSVDelimiter; }
+        set { m_CSVDelimiter = value; }
+    }
+
 }
 
 public class Folder
