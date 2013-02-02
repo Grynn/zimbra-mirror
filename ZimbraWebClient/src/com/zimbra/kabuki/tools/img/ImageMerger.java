@@ -64,6 +64,7 @@ public class ImageMerger {
     private static final String O_NO_APPEND = "a";
     private static final String O_VERBOSE = "v";
     private static final String O_DISABLED_IMAGES = "d";
+    private static final String O_SPACER_IMAGES = "si";
 
     private static final Options OPTIONS = new Options();
 
@@ -102,6 +103,7 @@ public class ImageMerger {
         addOption(O_NO_APPEND, "no-append", false, "don't append to output file", false);
         addOption(O_VERBOSE, "verbose", false, "verbose output", false);
         addOption(O_DISABLED_IMAGES, "disable-image", false, "(Deprecated) Create disabled image CSS", false);
+        addOption(O_SPACER_IMAGES,  "spacerimagespath", true, "Spacer images path", false);
     }
 
     private static void addOption(String shortParam, String longParam,
@@ -563,7 +565,9 @@ public class ImageMerger {
         if (cl.hasOption(O_DISABLED_IMAGES)) {
             printWarning("option -%s is deprecated", O_DISABLED_IMAGES);
         }
-
+        if (cl.hasOption(O_SPACER_IMAGES)) {
+           merger.setSpacerImagesPath(cl.getOptionValue(O_SPACER_IMAGES));
+        }
         // process
         assertAndExit(inputDirs.size() > 0, "must specify input directories");
         merger.process(inputDirs);
