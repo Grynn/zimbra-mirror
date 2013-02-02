@@ -69,6 +69,7 @@ if [ ${password_key} = antispam_mysql_password ]; then
     # Change the password in mysql.
     cat <<EOF | ${zimbra_home}/bin/antispam-mysql -u root --password="${antispam_mysql_root_password}"
 SET PASSWORD FOR '${antispam_mysql_user}' = PASSWORD('${newpassword}');
+SET PASSWORD FOR '${antispam_mysql_user}'@'127.0.0.1' = PASSWORD('${newpassword}');
 SET PASSWORD FOR '${antispam_mysql_user}'@'localhost' = PASSWORD('${newpassword}');
 SET PASSWORD FOR '${antispam_mysql_user}'@'localhost.localdomain' = PASSWORD('${newpassword}');
 EOF

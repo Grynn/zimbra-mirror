@@ -23,7 +23,7 @@ zmsetvars \
     antispam_mysql_user \
     antispam_mysql_password
 
-if [ x"${antispam_mysql_host}" = x`zmhostname` -o x"${antispam_mysql_host}" = "xlocalhost" ]; then
+if [ x"${antispam_mysql_host}" = x`zmhostname` -o x"${antispam_mysql_host}" = "xlocalhost" -o x"${antispam_mysql_host}" = "x127.0.0.1" -o x"${antispam_mysql_host}" = "x::1" ]; then
     exec ${antispam_mysql_directory}/bin/mysql \
         --socket=${antispam_mysql_socket} \
         --user=${antispam_mysql_user} \
