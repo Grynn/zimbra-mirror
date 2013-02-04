@@ -151,6 +151,7 @@ if [ -d img ]; then
             --css-path "${BASE_URL}/skins/${SKIN_NAME}/img/" \
             --css-file "images.css" \
             --js-file "images.css.js" \
+	    --spacerimagespath "${zimbra_home}/jetty/webapps/zimbra/img/zimbra" \
             --no-append \
             --output "${SKIN_DEST_DIR}/img" \
             --input "${IMAGE_SUBDIRS}" > /dev/null
@@ -170,7 +171,8 @@ if [ -d img ]; then
             --css-path "${BASE_URL}/skins/${SKIN_NAME}/img/" \
             --css-file "images_${LOCID}.css" \
             --js-file "images.css.js" \
-            --no-append \
+            --spacerimagespath "${zimbra_home}/jetty/webapps/zimbra/img/zimbra" \
+	    --no-append \
             --output "${SKIN_DEST_DIR}/img" \
             --input "${IMAGE_SUBDIRS}" > /dev/null
         perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/img/images_${LOCID}.css"
