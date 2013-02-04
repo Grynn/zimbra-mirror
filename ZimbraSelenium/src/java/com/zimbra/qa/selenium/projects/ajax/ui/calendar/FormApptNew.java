@@ -1002,7 +1002,7 @@ public class FormApptNew extends AbsForm {
 		if (appt.getAttendees() != null) {
 			zFillField(Field.Attendees, appt.getAttendees());
 			SleepUtil.sleepSmall();
-			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
 		}
 
 		// Optional

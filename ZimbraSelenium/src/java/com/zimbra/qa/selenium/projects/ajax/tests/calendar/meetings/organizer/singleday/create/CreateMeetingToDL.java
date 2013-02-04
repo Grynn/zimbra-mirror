@@ -36,7 +36,7 @@ public class CreateMeetingToDL extends CalendarWorkWeekTest {
 
 	@Test(description = "Create appt and Add attendee to existing appointment from contact picker",
 			groups = { "functional" })
-	public void CreateMeetingBySelectAttendees_01() throws HarnessException {
+	public void CreateMeetingToDL_01() throws HarnessException {
 		
 		// Create a meeting
 		String EmailAddress=null;
@@ -126,7 +126,7 @@ public class CreateMeetingToDL extends CalendarWorkWeekTest {
 		
 		// Verify after DL member accepts the invite , Attendee name is added at 'Attendee' header when he accepts the meeting
 		String msgHeader = Locators.MessageHeader + account1.EmailAddress +"')" ;
-		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_OPEN_MENU, apptSubject);
+		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK , apptSubject);
 		ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(msgHeader), "Verify Attendee name is added at 'Attendee' header when he accepts the meeting");
 		
 		// Verify appointment is present in attendee1 from DL 's calendar
