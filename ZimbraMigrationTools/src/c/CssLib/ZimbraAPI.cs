@@ -45,6 +45,9 @@ public class ZimbraAPI
         "/MAPIRoot/Tasks"
     };
 
+    char[] specialCharacters = { ':','/','"','\t','\r','\n'};
+
+
     private string lastError;
     public string LastError {
         get { return lastError; }
@@ -2515,7 +2518,23 @@ public class ZimbraAPI
         if (requestId != -1)
             writer.WriteAttributeString("requestId", requestId.ToString());
         writer.WriteStartElement("folder");
-        writer.WriteAttributeString("name", folder.name);
+
+       // specialCharacters.Any(s => s.Equals(folder.name));
+
+        int indSpecialC = folder.name.IndexOfAny(specialCharacters);
+        
+
+        if ( indSpecialC != -1)
+        {
+            
+            StringBuilder sb = new StringBuilder(folder.name);
+            sb[indSpecialC] = ReplaceSlash.ToCharArray().ElementAt(0)/*'_'*/;
+            string newS = sb.ToString();
+            writer.WriteAttributeString("name", newS);
+        }
+        else
+            writer.WriteAttributeString("name", folder.name);
+
         writer.WriteAttributeString("l", folder.parent);
         writer.WriteAttributeString("fie", "1");        // return the existing ID instead of an error
         if (folder.view.Length > 0)
