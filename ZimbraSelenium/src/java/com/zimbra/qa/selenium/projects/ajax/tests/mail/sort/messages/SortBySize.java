@@ -102,17 +102,17 @@ public class SortBySize extends PrefGroupMailByMessageTest {
 		List<MailItem> messages = app.zPageMail.zListGetMessages();
 		ZAssert.assertNotNull(messages, "Verify the message list exists");
 
-		MailItem itemB = null;
+		MailItem itemA = null;
 		for (MailItem m : messages) {
-			if ( subjectB.equals(m.gSubject) ) {
-				itemB = m;
-			}
 			if ( subjectA.equals(m.gSubject) ) {
-				ZAssert.assertNotNull(itemB, "Item A is in the list.  Verify Item B has already been found.");
+				itemA = m;
+			}
+			if ( subjectB.equals(m.gSubject) ) {
+				ZAssert.assertNotNull(itemA, "Item B is in the list.  Verify Item A has already been found.");
 			}
 		}
 		
-		ZAssert.assertNotNull(itemB, "Verify Item B was found.");
+		ZAssert.assertNotNull(itemA, "Verify Item A was found.");
 
 	}
 
@@ -203,17 +203,17 @@ public class SortBySize extends PrefGroupMailByMessageTest {
 		List<MailItem> messages = app.zPageMail.zListGetMessages();
 		ZAssert.assertNotNull(messages, "Verify the message list exists");
 
-		MailItem itemA = null;
+		MailItem itemB = null;
 		for (MailItem m : messages) {
-			if ( subjectA.equals(m.gSubject) ) {
-				itemA = m;
-			}
 			if ( subjectB.equals(m.gSubject) ) {
-				ZAssert.assertNotNull(itemA, "Item B is in the list.  Verify Item A has already been found.");
+				itemB = m;
+			}
+			if ( subjectA.equals(m.gSubject) ) {
+				ZAssert.assertNotNull(itemB, "Item A is in the list.  Verify Item B has already been found.");
 			}
 		}
 		
-		ZAssert.assertNotNull(itemA, "Verify Item A was found.");
+		ZAssert.assertNotNull(itemB, "Verify Item B was found.");
 
 
 	}

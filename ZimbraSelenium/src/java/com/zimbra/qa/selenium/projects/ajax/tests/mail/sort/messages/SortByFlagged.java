@@ -87,18 +87,18 @@ public class SortByFlagged extends PrefGroupMailByMessageTest {
 		ZAssert.assertNotNull(messages, "Verify the message list exists");
 
 		// Make sure the unflagged message appears in the list
-		MailItem itemB = null;
+		MailItem itemA = null;
 		for (MailItem m : messages) {
-			if ( subjectB.equals(m.gSubject) ) {
-				itemB = m;
-			}
 			if ( subjectA.equals(m.gSubject) ) {
+				itemA = m;
+			}
+			if ( subjectB.equals(m.gSubject) ) {
 				// Item B must be found before Item A (i.e. unflagged appears before flagged)
-				ZAssert.assertNotNull(itemB, "Item A is in the list.  Verify Item B has already been found.");
+				ZAssert.assertNotNull(itemA, "Item B is in the list.  Verify Item A has already been found.");
 			}
 		}
 		
-		ZAssert.assertNotNull(itemB, "Verify Item B was found.");
+		ZAssert.assertNotNull(itemA, "Verify Item B was found.");
 
 		
 	}
@@ -173,18 +173,18 @@ public class SortByFlagged extends PrefGroupMailByMessageTest {
 		ZAssert.assertNotNull(messages, "Verify the message list exists");
 
 		// Make sure the unflagged message appears in the list
-		MailItem itemA = null;
+		MailItem itemB = null;
 		for (MailItem m : messages) {
-			if ( subjectA.equals(m.gSubject) ) {
-				itemA = m;
-			}
 			if ( subjectB.equals(m.gSubject) ) {
+				itemB = m;
+			}
+			if ( subjectA.equals(m.gSubject) ) {
 				// Item A must be found before Item B (i.e. flagged appears before unflagged)
-				ZAssert.assertNotNull(itemA, "Item B is in the list.  Verify Item A has already been found.");
+				ZAssert.assertNotNull(itemB, "Item A is in the list.  Verify Item B has already been found.");
 			}
 		}
 		
-		ZAssert.assertNotNull(itemA, "Verify Item B was found.");
+		ZAssert.assertNotNull(itemB, "Verify Item B was found.");
 
 		
 	}
