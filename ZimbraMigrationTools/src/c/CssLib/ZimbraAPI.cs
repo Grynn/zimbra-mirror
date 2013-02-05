@@ -2528,6 +2528,10 @@ public class ZimbraAPI
         {
             
             StringBuilder sb = new StringBuilder(folder.name);
+            if (ReplaceSlash == null)
+            {
+                ReplaceSlash = "_";
+            }
             sb[indSpecialC] = ReplaceSlash.ToCharArray().ElementAt(0)/*'_'*/;
             string newS = sb.ToString();
             writer.WriteAttributeString("name", newS);
