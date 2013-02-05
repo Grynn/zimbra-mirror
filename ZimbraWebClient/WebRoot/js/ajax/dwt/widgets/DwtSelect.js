@@ -46,7 +46,7 @@ DwtSelect = function(params) {
 	this._hasSetMouseEvents = true;
 
     // initialize some variables
-    this._currentSelectionId = -1;
+    this._currentSelectedOption = null;
     this._options = new AjxVector();
     this._optionValuesToIndices = {};
     this._selectedValue = this._selectedOption = null;
@@ -251,6 +251,9 @@ DwtSelect.prototype.popup =
 function() {
 	var menu = this.getMenu();
 	if (!menu) { return; }
+	if (this._currentSelectedOption) {
+		menu.setSelectedItem(this._currentSelectedOption.getItem());
+	}
 
 	var selectElement = this._selectEl;
 	var selectBounds = Dwt.getBounds(selectElement);
@@ -321,7 +324,7 @@ function() {
 	this._optionValuesToIndices = [];
 	this._selectedValue = null;
 	this._selectedOption = null;
-	this._currentSelectionId = -1;
+	this._currentSelectedOption = null;
 };
 
 /**
@@ -657,15 +660,7 @@ function(ev) {
     this.notifyListeners(DwtEvent.ONCHANGE, event);
 };
 
-DwtSelect.prototype._clearOptionSelection = 
-function() {
-    if (this._currentSelectionId != -1) {
-        var currOption = DwtSelect._getObjectWithId(this._currentSelectionId);
-        currOption.deSelect();
-    }
-};
-
-DwtSelect.prototype._setSelectedOption = 
+DwtSelect.prototype._setSelectedOption =
 function(option) {
 	var displayValue = option.getSelectedValue() || option.getDisplayValue();
 	var image = option.getImage();
@@ -697,19 +692,21 @@ function() {
 
 DwtSelect.prototype._updateSelection = 
 function(newOption) {
-    var currOption = (this._currentSelectionId != -1)
-		? DwtSelect._getObjectWithId(this._currentSelectionId) : null;
+	var currOption = this._currentSelectedOption;
 
-    if (currOption) {
-        currOption.deSelect();
+	if (currOption) {
+		currOption.deSelect();
 	}
-    if (newOption) {
-		newOption.select();
-		this._currentSelectionId = newOption.getIdentifier();
-		var menu = this.getMenu();
-		if (menu)
-			menu.setSelectedItem(newOption.getItem());
-    }
+	this._currentSelectedOption = newOption;
+	if (!newOption) {
+		return;
+	}
+	newOption.select();
+	var menu = this.getMenu(true);
+	if (!menu) {
+		return;
+	}
+	menu.setSelectedItem(newOption.getItem());
 };
 
 // Call this function to update the rendering of the element
