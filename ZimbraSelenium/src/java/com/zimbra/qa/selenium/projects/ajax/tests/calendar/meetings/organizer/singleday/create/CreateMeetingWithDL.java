@@ -1,30 +1,17 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.singleday.create;
 
-import java.awt.event.KeyEvent;
+
 import java.util.Calendar;
 import org.testng.annotations.*;
-
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.core.Bugs;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmDeleteOrganizer;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogFindAttendees;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogFindLocation;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogSendUpdatetoAttendees;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogFindAttendees.Locators;;
 
-@SuppressWarnings("unused")
 public class CreateMeetingWithDL extends CalendarWorkWeekTest {	
 	
 	public CreateMeetingWithDL() {
@@ -35,7 +22,7 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
 	
 
 	@Test(description = " Create appointment with DL by choosing DL address from 'Select Addresses' dialog",
-			groups = { "functional0" })
+			groups = { "functional" })
 	public void CreateMeetingWithDL_01() throws HarnessException {
 		
 		// Create a meeting
