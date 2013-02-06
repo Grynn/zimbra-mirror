@@ -26,10 +26,9 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
 	public void CreateMeetingWithDL_01() throws HarnessException {
 		
 		// Create a meeting
-		String EmailAddress=null;
 		AppointmentItem appt = new AppointmentItem();
 	
-		String apptSubject, apptAttendee1, apptContent;
+		String apptSubject, apptContent;
 		Calendar now = this.calendarWeekDayUTC;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		
@@ -39,9 +38,6 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
 		ZimbraDistributionList distribution = (new ZimbraDistributionList()).provision();
 		distribution.addMember(account1);
 		distribution.addMember(account2);
-		ZimbraAccount organizer  = app.zGetActiveAccount();
-		apptAttendee1 = account1.EmailAddress;
-		
 		// Create appointment data
 		apptContent = ZimbraSeleniumProperties.getUniqueString();
 		appt.setSubject(apptSubject);
