@@ -304,11 +304,11 @@ public class PageCalendar extends AbsTab {
 		} else if (buttonName.equals(Button.O_EDIT_DISABLED_READONLY_APPT)) {
 			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id='EDIT'].ZDisabled");
 		} else if (buttonName.equals(Button.O_FORWARD_DISABLED_READONLY_APPT)) {
-			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id='FORWARD_APPT'].ZDisabled");
+			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id^='FORWARD_APPT__'].ZDisabled");
 		} else if (buttonName.equals(Button.O_PROPOSE_NEW_TIME_DISABLED_READONLY_APPT)) {
-			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id='PROPOSE_NEW_TIME'].ZDisabled");
+			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id^='PROPOSE_NEW_TIME__'].ZDisabled");
 		} else if (buttonName.equals(Button.O_DELETE_DISABLED_READONLY_APPT)) {
-			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id='DELETE'].ZDisabled");
+			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id^='DELETE__'].ZDisabled");
 		
 		} else {
 			return false;
