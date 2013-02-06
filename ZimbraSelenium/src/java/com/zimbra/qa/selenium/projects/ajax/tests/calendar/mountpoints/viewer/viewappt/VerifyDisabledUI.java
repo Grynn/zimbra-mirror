@@ -19,6 +19,8 @@ public class VerifyDisabledUI extends CalendarWorkWeekTest {
 			
 	public void VerifyDisabledUI_01() throws HarnessException {
 		
+		organizerTest = false;
+		
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 		String apptBody = ZimbraSeleniumProperties.getUniqueString();
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();
@@ -72,7 +74,7 @@ public class VerifyDisabledUI extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Mark ON to mounted calendar folder and select the appointment
-		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
+		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar"); //need to localize it
 		app.zTreeCalendar.zSelectMountedFolder(mountpointname);
 		
 		// Verify Save, Tag, Accepted, Edit, Forward, Delete, Propose New Time & Delete menus are disabled
