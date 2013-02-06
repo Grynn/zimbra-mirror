@@ -10,7 +10,6 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 
 public class CreateMeetingWithRSVPOnOff extends CalendarWorkWeekTest {
@@ -50,8 +49,7 @@ public class CreateMeetingWithRSVPOnOff extends CalendarWorkWeekTest {
 		// Create meeting with Request Response OFF
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
-		apptForm.zClickAt(Locators.ToolbarOptions, "");
-		apptForm.zClickAt(Locators.RequestResponse, "");
+		apptForm.zRequestResponseOFF();
 		apptForm.zSubmit(); 
 		
 		// Logout from organizer and Login as attendee
@@ -91,7 +89,7 @@ public class CreateMeetingWithRSVPOnOff extends CalendarWorkWeekTest {
 		ZAssert.assertNull(messageId, "Verify organizer does not recieve email notification because request response was set OFF while creating meeting invite");
 	}
 	@Test(description = "Verify organizer receives email notification when attendee responds to the meeting invite while 'Request Response' remains ON", 
-			groups = { "functional123" })
+			groups = { "functional" })
 	public void CreateMeetingWithRSVPOn_01() throws HarnessException {
 
 		// Create appointment data 
@@ -121,11 +119,7 @@ public class CreateMeetingWithRSVPOnOff extends CalendarWorkWeekTest {
 		// Create meeting with Request Response OFF and then ON
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
-		apptForm.zClickAt(Locators.ToolbarOptions, "");
-		apptForm.zClickAt(Locators.RequestResponse, ""); //Request Response Set to OFF
-		SleepUtil.sleepSmall();
-		apptForm.zClickAt(Locators.ToolbarOptions, "");
-		apptForm.zClickAt(Locators.RequestResponse, ""); //Request Response Set to ON
+		apptForm.zRequestResponseON(); // toggle request response option to enable it
 		apptForm.zSubmit(); 
 		
 		// Logout from organizer and Login as attendee
