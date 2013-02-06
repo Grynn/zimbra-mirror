@@ -25,18 +25,18 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogFindAttendees.Locators;;
 
 @SuppressWarnings("unused")
-public class CreateMeetingToDL extends CalendarWorkWeekTest {	
+public class CreateMeetingWithDL extends CalendarWorkWeekTest {	
 	
-	public CreateMeetingToDL() {
-		logger.info("New "+ CreateMeetingToDL.class.getCanonicalName());
+	public CreateMeetingWithDL() {
+		logger.info("New "+ CreateMeetingWithDL.class.getCanonicalName());
 		super.startingPage =  app.zPageCalendar;
 	    super.startingAccountPreferences = null;
 	}
 	
 
-	@Test(description = "Create appt and Add attendee to existing appointment from contact picker",
-			groups = { "functional" })
-	public void CreateMeetingToDL_01() throws HarnessException {
+	@Test(description = " Create appointment with DL by choosing DL address from 'Select Addresses' dialog",
+			groups = { "functional0" })
+	public void CreateMeetingWithDL_01() throws HarnessException {
 		
 		// Create a meeting
 		String EmailAddress=null;
@@ -45,7 +45,6 @@ public class CreateMeetingToDL extends CalendarWorkWeekTest {
 		String apptSubject, apptAttendee1, apptContent;
 		Calendar now = this.calendarWeekDayUTC;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
-		
 		
 		// Create a DL
 		ZimbraAccount account1 = (new ZimbraAccount()).provision().authenticate();
@@ -76,11 +75,10 @@ public class CreateMeetingToDL extends CalendarWorkWeekTest {
         // Choose the contact and choose it
         dialogFindAttendees.zClick(Locators.ContactPickerFirstContact);
         dialogFindAttendees.zClickButton(Button.B_CHOOSE_CONTACT_FROM_PICKER);
-        SleepUtil.sleepMedium();
         dialogFindAttendees.zClickButton(Button.B_OK);
         apptForm.zToolbarPressButton(Button.B_SEND);
 		apptForm.zSubmit();
-		SleepUtil.sleepMedium();
+
 		
         // Verify attendee1 of DL receives meeting invitation message
 		account1.soapSend(
@@ -113,8 +111,7 @@ public class CreateMeetingToDL extends CalendarWorkWeekTest {
 		// Logout from organizer and accept meeting from 1 of the DL member
 		app.zPageMain.zLogout();
 		app.zPageLogin.zLogin(account1);
-		SleepUtil.sleepMedium();
-
+		
 		// Accept the invite from 1 of the DL member
 		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, apptSubject);
 		display.zPressButton(Button.B_ACCEPT);

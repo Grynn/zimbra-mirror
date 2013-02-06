@@ -111,7 +111,7 @@ public class DialogFindAttendees extends DialogWarning {
 		}
 		this.sFocus(locator);
 		this.sClickAt(locator, "");
-		this.zWaitForBusyOverlay();
+		SleepUtil.sleepMedium();
 		this.zWaitForBusyOverlay();
 		// If page was specified, make sure it is active
 		if ( page != null ) {
