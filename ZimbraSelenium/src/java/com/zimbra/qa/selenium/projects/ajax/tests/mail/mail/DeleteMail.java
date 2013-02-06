@@ -8,6 +8,7 @@ import org.testng.annotations.*;
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
@@ -675,6 +676,65 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 		ZAssert.assertNull(found1, "Verify the message "+ mail1.dSubject +" is no longer in the inbox");
 		ZAssert.assertNull(found2, "Verify the message "+ mail2.dSubject +" is no longer in the inbox");
 		ZAssert.assertNull(found3, "Verify the message "+ mail3.dSubject +" is no longer in the inbox");
+
+		
+	}
+
+	
+	@Bugs(ids = "79188")
+	@Test(	description = "Delete a message from drafts",
+			groups = { "functional" })
+	public void DeleteMailFromDrafts_01() throws HarnessException {
+		
+		//-- DATA
+		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+
+		
+		app.zGetActiveAccount().soapSend(
+				"<SaveDraftRequest xmlns='urn:zimbraMail'>" +
+					"<m >" +
+						"<e t='t' a='"+ ZimbraAccount.AccountA().EmailAddress +"'/>" +
+						"<su>"+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>body "+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SaveDraftRequest>");
+        
+
+
+		// Get the system folders
+		FolderItem drafts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Drafts);
+		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+
+
+		
+		//-- GUI
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+				
+		// Click in Drafts
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, drafts);
+		
+		// Select the conversation or message (in 8.X, only messages are shown in drafts, not conversations)
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		
+		// Click Delete
+		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+		
+
+
+		//-- Verification
+		
+		// Verify draft is no longer in drafts folder
+		MailItem m = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:(" + subject +") inid:"+ drafts.getId());
+		ZAssert.assertNull(m, "Verify message is deleted from drafts");
+		
+		// Verify draft is in trash folder
+		m = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:(" + subject +") inid:"+ trash.getId());
+		ZAssert.assertNotNull(m, "Verify message is moved to trash");
+
 
 		
 	}

@@ -429,4 +429,80 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 		
 	}
 
+	@Bugs(ids = "79188")
+	@Test(	description = "Delete a conversation - 1 message in inbox, 1 message in draft",
+			groups = { "functional" })
+	public void DeleteConversation_11() throws HarnessException {
+		
+		//-- DATA
+		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+
+		// Create a conversation (1 message in inbox, 1 draft response)
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>"+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>body "+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+		
+		MailItem message1 = MailItem.importFromSOAP( app.zGetActiveAccount(), "subject:("+ subject +")");
+		
+		app.zGetActiveAccount().soapSend(
+				"<SaveDraftRequest xmlns='urn:zimbraMail'>" +
+					"<m origid='"+ message1.getId() +"' rt='r'>" +
+						"<e t='t' a='"+ ZimbraAccount.AccountA().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>body "+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SaveDraftRequest>");
+        
+
+
+		// Get the system folders
+		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
+		FolderItem drafts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Drafts);
+		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+
+
+		
+		//-- GUI
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+				
+		// Click in Drafts
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, drafts);
+		
+		// Select the conversation or message (in 8.X, only messages are shown in drafts, not conversations)
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		
+		// Click Delete
+		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+		
+
+
+		//-- Verification
+		
+		// Verify inbox message remains (bug 79188)
+		MailItem m = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:(" + subject +") inid:"+ inbox.getId());
+		ZAssert.assertNotNull(m, "Verify original message reamins in the inbox");
+		
+		// Verify draft is no longer in drafts folder
+		m = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:(" + subject +") inid:"+ drafts.getId());
+		ZAssert.assertNull(m, "Verify message is deleted from drafts");
+		
+		// Verify draft is in trash folder
+		m = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:(" + subject +") inid:"+ trash.getId());
+		ZAssert.assertNotNull(m, "Verify message is moved to trash");
+
+
+		
+	}
+
 }
