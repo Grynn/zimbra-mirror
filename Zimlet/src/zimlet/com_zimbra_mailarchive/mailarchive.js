@@ -132,13 +132,20 @@ function(app, toolbar, controller, viewId) {
 		if (!toolbar.getOp(ZmArchiveZimlet.ARCHIVE_BUTTON_ID)) {
 			var button = toolbar.createOp(ZmArchiveZimlet.ARCHIVE_BUTTON_ID, buttonArgs);
 			button.addSelectionListener(new AjxListener(controller, controller._archiveViaZimletListener, [this]));
-
+			button.archiveZimlet = this;
 			// override the function to reset the operations in the toolbar as there is no method to
 			// set when to enable or disable buttons based on the selection in the button api
 			var originalFunction = controller._resetOperations;
 			controller._resetOperations = function(parent, num) {
+				var showArchive = true;
+				var obj = parent.getOp(ZmArchiveZimlet.ARCHIVE_BUTTON_ID);
+				var msg = controller.getMsg();
+				
+				if (msg && obj && obj.archiveZimlet && msg.folderId == obj.archiveZimlet._archiveFolderId) {
+					showArchive = false;
+				}
 				originalFunction.apply(controller, arguments);
-				parent.enable(ZmArchiveZimlet.ARCHIVE_BUTTON_ID, num);
+				parent.enable(ZmArchiveZimlet.ARCHIVE_BUTTON_ID, num && showArchive);
 			};
 			
 			//add listener to listview so that we can enable button when multiple items are selected
@@ -149,6 +156,14 @@ function(app, toolbar, controller, viewId) {
 		}
 	}
 	else if (viewId.indexOf("COMPOSE") >= 0 && this._archiveFolderId) {
+		var visible = true;
+		var msg = controller && controller.getMsg();
+		if (!msg) {
+			visible = true;
+		}
+		else if (msg.folderId == this._archiveFolderId || msg.folderId == ZmFolder.ID_SENT || msg.folderId == ZmFolder.ID_TRASH	|| msg.folderId == ZmFolder.ID_SPAM) { 
+			visible = false; 
+		}
 		var buttonArgs = {
 			text: this.getMessage("sendAndArchiveButton"),
 			tooltip: this.getMessage("sendAndArchiveTooltip"),
@@ -158,14 +173,13 @@ function(app, toolbar, controller, viewId) {
 			showTextInToolbar: true,
 			enabled: true
 		};
-		if (!toolbar.getOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID") && this.isActionForArchive(controller._action) && this._showSendAndArchive) {
+		if (!toolbar.getOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID") && this.isActionForArchive(controller._action) && this._showSendAndArchive && visible) {
 			var button = toolbar.createOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID", buttonArgs);
 			button.addSelectionListener(new AjxListener(this, this.sendAndArchiveListener, [button]));
 		}
 		else if (toolbar.getOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID")){
 			var button = toolbar.getOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID");
-			var visible = false;
-			if (this._showSendAndArchive) {
+			if (this._showSendAndArchive && visible) {
 				visible = this.isActionForArchive(controller._action);
 			}
 			button.setEnabled(true);
