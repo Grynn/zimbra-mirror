@@ -38,9 +38,9 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/ganymed-ssh2-build210.jar" sourcepath="/ThirdParty/ganymed-ssh2/ganymed-ssh2/src"/>
 	<classpathentry kind="lib" path="jars/ical4j-0.9.16-patched.jar"/>
-	<classpathentry kind="lib" path="jars/junit-4.8.2.jar" sourcepath="jars-src/junit-4.8.2-src.jar">
+	<classpathentry kind="lib" path="jars-internal/jars/junit-4.8.2.jar" sourcepath="jars-internal/jars-src/junit-4.8.2-src.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/junit-4.8.2-javadoc.zip!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-internal/jars-javadoc/junit-4.8.2-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/jzlib-1.0.7.jar"/>
@@ -66,9 +66,9 @@
 			<attribute name="javadoc_location" value="http://download.oracle.com/docs/cd/E17802_01/products/products/servlet/2.5/docs/servlet-2_5-mr2/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/tnef-1.6.0.jar" sourcepath="jars-src/tnef-1.6.0-src.zip">
+	<classpathentry kind="lib" path="jars/tnef-1.6.0.jar" sourcepath="jars-internal/jars-src/tnef-1.6.0-src.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/tnef-1.6.0-javadoc.zip!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-internal/jars-javadoc/tnef-1.6.0-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/xercesImpl-2.9.1.jar" sourcepath="/ThirdParty/xerces-2_9_1-src/src"/>

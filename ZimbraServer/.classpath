@@ -66,9 +66,9 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/slf4j-log4j12-1.6.4.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/slf4j-api-1.6.4.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/tnef-1.6.0.jar" sourcepath="/ZimbraCommon/jars-src/tnef-1.6.0-src.zip">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/tnef-1.6.0.jar" sourcepath="/ZimbraCommon/jars-internal/jars-src/tnef-1.6.0-src.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/tnef-1.6.0-javadoc.zip!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-internal/jars-javadoc/tnef-1.6.0-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/xercesImpl-2.9.1.jar"/>
@@ -109,7 +109,7 @@
 	<classpathentry kind="src" output="build/test-classes" path="src/java-test"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/sqlite-jdbc-3.7.5-1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/junit-4.8.2.jar" sourcepath="/ZimbraCommon/jars-src/junit-4.8.2-src.jar">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars-internal/jars/junit-4.8.2.jar" sourcepath="/ZimbraCommon/jars-internal/jars-src/junit-4.8.2-src.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://kentbeck.github.com/junit/javadoc/latest/"/>
 		</attributes>

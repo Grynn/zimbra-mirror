@@ -7,7 +7,7 @@
   <classpathentry kind="src" output="build/soapdocs-test-classes" path="soapdocs/src/java-test"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/junit-4.8.2.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars-internal/jars/junit-4.8.2.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-lang-2.6.jar"/>
     <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-1.2.jar" sourcepath="/ZimbraCommon/jars-src/commons-cli-1.2-src.zip">
         <attributes>
