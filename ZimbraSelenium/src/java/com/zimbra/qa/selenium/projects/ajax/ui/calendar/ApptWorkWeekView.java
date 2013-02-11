@@ -3,6 +3,8 @@ package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
 
 
+import java.util.Calendar;
+
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
@@ -34,16 +36,21 @@ public class ApptWorkWeekView extends ApptView {
 	public boolean isApptExist(AppointmentItem appt) throws HarnessException {
 		 return super.isApptExist(appt);
 	}
+	
 	@Override
 	public boolean zIsActive() throws HarnessException {
-        return 
-        (
-         //TODO
-        //( sGetCssCount("css=div.ZmCalViewMgr>div.div.calendar_heading div.calendar_heading_day") == 0)
-        //&&		
-        (sGetCssCount("css=div.calendar_heading>div.calendar_heading_day_today") >= 1)
-        );
-						
+		
+		Calendar calendarWeekDayUTC = Calendar.getInstance();
+		
+		if ( calendarWeekDayUTC.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendarWeekDayUTC.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			return (sIsElementPresent("css=div[id='zb__CLD__WORK_WEEK_VIEW'][class*='ZSelected']"));
+			
+		} else {
+			
+			// sGetCssCount("css=div.ZmCalViewMgr>div.div.calendar_heading div.calendar_heading_day") == 0
+		    return (sGetCssCount("css=div.calendar_heading>div.calendar_heading_day_today") >= 1);
+		}
+		
 	}
 	
 }
