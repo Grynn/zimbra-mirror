@@ -297,14 +297,14 @@ public class DisplayMail extends AbsDisplay {
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("locator is not present for button "+ button +" : "+ locator);
 		
-		this.zClick(locator);
+		this.zClickAt(locator , "");
 		
 		this.zWaitForBusyOverlay();
 
 		if ( page != null ) {
 			page.zWaitForActive();
 		}
-		
+		logger.info("postfix"+ doPostfixCheck);
 		if ( doPostfixCheck ) {
 			// Make sure the response is delivered before proceeding
 			Stafpostqueue sp = new Stafpostqueue();

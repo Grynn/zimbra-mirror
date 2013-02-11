@@ -85,7 +85,8 @@ public class DialogFindAttendees extends DialogWarning {
 			page = null;
 			                              
 		} else if (button == Button.B_CHOOSE_CONTACT_FROM_PICKER) {
-
+			
+			this.zClick(Locators.ContactPickerFirstContact);
 			locator = Locators.SelectContactFromPicker;
 			page = null;
 			                              

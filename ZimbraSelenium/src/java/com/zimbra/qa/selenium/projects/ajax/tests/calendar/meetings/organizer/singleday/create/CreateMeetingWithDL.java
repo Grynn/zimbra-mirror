@@ -10,7 +10,8 @@ import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogFindAttendees;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogFindAttendees.Locators;;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogFindAttendees.Locators;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogFindAttendees.Field;
 
 public class CreateMeetingWithDL extends CalendarWorkWeekTest {	
 	
@@ -21,7 +22,7 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
 	}
 	
 
-	@Test(description = "Create appointment with DL by choosing DL address from 'Select Addresses' dialog",
+	@Test(description = " Create appointment with DL by choosing DL address from 'Select Addresses' dialog",
 			groups = { "functional" })
 	public void CreateMeetingWithDL_01() throws HarnessException {
 		
@@ -52,17 +53,16 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
         apptForm.zToolbarPressButton(Button.B_TO);
         
         DialogFindAttendees dialogFindAttendees = (DialogFindAttendees) new DialogFindAttendees(app, app.zPageCalendar);
-        dialogFindAttendees.zType(Locators.ContactPickerSerachField, distribution.EmailAddress);
+        dialogFindAttendees.zType(Field.ContactPickerSerachField, distribution.EmailAddress);
         dialogFindAttendees.zClickButton(Button.B_SEARCH);
         dialogFindAttendees.zWaitForBusyOverlay();
         
         // Choose the contact and choose it
-        dialogFindAttendees.zClick(Locators.ContactPickerFirstContact);
         dialogFindAttendees.zClickButton(Button.B_CHOOSE_CONTACT_FROM_PICKER);
         dialogFindAttendees.zClickButton(Button.B_OK);
         apptForm.zToolbarPressButton(Button.B_SEND);
 		apptForm.zSubmit();
-
+		
         // Verify attendee1 of DL receives meeting invitation message
 		account1.soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
@@ -102,11 +102,10 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
 		// Navigate to Calendar tab
 		AbsTab startingPage = app.zPageCalendar;
 		startingPage.zNavigateTo();
-		SleepUtil.sleepMedium();
 		
 		// Verify after DL member accepts the invite , Attendee name is added at 'Attendee' header when he accepts the meeting
 		String msgHeader = Locators.MessageHeader + account1.EmailAddress +"')" ;
-		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK , Button.O_OPEN_MENU, apptSubject);
+		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_OPEN_MENU, apptSubject);
 		ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(msgHeader), "Verify Attendee name is added at 'Attendee' header when he accepts the meeting");
 		
 		// Verify appointment is present in attendee1 from DL 's calendar
