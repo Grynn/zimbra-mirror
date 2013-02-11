@@ -475,15 +475,24 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		
+		try {
 				
-		// Click in Drafts
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, drafts);
+			// Click in Drafts
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, drafts);
+			
+			// Select the conversation or message (in 8.X, only messages are shown in drafts, not conversations)
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+			
+			// Click Delete
+			app.zPageMail.zToolbarPressButton(Button.B_DELETE);
 		
-		// Select the conversation or message (in 8.X, only messages are shown in drafts, not conversations)
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
-		
-		// Click Delete
-		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+		} finally {
+			
+			// Click in Inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inbox);
+
+		}
 		
 
 
