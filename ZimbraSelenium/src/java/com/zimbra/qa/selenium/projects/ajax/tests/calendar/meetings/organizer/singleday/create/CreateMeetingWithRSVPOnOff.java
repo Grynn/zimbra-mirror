@@ -37,7 +37,6 @@ public class CreateMeetingWithRSVPOnOff extends CalendarWorkWeekTest {
 		AppointmentItem appt = new AppointmentItem();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 13, 0, 0);
-		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create appointment data
 		appt.setSubject(apptSubject);
@@ -50,7 +49,7 @@ public class CreateMeetingWithRSVPOnOff extends CalendarWorkWeekTest {
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
 		apptForm.zRequestResponseOFF();
-		apptForm.zSubmit(); 
+		apptForm.zSubmit();
 		
 		// Logout from organizer and Login as attendee
 		app.zPageMain.zLogout();
@@ -62,12 +61,12 @@ public class CreateMeetingWithRSVPOnOff extends CalendarWorkWeekTest {
 		display.zPressButton(Button.B_ACCEPT);
 		SleepUtil.sleepVeryLong(); // it passes only when I add sleepVeryLong() twice on my local setup, but currently adding only once lets see if it passes
 		
-		// Organizer: Search for the appointment (InvId)
-		organizer.soapSend(
+		// Search for the appointment (InvId)
+		app.zGetActiveAccount().soapSend(
 					"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-10).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(10).toMillis() +"'>"
 				+		"<query>"+ apptSubject +"</query>"
 				+	"</SearchRequest>");
-		String organizerInvId = organizer.soapSelectValue("//mail:appt", "invId");
+		String organizerInvId = app.zGetActiveAccount().soapSelectValue("//mail:appt", "invId");
 				
 		// Get the attendee appointment details
 		
@@ -88,6 +87,7 @@ public class CreateMeetingWithRSVPOnOff extends CalendarWorkWeekTest {
 		// Verify organizer does not receive email notification because request response was set OFF while creating meeting invite
 		ZAssert.assertNull(messageId, "Verify organizer does not recieve email notification because request response was set OFF while creating meeting invite");
 	}
+	
 	@Test(description = "Verify organizer receives email notification when attendee responds to the meeting invite while 'Request Response' remains ON", 
 			groups = { "functional" })
 	public void CreateMeetingWithRSVPOn_01() throws HarnessException {
