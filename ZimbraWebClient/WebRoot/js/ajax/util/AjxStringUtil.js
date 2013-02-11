@@ -1965,7 +1965,7 @@ function(el, ctxt) {
 					}
 				}
 				else if (type === AjxStringUtil.ORIG_HEADER) {
-					if (ctxt.results[ctxt.results.length - 1].type === AjxStringUtil.ORIG_LINE && ctxt.lineNode) {
+					if (ctxt.results.length && ctxt.results[ctxt.results.length - 1].type === AjxStringUtil.ORIG_LINE && ctxt.lineNode) {
 						ctxt.sepNode = ctxt.lineNode;
 						ctxt.done = true;
 					}
