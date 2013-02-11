@@ -6,6 +6,9 @@
 #include <mspst.h>
 #include <ntsecapi.h>
 
+#include <Dsgetdc.h>
+#include <lmcons.h>
+#include <lmapibuf.h>
 enum AttachPropIdx
 {
     ATTACH_METHOD = 0, ATTACH_CONTENT_ID, ATTACH_LONG_FILENAME, WATTACH_LONG_FILENAME,
@@ -3150,4 +3153,142 @@ void Zimbra::MAPI::Util::GetContentTypeFromExtension(LPSTR pExt, LPSTR &pContent
         return;
     }
     RegCloseKey(hExtKey);
+}
+
+CString ConvertToLDAPDN(CString dn)
+{
+    // dn = CString("/") + dn;
+    CString out;
+    int indx;
+
+    while ((indx = dn.ReverseFind('/')) != -1)
+    {
+        int len = dn.GetLength();
+
+        out += dn.Right(len - indx);
+        dn.Delete(indx, len - indx);
+    }
+    out.Replace('/', ',');
+    indx = out.Find(',');
+    out.Delete(indx);
+    return out;
+}
+
+HRESULT Zimbra::MAPI::Util::GetSMTPFromAD(Zimbra::MAPI::MAPISession &session, RECIP_INFO &recipInfo,
+    wstring strUser, wstring strPsw, tstring &strSmtpAddress)
+{
+	UNREFERENCED_PARAMETER(session);
+	HRESULT hr=S_OK;
+	// Get the Domain Controller Name for the logged on user
+    PDOMAIN_CONTROLLER_INFO pInfo;
+    DWORD dwRes = DsGetDcName(NULL, NULL, NULL, NULL, NULL, &pInfo);
+
+    wstring strContainer = L"LDAP://";
+    // Store the Domain Controller name if we got it
+    if (ERROR_SUCCESS == dwRes)
+    {
+        strContainer += pInfo->DomainControllerName + 2;
+        NetApiBufferFree(pInfo);
+    }
+
+	if (strContainer.find(_T("LDAP://")) == -1)
+    {
+        wstring strContainerPath = _T("LDAP://");
+
+        strContainerPath = strContainerPath + strContainer;
+        strContainer = strContainerPath;
+    }
+
+	static std::map<tstring, tstring> mapExAddrSMTP;
+
+    strSmtpAddress = mapExAddrSMTP[tstring(recipInfo.pEmailAddr)];
+    if (!strSmtpAddress.size())
+    {
+        // Get IDirectorySearch Object
+        CComPtr<IDirectorySearch> pDirSearch;
+        if (strUser.length() || strPsw.length())
+			hr = ADsOpenObject(strContainer.c_str(), strUser.c_str(), strPsw.c_str(), ADS_SECURE_AUTHENTICATION,
+                IID_IDirectorySearch, (void **)&pDirSearch);
+        else
+            hr = ADsOpenObject(strContainer.c_str(), NULL, NULL, ADS_SECURE_AUTHENTICATION,
+                IID_IDirectorySearch, (void **)&pDirSearch);
+        if (FAILED(hr))
+        {
+            return E_FAIL;
+        }
+
+        // Set Search Preferences
+        ADS_SEARCHPREF_INFO searchPrefs[2];
+
+        searchPrefs[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;
+        searchPrefs[0].vValue.dwType = ADSTYPE_INTEGER;
+        searchPrefs[0].vValue.Integer = ADS_SCOPE_SUBTREE;
+
+        // Ask for only one object that satisfies the criteria
+        searchPrefs[1].dwSearchPref = ADS_SEARCHPREF_SIZE_LIMIT;
+        searchPrefs[1].vValue.dwType = ADSTYPE_INTEGER;
+        searchPrefs[1].vValue.Integer = 1;
+
+        pDirSearch->SetSearchPreference(searchPrefs, 2);
+
+        CComBSTR filter;
+        filter = _T("(|(distinguishedName=");
+
+        CString strTempDN = ConvertToLDAPDN(recipInfo.pEmailAddr);
+
+        filter.Append(strTempDN.GetBuffer());
+        filter.Append(_T(")(legacyExchangeDN="));
+        filter += recipInfo.pEmailAddr;
+        filter.Append(_T("))"));
+
+        ADS_SEARCH_HANDLE hSearch;
+
+        // Retrieve the "mail" attribute for the specified dn
+        LPWSTR pAttributes = L"mail";
+
+        hr = pDirSearch->ExecuteSearch(filter, &pAttributes, 1, &hSearch);
+        if (FAILED(hr))
+            return E_FAIL;
+
+        ADS_SEARCH_COLUMN mailCol;
+
+        while (SUCCEEDED(hr = pDirSearch->GetNextRow(hSearch)))
+        {
+            if (S_OK == hr)
+            {
+                hr = pDirSearch->GetColumn(hSearch, pAttributes, &mailCol);
+                if (FAILED(hr))
+                    break;
+                strSmtpAddress = mailCol.pADsValues->CaseIgnoreString;
+
+                // Make an entry in the map
+                mapExAddrSMTP[tstring(recipInfo.pEmailAddr)] = strSmtpAddress;
+
+                pDirSearch->CloseSearchHandle(hSearch);
+
+                return S_OK;
+            }
+            else if (S_ADS_NOMORE_ROWS == hr)
+            {
+                // Call ADsGetLastError to see if the search is waiting for a response.
+                DWORD dwError = ERROR_SUCCESS;
+                WCHAR szError[512];
+                WCHAR szProvider[512];
+
+                ADsGetLastError(&dwError, szError, 512, szProvider, 512);
+                if (ERROR_MORE_DATA != dwError)
+                    break;
+            }
+            else
+            {
+                break;
+            }
+        }
+        pDirSearch->CloseSearchHandle(hSearch);
+        return E_FAIL;
+    }
+    else
+    {
+        return S_OK;
+    }
 }

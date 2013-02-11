@@ -31,6 +31,7 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session, Zimbra::MAP
     SetExceptionType(exceptionType);
 	pInvTz = NULL;
 	_pTzString = NULL;
+	m_pAddrBook = NULL;
 	
     //if (MAPIAppointment::m_bNamedPropsInitialized == false)
     //{
@@ -68,8 +69,13 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session, Zimbra::MAP
     m_pPrivate = L"";
 	m_pReminderSet = L"";
 	m_pResponseRequested = L"";
-
-    SetMAPIAppointmentValues();
+	    
+	HRESULT hr=session.OpenAddressBook(&m_pAddrBook);
+	if(!SUCCEEDED(hr))
+	{
+		m_pAddrBook=NULL;
+	}
+	SetMAPIAppointmentValues();
 }
 
 MAPIAppointment::~MAPIAppointment()
@@ -79,6 +85,9 @@ MAPIAppointment::~MAPIAppointment()
         MAPIFreeBuffer(m_pPropVals);
     }
     m_pPropVals = NULL;
+	if(m_pAddrBook)
+		m_pAddrBook->Release();
+	m_pAddrBook=NULL;
 }
 
 HRESULT MAPIAppointment::InitNamedPropsForAppt()
@@ -874,6 +883,39 @@ void MAPIAppointment::SetExceptionType(int type)
     }
 }
 
+HRESULT MAPIAppointment::UpdateAttendeeFromEntryId(Attendee &pAttendee,
+    SBinary &eid)
+{
+    Zimbra::Util::ScopedInterface<IMailUser> pUser;
+    ULONG ulObjType = 0;
+	if(!m_pAddrBook)
+		return E_FAIL;
+    HRESULT hr = m_pAddrBook->OpenEntry(eid.cb, (LPENTRYID)eid.lpb, NULL, MAPI_BEST_ACCESS,
+        &ulObjType, (LPUNKNOWN *)pUser.getptr());
+
+    if (FAILED(hr) || (ulObjType != MAPI_MAILUSER))
+        return E_FAIL;
+    SizedSPropTagArray(3, tags) = {
+        3, { PR_ADDRTYPE_W, PR_DISPLAY_NAME_W, PR_EMAIL_ADDRESS_W }
+    };
+
+    ULONG cVals = 0;
+    Zimbra::Util::ScopedBuffer<SPropValue> pVals;
+
+    hr = pUser->GetProps((LPSPropTagArray) & tags, MAPI_UNICODE, &cVals, pVals.getptr());
+    if (FAILED(hr))
+        return hr;
+    // no smtp address, bail
+    if ((pVals->ulPropTag != PR_ADDRTYPE_W) || (wcsicmp(pVals->Value.lpszW, L"SMTP") != 0))
+        return E_FAIL;
+    if ((pVals[1].ulPropTag == PR_DISPLAY_NAME_W) && ((pAttendee.nam == L"")))
+        pAttendee.nam = pVals[1].Value.lpszW;
+    if ((pVals[2].ulPropTag == PR_EMAIL_ADDRESS_W) && (pAttendee.addr == L""))
+        pAttendee.addr=pVals[2].Value.lpszW;
+
+	return S_OK;
+}
+
 HRESULT MAPIAppointment::SetOrganizerAndAttendees()
 {
     Zimbra::Util::ScopedInterface<IMAPITable> pRecipTable;
@@ -887,11 +929,11 @@ HRESULT MAPIAppointment::SetOrganizerAndAttendees()
 
     typedef enum _AttendeePropTagIdx
     {
-        AT_DISPLAY_NAME, AT_SMTP_ADDR, AT_RECIPIENT_FLAGS, AT_RECIPIENT_TYPE, AT_RECIPIENT_TRACKSTATUS,AT_EMAIL_ADDRESS, AT_NPROPS
+        AT_ADDRTYPE, AT_ENTRYID, AT_DISPLAY_NAME, AT_SMTP_ADDR, AT_RECIPIENT_FLAGS, AT_RECIPIENT_TYPE, AT_RECIPIENT_TRACKSTATUS,AT_EMAIL_ADDRESS, AT_NPROPS
     } AttendeePropTagIdx;
 
-    SizedSPropTagArray(6, reciptags) = {
-        6, { PR_DISPLAY_NAME_W, PR_SMTP_ADDRESS_W, PR_RECIPIENT_FLAGS, PR_RECIPIENT_TYPE, PR_RECIPIENT_TRACKSTATUS,PR_EMAIL_ADDRESS }
+    SizedSPropTagArray(AT_NPROPS, reciptags) = {
+        AT_NPROPS, { PR_ADDRTYPE, PR_ENTRYID, PR_DISPLAY_NAME_W, PR_SMTP_ADDRESS_W, PR_RECIPIENT_FLAGS, PR_RECIPIENT_TYPE, PR_RECIPIENT_TRACKSTATUS,PR_EMAIL_ADDRESS }
     };
 
     ULONG ulRows = 0;
@@ -926,17 +968,51 @@ HRESULT MAPIAppointment::SetOrganizerAndAttendees()
 		{
                     if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_DISPLAY_NAME].ulPropTag) != PT_ERROR)
                     {
-		        m_pOrganizerName = pRecipRows->aRow[iRow].lpProps[AT_DISPLAY_NAME].Value.lpszW;
+						m_pOrganizerName = pRecipRows->aRow[iRow].lpProps[AT_DISPLAY_NAME].Value.lpszW;
                     }
                     if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].ulPropTag) != PT_ERROR)
                     {
-		        m_pOrganizerAddr = pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].Value.lpszW;
+						 m_pOrganizerAddr = pRecipRows->aRow[iRow].lpProps[AT_SMTP_ADDR].Value.lpszW;
                     }
-					if(lstrcmpiW(m_pOrganizerAddr.c_str(),L"") == 0) 
-				{
-					 if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_EMAIL_ADDRESS].ulPropTag) != PT_ERROR)
-				   m_pOrganizerAddr = pRecipRows->aRow[iRow].lpProps[AT_EMAIL_ADDRESS].Value.lpszW;
-				}
+					if((lstrcmpiW(m_pOrganizerAddr.c_str(),L"") == 0) ||(m_pOrganizerName ==L""))
+					{
+						Attendee* pAttendee = new Attendee(); 
+						dlogi("Going to Update organizer from EID...");
+						if(UpdateAttendeeFromEntryId(*pAttendee,pRecipRows->aRow[iRow].lpProps[AT_ENTRYID].Value.bin) !=S_OK)
+						{
+							dlogi("Going to update organizer from AD");
+							RECIP_INFO tempRecip;
+
+							tempRecip.pAddrType = NULL;
+							tempRecip.pEmailAddr = NULL;
+							tempRecip.cbEid = 0;
+							tempRecip.pEid = NULL;
+
+							tempRecip.pAddrType =
+								pRecipRows->aRow[iRow].lpProps[AT_ADDRTYPE].Value.lpszW;
+							tempRecip.pEmailAddr =
+								pRecipRows->aRow[iRow].lpProps[AT_EMAIL_ADDRESS].Value.lpszW;
+							if (pRecipRows->aRow[iRow].lpProps[AT_ENTRYID].ulPropTag != PT_ERROR)
+							{
+								tempRecip.cbEid =
+									pRecipRows->aRow[iRow].lpProps[AT_ENTRYID].Value.bin.cb;
+								tempRecip.pEid =
+									(LPENTRYID)pRecipRows->aRow[iRow].lpProps[AT_ENTRYID].Value
+									.bin.lpb;
+							}
+							std::wstring wstrEmailAddress;
+							Zimbra::MAPI::Util::GetSMTPFromAD(*m_session, tempRecip,L"" , L"",wstrEmailAddress);
+							pAttendee->addr = wstrEmailAddress;
+							dlogi("Email address(AD):",wstrEmailAddress);
+							dlogi("AD update end.");
+						}
+						dlogi("EID update end.");
+						if(m_pOrganizerAddr==L"") 
+							m_pOrganizerAddr = pAttendee->addr;
+						if(m_pOrganizerName==L"")
+							m_pOrganizerName = pAttendee->nam;
+					}
+					dlogi("OrganizerAddr: ",m_pOrganizerAddr, "  OrganizerName: ",m_pOrganizerName);
 		}
 		else
 		{
@@ -951,14 +1027,45 @@ HRESULT MAPIAppointment::SetOrganizerAndAttendees()
 				wstring attaddress = pAttendee->addr;
 				if(lstrcmpiW(attaddress.c_str(),L"") == 0) 
 				{
-					 if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_EMAIL_ADDRESS].ulPropTag) != PT_ERROR)
-				    pAttendee->addr = pRecipRows->aRow[iRow].lpProps[AT_EMAIL_ADDRESS].Value.lpszW;
+					if (((pAttendee->nam==L"") || (pAttendee->addr==L"")) && (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_ENTRYID].ulPropTag) != PT_ERROR))
+					{
+						dlogi("Going to Update attendee from EID...");
+					 if(UpdateAttendeeFromEntryId(*pAttendee,pRecipRows->aRow[iRow].lpProps[AT_ENTRYID].Value.bin)!=S_OK)
+					 {
+						dlogi("Going to update attendee from AD");				
+						RECIP_INFO tempRecip;
+						tempRecip.pAddrType = NULL;
+						tempRecip.pEmailAddr = NULL;
+						tempRecip.cbEid = 0;
+						tempRecip.pEid = NULL;
+
+						tempRecip.pAddrType =
+							pRecipRows->aRow[iRow].lpProps[AT_ADDRTYPE].Value.lpszW;
+						tempRecip.pEmailAddr =
+							pRecipRows->aRow[iRow].lpProps[AT_EMAIL_ADDRESS].Value.lpszW;
+						if (pRecipRows->aRow[iRow].lpProps[AT_ENTRYID].ulPropTag != PT_ERROR)
+						{
+							tempRecip.cbEid =
+								pRecipRows->aRow[iRow].lpProps[AT_ENTRYID].Value.bin.cb;
+							tempRecip.pEid =
+								(LPENTRYID)pRecipRows->aRow[iRow].lpProps[AT_ENTRYID].Value
+								.bin.lpb;
+						}
+						std::wstring wstrEmailAddress;
+						Zimbra::MAPI::Util::GetSMTPFromAD(*m_session, tempRecip,L"" , L"",wstrEmailAddress);
+						pAttendee->addr = wstrEmailAddress;
+						dlogi("Email address(AD):",wstrEmailAddress);
+						dlogi("AD update end.");
+					}
+					 dlogi("EID update end.");
+					}
 				}
+				dlogi("AttendeeAddr: ",pAttendee->addr,"  AttendeeName :",pAttendee->nam);
 			    if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TYPE].ulPropTag) != PT_ERROR)
 				    pAttendee->role = ConvertValueToRole(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TYPE].Value.l);
 				if (PROP_TYPE(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TRACKSTATUS].ulPropTag) != PT_ERROR)
 				    pAttendee->partstat = ConvertValueToPartStat(pRecipRows->aRow[iRow].lpProps[AT_RECIPIENT_TRACKSTATUS].Value.l);
-				m_vAttendees.push_back(pAttendee);
+						m_vAttendees.push_back(pAttendee);
                     }
 		}
 	    }
