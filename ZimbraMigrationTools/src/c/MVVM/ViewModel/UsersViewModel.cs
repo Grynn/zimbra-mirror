@@ -329,6 +329,24 @@ public class UsersViewModel: BaseViewModel
     {
         if (!ValidateUsersList(true))
             return;
+
+        ScheduleViewModel scheduleViewModel =
+            ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
+
+        System.Xml.Serialization.XmlSerializer reader =
+            new System.Xml.Serialization.XmlSerializer(typeof(Config));
+        if (File.Exists(scheduleViewModel.GetConfigFile()))
+        {
+            System.IO.StreamReader fileRead = new System.IO.StreamReader(
+                scheduleViewModel.GetConfigFile());
+
+            Config Z11 = new Config();
+
+            Z11 = (Config)reader.Deserialize(fileRead);
+            fileRead.Close();
+
+            CSVDelimiter = Z11.AdvancedImportOptions.CSVDelimiter;
+        }
         List<Users> ListofUsers = new List<Users>();
         for (int i = 0; i < UsersList.Count; i++)
         {
@@ -364,8 +382,8 @@ public class UsersViewModel: BaseViewModel
         // fDialog.CheckFileExists = true;
         // fDialog.Multiselect = false;
 
-        ScheduleViewModel scheduleViewModel =
-            ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
+        /*ScheduleViewModel scheduleViewModel =
+            ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);*/
 
         if (fDialog.ShowDialog() == true)
         {
