@@ -21,7 +21,7 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
 	}
 	
 
-	@Test(description = " Create appointment with DL by choosing DL address from 'Select Addresses' dialog",
+	@Test(description = "Create appointment with DL by choosing DL address from 'Select Addresses' dialog",
 			groups = { "functional" })
 	public void CreateMeetingWithDL_01() throws HarnessException {
 		
@@ -38,6 +38,7 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
 		ZimbraDistributionList distribution = (new ZimbraDistributionList()).provision();
 		distribution.addMember(account1);
 		distribution.addMember(account2);
+		
 		// Create appointment data
 		apptContent = ZimbraSeleniumProperties.getUniqueString();
 		appt.setSubject(apptSubject);
@@ -62,7 +63,6 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
         apptForm.zToolbarPressButton(Button.B_SEND);
 		apptForm.zSubmit();
 
-		
         // Verify attendee1 of DL receives meeting invitation message
 		account1.soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
@@ -106,7 +106,7 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
 		
 		// Verify after DL member accepts the invite , Attendee name is added at 'Attendee' header when he accepts the meeting
 		String msgHeader = Locators.MessageHeader + account1.EmailAddress +"')" ;
-		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK , apptSubject);
+		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK , Button.O_OPEN_MENU, apptSubject);
 		ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(msgHeader), "Verify Attendee name is added at 'Attendee' header when he accepts the meeting");
 		
 		// Verify appointment is present in attendee1 from DL 's calendar
