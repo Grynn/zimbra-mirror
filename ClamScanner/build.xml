@@ -33,6 +33,9 @@
 		<fileset dir="${common.dir}/jars">
 			<include name="**/*.jar"/>
 		</fileset>
+                <fileset dir="${common.internal.jars.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
 	</path>
 
 	<target name="compile" depends="build-init" description="Compiles the source code">
