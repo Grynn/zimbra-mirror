@@ -40,13 +40,12 @@ public class DialogSendUpdatetoAttendees extends DialogWarning {
 		
 		} else if (button == Button.B_OK) {
 
-			locator = "css=div[class='DwtDialog'] td[id$='_button2_title']";
-			locator = "css=div[id^='DWT'][class='DwtDialog'] div[id$='buttons'] td[id$='_button2_title']";
+			locator = "css=div[id='SEND_NOTIFY_DIALOG'][class='DwtDialog'] div[id='SEND_NOTIFY_DIALOG_buttons'] td[id='SEND_NOTIFY_DIALOG_button2_title']";
 			page = null;
 		
 		} else if (button == Button.B_CANCEL) {
 
-			locator = "css=div[class='DwtDialog'] td[id$='_button1_title']";
+			locator = "css=div[id='SEND_NOTIFY_DIALOG'][class='DwtDialog'] div[id='SEND_NOTIFY_DIALOG_buttons'] td[id='SEND_NOTIFY_DIALOG_button1_title']";
 			page = null;
 			                              
 		} else {
