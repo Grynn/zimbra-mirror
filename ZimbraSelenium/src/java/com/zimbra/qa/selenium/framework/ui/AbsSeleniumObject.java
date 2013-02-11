@@ -44,6 +44,9 @@ import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogFindAttendees.Field;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogFindAttendees.Locators;
+
 import org.openqa.selenium.HasInputDevices;
 import org.openqa.selenium.internal.Locatable;
 
@@ -574,6 +577,35 @@ public abstract class AbsSeleniumObject {
 	    this.sType(locator, value, we);		
 	}
 
+	
+	public void zType(Object locatorname, String value, WebElement... elements) throws HarnessException {
+	    String locator = null ;
+	    if(locatorname == Field.ContactPickerSerachField){
+	    	locator = Locators.ContactPickerSerachField;
+	    	logger.info("zType(" + locator + "," + value + ")");
+	    }
+	    
+	    WebElement we = null;
+	    if(ZimbraSeleniumProperties.isWebDriver()){
+		logger.info("...WebDriver...getElement");
+		if(elements != null && elements.length > 0){
+		    we = elements[0];
+		} else {
+		    we = getElement(locator);
+		}				
+	    } else {
+		// Check if the locator is present
+		if (!sIsElementPresent(locator)) {
+			logger.info("zType(" + locator + ") element is not present");
+			throw new HarnessException("zType(" + locator
+					+ ") element is not present");
+		}
+	    }
+	    
+	    this.sFocus(locator, we);
+	    this.sClickAt(locator, "0,0", we);
+	    this.sType(locator, value, we);		
+	}
 	/**
 	 * This method uses sTypeKeys to simulate the activation of textfield,
 	 * then change the property internally through sType method
