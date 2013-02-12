@@ -670,6 +670,9 @@ public class CodeCoverage {
 			// Instrument the code
 			// Instrumentation could take some time, so increase the timeout
 			staf.setTimeout(120000);
+			//staf.execute("find " + appfolder + "/js -type f -exec sed -i" +  " 's/\\x0//g' {} +");
+			staf.execute("sed -i" +  "'s/\\x0//g'" + appfolder + "/js/Admin_all.js" + "'s/\\x0//g'");
+			staf.execute("sed -i" +  "'s/\\x0//g'" + appfolder + "/js/zimbraAdmin/accounts/controller/ZaAccountListController.js");
 			staf.execute(Tool +" --no-instrument=help/ "+ appfolder +" "+ WebappsInstrumented);
 			staf.resetTimeout();
 			
