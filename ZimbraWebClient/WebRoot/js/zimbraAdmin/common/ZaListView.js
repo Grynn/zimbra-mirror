@@ -63,6 +63,10 @@ ZaListView.prototype._createItemHtml = function(item) {
 	DwtListView.prototype._createItemHtml.call(this,item);
 }
 
+ZaListView.prototype.createHeaderHtml = function (defaultColumnSort) {
+    DwtListView.prototype.createHeaderHtml.call(this, defaultColumnSort, true);
+}
+
 ZaListView.prototype.getTitle =
 function () {
 	return	"";
