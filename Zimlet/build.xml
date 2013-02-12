@@ -33,6 +33,7 @@
 
 	<property name="common.dir" location="../ZimbraCommon" />
 	<property name="common.jars.dir" location="${common.dir}/jars" />
+	<property name="common.internal.jars.dir" location="${common.dir}/jars-internal/jars" />
 	<property name="common.classes.dir" location="../ZimbraCommon/build/classes" />
 
     <property name="soap.dir" location="../ZimbraSoap"/>
