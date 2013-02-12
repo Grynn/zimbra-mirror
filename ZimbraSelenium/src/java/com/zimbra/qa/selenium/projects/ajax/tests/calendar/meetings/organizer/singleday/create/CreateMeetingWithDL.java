@@ -53,7 +53,7 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
         apptForm.zToolbarPressButton(Button.B_TO);
         
         DialogFindAttendees dialogFindAttendees = (DialogFindAttendees) new DialogFindAttendees(app, app.zPageCalendar);
-        dialogFindAttendees.zType(Field.ContactPickerSerachField, distribution.EmailAddress);
+        dialogFindAttendees.zFillField(Field.ContactPickerSerachField, distribution.EmailAddress);
         dialogFindAttendees.zClickButton(Button.B_SEARCH);
         dialogFindAttendees.zWaitForBusyOverlay();
         
@@ -102,6 +102,7 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
 		// Navigate to Calendar tab
 		AbsTab startingPage = app.zPageCalendar;
 		startingPage.zNavigateTo();
+		SleepUtil.sleepSmall();
 		
 		// Verify after DL member accepts the invite , Attendee name is added at 'Attendee' header when he accepts the meeting
 		String msgHeader = Locators.MessageHeader + account1.EmailAddress +"')" ;

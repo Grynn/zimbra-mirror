@@ -1,4 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
+import org.openqa.selenium.WebElement;
+
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -190,6 +192,34 @@ public class DialogFindAttendees extends DialogWarning {
 		this.zWaitForBusyOverlay();
 	}
 	
+	public void zFillField(Object locatorname, String value, WebElement... elements) throws HarnessException {
+	    String locator = null ;
+	    if(locatorname == Field.ContactPickerSerachField){
+	    	locator = Locators.ContactPickerSerachField;
+	    	logger.info("zType(" + locator + "," + value + ")");
+	    }
+	    
+	    WebElement we = null;
+	    if(ZimbraSeleniumProperties.isWebDriver()){
+		logger.info("...WebDriver...getElement");
+		if(elements != null && elements.length > 0){
+		    we = elements[0];
+		} else {
+		    we = getElement(locator);
+		}				
+	    } else {
+		// Check if the locator is present
+		if (!sIsElementPresent(locator)) {
+			logger.info("zType(" + locator + ") element is not present");
+			throw new HarnessException("zType(" + locator
+					+ ") element is not present");
+		}
+	    }
+	    
+	    this.sFocus(locator, we);
+	    this.sClickAt(locator, "0,0", we);
+	    this.sType(locator, value, we);		
+	}
 }
 
 
