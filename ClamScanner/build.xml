@@ -5,6 +5,7 @@
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="common.dir" location="../ZimbraCommon" />
+	<property name="common.internal.jars.dir" location="../ZimbraCommon/jars-internal/jars" />
 	<property name="common.classes.dir" location="${common.dir}/build/classes" />
 
 	<path id="all.java.path">
