@@ -336,7 +336,7 @@ $ldap->unbind();
 exit;
 
 sub usage() {
-  print "$0 [-a [-b]] [-q] [-r] [-s selector] [-u [-b]] [-d domain]\n";
+  print "Usage: $0 [-a [-b]] [-q] [-r] [-s selector] [-u [-b]] [-d domain]\n";
   print "-a: Add new key pair and selector for domain\n";
   print "-b: Optional parameter specifying the number of bits for the new key.\n";
   print "    Only works with -a and -u.  Default when not specified is 1024 bits.\n";
