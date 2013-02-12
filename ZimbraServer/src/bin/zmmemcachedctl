@@ -55,6 +55,11 @@ checkrunning()
 case "$1" in 
   start)
 
+    if [ ! -L /opt/zimbra/memcached ]; then
+      echo "Error: memcached not installed"
+      exit 1
+    fi
+
     checkrunning
     echo -n "Starting ${servicename}..."
     if [ $running = 1 ]; then
