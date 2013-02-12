@@ -85,7 +85,22 @@ function(zimlet, now, isDragProxy) {
 			html[idx++] = "<td align='left' width=" + cellWidth + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(zimlet.getDescription() );
 			html[idx++] = "</nobr></td>";
-		}
+		} else if (field === "spacer") {
+            // spacer
+            html[idx++] = "<td align='left' width=" + cellWidth + "></td>";
+        } else if (field == ZaZimlet.A_zimbraZimletVersion) {
+            // version
+            html[idx++] = "<td align='left' width=" + cellWidth + ">";
+            var version = zimlet.attrs[ZaZimlet.A_zimbraZimletVersion];
+            if (version && version.length > 0) {
+                var lastIndexOf_ = version.lastIndexOf("_");
+                if (lastIndexOf_ > -1) {
+                    version = version.substring(0, lastIndexOf_);
+                }
+            }
+            html[idx++] = AjxStringUtil.htmlEncode(version);
+            html[idx++] = "</td>";
+        }
 	}
 	html[idx++] = "</tr></table>";
 	div.innerHTML = html.join("");
@@ -99,7 +114,9 @@ function() {
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
 	var sortable=1;
 	headerList[0] = new ZaListHeaderItem(ZaZimlet.A_name, ZaMsg.CLV_Name_col, null, 250, sortable++, "name", true, true);
-	headerList[1] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletDescription, ZaMsg.DLV_Description_col, null, "auto", null, ZaZimlet.A_zimbraZimletDescription, false, true);
+	headerList[1] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletDescription, ZaMsg.DLV_Description_col, null, "auto", null, ZaZimlet.A_zimbraZimletDescription, true, true);
+    headerList[2] = new ZaListHeaderItem("spacer", null, null, "5px", null, null, false, false);
+    headerList[3] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletVersion, ZaMsg.CLV_Version_col, null, "80px", null, ZaZimlet.A_zimbraZimletVersion, true, true);
 	return headerList;
 }
 
