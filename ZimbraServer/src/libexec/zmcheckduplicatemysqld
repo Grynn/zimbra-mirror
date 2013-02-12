@@ -173,7 +173,8 @@ sub logError {
 
 sub usage {
   print STDERR "Usage: $0 [-h] [-v] [-d] [-m]\n";
+  print STDERR "-d   Add basic debug information to output.\n";
   print STDERR "-h   This usage page.\n";
   print STDERR "-v   Verbose output.\n";
-  print STDERR "-m   Mail output to admin account \n";
+  print STDERR "-m   Mail output to admin account.\n";
 }
