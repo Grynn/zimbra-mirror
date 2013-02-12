@@ -159,7 +159,7 @@ function(app, toolbar, controller, viewId) {
 		var visible = true;
 		var msg = controller && controller.getMsg();
 		if (!msg) {
-			visible = true;
+			visible = false;
 		}
 		else if (msg.folderId == this._archiveFolderId || msg.folderId == ZmFolder.ID_SENT || msg.folderId == ZmFolder.ID_TRASH	|| msg.folderId == ZmFolder.ID_SPAM) { 
 			visible = false; 
@@ -400,7 +400,9 @@ function(button) {
 	}
 	var cc = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
 	//var callback = new AjxCallback (this,this._handleArchive);
-	this._msgMap[cc._msg.id] = true;
+	if (cc && cc._msg && cc._msg.id) {
+		this._msgMap[cc._msg.id] = true;
+	}
 	cc.sendMsg();
 	//cc.sendMsg(null, null, callback);
 };
