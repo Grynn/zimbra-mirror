@@ -410,25 +410,16 @@ function(attrs) {
 
 UnknownPersonSlide.prototype._removeCustomAttrs =
 function(attrs) {
-	if(attrs["rightClickForMoreOptions"]) {
-		delete attrs["rightClickForMoreOptions"];
-	}
-	if(attrs["formattedEmail"]) {
-		delete attrs["formattedEmail"];
-	}
-	if(attrs["address"]) {
-		delete attrs["address"];
-	}
-    if(attrs["presence"]) {
-        delete attrs["presence"];
-    }
+	delete attrs["rightClickForMoreOptions"];
+	delete attrs["formattedEmail"];
+	delete attrs["address"];
+	delete attrs["presence"];
+
     /* See bug 77183. imagepart is not a generated attr so do not remove it
     if(attrs["imagepart"]) {
         delete attrs["imagepart"];
     }*/
-    if(attrs["imURI"]) {
-        delete attrs["imURI"];
-    }
+	delete attrs["imURI"];
 };
 
 UnknownPersonSlide.prototype._formatTexts =
