@@ -26,6 +26,8 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
 			groups = { "functional" })
 	public void CreateMeetingWithDL_01() throws HarnessException {
 		
+		organizerTest = false;
+		
 		// Create a meeting
 		AppointmentItem appt = new AppointmentItem();
 	
