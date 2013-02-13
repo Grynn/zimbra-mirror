@@ -1536,7 +1536,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 					]
 				},
 
-				{type:_CASE_, numCols:1, caseKey: ZaNewDomainXWizard.AUTH_TEST_RESULT_STEP,colSizes:["220px","450px"],
+				{type:_CASE_, numCols:1, caseKey: ZaNewDomainXWizard.AUTH_TEST_RESULT_STEP,colSizes:["380px","290px"],
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isAuthMechNotZimbra],
 					visibilityChangeEventSources:[ZaModel.currentStep],
 					items: [
