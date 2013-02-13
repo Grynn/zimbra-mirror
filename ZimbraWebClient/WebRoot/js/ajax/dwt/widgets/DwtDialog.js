@@ -305,6 +305,9 @@ function(buttonId) {
  */
 DwtDialog.prototype.setButtonEnabled = 
 function(buttonId, enabled) {
+	if (!this._button[buttonId]) {
+		return;
+	}
 	this._button[buttonId].setEnabled(enabled);
 };
 
@@ -316,6 +319,9 @@ function(buttonId, enabled) {
  */
 DwtDialog.prototype.setButtonVisible = 
 function(buttonId, visible) {
+	if (!this._button[buttonId]) {
+		return;
+	}
 	this._button[buttonId].setVisible(visible);
 };
 
