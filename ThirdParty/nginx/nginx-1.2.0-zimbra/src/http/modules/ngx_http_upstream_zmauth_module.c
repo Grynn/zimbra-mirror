@@ -298,7 +298,9 @@ ngx_http_upstream_do_init_zmauth_peer(ngx_http_request_t *r,
         work->connection = r->connection;
         work->data = r;
         work->username = usr;
-        work->virtual_host = r->headers_in.host->value;
+        if (r->headers_in.host != NULL) {
+            work->virtual_host = r->headers_in.host->value;
+        }
         work->alias_check_stat = ZM_ALIAS_NOT_CHECKED;
         work->on_success = zmauth_lookup_result_handler;
         work->on_failure = zmauth_lookup_result_handler;
