@@ -22,4 +22,9 @@ zmsetvars \
 	zimbra_home \
 	zimbra_server_hostname 
 
+if [ ! -L /opt/zimbra/postfix ]; then
+  echo "Error: postfix not installed"
+  exit 1
+fi
+
 sudo ${zimbra_home}/postfix/sbin/postconf "$@"
