@@ -406,9 +406,10 @@ public class CSMigrationWrapper
                             Log.trace("CSmigration processitems foldertype from itemobject");
                             foldertype type = (foldertype)itemobject.Type;
                             Log.trace("CSmigration processitems ProcessIt");
+                            bool bError = false;
                             if (ProcessIt(options, type))
                             {
-                                bool bError = false;
+                                 bError = false;
 
                                 bool bSkipMessage = false;
                                 Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -529,6 +530,7 @@ public class CSMigrationWrapper
                                             catch (Exception)
                                             {
                                                 Log.info(dict["Subject"], ": unable to parse date");
+                                                bError = true;
                                             }
                                         }
                                         if (!bSkipMessage)
@@ -564,7 +566,7 @@ public class CSMigrationWrapper
                                             {
                                                 Acct.TotalErrors++;
                                                 Log.err("Exception caught in ProcessItems->api.AddMessage", e.Message);
-
+                                                bError = true;
                                             }
                                         }
                                     }
@@ -592,13 +594,17 @@ public class CSMigrationWrapper
                                                     options.IsMaintainenceMode = true;
                                                 }
                                                 Log.err("Error in CreateContact ", errMsg);
+
+                                                
+                                                Acct.TotalErrors++;
+                                                bError = true;
                                             }
                                         }
                                         catch (Exception e)
                                         {
                                             Acct.TotalErrors++;
                                             Log.err("Exception caught in ProcessItems->api.CreateContact", e.Message);
-
+                                            bError = true;
 
                                         }
                                     }
@@ -620,6 +626,7 @@ public class CSMigrationWrapper
                                             catch (Exception)
                                             {
                                                 Log.info(dict["su"], ": unable to parse date");
+                                                bError = true;
                                             }
                                         }
                                         if (!bSkipMessage)
@@ -659,7 +666,7 @@ public class CSMigrationWrapper
                                                                                        ProblemInfo.TYPE_ERR);
                                                 Acct.TotalErrors++;
                                                 Log.err(dict["su"], "exception caught in ProcessItems->api.AddAppointment", e.Message);
-
+                                                bError = true;
                                             }
                                         }
                                     }
@@ -683,6 +690,7 @@ public class CSMigrationWrapper
                                             {
 
                                                 Log.info(dict["su"], ": unable to parse date");
+                                                bError = true;
                                             }
                                         }
                                         if (!bSkipMessage)
@@ -709,6 +717,9 @@ public class CSMigrationWrapper
                                                     }
 
                                                     Log.err("error in AddTask ", errMsg);
+                                                    
+                                                    Acct.TotalErrors++;
+                                                    bError = true;
 
 
                                                 }
@@ -717,6 +728,7 @@ public class CSMigrationWrapper
                                             {
                                                 Acct.TotalErrors++;
                                                 Log.err("exception caught in ProcessItems->api.AddTask", e.Message);
+                                                bError = true;
                                             }
                                         }
                                     }
@@ -738,7 +750,7 @@ public class CSMigrationWrapper
                                         : Acct.migrationFolder.CurrentCountOfItems + 1;
                                 }
                             }
-                            if (historyid != "")
+                            if ((historyid != "") &&(!bError))
                             {
                                 try
                                 {
