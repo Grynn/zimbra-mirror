@@ -16,6 +16,15 @@
 source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars
 
+while getopts "h" flag
+do
+  if [ x$flag == "xh" ]; then
+    echo "Usage: $0 [-h]"
+    echo "    Dumps various environment information"
+    echo "    -h: This help information"
+    exit 0
+  fi
+done
 
 echo "----------------"
 date +%Y%m%d%H%M%S
