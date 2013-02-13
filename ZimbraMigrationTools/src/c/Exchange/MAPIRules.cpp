@@ -1264,9 +1264,9 @@ void CRuleMap::WriteFilterRule(CRule &rule, LPWSTR &filterRule)
     rule.GetName(wstrRuleName);
     long lActive = rule.GetActive();
     wstrRuleActive = (lActive == 0) ? L"0" : L"1";
-    lstrcpy(filterRule, L"name,");
+    lstrcpy(filterRule, L"name;");
     lstrcat(filterRule, wstrRuleName.c_str());
-    lstrcat(filterRule, L",active,");
+    lstrcat(filterRule, L";active;");
     lstrcat(filterRule, wstrRuleActive.c_str());
 }
 

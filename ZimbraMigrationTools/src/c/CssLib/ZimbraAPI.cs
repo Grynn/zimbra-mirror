@@ -2394,8 +2394,8 @@ public class ZimbraAPI
         string filterActionsDictName = idx.ToString() + "filterActions";
 
         writer.WriteStartElement("filterRule");
-        string[] tokens = rules[filterRuleDictName].Split(',');
-        //string[] tokens = rules[filterRuleDictName].Split(';');
+       // string[] tokens = rules[filterRuleDictName].Split(',');
+        string[] tokens = rules[filterRuleDictName].Split(';');
         writer.WriteAttributeString(tokens.GetValue(0).ToString(), tokens.GetValue(1).ToString());
         writer.WriteAttributeString(tokens.GetValue(2).ToString(), tokens.GetValue(3).ToString());
 
