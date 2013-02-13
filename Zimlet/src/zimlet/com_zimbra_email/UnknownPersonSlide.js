@@ -238,10 +238,10 @@ function() {
 
     var contactList = AjxDispatcher.run("GetContacts");
     var contact = contactList ? contactList.getContactByEmail(this.emailZimlet.emailAddress) : null;
-    if (contact) {
+    if (contact || !appCtxt.get(ZmSetting.GAL_ENABLED)) {
         this._handleContactDetails(null, contact);
     }
-	if (!contact) { //not in address book - search in the GAL
+	else { //not in address book - search in the GAL
 		var jsonObj, request, soapDoc;
 		jsonObj = {SearchGalRequest:{_jsns:"urn:zimbraAccount"}};
 		request = jsonObj.SearchGalRequest;
@@ -252,6 +252,7 @@ function() {
 		var callback = new AjxCallback(this, this._handleContactDetails);
 		appCtxt.getAppController().sendRequest({jsonObj:jsonObj,asyncMode:true,callback:callback, noBusyOverlay:true});
 	}
+
 };
 
 
