@@ -1,11 +1,355 @@
---- openldap-2.4.33/libraries/liblmdb/mdb.c.orig	2013-02-06 10:53:58.087399407 -0800
-+++ openldap-2.4.33/libraries/liblmdb/mdb.c	2013-02-06 10:54:02.871267137 -0800
-@@ -1370,7 +1370,7 @@
- 			MDB_oldpages *mop = txn->mt_env->me_pghead;
- 			if (num > 1) {
- 				MDB_cursor m2;
--				int retry = 500, readit = 0, n2 = num-1;
-+				int retry = 20000, readit = 0, n2 = num-1;
- 				unsigned int i, j, k;
+diff --git a/libraries/liblmdb/mdb.c b/libraries/liblmdb/mdb.c
+index cdd8ea1..4baf350 100644
+--- a/libraries/liblmdb/mdb.c
++++ b/libraries/liblmdb/mdb.c
+@@ -913,12 +913,6 @@ typedef struct MDB_xcursor {
  
- 				/* If current list is too short, must fetch more and coalesce */
+ 	/** A set of pages freed by an earlier transaction. */
+ typedef struct MDB_oldpages {
+-	/** Usually we only read one record from the FREEDB at a time, but
+-	 *	in case we read more, this will chain them together.
+-	 */
+-	struct MDB_oldpages *mo_next;
+-	/**	The ID of the transaction in which these pages were freed. */
+-	txnid_t		mo_txnid;
+ 	/** An #MDB_IDL of the pages */
+ 	pgno_t		mo_pages[1];	/* dynamic */
+ } MDB_oldpages;
+@@ -949,12 +943,10 @@ struct MDB_env {
+ 	size_t		me_mapsize;		/**< size of the data memory map */
+ 	off_t		me_size;		/**< current file size */
+ 	pgno_t		me_maxpg;		/**< me_mapsize / me_psize */
+-	txnid_t		me_pgfirst;		/**< ID of first old page record we used */
+ 	txnid_t		me_pglast;		/**< ID of last old page record we used */
+ 	MDB_dbx		*me_dbxs;		/**< array of static DB info */
+ 	uint16_t	*me_dbflags;	/**< array of flags from MDB_db.md_flags */
+-	MDB_oldpages *me_pghead;	/**< list of old page records */
+-	MDB_oldpages *me_pgfree;	/**< list of page records to free */
++	MDB_oldpages *me_pghead;	/**< old pages reclaimed from freelist */
+ 	pthread_key_t	me_txkey;	/**< thread-key for readers */
+ 	MDB_page	*me_dpages;		/**< list of malloc'd blocks for re-use */
+ 	/** IDL of pages that became unused in a write txn */
+@@ -1095,6 +1087,10 @@ mdb_dkey(MDB_val *key, char *buf)
+ 	char *ptr = buf;
+ 	unsigned char *c = key->mv_data;
+ 	unsigned int i;
++
++	if (!key)
++		return "";
++
+ 	if (key->mv_size > MDB_MAXKEYSIZE)
+ 		return "MDB_MAXKEYSIZE";
+ 	/* may want to make this a dynamic check: if the key is mostly
+@@ -1283,7 +1279,6 @@ mdb_page_alloc(MDB_cursor *mc, int num, MDB_page **mp)
+ 	 * after txn 3 commits, and so will be safe to re-use in txn 4.
+ 	 */
+ 	if (txn->mt_txnid > 3) {
+-
+ 		if (!txn->mt_env->me_pghead &&
+ 			txn->mt_dbs[FREE_DBI].md_root != P_INVALID) {
+ 			/* See if there's anything in the free DB */
+@@ -1294,7 +1289,7 @@ mdb_page_alloc(MDB_cursor *mc, int num, MDB_page **mp)
+ 			txnid_t *kptr;
+ 
+ 			mdb_cursor_init(&m2, txn, FREE_DBI, NULL);
+-			if (!txn->mt_env->me_pgfirst) {
++			if (!txn->mt_env->me_pglast) {
+ 				mdb_page_search(&m2, NULL, 0);
+ 				leaf = NODEPTR(m2.mc_pg[m2.mc_top], 0);
+ 				kptr = (txnid_t *)NODEKEY(leaf);
+@@ -1334,22 +1329,21 @@ again:
+ 				MDB_oldpages *mop;
+ 				pgno_t *idl;
+ 
+-				if (!txn->mt_env->me_pgfirst) {
++				if (!txn->mt_env->me_pglast) {
+ 					mdb_node_read(txn, leaf, &data);
+ 				}
+-				txn->mt_env->me_pglast = last;
+-				if (!txn->mt_env->me_pgfirst)
+-					txn->mt_env->me_pgfirst = last;
+ 				idl = (MDB_ID *) data.mv_data;
+ 				/* We might have a zero-length IDL due to freelist growth
+ 				 * during a prior commit
+ 				 */
+-				if (!idl[0]) goto again;
++				if (!idl[0]) {
++					txn->mt_env->me_pglast = last;
++					goto again;
++				}
+ 				mop = malloc(sizeof(MDB_oldpages) + MDB_IDL_SIZEOF(idl) - sizeof(pgno_t));
+ 				if (!mop)
+ 					return ENOMEM;
+-				mop->mo_next = txn->mt_env->me_pghead;
+-				mop->mo_txnid = last;
++				txn->mt_env->me_pglast = last;
+ 				txn->mt_env->me_pghead = mop;
+ 				memcpy(mop->mo_pages, idl, MDB_IDL_SIZEOF(idl));
+ 
+@@ -1357,7 +1351,7 @@ again:
+ 				{
+ 					unsigned int i;
+ 					DPRINTF("IDL read txn %zu root %zu num %zu",
+-						mop->mo_txnid, txn->mt_dbs[FREE_DBI].md_root, idl[0]);
++						last, txn->mt_dbs[FREE_DBI].md_root, idl[0]);
+ 					for (i=0; i<idl[0]; i++) {
+ 						DPRINTF("IDL %zu", idl[i+1]);
+ 					}
+@@ -1393,7 +1387,7 @@ none:
+ 						pgno_t *idl;
+ 						int exact;
+ 
+-						last = mop->mo_txnid + 1;
++						last = txn->mt_env->me_pglast + 1;
+ 
+ 						/* We haven't hit the readers list yet? */
+ 						if (!oldest) {
+@@ -1436,8 +1430,6 @@ none:
+ 								mop2->mo_pages[k--] = mop->mo_pages[j--];
+ 						}
+ 						txn->mt_env->me_pglast = last;
+-						mop2->mo_txnid = last;
+-						mop2->mo_next = mop->mo_next;
+ 						txn->mt_env->me_pghead = mop2;
+ 						free(mop);
+ 						mop = mop2;
+@@ -1473,13 +1465,8 @@ none:
+ 				mop->mo_pages[0]--;
+ 			}
+ 			if (MDB_IDL_IS_ZERO(mop->mo_pages)) {
+-				txn->mt_env->me_pghead = mop->mo_next;
+-				if (mc->mc_dbi == FREE_DBI) {
+-					mop->mo_next = txn->mt_env->me_pgfree;
+-					txn->mt_env->me_pgfree = mop;
+-				} else {
+-					free(mop);
+-				}
++				txn->mt_env->me_pghead = NULL;
++				free(mop);
+ 			}
+ 		}
+ 	}
+@@ -1992,11 +1979,10 @@ mdb_txn_reset0(MDB_txn *txn)
+ 				env->me_free_pgs = txn->mt_free_pgs;
+ 		}
+ 
+-		while ((mop = txn->mt_env->me_pghead)) {
+-			txn->mt_env->me_pghead = mop->mo_next;
++		if ((mop = txn->mt_env->me_pghead) != NULL) {
++			txn->mt_env->me_pghead = NULL;
+ 			free(mop);
+ 		}
+-		txn->mt_env->me_pgfirst = 0;
+ 		txn->mt_env->me_pglast = 0;
+ 
+ 		env->me_txn = NULL;
+@@ -2044,7 +2030,8 @@ mdb_txn_commit(MDB_txn *txn)
+ 	off_t		 size;
+ 	MDB_page	*dp;
+ 	MDB_env	*env;
+-	pgno_t	next, freecnt;
++	pgno_t	next, freecnt, maxfree_1pg;
++	txnid_t	oldpg_txnid, id;
+ 	MDB_cursor mc;
+ 
+ 	assert(txn != NULL);
+@@ -2156,10 +2143,28 @@ mdb_txn_commit(MDB_txn *txn)
+ 		}
+ 	}
+ 
++	/* Save the freelist as of this transaction to the freeDB. This
++	 * can change the freelist, so keep trying until it stabilizes.
++	 *
++	 * env->me_pglast and the length of txn->mt_free_pgs cannot decrease,
++	 * except the code below can decrease env->me_pglast to split pghead.
++	 * Page numbers cannot disappear from txn->mt_free_pgs.  New pages
++	 * can only appear in env->me_pghead when env->me_pglast increases.
++	 * Until then, the me_pghead pointer won't move but can become NULL.
++	 */
++
+ 	mdb_cursor_init(&mc, txn, FREE_DBI, NULL);
++	oldpg_txnid = id = 0;
++	freecnt = 0;
++	/* Preferred max #items per freelist entry, to avoid overflow pages.
++	 * Leave room for headers, key (txnid), pagecount (pageno_t), and
++	 * FIXME: a bit more in case there is some delimiter I don't know about.
++	 */
++	maxfree_1pg = (env->me_psize - (PAGEHDRSZ + NODESIZE + 3*sizeof(MDB_ID)))
++		/ sizeof(pgno_t);
+ 
+ 	/* should only be one record now */
+-	if (env->me_pghead || env->me_pgfirst) {
++	if (env->me_pghead || env->me_pglast) {
+ 		/* make sure first page of freeDB is touched and on freelist */
+ 		rc = mdb_page_search(&mc, NULL, MDB_PS_MODIFY);
+ 		if (rc && rc != MDB_NOTFOUND) {
+@@ -2170,28 +2175,27 @@ fail:
+ 	}
+ 
+ 	/* Delete IDLs we used from the free list */
+-	if (env->me_pgfirst) {
+-		txnid_t cur;
++	if (env->me_pglast) {
+ 		MDB_val key;
+-		int exact = 0;
+ 
+-		key.mv_size = sizeof(cur);
+-		for (cur = env->me_pgfirst; cur <= env->me_pglast; cur++) {
+-			key.mv_data = &cur;
+-
+-			mdb_cursor_set(&mc, &key, NULL, MDB_SET, &exact);
++		do {
++free_pgfirst:
++			rc = mdb_cursor_first(&mc, &key, NULL);
++			if (rc)
++				goto fail;
++			oldpg_txnid = *(txnid_t *)key.mv_data;
++again:
++			assert(oldpg_txnid <= env->me_pglast);
++			id = 0;
+ 			rc = mdb_cursor_del(&mc, 0);
+ 			if (rc)
+ 				goto fail;
+-		}
+-		env->me_pgfirst = 0;
+-		env->me_pglast = 0;
++		} while (oldpg_txnid < env->me_pglast);
+ 	}
+ 
+-	/* save to free list */
++	/* Save IDL of pages freed by this txn, to freeDB */
+ free2:
+-	freecnt = txn->mt_free_pgs[0];
+-	if (!MDB_IDL_IS_ZERO(txn->mt_free_pgs)) {
++	if (freecnt != txn->mt_free_pgs[0]) {
+ 		MDB_val key, data;
+ 
+ 		/* make sure last page of freeDB is touched and on freelist */
+@@ -2216,61 +2220,64 @@ free2:
+ 		/* write to last page of freeDB */
+ 		key.mv_size = sizeof(pgno_t);
+ 		key.mv_data = &txn->mt_txnid;
+-		data.mv_data = txn->mt_free_pgs;
+ 		/* The free list can still grow during this call,
+-		 * despite the pre-emptive touches above. So check
+-		 * and make sure the entire thing got written.
++		 * despite the pre-emptive touches above. So retry
++		 * until the reserved space remains big enough.
+ 		 */
+ 		do {
++			assert(freecnt < txn->mt_free_pgs[0]);
+ 			freecnt = txn->mt_free_pgs[0];
+ 			data.mv_size = MDB_IDL_SIZEOF(txn->mt_free_pgs);
+-			mdb_midl_sort(txn->mt_free_pgs);
+-			rc = mdb_cursor_put(&mc, &key, &data, 0);
++			rc = mdb_cursor_put(&mc, &key, &data, MDB_RESERVE);
+ 			if (rc)
+ 				goto fail;
+ 		} while (freecnt != txn->mt_free_pgs[0]);
++		mdb_midl_sort(txn->mt_free_pgs);
++		memcpy(data.mv_data, txn->mt_free_pgs, data.mv_size);
++		if (oldpg_txnid < env->me_pglast || (!env->me_pghead && id))
++			goto free_pgfirst;	/* used up freeDB[oldpg_txnid] */
+ 	}
+-	/* should only be one record now */
+-again:
++
++	/* Put back page numbers we took from freeDB but did not use */
+ 	if (env->me_pghead) {
++	  for (;;) {
+ 		MDB_val key, data;
+ 		MDB_oldpages *mop;
+ 		pgno_t orig;
+-		txnid_t id;
+ 
+ 		mop = env->me_pghead;
+-		id = mop->mo_txnid;
++		id = env->me_pglast;
+ 		key.mv_size = sizeof(id);
+ 		key.mv_data = &id;
+-		data.mv_size = MDB_IDL_SIZEOF(mop->mo_pages);
+-		data.mv_data = mop->mo_pages;
+-		orig = mop->mo_pages[0];
+ 		/* These steps may grow the freelist again
+ 		 * due to freed overflow pages...
+ 		 */
+-		rc = mdb_cursor_put(&mc, &key, &data, 0);
+-		if (rc)
+-			goto fail;
+-		if (mop == env->me_pghead && env->me_pghead->mo_txnid == id) {
+-			/* could have been used again here */
+-			if (mop->mo_pages[0] != orig) {
+-				data.mv_size = MDB_IDL_SIZEOF(mop->mo_pages);
+-				data.mv_data = mop->mo_pages;
+-				id = mop->mo_txnid;
+-				rc = mdb_cursor_put(&mc, &key, &data, 0);
+-				if (rc)
+-					goto fail;
+-			}
+-		} else {
+-			/* was completely used up */
+-			rc = mdb_cursor_del(&mc, 0);
++		i = 2;
++		do {
++			orig = mop->mo_pages[0];
++			if (orig > maxfree_1pg && id > 4)
++				orig = maxfree_1pg; /* Do not use an overflow page */
++			data.mv_size = (orig + 1) * sizeof(pgno_t);
++			rc = mdb_cursor_put(&mc, &key, &data, MDB_RESERVE);
+ 			if (rc)
+ 				goto fail;
+-			if (env->me_pghead)
+-				goto again;
+-		}
+-		env->me_pgfirst = 0;
+-		env->me_pglast = 0;
++			assert(!env->me_pghead || env->me_pglast);
++			/* mop could have been used again here */
++			if (id != env->me_pglast || env->me_pghead == NULL)
++				goto again;		/* was completely used up */
++			assert(mop == env->me_pghead);
++		} while (mop->mo_pages[0] < orig && --i);
++		memcpy(data.mv_data, mop->mo_pages, data.mv_size);
++		if (mop->mo_pages[0] <= orig)
++			break;
++		*(pgno_t *)data.mv_data = orig;
++		mop->mo_pages[0] -= orig;
++		memmove(&mop->mo_pages[1], &mop->mo_pages[1 + orig],
++			mop->mo_pages[0] * sizeof(pgno_t));
++		/* Save more oldpages at the previous txnid. */
++		assert(env->me_pglast == id && id == oldpg_txnid);
++		env->me_pglast = --oldpg_txnid;
++	  }
+ 	}
+ 
+ 	/* Check for growth of freelist again */
+@@ -2282,12 +2289,6 @@ again:
+ 		env->me_pghead = NULL;
+ 	}
+ 
+-	while (env->me_pgfree) {
+-		MDB_oldpages *mop = env->me_pgfree;
+-		env->me_pgfree = mop->mo_next;
+-		free(mop);
+-	}
+-
+ 	if (!MDB_IDL_IS_ZERO(txn->mt_free_pgs)) {
+ 		if (mdb_midl_shrink(&txn->mt_free_pgs))
+ 			env->me_free_pgs = txn->mt_free_pgs;
+@@ -2422,6 +2423,7 @@ sync:
+ 	}
+ 
+ done:
++	env->me_pglast = 0;
+ 	env->me_txn = NULL;
+ 	if (txn->mt_numdbs > env->me_numdbs) {
+ 		/* update the DB flags */
+@@ -4819,7 +4821,7 @@ mdb_cursor_put(MDB_cursor *mc, MDB_val *key, MDB_val *data,
+ 	if (F_ISSET(mc->mc_txn->mt_flags, MDB_TXN_RDONLY))
+ 		return EACCES;
+ 
+-	if (key->mv_size == 0 || key->mv_size > MDB_MAXKEYSIZE)
++	if (flags != MDB_CURRENT && (key->mv_size == 0 || key->mv_size > MDB_MAXKEYSIZE))
+ 		return EINVAL;
+ 
+ 	if (F_ISSET(mc->mc_db->md_flags, MDB_DUPSORT) && data->mv_size > MDB_MAXKEYSIZE)
