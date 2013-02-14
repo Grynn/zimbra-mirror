@@ -340,7 +340,7 @@ public class Props2JsServlet extends HttpServlet {
                     public List<Locale> getCandidateLocales(String baseName, Locale locale)
                     {
                         if (baseName == null) throw new NullPointerException();
-                        if (locale.equals(new Locale("zh", "HK")) || locale.equals(new Locale("zh", "CN")))
+                        if (locale.equals(new Locale("zh", "HK")) || locale.equals(new Locale("zh", "CN")) || locale.equals(new Locale("zh", "TW")))
                         {
                             return Arrays.asList(
                                     locale,
