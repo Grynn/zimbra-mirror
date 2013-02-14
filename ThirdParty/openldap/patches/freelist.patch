@@ -1,21 +1,25 @@
-diff --git a/libraries/liblmdb/mdb.c b/libraries/liblmdb/mdb.c
-index cdd8ea1..4baf350 100644
---- a/libraries/liblmdb/mdb.c
-+++ b/libraries/liblmdb/mdb.c
-@@ -913,12 +913,6 @@ typedef struct MDB_xcursor {
+--- openldap-2.4.33/libraries/liblmdb/mdb.c.orig	2013-02-04 10:05:20.000000000 -0800
++++ openldap-2.4.33/libraries/liblmdb/mdb.c	2013-02-14 12:56:01.227623158 -0800
+@@ -911,18 +911,6 @@
+ 	unsigned char mx_dbflag;
+ } MDB_xcursor;
  
- 	/** A set of pages freed by an earlier transaction. */
- typedef struct MDB_oldpages {
+-	/** A set of pages freed by an earlier transaction. */
+-typedef struct MDB_oldpages {
 -	/** Usually we only read one record from the FREEDB at a time, but
 -	 *	in case we read more, this will chain them together.
 -	 */
 -	struct MDB_oldpages *mo_next;
 -	/**	The ID of the transaction in which these pages were freed. */
 -	txnid_t		mo_txnid;
- 	/** An #MDB_IDL of the pages */
- 	pgno_t		mo_pages[1];	/* dynamic */
- } MDB_oldpages;
-@@ -949,12 +943,10 @@ struct MDB_env {
+-	/** An #MDB_IDL of the pages */
+-	pgno_t		mo_pages[1];	/* dynamic */
+-} MDB_oldpages;
+-
+ 	/** The database environment. */
+ struct MDB_env {
+ 	HANDLE		me_fd;		/**< The main data file */
+@@ -949,12 +937,10 @@
  	size_t		me_mapsize;		/**< size of the data memory map */
  	off_t		me_size;		/**< current file size */
  	pgno_t		me_maxpg;		/**< me_mapsize / me_psize */
@@ -25,11 +29,11 @@ index cdd8ea1..4baf350 100644
  	uint16_t	*me_dbflags;	/**< array of flags from MDB_db.md_flags */
 -	MDB_oldpages *me_pghead;	/**< list of old page records */
 -	MDB_oldpages *me_pgfree;	/**< list of page records to free */
-+	MDB_oldpages *me_pghead;	/**< old pages reclaimed from freelist */
++	pgno_t		*me_pghead;	/**< old pages reclaimed from freelist */
  	pthread_key_t	me_txkey;	/**< thread-key for readers */
  	MDB_page	*me_dpages;		/**< list of malloc'd blocks for re-use */
  	/** IDL of pages that became unused in a write txn */
-@@ -1095,6 +1087,10 @@ mdb_dkey(MDB_val *key, char *buf)
+@@ -1095,6 +1081,10 @@
  	char *ptr = buf;
  	unsigned char *c = key->mv_data;
  	unsigned int i;
@@ -40,7 +44,7 @@ index cdd8ea1..4baf350 100644
  	if (key->mv_size > MDB_MAXKEYSIZE)
  		return "MDB_MAXKEYSIZE";
  	/* may want to make this a dynamic check: if the key is mostly
-@@ -1283,7 +1279,6 @@ mdb_page_alloc(MDB_cursor *mc, int num, MDB_page **mp)
+@@ -1283,7 +1273,6 @@
  	 * after txn 3 commits, and so will be safe to re-use in txn 4.
  	 */
  	if (txn->mt_txnid > 3) {
@@ -48,7 +52,7 @@ index cdd8ea1..4baf350 100644
  		if (!txn->mt_env->me_pghead &&
  			txn->mt_dbs[FREE_DBI].md_root != P_INVALID) {
  			/* See if there's anything in the free DB */
-@@ -1294,7 +1289,7 @@ mdb_page_alloc(MDB_cursor *mc, int num, MDB_page **mp)
+@@ -1294,7 +1283,7 @@
  			txnid_t *kptr;
  
  			mdb_cursor_init(&m2, txn, FREE_DBI, NULL);
@@ -57,9 +61,13 @@ index cdd8ea1..4baf350 100644
  				mdb_page_search(&m2, NULL, 0);
  				leaf = NODEPTR(m2.mc_pg[m2.mc_top], 0);
  				kptr = (txnid_t *)NODEKEY(leaf);
-@@ -1334,22 +1329,21 @@ again:
- 				MDB_oldpages *mop;
- 				pgno_t *idl;
+@@ -1331,33 +1320,31 @@
+ 			if (oldest > last) {
+ 				/* It's usable, grab it.
+ 				 */
+-				MDB_oldpages *mop;
+-				pgno_t *idl;
++				pgno_t *idl, *mop;
  
 -				if (!txn->mt_env->me_pgfirst) {
 +				if (!txn->mt_env->me_pglast) {
@@ -73,20 +81,22 @@ index cdd8ea1..4baf350 100644
  				 * during a prior commit
  				 */
 -				if (!idl[0]) goto again;
+-				mop = malloc(sizeof(MDB_oldpages) + MDB_IDL_SIZEOF(idl) - sizeof(pgno_t));
 +				if (!idl[0]) {
 +					txn->mt_env->me_pglast = last;
 +					goto again;
 +				}
- 				mop = malloc(sizeof(MDB_oldpages) + MDB_IDL_SIZEOF(idl) - sizeof(pgno_t));
++				mop = malloc(MDB_IDL_SIZEOF(idl));
  				if (!mop)
  					return ENOMEM;
 -				mop->mo_next = txn->mt_env->me_pghead;
 -				mop->mo_txnid = last;
 +				txn->mt_env->me_pglast = last;
  				txn->mt_env->me_pghead = mop;
- 				memcpy(mop->mo_pages, idl, MDB_IDL_SIZEOF(idl));
+-				memcpy(mop->mo_pages, idl, MDB_IDL_SIZEOF(idl));
++				memcpy(mop, idl, MDB_IDL_SIZEOF(idl));
  
-@@ -1357,7 +1351,7 @@ again:
+ #if MDB_DEBUG > 1
  				{
  					unsigned int i;
  					DPRINTF("IDL read txn %zu root %zu num %zu",
@@ -95,8 +105,30 @@ index cdd8ea1..4baf350 100644
  					for (i=0; i<idl[0]; i++) {
  						DPRINTF("IDL %zu", idl[i+1]);
  					}
-@@ -1393,7 +1387,7 @@ none:
- 						pgno_t *idl;
+@@ -1367,14 +1354,14 @@
+ 		}
+ none:
+ 		if (txn->mt_env->me_pghead) {
+-			MDB_oldpages *mop = txn->mt_env->me_pghead;
++			pgno_t *mop = txn->mt_env->me_pghead;
+ 			if (num > 1) {
+ 				MDB_cursor m2;
+ 				int retry = 500, readit = 0, n2 = num-1;
+ 				unsigned int i, j, k;
+ 
+ 				/* If current list is too short, must fetch more and coalesce */
+-				if (mop->mo_pages[0] < (unsigned)num)
++				if (mop[0] < (unsigned)num)
+ 					readit = 1;
+ 
+ 				mdb_cursor_init(&m2, txn, FREE_DBI, NULL);
+@@ -1389,11 +1376,10 @@
+ 					}
+ 					if (readit) {
+ 						MDB_val key, data;
+-						MDB_oldpages *mop2;
+-						pgno_t *idl;
++						pgno_t *idl, *mop2;
  						int exact;
  
 -						last = mop->mo_txnid + 1;
@@ -104,8 +136,27 @@ index cdd8ea1..4baf350 100644
  
  						/* We haven't hit the readers list yet? */
  						if (!oldest) {
-@@ -1436,8 +1430,6 @@ none:
- 								mop2->mo_pages[k--] = mop->mo_pages[j--];
+@@ -1423,39 +1409,37 @@
+ 						if (rc)
+ 							return rc;
+ 						idl = (MDB_ID *) data.mv_data;
+-						mop2 = malloc(sizeof(MDB_oldpages) + MDB_IDL_SIZEOF(idl) - 2*sizeof(pgno_t) + MDB_IDL_SIZEOF(mop->mo_pages));
++						mop2 = malloc(MDB_IDL_SIZEOF(idl) + MDB_IDL_SIZEOF(mop));
+ 						if (!mop2)
+ 							return ENOMEM;
+ 						/* merge in sorted order */
+-						i = idl[0]; j = mop->mo_pages[0]; mop2->mo_pages[0] = k = i+j;
+-						mop->mo_pages[0] = P_INVALID;
++						i = idl[0]; j = mop[0]; mop2[0] = k = i+j;
++						mop[0] = P_INVALID;
+ 						while (i>0  || j>0) {
+-							if (i && idl[i] < mop->mo_pages[j])
+-								mop2->mo_pages[k--] = idl[i--];
++							if (i && idl[i] < mop[j])
++								mop2[k--] = idl[i--];
+ 							else
+-								mop2->mo_pages[k--] = mop->mo_pages[j--];
++								mop2[k--] = mop[j--];
  						}
  						txn->mt_env->me_pglast = last;
 -						mop2->mo_txnid = last;
@@ -113,10 +164,41 @@ index cdd8ea1..4baf350 100644
  						txn->mt_env->me_pghead = mop2;
  						free(mop);
  						mop = mop2;
-@@ -1473,13 +1465,8 @@ none:
- 				mop->mo_pages[0]--;
+ 						/* Keep trying to read until we have enough */
+-						if (mop->mo_pages[0] < (unsigned)num) {
++						if (mop[0] < (unsigned)num) {
+ 							continue;
+ 						}
+ 					}
+ 
+ 					/* current list has enough pages, but are they contiguous? */
+-					for (i=mop->mo_pages[0]; i>=(unsigned)num; i--) {
+-						if (mop->mo_pages[i-n2] == mop->mo_pages[i] + n2) {
+-							pgno = mop->mo_pages[i];
++					for (i=mop[0]; i>=(unsigned)num; i--) {
++						if (mop[i-n2] == mop[i] + n2) {
++							pgno = mop[i];
+ 							i -= n2;
+ 							/* move any stragglers down */
+-							for (j=i+num; j<=mop->mo_pages[0]; j++)
+-								mop->mo_pages[i++] = mop->mo_pages[j];
+-							mop->mo_pages[0] -= num;
++							for (j=i+num; j<=mop[0]; j++)
++								mop[i++] = mop[j];
++							mop[0] -= num;
+ 							break;
+ 						}
+ 					}
+@@ -1469,17 +1453,12 @@
+ 				} while (1);
+ 			} else {
+ 				/* peel pages off tail, so we only have to truncate the list */
+-				pgno = MDB_IDL_LAST(mop->mo_pages);
+-				mop->mo_pages[0]--;
++				pgno = MDB_IDL_LAST(mop);
++				mop[0]--;
  			}
- 			if (MDB_IDL_IS_ZERO(mop->mo_pages)) {
+-			if (MDB_IDL_IS_ZERO(mop->mo_pages)) {
 -				txn->mt_env->me_pghead = mop->mo_next;
 -				if (mc->mc_dbi == FREE_DBI) {
 -					mop->mo_next = txn->mt_env->me_pgfree;
@@ -124,12 +206,22 @@ index cdd8ea1..4baf350 100644
 -				} else {
 -					free(mop);
 -				}
++			if (MDB_IDL_IS_ZERO(mop)) {
 +				txn->mt_env->me_pghead = NULL;
 +				free(mop);
  			}
  		}
  	}
-@@ -1992,11 +1979,10 @@ mdb_txn_reset0(MDB_txn *txn)
+@@ -1952,7 +1931,7 @@
+ 		if (!(env->me_flags & MDB_ROFS))
+ 			txn->mt_u.reader->mr_txnid = (txnid_t)-1;
+ 	} else {
+-		MDB_oldpages *mop;
++		pgno_t *mop;
+ 		MDB_page *dp;
+ 		unsigned int i;
+ 
+@@ -1992,11 +1971,10 @@
  				env->me_free_pgs = txn->mt_free_pgs;
  		}
  
@@ -143,7 +235,7 @@ index cdd8ea1..4baf350 100644
  		txn->mt_env->me_pglast = 0;
  
  		env->me_txn = NULL;
-@@ -2044,7 +2030,8 @@ mdb_txn_commit(MDB_txn *txn)
+@@ -2044,7 +2022,8 @@
  	off_t		 size;
  	MDB_page	*dp;
  	MDB_env	*env;
@@ -153,7 +245,7 @@ index cdd8ea1..4baf350 100644
  	MDB_cursor mc;
  
  	assert(txn != NULL);
-@@ -2156,10 +2143,28 @@ mdb_txn_commit(MDB_txn *txn)
+@@ -2156,10 +2135,28 @@
  		}
  	}
  
@@ -183,7 +275,7 @@ index cdd8ea1..4baf350 100644
  		/* make sure first page of freeDB is touched and on freelist */
  		rc = mdb_page_search(&mc, NULL, MDB_PS_MODIFY);
  		if (rc && rc != MDB_NOTFOUND) {
-@@ -2170,28 +2175,27 @@ fail:
+@@ -2170,28 +2167,27 @@
  	}
  
  	/* Delete IDLs we used from the free list */
@@ -225,7 +317,7 @@ index cdd8ea1..4baf350 100644
  		MDB_val key, data;
  
  		/* make sure last page of freeDB is touched and on freelist */
-@@ -2216,61 +2220,64 @@ free2:
+@@ -2216,61 +2212,63 @@
  		/* write to last page of freeDB */
  		key.mv_size = sizeof(pgno_t);
  		key.mv_data = &txn->mt_txnid;
@@ -258,9 +350,10 @@ index cdd8ea1..4baf350 100644
  	if (env->me_pghead) {
 +	  for (;;) {
  		MDB_val key, data;
- 		MDB_oldpages *mop;
- 		pgno_t orig;
+-		MDB_oldpages *mop;
+-		pgno_t orig;
 -		txnid_t id;
++		pgno_t orig, *mop;
  
  		mop = env->me_pghead;
 -		id = mop->mo_txnid;
@@ -291,7 +384,7 @@ index cdd8ea1..4baf350 100644
 -			rc = mdb_cursor_del(&mc, 0);
 +		i = 2;
 +		do {
-+			orig = mop->mo_pages[0];
++			orig = mop[0];
 +			if (orig > maxfree_1pg && id > 4)
 +				orig = maxfree_1pg; /* Do not use an overflow page */
 +			data.mv_size = (orig + 1) * sizeof(pgno_t);
@@ -308,14 +401,14 @@ index cdd8ea1..4baf350 100644
 +			if (id != env->me_pglast || env->me_pghead == NULL)
 +				goto again;		/* was completely used up */
 +			assert(mop == env->me_pghead);
-+		} while (mop->mo_pages[0] < orig && --i);
-+		memcpy(data.mv_data, mop->mo_pages, data.mv_size);
-+		if (mop->mo_pages[0] <= orig)
++		} while (mop[0] < orig && --i);
++		memcpy(data.mv_data, mop, data.mv_size);
++		if (mop[0] <= orig)
 +			break;
 +		*(pgno_t *)data.mv_data = orig;
-+		mop->mo_pages[0] -= orig;
-+		memmove(&mop->mo_pages[1], &mop->mo_pages[1 + orig],
-+			mop->mo_pages[0] * sizeof(pgno_t));
++		mop[0] -= orig;
++		memmove(&mop[1], &mop[1 + orig],
++			mop[0] * sizeof(pgno_t));
 +		/* Save more oldpages at the previous txnid. */
 +		assert(env->me_pglast == id && id == oldpg_txnid);
 +		env->me_pglast = --oldpg_txnid;
@@ -323,7 +416,7 @@ index cdd8ea1..4baf350 100644
  	}
  
  	/* Check for growth of freelist again */
-@@ -2282,12 +2289,6 @@ again:
+@@ -2282,12 +2280,6 @@
  		env->me_pghead = NULL;
  	}
  
@@ -336,7 +429,7 @@ index cdd8ea1..4baf350 100644
  	if (!MDB_IDL_IS_ZERO(txn->mt_free_pgs)) {
  		if (mdb_midl_shrink(&txn->mt_free_pgs))
  			env->me_free_pgs = txn->mt_free_pgs;
-@@ -2422,6 +2423,7 @@ sync:
+@@ -2422,6 +2414,7 @@
  	}
  
  done:
@@ -344,7 +437,7 @@ index cdd8ea1..4baf350 100644
  	env->me_txn = NULL;
  	if (txn->mt_numdbs > env->me_numdbs) {
  		/* update the DB flags */
-@@ -4819,7 +4821,7 @@ mdb_cursor_put(MDB_cursor *mc, MDB_val *key, MDB_val *data,
+@@ -4819,7 +4812,7 @@
  	if (F_ISSET(mc->mc_txn->mt_flags, MDB_TXN_RDONLY))
  		return EACCES;
  
