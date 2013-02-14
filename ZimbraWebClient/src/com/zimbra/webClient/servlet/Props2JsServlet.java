@@ -40,6 +40,7 @@ public class Props2JsServlet extends com.zimbra.kabuki.servlets.Props2JsServlet 
 		if (skin == null) {
 			skin = req.getParameter(P_SKIN);
 		}
+        skin = skin.replaceAll("[^A-Za-z0-9]", "");
 		return skin;
 	}
 
