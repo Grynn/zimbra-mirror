@@ -138,6 +138,10 @@ public class UsersViewModel: BaseViewModel
             fileRead.Close();
 
             CSVDelimiter = Z11.AdvancedImportOptions.CSVDelimiter;
+            if (CSVDelimiter == null)
+            {
+                CSVDelimiter = ",";
+            }
 
             ZimbraDomain = Z11.UserProvision.DestinationDomain;
             if (DomainList.Count > 0)
@@ -350,6 +354,10 @@ public class UsersViewModel: BaseViewModel
         List<Users> ListofUsers = new List<Users>();
         for (int i = 0; i < UsersList.Count; i++)
         {
+            if (CSVDelimiter == null)
+            {
+                CSVDelimiter = ",";
+            }
             string users = UsersList[i].Username + CSVDelimiter/*','*/ + UsersList[i].MappedName;
 
 //            string[] nameTokens = users.Split(',');
