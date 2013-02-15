@@ -416,13 +416,15 @@ public class Button {
 	public static final Button O_FORWARD_DISABLED = new Button("O_FORWARD_DISABLED");	
 	public static final Button O_MOVE_DISABLED = new Button("O_MOVE_DISABLED");
 	public static final Button O_TAG_APPOINTMENT_DISABLED = new Button("O_TAG_APPOINTMENT_DISABLED");
+	public static final Button O_REPLY_DISABLED = new Button("O_REPLY_DISABLED");
 	public static final Button B_TAG_APPOINTMENT_DISABLED_READONLY_APPT = new Button("B_TAG_APPOINTMENT_DISABLED_READONLY_APPT");
 	public static final Button B_SAVE_DISABLED_READONLY_APPT = new Button("B_SAVE_DISABLED_READONLY_APPT");
 	public static final Button B_ACCEPTED_DISABLED_READONLY_APPT = new Button("B_ACCEPTED_DISABLED_READONLY_APPT");
 	public static final Button O_EDIT_DISABLED_READONLY_APPT = new Button("O_EDIT_DISABLED_READONLY_APPT");
 	public static final Button O_FORWARD_DISABLED_READONLY_APPT = new Button("O_FORWARD_DISABLED_READONLY_APPT");
 	public static final Button O_PROPOSE_NEW_TIME_DISABLED_READONLY_APPT = new Button("O_PROPOSE_NEW_TIME_DISABLED_READONLY_APPT");
-	public static final Button O_DELETE_DISABLED_READONLY_APPT = new Button("O_DELETE_DISABLED_READONLY_APPT");	
+	public static final Button O_DELETE_DISABLED_READONLY_APPT = new Button("O_DELETE_DISABLED_READONLY_APPT");
+	public static final Button O_SHARE_CALENDAR_DISABLED = new Button("O_SHARE_CALENDAR");
 	
 	public static final Button O_VIEW_DAY_MENU = new Button("O_VIEW_DAY_MENU");
 	public static final Button O_VIEW_WORK_WEEK_MENU = new Button("O_VIEW_WORK_WEEK_MENU");

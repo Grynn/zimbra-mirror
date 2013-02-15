@@ -4,6 +4,7 @@
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,12 +107,12 @@ public class DialogShareFind extends AbsDialog {
 		
 		// To activate the Search button, need to focus/click
 		this.sFocus(locator);
-		this.zClick(locator);
+		this.zClickAt(locator, "");
 		this.zKeyboard.zTypeCharacters(email);
 		if (!(sGetValue(locator).equalsIgnoreCase(email))) {
 			this.sType(locator, email);
 		}
-		
+		this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_HOME); // to enable search button because it remains disabled
 		this.zWaitForBusyOverlay();
 
 	}

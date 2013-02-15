@@ -229,6 +229,10 @@ public class PageCalendar extends AbsTab {
 		}	
 	}
 	
+	public boolean zIsAppointmentExists(String apptSubject) throws HarnessException {
+		return sIsElementPresent(zGetApptLocator(apptSubject));
+	}
+	
 	public boolean zGetViewApptLocator() throws HarnessException {
 		return zIsVisiblePerPosition("css=td[id$='_responseActionSelectCell'] td[id$='_select_container']", 5, 5);
 	}
@@ -282,6 +286,9 @@ public class PageCalendar extends AbsTab {
 		
 		if (buttonName.equals(Button.B_DELETE_DISABLED)) {
 			return sIsElementPresent("css=div[id='zb__CLD__DELETE'].ZDisabled");
+			
+		} else if (buttonName.equals(Button.O_SHARE_CALENDAR_DISABLED)) {
+			return sIsElementPresent("css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='SHARE_CALENDAR'].ZDisabled");	
 		
 		} else if (buttonName.equals(Button.O_REINVITE_ATTENDEES_DISABLED)) {
 			return sIsElementPresent("css=div[id='zm__Calendar'] div[id='REINVITE_ATTENDEES'].ZDisabled");
@@ -293,6 +300,8 @@ public class PageCalendar extends AbsTab {
 			return sIsElementPresent("css=div[id='zm__Calendar'] div[id^='MOVE'].ZDisabled");
 		} else if (buttonName.equals(Button.O_TAG_APPOINTMENT_DISABLED)) {
 			return sIsElementPresent("css=div[id='zm__Calendar'] div[id='TAG_MENU'].ZDisabled");
+		} else if (buttonName.equals(Button.O_REPLY_DISABLED)) {
+			return sIsElementPresent("css=div[id='zm__Calendar'] div[id^='REPLY'].ZDisabled");	
 		
 		} else if (buttonName.equals(Button.B_TAG_APPOINTMENT_DISABLED_READONLY_APPT)) {
 			return sIsElementPresent("css=div[id='ztb__APPTRO-1'] div[id^='zb__APPTRO-1'][id$='TAG_MENU'].ZDisabled");
@@ -307,6 +316,8 @@ public class PageCalendar extends AbsTab {
 			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id^='FORWARD_APPT__'].ZDisabled");
 		} else if (buttonName.equals(Button.O_PROPOSE_NEW_TIME_DISABLED_READONLY_APPT)) {
 			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id^='PROPOSE_NEW_TIME__'].ZDisabled");
+		} else if (buttonName.equals(Button.O_DELETE_DISABLED_READONLY_APPT)) {
+			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id^='DELETE__'].ZDisabled");
 		} else if (buttonName.equals(Button.O_DELETE_DISABLED_READONLY_APPT)) {
 			return sIsElementPresent("css=div[id='zm__APPTRO-1'] div[id^='DELETE__'].ZDisabled");
 		
