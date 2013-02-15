@@ -387,6 +387,7 @@ use FileHandle;
 use POSIX ":sys_wait_h";
 
 ## User supplied modules and their locations
+use lib "/opt/zimbra/zimbramon/lib";
 use lib qw($extra_includes);
 $extra_modules
 
