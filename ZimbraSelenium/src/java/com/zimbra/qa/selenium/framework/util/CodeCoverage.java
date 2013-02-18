@@ -673,10 +673,11 @@ public class CodeCoverage {
 			
 			
 			// NULL characters in JS files prevent instrumentation. Hence remove NULL characters.
-			// staf.execute("find " + appfolder + "/js -type f -exec sed -i" +  " 's/\\\\x0//g' {} +");
-			//staf.execute("sed -i " +  "'s/\\\\x0//g' " + appfolder + "/js/Admin_all.js");
-			//staf.execute("sed -i " +  "'s/\\\\x0//g' " + appfolder + "/js/zimbraAdmin/accounts/controller/ZaAccountListController.js");
-			
+			if ( ZimbraSeleniumProperties.getAppType().equals(AppType.ADMIN) ) {
+				staf.execute("find " + appfolder + "/js -type f -exec sed -i" +  " 's/\\\\x0//g' {} +");
+				//staf.execute("sed -i " +  "'s/\\\\x0//g' " + appfolder + "/js/Admin_all.js");
+				//staf.execute("sed -i " +  "'s/\\\\x0//g' " + appfolder + "/js/zimbraAdmin/accounts/controller/ZaAccountListController.js");
+			}
 			
 			staf.execute(Tool +" --no-instrument=help/ "+ appfolder +" "+ WebappsInstrumented);
 			staf.resetTimeout();
