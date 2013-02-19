@@ -303,19 +303,19 @@ public class PageManageCOS extends AbsTab {
 	public List<CosItem> zListGetCos() throws HarnessException {
 
 		List<CosItem> items = new ArrayList<CosItem>();
-
+		
 		// Make sure the button exists
 		if ( !this.sIsElementPresent("css=div[id='zl__COS_MANAGE'] div[id$='__rows']") )
 			throw new HarnessException("Account Rows is not present");
 
 		// How many items are in the table?
-		String rowsLocator = "//div[@id='zl__COS_MANAGE']//div[contains(@id, '__rows')]//div[contains(@id,'zli__')]";
-		int count = this.sGetXpathCount(rowsLocator);
-		logger.debug(myPageName() + " zListGetCOS: number of cos: "+ count);
+		String rowsLocator = "css=div#zl__COS_MANAGE div[id$='__rows'] div[id^='zli__']";
+		int count = this.sGetCssCount(rowsLocator);
+		logger.debug(myPageName() + " zListGetAccounts: number of accounts: "+ count);
 
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
-			final String cosLocator = rowsLocator + "["+ i +"]";
+			final String cosLocator = rowsLocator + ":nth-child("+i+")";
 			String locator;
 
 			CosItem item = new CosItem();
