@@ -246,15 +246,18 @@ public class QuickAddAppointment extends AbsTab {
 	}
 	
 	public void zWaitForMiniCalToLoad() throws HarnessException {
-		Boolean isElementPresent = this.sIsElementPresent("css=td[class='DwtCalendarTitlebar']");
-		while (isElementPresent == false) {
-			SleepUtil.sleepSmall();
+		Boolean isElementPresent;
+		for (int i=0; i<=10; i++) {
+			isElementPresent = this.sIsElementPresent("css=td[class='DwtCalendarTitlebar']");
+			while (isElementPresent == false) {
+				SleepUtil.sleepSmall();
+			}
 		}
 	}
 	
 	public void zMoreDetails() throws HarnessException {
 		this.zClickAt(Locators.MoreDetailsButtonQuickAdd, "");
-		SleepUtil.sleepSmall();
+		SleepUtil.sleepLong(); //UI takes time to draw and auto-complete attendees so tests fails
 	}
 	
 	public void zFill(IItem item) throws HarnessException {
