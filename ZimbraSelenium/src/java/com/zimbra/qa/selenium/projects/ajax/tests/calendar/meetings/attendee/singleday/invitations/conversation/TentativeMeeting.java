@@ -416,7 +416,7 @@ public class TentativeMeeting extends CalendarWorkWeekTest {
 		
 	}
 	
-	@Bugs(ids = "69132")
+	@Bugs(ids = "69132,65356")
 	@Test(
 			description = "Mark meeting as tentative using 'Tentative -> Don't Notify Organizer'", 
 			groups = { "functional" })

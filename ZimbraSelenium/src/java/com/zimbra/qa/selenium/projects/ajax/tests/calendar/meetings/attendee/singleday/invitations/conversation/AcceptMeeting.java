@@ -409,7 +409,7 @@ public class AcceptMeeting extends CalendarWorkWeekTest {
 		
 	}
 	
-	@Bugs(ids = "69132")
+	@Bugs(ids = "69132,65356")
 	@Test(
 			description = "Accept meeting using 'Accept -> Don't Notify Organizer'", 
 			groups = { "functional" })

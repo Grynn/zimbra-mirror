@@ -18,6 +18,13 @@ public class AcceptMeeting extends CalendarWorkWeekTest {
 	public AcceptMeeting() {
 		logger.info("New "+ AcceptMeeting.class.getCanonicalName());
 		super.startingPage = app.zPageMail;
+		super.startingAccountPreferences = new HashMap<String, String>()
+		{
+			private static final long serialVersionUID = 1L;
+			{
+				put("zimbraPrefGroupMailBy", "message");
+			}
+		};
 	}
 
 	/**
@@ -51,7 +58,7 @@ public class AcceptMeeting extends CalendarWorkWeekTest {
 	@Bugs(ids = "69132")
 	@Test(
 			description = "Accept a meeting using Accept button from invitation message", 
-			groups = { "smoke" })
+			groups = { "sanity" })
 	public void AcceptMeeting_01() throws HarnessException {
 
 		// ------------------------ Test data ------------------------------------
@@ -411,7 +418,7 @@ public class AcceptMeeting extends CalendarWorkWeekTest {
 
 	}
 	
-	@Bugs(ids = "69132")
+	@Bugs(ids = "69132,65356")
 	@Test(
 			description = "Accept meeting using 'Accept -> Don't Notify Organizer'", 
 			groups = { "functional" })

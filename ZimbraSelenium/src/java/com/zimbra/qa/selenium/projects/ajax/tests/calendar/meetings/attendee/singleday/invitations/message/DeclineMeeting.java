@@ -18,6 +18,13 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 	public DeclineMeeting() {
 		logger.info("New "+ DeclineMeeting.class.getCanonicalName());
 		super.startingPage =  app.zPageMail;
+		super.startingAccountPreferences = new HashMap<String, String>()
+		{
+			private static final long serialVersionUID = 1L;
+			{
+				put("zimbraPrefGroupMailBy", "message");
+			}
+		};
 	}
 
 	/**
@@ -418,7 +425,7 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 		
 	}
 	
-	@Bugs(ids = "69132")
+	@Bugs(ids = "69132,65356")
 	@Test(
 			description = "Decline meeting using 'Decline -> Don't Notify Organizer'", 
 			groups = { "functional" })

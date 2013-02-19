@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.singleday.invitations.message;
 
 import java.util.*;
+
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -11,12 +12,18 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
-@SuppressWarnings("unused")
 public class DeclineProposeNewTime extends CalendarWorkWeekTest {
 
 	public DeclineProposeNewTime() {
 		logger.info("New "+ DeclineProposeNewTime.class.getCanonicalName());
 		super.startingPage =  app.zPageMail;
+		super.startingAccountPreferences = new HashMap<String, String>()
+		{
+			private static final long serialVersionUID = 1L;
+			{
+				put("zimbraPrefGroupMailBy", "message");
+			}
+		};
 	}
 	
 	@Test(description = "Receive meeting invite -> Propose New Time to organizer and organizer declines the new time using message view", 
@@ -26,17 +33,15 @@ public class DeclineProposeNewTime extends CalendarWorkWeekTest {
 		// ------------------------ Test data ------------------------------------
 
 		String organizerEmailAddress, apptAttendee1EmailAddress, apptAttendee2EmailAddress;
-		ZimbraAccount organizer, apptAttendee1, apptAttendee2; 
+		ZimbraAccount organizer, apptAttendee1; 
 		String apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		String apptBody = ZimbraSeleniumProperties.getUniqueString();
-		String modifiedSubject = ZimbraSeleniumProperties.getUniqueString();
 		String modifiedBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		apptAttendee1 = app.zGetActiveAccount();
 		apptAttendee1EmailAddress = app.zGetActiveAccount().EmailAddress;
 		organizer = ZimbraAccount.AccountA();
 		organizerEmailAddress = ZimbraAccount.AccountA().EmailAddress;
-		apptAttendee2 = ZimbraAccount.AccountB();
 		apptAttendee2EmailAddress = ZimbraAccount.AccountB().EmailAddress;
 
 		Calendar now = this.calendarWeekDayUTC;

@@ -416,7 +416,7 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 		
 	}
 	
-	@Bugs(ids = "69132")
+	@Bugs(ids = "69132,65356")
 	@Test(
 			description = "Decline meeting using 'Decline -> Don't Notify Organizer'", 
 			groups = { "functional" })

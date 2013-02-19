@@ -69,6 +69,7 @@ public class Button {
 	public static final Button O_PRINT_TASKFOLDER = new Button("O_PRINT_TASKFOLDER");
 
 	// Accept decline options
+	public static final Button B_CALENDAR = new Button("B_CALENDAR");
 	public static final Button O_ACCEPT_NOTIFY_ORGANIZER = new Button("O_ACCEPT_NOTIFY_ORGANIZER");
 	public static final Button O_ACCEPT_EDIT_REPLY = new Button("O_ACCEPT_EDIT_REPLY");
 	public static final Button O_ACCEPT_DONT_NOTIFY_ORGANIZER = new Button("O_ACCEPT_DONTNOTIFY_ORGANIZER");

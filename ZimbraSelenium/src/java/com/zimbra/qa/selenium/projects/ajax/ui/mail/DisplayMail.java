@@ -47,6 +47,8 @@ public class DisplayMail extends AbsDisplay {
 		//public static final String ConversationViewPreviewAtRightCSS	= "css=div[id='zv__CLV__MSG']";
 	
 		// Accept, Decline & Tentative button, menus and dropdown locators
+		public static final String CalendarDropdown = "css=td[id$='_calendarSelectToolbarCell'] td[id$='_select_container']";
+		
 		public static final String AcceptButton = "css=td[id$='__Inv__REPLY_ACCEPT_title']";
 		public static final String AcceptDropdown = "css=td[id$='__Inv__REPLY_ACCEPT_dropdown']>div";
 		public static final String AcceptNotifyOrganizerMenu = "id=REPLY_ACCEPT_NOTIFY_title";
@@ -404,13 +406,69 @@ public class DisplayMail extends AbsDisplay {
 				optionLocator = Locators.DeclineDontNotifyOrganizerMenu;
 				doPostfixCheck = false;
 				page = this;
-				
-			} else {
-	
-				throw new HarnessException("No logic defined for pulldown " + pulldown + " and option " + option);
-
 			}
 			
+		} else if ( pulldown == Button.B_CALENDAR ) {
+				
+			pulldownLocator = Locators.CalendarDropdown;
+			optionLocator = "css=div[id*='Menu_'] td[id$='_title']:contains('" + option + "')";
+			doPostfixCheck = true;
+			page = this;
+					
+		} else {
+
+			throw new HarnessException("No logic defined for pulldown " + pulldown + " and option " + option);
+
+		}
+
+		// Click to dropdown and corresponding option
+		
+		zClickAt(pulldownLocator, "");
+		
+		zWaitForBusyOverlay();
+		
+		zClick(optionLocator);
+		
+		zWaitForBusyOverlay();
+
+		if (page != null) {
+			page.zWaitForActive();
+		}
+
+		if ( doPostfixCheck ) {
+			// Make sure the response is delivered before proceeding
+			Stafpostqueue sp = new Stafpostqueue();
+			sp.waitForPostqueue();
+		}
+
+		return (page);
+		
+	}
+	
+	public AbsPage zPressButtonPulldown(Button pulldown, String option) throws HarnessException {
+		
+		logger.info(myPageName() + " zPressButtonPulldown(" + pulldown + ", " + option + ")");
+		
+		tracer.trace("Click pulldown " + pulldown + " then " + option);
+
+		if (pulldown == null || option == null) throw new HarnessException("Button/options cannot be null!");
+		
+		String pulldownLocator = null;
+		String optionLocator = null;
+		AbsPage page = this;
+		boolean doPostfixCheck = false;
+
+		if ( pulldown == Button.B_CALENDAR ) {
+				
+			pulldownLocator = Locators.CalendarDropdown;
+			optionLocator = "css=div[id*='Menu_'] td[id$='_title']:contains('" + option + "')";
+			doPostfixCheck = false;
+			page = this;
+					
+		} else {
+
+			throw new HarnessException("No logic defined for pulldown " + pulldown + " and option " + option);
+
 		}
 
 		// Click to dropdown and corresponding option
