@@ -941,6 +941,7 @@ public class PageCalendar extends AbsTab {
 
 				}
 				page = null;
+				waitForPostfix = true;
 			
 			} else if ( option == Button.O_TENTATIVE_MENU ) {
 				
