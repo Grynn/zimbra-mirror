@@ -155,6 +155,7 @@ public class FormMailNew extends AbsForm {
 			Stafpostqueue sp = new Stafpostqueue();
 			sp.waitForPostqueue();
 		
+			SleepUtil.sleepSmall();
 			
 			return (page);
 		
