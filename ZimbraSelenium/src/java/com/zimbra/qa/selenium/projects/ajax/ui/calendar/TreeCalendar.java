@@ -497,7 +497,7 @@ public class TreeCalendar extends AbsTree {
 
 	public AbsPage zTreeItem(Action action, String locator) throws HarnessException {
 		
-		locator = "css=div[id='ztih__main_Calendar__TAG'] td[id*='zti__main_Calendar__']:contains('" + locator + "')";
+		locator = "css=td[id^='zti__main_Calendar']:contains('" + locator + "')";
 
 		if ( locator == null )
 			throw new HarnessException("locator is null for action "+ action);
