@@ -1800,7 +1800,7 @@ function(tmods,tmpObj) {
                         soapDoc.set("id", this[ZaDomain.A2_gal_sync_accounts][i].id, modifyDSDoc);
                         var ds = soapDoc.set("dataSource", null,modifyDSDoc);
                         ds.setAttribute("id", this[ZaDomain.A2_gal_sync_accounts][i][ZaAccount.A2_ldap_ds].id);
-                        var attr = soapDoc.set("a", [ZaAccount.A2_ldap_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval],ds);
+                        var attr = soapDoc.set("a", currentGalAccount[ZaAccount.A2_ldap_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval],ds);
                         attr.setAttribute("n", ZaDataSource.A_zimbraDataSourcePollingInterval);
                     }
                 }
