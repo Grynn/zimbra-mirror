@@ -138,8 +138,9 @@ public partial class UsersView
                         {
                             if (property == "sAMAccountName")
                             {
-                                accts[k++] = de.Name.Substring(3);
-                                accts[k++] = myCollection.ToString();
+                                  accts[k++] = de.Name.Substring(3);
+                                  accts[k++] = myCollection.ToString();
+                                
                                 break;
                             }
                         }
@@ -171,7 +172,17 @@ public partial class UsersView
             {
                 foreach (String item in lbQBUsers.Items)
                 {
-                    uvm.UsersList.Add(new UsersViewModel(item, accts[idx]));
+                    if (accts[idx + 1] != null)
+                    {
+                        if (item.CompareTo(accts[idx + 1]) == 0)
+                        {
+                            uvm.UsersList.Add(new UsersViewModel(item, accts[idx]));
+                        }
+                        else
+                        {
+                            uvm.UsersList.Add(new UsersViewModel(accts[idx + 1], accts[idx + 1]));
+                        }
+                    }
                     idx += 2;
                 }
             }
@@ -181,7 +192,12 @@ public partial class UsersView
                 {
                     idx = GetAcctIdx(item);
                     if (idx != -1)                  // it should always be something, but just in case ...
-                        uvm.UsersList.Add(new UsersViewModel(item, accts[idx]));
+                    {
+                        if(item.CompareTo(accts[idx]) == 0)
+                            uvm.UsersList.Add(new UsersViewModel(item, accts[idx]));
+                        else
+                            uvm.UsersList.Add(new UsersViewModel(accts[idx], accts[idx]));
+                    }
                 }
             }
             uvm.EnableNext = (uvm.UsersList.Count > 0);
