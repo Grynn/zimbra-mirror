@@ -706,7 +706,7 @@ public class ScheduleViewModel: BaseViewModel
                 }
 
          importOpts.SpecialCharRep = ovm.SpecialCharReplace;
-        
+         importOpts.LangID = ovm.LangID;
         return importOpts;
     }
 

@@ -107,6 +107,12 @@ public class AdvancedImportOptions
         set { m_CSVDelimiter = value; }
     }
 
+    private long m_LangID;
+    public long LangID
+    {
+        get { return m_LangID; }
+        set { m_LangID = value; }
+    }
 }
 
 public class Folder

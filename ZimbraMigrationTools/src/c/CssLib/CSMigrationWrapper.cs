@@ -106,6 +106,7 @@ public class MigrationOptions
     public Int32 MaxErrorCnt;
     public string SpecialCharRep;
     public bool IsMaintainenceMode;
+    public long LangID;
     
 }
 
@@ -1257,7 +1258,11 @@ public class CSMigrationWrapper
                 Acct.TotalItems += folder.ItemCount;
         }
         Log.info("Acct.TotalItems=", Acct.TotalItems.ToString());
-        ZimbraAPI  api = new ZimbraAPI(isServer, logLevel, options.SpecialCharRep);
+        ZimbraAPI api;
+        if (options.LangID != 0)
+            api = new ZimbraAPI(isServer, logLevel, options.SpecialCharRep, options.LangID);
+        else
+            api = new ZimbraAPI(isServer, logLevel, options.SpecialCharRep);
 
         api.AccountID = Acct.AccountID;
         api.AccountName = Acct.AccountName;

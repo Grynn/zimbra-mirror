@@ -33,8 +33,8 @@ public class ZimbraAPI
     // Values
     internal const int INLINE_LIMIT = 4000;     // smaller than this limit, we'll inline; larger, we'll upload
 
-    // Special folders array
-    string[] specialFolders = {
+    string[] specialFolders = new string[20];//{};
+    string[] EnspecialFolders = {
         "", "/MAPIRoot", "/MAPIRoot/Inbox",
         "/MAPIRoot/Deleted Items",
         "/MAPIRoot/Junk E-Mail", "/MAPIRoot/Sent Items",
@@ -44,7 +44,16 @@ public class ZimbraAPI
         "/MAPIRoot/Emailed Contacts", "/MAPIRoot/Chats",
         "/MAPIRoot/Tasks"
     };
-
+    string[] DespecialFolders = {
+        "", "/MAPIRoot", "/MAPIRoot/Posteingang",
+        "/MAPIRoot/Papierkorb",
+        "/MAPIRoot/Spam", "/MAPIRoot/Gesendet",
+        "/MAPIRoot/Entw\u00fcrfe", "/MAPIRoot/Kontakte",
+        "/MAPIRoot/Tags", "/MAPIRoot/Unterhaltungen",
+        "/MAPIRoot/Kalender", "", "/MAPIRoot/Wiki",
+        "/MAPIRoot/Mailempf\u00e4nger", "/MAPIRoot/Chats",
+        "/MAPIRoot/Aufgaben"
+    };
     char[] specialCharacters = { ':','/','"','\t','\r','\n'};
 
 
@@ -105,12 +114,34 @@ public class ZimbraAPI
 
     private string ReplaceSlash;
 
-    public ZimbraAPI(bool isServer,LogLevel level = LogLevel.Info,string replaceslash = "_")
+    public ZimbraAPI(bool isServer, LogLevel level = LogLevel.Info, string replaceslash = "_", long lang = 1033)
     {
         bIsServerMigration = isServer;
         loglevel = level;
         dFolderMap = new Dictionary<string, string>();
         ReplaceSlash = replaceslash;
+        switch (lang)
+        {
+            case 1033:
+                {
+                    Array.Copy(EnspecialFolders, specialFolders, EnspecialFolders.Length);
+
+                } break;
+
+            case 1031:
+                {
+                    Array.Copy(DespecialFolders, specialFolders, EnspecialFolders.Length);
+
+                } break;
+
+            default:
+                {
+
+                }
+                break;
+
+        }
+        
         
     }
 

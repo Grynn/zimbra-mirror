@@ -59,6 +59,7 @@ public class OptionsViewModel: BaseViewModel
         IsSkipFolders = config.AdvancedImportOptions.IsSkipFolders;
 
         SpecialCharReplace = config.AdvancedImportOptions.SpecialCharReplace;
+        LangID = config.AdvancedImportOptions.LangID;
 
         if (config.GeneralOptions != null)  // so old config files will work
         {
@@ -427,6 +428,19 @@ public class OptionsViewModel: BaseViewModel
             m_config.AdvancedImportOptions.CSVDelimiter = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("CSVDelimiter"));
+        }
+    }
+
+    public long LangID
+    {
+        get { return m_config.AdvancedImportOptions.LangID; }
+        set
+        {
+            if (value == m_config.AdvancedImportOptions.LangID)
+                return;
+            m_config.AdvancedImportOptions.LangID = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("LangID"));
         }
     }
    
