@@ -681,11 +681,11 @@ HRESULT MAPIContact::Init()
 
 				for (ULONG i = 0; i < lCount; i++)
 				{
-					Zimbra::Util::ScopedBuffer<SPropValue> pPropVal;
+					Zimbra::Util::ScopedBuffer<SPropValue> pPropVal=NULL;
 
 					hr = HrGetOneProp(m_pMessage, tagArray->aulPropTag[i], pPropVal.getptr());
-                                        if (lppPropNames[i] != NULL)    // FBS bug 71786 -- 3/20/12
-                                        {
+					if ((lppPropNames[i] != NULL) &&(hr==S_OK) &&(pPropVal.getptr()!=NULL))   // FBS bug 71786 -- 3/20/12
+                    {
 					    if (lppPropNames[i]->ulKind == MNID_STRING)
 					    {
 						    Zimbra::Util::Guid propGuid(*lppPropNames[i]->lpguid);
