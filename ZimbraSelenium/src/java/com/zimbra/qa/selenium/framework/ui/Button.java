@@ -378,6 +378,7 @@ public class Button {
 	public static final Button B_PROPOSE_NEW_TIME = new Button("B_PROPOSE_NEW_TIME");
 	public static final Button B_VIEW_ENTIRE_MESSAGE = new Button("B_VIEW_ENTIRE_MESSAGE");
 	public static final Button B_HIGHLIGHT_OBJECTS = new Button("B_HIGHLIGHT_OBJECTS");
+	public static final Button B_ADD_TO_CALENDAR = new Button("B_ADD_TO_CALENDAR");
 	
 	public static final Button B_QUICK_REPLY_REPLY = new Button("B_QUICK_REPLY_REPLY");
 	public static final Button B_QUICK_REPLY_REPLY_ALL = new Button("B_QUICK_REPLY_REPLY_ALL");
@@ -491,6 +492,7 @@ public class Button {
 	public static final Button B_SEND_UPDATES_ONLY_TO_ADDED_OR_REMOVED_ATTENDEES = new Button("B_SEND_UPDATES_ONLY_TO_ADDED_OR_REMOVED_ATTENDEES");
 	public static final Button B_SEND_UPDATES_TO_ALL_ATTENDEES = new Button("B_SEND_UPDATES_TO_ALL_ATTENDEES");
 	public static final Button B_CHOOSE_CONTACT_FROM_PICKER= new Button("B_CHOOSE_CONTACT_FROM_PICKER");
+	
 	// Calendar tree
 	public static final Button B_RELOAD = new Button("B_RELOAD");
 

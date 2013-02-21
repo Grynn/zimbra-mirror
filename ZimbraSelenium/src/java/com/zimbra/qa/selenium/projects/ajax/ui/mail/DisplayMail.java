@@ -607,6 +607,23 @@ public class DisplayMail extends AbsDisplay {
 			}
 			
 			return (page);
+			
+		} else if ( button == Button.B_ADD_TO_CALENDAR ) {
+
+			locator = attachment.getLocator() + "a[id$='_calendar']";
+			page = new DialogAddToCalendar(				
+					MyApplication, 
+					((AppAjaxClient) MyApplication).zPageMail);
+
+			this.sClick(locator);
+			
+			this.zWaitForBusyOverlay();
+
+			if ( page != null ) {
+				page.zWaitForActive();
+			}
+			
+			return (page);
 
 		} else if ( button == Button.B_ADD_TO_MY_FILES ) {
 			
