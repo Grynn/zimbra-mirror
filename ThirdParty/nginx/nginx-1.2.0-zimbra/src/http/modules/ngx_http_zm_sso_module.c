@@ -363,7 +363,9 @@ ngx_http_zm_sso_cert_auth(ngx_http_request_t *r, ngx_zm_lookup_work_t *w)
         ssl_client_s_dn_value.len = ssl_client_s_dn_var->len;
         w->auth_method = ZM_AUTHMETH_CERTAUTH;
         w->username = ssl_client_s_dn_value;
-        w->virtual_host = r->headers_in.host->value;
+        if (r->headers_in.host != NULL) {
+            w->virtual_host = r->headers_in.host->value;
+        }
         w->login_attempts = 0; /* HTTP is always 0 */
         w->connection = r->connection;
         w->on_success = ngx_http_zm_sso_cert_auth_on_success;
