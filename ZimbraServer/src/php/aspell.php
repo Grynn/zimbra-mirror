@@ -148,7 +148,7 @@ function returnError($errno, $message) {
     header("Content-Type: text/plain; charset=UTF-8");
     header("HTTP/1.1 500 Internal Server Error");
     error_log("Error $errno: " . $message);
-    exit($message);
+    exit("Unable to check spelling. See httpd_error.log for details"); 
 }
 
 ?>
