@@ -40,7 +40,7 @@
 	<target name="jar" depends="compile" description="Creates the jar file">
 		<jar destfile="${build.dir}/${jar.file}" basedir="${build.classes.dir}">
 				<zipfileset dir="${build.classes.dir}" prefix="" />
-				<zipfileset src="${common.jars.dir}/tnef-1.6.0.jar" />
+				<zipfileset src="${common.jars.dir}/tnef-1.8.0.jar" />
 				<manifest>
 					<attribute name="Main-Class" value="com.zimbra.zmtnef2xml.Main" />
 				</manifest>
