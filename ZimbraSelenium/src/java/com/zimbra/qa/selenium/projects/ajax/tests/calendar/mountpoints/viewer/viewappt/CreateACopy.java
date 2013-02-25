@@ -78,12 +78,14 @@ public class CreateACopy extends CalendarWorkWeekTest {
 		app.zTreeCalendar.zSelectMountedFolder(mountpointname);
 		
 		// Copy appointment
-		DialogInformational dlgInfo = (DialogInformational)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, Button.O_CREATE_A_COPY_MENU, apptSubject);;
+		DialogInformational dlgInfo = (DialogInformational)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, Button.O_CREATE_A_COPY_MENU, apptSubject);
 		dlgInfo.zClickButton(Button.B_OK);
 		
 		app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
-		DialogWarning dlgWarning = (DialogWarning) new DialogWarning(DialogWarning.DialogWarningID.SaveAppointmentWarningMessage, app, this.startingPage);
+		DialogWarning dlgWarning = (DialogWarning) new DialogWarning(DialogWarning.DialogWarningID.SaveChanges, app, this.startingPage);
 		dlgWarning.zClickButton(Button.B_NO);
+		
+		// Yes button functionality already convered in viewer -> actions -> CreateACopy.java
 		
 	}
 

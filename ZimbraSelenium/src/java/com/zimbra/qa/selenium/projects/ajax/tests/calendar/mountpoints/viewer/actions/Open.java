@@ -79,7 +79,8 @@ public class Open extends CalendarWorkWeekTest {
 		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_OPEN_MENU, apptSubject);
         ZAssert.assertEquals(app.zPageCalendar.zGetApptSubjectFromReadOnlyAppt(), apptSubject, "Verify appointment subject from read only appointment UI");
         ZAssert.assertEquals(app.zPageCalendar.zGetApptBodyFromReadOnlyAppt(), apptContent, "Verify appointment body from read only appointment UI");
-		
+        app.zPageCalendar.zToolbarPressButton(Button.B_CLOSE);
+        
 	}
 
 }
