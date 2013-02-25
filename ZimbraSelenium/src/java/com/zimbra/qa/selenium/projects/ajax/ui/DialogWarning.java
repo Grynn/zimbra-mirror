@@ -24,11 +24,9 @@ public class DialogWarning extends AbsDialog {
 	public static class DialogWarningID {
 		
 		public static final DialogWarningID ZmMsgDialog = new DialogWarningID("ZmMsgDialog");
-
 		public static final DialogWarningID SaveCurrentMessageAsDraft = new DialogWarningID("YesNoCancel");
-
 		public static final DialogWarningID SaveTaskChangeMessage = new DialogWarningID("YesNoCancel");
-		
+		public static final DialogWarningID SaveAppointmentWarningMessage = new DialogWarningID("YesNoCancel");
 		public static final DialogWarningID SendLink = new DialogWarningID("css=div[class=DwtConfirmDialog]");
 		public static final DialogWarningID DeleteTagWarningMessage = new DialogWarningID("YesNoMsgDialog");
 		public static final DialogWarningID EmptyFolderWarningMessage = new DialogWarningID("OkCancel");
@@ -37,7 +35,6 @@ public class DialogWarning extends AbsDialog {
 		public static final DialogWarningID PermanentlyDeleteTheItem = new DialogWarningID("OkCancel");
 		public static final DialogWarningID PermanentlyRemoveTheAttachment = new DialogWarningID("YesNoMsgDialog");
 		public static final DialogWarningID DeleteItemWithinRetentionPeriod = new DialogWarningID("OkCancel");
-
 		public static final DialogWarningID DeleteAppointment = new DialogWarningID("YesNo");
 
 		// See bug: http://bugzilla.zimbra.com/show_bug.cgi?id=63353
@@ -48,14 +45,10 @@ public class DialogWarning extends AbsDialog {
 		
 		// See http://bugzilla.zimbra.com/show_bug.cgi?id=64081
 		public static final DialogWarningID SendReadReceipt = new DialogWarningID("YesNoMsgDialog");;
-
 		public static final DialogWarningID QuickCommandConfirmDelete = new DialogWarningID("ZmQuickCommandConfirmation1");
-
 		public static final DialogWarningID PreferencesSaveChanges = new DialogWarningID("YesNoCancel");
 		public static final DialogWarningID SwitchingToTextWillDiscardHtmlFormatting = new DialogWarningID("css=td[id$='_formatWarning_title']");
-
 		public static final DialogWarningID SmsVerificationCodeSent = new DialogWarningID("ZmMsgDialog");
-
 		public static final DialogWarningID ZmAcceptShare = new DialogWarningID("ZmAcceptShare");
 
 		protected String Id;
