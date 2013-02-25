@@ -54,7 +54,7 @@ public class ZimbraAPI
         "/MAPIRoot/Mailempf\u00e4nger", "/MAPIRoot/Chats",
         "/MAPIRoot/Aufgaben"
     };
-    char[] specialCharacters = { ':','/','"','\t','\r','\n'};
+    char[] specialCharacters = { ':','/','"'};
 
 
     private string lastError;
