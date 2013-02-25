@@ -14,7 +14,9 @@
  */
 package com.zimbra.cs.taglib.tag;
 
-import com.google.common.collect.MapMaker;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.LoadingCache;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZSearchResultBean;
 import com.zimbra.client.ZMailbox;
@@ -27,7 +29,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
-import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -129,7 +130,7 @@ public final class SearchTag extends ZimbraSimpleTag {
             ZSearchResult searchResults = mConvId == null ? mbox.search(params) : mbox.searchConversation(mConvId, params);
 
             if (mSearchContext != 0) {
-                SearchContext sc = getSearchContextCache(jctxt).get(mSearchContext);
+                SearchContext sc = getSearchContextCache(jctxt).getIfPresent(mSearchContext);
                 if (sc == null) mSearchContext = 0;
                 else sc.setSearchResult(searchResults);
             }
@@ -145,13 +146,13 @@ public final class SearchTag extends ZimbraSimpleTag {
         }
     }
 
-    private static Map<Long, SearchContext> getSearchContextCache(PageContext ctxt) {
+    private static Cache<Long, SearchContext> getSearchContextCache(PageContext ctxt) {
         synchronized (ctxt.getSession()) {
             @SuppressWarnings("unchecked")
-            Map<Long, SearchContext> cache = (Map<Long, SearchContext>) ctxt.getAttribute(CACHE_ATTR,
-                    PageContext.SESSION_SCOPE);
+            Cache<Long, SearchContext> cache =
+                    (LoadingCache<Long, SearchContext>) ctxt.getAttribute(CACHE_ATTR, PageContext.SESSION_SCOPE);
             if (cache == null) {
-                cache = new MapMaker().concurrencyLevel(1).maximumSize(CACHE_SIZE).makeMap();
+                cache = CacheBuilder.newBuilder().maximumSize(CACHE_SIZE).concurrencyLevel(1).build();
                 ctxt.setAttribute(CACHE_ATTR, cache, PageContext.SESSION_SCOPE);
             }
             return cache;
@@ -160,7 +161,7 @@ public final class SearchTag extends ZimbraSimpleTag {
 
     private static long putSearchContext(PageContext ctxt, ZSearchResult result) {
         long id = ID_GEN.getAndIncrement();
-        Map<Long, SearchContext> cache = getSearchContextCache(ctxt);
+        Cache<Long, SearchContext> cache = getSearchContextCache(ctxt);
         SearchContext sc = new SearchContext();
         sc.setSearchResult(result);
         cache.put(id, sc);

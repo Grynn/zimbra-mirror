@@ -14,11 +14,11 @@
  */
 package com.zimbra.cs.taglib.tag;
 
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.MapMaker;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.Cache;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.*;
 import com.zimbra.client.ZMailbox;
@@ -105,7 +105,7 @@ public final class SearchContext {
         if (Strings.isNullOrEmpty(key)) {
             return null;
         }
-        return getSearchContextCache(ctxt).get(key);
+        return getSearchContextCache(ctxt).getIfPresent(key);
     }
 
     public static SearchContext newSearchContext(PageContext ctxt) {
@@ -114,13 +114,13 @@ public final class SearchContext {
         return sc;
     }
 
-    private static Map<String, SearchContext> getSearchContextCache(PageContext ctxt) {
+    private static Cache<String, SearchContext> getSearchContextCache(PageContext ctxt) {
         synchronized (ctxt.getSession()) {
             @SuppressWarnings("unchecked")
-            Map<String, SearchContext> cache = (Map<String, SearchContext>) ctxt.getAttribute(CACHE_ATTR,
-                    PageContext.SESSION_SCOPE);
+            Cache<String, SearchContext> cache =
+                    (Cache<String, SearchContext>) ctxt.getAttribute(CACHE_ATTR, PageContext.SESSION_SCOPE);
             if (cache == null) {
-                cache = new MapMaker().concurrencyLevel(1).maximumSize(CACHE_SIZE).makeMap();
+                cache = CacheBuilder.newBuilder().maximumSize(CACHE_SIZE).concurrencyLevel(1).build();
                 ctxt.setAttribute(CACHE_ATTR, cache, PageContext.SESSION_SCOPE);
             }
             return cache;
