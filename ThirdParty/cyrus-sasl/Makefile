@@ -13,17 +13,11 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 PATCH	:=
 
-FIXOSX	:= @echo "no need to fix anything"
-
 ifdef BETA
 	include $(CYRUS_ROOT)/../beta_versions.def
 	BSTR	:= beta
 else
 	include $(CYRUS_ROOT)/../versions.def
-endif
-
-ifneq	(,$(findstring MACOSX,$(BUILD_PLATFORM)))
-	FIXOSX	:= (./fix-sasl.pl $(CYRUS_PATCH) $(CYRUS_PATCHLEVEL))
 endif
 
 CYRUS_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl/cyrus-sasl-$(CYRUS_VERSION).tgz
@@ -38,7 +32,7 @@ checksrc:
 check:
 	@echo "Verifying cyrus-sasl build...";
 	$(CYRUS_ROOT)/../zmcheck.pl -s $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/sbin/saslauthd
-	$(CYRUS_ROOT)/../zmcheck.pl -l $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib/sasl2/libgssapiv2.so.2.0.$(CYRUS_PATCH)
+	$(CYRUS_ROOT)/../zmcheck.pl -l $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib/sasl2/libgssapiv2.so.3.0.0
 
 build:
 	@echo "Building cyrus-sasl for $(BUILD_PLATFORM)"
@@ -52,7 +46,6 @@ build:
 	$(PATCH))
 	_S_='~' ./zimbra-cyrus-sasl-build.sh ${BSTR}
 	(cd cyrus-sasl-$(CYRUS_VERSION); $(MAKE) install)
-	$(FIXOSX)
 	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
 	tar czf $(CYRUS_TGZ_TARGET) \
 	cyrus-sasl-$(CYRUS_VERSION))
