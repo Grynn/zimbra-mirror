@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.mountpoints.manager.actions;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.mountpoints.manager.actions.readonlyappt;
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
@@ -6,28 +6,30 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
-public class Accept extends CalendarWorkWeekTest {
+public class EditReplyAccept extends CalendarWorkWeekTest {
 
-	public Accept() {
-		logger.info("New "+ Accept.class.getCanonicalName());
+	public EditReplyAccept() {
+		logger.info("New "+ EditReplyAccept.class.getCanonicalName());
 		super.startingPage = app.zPageCalendar;
 	}
 	
-	@Test(	description = "Assistant right clicks to calendar invite from shared calendar and accepts the invite OBO boss",
-			groups = { "smoke" })
+	@Test(	description = "Assistant right clicks to calendar invite from shared calendar and accepts the invite OBO boss using Edit Reply -> Accept",
+			groups = { "functional" })
 			
-	public void Accept_01() throws HarnessException {
+	public void EditReplyAccept_01() throws HarnessException {
 		
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 		String apptBody = "body" + ZimbraSeleniumProperties.getUniqueString();
 		String mountPointName = "mountpoint" + ZimbraSeleniumProperties.getUniqueString();
+		String modifiedBody = ZimbraSeleniumProperties.getUniqueString();
 		
 		Calendar now = this.calendarWeekDayUTC;
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
-				
-		
+	
 		// Use system calendar folder
 		FolderItem folder = FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Calendar);
 		
@@ -67,8 +69,11 @@ public class Accept extends CalendarWorkWeekTest {
 		// Mark ON to mounted calendar folder and select the appointment
 		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
 		app.zTreeCalendar.zSelectMountedFolder(mountPointName);
-		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_ACCEPT_MENU, apptSubject);
-		
+
+		FormMailNew mailComposeForm = (FormMailNew)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_EDIT_REPLY_ACCEPT_SUB_MENU, apptSubject);
+        mailComposeForm.zFillField(Field.Body, modifiedBody + " ");		
+		mailComposeForm.zSubmit();
+		SleepUtil.sleepVeryLong(); // attendee status changes from NE to AC
 		
 		// -------------- Verification at organizer side --------------
 		
@@ -76,7 +81,7 @@ public class Accept extends CalendarWorkWeekTest {
 		
 		ZimbraAccount.AccountB().soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
-				+		"<query>inid:"+ inboxId +" subject:("+ apptSubject +")</query>"
+				+		"<query>inid:"+ inboxId + " " + "subject:(" + "Accept " + apptSubject + ")" + " " + "content:(" + modifiedBody + " " + "Yes, I will attend." + ")" + "</query>"
 				+	"</SearchRequest>");
 		String messageId = ZimbraAccount.AccountB().soapSelectValue("//mail:m", "id");
 		ZAssert.assertNotNull(messageId, "Verify organizer gets email notification");
