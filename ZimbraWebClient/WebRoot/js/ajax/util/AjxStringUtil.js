@@ -234,6 +234,7 @@ function(line) {
 
 AjxStringUtil.WRAP_LENGTH				= 80;
 AjxStringUtil.HDR_WRAP_LENGTH			= 120;
+AjxStringUtil.MAX_HTMLNODE_COUNT		= 250;
 
 // ID for a BLOCKQUOTE to mark it as ours
 AjxStringUtil.HTML_QUOTE_COLOR			= "#1010FF";
@@ -1879,7 +1880,9 @@ function(text) {
 		done:		false,
 		hasQuoted:	false,
 		sepNode:	null,
-		results:	[]
+		results:	[],
+		ignore:		false,
+		nodeCount:	0
 	};
 	AjxStringUtil._traverseOriginalHtmlContent(htmlNode, ctxt);
 
@@ -1915,7 +1918,9 @@ AjxStringUtil.IGNORE_NODE = AjxUtil.arrayAsHash(AjxStringUtil.IGNORE_NODE_LIST);
 AjxStringUtil._traverseOriginalHtmlContent =
 function(el, ctxt) {
 
-	if (ctxt.done || !el) { return; }
+	if (ctxt.done || !el || ctxt.ignore) { return; }
+
+	ctxt.nodeCount++; //keep a count of processed nodes.
 	
 	var nodeName = el.nodeName.toLowerCase();
 	DBG.println("html", AjxStringUtil.repeat("&nbsp;&nbsp;&nbsp;&nbsp;", ctxt.level) + nodeName + ((nodeName === "#text" && /\S+/.test(el.nodeValue) ? " - " + el.nodeValue.substr(0, 20) : "")));
@@ -2045,6 +2050,13 @@ function(el, ctxt) {
 		}
 	}
 
+	if (ctxt.hasQuoted && type === AjxStringUtil.ORIG_UNKNOWN && ctxt.count[AjxStringUtil.ORIG_WROTE_STRONG] === 1) {
+		//if we find a UNKNOWN block in the quoted content then it means there are possibly inline comments so do not do
+		//further processing
+		ctxt.ignore = true;
+		ctxt.sepNode = null;
+		return;
+	}
 	// if we found a recognized delimiter, set flag to clip it and subsequent nodes at its level
 	if (type === AjxStringUtil.ORIG_SEP_STRONG) {
 		ctxt.done = true;
@@ -2059,6 +2071,10 @@ function(el, ctxt) {
 	// any element that gets here will get recursed into
 	for (var i = 0, len = el.childNodes.length; i < len; i++) {
 		var childNode = el.childNodes[i];
+		if (ctxt.nodeCount > AjxStringUtil.MAX_HTMLNODE_COUNT) {
+			ctxt.sepNode = null;
+			return;
+		}
 		AjxStringUtil._traverseOriginalHtmlContent(childNode, ctxt);
 		// see if we ran into a delimiter
 		if (ctxt.done) {
