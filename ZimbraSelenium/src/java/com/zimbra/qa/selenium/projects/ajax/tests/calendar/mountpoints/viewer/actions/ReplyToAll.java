@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.mountpoints.viewer.viewappt;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.mountpoints.viewer.actions;
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
@@ -6,22 +6,25 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.SeparateWindowShowOriginal;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
-public class ShowOriginal extends CalendarWorkWeekTest {
+public class ReplyToAll extends CalendarWorkWeekTest {
 
-	public ShowOriginal() {
-		logger.info("New "+ ShowOriginal.class.getCanonicalName());
+	public ReplyToAll() {
+		logger.info("New "+ ReplyToAll.class.getCanonicalName());
 		super.startingPage = app.zPageCalendar;
 	}
 	
-	@Test(description = "Grantee views show original of the appointment from grantor's calendar (Actions -> Show Original)",
+	@Test(description = "Grantee replies all to appointment from grantor's calendar",
 			groups = { "functional" })
 			
-	public void ShowOriginal_01() throws HarnessException {
+	public void ReplyToAll_01() throws HarnessException {
 		
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 		String apptContent = ZimbraSeleniumProperties.getUniqueString();
+		String replyContent = ZimbraSeleniumProperties.getUniqueString();
+		
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		String mountpointname = "mountpoint" + ZimbraSeleniumProperties.getUniqueString();
 		
@@ -62,8 +65,10 @@ public class ShowOriginal extends CalendarWorkWeekTest {
 				+				"<e d='"+ endUTC.toTimeZone(ZTimeZone.TimeZoneEST.getID()).toYYYYMMDDTHHMMSS() +"' tz='"+ ZTimeZone.TimeZoneEST.getID() +"'/>"
 				+				"<or a='"+ ZimbraAccount.AccountA().EmailAddress +"'/>"
 				+				"<at role='REQ' ptst='NE' rsvp='1' a='" + app.zGetActiveAccount().EmailAddress + "'/>"
+				+				"<at role='REQ' ptst='NE' rsvp='1' a='" + ZimbraAccount.AccountB().EmailAddress + "'/>"
 				+			"</inv>"
 				+			"<e a='"+ app.zGetActiveAccount().EmailAddress +"' t='t'/>"
+				+			"<e a='"+ ZimbraAccount.AccountB().EmailAddress +"' t='t'/>"
 				+			"<su>"+ apptSubject +"</su>"
 				+			"<mp content-type='text/plain'>"
 				+				"<content>" + apptContent + "</content>"
@@ -76,23 +81,30 @@ public class ShowOriginal extends CalendarWorkWeekTest {
 		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
 		app.zTreeCalendar.zSelectMountedFolder(mountpointname);
 		
-		// Appointment show original
-		SeparateWindowShowOriginal window = (SeparateWindowShowOriginal)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK,Button.O_SHOW_ORIGINAL_MENU, apptSubject);
-		try	{	
-			window.zWaitForActive();
-			SleepUtil.sleepMedium();
-			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
-			
-			String body = window.sGetBodyText();
-			ZAssert.assertStringContains(body, apptSubject, "Verify subject in show original");
-			ZAssert.assertStringContains(body, apptContent, "Verify content in show original");
-			ZAssert.assertStringContains(body, "BEGIN:VCALENDAR", "Verify BEGIN header in show original");
-			ZAssert.assertStringContains(body, "END:VCALENDAR", "Verify END header in show original");
-			ZAssert.assertStringContains(body, "ORGANIZER:mailto:" + ZimbraAccount.AccountA().EmailAddress, "Verify organizer value in show original");
-			
-	    } finally {
-	    	if ( window != null ) window.zCloseWindow();
-		}
+		// Reply all to appointment
+        FormMailNew mailComposeForm = (FormMailNew)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_REPLY_TO_ALL_MENU, apptSubject);
+        mailComposeForm.zFillField(Field.Body, replyContent);		
+		mailComposeForm.zSubmit();
+		
+		// Verify the reply text at organizer side
+        String id = ZimbraAccount.AccountA().soapSelectValue("//mail:m", "id"); 
+		ZimbraAccount.AccountA().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>subject:("+ apptSubject +") content:("+ replyContent +")</query>"			
+			+	"</SearchRequest>");
+		
+		id = ZimbraAccount.AccountA().soapSelectValue("//mail:m", "id");
+		ZAssert.assertNotNull(id, "Verify the reply text in received message");
+		
+		// Verify the reply text at attende side
+        id = ZimbraAccount.AccountA().soapSelectValue("//mail:m", "id"); 
+		ZimbraAccount.AccountA().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>subject:("+ apptSubject +") content:("+ replyContent +")</query>"			
+			+	"</SearchRequest>");
+		
+		id = ZimbraAccount.AccountA().soapSelectValue("//mail:m", "id");
+		ZAssert.assertNotNull(id, "Verify the reply text in received message");
 		
 	}
 
