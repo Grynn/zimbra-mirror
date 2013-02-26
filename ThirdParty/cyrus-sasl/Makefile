@@ -51,7 +51,6 @@ build:
 	patch -g0 -p1 < ../patches/sasl-auth-zimbra-2.1.25.patch; \
 	patch -g0 -p1 < ../patches/saslauthd-conf.patch; \
 	patch -g0 -p1 < ../patches/auxprop.patch; \
-	patch -g0 -p1 < ../patches/gssapi.patch; \
 	patch -g0 -p1 < ../patches/heimdal-build.patch; \
 	$(PATCH))
 	_S_='~' ./zimbra-cyrus-sasl-build.sh ${BSTR}
