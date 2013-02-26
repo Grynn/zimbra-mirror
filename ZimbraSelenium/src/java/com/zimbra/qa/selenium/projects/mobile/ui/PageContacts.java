@@ -26,10 +26,12 @@ public class PageContacts extends AbsTab {
 	public static class Locators {
 	
 		// TODO: Need better locator that doesn't have content text
-		public static final String zContactsIsActive = "xpath=//a[contains(.,'Address Books')]";
-	
+//		public static final String zContactsIsActive = "xpath=//a[contains(.,'Address Books')]";
+		public static final String zContactsIsActive = "css=div.top_cont_lv_subtoolbar a:contains('Contacts')";
+		
 		// TODO: Need better locator that doesn't have content text
-		public static final String zNewContact = "//span//a[contains(.,'Add')]";
+//		public static final String zNewContact = "//span//a[contains(.,'Add')]";
+		public static final String zNewContact = "css=span.td a:contains('Add')";
 	}
 	
 	public PageContacts(AbsApplication application) {
