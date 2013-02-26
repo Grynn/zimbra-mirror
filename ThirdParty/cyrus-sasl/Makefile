@@ -46,12 +46,9 @@ build:
 	(tar xfz src/cyrus-sasl-$(CYRUS_RELEASE).tar.gz; \
 	mv cyrus-sasl-$(CYRUS_RELEASE) cyrus-sasl-$(CYRUS_VERSION); \
 	cd cyrus-sasl-$(CYRUS_VERSION); \
-	patch -g0 -p1 < ../patches/sasl-link-order.patch; \
-	patch -g0 -p1 < ../patches/sasl-darwin.patch; \
 	patch -g0 -p1 < ../patches/sasl-auth-zimbra-2.1.25.patch; \
 	patch -g0 -p1 < ../patches/saslauthd-conf.patch; \
 	patch -g0 -p1 < ../patches/auxprop.patch; \
-	patch -g0 -p1 < ../patches/heimdal-build.patch; \
 	$(PATCH))
 	_S_='~' ./zimbra-cyrus-sasl-build.sh ${BSTR}
 	(cd cyrus-sasl-$(CYRUS_VERSION); $(MAKE) install)
