@@ -14,12 +14,12 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.*;
 
 
-public class ZmMailItem extends AjaxCommonTest {
+public class ZmConv extends AjaxCommonTest {
 
 	
 	@SuppressWarnings("serial")
-	public ZmMailItem() throws HarnessException {
-		logger.info("New "+ ZmMailItem.class.getCanonicalName());
+	public ZmConv() throws HarnessException {
+		logger.info("New "+ ZmConv.class.getCanonicalName());
 		
 		super.startingPage = app.zPageMail;
 
@@ -47,7 +47,7 @@ public class ZmMailItem extends AjaxCommonTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
-		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailItem, "Load preview pane, text message, initial load");
+		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmConv, "Load preview pane, text message, initial load");
 
 		// Select the message so that it shows in the reading pane
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
