@@ -30,6 +30,7 @@ AutoRestartCount      20
 AutoRestartRate       10/1h
 Background            Yes
 ClockDrift            300
+DisableCryptoInit     yes
 DNSTimeout            10
 DomainKeysCompat      no
 EnableCoredumps       yes
