@@ -87,7 +87,7 @@ build:
 	rm -f $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin/openldap/noopsrch.a; \
 	chmod 755 $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin/openldap/noopsrch.la;)
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
-	rm -rf $(ZIMBRA_HOME)/data
+	rm -rf $(ZIMBRA_HOME)/data; rm -f $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/etc/openldap/DB_CONFIG.example
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap
