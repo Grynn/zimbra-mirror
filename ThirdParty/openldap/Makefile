@@ -87,11 +87,12 @@ build:
 	rm -f $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin/openldap/noopsrch.a; \
 	chmod 755 $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin/openldap/noopsrch.la;)
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
+	rm -rf $(ZIMBRA_HOME)/data
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap
 	(cd $(ZIMBRA_HOME); tar czf $(LDAP_LIB_TGZ_TARGET) openldap-$(LDAP_VERSION)/lib)
-	(cd $(ZIMBRA_HOME); tar czf $(LDAP_TGZ_TARGET) openldap-$(LDAP_VERSION)/bin openldap-$(LDAP_VERSION)/etc openldap-$(LDAP_VERSION)/include openldap-$(LDAP_VERSION)/sbin openldap-$(LDAP_VERSION)/share openldap-$(LDAP_VERSION)/var)
+	(cd $(ZIMBRA_HOME); tar czf $(LDAP_TGZ_TARGET) openldap-$(LDAP_VERSION)/bin openldap-$(LDAP_VERSION)/etc openldap-$(LDAP_VERSION)/include openldap-$(LDAP_VERSION)/sbin openldap-$(LDAP_VERSION)/share)
 
 p4edit: $(LDAP_TGZ_TARGET)
 	p4 add $(LDAP_TGZ_TARGET)
