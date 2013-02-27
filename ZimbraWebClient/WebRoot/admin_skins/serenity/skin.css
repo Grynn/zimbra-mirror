@@ -763,6 +763,10 @@ TD.gridGroupBodyLabel {
 }
  */
 
+.ZWidgetTitle {
+    cursor: default;
+}
+
 .ZaCurrentAppBar .ZWidgetTitle SPAN {
 	margin:0 3px;
 }
