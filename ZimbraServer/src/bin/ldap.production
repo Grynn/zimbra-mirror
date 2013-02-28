@@ -15,9 +15,9 @@
 # 
 
 PID=""
-PIDFILE="/opt/zimbra/openldap/var/run/slapd.pid"
+PIDFILE="/opt/zimbra/data/ldap/state/run/slapd.pid"
 
-mkdir -p "/opt/zimbra/openldap/var/run/"
+mkdir -p "/opt/zimbra/data/ldap/state/run/"
 
 source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars \

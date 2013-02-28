@@ -43,7 +43,7 @@ if ($zimbra_home eq "") {
    $zimbra_home = "/opt/zimbra";
 }
 
-my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/') or die "$@";
+my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fdata%2fldap%2fstate%2frun%2fldapi/') or die "$@";
 
 my $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
 

@@ -96,7 +96,7 @@ print "Updating local config and LDAP\n";
 if (!$options{r} && !$options{c}) {
   $ldap = Net::LDAP->new($master_ref)  or  die "$@";
 } else {
-  $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/')  or  die "$@";
+  $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fdata%2fldap%2fstate%2frun%2fldapi/')  or  die "$@";
 }
 
 if (!$options{r} && !$options{c}) {

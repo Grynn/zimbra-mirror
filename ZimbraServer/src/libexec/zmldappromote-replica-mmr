@@ -72,7 +72,7 @@ if(lc($ldap_is_master) eq "true") {
   print "Cannot run on a master.\n";
   exit(1);
 } else {
-  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/') or die "$@";
+  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fdata%2fldap%2state%2frun%2fldapi/') or die "$@";
   my $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
   $mesg->code && die "Bind: ". $mesg->error . "\n"; 
 

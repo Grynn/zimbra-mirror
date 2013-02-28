@@ -107,7 +107,7 @@ sub verifyLdap {
 sub verifyAccesslog {
   # Verify that accesslog DB doesn't already exist.
 
-  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/') or die "$@";
+  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fdata%2fldap%2fstate%2frun%2fldapi/') or die "$@";
   my $mesg;
   $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
 
@@ -127,7 +127,7 @@ sub verifyAccesslog {
 }
 
 sub verifySyncProv {
-  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/') or die "$@";
+  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fdata%2fldap%2fstate%2frun%2fldapi/') or die "$@";
   my $mesg;
 
   $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
@@ -151,7 +151,7 @@ sub enableSyncProv {
   print "Enabling sync provider on master...";
   File::Path::mkpath("${zimbra_home}/data/ldap/accesslog/db");
 
-  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/') or die "$@";
+  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fdata%2fldap%2fstate%2frun%2fldapi/') or die "$@";
   my $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
   $mesg->code && die "Bind: ". $mesg->error . "\n";
 
@@ -225,7 +225,7 @@ sub createLdapConfig {
     $ldaps=1;
   }
 
-  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/') or die "$@";
+  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fdata%2fldap%2fstate%2frun%2fldapi/') or die "$@";
   my $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
   $mesg->code && die "Bind: ". $mesg->error . "\n";
 
