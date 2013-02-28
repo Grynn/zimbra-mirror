@@ -312,9 +312,6 @@ function(ev) {
 
 ZLoginFactory._onFocusChange =
 function(type, id, target) {
-	if ((type != ZLoginFactory.BUTTON_TYPE) && !AjxEnv.isIE) {
-		ZLoginFactory._loginButtonBlur();
-	}	
 	if (type == ZLoginFactory.TEXT_TYPE) {
 		var edit = ZLoginFactory.get(id);
 		edit.focus();
@@ -352,12 +349,6 @@ function(startIndex, forward) {
 ZLoginFactory._loginButtonFocus =
 function(border) {
 	border.className = "DwtButton-focused";
-};
-
-ZLoginFactory._loginButtonBlur =
-function(button) {
-	var button = ZLoginFactory.get(ZLoginFactory.LOGIN_BUTTON_ID);
-	button.className = "DwtButton";
 };
 
 /*
