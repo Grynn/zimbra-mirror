@@ -248,6 +248,14 @@ sub get_mysql_data() {
     }
 }
 
+sub remove_data_dir($) {
+	my $dir = shift;
+	logmsg "Removing data collection directory\n";
+	chdir('..');
+	File::Path::remove_tree($dir);
+	print "$dir removed\n";
+	print "$0 run complete\n";
+}
 
 # "main"
 sub run() {
@@ -424,22 +432,27 @@ sub run() {
       logmsg "ld.so.conf not present...skipping copy.\n";
     }
     
-    logmsg "\n *** Diagnostics collection done.  Data stored in $destination/.\n";
+    logmsg "\n *** Diagnostics collection done. Data stored in $destination/.\n\n";
+    
     my $dirname = `pwd`;
     chomp($dirname);
     chomp($dirname = `basename $dirname`);
     if ($options{'z'} || $options{'Z'}) {
       logmsg "Zipping up contents of $destination into $destination.zip\n";
       chdir('..');
-      system("nice -n 19 zip -9r $dirname.zip $dirname/");
-      logmsg "\n *** Zipfile \"$destination.zip\" created.\n";
-      if ($options{'Z'}) {
-        remove_tree($dirname);
+      my $zipcreated = system("nice -n 19 zip -9r $dirname.zip $dirname/");
+      chdir($destination);
+	  if ($zipcreated == 0) {
+      	logmsg "\n *** Zipfile \"$destination.zip\" created.\n";
+      	remove_data_dir($destination) if ($options{'Z'})
+      } else {
+		logmsg "$destination.zip could not be created. Leaving data collection directory intact.\n";
+	    logmsg "$0 run complete\n";
       }
     } else {
     	logmsg "Skipping zip creation.\n";
+	    logmsg "$0 run complete\n";
     }
-    chdir($destination);
 }
 
 run();
