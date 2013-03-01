@@ -393,6 +393,7 @@ public class CSMigrationWrapper
                     while (iProcessedItems < Acct.migrationFolder.TotalCountOfItems)
                     {
                         Log.debug("Processing folder", folder.Name, "-- Total items:", folder.ItemCount);
+                        Log.debug("Processing folder", folder.Name, "-- Total items returned from itemobjectarray:", itemobjectarray.Count());
                         foreach (dynamic itemobject in itemobjectarray)
                         {
                             if (options.MaxErrorCnt > 0)
@@ -776,6 +777,7 @@ public class CSMigrationWrapper
                     while (iProcessedItems < itemobjectarray.Count())
                     {
                         Log.debug("Processing folder", folder.Name, "-- Total items:", folder.ItemCount);
+                        Log.debug("Processing folder", folder.Name, "-- Total items returned from itemobjectarray:", itemobjectarray.Count());
                         foreach (dynamic itemobject in itemobjectarray)
                         {
                             if (options.MaxErrorCnt > 0)

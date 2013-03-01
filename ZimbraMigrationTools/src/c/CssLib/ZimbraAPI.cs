@@ -33,8 +33,8 @@ public class ZimbraAPI
     // Values
     internal const int INLINE_LIMIT = 4000;     // smaller than this limit, we'll inline; larger, we'll upload
 
-    string[] specialFolders = new string[20];//{};
-    string[] EnspecialFolders = {
+    //string[] specialFolders = new string[20];//{};
+    string[] specialFolders = {
         "", "/MAPIRoot", "/MAPIRoot/Inbox",
         "/MAPIRoot/Deleted Items",
         "/MAPIRoot/Junk E-Mail", "/MAPIRoot/Sent Items",
@@ -44,7 +44,7 @@ public class ZimbraAPI
         "/MAPIRoot/Emailed Contacts", "/MAPIRoot/Chats",
         "/MAPIRoot/Tasks"
     };
-    string[] DespecialFolders = {
+    /*string[] DespecialFolders = {
         "", "/MAPIRoot", "/MAPIRoot/Posteingang",
         "/MAPIRoot/Papierkorb",
         "/MAPIRoot/Spam", "/MAPIRoot/Gesendet",
@@ -53,7 +53,7 @@ public class ZimbraAPI
         "/MAPIRoot/Kalender", "", "/MAPIRoot/Wiki",
         "/MAPIRoot/Mailempf\u00e4nger", "/MAPIRoot/Chats",
         "/MAPIRoot/Aufgaben"
-    };
+    };*/
     char[] specialCharacters = { ':','/','"'};
 
 
@@ -120,7 +120,7 @@ public class ZimbraAPI
         loglevel = level;
         dFolderMap = new Dictionary<string, string>();
         ReplaceSlash = replaceslash;
-        switch (lang)
+       /* switch (lang)
         {
             case 1033:
                 {
@@ -140,7 +140,7 @@ public class ZimbraAPI
                 }
                 break;
 
-        }
+        }*/
         
         
     }

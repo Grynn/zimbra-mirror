@@ -19,8 +19,8 @@ namespace MVVM.View
 {
 public partial class ResultsView
 {
-    ListView[] urListView = new ListView[30];
-    ListBox[] lbErrors = new ListBox[30];
+    ListView[] urListView = new ListView[200];
+    ListBox[] lbErrors = new ListBox[200];
 
     ProgressBar userProgressBar = null;
     Label userStatusMsg = null;
