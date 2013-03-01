@@ -774,6 +774,10 @@ public class CSMigrationWrapper
                 else
                 {
                     Log.trace(" Itemobjectarray.count is not equal to MigrationFolder.totalcountofitems");
+                    string errMesg = "MAPI Could not be returning all the items for the folder - Migration is not complete.Please re-run migration for the user";
+                    Acct.TotalErrors++;
+                    Log.err("CSmigrationwrapper MAPI edgecase",errMesg);
+                    Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, errMesg, ProblemInfo.TYPE_ERR);
                     while (iProcessedItems < itemobjectarray.Count())
                     {
                         Log.debug("Processing folder", folder.Name, "-- Total items:", folder.ItemCount);

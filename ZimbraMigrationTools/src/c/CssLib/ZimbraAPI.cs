@@ -2997,17 +2997,18 @@ public class ZimbraAPI
                     FileAccess.Write);
             StreamWriter w = new StreamWriter(fs);
             if( request)
-            w.WriteLine("Soap Request -------------------");
+            w.WriteLine(DateTime.Now + "" +"Soap Request -------------------");
             else
-                w.WriteLine("Soap Response -------------------");
+                w.WriteLine(DateTime.Now+ ""+ "Soap Response -------------------");
             w.WriteLine(message);
             w.WriteLine("\n");
             w.Close();
             bReturn = true;
         }
-        catch (Exception)
+        catch (Exception e)
         {
             bReturn = false;
+            Log.err(" ZimbraAPI::Exception is WriteSoapLog ", e.Message);
         }
     }
     return bReturn;
