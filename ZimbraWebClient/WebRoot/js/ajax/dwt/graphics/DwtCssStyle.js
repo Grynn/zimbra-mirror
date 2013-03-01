@@ -175,13 +175,16 @@ DwtCssStyle.removeProperty = function(el, prop) {
 DwtCssStyle.addRule =
 function(stylesheet, selector, declaration, index) {
 	if (stylesheet.addRule) {	// IE
+		//if index is not specified insert at the end so that new rule takes precedence
+		index = index || (stylesheet.rules.length);
 		stylesheet.addRule(selector, declaration, index);
-		return (index == null) ? (stylesheet.rules.length - 1) : index;
 	}
 	else {
-		stylesheet.insertRule(selector + "{" + declaration + "}", index || 0);
-		return (index == null) ? (stylesheet.cssRules.length - 1) : index;
+		//if index is not specified insert at the end so that new rule takes precedence
+		index = index || (stylesheet.cssRules.length);
+		stylesheet.insertRule(selector + "{" + declaration + "}", index);
 	}
+	return index;
 };
 
 /**

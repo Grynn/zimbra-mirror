@@ -892,3 +892,19 @@ AjxUtil.convertToEntities = function (source){
 	}
 	return result;
 };
+
+/**
+ *  Get the class attribute string from the given class.
+ * @param {array} - An array of class names to be converted to a class attribute.
+ * returns the attribute string with the class names or empty string if no class is passed.
+	*
+ */
+AjxUtil.getClassAttr = function (classes){
+	var attr = [];
+	if (classes && classes.length > 0) {
+		//remove duplicate css classes
+		classes = AjxUtil.uniq(classes);
+		return ["class='" , classes.join(" "), "'"].join("");
+	}
+	return "";
+}
