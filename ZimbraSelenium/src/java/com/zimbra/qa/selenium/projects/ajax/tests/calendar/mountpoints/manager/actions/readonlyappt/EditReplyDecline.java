@@ -2,6 +2,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.mountpoints.manager.
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -15,7 +17,8 @@ public class EditReplyDecline extends CalendarWorkWeekTest {
 		logger.info("New "+ EditReplyDecline.class.getCanonicalName());
 		super.startingPage = app.zPageCalendar;
 	}
-
+	
+	@Bugs(ids = "80559")
 	@Test(	description = "Assistant right clicks to calendar invite from shared calendar and declines the invite OBO boss (Notify organizer)",
 			groups = { "functional" })
 			

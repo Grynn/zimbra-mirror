@@ -2,6 +2,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.mountpoints.manager.
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -16,6 +18,7 @@ public class EditReplyAccept extends CalendarWorkWeekTest {
 		super.startingPage = app.zPageCalendar;
 	}
 	
+	@Bugs(ids = "80559")
 	@Test(	description = "Assistant right clicks to calendar invite from shared calendar and accepts the invite OBO boss using Edit Reply -> Accept",
 			groups = { "functional" })
 			

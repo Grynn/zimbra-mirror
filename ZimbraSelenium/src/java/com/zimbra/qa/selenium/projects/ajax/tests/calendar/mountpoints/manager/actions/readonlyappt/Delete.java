@@ -1,0 +1,316 @@
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.mountpoints.manager.actions.readonlyappt;
+
+import java.util.Calendar;
+import org.testng.annotations.Test;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmationDeclineAppointment;
+
+public class Delete extends CalendarWorkWeekTest {
+
+	public Delete() {
+		logger.info("New "+ Delete.class.getCanonicalName());
+		super.startingPage = app.zPageCalendar;
+	}
+	
+	@Test(	description = "Assistant right clicks to calendar invite from shared calendar and deletes the invite OBO boss (Don't notify organizer)",
+			groups = { "functional" })
+			
+	public void Delete_01() throws HarnessException {
+		
+		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
+		String apptBody = "body" + ZimbraSeleniumProperties.getUniqueString();
+		String mountPointName = "mountpoint" + ZimbraSeleniumProperties.getUniqueString();
+		
+		Calendar now = this.calendarWeekDayUTC;
+		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
+		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
+	
+		// Use system calendar folder
+		FolderItem folder = FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Calendar);
+		
+		// Share it
+		ZimbraAccount.AccountA().soapSend(
+					"<FolderActionRequest xmlns='urn:zimbraMail'>"
+				+		"<action id='"+ folder.getId() +"' op='grant'>"
+				+			"<grant d='"+ app.zGetActiveAccount().EmailAddress +"' gt='usr' perm='rwidx' view='appointment'/>"
+				+		"</action>"
+				+	"</FolderActionRequest>");
+		
+		// Mount it
+		app.zGetActiveAccount().soapSend(
+					"<CreateMountpointRequest xmlns='urn:zimbraMail'>"
+				+		"<link l='1' name='"+ mountPointName +"'  rid='"+ folder.getId() +"' zid='"+ ZimbraAccount.AccountA().ZimbraId +"' view='appointment' color='4'/>"
+				+	"</CreateMountpointRequest>");
+		
+		// Create invite
+		ZimbraAccount.AccountB().soapSend(
+				"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
+				+		"<m l='"+ folder.getId() +"' >"
+				+			"<inv method='REQUEST' type='event' status='CONF' draft='0' class='PUB' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"
+				+				"<s d='"+ startUTC.toTimeZone(ZTimeZone.TimeZoneEST.getID()).toYYYYMMDDTHHMMSS() +"' tz='"+ ZTimeZone.TimeZoneEST.getID() +"'/>"
+				+				"<e d='"+ endUTC.toTimeZone(ZTimeZone.TimeZoneEST.getID()).toYYYYMMDDTHHMMSS() +"' tz='"+ ZTimeZone.TimeZoneEST.getID() +"'/>"
+				+				"<or a='"+ ZimbraAccount.AccountB().EmailAddress +"'/>"
+				+				"<at role='REQ' ptst='NE' rsvp='1' a='" + ZimbraAccount.AccountA().EmailAddress + "'/>"
+				+			"</inv>"
+				+			"<e a='"+ ZimbraAccount.AccountA().EmailAddress +"' t='t'/>"
+				+			"<su>"+ apptSubject +"</su>"
+				+			"<mp content-type='text/plain'>"
+				+				"<content>" + apptBody + "</content>"
+				+			"</mp>"
+				+		"</m>"
+				+	"</CreateAppointmentRequest>");
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+		
+		// Mark ON to mounted calendar folder and select the appointment
+		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
+		app.zTreeCalendar.zSelectMountedFolder(mountPointName);
+		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, apptSubject);
+		
+		DialogConfirmationDeclineAppointment declineAppt = (DialogConfirmationDeclineAppointment) new DialogConfirmationDeclineAppointment(app, app.zPageCalendar);
+		declineAppt.zClickButton(Button.B_DONT_NOTIFY_ORGANIZER);
+		declineAppt.zClickButton(Button.B_YES);
+		SleepUtil.sleepVeryLong(); //Attendee status changes from DE To NE
+		
+		
+		// -------------- Verification at organizer side --------------
+		
+		String inboxId = FolderItem.importFromSOAP(ZimbraAccount.AccountB(), FolderItem.SystemFolder.Inbox).getId();
+		
+		ZimbraAccount.AccountB().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+				+		"<query>inid:"+ inboxId +" subject:("+ apptSubject +")</query>"
+				+	"</SearchRequest>");
+		String messageId = ZimbraAccount.AccountB().soapSelectValue("//mail:m", "id");
+		ZAssert.assertNull(messageId, "Verify organizer doesn't get email notification");
+		
+		// -------------- Verification at attendee side --------------
+
+		ZimbraAccount.AccountA().soapSend(
+					"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-10).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(10).toMillis() +"'>"
+				+		"<query>"+ apptSubject +"</query>"
+				+	"</SearchRequest>");
+		
+		String attendeeInvId = ZimbraAccount.AccountA().soapSelectValue("//mail:appt", "invId");
+		ZAssert.assertNull(attendeeInvId, "Verify appointment is deleted");
+		
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-10).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(10).toMillis() +"'>"
+			+		"<query>"+ apptSubject +"</query>"
+			+	"</SearchRequest>");
+	
+		attendeeInvId = app.zGetActiveAccount().soapSelectValue("//mail:appt", "invId");
+		ZAssert.assertNull(attendeeInvId, "Verify appointment is deleted");
+		
+	}
+	
+	@Test(	description = "Assistant right clicks to calendar invite from shared calendar and deletes the invite OBO boss (Notify organizer)",
+			groups = { "functional" })
+			
+	public void Delete_02() throws HarnessException {
+		
+		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
+		String apptBody = "body" + ZimbraSeleniumProperties.getUniqueString();
+		String mountPointName = "mountpoint" + ZimbraSeleniumProperties.getUniqueString();
+		
+		Calendar now = this.calendarWeekDayUTC;
+		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
+		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
+	
+		// Use system calendar folder
+		FolderItem folder = FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Calendar);
+		
+		// Share it
+		ZimbraAccount.AccountA().soapSend(
+					"<FolderActionRequest xmlns='urn:zimbraMail'>"
+				+		"<action id='"+ folder.getId() +"' op='grant'>"
+				+			"<grant d='"+ app.zGetActiveAccount().EmailAddress +"' gt='usr' perm='rwidx' view='appointment'/>"
+				+		"</action>"
+				+	"</FolderActionRequest>");
+		
+		// Mount it
+		app.zGetActiveAccount().soapSend(
+					"<CreateMountpointRequest xmlns='urn:zimbraMail'>"
+				+		"<link l='1' name='"+ mountPointName +"'  rid='"+ folder.getId() +"' zid='"+ ZimbraAccount.AccountA().ZimbraId +"' view='appointment' color='4'/>"
+				+	"</CreateMountpointRequest>");
+		
+		// Create invite
+		ZimbraAccount.AccountB().soapSend(
+				"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
+				+		"<m l='"+ folder.getId() +"' >"
+				+			"<inv method='REQUEST' type='event' status='CONF' draft='0' class='PUB' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"
+				+				"<s d='"+ startUTC.toTimeZone(ZTimeZone.TimeZoneEST.getID()).toYYYYMMDDTHHMMSS() +"' tz='"+ ZTimeZone.TimeZoneEST.getID() +"'/>"
+				+				"<e d='"+ endUTC.toTimeZone(ZTimeZone.TimeZoneEST.getID()).toYYYYMMDDTHHMMSS() +"' tz='"+ ZTimeZone.TimeZoneEST.getID() +"'/>"
+				+				"<or a='"+ ZimbraAccount.AccountB().EmailAddress +"'/>"
+				+				"<at role='REQ' ptst='NE' rsvp='1' a='" + ZimbraAccount.AccountA().EmailAddress + "'/>"
+				+			"</inv>"
+				+			"<e a='"+ ZimbraAccount.AccountA().EmailAddress +"' t='t'/>"
+				+			"<su>"+ apptSubject +"</su>"
+				+			"<mp content-type='text/plain'>"
+				+				"<content>" + apptBody + "</content>"
+				+			"</mp>"
+				+		"</m>"
+				+	"</CreateAppointmentRequest>");
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+		
+		// Mark ON to mounted calendar folder and select the appointment
+		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
+		app.zTreeCalendar.zSelectMountedFolder(mountPointName);
+		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, apptSubject);
+		
+		DialogConfirmationDeclineAppointment declineAppt = (DialogConfirmationDeclineAppointment) new DialogConfirmationDeclineAppointment(app, app.zPageCalendar);
+		declineAppt.zClickButton(Button.B_NOTIFY_ORGANIZER);
+		declineAppt.zClickButton(Button.B_YES);
+		SleepUtil.sleepVeryLong(); //Attendee status changes from NE To DE
+		
+		
+		// -------------- Verification at organizer side --------------
+		
+		String inboxId = FolderItem.importFromSOAP(ZimbraAccount.AccountB(), FolderItem.SystemFolder.Inbox).getId();
+		
+		ZimbraAccount.AccountB().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+				+		"<query>inid:"+ inboxId +" subject:("+ apptSubject +")</query>"
+				+	"</SearchRequest>");
+		String messageId = ZimbraAccount.AccountB().soapSelectValue("//mail:m", "id");
+		ZAssert.assertNotNull(messageId, "Verify organizer gets email notification");
+		
+		String attendeeStatus = ZimbraAccount.AccountB().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
+
+		// Verify attendee status shows as ptst=DE
+		ZAssert.assertEquals(attendeeStatus, "DE", "Verify that the attendee status shows as 'DECLINED'");
+		
+		// Verify from and sender address in accept invitation message		
+		ZimbraAccount.AccountB().soapSend(
+				"<GetMsgRequest  xmlns='urn:zimbraMail'>"
+			+		"<m id='"+ messageId +"'/>"
+			+	"</GetMsgRequest>");
+		
+		ZAssert.assertEquals(ZimbraAccount.AccountB().soapSelectValue("//mail:e[@t='f']", "a"), ZimbraAccount.AccountA().EmailAddress, "Verify From address in decline invitation message");
+		ZAssert.assertEquals(ZimbraAccount.AccountB().soapSelectValue("//mail:e[@t='s']", "a"), app.zGetActiveAccount().EmailAddress, "Verify Sender address in decline invitation message");
+		
+		ZimbraAccount.AccountB().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-10).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(10).toMillis() +"'>"
+			+		"<query>"+ apptSubject +"</query>"
+			+	"</SearchRequest>");
+	
+		String organizerInvId = ZimbraAccount.AccountB().soapSelectValue("//mail:appt", "invId");
+	
+		// Get the appointment details
+		ZimbraAccount.AccountB().soapSend(
+					"<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ organizerInvId +"'/>");
+		
+		attendeeStatus = ZimbraAccount.AccountB().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
+	
+		// Verify attendee status shows as ptst=DE
+		ZAssert.assertEquals(attendeeStatus, "DE", "Verify that the attendee status shows as 'DECLINED'");
+
+		
+		// -------------- Verification at attendee side --------------
+
+		ZimbraAccount.AccountA().soapSend(
+					"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-10).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(10).toMillis() +"'>"
+				+		"<query>"+ apptSubject +"</query>"
+				+	"</SearchRequest>");
+		
+		String attendeeInvId = ZimbraAccount.AccountA().soapSelectValue("//mail:appt", "invId");
+
+		ZimbraAccount.AccountA().soapSend(
+					"<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ attendeeInvId +"'/>");
+		
+		String myStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
+
+		// Verify attendee status
+		ZAssert.assertNull(myStatus, "Verify that attendee status is null");
+		
+		// Verify sent mail for declined appointment notification (action performed by assistant)
+		ZimbraAccount.AccountA().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+				+		"<query>" + "in:sent is:unread subject:("+ apptSubject +")</query>"
+				+	"</SearchRequest>");
+		messageId = ZimbraAccount.AccountA().soapSelectValue("//mail:m", "id");
+		ZAssert.assertNotNull(messageId, "Verify sent mail for declined appointment notification (action performed by assistant)");
+		
+		// Verify from and sender address in decline invitation message		
+		ZimbraAccount.AccountA().soapSend(
+				"<GetMsgRequest  xmlns='urn:zimbraMail'>"
+			+		"<m id='"+ messageId +"'/>"
+			+	"</GetMsgRequest>");
+		
+		ZAssert.assertEquals(ZimbraAccount.AccountA().soapSelectValue("//mail:e[@t='f']", "a"), ZimbraAccount.AccountA().EmailAddress, "Verify From address in decline invitation message");
+		ZAssert.assertEquals(ZimbraAccount.AccountA().soapSelectValue("//mail:e[@t='s']", "a"), app.zGetActiveAccount().EmailAddress, "Verify Sender address in decline invitation message");
+		
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-10).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(10).toMillis() +"'>"
+			+		"<query>"+ apptSubject +"</query>"
+			+	"</SearchRequest>");
+	
+		attendeeInvId = app.zGetActiveAccount().soapSelectValue("//mail:appt", "invId");
+		ZAssert.assertNull(attendeeInvId, "Verify appointment is deleted");
+		
+	}
+	
+	@Test(	description = "Assistant clicks to calendar invite from shared calendar and deletes the invite OBO boss",
+			groups = { "functional" })
+			
+	public void Delete_03() throws HarnessException {
+		
+		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
+		String apptBody = "body" + ZimbraSeleniumProperties.getUniqueString();
+		String mountPointName = "mountpoint" + ZimbraSeleniumProperties.getUniqueString();
+		
+		Calendar now = this.calendarWeekDayUTC;
+		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
+		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
+	
+		// Use system calendar folder
+		FolderItem folder = FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Calendar);
+		
+		// Share it
+		ZimbraAccount.AccountA().soapSend(
+					"<FolderActionRequest xmlns='urn:zimbraMail'>"
+				+		"<action id='"+ folder.getId() +"' op='grant'>"
+				+			"<grant d='"+ app.zGetActiveAccount().EmailAddress +"' gt='usr' perm='rwidx' view='appointment'/>"
+				+		"</action>"
+				+	"</FolderActionRequest>");
+		
+		// Mount it
+		app.zGetActiveAccount().soapSend(
+					"<CreateMountpointRequest xmlns='urn:zimbraMail'>"
+				+		"<link l='1' name='"+ mountPointName +"'  rid='"+ folder.getId() +"' zid='"+ ZimbraAccount.AccountA().ZimbraId +"' view='appointment' color='4'/>"
+				+	"</CreateMountpointRequest>");
+		
+		// Create invite
+		ZimbraAccount.AccountB().soapSend(
+				"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
+				+		"<m l='"+ folder.getId() +"' >"
+				+			"<inv method='REQUEST' type='event' status='CONF' draft='0' class='PUB' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"
+				+				"<s d='"+ startUTC.toTimeZone(ZTimeZone.TimeZoneEST.getID()).toYYYYMMDDTHHMMSS() +"' tz='"+ ZTimeZone.TimeZoneEST.getID() +"'/>"
+				+				"<e d='"+ endUTC.toTimeZone(ZTimeZone.TimeZoneEST.getID()).toYYYYMMDDTHHMMSS() +"' tz='"+ ZTimeZone.TimeZoneEST.getID() +"'/>"
+				+				"<or a='"+ ZimbraAccount.AccountB().EmailAddress +"'/>"
+				+				"<at role='REQ' ptst='NE' rsvp='1' a='" + ZimbraAccount.AccountA().EmailAddress + "'/>"
+				+			"</inv>"
+				+			"<e a='"+ ZimbraAccount.AccountA().EmailAddress +"' t='t'/>"
+				+			"<su>"+ apptSubject +"</su>"
+				+			"<mp content-type='text/plain'>"
+				+				"<content>" + apptBody + "</content>"
+				+			"</mp>"
+				+		"</m>"
+				+	"</CreateAppointmentRequest>");
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+		
+		// Mark ON to mounted calendar folder and select the appointment
+		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
+		app.zTreeCalendar.zSelectMountedFolder(mountPointName);
+		app.zPageCalendar.zListItem(Action.A_LEFTCLICK, Button.B_DELETE, apptSubject);
+		
+		DialogConfirmationDeclineAppointment deleteAppt = (DialogConfirmationDeclineAppointment) new DialogConfirmationDeclineAppointment(app, app.zPageCalendar);
+		deleteAppt.zClickButton(Button.B_NO);
+		app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
+		
+		// Don't notify organizer and notify organizer logic is covered in above tests
+		
+	}
+}
