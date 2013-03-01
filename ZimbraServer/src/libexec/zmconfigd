@@ -27,6 +27,7 @@ import traceback
 
 import conf
 # import commands
+from org.apache.log4j import PropertyConfigurator
 import state
 import listener
 from ldap import Ldap
@@ -145,6 +146,7 @@ state.State.mState = myState
 myConfig = conf.Config()
 conf.Config.mConfig = myConfig;
 myState.getLocalConfig(myConfig)
+PropertyConfigurator.configure(myState.localconfig["zimbra_home"]+"/conf/zmconfigd.log4j.properties")
 Log.initLogging(myConfig)
 Ldap.initLdap(myConfig)
 
