@@ -982,11 +982,11 @@ public class PageMail extends AbsTab {
 		//
 
 		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-			listLocator = "css=div[id='zl__TV-main__rows']";
-			rowLocator = "div[id^='zli__TV-main__']";
+			listLocator = "css=ul[id='zl__TV-main__rows']";
+			rowLocator = "li[id^='zli__TV-main__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV-main__rows']";
-			rowLocator = "div[id^='zli__CLV-main__']";
+			listLocator = "css=ul[id='zl__CLV-main__rows']";
+			rowLocator = "li[id^='zli__CLV-main__']";
 		}
 
 		// TODO: how to handle both messages and conversations, maybe check the view first?
@@ -1197,11 +1197,11 @@ public class PageMail extends AbsTab {
 		//
 
 		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-			listLocator = "css=div[id='zl__TV-main__rows']";
-			rowLocator = "div[id^='zli__TV-main__']";
+			listLocator = "css=ul[id='zl__TV-main__rows']";
+			rowLocator = "li[id^='zli__TV-main__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV-main__rows']";
-			rowLocator = "div[id^='zli__CLV-main__']";
+			listLocator = "css=ul[id='zl__CLV-main__rows']";
+			rowLocator = "li[id^='zli__CLV-main__']";
 		}
 
 		// TODO: how to handle both messages and conversations, maybe check the view first?
