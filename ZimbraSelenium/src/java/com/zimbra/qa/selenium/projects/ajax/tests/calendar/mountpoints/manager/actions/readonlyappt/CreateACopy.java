@@ -19,7 +19,7 @@ public class CreateACopy extends CalendarWorkWeekTest {
 		super.startingPage = app.zPageCalendar;
 	}
 	
-	@Bugs(ids = "80700")
+	@Bugs(ids = "80322,80700")
 	@Test(	description = "Assistant right clicks to calendar invite from shared calendar and creates a copy of it",
 			groups = { "functional" })
 			
