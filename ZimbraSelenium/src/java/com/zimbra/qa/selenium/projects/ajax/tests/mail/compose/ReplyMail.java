@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -174,6 +175,57 @@ public class ReplyMail extends PrefGroupMailByMessageTest {
 		ZAssert.assertEquals(received.dToRecipients.size(), 1, "Verify the message is sent to 1 'to' recipient");
 		ZAssert.assertEquals(received.dToRecipients.get(0).dEmailAddress, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");
 		ZAssert.assertEquals(received.dCcRecipients.size(), 0, "Verify the message is sent to 0 'cc' recipients");
+
+	}
+
+	@Test(	description = "Reply to a message - Verify no drafts saved",
+			groups = { "functional" })
+	public void ReplyMail_04() throws HarnessException {
+
+		//-- DATA
+		FolderItem drafts = FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Drafts);
+		
+		// Send a message to the account
+		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		ZimbraAccount.AccountA().soapSend(
+					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+						"<m>" +
+							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+							"<e t='c' a='"+ ZimbraAccount.AccountB().EmailAddress +"'/>" +
+							"<su>"+ subject +"</su>" +
+							"<mp ct='text/plain'>" +
+								"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+							"</mp>" +
+						"</m>" +
+					"</SendMsgRequest>");
+
+
+
+		//-- GUI
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the item
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Reply the item
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_REPLY);
+
+		// Send the message
+		mailform.zSubmit();
+
+
+
+		//-- Verification
+		
+		// Verify no new drafts
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>inid:"+ drafts.getId() +" subject:("+ subject +")</query>"
+			+	"</SearchRequest>");
+		Element[] nodes = app.zGetActiveAccount().soapSelectNodes("//mail:m");
+		ZAssert.assertEquals(nodes.length, 0, "Verify no drafts");
 
 	}
 
