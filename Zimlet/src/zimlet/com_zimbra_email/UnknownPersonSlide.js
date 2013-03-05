@@ -279,20 +279,8 @@ function(response, contact) {
     attrs["fullName"] =  this.emailZimlet.fullName || attrs["fullName"] || contact && contact._fileAs;
     this._presentity = attrs["email"] = this.emailZimlet.emailAddress || attrs["email"];        // email is the presence identity
 
-    var image = attrs[ZmContact.F_image];
-    var imagepart =  attrs[ZmContact.F_imagepart];
-    var imgUrl = null;
-    id = id || contact && contact.id;
+	var imgUrl = contact && contact.getImageUrl(UnknownPersonSlide.WIDTH);
 
-    if (image){
-       imgUrl = contact && contact.getImageUrl(UnknownPersonSlide.WIDTH);
-    }
-    else if (imagepart){
-        // Low level code to construct the image URL due to bug 73146 - Contacts call does not return the image information
-        // TODO - fix this to a non-low level code
-        var msgFetchUrl = appCtxt.get(ZmSetting.CSFE_MSG_FETCHER_URI);
-        imgUrl =  [msgFetchUrl, "&id=", id, "&part=", imagepart, "&max_width=", UnknownPersonSlide.WIDTH ,"&t=", (new Date()).getTime()].join("");
-    }
 	this._setProfileImage(imgUrl);
 	this._setContactDetails(attrs);
     // Retrieve the presence information from the presence provider - e.g. Click2Call
