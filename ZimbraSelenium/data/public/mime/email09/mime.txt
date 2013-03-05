@@ -1,0 +1,61 @@
+Date: Tue, 5 Mar 2013 12:56:56 -0800 (PST)
+From: foo@example.com
+To: bar@example.com
+Message-ID: <1474748869.540343.1362517016470.JavaMail.root@zimbra.com>
+In-Reply-To: <748870681.540330.1362517013598.JavaMail.root@zimbra.com>
+Subject: subject03431362517016470
+MIME-Version: 1.0
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_540339_232069497.1362517016450"
+
+------=_Part_540339_232069497.1362517016450
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_540340_561733127.1362517016450"
+
+------=_Part_540340_561733127.1362517016450
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+Test 
+
+
+
+------=_Part_540340_561733127.1362517016450
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+<html><body><div style="font-family: Verdana; font-size: 10pt; color: #000099"><div>Test<br></div><div><br></div><div><br></div></div></body></html>
+------=_Part_540340_561733127.1362517016450--
+
+------=_Part_540339_232069497.1362517016450
+Content-Type: image/jpeg; name=screenshot.JPG
+Content-Disposition: attachment; filename=screenshot.JPG
+Content-Transfer-Encoding: base64
+
+/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0a
+HBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIy
+MjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAXAEoDASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDF0DRb
+XWVnNzrdlpvlFQouWwXznp9MfrW5efD77P4eutat/EFhdWtuCS0ecMR/CD0zyB9TWD4N8LXHizVv
+JUmKygw91cY4RfQe55x+J7VpeN9bnv1i03TbC5s/D9gNsKGJlEh6eY2R1PbPPOepNAGRqFha2lhp
+s9tqQu5rqMtLAsRUwEYwuSfmzk9PSqHlT+S0vlS+Up2s+04B9CfWvT7jaP8AhVmABn2/65VraP4q
+vtQ+I2vaHdCGTS4I5ttsYlxlWAJJxk5yc5z1oA8ZeOaKNJJIpERxlGZSA30PetvWvDU2lW2kSRTP
+dPqNmt0I0iIMYIBx1OevXiussfEV/wCLvhx4pbWZI5zabJICIlXyySTgYHbH15PNW/EviDXtA8Ie
+EpNGQxJNYQiW4WEOSQibUOQcDkn3/OgDysby+wBi2cYxzR8+FO1vm+7x1+leytGjfEzwbfT26W+p
+3tjJJeRKuMP5LckeuSw59PasPT9b1rxV45uTb38OmWejJO8W21WTyowdpwuPmYjH64HYgHm7iSMg
+OrqT/eGKZv8Ac16rreq2/iH4W6zdm+uNSNpcRGK4urRYWQl0BA28Hgn6bvpXkHmD1oA0NC8Za74a
+imi0i+NukzBnHlI+SP8AeU4q/ffEvxbqVjPZXeqmS3nQxyIIIl3KeoyFBoopCMs+KtZP9l5vXP8A
+ZX/HllVPlcg+nPQdc9MUlv4o1i01i51aC8ZL65DiaUKvzb/vcYx+Q47UUUAQ2eu6jYade2FrctHa
+3oVbiMAEOB06jI69sVr2XxG8V6fDBDa6vIkUEKwRoY0ZVRegwVIz79feiigCj/wlut/8JAuum/kb
+U0ztnYKdoIK4AIxjBPGO9Q6Z4j1XRtTbUdPvJILt87pBg7snJyCMHnnkUUUAXtT8eeJNYsZ7K+1J
+pbWfb5kXloqnadwwAoxzzx171z/mH/JoooA//9k=
+------=_Part_540339_232069497.1362517016450--
+
+
