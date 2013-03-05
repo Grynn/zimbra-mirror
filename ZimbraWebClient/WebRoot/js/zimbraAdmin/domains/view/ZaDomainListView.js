@@ -85,7 +85,12 @@ function(domain, now, isDragProxy) {
 		var cellWidth = this._getCellWidth(i, {});
 		if(field == "type") {
 			// type
-			html[idx++] = "<td id=\"" + rowId + "_data_type_" + dwtId + "\" width=" + this._headerList[i]._width + ">" + AjxImg.getImageHtml("Domain") + "</td>";
+            var partialClassName = "Domain";
+            var domainType = domain.attrs[ZaDomain.A_domainType];
+            if (domainType === "alias") {
+                partialClassName += "Alias";
+            }
+			html[idx++] = "<td id=\"" + rowId + "_data_type_" + dwtId + "\" width=" + this._headerList[i]._width + ">" + AjxImg.getImageHtml(partialClassName) + "</td>";
 		} else if(field == ZaDomain.A_domainName) {
 			// name
 			html[idx++] = "<td id=\"" + rowId + "_data_name_" + dwtId + "\" align='left' width=" + cellWidth + "><nobr>";
