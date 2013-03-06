@@ -1,0 +1,34 @@
+From aee706272c660e052c991fea82ce6269c605be1d Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@openldap.org>
+Date: Wed, 6 Mar 2013 12:30:37 -0800
+Subject: [PATCH] ITS#7536 fix mdb_rebalance
+
+A page must always have at least 2 keys (unless it's a root page)
+---
+ libraries/liblmdb/mdb.c |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/libraries/liblmdb/mdb.c b/libraries/liblmdb/mdb.c
+index 4d8bfa3..058c68b 100644
+--- a/libraries/liblmdb/mdb.c
++++ b/libraries/liblmdb/mdb.c
+@@ -6368,12 +6368,13 @@ mdb_rebalance(MDB_cursor *mc)
+ 	DPRINTF("found neighbor page %zu (%u keys, %.1f%% full)",
+ 	    mn.mc_pg[mn.mc_top]->mp_pgno, NUMKEYS(mn.mc_pg[mn.mc_top]), (float)PAGEFILL(mc->mc_txn->mt_env, mn.mc_pg[mn.mc_top]) / 10);
+ 
+-	/* If the neighbor page is above threshold and has at least two
+-	 * keys, move one key from it.
++	/* If the neighbor page is above threshold and has at least three
++	 * keys, move one key from it. (A page must never have fewer than
++	 * 2 keys.)
+ 	 *
+ 	 * Otherwise we should try to merge them.
+ 	 */
+-	if (PAGEFILL(mc->mc_txn->mt_env, mn.mc_pg[mn.mc_top]) >= FILL_THRESHOLD && NUMKEYS(mn.mc_pg[mn.mc_top]) >= 2)
++	if (PAGEFILL(mc->mc_txn->mt_env, mn.mc_pg[mn.mc_top]) >= FILL_THRESHOLD && NUMKEYS(mn.mc_pg[mn.mc_top]) > 2)
+ 		return mdb_node_move(&mn, mc);
+ 	else {
+ 		if (mc->mc_ki[ptop] == 0)
+-- 
+1.7.2.5
+
