@@ -44,6 +44,38 @@ public class ZimbraAPI
         "/MAPIRoot/Emailed Contacts", "/MAPIRoot/Chats",
         "/MAPIRoot/Tasks"
     };
+    Dictionary<string ,string > specialFoldersMap = new Dictionary<string,string>()
+    {{"","0"},{"/MAPIRoot","1"},{"/MAPIRoot/Inbox","2"},{"/MAPIRoot/Deleted Items","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Sent Items","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Contacts","7"},
+        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Conversations","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Chats","14"},
+        {"/MAPIRoot/Tasks","15"},
+        {"/MAPIRoot/Posteingang","2"},
+        {"/MAPIRoot/Papierkorb","3"},
+        {"/MAPIRoot/Spam","4"}, {"/MAPIRoot/Gesendet","5"},
+        {"/MAPIRoot/Entw\u00fcrfe","6"}, {"/MAPIRoot/Kontakte","7"},
+        {"/MAPIRoot/Unterhaltungen","9"},
+        {"/MAPIRoot/Kalender","10"}, 
+        {"/MAPIRoot/Mailempf\u00e4nger","13"},{"/MAPIRoot/Aufgaben","15"},
+        {"/MAPIRoot/Bandeja de entrada","2"},
+        {"/MAPIRoot//Papelera","4"},
+        {"/MAPIRoot/Enviados","5"},
+{"/MAPIRoot/Borradores","6"},
+{"/MAPIRoot/Contactos","7"},
+ {"/MAPIRoot/Etiquetas","8"},
+ {"/MAPIRoot/Agenda","10"},
+{"/MAPIRoot/Tareas","15"},
+{"/MAPIRoot/Conversaciones","9"},
+ {"/MAPIRoot/Contactos respondidos","13"},
+{"/MAPIRoot/Chat","14"}
+ 
+
+
+
+
+};
     /*string[] DespecialFolders = {
         "", "/MAPIRoot", "/MAPIRoot/Posteingang",
         "/MAPIRoot/Papierkorb",
@@ -157,13 +189,17 @@ public class ZimbraAPI
         {
             return "5";//same as MAPIRoot/Sent Items
         }
-        for (int i = 0; i < specialFolders.Length; i++)
+      /*  for (int i = 0; i < specialFolders.Length; i++)
         {
             string sSpecialFolder = specialFolders[i].ToUpper();
             if (sFolderPath == sSpecialFolder)
                 return i.ToString();
-        }
-        return "";
+        }*/
+        string tempstr = folderPath;
+        if (specialFoldersMap.ContainsKey(tempstr))
+            return specialFoldersMap[tempstr];
+        else
+            return "";
     }
 
     // Parse Methods //////////////////
