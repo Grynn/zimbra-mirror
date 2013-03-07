@@ -185,6 +185,20 @@ function () {
 	return des;
 }
 
+/**
+ * Searches for display name for the zimlet, and if not present, just returns an empty string
+ * Needed to provide information as to which zimlets are missing the Display Names
+ *
+ * @return {*|string}
+ *
+ */
+ZaZimlet.prototype.getDisplayName = function () {
+    var name = this[ZaZimlet.A_name];
+    var obj = window[name];
+    var displayName = (obj && (obj["label"] || obj["zimletLabel"])) || "";
+    return displayName;
+}
+
 ZaZimlet.prototype.getLabel = 
 function (){
 	var label = null;

@@ -77,14 +77,19 @@ function(zimlet, now, isDragProxy) {
 		var cellWidth = this._getCellWidth(i, {});
 		if(field == ZaZimlet.A_name) {	
 			// name
-			html[idx++] = "<td align='left' width=" + cellWidth + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(zimlet.getLabel());
-			html[idx++] = "</nobr></td>";
+			html[idx++] = "<td align='left' width=" + cellWidth + ">";
+			html[idx++] = AjxStringUtil.htmlEncode(zimlet[ZaZimlet.A_name]);
+			html[idx++] = "</td>";
+        } else if (field == "display") {
+            // Display Name
+            html[idx++] = "<td align='left' width=" + cellWidth + ">";
+            html[idx++] = AjxStringUtil.htmlEncode(zimlet.getDisplayName());
+            html[idx++] = "</td>";
 		} else if(field == ZaZimlet.A_zimbraZimletDescription) {	
 			// description
-			html[idx++] = "<td align='left' width=" + cellWidth + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(zimlet.getDescription() );
-			html[idx++] = "</nobr></td>";
+			html[idx++] = "<td align='left' width=" + cellWidth + ">";
+			html[idx++] = AjxStringUtil.htmlEncode(zimlet.getDescription());
+			html[idx++] = "</td>";
 		} else if (field === "spacer") {
             // spacer
             html[idx++] = "<td align='left' width=" + cellWidth + "></td>";
@@ -114,9 +119,10 @@ function() {
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
 	var sortable=1;
 	headerList[0] = new ZaListHeaderItem(ZaZimlet.A_name, ZaMsg.CLV_Name_col, null, 250, sortable++, "name", true, true);
-	headerList[1] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletDescription, ZaMsg.DLV_Description_col, null, "auto", null, ZaZimlet.A_zimbraZimletDescription, true, true);
-    headerList[2] = new ZaListHeaderItem("spacer", null, null, "5px", null, null, false, false);
-    headerList[3] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletVersion, ZaMsg.CLV_Version_col, null, "80px", null, ZaZimlet.A_zimbraZimletVersion, true, true);
+    headerList[1] = new ZaListHeaderItem("display", ZaMsg.ALV_DspName_col, null, 250, null, "display", true, true);
+	headerList[2] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletDescription, ZaMsg.DLV_Description_col, null, "auto", null, ZaZimlet.A_zimbraZimletDescription, true, true);
+    headerList[3] = new ZaListHeaderItem("spacer", null, null, "5px", null, null, false, false);
+    headerList[4] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletVersion, ZaMsg.CLV_Version_col, null, "80px", null, ZaZimlet.A_zimbraZimletVersion, true, true);
 	return headerList;
 }
 
