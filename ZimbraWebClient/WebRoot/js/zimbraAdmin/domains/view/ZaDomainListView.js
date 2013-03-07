@@ -93,25 +93,25 @@ function(domain, now, isDragProxy) {
 			html[idx++] = "<td id=\"" + rowId + "_data_type_" + dwtId + "\" width=" + this._headerList[i]._width + ">" + AjxImg.getImageHtml(partialClassName) + "</td>";
 		} else if(field == ZaDomain.A_domainName) {
 			// name
-			html[idx++] = "<td id=\"" + rowId + "_data_name_" + dwtId + "\" align='left' width=" + cellWidth + "><nobr>";
+			html[idx++] = "<td id=\"" + rowId + "_data_name_" + dwtId + "\" align='left' width=" + cellWidth + ">";
 			html[idx++] = AjxStringUtil.htmlEncode(domain.name);
-			html[idx++] = "</nobr></td>";
+			html[idx++] = "</td>";
 		} else if(field == ZaDomain.A_description) {
 			// description		
-			html[idx++] = "<td id=\"" + rowId + "_data_desc_" + dwtId + "\" align='left' width=" + cellWidth + "><nobr>";
+			html[idx++] = "<td id=\"" + rowId + "_data_desc_" + dwtId + "\" align='left' width=" + cellWidth + ">";
 			html[idx++] = AjxStringUtil.htmlEncode(
 				ZaItem.getDescriptionValue(domain.attrs[ZaDomain.A_description]));
-			html[idx++] = "</nobr></td>";
+			html[idx++] = "</td>";
 		} else if(field == ZaDomain.A_zimbraDomainStatus) {
 			// description		
-			html[idx++] = "<td id=\"" + rowId + "_data_status_" + dwtId + "\" align='left' width=" + cellWidth + "><nobr>";
+			html[idx++] = "<td id=\"" + rowId + "_data_status_" + dwtId + "\" align='left' width=" + cellWidth + ">";
 			html[idx++] = ZaDomain._domainStatus(domain.attrs[ZaDomain.A_zimbraDomainStatus]);
-			html[idx++] = "</nobr></td>";
+			html[idx++] = "</td>";
 		} else if (field == ZaDomain.A_domainType) {
 			// domain type
-			html[idx++] = "<td id=\"" + rowId + "_data_domain_type_" + dwtId + "\" align='left' width=" + cellWidth + "><nobr>";
+			html[idx++] = "<td id=\"" + rowId + "_data_domain_type_" + dwtId + "\" align='left' width=" + cellWidth + ">";
 			html[idx++] = AjxStringUtil.htmlEncode(domain.attrs[ZaDomain.A_domainType]);
-			html[idx++] = "</nobr></td>";
+			html[idx++] = "</td>";
 		}
 	}
 	html[idx++] = "</tr></table>";
@@ -129,7 +129,7 @@ function() {
 	headerList[i++] = new ZaListHeaderItem("type", null, null, "22px", null, "objectClass", false, true);
 	headerList[i++] = new ZaListHeaderItem(ZaDomain.A_domainName , ZaMsg.DLV_Name_col, null, "250px", sortable++, ZaDomain.A_domainName, true, true);
 	//headerList[0].initialize(ZaMsg.CLV_Name_col, null, "245", true, ZaDomain.A_domainName);
-	headerList[i++] = new ZaListHeaderItem(ZaDomain.A_domainType , ZaMsg.DLV_Type_col, null, "100px", sortable++, ZaDomain.A_domainType, true, true);
+	headerList[i++] = new ZaListHeaderItem(ZaDomain.A_domainType , ZaMsg.DLV_Type_col, null, "100px", null, ZaDomain.A_domainType, true, true);
 	headerList[i++] = new ZaListHeaderItem(ZaDomain.A_zimbraDomainStatus , ZaMsg.DLV_Status_col, null, "100px", sortable++, ZaDomain.A_zimbraDomainStatus, true, true);
 	headerList[i++] = new ZaListHeaderItem(ZaDomain.A_description, ZaMsg.DLV_Description_col, null, "auto", null, null, true, true);
 	//headerList[1].initialize(ZaMsg.CLV_Description_col, null, "245", false, ZaDomain.A_description);
