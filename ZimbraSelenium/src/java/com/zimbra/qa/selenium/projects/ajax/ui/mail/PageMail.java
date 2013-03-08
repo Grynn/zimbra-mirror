@@ -929,11 +929,11 @@ public class PageMail extends AbsTab {
 		String listLocator = null;
 		String rowLocator = null;
 		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-			listLocator = "css=div[id='zl__TV-main__rows']";
-			rowLocator = "div[id^='zli__TV-main__']";
+			listLocator = "css=ul[id='zl__TV-main__rows']";
+			rowLocator = "li[id^='zli__TV-main__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV-main__rows']";
-			rowLocator = "div[id^='zli__CLV-main__']";
+			listLocator = "css=ul[id='zl__CLV-main__rows']";
+			rowLocator = "li[id^='zli__CLV-main__']";
 		}
 
 		// Make sure the button exists
