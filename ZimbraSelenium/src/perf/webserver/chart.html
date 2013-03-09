@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+	/**
+		Example:
+		?apps=1&browsers=1&builds=8&builds=9&messages=1",
+		app: ajax
+		builds: 7.2.3 and 8.0.3
+		browser: firefox
+		use-case: login
+	**/
+		
+	var jsonData = $.ajax({
+          url: "http://zqa-006.eng.vmware.com/perf/perf2/chart_json.cgi?apps=1&browsers=1&builds=8&builds=9&messages=31",
+          dataType:"json",
+          async: false
+          }).responseText;
+        var data = new google.visualization.DataTable(jsonData);
+
+        var options = {
+          title: 'Client Performance'
+        };
+
+        var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+/**
+	document.getElementById('foo').innerHTML = data.toJSON();
+	document.getElementById('bar').innerHTML = jsonData;
+**/
+      }
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    <div id="foo" style="width: 900px; height: 500px;"></div>
+    <div id="bar" style="width: 900px; height: 500px;"></div>
+  </body>
+</html>
+
+
