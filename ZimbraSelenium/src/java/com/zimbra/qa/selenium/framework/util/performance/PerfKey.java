@@ -12,6 +12,7 @@ public class PerfKey {
 
 	public static final PerfKey ZmMailApp 			= new PerfKey("ZmMailApp", "ZmMailApp_launched", "ZmMailApp_loaded");
 	public static final PerfKey ZmMailItem 			= new PerfKey("ZmMailItem", "ZmMailItem_loading", "ZmMailItem_loaded");
+	public static final PerfKey ZmMailAppOverviewPanel 			= new PerfKey("ZmMailApp-overviewPanel", "ZmMailApp-overviewPanel_loading", "ZmMailApp-overviewPanel_loaded");
 	public static final PerfKey ZmConv	 			= new PerfKey("ZmConv", "ZmConv_loading", "ZmConv_loaded");
 	public static final PerfKey ZmContactsApp 		= new PerfKey("ZmContactsApp", "ZmContactsApp_launched", "ZmContactsApp_loaded");
 	public static final PerfKey ZmContactsItem 		= new PerfKey("ZmContactsItem", "ZmContactItem_loading", "ZmContactItem_loaded");

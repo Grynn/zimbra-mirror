@@ -48,7 +48,7 @@ public class ZmMailAppFolders extends AjaxCommonTest {
 		app.zPageLogin.zSetLoginName(ZimbraAccount.AccountZWC().EmailAddress);
 		app.zPageLogin.zSetLoginPassword(ZimbraAccount.AccountZWC().Password);
 
-		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailApp, "Load the mail app, message view, 1 folder");
+		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailAppOverviewPanel, "Load the mail app, message view, 1 folder");
 
 		// Click the Login button
 		app.zPageLogin.sClick(Locators.zBtnLogin);
@@ -79,7 +79,7 @@ public class ZmMailAppFolders extends AjaxCommonTest {
 		app.zPageLogin.zSetLoginName(ZimbraAccount.AccountZWC().EmailAddress);
 		app.zPageLogin.zSetLoginPassword(ZimbraAccount.AccountZWC().Password);
 
-		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailApp, "Load the mail app, message view, 100 folders");
+		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailAppOverviewPanel, "Load the mail app, message view, 100 folders");
 
 		// Click the Login button
 		app.zPageLogin.sClick(Locators.zBtnLogin);
