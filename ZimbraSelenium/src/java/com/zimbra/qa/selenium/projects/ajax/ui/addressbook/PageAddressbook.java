@@ -503,7 +503,11 @@ public class PageAddressbook extends AbsTab {
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);	
 		}
 		else if (shortcut == Shortcut.S_MOVE) {
-			page = new DialogMove(MyApplication, this);				
+			page = new DialogMove(MyApplication, this);
+			zKeyDown("77");
+			zWaitForBusyOverlay();
+			page.zWaitForActive();
+			return (page);
 		} 
 		else if ( shortcut == Shortcut.S_ASSISTANT ) {			
 			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageAddressbook);
