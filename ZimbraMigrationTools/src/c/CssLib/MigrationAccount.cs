@@ -158,6 +158,12 @@ public class MigrationAccount
         set { IsValidAccount = value; }
     }
 
+    public bool IsCompletedMigration
+    {
+        get { return IsCompleted; }
+        set { IsCompleted = value; }
+    }
+
     private string accountName;
     private int accountNum;
     private System.DateTime dateRaised;
@@ -172,7 +178,7 @@ public class MigrationAccount
     private int totalTasks;
     private int totalWarnings;
     private bool IsValidAccount;
-
+    private bool IsCompleted;
     
 }
 

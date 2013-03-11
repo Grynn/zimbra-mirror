@@ -866,7 +866,7 @@ public class ScheduleViewModel: BaseViewModel
         if (!m_isPreview)
         {
             int tnum = GetThreadNum(MyAcct.AccountNum);
-        //Log.info(" in worker_RunWorkerCompleted  for ThreadNum : " + tnum);
+            //Log.info(" in worker_RunWorkerCompleted  for ThreadNum : " + tnum);
 
             if ((!(MyAcct.IsValid)) && (MyAcct.TotalErrors > 0))
             {
@@ -876,10 +876,18 @@ public class ScheduleViewModel: BaseViewModel
             }
             else
             {
-
-                Log.info(" in DOWORK -- Migration completed for usernum: " + MyAcct.AccountNum + " and threadnum" + tnum);
-                accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";
-                accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Complete";
+                if ((!(MyAcct.IsCompletedMigration)) && (MyAcct.TotalErrors > 0))
+                {
+                    Log.info(" in DOWORK -- Migration Incomplete for usernum: " + MyAcct.AccountNum + " and threadnum" + tnum);
+                    accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration Incomplete - Please Re-Run Migration";
+                    accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Incomplete";
+                }
+                else
+                {
+                    Log.info(" in DOWORK -- Migration completed for usernum: " + MyAcct.AccountNum + " and threadnum" + tnum);
+                    accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";
+                    accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Complete";
+                }
             }
         }
         else

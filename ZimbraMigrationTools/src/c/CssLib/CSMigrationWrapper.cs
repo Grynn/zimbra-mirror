@@ -390,6 +390,7 @@ public class CSMigrationWrapper
             {
                 if (Acct.migrationFolder.TotalCountOfItems == itemobjectarray.Count())
                 {
+                    
                     while (iProcessedItems < Acct.migrationFolder.TotalCountOfItems)
                     {
                         Log.debug("Processing folder", folder.Name, "-- Total items:", folder.ItemCount);
@@ -778,6 +779,7 @@ public class CSMigrationWrapper
                     Acct.TotalErrors++;
                     Log.err("CSmigrationwrapper MAPI edgecase",errMesg);
                     Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, errMesg, ProblemInfo.TYPE_ERR);
+                    Acct.IsCompletedMigration = false;
                     while (iProcessedItems < itemobjectarray.Count())
                     {
                         Log.debug("Processing folder", folder.Name, "-- Total items:", folder.ItemCount);
@@ -1212,6 +1214,7 @@ public class CSMigrationWrapper
         else
         {
             Acct.IsValid = true;
+            Acct.IsCompletedMigration = true;
             Log.info(accountName, "initialized");
         }
 
