@@ -92,7 +92,7 @@ sub page {
 
 	print "<h2>Create a custom chart</h2>\n";
 
-	print "<form name='input' action='chart.html' method='get'>\n";
+	print "<form name='input' action='chart_html.cgi' method='get'>\n";
 	print "<fieldset>\n";
 	print "<legend>Restrict To:</legend>\n";
 
@@ -173,7 +173,7 @@ sub main {
 
 	# Get the list of tests (messages table)
 	#
-	$sql = "SELECT id,build FROM builds ORDER BY id";
+	$sql = "SELECT id,build FROM builds ORDER BY build ASC";
 	$sth = $dbh->prepare($sql);
 	$sth->execute();
 	while (my ($id, $build) = $sth->fetchrow_array()) {
