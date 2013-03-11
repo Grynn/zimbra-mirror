@@ -1,0 +1,9 @@
+Date: Tue, 15 Nov 2011 17:06:47 -0800 (PST)
+From: foo@example.com
+To: bar@example.com
+Subject: 2 plain text format
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+The Ming Dynasty, also Empire of the Great Ming, was the ruling dynasty of China from 1368 to 1644.

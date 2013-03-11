@@ -269,9 +269,19 @@ public class FormApptNew extends AbsForm {
 				+ equipment + "')");
 	}
 
-	public String zGetApptBody() throws HarnessException {
-		return sGetValue("css=div[class='ZmHtmlEditor'] textarea[class=DwtHtmlEditorTextArea]");
+	public String zGetApptBodyValue() throws HarnessException {
+		return sGetValue("css=div[class='ZmHtmlEditor'] textarea[class='DwtHtmlEditorTextArea']");
 	}
+	
+	public String zGetApptBodyText() throws HarnessException {
+		String bodyText;
+		this.sSelectFrame("css=iframe[id$='_content_ifr']");
+		bodyText = sGetText("css=body[id='tinymce']"); 
+		this.sSelectFrame("relative=top");
+		return bodyText;
+		
+	}
+	
 
 	public void zRemoveAttendee(String attendee) throws HarnessException {
 		SleepUtil.sleepSmall(); // let free/busy UI draw and then we take UI
@@ -339,6 +349,8 @@ public class FormApptNew extends AbsForm {
 			// Wait for the message to be delivered
 			Stafpostqueue sp = new Stafpostqueue();
 			sp.waitForPostqueue();
+			
+			SleepUtil.sleepMedium();
 
 			return (page);
 
