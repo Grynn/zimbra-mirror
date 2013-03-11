@@ -202,7 +202,7 @@ function(tabGroup) {
  */
 DwtKeyboardMgr.prototype.setTabGroup =
 function(tabGroup) {
-	if (!this.__enabled || !this.__keyboardHandlingInited) { return; }
+//	if (!this.__enabled || !this.__keyboardHandlingInited) { return; }
 	
 	var otg = this.popTabGroup();
 	this.pushTabGroup(tabGroup);
@@ -249,10 +249,10 @@ function() {
  */ 
 DwtKeyboardMgr.prototype.grabFocus =
 function(focusObj) {
-	if (!this.__enabled) { return; }
-	if (!this.__keyboardHandlingInited) {
-		return;
-	}
+//	if (!this.__enabled) { return; }
+//	if (!this.__keyboardHandlingInited) {
+//		return;
+//	}
 	if (typeof focusObj == "string") {
 		focusObj = document.getElementById(focusObj);
 	}
@@ -295,10 +295,10 @@ function(focusObj) {
  */
 DwtKeyboardMgr.prototype.dwtControlHasFocus =
 function(control) {
-	if (!this.__enabled) { return false; }
-	if (!this.__keyboardHandlingInited) {
-		return false;
-	}
+//	if (!this.__enabled) { return false; }
+//	if (!this.__keyboardHandlingInited) {
+//		return false;
+//	}
 		
 	return (this.__dwtCtrlHasFocus && this.__focusObj == control);
 };
@@ -503,7 +503,9 @@ function(focusObj) {
 		} else {
 			DwtKeyboardMgr.__onFocusHdlr();
 			// input -> ctrl: set browser focus to keyboard input field
-			this._kbFocusField.focus();
+			if (this.__enabled) {
+				this._kbFocusField.focus();
+			}
 		}
 	}
 };
