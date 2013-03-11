@@ -69,7 +69,7 @@ public class Open extends CalendarWorkWeekTest {
         ZAssert.assertTrue(apptForm.zVerifyOptionalAttendee(apptOptional), "Verify appointment optional attendee");
         ZAssert.assertTrue(apptForm.zVerifyLocation(apptLocation), "Verify appointment location");
         ZAssert.assertTrue(apptForm.zVerifyEquipment(apptEquipment), "Verify appointment equipment");
-        ZAssert.assertEquals(apptForm.zGetApptBody(), apptBody, "Verify appointment body");
+        ZAssert.assertEquals(apptForm.zGetApptBodyValue(), apptBody, "Verify appointment body");
         
 	}
 	
