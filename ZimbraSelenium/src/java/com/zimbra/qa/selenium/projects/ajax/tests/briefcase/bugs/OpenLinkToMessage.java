@@ -99,7 +99,7 @@ public class OpenLinkToMessage extends FeatureBriefcaseTest {
 		
 		ZAssert
 				.assertTrue(app.zPageBriefcase
-						.zWaitForElementPresent(PageMail.Locators.cssTVRowsLocator,"5000"),
+						.zWaitForElementPresent("css=[id=zl__TV-main__rows]","5000"),
 						"Verify List View Rows are displayed after message pane is closed");
 	}
 
