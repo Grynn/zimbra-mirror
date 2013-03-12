@@ -31,6 +31,7 @@ my %browsers = ();
 my %builds = ();
 my %messages = ();
 my %milestones = ();
+my %statistics = ();
 
 sub radio {
 	my $name = $_[0];
@@ -103,7 +104,7 @@ sub page {
 		print "<th align='left'>Apps:</th>\n";
 		print "<th align='left'>Browsers:</th>\n";
 		print "<th align='left'>Builds:</th>\n";
-		print "<th align='left'>Milestones:</th>\n";
+#		print "<th align='left'>Milestones:</th>\n";
 		print "<th align='left'>Actions:</th>\n";
 
 	print "</tr>\n";
@@ -113,35 +114,52 @@ sub page {
 		print "<td valign='top'>".  &select("apps", "apps", undef, 5, \%apps) ."</td>\n";
 		print "<td valign='top'>".  &select("browsers", "browsers", 1, 5, \%browsers) ."</td>\n";
 		print "<td valign='top'>".  &select("builds", "builds", 1, 5, \%builds) ."</td>\n";
-		print "<td valign='top'>".  &select("milestones", "milestones", undef, 5, \%milestones) ."</td>\n";
+#		print "<td valign='top'>".  &select("milestones", "milestones", undef, 5, \%milestones) ."</td>\n";
 		print "<td valign='top'>".  &select("messages", "messages", 1, 10, \%messages) ."</td>\n";
 
 	print "</tr>\n";
 	print "</table>\n";
 	print "</fieldset>\n";
 
-	print "<fieldset>\n";
-	print "<legend>Plot:</legend>\n";
-	print "<table>\n";
-	print "<tr>\n";
-
-		print "<td>\n";
-		my %plots = ();
-		$plots{'Browsers'} = "Browsers";
-		$plots{'Builds'} = "Builds";
-		$plots{'Milestones'} = "Milestones";
-		print &radio("plot", "Builds", \%plots);
-		print "</td>\n";
-
-	print "</tr>\n";
-	print "</table>\n";
-	print "</fieldset>\n";
+#	print "<fieldset>\n";
+#	print "<legend>Plot:</legend>\n";
+#	print "<table>\n";
+#	print "<tr>\n";
+#
+#		print "<td>\n";
+#		my %plots = ();
+#		$plots{'Browsers'} = "Browsers";
+#		$plots{'Builds'} = "Builds";
+#		$plots{'Milestones'} = "Milestones";
+#		print &radio("plot", "Builds", \%plots);
+#		print "</td>\n";
+#
+#	print "</tr>\n";
+#	print "</table>\n";
+#	print "</fieldset>\n";
 
 
 
 
 	print "<input type='submit' value='Plot'/>\n";
 	print "</form>\n";
+
+	print "<fieldset>\n";
+	print "<legend>Counts:</legend>\n";
+	print "<table border='1'>\n";
+
+	print "<tr><th>Key</th><th>Datapoints</th></tr>\n";
+
+	foreach my $key (keys %statistics) {
+		print "<tr>\n";
+		print "<td>$key</td>\n";
+		print "<td>". $statistics{$key} ."</td>\n";
+		print "</tr>\n";
+	}
+
+	print "</table>\n";
+	print "</fieldset>\n";
+
 	print "</body>\n";
 	print "</html>\n";
 
@@ -196,6 +214,15 @@ sub main {
 	$sth->execute();
 	while (my ($id, $milestone) = $sth->fetchrow_array()) {
 		$milestones{$id} = $milestone;
+	}
+
+	foreach my $id (keys %browsers) {
+		$sql = "SELECT count(*) FROM perf where browserid = $id";
+		$sth = $dbh->prepare($sql);
+		$sth->execute();
+		while (my ($count) = $sth->fetchrow_array()) {
+			$statistics{$browsers{$id}} = $count;
+		}
 	}
 
 	# Build the page

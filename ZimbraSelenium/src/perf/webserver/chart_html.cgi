@@ -142,7 +142,9 @@ sub page {
 	print "}).responseText;\n";
 	print "var data = new google.visualization.DataTable(jsonData);\n";
 	print "var options = {\n";
-	print "title: chart_title\n";
+	print "title: chart_title ,\n";
+	print "vAxis: { title: \"msec\" },\n";
+	print "hAxis: { title: \"date\" },\n";
 	print "};\n";
 	print "var chart = new google.visualization.ScatterChart(document.getElementById(divid));\n";
 	print "chart.draw(data, options);\n";
