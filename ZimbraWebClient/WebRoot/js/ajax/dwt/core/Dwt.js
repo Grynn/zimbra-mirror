@@ -1556,6 +1556,9 @@ function(id, date) {
 		document.body.appendChild(div);
 	}
 	div.innerHTML = date.getTime();
+	if (window.appDevMode) {
+		console.profile(id);
+	}
 };
 
 /**
@@ -1576,6 +1579,9 @@ function(id, date) {
 		document.body.appendChild(div);
 	}
 	div.innerHTML = date.getTime();
+	if (window.appDevMode) {
+		console.profileEnd();
+	}
 };
 
 /**
