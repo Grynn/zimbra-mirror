@@ -836,40 +836,29 @@ public class PageMail extends AbsTab {
 		}
 
 		// Get the fragment and the subject
-		locator = msglocator + " span[id$='__fm']";
+		item.gFragment = "";	// Initialize
+		item.gSubject = "";		// Initialize
+		locator = msglocator + " [id$='__fm']";
 		if ( this.sIsElementPresent(locator) ) {
 
 			item.gFragment = this.sGetText(locator).trim();
 
 			// Get the subject
-			locator = msglocator + " td[id$='__su']";
-			if ( this.sIsElementPresent(msglocator + " td[id$='__su']") ) {
+			locator = msglocator + " [id$='__su']";
+			if ( this.sIsElementPresent(locator) ) {
 				
-				String subject = this.sGetText(msglocator + " td[id$='__su']").trim();
+				String subject = this.sGetText(locator).trim();
 
 				// The subject contains the fragment, e.g. "subject - fragment", so
 				// strip it off
 				item.gSubject = subject.replace(item.gFragment, "").trim();
 
-			} else if ( this.sIsElementPresent(msglocator + " span[id$='__su']") ) {
-				
-				String subject = this.sGetText(msglocator + " span[id$='__su']").trim();
-
-				// The subject contains the fragment, e.g. "subject - fragment", so
-				// strip it off
-				item.gSubject = subject.replace(item.gFragment, "").trim();
-
-			} else {
-				
-				// No subject (i.e. expanded conversation message)
-				item.gSubject = "";
-				
 			}
 
 		} else {
 
 			// Conversation items's fragment is in the subject field
-			locator = msglocator + " span[id$='__su']";
+			locator = msglocator + " [id$='__su']";
 			if ( this.sIsElementPresent(locator) ) {
 				
 				item.gFragment = this.sGetText(locator).trim();
@@ -878,11 +867,6 @@ public class PageMail extends AbsTab {
 				// For now, just set it to blank
 				item.gSubject = "";
 
-			} else {
-
-				item.gFragment = "";
-				item.gSubject = "";
-				
 			}
 
 		}
@@ -905,7 +889,7 @@ public class PageMail extends AbsTab {
 		}
 
 		// Get the received date
-		locator = msglocator + " span[id$='__dt']";
+		locator = msglocator + " [id$='__dt']";
 		item.gReceived = this.sGetText(locator).trim();
 
 
@@ -949,7 +933,7 @@ public class PageMail extends AbsTab {
 		for (int i = 1; i <= count; i++) {
 
 			// Add the new item to the list
-			MailItem item = parseMessageRow(listLocator + " div:nth-of-type("+ i +") ");
+			MailItem item = parseMessageRow(listLocator + " li:nth-of-type("+ i +") ");
 			items.add(item);
 			logger.info(item.prettyPrint());
 		}
@@ -1001,7 +985,7 @@ public class PageMail extends AbsTab {
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
 
-			itemlocator = listLocator + " div:nth-of-type("+ i +") ";
+			itemlocator = listLocator + " li:nth-of-type("+ i +") ";
 			String s = this.sGetText(itemlocator + " [id$='__su']").trim();
 
 			if ( s.contains(subject) ) {
