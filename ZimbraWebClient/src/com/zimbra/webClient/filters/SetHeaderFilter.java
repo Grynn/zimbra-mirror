@@ -497,7 +497,7 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
         if (expiresValue > 0 && req.getMethod().equals("GET")) {
             TimeZone gmt = TimeZone.getTimeZone(GMT);
             long now = System.currentTimeMillis();
-            Date expiresDate = new Date(now + (expiresValue * 1000));
+            Date expiresDate = new Date(now + (expiresValue * (long)1000));
             DateFormat df = new SimpleDateFormat(TIME_FORMAT);
             df.setTimeZone(gmt);
             resp.setHeader(HEADER_EXPIRES, df.format(expiresDate) + " " + GMT);
