@@ -129,10 +129,14 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 				break;
 			}
 		}
-		
+		String listItem = "css=div[id*=zl__CLV-SR-Mail][class=DwtListView] [id*=zli__CLV-SR-Mail]";
+		ZAssert.assertTrue(app.zPageSearch.sIsElementPresent(listItem + ":contains(" + message1.dSubject + ")"), "Verify the message in the inbox is found");
+		ZAssert.assertTrue(app.zPageSearch.sIsElementPresent(listItem + ":contains(" + message2.dSubject + ")"), "Verify the message in the trash is found");
+
+		/*
 		ZAssert.assertTrue(found1, "Verify the message in the inbox is found");
 		ZAssert.assertTrue(found2, "Verify the message in the trash is found");
-		
+		*/
 		
 	}
 
