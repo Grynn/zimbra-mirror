@@ -152,18 +152,27 @@ public class ReplyMail extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
-		// Select the sent folder
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Sent));
-				
-				// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		try {
+			
+			// Select the sent folder
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Sent));
+					
+					// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 
-		// Reply the item
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_REPLY);
+			// Reply the item
+			FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_REPLY);
 
-		// Send the message
-		mailform.zSubmit();
+			// Send the message
+			mailform.zSubmit();
 
+
+		} finally {
+			
+			// Select the inbox folder
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox));
+
+		}
 
 
 		//-- Verification
