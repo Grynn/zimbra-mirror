@@ -32,3 +32,48 @@ index 4d8bfa3..058c68b 100644
 -- 
 1.7.2.5
 
+From 77001f549ba5b28a4cff89c4d58012a106985437 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@symas.com>
+Date: Tue, 12 Mar 2013 17:29:34 -0700
+Subject: [PATCH] ITS#7538 fallout from ITS#7536 fix.
+
+Allow leaf pages to have only 1 key.
+---
+ libraries/liblmdb/mdb.c |   13 ++++++-------
+ 1 files changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/libraries/liblmdb/mdb.c b/libraries/liblmdb/mdb.c
+index a2a2e52..cf306fc 100644
+--- a/libraries/liblmdb/mdb.c
++++ b/libraries/liblmdb/mdb.c
+@@ -6250,7 +6250,7 @@ static int
+ mdb_rebalance(MDB_cursor *mc)
+ {
+ 	MDB_node	*node;
+-	int rc;
++	int rc, minkeys;
+ 	unsigned int ptop;
+ 	MDB_cursor	mn;
+ 
+@@ -6380,13 +6380,12 @@ mdb_rebalance(MDB_cursor *mc)
+ 	DPRINTF("found neighbor page %zu (%u keys, %.1f%% full)",
+ 	    mn.mc_pg[mn.mc_top]->mp_pgno, NUMKEYS(mn.mc_pg[mn.mc_top]), (float)PAGEFILL(mc->mc_txn->mt_env, mn.mc_pg[mn.mc_top]) / 10);
+ 
+-	/* If the neighbor page is above threshold and has at least three
+-	 * keys, move one key from it. (A page must never have fewer than
+-	 * 2 keys.)
+-	 *
+-	 * Otherwise we should try to merge them.
++	/* If the neighbor page is above threshold and has enough keys,
++	 * move one key from it. Otherwise we should try to merge them.
++	 * (A branch page must never have less than 2 keys.)
+ 	 */
+-	if (PAGEFILL(mc->mc_txn->mt_env, mn.mc_pg[mn.mc_top]) >= FILL_THRESHOLD && NUMKEYS(mn.mc_pg[mn.mc_top]) > 2)
++	minkeys = 1 + (IS_BRANCH(mn.mc_pg[mn.mc_top]));
++	if (PAGEFILL(mc->mc_txn->mt_env, mn.mc_pg[mn.mc_top]) >= FILL_THRESHOLD && NUMKEYS(mn.mc_pg[mn.mc_top]) > minkeys)
+ 		return mdb_node_move(&mn, mc);
+ 	else {
+ 		if (mc->mc_ki[ptop] == 0)
+-- 
+1.7.4.2
+
