@@ -342,11 +342,11 @@ public class PageSearch extends AbsTab {
 		String listLocator = null;
 		String rowLocator = null;
 		if (zGetPropMailView() == SearchView.BY_MESSAGE) {
-			listLocator = "css=div[id^='zv__TV-SR-Mail-']";
-			rowLocator = "div[id$='__rows']";
+			listLocator = "css=ul[id^='zl__TV-SR-Mail']";
+			rowLocator = "li[id^='zli__TV-SR-Mail-']";
 		} else {
-			listLocator = "css=div[id^='zv__CLV-SR-Mail-']";
-			rowLocator = "div[id*=zli__CLV-SR-Mail]";
+			listLocator = "css=ul[id^='zl__CLV-SR-Mail-']";
+			rowLocator = "li[id^='zli__CLV-SR-Mail-']";
 		}
 
 		// Make sure the button exists
@@ -363,7 +363,7 @@ public class PageSearch extends AbsTab {
 		for (int i = 1; i <= count; i++) {
 
 			// Add the new item to the list
-			MailItem item = ((AppAjaxClient)this.MyApplication).zPageMail.parseMessageRow(listLocator + " div:nth-of-type("+ i +") ");
+			MailItem item = ((AppAjaxClient)this.MyApplication).zPageMail.parseMessageRow(listLocator + " li:nth-of-type("+ i +") ");
 			items.add(item);
 			logger.info(item.prettyPrint());
 		}
@@ -378,9 +378,9 @@ public class PageSearch extends AbsTab {
 
 
 	public SearchView zGetPropMailView() throws HarnessException {
-		if ( this.zIsVisiblePerPosition("css=div[id^='zv__CLV-SR-Mail-']", 0, 0) ) {
+		if ( this.zIsVisiblePerPosition("css=ul[id^='zl__CLV-SR-Mail-']", 0, 0) ) {
 			return (SearchView.BY_CONVERSATION);
-		} else if ( this.zIsVisiblePerPosition("css=div[id^='zv__TV-SR-Mail-']", 0, 0) ) {
+		} else if ( this.zIsVisiblePerPosition("css=ul[id^='zl__TV-SR-Mail']", 0, 0) ) {
 			return (SearchView.BY_MESSAGE);
 		}
 
