@@ -6,7 +6,7 @@
 // MAPITableIterator
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MAPITableIterator::MAPITableIterator(): m_pTable(NULL), m_pParentFolder(NULL), m_pRows(NULL),
-    m_currRow(0), m_batchSize(200), m_rowsVisited(0), m_totalRows(0), m_session(NULL) {}
+    m_currRow(0), m_batchSize(100), m_rowsVisited(0), m_totalRows(0), m_session(NULL) {}
 
 MAPITableIterator::~MAPITableIterator()
 {
