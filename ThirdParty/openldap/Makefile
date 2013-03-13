@@ -12,7 +12,7 @@ endif
 MAKEARGS ?= -j2 DEFINES="-DCHECK_CSN -DSLAP_SCHEMA_EXPOSE"
 ZIMBRA_HOME ?= /opt/zimbra
 
-PATCH	:=
+PATCH	:= patch -g0 -N -p1 < ../patches/ITS7536.patch;
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
@@ -23,7 +23,6 @@ endif
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	ENVMOD := env LIBS="-lresolv" 
 	CPPFLAG := "-DOPENLDAP_FD_SETSIZE=32768"
-	PATCH	:=
 endif
 
 LDFLAGS	:=	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L$(LIBTOOL_LIB_DIR) \
