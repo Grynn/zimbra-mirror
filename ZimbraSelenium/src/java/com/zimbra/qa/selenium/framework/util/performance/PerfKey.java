@@ -14,17 +14,27 @@ public class PerfKey {
 	public static final PerfKey ZmMailItem 			= new PerfKey("ZmMailItem", "ZmMailItem_loading", "ZmMailItem_loaded");
 	public static final PerfKey ZmMailAppOverviewPanel 			= new PerfKey("ZmMailApp-overviewPanel", "ZmMailApp-overviewPanel_loading", "ZmMailApp-overviewPanel_loaded");
 	public static final PerfKey ZmConv	 			= new PerfKey("ZmConv", "ZmConv_loading", "ZmConv_loaded");
+	
 	public static final PerfKey ZmContactsApp 		= new PerfKey("ZmContactsApp", "ZmContactsApp_launched", "ZmContactsApp_loaded");
 	public static final PerfKey ZmContactsItem 		= new PerfKey("ZmContactsItem", "ZmContactItem_loading", "ZmContactItem_loaded");
+	public static final PerfKey ZmContactsAppOverviewPanel 			= new PerfKey("ZmContactsApp-overviewPanel", "ZmContactsApp-overviewPanel_loading", "ZmContactsApp-overviewPanel_loaded");
+
 	public static final PerfKey ZmCalendarApp 		= new PerfKey("ZmCalendarApp", "ZmCalendarApp_launched", "ZmCalendarApp_loaded");
 	public static final PerfKey ZmCalWorkWeekView 	= new PerfKey("ZmCalWorkWeekView", "ZmCalWorkWeekView_loading", "ZmCalWorkWeekView_loaded");
 	public static final PerfKey ZmCalItemView 		= new PerfKey("ZmCalItemView", "ZmCalItemView_loading", "ZmCalItemView_loaded");
 	public static final PerfKey ZmCalViewItem 		= new PerfKey("ZmCalViewItem", "ZmCalViewItem_loading", "ZmCalViewItem_loaded");
+	public static final PerfKey ZmCalendarAppOverviewPanel 			= new PerfKey("ZmCalendarApp-overviewPanel", "ZmCalendarApp-overviewPanel_loading", "ZmCalendarApp-overviewPanel_loaded");
+
 	public static final PerfKey ZmTasksApp 			= new PerfKey("ZmTasksApp", "ZmTasksApp_launched", "ZmTasksApp_loaded");
 	public static final PerfKey ZmTaskItem 			= new PerfKey("ZmTaskItem", "ZmTaskItem_loading", "ZmTaskItem_loaded");
+	public static final PerfKey ZmTasksAppOverviewPanel 			= new PerfKey("ZmTasksApp-overviewPanel", "ZmTasksApp-overviewPanel_loading", "ZmTasksApp-overviewPanel_loaded");
+
 	public static final PerfKey ZmBriefcaseApp 		= new PerfKey("ZmBriefcaseApp", "ZmBriefcaseApp_launched", "ZmBriefcaseApp_loaded");
 	public static final PerfKey ZmBriefcaseItem 	= new PerfKey("ZmBriefcaseItem", "ZmBriefcaseItem_loading", "ZmBriefcaseItem_loaded");
-	
+	public static final PerfKey ZmBriefcaseAppOverviewPanel 		= new PerfKey("ZmBriefcaseApp-overviewPanel", "ZmBriefcaseApp-overviewPanel_loading", "ZmBriefcaseApp-overviewPanel_loaded");
+
+	public static final PerfKey ZmPreferencesAppOverviewPanel 		= new PerfKey("ZmContactsApp-overviewPanel", "ZmPreferencesApp-overviewPanel_loading", "ZmPreferencesApp-overviewPanel_loaded");
+
 	protected String Key;
 	protected String LaunchKey;
 	protected String FinishKey;
