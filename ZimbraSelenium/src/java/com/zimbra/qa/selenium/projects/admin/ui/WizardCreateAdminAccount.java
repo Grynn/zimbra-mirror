@@ -7,6 +7,8 @@ import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.AbsWizard;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 
 
@@ -88,12 +90,20 @@ public class WizardCreateAdminAccount extends AbsWizard {
 
 		if(adminType.equals(Locators.ADMIN_USER)) {
 			zType(Locators.zdlg_ACCT_NAME, CN);
+			if(ZimbraSeleniumProperties.isWebDriver()) {
+				SleepUtil.sleepSmall();
+				this.clearField(Locators.zdlg_DOMAIN_NAME);	
+			}
 			zType(Locators.zdlg_DOMAIN_NAME,"");
 			this.zKeyboard.zTypeCharacters(domain);
 			clickNext(AbsWizard.Locators.ADMIN_DIALOG);
 			clickFinish(AbsWizard.Locators.ADMIN_DIALOG);
 		}else {
 			zType(Locators.zdlg_DL_NAME, CN);
+			if(ZimbraSeleniumProperties.isWebDriver()) {
+				SleepUtil.sleepSmall();
+				this.clearField(Locators.zdlg_DL_DOMAIN_NAME);
+			}
 			zType(Locators.zdlg_DL_DOMAIN_NAME,"");
 			this.zKeyboard.zTypeCharacters(domain);
 			clickFinish(AbsWizard.Locators.ADMIN_DIALOG);

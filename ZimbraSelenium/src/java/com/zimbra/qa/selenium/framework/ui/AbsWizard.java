@@ -5,6 +5,8 @@ import org.apache.log4j.Logger;
 
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 
 /**
@@ -124,8 +126,13 @@ public abstract class AbsWizard extends AbsPage {
 			throw new HarnessException("buttonPath was null for "+ button);
 		}
 		
-		if(sIsElementPresent(buttonPath))
+		if(sIsElementPresent(buttonPath)) {
+			if(ZimbraSeleniumProperties.isWebDriver()) {
+				SleepUtil.sleepMedium();
+			}
 			zClickAt(buttonPath,"");
+		}
+			
 
 	}
 

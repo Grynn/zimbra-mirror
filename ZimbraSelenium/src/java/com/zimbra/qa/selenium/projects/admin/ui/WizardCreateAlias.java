@@ -7,6 +7,8 @@ import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.AbsWizard;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.admin.items.AliasItem;
 
 
@@ -45,11 +47,16 @@ public class WizardCreateAlias extends AbsWizard {
 		 * If you use normal type method domain is taken as default domain name.
 		 * Below line of code is not grid friendly but this is only solution working currently. 
 		 */
-		
+		if(ZimbraSeleniumProperties.isWebDriver()) { 
+			SleepUtil.sleepSmall();
+			this.clearField(Locators.zdlg_ALIAS_DOMAIN_NAME);
+			
+		} 
 		sType(Locators.zdlg_ALIAS_DOMAIN_NAME,"");
 		zType(Locators.zdlg_ALIAS_DOMAIN_NAME,"");
 		this.zKeyboard.zTypeCharacters(domain);
-		System.out.println(domain);
+		//System.out.println(domain);
+		
 		
 		sType(Locators.zdlg_TARGET_ACCOUNT_NAME, targetAccount);
 		zClick(Locators.zdlg_OK);

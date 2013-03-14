@@ -4,6 +4,8 @@ import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.AbsWizard;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.admin.items.DistributionListItem;
 
 public class WizardCreateDL extends AbsWizard {
@@ -30,6 +32,10 @@ public class WizardCreateDL extends AbsWizard {
 
 
 		zType(Locators.zdlg_DL_NAME, CN);
+		if(ZimbraSeleniumProperties.isWebDriver()) {
+			SleepUtil.sleepSmall();
+			this.clearField(Locators.zdlg_DOMAIN_NAME);
+		}
 		zType(Locators.zdlg_DOMAIN_NAME, "");
 		this.zKeyboard.zTypeCharacters(domain);
 		

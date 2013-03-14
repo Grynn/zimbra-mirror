@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.AbsWizard;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 
 
@@ -42,7 +43,6 @@ public class WizardCreateAccount extends AbsWizard {
 		String CN = account.getLocalName();
 		String domain = account.getDomainName();
 
-
 		zType(Locators.zdlg_ACCT_NAME, CN);
 		
 
@@ -50,6 +50,9 @@ public class WizardCreateAccount extends AbsWizard {
 		 * If you use normal type method domain is taken as default domain name.
 		 * Below line of code is not grid friendly but this is only solution working currently. 
 		 */
+		if(ZimbraSeleniumProperties.isWebDriver()) 
+			this.clearField(Locators.zdlg_DOMAIN_NAME);
+		
 		zType(Locators.zdlg_DOMAIN_NAME,"");
 		this.zKeyboard.zTypeCharacters(domain);
 		
@@ -73,7 +76,7 @@ public class WizardCreateAccount extends AbsWizard {
 		clickFinish(AbsWizard.Locators.ACCOUNT_DIALOG);
 
 		// Need to dismiss the "account created" dialog.
-		zClick(Locators.zdlg_OK);
+		//zClick(Locators.zdlg_OK);
 		//throw new HarnessException("See http://bugzilla.zimbra.com/show_bug.cgi?id=59013");
 
 		return (account);

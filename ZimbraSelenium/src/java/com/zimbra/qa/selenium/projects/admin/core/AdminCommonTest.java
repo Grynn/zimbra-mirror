@@ -1,7 +1,17 @@
 package com.zimbra.qa.selenium.projects.admin.core;
 
+import java.awt.Toolkit;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverBackedSelenium;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
@@ -24,6 +34,9 @@ import com.zimbra.qa.selenium.projects.admin.ui.AppAdminConsole;
  *
  */
 public class AdminCommonTest {
+	private WebDriverBackedSelenium _webDriverBackedSelenium = null;
+	private WebDriver _webDriver = null;
+	
 	protected static Logger logger = LogManager.getLogger(AdminCommonTest.class);
 	
 	/**
@@ -37,6 +50,7 @@ public class AdminCommonTest {
 	 */
 	protected AppAdminConsole app = null;
 
+	
 	/**
 	 * BeforeMethod variables
 	 * startingPage = the starting page before the test method starts
@@ -71,15 +85,36 @@ public class AdminCommonTest {
 		{
 			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.ADMIN);
 
-			// Use 30 second timeout for opening the browser
-			String timeout = ZimbraSeleniumProperties.getStringProperty("selenium.maxpageload.msec", "30000");
+			if(ZimbraSeleniumProperties.isWebDriver()) {
+				_webDriver = ClientSessionFactory.session().webDriver();
 
-			ClientSessionFactory.session().selenium().start();
-			ClientSessionFactory.session().selenium().windowMaximize();
-			ClientSessionFactory.session().selenium().windowFocus();
-			ClientSessionFactory.session().selenium().allowNativeXpath("true");
-			ClientSessionFactory.session().selenium().setTimeout("60000");
-			ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getBaseURL());
+				Capabilities cp =  ((RemoteWebDriver)_webDriver).getCapabilities();
+				if (cp.getBrowserName().equals(DesiredCapabilities.firefox().getBrowserName())||cp.getBrowserName().equals(DesiredCapabilities.chrome().getBrowserName())||cp.getBrowserName().equals(DesiredCapabilities.internetExplorer().getBrowserName())){				
+					_webDriver.manage().window().setPosition(new Point(0, 0));
+					_webDriver.manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
+					//_webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+					_webDriver.navigate().to(ZimbraSeleniumProperties.getBaseURL());
+
+				}
+				
+			}else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
+				_webDriverBackedSelenium = ClientSessionFactory.session().webDriverBackedSelenium();
+				_webDriverBackedSelenium.windowMaximize();
+				_webDriverBackedSelenium.windowFocus();
+				_webDriverBackedSelenium.setTimeout("60000");// Use 60 second timeout for
+				_webDriverBackedSelenium.open(ZimbraSeleniumProperties.getBaseURL());
+			} else {
+				// Use 30 second timeout for opening the browser
+				String timeout = ZimbraSeleniumProperties.getStringProperty("selenium.maxpageload.msec", "30000");
+
+				ClientSessionFactory.session().selenium().start();
+				ClientSessionFactory.session().selenium().windowMaximize();
+				ClientSessionFactory.session().selenium().windowFocus();
+				ClientSessionFactory.session().selenium().allowNativeXpath("true");
+				ClientSessionFactory.session().selenium().setTimeout("60000");
+				ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getBaseURL());
+			}
 			
 		} catch (SeleniumException e) {
 			logger.error("Unable to open admin app.  Is a valid cert installed?", e);
@@ -159,8 +194,15 @@ public class AdminCommonTest {
 	@AfterSuite( groups = { "always" } )
 	public void commonTestAfterSuite() throws HarnessException {	
 		logger.info("commonTestAfterSuite: start");
-		
-		ClientSessionFactory.session().selenium().stop();
+
+		if(ZimbraSeleniumProperties.isWebDriver()) {
+			_webDriver.switchTo().defaultContent();
+			_webDriver.quit();
+		} else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) {
+			_webDriverBackedSelenium.stop();
+		} else {
+			ClientSessionFactory.session().selenium().stop();
+		}
 
 		logger.info("commonTestAfterSuite: finish");
 
