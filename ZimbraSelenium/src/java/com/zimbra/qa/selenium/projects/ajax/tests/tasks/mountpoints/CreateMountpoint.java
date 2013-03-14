@@ -19,7 +19,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareAccept;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 
 public class CreateMountpoint extends AjaxCommonTest{
-private ZimbraAccount Owner = null;
 	
 	
 	@SuppressWarnings("serial")
@@ -34,16 +33,14 @@ private ZimbraAccount Owner = null;
 			}
 		};		
 		
-		Owner = new ZimbraAccount();
-		Owner.provision();
-		Owner.authenticate();
-		
 	}
 	
 	@Test(	description = "Receive an invitation to a shared folder, accept it.",
 			groups = { "smoke" })
 	public void CreateMountpoint_01() throws HarnessException {
 		
+		ZimbraAccount Owner = (new ZimbraAccount()).provision().authenticate();
+
 		FolderItem ownerTask = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
 
 		// Create the subTaskList

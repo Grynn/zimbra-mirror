@@ -19,7 +19,6 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 public class MoveMountpoint extends AjaxCommonTest {
 
-	private ZimbraAccount Owner = null;
 	
 	
 	@SuppressWarnings("serial")
@@ -33,16 +32,15 @@ public class MoveMountpoint extends AjaxCommonTest {
 			}
 		};		
 		
-		Owner = new ZimbraAccount();
-		Owner.provision();
-		Owner.authenticate();
-		
 	}
+	
 	@Bugs(ids="69661")
 	@Test(	description = "Move a mountpoint under a subfolder - Drag and Drop, Move",
 			groups = { "smoke" })
 	public void MoveMountpoint_01() throws HarnessException {
 		
+		ZimbraAccount Owner = (new ZimbraAccount()).provision().authenticate();
+
 		// Owner creates a folder, shares it with current user
 		String ownerFoldername = "ownerfolder"+ ZimbraSeleniumProperties.getUniqueString();
 		

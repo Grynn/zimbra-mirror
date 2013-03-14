@@ -21,16 +21,11 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.SeparateWindowDisplayMail;
 
 public class CreateMountpoint extends PrefGroupMailByMessageTest {
 
-	private ZimbraAccount Owner = null;
 	
 	
 	public CreateMountpoint() {
 		logger.info("New "+ CreateMountpoint.class.getCanonicalName());
 		
-		
-		Owner = new ZimbraAccount();
-		Owner.provision();
-		Owner.authenticate();
 		
 	}
 	
@@ -38,6 +33,8 @@ public class CreateMountpoint extends PrefGroupMailByMessageTest {
 			groups = { "smoke" })
 	public void CreateMountpoint_01() throws HarnessException {
 		
+		ZimbraAccount Owner = (new ZimbraAccount()).provision().authenticate();
+
 		// Owner creates a folder, shares it with current user, and sends invitation
 		String ownerFoldername = "ownerfolder"+ ZimbraSeleniumProperties.getUniqueString();
 		

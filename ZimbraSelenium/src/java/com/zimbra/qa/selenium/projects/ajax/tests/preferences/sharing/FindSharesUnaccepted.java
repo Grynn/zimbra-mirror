@@ -14,17 +14,12 @@ import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeI
 
 public class FindSharesUnaccepted extends AjaxCommonTest {
 
-	protected ZimbraAccount Owner = null;
 	
 	
 	public FindSharesUnaccepted() {
 		
 		super.startingPage = app.zPagePreferences;
 		super.startingAccountPreferences = null;
-		
-		Owner = new ZimbraAccount();
-		Owner.provision();
-		Owner.authenticate();
 		
 	}
 
@@ -34,6 +29,8 @@ public class FindSharesUnaccepted extends AjaxCommonTest {
 			groups = { "functional" }
 			)
 	public void FindSharesUnaccepted_01() throws HarnessException {
+
+		ZimbraAccount Owner = (new ZimbraAccount()).provision().authenticate();
 
 		//*** Test Data
 		String ownerFoldername = "ownerfolder"+ ZimbraSeleniumProperties.getUniqueString();

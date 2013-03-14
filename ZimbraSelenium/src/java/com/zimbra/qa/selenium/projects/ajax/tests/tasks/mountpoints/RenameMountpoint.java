@@ -19,7 +19,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameFolder;
 
 public class RenameMountpoint extends PrefGroupMailByMessageTest {
 
-	private ZimbraAccount Owner = null;
 
 	@SuppressWarnings("serial")
 	public RenameMountpoint() {
@@ -34,14 +33,12 @@ public class RenameMountpoint extends PrefGroupMailByMessageTest {
 			}
 		};
 
-		Owner = new ZimbraAccount();
-		Owner.provision();
-		Owner.authenticate();
-
 	}
 
 	@Test(description = "Rename a mountpoint (Right Click -> Rename)", groups = { "smoke" })
 	public void RenameMountpoint_01() throws HarnessException {
+
+		ZimbraAccount Owner = (new ZimbraAccount()).provision().authenticate();
 
 		// Owner creates a folder, shares it with current user
 		String ownerFoldername = "ownerfolder"

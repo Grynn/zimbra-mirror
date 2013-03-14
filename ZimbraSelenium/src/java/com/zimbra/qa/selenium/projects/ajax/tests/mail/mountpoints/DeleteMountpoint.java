@@ -19,16 +19,11 @@ import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 
 public class DeleteMountpoint extends PrefGroupMailByMessageTest {
 
-	private ZimbraAccount Owner = null;
 	
 	
 	public DeleteMountpoint() {
 		logger.info("New "+ DeleteMountpoint.class.getCanonicalName());
 		
-		
-		Owner = new ZimbraAccount();
-		Owner.provision();
-		Owner.authenticate();
 		
 	}
 	
@@ -36,6 +31,8 @@ public class DeleteMountpoint extends PrefGroupMailByMessageTest {
 			groups = { "smoke" })
 	public void DeleteMountpoint_01() throws HarnessException {
 		
+		ZimbraAccount Owner = (new ZimbraAccount()).provision().authenticate();
+
 		// Owner creates a folder, shares it with current user
 		String ownerFoldername = "ownerfolder"+ ZimbraSeleniumProperties.getUniqueString();
 		

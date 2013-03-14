@@ -4,7 +4,6 @@ import java.util.*;
 
 import org.testng.annotations.*;
 
-import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain.ResultListener;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;

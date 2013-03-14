@@ -9,7 +9,6 @@ import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 
 public class DeleteMountpoint extends CalendarWorkWeekTest {
 
-	private ZimbraAccount Owner = null;
 	
 	public DeleteMountpoint() {
 		logger.info("New "+ DeleteMountpoint.class.getCanonicalName());
@@ -17,9 +16,6 @@ public class DeleteMountpoint extends CalendarWorkWeekTest {
 		// All tests start at the login page
 		super.startingPage = app.zPageCalendar;
 
-		Owner = new ZimbraAccount();
-		Owner.provision();
-		Owner.authenticate();
 	}
 	
 	@Test(	description = "Delete a mountpoint to a shared calendar (right click -> Delete)",
@@ -27,6 +23,8 @@ public class DeleteMountpoint extends CalendarWorkWeekTest {
 			
 	public void DeleteMountpoint_01() throws HarnessException {
 		
+		ZimbraAccount Owner = (new ZimbraAccount()).provision().authenticate();
+
 		// Owner creates a folder, shares it with current user
 		String ownerFoldername = "ownerfolder"+ ZimbraSeleniumProperties.getUniqueString();
 		

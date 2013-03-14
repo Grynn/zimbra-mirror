@@ -21,10 +21,6 @@ public class ReplyAllMail extends PrefGroupMailByMessageTest {
 	public ReplyAllMail() {
 		logger.info("New "+ ReplyAllMail.class.getCanonicalName());
 	
-		account1 = (new ZimbraAccount()).provision().authenticate();
-		account2 = (new ZimbraAccount()).provision().authenticate();
-		account3 = (new ZimbraAccount()).provision().authenticate();
-		account4 = (new ZimbraAccount()).provision().authenticate();
 		
 	}
 	
@@ -33,6 +29,13 @@ public class ReplyAllMail extends PrefGroupMailByMessageTest {
 	public void ReplyMail_01() throws HarnessException {
 
 		//-- DATA
+		
+		if ( account1 == null ) {
+			account1 = (new ZimbraAccount()).provision().authenticate();
+			account2 = (new ZimbraAccount()).provision().authenticate();
+			account3 = (new ZimbraAccount()).provision().authenticate();
+			account4 = (new ZimbraAccount()).provision().authenticate();
+		}
 		
 		// Send a message to the account
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
@@ -121,6 +124,14 @@ public class ReplyAllMail extends PrefGroupMailByMessageTest {
 
 		//-- DATA
 		
+		if ( account1 == null ) {
+			account1 = (new ZimbraAccount()).provision().authenticate();
+			account2 = (new ZimbraAccount()).provision().authenticate();
+			account3 = (new ZimbraAccount()).provision().authenticate();
+			account4 = (new ZimbraAccount()).provision().authenticate();
+		}
+		
+
 		// Send a message to the account
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
 		ZimbraAccount.AccountA().soapSend(
@@ -208,6 +219,14 @@ public class ReplyAllMail extends PrefGroupMailByMessageTest {
 
 		//-- DATA
 		
+		if ( account1 == null ) {
+			account1 = (new ZimbraAccount()).provision().authenticate();
+			account2 = (new ZimbraAccount()).provision().authenticate();
+			account3 = (new ZimbraAccount()).provision().authenticate();
+			account4 = (new ZimbraAccount()).provision().authenticate();
+		}
+		
+
 		// Send a message from the account
 		
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();

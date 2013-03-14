@@ -18,16 +18,11 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder.FolderColor
 
 public class ChangeColorMountpoint extends PrefGroupMailByMessageTest {
 
-	private ZimbraAccount Owner = null;
 	
 	
 	public ChangeColorMountpoint() {
 		logger.info("New "+ ChangeColorMountpoint.class.getCanonicalName());
 		
-		
-		Owner = new ZimbraAccount();
-		Owner.provision();
-		Owner.authenticate();
 		
 	}
 	
@@ -35,6 +30,8 @@ public class ChangeColorMountpoint extends PrefGroupMailByMessageTest {
 			groups = { "functional" })
 	public void ChangeColorMountpoint_01() throws HarnessException {
 		
+		ZimbraAccount Owner = (new ZimbraAccount()).provision().authenticate();
+
 		// Owner creates a folder, shares it with current user
 		String ownerFoldername = "ownerfolder"+ ZimbraSeleniumProperties.getUniqueString();
 		
