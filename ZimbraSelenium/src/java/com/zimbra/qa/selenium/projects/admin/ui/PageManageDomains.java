@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.admin.items.DomainItem;
 
 
@@ -110,7 +111,10 @@ public class PageManageDomains extends AbsTab {
 		sIsElementPresent(Locators.DOMAINS);
 		zClickAt(Locators.DOMAINS, "");
 
-		zWaitForActive();
+		if(ZimbraSeleniumProperties.isWebDriver())
+			SleepUtil.sleepMedium();
+		else
+			zWaitForActive();
 
 	}
 

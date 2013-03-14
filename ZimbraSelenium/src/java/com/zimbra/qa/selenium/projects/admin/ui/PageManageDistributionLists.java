@@ -24,9 +24,9 @@ import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 public class PageManageDistributionLists extends AbsTab {
 
 	public static class Locators {
-		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgManageAccounts";
+		public static final String MANAGE_ACCOUNTS_ICON="css=div[class=ImgManageAccounts]";
 		public static final String DISTRIBUTION_LISTS="css=td[id^='zti__AppAdmin__Home__dlLstHV']";
-		public static final String GEAR_ICON="css=div.ImgConfigure";
+		public static final String GEAR_ICON="css=div[class=ImgConfigure]";
 		public static final String NEW_MENU="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDistributionList']";
 		public static final String HOME="Home";
 		public static final String MANAGE="Manage";
@@ -91,7 +91,10 @@ public class PageManageDistributionLists extends AbsTab {
 		sIsElementPresent(Locators.DISTRIBUTION_LISTS);
 		zClickAt(Locators.DISTRIBUTION_LISTS, "");
 
-		zWaitForActive();
+		if(ZimbraSeleniumProperties.isWebDriver())
+			SleepUtil.sleepMedium();
+		else
+			zWaitForActive();
 	}
 
 	@Override
@@ -263,7 +266,10 @@ public class PageManageDistributionLists extends AbsTab {
 			if (!this.sIsElementPresent(pulldownLocator)) {
 				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
 			}
-
+			
+			if(ZimbraSeleniumProperties.isWebDriver()) 
+				SleepUtil.sleepSmall();
+			
 			this.sClickAt(pulldownLocator,"0,0");
 			SleepUtil.sleepMedium();
 

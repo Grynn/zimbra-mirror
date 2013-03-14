@@ -26,9 +26,9 @@ public class PageManageAliases extends AbsTab {
 	public static class Locators {
 
 		// ** OverviewTreePanel -> Manage -> Aliases
-		public static final String MANAGE_ACCOUNTS_ICON="css=div.ImgManageAccounts";
+		public static final String MANAGE_ACCOUNTS_ICON="css=div[class=ImgManageAccounts]";
 		public static final String ALIASES="css=td[id^='zti__AppAdmin__Home__aliaLstHV']";
-		public static final String GEAR_ICON="css=div.ImgConfigure";
+		public static final String GEAR_ICON="css=div[class=ImgConfigure]";
 		public static final String NEW_MENU="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgAccountAlias']";
 		public static final String HOME="Home";
 		public static final String MANAGE="Manage";
@@ -90,11 +90,15 @@ public class PageManageAliases extends AbsTab {
 		}
 
 		// Click on Addresses -> Accounts
-		zClickAt(Locators.MANAGE_ACCOUNTS_ICON,"");
+		//SleepUtil.sleepMedium();
+		zClickAt(Locators.MANAGE_ACCOUNTS_ICON,"");		
 		sIsElementPresent(Locators.ALIASES);
 		zClickAt(Locators.ALIASES, "");
 
-		zWaitForActive();
+		if(ZimbraSeleniumProperties.isWebDriver()) 
+			SleepUtil.sleepMedium();
+		else
+			zWaitForActive();
 	}
 
 	@Override
