@@ -19,8 +19,6 @@ public class Bug78632 extends PrefGroupMailByMessageTest {
 	public Bug78632() {
 		logger.info("New "+ Bug78632.class.getCanonicalName());
 	
-		account1 = (new ZimbraAccount()).provision().authenticate();
-		account2 = (new ZimbraAccount()).provision().authenticate();
 		
 	}
 	
@@ -31,6 +29,11 @@ public class Bug78632 extends PrefGroupMailByMessageTest {
 	public void Bug78632_01() throws HarnessException {
 
 		//-- DATA
+		
+		if ( account1 == null ) {
+			account1 = (new ZimbraAccount()).provision().authenticate();
+			account2 = (new ZimbraAccount()).provision().authenticate();
+		}
 		
 		// Set an alias on the account
 		
@@ -175,6 +178,11 @@ public class Bug78632 extends PrefGroupMailByMessageTest {
 
 		//-- DATA
 		
+		if ( account1 == null ) {
+			account1 = (new ZimbraAccount()).provision().authenticate();
+			account2 = (new ZimbraAccount()).provision().authenticate();
+		}
+
 		// Set the primary address on the account
 		
 		//-- Data setup
