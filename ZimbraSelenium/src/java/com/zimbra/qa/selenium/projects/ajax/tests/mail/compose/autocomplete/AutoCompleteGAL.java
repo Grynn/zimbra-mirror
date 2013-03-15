@@ -27,11 +27,6 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		super.startingAccountPreferences.put("zimbraPrefComposeFormat", "text");
 		super.startingAccountPreferences.put("zimbraPrefGalAutoCompleteEnabled", "TRUE");
 	
-		SampleAccount = new ZimbraAccount();
-		SampleAccount.setPref("displayName", FirstName + " " + LastName);
-		SampleAccount.provision();
-		SampleAccount.authenticate();
-
 	}
 	
 	@Test(	description = "Autocomplete using the GAL - First Name",
@@ -42,7 +37,12 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
-		
+		if ( SampleAccount == null ) {
+			SampleAccount = new ZimbraAccount();
+			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.provision();
+			SampleAccount.authenticate();
+		}
 		
 		// Open the new mail form
 		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
@@ -82,7 +82,14 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
+		if ( SampleAccount == null ) {
+			SampleAccount = new ZimbraAccount();
+			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.provision();
+			SampleAccount.authenticate();
+		}
 		
+
 		
 		// Open the new mail form
 		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
@@ -122,7 +129,14 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
+		if ( SampleAccount == null ) {
+			SampleAccount = new ZimbraAccount();
+			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.provision();
+			SampleAccount.authenticate();
+		}
 		
+
 		
 		// Open the new mail form
 		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
@@ -162,7 +176,14 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
+		if ( SampleAccount == null ) {
+			SampleAccount = new ZimbraAccount();
+			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.provision();
+			SampleAccount.authenticate();
+		}
 		
+
 		
 		// Open the new mail form
 		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
@@ -202,7 +223,14 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
+		if ( SampleAccount == null ) {
+			SampleAccount = new ZimbraAccount();
+			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.provision();
+			SampleAccount.authenticate();
+		}
 		
+
 		
 		// Open the new mail form
 		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
@@ -242,7 +270,14 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
+		if ( SampleAccount == null ) {
+			SampleAccount = new ZimbraAccount();
+			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.provision();
+			SampleAccount.authenticate();
+		}
 		
+
 		
 		// Open the new mail form
 		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
@@ -396,7 +431,14 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 	public void AutoCompleteGAL_Bug47045A() throws HarnessException {
 		
 
+		if ( SampleAccount == null ) {
+			SampleAccount = new ZimbraAccount();
+			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.provision();
+			SampleAccount.authenticate();
+		}
 		
+
 		// Message properties
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
@@ -438,7 +480,14 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 	public void AutoCompleteGAL_Bug47045B() throws HarnessException {
 		
 
+		if ( SampleAccount == null ) {
+			SampleAccount = new ZimbraAccount();
+			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.provision();
+			SampleAccount.authenticate();
+		}
 		
+
 		// Message properties
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
