@@ -7,8 +7,8 @@ import java.util.*;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 /**
@@ -161,6 +161,15 @@ public class PageSearch extends AbsTab {
 			locator = "css=div[id^='ztb_searchresults__'] td[id$='_saveButton'] td[id$='_title']";
 			page = new DialogSaveSearch(MyApplication, this);
 			
+		} else if ( (button == Button.B_DELETE) ) {
+			
+			if (zGetPropMailView() == SearchView.BY_MESSAGE) {
+				locator = "css=div[id^='ztb__TV-SR-Mail-'] div[id$='__DELETE'] td[id$='_title']";
+			} else {
+				locator = "css=div[id^='ztb__CLV-SR-Mail-'] div[id$='__DELETE'] td[id$='_title']";
+			}
+			page = null;
+			
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
@@ -177,7 +186,7 @@ public class PageSearch extends AbsTab {
 		//
 	
 		// Click it
-		zClick(locator);
+		zClickAt(locator, "");
 		
 		// If the app is busy, wait for it to become active
 		zWaitForBusyOverlay();
@@ -291,9 +300,334 @@ public class PageSearch extends AbsTab {
 		return (page);
 	}
 
+	/**
+	 * Activate a pulldown with dynamic values, such as "Move to folder" and "Add a tag".
+	 * 
+	 * @param pulldown the toolbar button to press
+	 * @param dynamic the toolbar item to click such as FolderItem or TagItem
+	 * @throws HarnessException 
+	 */
+	public AbsPage zToolbarPressPulldown(Button pulldown, Object dynamic) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ dynamic +")");
+
+		tracer.trace("Click pulldown "+ pulldown +" then "+ dynamic);
+
+
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (dynamic == null)
+			throw new HarnessException("Option cannot be null!");
+
+
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+
+		if ( pulldown == Button.B_MOVE ) {
+
+			if ( !(dynamic instanceof FolderItem) ) 
+				throw new HarnessException("if pulldown = " + Button.B_MOVE +", then dynamic must be FolderItem");
+
+			FolderItem folder = (FolderItem)dynamic;
+
+			// Check if we are CLV or MV
+			if (zGetPropMailView() == SearchView.BY_MESSAGE) {
+				pulldownLocator = "css=div[id^='ztb__TV-SR-Mail'] div[id$='__MOVE_MENU'] td[id$='_dropdown']>div";
+				optionLocator = "css=td[id^='zti__ZmFolderChooser_MailTV-SR-Mail'][id$='" + folder.getId() +"_textCell']";
+			} else {
+				pulldownLocator = "css=div[id^='ztb__CLV-SR-Mail'] div[id$='__MOVE_MENU'] td[id$='_dropdown']>div";
+				optionLocator = "css=td[id^='zti__ZmFolderChooser_MailCLV-SR-Mail'][id$='" + folder.getId() +"_textCell']";
+			}
+
+
+			page = null;
+
+
+		} else if ( pulldown == Button.B_TAG ) {
+			
+			if ( !(dynamic instanceof TagItem) ) 
+				throw new HarnessException("if pulldown = " + Button.B_TAG +", then dynamic must be TagItem");
+
+			TagItem tag = (TagItem)dynamic;
+
+			pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+			optionLocator = "css=div[id='zb__TV-main__TAG_MENU|MENU'] td[id$='_title']:contains("+ tag.getName() +")";
+			page = null;
+
+		} else {
+
+			throw new HarnessException("no logic defined for pulldown/dynamic " + pulldown + "/" + dynamic);
+
+		}
+
+		// Default behavior
+		if (pulldownLocator != null) {
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " pulldownLocator " + pulldownLocator + " not present!");
+			}
+
+			this.zClickAt(pulldownLocator,"");
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			SleepUtil.sleepSmall();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException(" dynamic " + dynamic + " optionLocator " + optionLocator + " not present!");
+				}
+
+				this.zClickAt(optionLocator,"");
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+			}
+
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if (page != null) {
+				page.zWaitForActive();
+			}
+
+		}
+
+
+
+		// Return the specified page, or null if not set
+		return (page);
+
+
+
+	}
+
+
+	protected AbsPage zListItemMessages(Action action, String subject) throws HarnessException {
+		
+		// Copied from PageMail.  It would probably be better to re-use somehow.
+		
+		
+		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
+
+		tracer.trace(action +" on subject = "+ subject);
+
+		if ( action == null )
+			throw new HarnessException("action cannot be null");
+
+		if ( subject == null )
+			throw new HarnessException("subject cannot be null");
+
+		AbsPage page = null;
+		String listLocator;
+		String rowLocator;
+		String itemlocator = null;
+
+
+		// Find the item locator
+		//
+
+		if (zGetPropMailView() == SearchView.BY_MESSAGE) {
+			listLocator = "css=ul[id^='zl__TV-SR-Mail']";
+			rowLocator = "li[id^='zli__TV-SR-Mail-']";
+		} else {
+			listLocator = "css=ul[id^='zl__CLV-SR-Mail-']";
+			rowLocator = "li[id^='zli__CLV-SR-Mail-']";
+		}
+
+		// TODO: how to handle both messages and conversations, maybe check the view first?
+		if ( !this.sIsElementPresent(listLocator) )
+			throw new HarnessException("List View Rows is not present "+ listLocator);
+
+		// How many items are in the table?
+		int count = this.sGetCssCount(listLocator + " " + rowLocator);
+		logger.debug(myPageName() + " zListSelectItem: number of list items: "+ count);
+
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+
+			itemlocator = listLocator + " li:nth-of-type("+ i +") ";
+			String s = this.sGetText(itemlocator + " [id$='__su']").trim();
+
+			if ( s.contains(subject) ) {
+				break; // found it
+			}
+
+			itemlocator = null;
+		}
+
+		if ( itemlocator == null ) {
+			throw new HarnessException("Unable to locate item with subject("+ subject +")");
+		}
+
+		if ( action == Action.A_LEFTCLICK ) {
+
+			// Left-Click on the item
+			this.zClickAt(itemlocator,"");
+
+			this.zWaitForBusyOverlay();
+
+//			// Return the displayed mail page object
+//			if ( zGetPropMailView() == SearchView.BY_MESSAGE ) {
+//				page = new DisplayMail(MyApplication);
+//			} else {
+//				page = new DisplayConversation(MyApplication);
+//			}
+			page = null;
+			
+			// FALL THROUGH
+
+		} else if ( action == Action.A_DOUBLECLICK ) {
+
+			// Double-Click on the item
+			this.sDoubleClick(itemlocator);
+
+			this.zWaitForBusyOverlay();
+
+//			page = new DisplayMail(MyApplication);
+			page = null;
+
+			// FALL THROUGH
+		} else if ( action == Action.A_CTRLSELECT ) {
+
+			throw new HarnessException("implement me!  action = "+ action);
+
+		} else if ( action == Action.A_SHIFTSELECT ) {
+
+			throw new HarnessException("implement me!  action = "+ action);
+
+		} else if ( action == Action.A_RIGHTCLICK ) {
+
+			// Right-Click on the item
+			this.zRightClick(itemlocator);
+
+			// Return the displayed mail page object
+			page = new ContextMenu(MyApplication);
+
+			// FALL THROUGH
+
+		} else if ( action == Action.A_MAIL_CHECKBOX ) {
+
+			String selectlocator = itemlocator + " div[id$='__se']";
+			if ( !this.sIsElementPresent(selectlocator) )
+				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
+
+			String image = this.sGetAttribute(selectlocator +"@class");
+			if ( image.equals("ImgCheckboxChecked") )
+				throw new HarnessException("Trying to check box, but it was already enabled");
+
+			// Left-Click on the flag field
+			this.zClick(selectlocator);
+
+			this.zWaitForBusyOverlay();
+
+			// No page to return
+			page = null;
+
+			// FALL THROUGH
+
+		} else if ( action == Action.A_MAIL_UNCHECKBOX ) {
+
+			String selectlocator = itemlocator + " div[id$='__se']";
+			if ( !this.sIsElementPresent(selectlocator) )
+				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
+
+			String image = this.sGetAttribute(selectlocator +"@class");
+			if ( image.equals("ImgCheckboxUnchecked") )
+				throw new HarnessException("Trying to uncheck box, but it was already disabled");
+
+			// Left-Click on the flag field
+			this.zClick(selectlocator);
+
+			this.zWaitForBusyOverlay();
+
+			// No page to return
+			page = null;
+
+			// FALL THROUGH
+
+		} else if ( action == Action.A_MAIL_EXPANDCONVERSATION ) {
+
+			String selectlocator = itemlocator + " div[id$='__ex']";
+			if ( !this.sIsElementPresent(selectlocator) )
+				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
+
+			String image = this.sGetAttribute(selectlocator +"@class");
+			if ( image.equals("ImgNodeExpanded") )
+				throw new HarnessException("Trying to expand, but conversation was alread expanded");
+
+			// Left-Click on the flag field
+			this.zClick(selectlocator);
+
+			this.zWaitForBusyOverlay();
+
+			// No page to return
+			page = null;
+
+		} else if ( action == Action.A_MAIL_COLLAPSECONVERSATION ) {
+
+			String selectlocator = itemlocator + " div[$id$='__ex']";
+			if ( !this.sIsElementPresent(selectlocator) )
+				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
+
+			String image = this.sGetAttribute(selectlocator +"@class");
+			if ( image.equals("ImgNodeCollapsed") )
+				throw new HarnessException("Trying to collapse, but conversation was alread collapsed");
+
+			// Left-Click on the flag field
+			this.zClick(selectlocator);
+
+			this.zWaitForBusyOverlay();
+
+			// No page to return
+			page = null;
+
+		} else if ( (action == Action.A_MAIL_FLAG) || (action == Action.A_MAIL_UNFLAG) ) {
+			// Both FLAG and UNFLAG have the same action and result
+
+			String flaglocator = itemlocator + " div[id$='__fg']";
+
+			// Left-Click on the flag field
+			this.zClick(flaglocator);
+
+			this.zWaitForBusyOverlay();
+
+			// No page to return
+			page = null;
+
+			// FALL THROUGH
+
+		} else {
+			throw new HarnessException("implement me!  action = "+ action);
+		}
+
+
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+
+		// default return command
+		return (page);
+
+
+	}
+	
 	@Override
 	public AbsPage zListItem(Action action, String item) throws HarnessException {
-		throw new HarnessException(myPageName() + " does not have a list view");
+		
+		// TODO: need to determine if the search results
+		// TODO: are displaying messages, contacts, appointments, etc.
+		// TODO: for now, assume messages
+		// TODO:
+		return (zListItemMessages(action, item));
+
 	}
 
 	@Override
