@@ -1,0 +1,17 @@
+<zimlet description="${msg.description}" name="com_zimbra_linkedinimage" label="${msg.label}" version="1.0">
+   <include>linkedinimage.js</include>
+   <includeCSS>linkedinimage.css</includeCSS>
+   <handlerObject>com_zimbra_linkedinimage_HandlerObject</handlerObject>
+   <zimletPanelItem icon="LINKEDIN-panelIcon" label="${msg.LinkedInImageZimlet_label}">
+     <toolTipText>${msg.LinkedInImageZimlet_toolTip}</toolTipText>
+     <contextMenu>
+         <menuItem id="SIGN_IN" icon="LINKEDIN-panelIcon" label="${msg.LinkedInImageZimlet_signInWithLinkedIn}"/>
+         <menuItem id="SCAN" icon="LINKEDIN-panelIcon" label="${msg.LinkedInImageZimlet_startScanning}"/>
+         <menuItem id="SIGN_OUT" icon="LINKEDIN-panelIcon" label="${msg.LinkedInImageZimlet_signOutOfLinkedIn}"/>
+         <menuItem id="CLEAR" icon="LINKEDIN-panelIcon" label="${msg.LinkedInImageZimlet_clearLinkedIn}"/>
+     </contextMenu>
+   </zimletPanelItem>
+   <userProperties>
+      <property type="string" name="linkedinZimlet_api_key" value="lux1wxm8riao"/>
+   </userProperties>
+</zimlet>
