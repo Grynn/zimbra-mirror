@@ -209,8 +209,8 @@ function() {
 
 LinkedInImageZimlet.prototype._afterLinkedInLoaded =
 function() {
-	this._updateActionMenu();
 	this._linkedInLoaded = true;
+	this._updateActionMenu();
 	IN.Event.on(IN, "auth", this.onLinkedInAuth.bind(this));
 };
 
