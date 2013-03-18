@@ -104,7 +104,7 @@ sub get_nginx_pid {
         chomp($pid = <PID>);
         close(PID);
     } else {
-        if ( -l /opt/zimbra/nginx ) {
+        if ( -l "/opt/zimbra/nginx" ) {
             print STDERR "zmstat-nginx: cannot open nginx.pid: $!\n";
         }
     }
