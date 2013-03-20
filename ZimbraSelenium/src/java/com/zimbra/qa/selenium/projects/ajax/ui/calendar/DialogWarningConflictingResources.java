@@ -34,12 +34,11 @@ public class DialogWarningConflictingResources extends DialogWarning {
 		logger.info("new " + DialogWarningConflictingResources.class.getCanonicalName());
 	}
 
-	public String zGetLocationConflictWarningDialogText() throws HarnessException {
+	public String zGetResourceConflictWarningDialogText() throws HarnessException {
 		String text = null;	
 		SleepUtil.sleepMedium();
 		text = this.zGetDisplayedText("css=div[id='RESC_CONFLICT_DLG']");
 		return text;
 	}
-	
 }
 

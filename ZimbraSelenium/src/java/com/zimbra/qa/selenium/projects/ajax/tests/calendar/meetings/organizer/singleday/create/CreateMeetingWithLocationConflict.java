@@ -20,7 +20,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		super.startingPage =  app.zPageCalendar;
 	}
 	@Test(description = "Verify sending appt invite when Location resource has conflicts shows conflict dialog", 
-			groups = { "functional" })
+			groups = { "functional12" })
 	public void CreateMeetingWithLocationConflict_01() throws HarnessException {
 		
 		// Creating object for meeting data
@@ -72,12 +72,11 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
 		SleepUtil.sleepSmall();
-
+		
 		// Verify the compose page shows note below resource about conflicting resources
 		ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(Locators.ConflictResourceNote),  "Verify that the conflicting resource note appears on appt compose page");
-
 		DialogWarningConflictingResources  dialog = (DialogWarningConflictingResources) app.zPageCalendar.zToolbarPressButton(Button.B_SEND_WITH_CONFLICT);
-		String dialogContent = dialog.zGetLocationConflictWarningDialogText();
+		String dialogContent = dialog.zGetResourceConflictWarningDialogText();
 		ZAssert.assertTrue(dialogContent.contains("The selected resources/location cannot be scheduled for the following instances"), "Verify that the dialog shows expected text");
 		ZAssert.assertTrue(dialogContent.contains(apptLocation+"(Busy)"), "Verify that the dialog shows location name on conflict warning");
 
@@ -90,14 +89,14 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		ZAssert.assertEquals(appt.getLocation(), apptLocation, "Location: Verify the location is present in the appointment");
 		SleepUtil.sleepVeryLong();
 		
-		// Verify location free/busy status shows as psts=DE
+		// Verify location free/busy status shows as psts=AC
 		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation +"']", "ptst");
-		ZAssert.assertEquals(locationStatus, "DE", "Verify that the location status shows as 'DECLINED'");
+		ZAssert.assertEquals(locationStatus, "AC", "Verify that the location status shows as 'DECLINED'");
 			
 	}
 	
 	@Test(description = "Verify Cancelling create appt when Location resource has conflicts shows conflict dialog", 
-			groups = { "functional" })
+			groups = { "functional12" })
 	public void CreateMeetingWithLocationConflict_02() throws HarnessException {
 
 		// Creating object for meeting data
@@ -153,7 +152,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		
 		// Verify the compose page shows note below resource about conflicting resources and conflicting resource dialog appears
 		DialogWarningConflictingResources  dialog = (DialogWarningConflictingResources) app.zPageCalendar.zToolbarPressButton(Button.B_SEND_WITH_CONFLICT);
-		String dialogContent = dialog.zGetLocationConflictWarningDialogText();
+		String dialogContent = dialog.zGetResourceConflictWarningDialogText();
 		ZAssert.assertTrue(dialogContent.contains("The selected resources/location cannot be scheduled for the following instances"), "Verify that the dialog shows expected text");
 		ZAssert.assertTrue(dialogContent.contains(apptLocation+"(Busy)"), "Verify that the dialog shows location name on conflict warning");
 
@@ -173,7 +172,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Verify Saving meeting invite when Location resource has conflicts shows conflict dialog",  
-			groups = { "functional" })
+			groups = { "functional12" })
 	public void CreateMeetingWithLocationConflict_03() throws HarnessException {
 		
 		// Creating object for meeting data
@@ -224,14 +223,13 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		// Create meeting which has location conflict for above created appointment
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
-		SleepUtil.sleepSmall();
 		
-		// verify the compose page shows note below resource about conflicting resources
-		ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(Locators.ConflictResourceNote),  "Verify that the conflicting resource note appears on appt compose page");
-
+		// Verify the compose page shows note below resource about conflicting resources
+		ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(Locators.ConflictResourceNote),  "Verify that the conflicting resource note appears on appt compose page");	
+		
 		//verify the compose page shows note below resource about conflicting resources and conflicting resource dialog appears
 		DialogWarningConflictingResources  dialog = (DialogWarningConflictingResources) app.zPageCalendar.zToolbarPressButton(Button.B_SAVE_WITH_CONFLICT);
-		String dialogContent = dialog.zGetLocationConflictWarningDialogText();
+		String dialogContent = dialog.zGetResourceConflictWarningDialogText();
 		ZAssert.assertTrue(dialogContent.contains("The selected resources/location cannot be scheduled for the following instances"), "Verify that the dialog shows expected text");
 		ZAssert.assertTrue(dialogContent.contains(apptLocation+"(Busy)"), "Verify that the dialog shows location name on conflict warning");
 		
@@ -254,7 +252,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Verify organizer can close modified appointment with location Conflict",  
-			groups = { "functional" })
+			groups = { "functional12" })
 	public void CreateMeetingWithLocationConflict_04() throws HarnessException {
 		
 		// Creating object for meeting data
@@ -305,10 +303,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		// Create meeting which has location conflict for above created appointment
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
-		SleepUtil.sleepSmall();
 		
-		// Verify the compose page shows note below resource about conflicting resources
-		ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(Locators.ConflictResourceNote),  "Verify that the conflicting resource note appears on appt compose page");
         apptForm.zToolbarPressButton(Button.B_CLOSE);
         
         DialogConfirmModification confirmClose = (DialogConfirmModification) new DialogConfirmModification(app, app.zPageCalendar);
