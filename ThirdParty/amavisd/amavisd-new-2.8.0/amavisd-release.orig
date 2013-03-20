@@ -80,7 +80,7 @@ use vars qw($log_level $socketname $have_inet4 $have_inet6 $have_socket_ip);
 BEGIN {
   $log_level = 1;
 # $socketname = '127.0.0.1:9998';
-  $socketname = '/opt/zimbra/data/amavisd/amavisd.sock';
+  $socketname = '/var/amavis/amavisd.sock';
 }
 
 BEGIN {
