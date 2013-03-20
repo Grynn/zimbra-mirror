@@ -566,13 +566,27 @@ LPCWSTR MAPIAccessAPI::_GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data
         folder.GetMessageIterator(*msgIter);
 
         BOOL bContinue = true;
+		BOOL skip = false;
 
         while (bContinue)
         {
+			skip = false;
             Zimbra::MAPI::MAPIMessage *msg = new Zimbra::MAPI::MAPIMessage();
 
+			try
+			{
             bContinue = msgIter->GetNext(*msg);
-            if (bContinue)
+			}
+			catch (MAPIMessageException &msgex)
+			{
+				lpwstrStatus = FormatExceptionInfo(msgex.ErrCode(), (LPWSTR)msgex.Description().c_str(),
+					(LPSTR)msgex.SrcFile().c_str(), msgex.SrcLine());
+				dloge(lpwstrStatus);
+				Zimbra::Util::CopyString(lpwstrRetVal, msgex.ShortDescription().c_str());
+				bContinue = true;
+				skip = true;
+			}
+            if (bContinue && !(skip))
             {
                 Item_Data itemdata;
 
@@ -617,6 +631,7 @@ LPCWSTR MAPIAccessAPI::_GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data
             (LPSTR)msgex.SrcFile().c_str(), msgex.SrcLine());
 		dloge(lpwstrStatus);
 		Zimbra::Util::CopyString(lpwstrRetVal, msgex.ShortDescription().c_str());
+	
     }
     catch (GenericException &genex)
     {
