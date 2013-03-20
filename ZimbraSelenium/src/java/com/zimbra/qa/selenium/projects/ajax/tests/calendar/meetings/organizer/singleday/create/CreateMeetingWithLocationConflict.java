@@ -97,7 +97,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Verify Cancelling create appt when Location resource has conflicts shows conflict dialog", 
-			groups = { "functional12" })
+			groups = { "functional" })
 	public void CreateMeetingWithLocationConflict_02() throws HarnessException {
 
 		// Creating object for meeting data
