@@ -78,6 +78,7 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		
 		// Open appointment again and check from the UI side
 		app.zPageCalendar.zNavigateTo();
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, "1 html f...");
 		ZAssert.assertTrue(apptForm.zVerifyRequiredAttendee(apptAttendee1), "Open created appointment again and verify attendee1");
 		ZAssert.assertTrue(apptForm.zVerifyRequiredAttendee(apptAttendee2), "Open created appointment again and verify attendee2");
@@ -141,6 +142,7 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		
 		// Open appointment again and check from the UI side
 		app.zPageCalendar.zNavigateTo();
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, "2 html f...");
 		ZAssert.assertStringContains(apptForm.zGetApptBodyValue(), content, "Open created appointment again and verify body text");
 		apptForm.zToolbarPressButton(Button.B_CLOSE);
@@ -194,6 +196,7 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		
 		// Open appointment again and check from the UI side
 		app.zPageCalendar.zNavigateTo();
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, "1 plain ...");
 		ZAssert.assertStringContains(apptForm.zGetApptBodyValue(), fullContent, "Open created appointment again and verify body text");
 		apptForm.zToolbarPressButton(Button.B_CLOSE);
@@ -247,6 +250,7 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		
 		// Open appointment again and check from the UI side
 		app.zPageCalendar.zNavigateTo();
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, "2 plain ...");
 		ZAssert.assertStringContains(apptForm.zGetApptBodyValue(), fullContent, "Open created appointment again and verify body text");
 		apptForm.zToolbarPressButton(Button.B_CLOSE);
@@ -307,6 +311,7 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		
 		// Open appointment again and check from the UI side
 		app.zPageCalendar.zNavigateTo();
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, "3 html f...");
 		ZAssert.assertStringContains(apptForm.zGetApptBodyText(), content, "Open created appointment again and verify body text");
 		apptForm.zToolbarPressButton(Button.B_CLOSE);
@@ -367,6 +372,7 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		
 		// Open appointment again and check from the UI side
 		app.zPageCalendar.zNavigateTo();
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, "4 html f...");
 		ZAssert.assertStringContains(apptForm.zGetApptBodyText(), content, "Open created appointment again and verify body text");
 		apptForm.zToolbarPressButton(Button.B_CLOSE);
@@ -420,6 +426,7 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		
 		// Open appointment again and check from the UI side
 		app.zPageCalendar.zNavigateTo();
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, "3 plain ...");
 		ZAssert.assertStringContains(apptForm.zGetApptBodyValue(), fullContent, "Open created appointment again and verify body text");
 		apptForm.zToolbarPressButton(Button.B_CLOSE);
@@ -483,6 +490,7 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		
 		// Open appointment again and check from the UI side
 		app.zPageCalendar.zNavigateTo();
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, "4 plain ...");
 		ZAssert.assertStringContains(apptForm.zGetApptBodyText(), fullContent, "Open created appointment again and verify body text");
 		apptForm.zToolbarPressButton(Button.B_CLOSE);
