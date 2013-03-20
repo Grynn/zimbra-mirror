@@ -50,6 +50,7 @@ public class DialogWarning extends AbsDialog {
 		public static final DialogWarningID SwitchingToTextWillDiscardHtmlFormatting = new DialogWarningID("css=td[id$='_formatWarning_title']");
 		public static final DialogWarningID SmsVerificationCodeSent = new DialogWarningID("ZmMsgDialog");
 		public static final DialogWarningID ZmAcceptShare = new DialogWarningID("ZmAcceptShare");
+	   	public static final DialogWarningID ConflictResource = new DialogWarningID("RESC_CONFLICT_DLG");
 
 		protected String Id;
 		public DialogWarningID(String id) {
@@ -127,7 +128,15 @@ public class DialogWarning extends AbsDialog {
 
 			locator = buttonsTableLocator + " td[id$='_button2_title']";
 
-		} else {
+		}else if (button == Button.B_SAVE_WITH_CONFLICT) {
+
+			locator = "css=div[class$='DwtDialogButtonBar'] td[id^='Save_'] td[id$='_button11_title']:contains('Save')";
+
+		}else if (button == Button.B_CANCEL_CONFLICT) {
+
+			locator = "css=div[class$='DwtDialogButtonBar'] td[id^='Cancel_'] td[id$='_button12_title']:contains('Cancel')";
+
+		}  else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
 

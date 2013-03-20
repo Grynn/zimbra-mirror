@@ -12,8 +12,8 @@ public class DialogConfirmModification extends DialogWarning {
 	public static final String SaveAndSendUpdates = "css=div[class='DwtDialog WindowOuterContainer'] input[id$='_send']";
 	public static final String DontSaveAndKeepOpen = "css=div[class='DwtDialog WindowOuterContainer'] input[id$='_cancel']";
 	public static final String DiscardAndClose = "css= div[class='DwtDialog WindowOuterContainer'] input[id$='_discard']";
-	public static final String Ok_changes = "css=td[id='CHNG_DLG_ORG_1_button2_title']";
-	public static final String Cancel_changes =  "css=td[id='CHNG_DLG_ORG_1_button1_title']";
+	public static final String Ok_changes = "css=td[id='YesNoCancel_button5_title']";
+	public static final String Cancel_changes =  "css=td[id='YesNoCancel_button4_title']";
 	}
 	public DialogConfirmModification(AbsApplication application, AbsTab page) {
 		super(new DialogWarningID(LocatorDivID), application, page);

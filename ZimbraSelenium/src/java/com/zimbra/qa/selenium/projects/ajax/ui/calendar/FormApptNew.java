@@ -88,6 +88,8 @@ public class FormApptNew extends AbsForm {
 		public static final String EquipmentName= "css=div[class='DwtDialog'] div[id$='_content'] table tr td:nth-child(2) input";
 		public static final String ToolbarOptions= "css=td[id='zb__APPT-1__COMPOSE_OPTIONS_title']";
 		public static final String RequestResponse= "css=td[id$='_title']:contains('Request Responses')";
+		public static final String ConflictResourceNote = "css= div[id$='_location_status']:contains('One or more locations are not available at the selected time')";
+
 	}
 
 	public static class Field {
@@ -1200,4 +1202,12 @@ public class FormApptNew extends AbsForm {
 		this.zClickAt(Locators.RequestResponse, ""); //Request Response Set to ON
 		
 	}
+	
+	public void zCloseModifiedApptTab()throws HarnessException {
+		// Close the modified appointment without saving changes
+		this.zToolbarPressButton(Button.B_CLOSE);
+		DialogConfirmModification confirmClose = (DialogConfirmModification) new DialogConfirmModification(this.MyApplication, pageCal);
+	    confirmClose.zClickButton(Button.B_CANCEL);	
+	}
+	
 }

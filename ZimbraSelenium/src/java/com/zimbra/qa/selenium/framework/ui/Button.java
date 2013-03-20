@@ -559,7 +559,9 @@ public class Button {
 	public static Button B_SELECT_EQUIPMENT = new Button("B_SELECT_EQUIPMENT");
 	public static Button B_EQUIPMENT = new Button("B_EQUIPMENT");
 	public static Button B_SELECT_FIRST_CONTACT = new Button("B_SELECT_FIRST_CONTACT");
-	
+	public static Button B_SAVE_WITH_CONFLICT = new Button("B_SAVE_WITH_CONFLICT");
+	public static Button B_CANCEL_CONFLICT = new Button("B_CANCEL_CONFLICT");
+	public static Button B_SEND_WITH_CONFLICT = new Button("B_SEND_WITH_CONFLICT");
 	// Button properties
 	private final String ID;
 
