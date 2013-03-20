@@ -20,7 +20,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		super.startingPage =  app.zPageCalendar;
 	}
 	@Test(description = "Verify sending appt invite when Location resource has conflicts shows conflict dialog", 
-			groups = { "functional12" })
+			groups = { "functional" })
 	public void CreateMeetingWithLocationConflict_01() throws HarnessException {
 		
 		// Creating object for meeting data
@@ -96,7 +96,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Verify Cancelling create appt when Location resource has conflicts shows conflict dialog", 
-			groups = { "functional12" })
+			groups = { "functional" })
 	public void CreateMeetingWithLocationConflict_02() throws HarnessException {
 
 		// Creating object for meeting data
@@ -172,7 +172,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Verify Saving meeting invite when Location resource has conflicts shows conflict dialog",  
-			groups = { "functional12" })
+			groups = { "functional" })
 	public void CreateMeetingWithLocationConflict_03() throws HarnessException {
 		
 		// Creating object for meeting data
@@ -252,7 +252,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Verify organizer can close modified appointment with location Conflict",  
-			groups = { "functional12" })
+			groups = { "functional" })
 	public void CreateMeetingWithLocationConflict_04() throws HarnessException {
 		
 		// Creating object for meeting data
