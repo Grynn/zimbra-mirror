@@ -8,7 +8,6 @@ import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogConfirmModification;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogWarningConflictingResources;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Locators;
@@ -300,14 +299,10 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		appt.setContent(apptContent);
 		appt.setLocation(apptLocation);
 		
-		// Create meeting which has location conflict for above created appointment
+		// Create meeting which has location conflict for above created appointment and then close it w/o saving
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
-		
-        apptForm.zToolbarPressButton(Button.B_CLOSE);
-        
-        DialogConfirmModification confirmClose = (DialogConfirmModification) new DialogConfirmModification(app, app.zPageCalendar);
-        confirmClose.zClickButton(Button.B_OK);
+		apptForm.zCloseModifiedApptTab();
       
         // Verify that appointment subject is not modified
         AppointmentItem modifyAppt = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject2 +")");
