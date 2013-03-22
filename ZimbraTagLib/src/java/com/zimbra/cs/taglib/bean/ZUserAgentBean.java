@@ -43,6 +43,10 @@ public class ZUserAgentBean {
     boolean isHotJava = false;
     boolean isIPhone = false;
     boolean isIPod = false;
+    boolean isTouchiPad = false;
+
+    // Refer bug 80330 for details.
+    @Deprecated
     boolean isIPad = false;
 
     public ZUserAgentBean(String userAgent) {
@@ -93,7 +97,7 @@ public class ZUserAgentBean {
                 } else if ((token.indexOf("iphone")) != -1) {
                     isIPhone = true;
                 } else if ((token.indexOf("ipad")) != -1) {
-                    isIPad = true;
+                    isTouchiPad = true;
                 } else if ((token.indexOf("ipod")) != -1) {
                     isIPod = true;
                 } else if ((token.indexOf("hotjava")) != -1) {
@@ -252,7 +256,10 @@ public class ZUserAgentBean {
 
     public boolean getIsiPod() { return isIPod; }
 
+    @Deprecated
     public boolean getIsiPad() { return isIPad; }
+
+    public boolean getIsTouchiPad() { return isTouchiPad; }
 
     public static class Version {
         
