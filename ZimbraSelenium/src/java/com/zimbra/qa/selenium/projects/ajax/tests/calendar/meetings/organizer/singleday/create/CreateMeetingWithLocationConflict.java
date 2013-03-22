@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -18,6 +19,8 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		logger.info("New "+ CreateMeetingWithLocationConflict.class.getCanonicalName());
 		super.startingPage =  app.zPageCalendar;
 	}
+	
+	@Bugs(ids = "81246")
 	@Test(description = "Verify sending appt invite when Location resource has conflicts shows conflict dialog", 
 			groups = { "functional" })
 	public void CreateMeetingWithLocationConflict_01() throws HarnessException {
@@ -38,8 +41,8 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		
 		// Absolute dates in UTC zone
 		Calendar now = this.calendarWeekDayUTC;
-		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
-		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
+		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 9, 0, 0);
+		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 18, 0, 0);
 		
 		app.zGetActiveAccount().soapSend(
                 "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
@@ -70,7 +73,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		// Create meeting which has location conflict with above created appointment
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
-		SleepUtil.sleepSmall();
+		SleepUtil.sleepVeryLong();
 		
 		// Verify the compose page shows note below resource about conflicting resources
 		ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(Locators.ConflictResourceNote),  "Verify that the conflicting resource note appears on appt compose page");
@@ -135,6 +138,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
                      "</m>" +
                "</CreateAppointmentRequest>");
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        SleepUtil.sleepSmall();
         
         // Create meeting which has location conflict for above created appointment
 		appt.setSubject(apptSubject2);
@@ -144,7 +148,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		appt.setLocation(apptLocation);
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
-		SleepUtil.sleepSmall();
+		SleepUtil.sleepVeryLong();
 		
 		// Verify the compose page shows note below resource about conflicting resources
 		ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(Locators.ConflictResourceNote),  "Verify that the conflicting resource note appears on appt compose page");
@@ -222,6 +226,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		// Create meeting which has location conflict for above created appointment
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
+		SleepUtil.sleepVeryLong();
 		
 		// Verify the compose page shows note below resource about conflicting resources
 		ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(Locators.ConflictResourceNote),  "Verify that the conflicting resource note appears on appt compose page");	
@@ -302,6 +307,8 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		// Create meeting which has location conflict for above created appointment and then close it w/o saving
 		FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zToolbarPressButton(Button.B_NEW);
 		apptForm.zFill(appt);
+		SleepUtil.sleepVeryLong();
+		
 		apptForm.zCloseModifiedApptTab();
       
         // Verify that appointment subject is not modified
