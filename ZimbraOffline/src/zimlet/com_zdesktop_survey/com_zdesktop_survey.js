@@ -1,6 +1,6 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
- * Zimbra Collaboration Suite Zimlets
+ * Zimbra Collaboration Suite Server
  * Copyright (C) 2011 VMware, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License

@@ -1,2 +1,18 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+ * ***** BEGIN LICENSE BLOCK *****
+ * 
+ * Zimbra Collaboration Suite Web Client
+ * Copyright (C) 2010, 2011 VMware, Inc.
+ * 
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.3 ("License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ * http://www.zimbra.com/license.
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+ * 
+ * ***** END LICENSE BLOCK *****
+-->
 <pk><wd nm="zoekoperator" rd="89,0:449,671"/><wd nm="zoekparameter" rd="89,0:1655,1859,1970"/><wd nm="zoekparameterxxxx" rd="89,0:1805"/><wd nm="zoekprogramma" rd="89,0:2464"/><wd nm="zoekquery" rd="86,0:383,460,1371|87,0:1054|89,0:3378|91,0:155|94,0:395"/><wd nm="zoekquery&apos;s" rd="94,0:1121"/><wd nm="zoekreeks" rd="55,0:326,512,756|89,0:4265"/><wd nm="zoekresultaten" rd="31,0:2049|85,0:1405|91,0:811"/><wd nm="zoeksyntaxis" rd="94,0:1768"/><wd nm="zoekt" rd="17,0:3204|31,0:1814|43,0:1127|52,0:361,508|86,0:526,881|89,0:1612,2595,2934|93,0:301|94,0:1983,2472"/><wd nm="zoektaal" rd="116,0:1560"/><wd nm="zoektaalxxxx" rd="89,2:317"/><wd nm="zoektekst" rd="94,0:2298"/><wd nm="zoektekstvak" rd="116,0:1633"/><wd nm="zoektermen" rd="89,0:2062"/><wd nm="zoektermenxxxx" rd="89,2:2035"/><wd nm="zoekvak" rd="90,0:336|94,0:606"/><wd nm="zoekvakje" rd="90,0:895"/><wd nm="zoekvakjes" rd="89,0:3140"/><wd nm="zoekveld" rd="23,0:139,498|89,0:406|94,0:505,1253"/><wd nm="zoekvenster" rd="92,0:932,2134|93,0:1425,1490"/><wd nm="zoekvoorbeelden" rd="92,64:2450"/><wd nm="zoekvoorkeur" rd="116,0:3879"/><wd nm="zoekwerkbalkxxxx" rd="116,0:1579"/><wd nm="zoekwoorden" rd="94,0:484"/><wd nm="zoiets" rd="38,0:552"/><wd nm="zolang" rd="89,0:1983|116,0:6221|119,0:1855"/><wd nm="zonder" rd="36,0:1815|37,0:282|44,0:490,977|50,0:852|52,0:2014,3307,4332|54,0:4580|71,0:906|88,0:854|89,0:443|90,0:98|102,0:1098|103,0:1652|116,0:9838|131,0:1053|132,0:2115|134,0:670" sp="1"/><wd nm="zorgt" rd="43,0:2551"/><wd nm="zou" rd="31,0:1250|43,0:753|52,0:2650|89,0:5391|92,0:230"/><wd nm="zoveel" rd="101,0:590"/><wd nm="zowel" rd="86,0:889|88,0:524|89,0:2942|92,0:1163"/><wd nm="zul" rd="17,0:3392"/><wd nm="zullen" rd="43,0:429" sp="1"/><wd nm="zwart" rd="116,0:6040"/><wd nm="zwc" rd="128,0:979,1100,1194"/><wd nm="|" rd="83,0:1535|116,0:6983"/><wd nm="één" rd="1,0:1818|2,0:221|3,0:371|6,0:123|10,0:149,227|16,0:794|17,0:469,949,1087|30,0:809,3414|31,0:1560,1828,2200,2534|33,0:2085|39,0:1283|43,0:1472,2520|44,0:1028|48,0:744,766|52,0:2842,4446|53,0:1269,1810,3027|54,0:1144,1202,1252,2090,2339,3240|55,0:729|56,0:263|58,0:364,1530|63,0:915|64,0:431|79,0:477|86,0:141,841|89,0:2355,4788|90,0:1056|96,0:1311,3324|97,0:653,675|98,0:181,1478|110,0:961|116,0:8208|119,0:1226|120,0:438,1141|124,0:315|133,0:1915,1937"/><wd nm="–" rd="21,0:403|26,0:305|89,0:511"/></pk>

@@ -1,2 +1,18 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * ***** BEGIN LICENSE BLOCK *****
+ * 
+ * Zimbra Collaboration Suite Web Client
+ * Copyright (C) 2010, 2011, 2012 VMware, Inc.
+ * 
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.3 ("License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ * http://www.zimbra.com/license.
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+ * 
+ * ***** END LICENSE BLOCK *****
+-->
 <cki><ck fm="Cliente Web Avançado" to="Lendo um e-mail" num="83"/><ck fm="Recebendo uma notificação de novos e-mails para outro endereço de e-mail" to="Exibindo compromissos que duram o dia todo na sua visualização Semana útil" num="83"/><ck fm="Exportar sua agenda iCal" to="Usando presença para tornar seu status conhecido" num="57"/></cki>

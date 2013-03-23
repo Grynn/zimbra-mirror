@@ -1,2 +1,18 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * ***** BEGIN LICENSE BLOCK *****
+ * 
+ * Zimbra Collaboration Suite Web Client
+ * Copyright (C) 2010, 2011, 2012 VMware, Inc.
+ * 
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.3 ("License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ * http://www.zimbra.com/license.
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+ * 
+ * ***** END LICENSE BLOCK *****
+-->
 <cki><ck fm="!" to="-"/><ck fm="/" to="activiteitenstroomregels"/><ck fm="actuele" to="alle"/><ck fm="alleen" to="beheren"/><ck fm="behorende" to="bevestigde"/><ck fm="bevestigen" to="contacten"/><ck fm="contactengroep" to="de"/><ck fm="deactiveren" to="doorsturen"/><ck fm="doorstuuradressen" to="een"/><ck fm="eender" to="filters"/><ck fm="filtervolgorde" to="gelden"/><ck fm="geldig" to="herhaling"/><ck fm="herhalingsgegevens" to="hulpbrongebruik"/><ck fm="hulpbronnen" to="inhoud:bananen"/><ck fm="inhouddeelvenster" to="je"/><ck fm="jezelf" to="kunnen"/><ck fm="kunt" to="mailadressen"/><ck fm="mailalias" to="met"/><ck fm="meteen" to="nieuwe"/><ck fm="nieuwere" to="ontvangen"/><ck fm="ontvanger" to="opstellen"/><ck fm="opstelpagina" to="product"/><ck fm="producten" to="slepen"/><ck fm="sleutel" to="takenlijst"/><ck fm="takenlijsten" to="toepassen"/><ck fm="toepassing" to="van"/><ck fm="vanaf" to="verzenden"/><ck fm="verzending" to="vooruit"/><ck fm="voorvoegsel" to="wijzigen"/><ck fm="wijziging" to="zijn"/><ck fm="zimbra" to="™"/></cki>

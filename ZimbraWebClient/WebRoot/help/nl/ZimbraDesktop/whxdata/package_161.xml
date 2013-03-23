@@ -1,2 +1,18 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+ * ***** BEGIN LICENSE BLOCK *****
+ * 
+ * Zimbra Collaboration Suite Web Client
+ * Copyright (C) 2010 VMware, Inc.
+ * 
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.3 ("License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ * http://www.zimbra.com/license.
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+ * 
+ * ***** END LICENSE BLOCK *****
+-->
 <pk><wd nm="ïnterpreteerd" rd="51,0:3775"/><wd nm="ór" rd="54,0:1414,1510|82,0:1540|87,0:6743|112,0:1199,1269,1323|115,0:9105"/><wd nm="óór" rd="54,0:1414,1510|82,0:1540|87,0:6743|112,0:1199,1269,1323|115,0:9105"/><wd nm="üploade" rd="0,0:2722,2877"/><wd nm="–" rd="21,0:477|26,0:301|87,0:581"/><wd nm="’s" rd="118,0:1149,1541"/><wd nm="’s" rd="70,128:0,142,2172"/></pk>
