@@ -721,9 +721,10 @@ function(str, quotePrefix, openTag, closeTag) {
 
 		str = lines.join("\n");
 	}
-		
 
 	str = str
+		.replace(/  /mg, ' &nbsp;')
+		.replace(/^ /mg, '&nbsp;')
 		.replace(/\t/mg, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
 		.replace(/\r?\n/mg, "<br>");
 	return str;
