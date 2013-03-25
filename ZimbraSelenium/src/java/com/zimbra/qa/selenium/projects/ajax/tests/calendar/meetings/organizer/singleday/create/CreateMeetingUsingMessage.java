@@ -27,6 +27,7 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogAddAttendees;
 
 public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
@@ -70,6 +71,8 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		dlgAddAttendees.zClickButton(Button.B_YES);
 		
 		FormApptNew apptForm = new FormApptNew(app);
+		apptForm.zFillField(Field.StartDate, startUTC);
+		apptForm.zFillField(Field.EndDate, endUTC);
 		ZAssert.assertEquals(apptForm.zGetApptSubject(), subject, "Verify populated appointment subject from message");
 		ZAssert.assertTrue(apptForm.zVerifyRequiredAttendee(apptAttendee1), "Verify populated email address bubble 1 from message");
 		ZAssert.assertTrue(apptForm.zVerifyRequiredAttendee(apptAttendee2), "Verify populated email address bubble 2 from message");
@@ -94,7 +97,6 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		
 		// Open appointment again and check from the UI side
 		app.zPageCalendar.zNavigateTo();
-		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, "1 html f...");
 		ZAssert.assertTrue(apptForm.zVerifyRequiredAttendee(apptAttendee1), "Open created appointment again and verify attendee1");
 		ZAssert.assertTrue(apptForm.zVerifyRequiredAttendee(apptAttendee2), "Open created appointment again and verify attendee2");
@@ -136,6 +138,8 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		dlgAddAttendees.zClickButton(Button.B_YES);
 		
 		FormApptNew apptForm = new FormApptNew(app);
+		apptForm.zFillField(Field.StartDate, startUTC);
+		apptForm.zFillField(Field.EndDate, endUTC);
 		ZAssert.assertEquals(apptForm.zGetApptSubject(), subject, "Verify populated appointment subject from message");
 		ZAssert
 				.assertEquals(
@@ -198,6 +202,8 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		dlgAddAttendees.zClickButton(Button.B_NO);
 		
 		FormApptNew apptForm = new FormApptNew(app);
+		apptForm.zFillField(Field.StartDate, startUTC);
+		apptForm.zFillField(Field.EndDate, endUTC);
 		ZAssert.assertEquals(apptForm.zGetApptSubject(), subject, "Verify populated appointment subject from message");
 		ZAssert.assertStringContains(apptForm.zGetApptBodyValue(), fullContent, "Verify populated appointment body from message");
 		apptForm.zToolbarPressButton(Button.B_SEND);
@@ -252,6 +258,8 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		dlgAddAttendees.zClickButton(Button.B_NO);
 		
 		FormApptNew apptForm = new FormApptNew(app);
+		apptForm.zFillField(Field.StartDate, startUTC);
+		apptForm.zFillField(Field.EndDate, endUTC);
 		ZAssert.assertEquals(apptForm.zGetApptSubject(), subject, "Verify populated appointment subject from message");
 		ZAssert.assertStringContains(apptForm.zGetApptBodyValue(), fullContent, "Verify populated appointment body from message");
 		apptForm.zToolbarPressButton(Button.B_SEND);
@@ -305,6 +313,8 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		dlgAddAttendees.zClickButton(Button.B_YES);
 		
 		FormApptNew apptForm = new FormApptNew(app);
+		apptForm.zFillField(Field.StartDate, startUTC);
+		apptForm.zFillField(Field.EndDate, endUTC);
 		ZAssert.assertEquals(apptForm.zGetApptSubject(), subject, "Verify populated appointment subject from message");
 		ZAssert
 				.assertEquals(
@@ -366,6 +376,8 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		dlgAddAttendees.zClickButton(Button.B_YES);
 		
 		FormApptNew apptForm = new FormApptNew(app);
+		apptForm.zFillField(Field.StartDate, startUTC);
+		apptForm.zFillField(Field.EndDate, endUTC);
 		ZAssert.assertEquals(apptForm.zGetApptSubject(), subject, "Verify populated appointment subject from message");
 		ZAssert
 				.assertEquals(
@@ -429,6 +441,8 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		dlgAddAttendees.zClickButton(Button.B_YES);
 		
 		FormApptNew apptForm = new FormApptNew(app);
+		apptForm.zFillField(Field.StartDate, startUTC);
+		apptForm.zFillField(Field.EndDate, endUTC);
 		ZAssert.assertEquals(apptForm.zGetApptSubject(), subject, "Verify populated appointment subject from message");
 		apptForm.zToolbarPressButton(Button.B_SEND);
 		
@@ -483,6 +497,8 @@ public class CreateMeetingUsingMessage extends CalendarWorkWeekTest {
 		dlgAddAttendees.zClickButton(Button.B_NO);
 		
 		FormApptNew apptForm = new FormApptNew(app);
+		apptForm.zFillField(Field.StartDate, startUTC);
+		apptForm.zFillField(Field.EndDate, endUTC);
 		ZAssert.assertEquals(apptForm.zGetApptSubject(), subject, "Verify populated appointment subject from message");
 		ZAssert
 			.assertEquals(

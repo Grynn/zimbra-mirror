@@ -503,10 +503,16 @@ public class PageCalendar extends AbsTab {
 		String locator = null;
 		AbsPage page = null;
 
+		SleepUtil.sleepMedium(); //test fails because selenium method runs fast so it doesn't find element
 		if ( this.sIsElementPresent(itemsLocator +" td.appt_name:contains('"+ subject +"')")) {
 			
 			// Single occurrence locator
 			locator = itemsLocator +" td.appt_name:contains('"+ subject +"')";
+		
+		} else if ( this.sIsElementPresent(itemsLocator +" td.appt_30_name:contains('"+ subject +"')")) {
+			
+			// Single occurrence locator
+			locator = itemsLocator +" td.appt_30_name:contains('"+ subject +"')";
 
 		} else if ( this.sIsElementPresent(itemsLocator +" td[class$='appt_new_name']:contains('"+ subject +"')")) {
 			
