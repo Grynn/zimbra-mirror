@@ -127,6 +127,9 @@
     <fileset dir="${jars.dir}">
       <include name="**/*.jar" />
     </fileset>
+  	<fileset dir="${common.internal.jars.dir}">
+  	  <include name="**/*.jar"/>
+  	</fileset>
   </path>
 
   <path id="class.path">
