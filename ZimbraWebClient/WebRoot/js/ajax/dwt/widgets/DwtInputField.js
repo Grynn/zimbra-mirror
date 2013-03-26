@@ -55,7 +55,8 @@
 DwtInputField = function(params) {
 
 	if (arguments.length == 0) return;
-	this._origClassName = params.className ? params.className : "DwtInputField";
+	params.className = params.className  || "DwtInputField";
+	this._origClassName = params.className;
 	this._errorClassName = this._origClassName + "-Error";
 	this._hintClassName = this._origClassName + "-hint";
 	this._disabledClassName = this._origClassName + "-disabled";
