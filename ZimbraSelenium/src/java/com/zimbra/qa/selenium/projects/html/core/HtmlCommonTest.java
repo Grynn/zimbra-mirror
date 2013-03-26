@@ -16,13 +16,17 @@
  */
 package com.zimbra.qa.selenium.projects.html.core;
 
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.*;
 
 import org.apache.log4j.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.*;
 import org.testng.annotations.*;
 import org.xml.sax.SAXException;
 
+import com.thoughtworks.selenium.*;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -80,7 +84,11 @@ public class HtmlCommonTest {
 	protected static Logger logger = LogManager.getLogger(HtmlCommonTest.class);
 
 
+	// Web Driver integration
+	private WebDriver _webDriver = null;
+	private DefaultSelenium _selenium = null;
 
+	
 	/**
 	 * The Html application object
 	 */
@@ -128,13 +136,67 @@ public class HtmlCommonTest {
 
 		ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.HTML);
 
-		ClientSessionFactory.session().selenium().start();
-		ClientSessionFactory.session().selenium().windowMaximize();
-		ClientSessionFactory.session().selenium().windowFocus();
-		ClientSessionFactory.session().selenium().allowNativeXpath("true");
-		ClientSessionFactory.session().selenium().setTimeout("30000");// Use 30 second timeout for opening the browser
+		try
+		{
+			
+			if (ZimbraSeleniumProperties.isWebDriver()) {
 
-		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getBaseURL());
+				_webDriver = ClientSessionFactory.session().webDriver();
+
+				Capabilities cp =  ((RemoteWebDriver)_webDriver).getCapabilities();
+				if (cp.getBrowserName().equals(DesiredCapabilities.firefox().getBrowserName())||cp.getBrowserName().equals(DesiredCapabilities.chrome().getBrowserName())||cp.getBrowserName().equals(DesiredCapabilities.internetExplorer().getBrowserName())){				
+					_webDriver.manage().window().setPosition(new Point(0, 0));
+					_webDriver.manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
+				}								
+
+			} else {
+
+				_selenium = ClientSessionFactory.session().selenium();
+
+				_selenium.start();
+				_selenium.windowMaximize();
+				_selenium.windowFocus();
+				_selenium.allowNativeXpath("true");
+				_selenium.setTimeout("30000");// Use 30 second timeout for opening the browser
+	
+			}
+			
+		} catch (SeleniumException e) {
+			logger.error("Unable to mobile app.", e);
+			throw new HarnessException(e);
+		}
+
+		// Dynamic wait for App to be ready	
+		final int maxRetry = 10;
+		for ( int retry = 0; retry < maxRetry; retry++ ) {
+			
+			try
+			{
+				logger.info("Retry #" + retry);
+
+				if (ZimbraSeleniumProperties.isWebDriver()) {
+					//_webDriver.get(ZimbraSeleniumProperties.getBaseURL());
+					_webDriver.navigate().to(ZimbraSeleniumProperties.getBaseURL());
+				} 
+				else {
+					_selenium.open(ZimbraSeleniumProperties.getBaseURL());
+				}
+
+				// If we made it here, everything is ok
+				logger.info("App is ready!");
+				break; // for ( int retry = 0; retry ...
+				
+			} catch (SeleniumException e) {
+				if ( retry >= maxRetry ) {
+					logger.error("Unable to open browser app.  Is a valid cert installed?", e);
+					throw new HarnessException(e);
+				} else {
+					logger.info("App is still not ready...", e);
+					SleepUtil.sleep(10000);
+				}
+			}
+		}
+
 
 		logger.info("commonTestBeforeSuite: finish");		
 	}
