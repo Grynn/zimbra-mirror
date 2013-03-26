@@ -49,13 +49,24 @@ AjxStringUtil.capitalize = function(str) {
 };
 
 /**
+ * Capitalizes the specified string by upper-casing the first character.
+ * Unlike AjxStringUtil.capitalize - don't change the rest of the letters.
+ *
+ * @param {string} str  The string to capitalize.
+ */
+AjxStringUtil.capitalizeFirstLetter = function(str) {
+	return str.length > 0 ? str.charAt(0).toUpperCase() + str.substr(1) : "";
+};
+
+
+/**
  * Capitalizes all the words in the specified string by upper-casing the first
- * character of each word and lower-casing the rest of the word.
+ * character of each word (does not change following characters, so something like MTV stays MTV
  *
  * @param {string} str  The string to capitalize.
  */
 AjxStringUtil.capitalizeWords = function(str) {
-    return AjxUtil.map(str.split(/\s+/g), AjxStringUtil.capitalize).join(" ");
+    return AjxUtil.map(str.split(/\s+/g), AjxStringUtil.capitalizeFirstLetter).join(" ");
 };
 
 /**
