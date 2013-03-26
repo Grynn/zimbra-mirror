@@ -16,10 +16,13 @@
  */
 package com.zimbra.qa.selenium.projects.mobile.core;
 
+import java.awt.Toolkit;
 import java.lang.reflect.Method;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.*;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
@@ -36,9 +39,7 @@ import com.thoughtworks.selenium.SeleniumException;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.core.Repository;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.mobile.ui.AppMobileClient;
 
 
@@ -50,6 +51,10 @@ import com.zimbra.qa.selenium.projects.mobile.ui.AppMobileClient;
 public class MobileCommonTest {
 	protected static Logger logger = LogManager.getLogger(MobileCommonTest.class);
 		
+	
+	// Web Driver integration
+	private WebDriver _webDriver = null;
+	private DefaultSelenium _selenium = null;
 
 	/**
 	 * The AdminConsole application object
@@ -125,22 +130,72 @@ public class MobileCommonTest {
             Boolean.parseBoolean(appendToExisting),
             resultId);
 
-      // Make sure there is a new default account
+      	// Make sure there is a new default account
 		ZimbraAccount.ResetAccountZMC();
 				
+		// Set the app type
+		ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.MOBILE);
+
 		try
 		{
+
+			if (ZimbraSeleniumProperties.isWebDriver()) {
+
+				_webDriver = ClientSessionFactory.session().webDriver();
+
+				Capabilities cp =  ((RemoteWebDriver)_webDriver).getCapabilities();
+				if (cp.getBrowserName().equals(DesiredCapabilities.firefox().getBrowserName())||cp.getBrowserName().equals(DesiredCapabilities.chrome().getBrowserName())||cp.getBrowserName().equals(DesiredCapabilities.internetExplorer().getBrowserName())){				
+					_webDriver.manage().window().setPosition(new Point(0, 0));
+					_webDriver.manage().window().setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
+				}								
+
+			} else {
+
+
+				_selenium = ClientSessionFactory.session().selenium();
+				_selenium.start();
+				_selenium.windowMaximize();
+				_selenium.windowFocus();
+				_selenium.allowNativeXpath("true");
+				_selenium.setTimeout("30000");	// Use 30 second timeout for opening the browser
+
+			}
 			
-			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.MOBILE);
+			// Dynamic wait for App to be ready
+			int maxRetry = 10;
+			int retry = 0;
+			boolean appIsReady = false;
+			
+			while (retry < maxRetry && !appIsReady) {
+				
+				try
+				{
+					logger.info("Retry #" + retry);
+					retry ++;
 
-			DefaultSelenium selenium = ClientSessionFactory.session().selenium();
-			selenium.start();
-			selenium.windowMaximize();
-			selenium.windowFocus();
-			selenium.allowNativeXpath("true");
-			selenium.setTimeout("30000");	// Use 30 second timeout for opening the browser
-			selenium.open(ZimbraSeleniumProperties.getBaseURL());
+					if (ZimbraSeleniumProperties.isWebDriver()) {
+						//_webDriver.get(ZimbraSeleniumProperties.getBaseURL());
+						_webDriver.navigate().to(ZimbraSeleniumProperties.getBaseURL());
+					} 
+					else {
+						_selenium.open(ZimbraSeleniumProperties.getBaseURL());
+					}
 
+					appIsReady = true;
+				} catch (SeleniumException e) {
+					if (retry >= maxRetry) {
+						logger.error("Unable to open admin app.  Is a valid cert installed?", e);
+						throw e;
+					} else {
+						logger.info("App is still not ready...", e);
+						SleepUtil.sleep(10000);
+						continue;
+					}
+				}
+			}
+			logger.info("App is ready!");
+
+			
 		} catch (SeleniumException e) {
 			logger.error("Unable to mobile app.", e);
 			throw e;
@@ -247,7 +302,13 @@ public class MobileCommonTest {
 	public void commonTestAfterSuite() throws HarnessException {	
 		logger.info("commonTestAfterSuite: start");
 		
-		ClientSessionFactory.session().selenium().stop();
+		if (ZimbraSeleniumProperties.isWebDriver()) {
+			_webDriver.quit();
+		} else {
+			ClientSessionFactory.session().selenium().stop();
+		}
+
+		
 		_repository.endRepository();
 
 		logger.info("commonTestAfterSuite: finish");
