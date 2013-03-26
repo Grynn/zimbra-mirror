@@ -144,3 +144,11 @@
     compress
 }   
 
+/opt/zimbra/log/vmware-heartbeat.log {
+    daily
+    missingok
+    copytruncate
+    rotate 7
+    notifempty
+    compress
+}
