@@ -8,5 +8,8 @@ reject_unlisted_recipient
 %%contains VAR:zimbraMtaRestriction reject_unknown_helo_hostname%%
 %%contains VAR:zimbraMtaRestriction reject_unknown_sender_domain%%
 %%explode reject_rbl_client VAR:zimbraMtaRestrictionRBLs%%
+%%explode reject_rhsbl_client VAR:zimbraMtaRestrictionRHSBLCs%%
+%%explode reject_rhsbl_reverse_client VAR:zimbraMtaRestrictionRHSBLRCs%%
+%%explode reject_rhsbl_sender VAR:zimbraMtaRestrictionRHSBLSs%%
 %%contains VAR:zimbraMtaRestriction check_policy_service unix:private/policy%%
 permit

@@ -2,12 +2,12 @@
 # ***** BEGIN LICENSE BLOCK *****
 # Zimbra Collaboration Suite Server
 # Copyright (C) 2010, 2011, 2012, 2013 VMware, Inc.
-# 
+#
 # The contents of this file are subject to the Zimbra Public License
 # Version 1.3 ("License"); you may not use this file except in
 # compliance with the License.  You may obtain a copy of the License at
 # http://www.zimbra.com/license.
-# 
+#
 # Software distributed under the License is distributed on an "AS IS"
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 # ***** END LICENSE BLOCK *****
@@ -57,6 +57,21 @@ class GlobalConfig(config.Config):
 			p = re.findall(r'reject_rbl_client\s+(\S+)',self["zimbraMtaRestriction"])
 			self["zimbraMtaRestriction"] = q
 			self["zimbraMtaRestrictionRBLs"] = ' '.join(p)
+			# Remove all the reject_rhsbl_client lines from MTA restriction and put the values in RBLs
+			q = re.sub(r'reject_rhsbl_client\s+\S+\s+','',self["zimbraMtaRestriction"])
+			p = re.findall(r'reject_rhsbl_client\s+(\S+)',self["zimbraMtaRestriction"])
+			self["zimbraMtaRestriction"] = q
+			self["zimbraMtaRestrictionRHSBLCs"] = ' '.join(p)
+			# Remove all the reject_rhsbl_sender lines from MTA restriction and put the values in RBLs
+			q = re.sub(r'reject_rhsbl_sender\s+\S+\s+','',self["zimbraMtaRestriction"])
+			p = re.findall(r'reject_rhsbl_sender\s+(\S+)',self["zimbraMtaRestriction"])
+			self["zimbraMtaRestriction"] = q
+			self["zimbraMtaRestrictionRHSBLSs"] = ' '.join(p)
+			# Remove all the reject_rhsbl_reverse_client lines from MTA restriction and put the values in RBLs
+			q = re.sub(r'reject_rhsbl_reverse_client\s+\S+\s+','',self["zimbraMtaRestriction"])
+			p = re.findall(r'reject_rhsbl_reverse_client\s+(\S+)',self["zimbraMtaRestriction"])
+			self["zimbraMtaRestriction"] = q
+			self["zimbraMtaRestrictionRHSBLRCs"] = ' '.join(p)
 
 		if self["zimbraIPMode"] is not None:
 			self["zimbraIPv4BindAddress"] = "127.0.0.1"
