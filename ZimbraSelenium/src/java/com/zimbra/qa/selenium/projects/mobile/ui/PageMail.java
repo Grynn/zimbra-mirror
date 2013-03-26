@@ -42,10 +42,9 @@ public class PageMail extends AbsTab {
 	public static class Locators {
 		
 		// TODO: Need better locator that doesn't have content text
-		public static final String zMailIsActive = "xpath=//a[contains(.,'Folders')]";
+		public static final String zMailIsActive = "css=a:contains('Folders')";
 
-		public static final String zDList_View = "xpath=//div[@id='dlist-view']";
-		public static final String zDList_View_2 = "//div[@id='dlist-view']/div";
+		public static final String zDList_View = "css=div#dlist-view";
 
 	}
 	

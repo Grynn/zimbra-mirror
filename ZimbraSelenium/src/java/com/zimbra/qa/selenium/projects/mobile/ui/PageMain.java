@@ -35,20 +35,21 @@ public class PageMain extends AbsTab {
 
 	public static class Locators {
 	
-		public static final String zBtnLogout = "xpath=//*[@id='_logout']";
+		public static final String zBtnLogout = "css=[id='_logout']";
 		
-		public static final String zMainCopyright = "//div[@id='copyright_notice']";
-		public static final String zMainCopyrightText = "//div[@id='copyright_notice']//a";
+		public static final String zMainCopyright = "css=div#copyright_notice";
+		public static final String zMainCopyrightText = zMainCopyright +" a";
 		
-		public static final String zAppbarMail = "//div[@id='appbar']//a[@id='mail']";
-		public static final String zAppbarContact = "//div[@id='appbar']//a[@id='contact']";
-		public static final String zAppbarCal = "//div[@id='appbar']//a[@id='cal']";
-		public static final String zAppbarDocs = "//div[@id='appbar']//a[@id='docs']";
-		public static final String zAppbarSearch = "//div[@id='appbar']//a[@id='search']";
+		public static final String zAppbar = "css=div#appbar";
+		public static final String zAppbarMail = zAppbar +" a#mail";
+		public static final String zAppbarContact = zAppbar +" a#contact";
+		public static final String zAppbarCal = zAppbar +" a#cal";
+		public static final String zAppbarDocs = zAppbar +" a#docs";
+		public static final String zAppbarSearch = zAppbar +" a#search";
 		
 		public static final String zBtnCompose = "//a[@href='zmain?st=newmail']";
 		
-		public static final String zPreferences = "//a[@href='?st=prefs']";
+		public static final String zPreferences = "css=a[href='?st=prefs']";
 	
 	}
 	

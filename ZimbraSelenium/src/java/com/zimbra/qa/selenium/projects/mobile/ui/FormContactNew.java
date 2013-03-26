@@ -31,11 +31,11 @@ public class FormContactNew extends AbsForm {
 		
 		public static final String lSubmit = "//input[@name='actionSave']";
 		
-		public static final String lLastName		= "xpath=//input[@id='lastName']";
-		public static final String lFirstName		= "xpath=//input[@id='firstName']";
-		public static final String lJobTitle		= "xpath=//input[@id='jobTitle']";
-		public static final String lCompany			= "xpath=//input[@id='company']";
-		public static final String lEmail			= "xpath=//input[@id='email']";
+		public static final String lLastName		= "css=input#lastName";
+		public static final String lFirstName		= "css=input#firstName";
+		public static final String lJobTitle		= "css=input#jobTitle";
+		public static final String lCompany			= "css=input#company";
+		public static final String lEmail			= "css=input#email";
 
 	}
 	

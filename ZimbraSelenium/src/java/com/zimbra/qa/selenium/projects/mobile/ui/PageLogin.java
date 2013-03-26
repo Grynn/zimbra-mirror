@@ -40,12 +40,12 @@ public class PageLogin extends AbsTab {
 		public static final String zInputRemember = "css=input#remember";
 		
 		// Displayed text
-		public static final String zDisplayedZLoginAppName = "xpath=//*[@id='ZLoginAppName']";
-		public static final String zDisplayedusername = "xpath=//form[@name='loginForm']//label[@for='username']";
-		public static final String zDisplayedpassword = "xpath=//td[@class='zLoginLabelContainer']//label[@for='password']";
-		public static final String zDisplayedremember = "xpath=//td[@class='zLoginCheckboxLabelContainer']//label[@for='remember']";
-		public static final String zDisplayedwhatsthis = "xpath=//*[@id='ZLoginWhatsThisAnchor']";
-		public static final String zDisplayedcopyright = "xpath=//div[@class='copyright']";
+		public static final String zDisplayedZLoginAppName = "css=[id='ZLoginAppName']";
+		public static final String zDisplayedusername = "css=form[name='loginForm'] label[for='username']";
+		public static final String zDisplayedpassword = "css=td.zLoginLabelContainer label[for='password']";
+		public static final String zDisplayedremember = "css=td.zLoginCheckboxLabelContainer label[for='remember']";
+		public static final String zDisplayedwhatsthis = "css=[id='ZLoginWhatsThisAnchor']";
+		public static final String zDisplayedcopyright = "css=div.copyright";
 		
 	}
 		
