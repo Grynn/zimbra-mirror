@@ -181,10 +181,13 @@ public class PageMain extends AbsTab {
 		if ( sIsElementPresent(locator) ) {
 			logger.debug("Found compose tabs");
 			
-			String xpath = "//td[contains(@id,'ztb_appChooser_item_')]//div[contains(@id,'zb__App__tab_COMPOSE')]";
-			int count = this.sGetXpathCount(xpath);
+			// String xpath = "//td[contains(@id,'ztb_appChooser_item_')]//div[contains(@id,'zb__App__tab_COMPOSE')]";
+			// int count = this.sGetXpathCount(xpath);
+			String css = "css=td[id^='ztb_appChooser_item_'] div[id^='zb__App__tab_COMPOSE']";
+			int count = this.sGetCssCount(css);
 			for (int i = 1; i <= count; i++) {
-				locator = xpath + "//td[contains(@id,'_left_icon')]["+ i +"]";
+				// locator = xpath + "//td[contains(@id,'_left_icon')]["+ i +"]";
+				locator = css + " td[id$='_left_icon']:nth-of-type("+ i +")";
 				if ( !sIsElementPresent(locator) ) 
 					throw new HarnessException("Unable to find compose tab close icon "+ locator);
 				this.zClick(locator);

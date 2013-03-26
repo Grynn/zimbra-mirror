@@ -391,9 +391,11 @@ public class PageMail extends AbsTab {
 
 		List<MailItem> items = new ArrayList<MailItem>();
 
-		int count = this.sGetXpathCount("//tbody[@id='mess_list_tbody']//tr");
-		for (int i = 1; i <= count; i++) {
-			String itemLocator = "//tbody[@id='mess_list_tbody']//tr["+ i +"]";
+		// int count = this.sGetXpathCount("//tbody[@id='mess_list_tbody']//tr");
+		int count = this.sGetCssCount("css=tbody#mess_list_tbody tr");
+		for (int row = 0; row < count; row++) {
+			// String itemLocator = "//tbody[@id='mess_list_tbody']//tr["+ i +"]";
+			String itemLocator = "css=tbody#mess_list_tbody tr#R"+ row;
 			String locator;
 			
 			MailItem item = new MailItem();
@@ -409,13 +411,13 @@ public class PageMail extends AbsTab {
 			// Column 5 is 'sent/reply/received/read/etc.' icon
 			
 			// Column 6 is 'From'
-			locator = itemLocator + "/td[6]";
+			locator = itemLocator + ">td:nth-of-type(6)";
 			item.gFrom = this.sGetText(locator);
 
 			// Column 7 is 'attachments'
 			
 			// Column 8 is 'subject'
-			locator = itemLocator + "/td[8]//span[1]";
+			locator = itemLocator + ">td:nth-of-type(8) span:nth-of-type(1)";
 			item.gSubject = this.sGetText(locator);
 			
 			// Column 9 is 'size'
