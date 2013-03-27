@@ -18,7 +18,7 @@
 # chicken and egg reasons. So we just make assumptions about install layout.
 #
 
-if [ x`whoami` != xzimbra ]; then
+if [ x`whoami` == xroot ]; then
   echo Error: must be run as zimbra user
   exit 1
 fi
