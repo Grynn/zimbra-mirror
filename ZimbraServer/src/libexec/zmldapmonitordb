@@ -32,6 +32,10 @@ if ($help) {
 
 my $localxml = XMLin("/opt/zimbra/conf/localconfig.xml");
 
+my $ldap_monitor_mdb = $localxml->{key}->{ldap_monitor_mdb};
+my $ldap_monitor_alert_only = $localxml->{key}->{ldap_monitor_alert_only};
+my $ldap_monitor_warning = $localxml->{key}->{ldap_monitor_warning};
+my $ldap_monitor_critical = $localxml->{key}->{ldap_monitor_critical};
 my $ldap_db_maxsize = $localxml->{key}->{ldap_db_maxsize}->{value};
 my $ldap_accesslog_maxsize = $localxml->{key}->{ldap_accesslog_maxsize}->{value};
 my $ldap_is_master = $localxml->{key}->{ldap_is_master}->{value};
@@ -52,6 +56,50 @@ if ($ldap_db_maxsize eq "") {
 
 if ($ldap_accesslog_maxsize eq "") {
   $ldap_accesslog_maxsize = 85899345920;
+}
+
+if ($ldap_monitor_mdb eq "") {
+  $ldap_monitor_mdb = "true";
+}
+
+if ($ldap_monitor_alert_only eq "") {
+  $ldap_monitor_alert_only = "true";
+}
+
+if ($ldap_monitor_warning eq "") {
+  $ldap_monitor_warning = .8;
+}
+
+if ($ldap_monitor_critical eq "") {
+  $ldap_monitor_critical = .9;
+}
+
+if ($ldap_monitor_mdb == 1) {
+  $ldap_monitor_mdb = "true";
+}
+
+if ($ldap_monitor_mdb == 0) {
+  $ldap_monitor_mdb = "false";
+}
+
+if ($ldap_monitor_alert_only == 1) {
+  $ldap_monitor_alert_only = "true";
+}
+
+if ($ldap_monitor_alert_only == 0) {
+  $ldap_monitor_alert_only = "false";
+}
+
+if ($ldap_monitor_warning > 1) {
+  $ldap_monitor_warning/=100;
+}
+
+if ($ldap_monitor_critical > 1) {
+  $ldap_monitor_critical/=100;
+}
+
+if ($ldap_monitor_mdb ne "true") {
+  exit 0;
 }
 
 my $db="${zimbra_home}/data/ldap/mdb/db/data.mdb";
@@ -99,4 +147,5 @@ if ($debug) {
   print "mdb_alarm=$mdb_alarm\n";
   print "alog_alarm=$alog_alarm\n";
 }
+
 
