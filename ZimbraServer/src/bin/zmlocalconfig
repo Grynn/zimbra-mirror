@@ -18,6 +18,11 @@
 # chicken and egg reasons. So we just make assumptions about install layout.
 #
 
+if [ x`whoami` != xzimbra ]; then
+  echo Error: must be run as zimbra user
+  exit 1
+fi
+
 ZMROOT=`dirname $0`/..
 ZMROOT=`(cd "${ZMROOT}"; pwd)`
 
