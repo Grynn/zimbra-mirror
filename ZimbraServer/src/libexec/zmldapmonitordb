@@ -3,6 +3,8 @@ use strict;
 use lib qw (/opt/zimbra/zimbramon/lib);
 use XML::Simple;
 use Getopt::Long;
+use Filesys::Df;
+use POSIX;
 
 if ( ! -d "/opt/zimbra/openldap/etc" ) {
   print "ERROR: openldap does not appear to be installed - exiting\n";
@@ -74,19 +76,19 @@ if ($ldap_monitor_critical eq "") {
   $ldap_monitor_critical = .9;
 }
 
-if ($ldap_monitor_mdb == 1) {
+if (isdigit($ldap_monitor_mdb) && $ldap_monitor_mdb == 1) {
   $ldap_monitor_mdb = "true";
 }
 
-if ($ldap_monitor_mdb == 0) {
+if (isdigit($ldap_monitor_mdb) && $ldap_monitor_mdb == 0) {
   $ldap_monitor_mdb = "false";
 }
 
-if ($ldap_monitor_alert_only == 1) {
+if (isdigit($ldap_monitor_alert_only) && $ldap_monitor_alert_only == 1) {
   $ldap_monitor_alert_only = "true";
 }
 
-if ($ldap_monitor_alert_only == 0) {
+if (isdigit($ldap_monitor_alert_only) && $ldap_monitor_alert_only == 0) {
   $ldap_monitor_alert_only = "false";
 }
 
@@ -102,6 +104,7 @@ if ($ldap_monitor_mdb ne "true") {
   exit 0;
 }
 
+my $zmlocalconfig="${zimbra_home}/bin/zmlocalconfig";
 my $db="${zimbra_home}/data/ldap/mdb/db/data.mdb";
 my $adb="${zimbra_home}/data/ldap/accesslog/db/data.mdb";
 my $blocksize=(stat $db)[11]/8;
@@ -148,4 +151,27 @@ if ($debug) {
   print "alog_alarm=$alog_alarm\n";
 }
 
+my $partUsage=df("/opt/zimbra/data/ldap/mdb/db");
+if(defined($partUsage) && $debug) {
+  print "Total 1k blocks: $partUsage->{blocks}\n";
+  print "Total 1k blocks free: $partUsage->{bfree}\n";
+  print "Total 1k blocks used: $partUsage->{used}\n";
+}
 
+if ($mdb_alarm && $ldap_monitor_alert_only eq "false") {
+  #  Do zmlocalconfig bits
+}
+
+sub setLocalConfig {
+  my $key = shift;
+  my $val = shift;
+  print "Setting local config $key=$val\n" if $debug;
+  runCommand("$zmlocalconfig -f -e ${key}=\'${val}\' 2> /dev/null");
+}
+
+sub runCommand {
+  my $cmd = shift;
+  my $rc;
+  $rc = 0xffff & system("$cmd > /dev/null 2>&1 ");
+  return $rc;
+}
