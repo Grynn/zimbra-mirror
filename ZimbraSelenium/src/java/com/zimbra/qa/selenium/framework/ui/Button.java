@@ -578,6 +578,9 @@ public class Button {
 	public static Button B_SAVE_WITH_CONFLICT = new Button("B_SAVE_WITH_CONFLICT");
 	public static Button B_CANCEL_CONFLICT = new Button("B_CANCEL_CONFLICT");
 	public static Button B_SEND_WITH_CONFLICT = new Button("B_SEND_WITH_CONFLICT");
+	
+	public static Button B_SAVE_MODIFICATION =   new Button("B_SAVE_MODIFICATION");
+	public static Button B_CANCEL_MODIFICATION =   new Button("B_CANCEL_MODIFICATION");
 	// Button properties
 	private final String ID;
 

@@ -82,7 +82,7 @@ public class CloseModifyAppointment extends CalendarWorkWeekTest {
         apptForm.zToolbarPressButton(Button.B_CLOSE);
         
         DialogConfirmModification confirmClose = (DialogConfirmModification) new DialogConfirmModification(app, app.zPageCalendar);
-        confirmClose.zClickButton(Button.B_OK);
+        confirmClose.zClickButton(Button.B_SAVE_MODIFICATION);
         DialogSendUpdatetoAttendees sendUpdateDialog = (DialogSendUpdatetoAttendees) new DialogSendUpdatetoAttendees(app, app.zPageCalendar);
         sendUpdateDialog.zClickButton(Button.B_OK);
 
@@ -153,7 +153,7 @@ public class CloseModifyAppointment extends CalendarWorkWeekTest {
         
         DialogConfirmModification confirmClose = (DialogConfirmModification) new DialogConfirmModification(app, app.zPageCalendar);
         confirmClose.zClickButton(Button.B_DISCARD_CLOSE);
-        confirmClose.zClickButton(Button.B_OK);
+        confirmClose.zClickButton(Button.B_SAVE_MODIFICATION);
         SleepUtil.sleepSmall();
         
         // Verify 'Save Appointment' dialog is closed
@@ -221,7 +221,7 @@ public class CloseModifyAppointment extends CalendarWorkWeekTest {
         
         DialogConfirmModification confirmClose = (DialogConfirmModification) new DialogConfirmModification(app, app.zPageCalendar);
         confirmClose.zClickButton(Button.B_DONTSAVE_KEEP_OPEN);
-        confirmClose.zClickButton(Button.B_OK);    
+        confirmClose.zClickButton(Button.B_SAVE_MODIFICATION);    
         
         // Verify 'Save Appointment' dialog is closed
         ZAssert.assertFalse(confirmClose.zIsActive(), "Verify 'Save Appointment' dialog is closed");
