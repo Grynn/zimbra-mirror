@@ -39,6 +39,7 @@ public class PageCalendar extends AbsTab {
 		public static final String OrganizerSaveButton = "css=div[id$='zb__APPT-1__SAVE'] ";
 		public static final String CloseButton = "css=td[id$='__CANCEL_title']:contains('Close')";
 		public static final String ViewButton = "id=zb__CLD__VIEW_MENU_dropdown";
+		public static final String DeleteButton = "css=td[id='zb__CLD__DELETE_title']";
 		public static final String CalendarFolder = "id=zti__main_Calendar__10_textCell";
 
 		// Menus
@@ -893,8 +894,31 @@ public class PageCalendar extends AbsTab {
 			throw new HarnessException("Unable to determine locator for appointment: "+ subject);
 		}
 		
-		if (action == Action.A_RIGHTCLICK) {
+		if (action == Action.A_LEFTCLICK) {
 			
+			this.zClickAt(locator, "");
+			this.zWaitForBusyOverlay();
+			SleepUtil.sleepSmall();
+			
+			if ( (option == Button.B_DELETE)) {
+				
+				optionLocator = Locators.DeleteButton;
+				
+				if ( optionLocator != null ) {
+					this.zClickAt(optionLocator, "");
+					SleepUtil.sleepSmall();
+					this.zWaitForBusyOverlay();
+				}
+				page = null;
+				waitForPostfix = true;
+				
+			} else {
+
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+			}
+			
+		} else if (action == Action.A_RIGHTCLICK) {
+		
 			this.zRightClickAt(locator, "");
 			this.zWaitForBusyOverlay();
 			SleepUtil.sleepSmall();
@@ -1554,7 +1578,7 @@ public class PageCalendar extends AbsTab {
 			
 		} else if (button == Button.B_DELETE) {
 
-			locator = "css=td[id='zb__CLD__DELETE_title']";
+			locator = Locators.DeleteButton;
 			this.zClickAt(locator, "");
 			this.zWaitForBusyOverlay();
 
