@@ -92,12 +92,23 @@ sub select {
 	
 	$value = $value .  "<select name='$name' id='$id' $multipleAttr $sizeAttr >\n";
 
-	my @sorted = sort { $a <=> $b } keys %h;
-	if ( defined($valuesort) ) {
-		@sorted = sort { $h{$a} cmp $h{$b} } keys %h;
-	}
-	foreach my $k (@sorted) {
-		$value = $value . "<option value='$k'>$h{$k}</option>\n";
+	if (($name eq 'build1') || ($name eq 'build2')){
+		my @sorted = sort { $h{$b} cmp $h{$a} } keys %h;
+		if ( defined($valuesort) ) {
+			@sorted = sort { $h{$b} cmp $h{$a} } keys %h;
+		}
+		foreach my $k (@sorted) {
+			$value = $value . "<option value='$k'>$h{$k}</option>\n";
+		}
+	} else {
+		my @sorted = sort { $h{$a} cmp $h{$b} } keys %h;
+        	if ( defined($valuesort) ) {
+                	@sorted = sort { $h{$a} cmp $h{$b} } keys %h;
+        	}
+       		 foreach my $k (@sorted) {
+                	$value = $value . "<option value='$k'>$h{$k}</option>\n";
+        	}
+
 	}
 	$value = $value . "</select>\n";
 

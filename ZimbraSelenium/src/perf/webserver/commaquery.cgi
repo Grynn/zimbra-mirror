@@ -85,14 +85,27 @@ sub select {
 	my $value = "";
 	
 	$value = $value .  "<select name='$name' id='$id' $multipleAttr $sizeAttr >\n";
+	 if ($name eq 'builds') {
+                foreach (sort { ($h{$b} cmp $h{$a}) || ($a cmp $b) } keys %h) {
+                        $value = $value . "<option value='$_'>$h{$_}</option>\n";
+                }
+        } else {
+                foreach (sort { ($h{$a} cmp $h{$b}) || ($a cmp $b) } keys %h) {
+                        $value = $value . "<option value='$_'>$h{$_}</option>\n";
+                }
+        }
 
-	foreach my $k (sort { $a <=> $b } keys %h) {
-		$value = $value . "<option value='$k'>$h{$k}</option>\n";
-	}
-	$value = $value . "</select>\n";
-
-	return $value;
+        $value = $value . "</select>\n";
+        return $value;
 }
+
+#	foreach my $k (sort { $a <=> $b } keys %h) {
+#		$value = $value . "<option value='$k'>$h{$k}</option>\n";
+#	}
+#	$value = $value . "</select>\n";
+
+#	return $value;
+
 
 sub page {
 
