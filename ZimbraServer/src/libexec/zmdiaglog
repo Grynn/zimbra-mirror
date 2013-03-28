@@ -440,11 +440,10 @@ sub run() {
     if ($options{'z'} || $options{'Z'}) {
       logmsg "Zipping up contents of $destination into $destination.zip\n";
       chdir('..');
-      my $zipcreated = system("nice -n 19 zip -9r $dirname.zip $dirname/");
-      chdir($destination);
-	  if ($zipcreated == 0) {
+      my $rc = 0xffff & system("nice -n 19 zip -9r $dirname.zip $dirname/");
+	  if (($rc == 0) && (-e "$destination.zip")) {
       	logmsg "\n *** Zipfile \"$destination.zip\" created.\n";
-      	remove_data_dir($destination) if ($options{'Z'})
+		remove_data_dir($destination) if ($options{'Z'});
       } else {
 		logmsg "$destination.zip could not be created. Leaving data collection directory intact.\n";
 	    logmsg "$0 run complete\n";
