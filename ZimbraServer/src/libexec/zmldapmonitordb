@@ -38,15 +38,37 @@ my $ldap_monitor_mdb = $localxml->{key}->{ldap_monitor_mdb};
 my $ldap_monitor_alert_only = $localxml->{key}->{ldap_monitor_alert_only};
 my $ldap_monitor_warning = $localxml->{key}->{ldap_monitor_warning};
 my $ldap_monitor_critical = $localxml->{key}->{ldap_monitor_critical};
+my $ldap_monitor_growth = $localxml->{key}->{ldap_monitor_growth};
 my $ldap_db_maxsize = $localxml->{key}->{ldap_db_maxsize}->{value};
 my $ldap_accesslog_maxsize = $localxml->{key}->{ldap_accesslog_maxsize}->{value};
 my $ldap_is_master = $localxml->{key}->{ldap_is_master}->{value};
 my $zimbra_home = $localxml->{key}->{zimbra_home}->{value};
 
+chomp($ldap_monitor_mdb);
+chomp($ldap_monitor_alert_only);
+chomp($ldap_monitor_warning);
+chomp($ldap_monitor_critical);
+chomp($ldap_monitor_growth);
 chomp($ldap_db_maxsize);
 chomp($ldap_accesslog_maxsize);
 chomp($ldap_is_master);
 chomp($zimbra_home);
+
+if ($ldap_monitor_mdb eq "") {
+  $ldap_monitor_mdb = "true";
+}
+
+if (isdigit($ldap_monitor_mdb) && $ldap_monitor_mdb == 1) {
+  $ldap_monitor_mdb = "true";
+}
+
+if (isdigit($ldap_monitor_mdb) && $ldap_monitor_mdb == 0) {
+  $ldap_monitor_mdb = "false";
+}
+
+if ($ldap_monitor_mdb ne "true") {
+  exit 0;
+}
 
 if ($zimbra_home eq "") {
    $zimbra_home = "/opt/zimbra";
@@ -58,10 +80,6 @@ if ($ldap_db_maxsize eq "") {
 
 if ($ldap_accesslog_maxsize eq "") {
   $ldap_accesslog_maxsize = 85899345920;
-}
-
-if ($ldap_monitor_mdb eq "") {
-  $ldap_monitor_mdb = "true";
 }
 
 if ($ldap_monitor_alert_only eq "") {
@@ -76,12 +94,8 @@ if ($ldap_monitor_critical eq "") {
   $ldap_monitor_critical = .9;
 }
 
-if (isdigit($ldap_monitor_mdb) && $ldap_monitor_mdb == 1) {
-  $ldap_monitor_mdb = "true";
-}
-
-if (isdigit($ldap_monitor_mdb) && $ldap_monitor_mdb == 0) {
-  $ldap_monitor_mdb = "false";
+if ($ldap_monitor_growth eq "") {
+  $ldap_monitor_growth = .25;
 }
 
 if (isdigit($ldap_monitor_alert_only) && $ldap_monitor_alert_only == 1) {
@@ -100,8 +114,8 @@ if ($ldap_monitor_critical > 1) {
   $ldap_monitor_critical/=100;
 }
 
-if ($ldap_monitor_mdb ne "true") {
-  exit 0;
+if ($ldap_monitor_growth > 1) {
+  $ldap_monitor_growth/=100;
 }
 
 my $zmlocalconfig="${zimbra_home}/bin/zmlocalconfig";
@@ -118,11 +132,11 @@ if ($ldap_is_master && -f "${zimbra_home}/data/ldap/accesslog/db/data.mdb") {
   $alog_used*=$blocksize;
 }
 
-my $mdb_warning_size = .8*$ldap_db_maxsize;
-my $alog_warning_size = .8*$ldap_accesslog_maxsize;
+my $mdb_warning_size = $ldap_monitor_warning * $ldap_db_maxsize;
+my $alog_warning_size = $ldap_monitor_warning * $ldap_accesslog_maxsize;
 
-my $mdb_critical_size = .9*$ldap_db_maxsize;
-my $alog_critical_size = .9*$ldap_accesslog_maxsize;
+my $mdb_critical_size = $ldap_monitor_critical * $ldap_db_maxsize;
+my $alog_critical_size = $ldap_monitor_critical * $ldap_accesslog_maxsize;
 
 my $mdb_alarm=0;
 if ($mdb_used >= $mdb_critical_size) {
@@ -131,11 +145,39 @@ if ($mdb_used >= $mdb_critical_size) {
    $mdb_alarm=1;
 }
 
+my $mdb_growth_size=0;
+if ($mdb_alarm) {
+  $mdb_growth_size = $ldap_monitor_growth * $ldap_db_maxsize;
+}
+
 my $alog_alarm=0;
 if ($alog_used >= $alog_critical_size) {
   $alog_alarm=2;
 } elsif ($alog_used >= $alog_warning_size) {
   $alog_alarm=1;
+}
+
+my $alog_growth_size=0;
+if ($alog_alarm) {
+  $alog_growth_size = $ldap_monitor_growth * $ldap_accesslog_maxsize;
+}
+
+my $partUsage=df("/opt/zimbra/data/ldap/mdb/db");
+my $totalspace = $partUsage->{blocks}*1024;
+my $freespace = $partUsage->{bfree}*1024;
+my $usedspace = $partUsage->{used}*1024;
+if(defined($partUsage) && $debug) {
+  print "Total space: ".$totalspace."\n";
+  print "Total free: ".$freespace."\n";
+  print "Total used: ".$usedspace."\n";
+}
+
+my $space_alarm;
+my $disk_warning_size = $ldap_monitor_warning * $freespace;
+my $disk_critical_size = $ldap_monitor_critical * $freespace;
+
+if ($ldap_db_maxsize > $totalspace) {
+  $space_alarm=7;
 }
 
 if ($debug) {
@@ -149,13 +191,9 @@ if ($debug) {
   print "alog_critical_size=$alog_critical_size\n";
   print "mdb_alarm=$mdb_alarm\n";
   print "alog_alarm=$alog_alarm\n";
-}
-
-my $partUsage=df("/opt/zimbra/data/ldap/mdb/db");
-if(defined($partUsage) && $debug) {
-  print "Total 1k blocks: $partUsage->{blocks}\n";
-  print "Total 1k blocks free: $partUsage->{bfree}\n";
-  print "Total 1k blocks used: $partUsage->{used}\n";
+  print "space_alarm=$space_alarm\n";
+  print "mdb_growth_size=$mdb_growth_size\n";
+  print "alog_growth_size=$alog_growth_size\n";
 }
 
 if ($mdb_alarm && $ldap_monitor_alert_only eq "false") {
