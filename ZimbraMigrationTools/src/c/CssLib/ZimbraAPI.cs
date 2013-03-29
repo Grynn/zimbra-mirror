@@ -2728,7 +2728,11 @@ public class ZimbraAPI
                     string[] words = FolderPath.Split('/');
 
                     int ind = 0;
-                    int  mnIndex = 3;
+                    int  mnIndex =0;
+                    if (FolderPath.Contains("Inbox"))
+                    { mnIndex = 3; }
+                    else
+                        mnIndex = 2;
                     int len = 0;
                     if (words[mnIndex] != "")
                         ind = FolderPath.IndexOf(words[mnIndex]);
