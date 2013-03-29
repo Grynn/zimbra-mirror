@@ -258,9 +258,28 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 
 		// If specified, load the log4j property file first
 		// so that we start logging immediately
-		if (request.optionTimes(Arguments.argLog4j) > 0 ) {
-        	PropertyConfigurator.configure(request.optionValue(Arguments.argLog4j));
-		}
+        if (request.optionTimes(Arguments.argLog4j) > 0 ) {
+        	
+        	// Even if a log4j.properties file was specified, check 
+        	// for a local log4j file, since it is the first priority.
+        	// The user should delete the local file, if that's not
+        	// what is desired
+        	//
+            File f = new File(defaultLog4jProperties);
+            if ( f.exists() ) {
+            	
+            	// Priority 1: a local log4j.properties file
+                PropertyConfigurator.configure(defaultLog4jProperties);
+                mLog.warn("Using "+ defaultLog4jProperties +".  Delete the file to use "+ Arguments.argLog4j);
+
+            } else {
+            	
+            	// Priority 2: a specified log4j.properties file
+            	PropertyConfigurator.configure(request.optionValue(Arguments.argLog4j));
+
+            }
+        }
+
 
 		// Set the harness parameters
         harness.jarfilename = valueJarfile;
