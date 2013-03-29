@@ -9,6 +9,7 @@
 smtp      inet  n       -       n       -       -       smtpd
 	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10030
 %%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_filter=[%%zimbraLocalBindAddress%%]:10027
+%%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_options=speed_adjust
 465    inet  n       -       n       -       -       smtpd
 	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10030
 	-o smtpd_tls_wrappermode=yes 
@@ -22,6 +23,7 @@ smtp      inet  n       -       n       -       -       smtpd
 	-o syslog_name=postfix/smtps
 	-o milter_macro_daemon_name=ORIGINATING
 %%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_filter=[%%zimbraLocalBindAddress%%]:10027
+%%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_options=speed_adjust
 submission inet n      -       n       -       -       smtpd
 	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10030
 	-o smtpd_etrn_restrictions=reject
@@ -36,6 +38,7 @@ submission inet n      -       n       -       -       smtpd
 	-o syslog_name=postfix/submission
 	-o milter_macro_daemon_name=ORIGINATING
 %%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_filter=[%%zimbraLocalBindAddress%%]:10027
+%%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_options=speed_adjust
 scan      unix  -       -       n       -       10      smtp
 	-o smtp_send_xforward_command=yes
 	-o disable_mime_output_conversion=yes
