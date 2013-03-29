@@ -72,7 +72,7 @@ public class ZmMailItem extends AjaxCommonTest {
 
 	}
 
-	@Test(	description = "Measure the performance for preview pane, html message, 1 message",
+	@Test(	description = "Measure the performance for preview pane, text message, 1 message",
 			groups = { "performance" })
 	public void ZmMailItem_02() throws HarnessException {
 		
@@ -94,7 +94,44 @@ public class ZmMailItem extends AjaxCommonTest {
 		PerfMetrics.waitTimestamp(token);
 
 	}
+	
+	@Test(	description = "Measure the performance for preview pane,  message with 1 attachment",
+			groups = { "performance" })
+	public void ZmMailItem_03() throws HarnessException {
+		
+		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email05/mime01.txt";
+		final String subject = "subject151615738";
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFile));
 
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
+		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailItem, "Load preview pane, text message, 1 attachment");
+
+		// Select the message so that it shows in the reading pane
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		PerfMetrics.waitTimestamp(token);
+	}
+	
+	
+	@Test(	description = "Measure the performance for preview pane,  message with 3 attachment",
+			groups = { "performance" })
+	public void ZmMailItem_04() throws HarnessException {
+		
+		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email05/mime02.txt";
+		final String subject = "subject151111738";
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFile));
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailItem, "Load preview pane, text message, 3 attachments");
+
+		// Select the message so that it shows in the reading pane
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		PerfMetrics.waitTimestamp(token);
+	}
 
 }
