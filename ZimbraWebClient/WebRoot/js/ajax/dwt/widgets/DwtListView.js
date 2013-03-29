@@ -98,7 +98,18 @@ DwtListView = function(params) {
 	this._stateChangeEv = new DwtEvent(true);
 	this._headerList = params.headerList;
 	this._noMaximize = params.noMaximize;
-	this._parentEl = this._headerList ? this._listDiv : this.getHtmlElement();
+	if (this._headerList) {
+		this._parentEl = this._listDiv;
+	} else {
+		this._parentEl = this.getHtmlElement();
+		if (this.useListElement()) {
+			//insert unordered list element
+			var ul = document.createElement("ul");
+			ul.className = "DwtListView-Rows";
+			this._parentEl.appendChild(ul);
+			this._parentEl = ul;
+		}
+	}
 	
 	this._list = null;
 	this.offset = 0;
