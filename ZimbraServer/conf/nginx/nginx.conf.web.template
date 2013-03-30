@@ -35,6 +35,12 @@ http
         zmauth_admin;
     }
 
+    # Enable Access logs for web traffic
+    log_format upstream '$remote_addr - $remote_user [$time_local]  '
+			'"$request" $status $bytes_sent '
+			'"$http_referer" "$http_user_agent" "$upstream_addr"';
+    access_log ${web.logfile} upstream;
+
     # Set proxy timeout
     proxy_read_timeout ${web.upstream.read.timeout};
     proxy_send_timeout ${web.upstream.send.timeout};
