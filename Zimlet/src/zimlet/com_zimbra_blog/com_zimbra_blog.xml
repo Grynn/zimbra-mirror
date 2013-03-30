@@ -1,43 +1,46 @@
-<zimlet name="com_zimbra_blog" version="1.1" label="Blog" description="Drag-and-drop items to post to a blog.">
 <!--
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Zimlets
  * Copyright (C) 2007, 2008, 2009, 2010 VMware, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
 -->
-	<include>wordpress.js</include>
-	<include>typepad.js</include>
-	<include>blog.js</include>
+<zimlet name="com_zimbra_blog"
+        version="1.1"
+        label="Blog"
+        description="Drag-and-drop items to post to a blog.">
+    <include>wordpress.js</include>
+    <include>typepad.js</include>
+    <include>blog.js</include>
     <includeCSS>blog.css</includeCSS>
-	<handlerObject>Com_Zimbra_Blog</handlerObject>
-	<zimletPanelItem label="Blog" icon="Blog-panelIcon">
-		<toolTipText>Drag-and-drop items to post to a blog.</toolTipText>
-		<dragSource type="ZmContact" />
-		<dragSource type="ZmMailMsg" />
-		<dragSource type="ZmNotebook" />
-		<dragSource type="ZmAppt" />    
-		<dragSource type="ZmConv" />
-		<contextMenu>
-			<menuItem label="Preferences..." id="PREFERENCES"/>
-		</contextMenu>
-	</zimletPanelItem>
-	<userProperties>
-		<property type="string" name="user" minLength="4" maxLength="32" label="Login ID" />
-		<property type="password" name="passwd" minLength="4" maxLength="32" label="Password" />
-		<property type="string" name="blogurl" minLength="4" maxLength="96" label="Blog URL" />
-		<property type="enum" name="blogtype" width="100" label="Blog Type" value="WordPress">
-			<item label="WordPress" value="WordPress"/>
-			<item label="TypePad" value="TypePad"/>
-		</property>
-	</userProperties>
+    <handlerObject>Com_Zimbra_Blog</handlerObject>
+    <zimletPanelItem label="Blog" icon="Blog-panelIcon">
+        <toolTipText>Drag-and-drop items to post to a blog.</toolTipText>
+        <dragSource type="ZmContact" />
+        <dragSource type="ZmMailMsg" />
+        <dragSource type="ZmNotebook" />
+        <dragSource type="ZmAppt" />
+        <dragSource type="ZmConv" />
+        <contextMenu>
+            <menuItem label="Preferences..." id="PREFERENCES"/>
+        </contextMenu>
+    </zimletPanelItem>
+    <userProperties>
+        <property type="string" name="user" minLength="4" maxLength="32" label="Login ID" />
+        <property type="password" name="passwd" minLength="4" maxLength="32" label="Password" />
+        <property type="string" name="blogurl" minLength="4" maxLength="96" label="Blog URL" />
+        <property type="enum" name="blogtype" width="100" label="Blog Type" value="WordPress">
+            <item label="WordPress" value="WordPress"/>
+            <item label="TypePad" value="TypePad"/>
+        </property>
+    </userProperties>
 </zimlet>
