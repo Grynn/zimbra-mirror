@@ -31,7 +31,6 @@ checksrc:
 build:
 	(tar xzf src/zeromq-$(ZMQ_VERSION).tar.gz; \
 	cd zeromq-$(ZMQ_VERSION); \
-	patch -g0 -N -p1 < ../patches/newline.patch; \
 	LDFLAGS="-Wl,-rpath,$(ZIMBRA_HOME)/zeromq-$(ZMQ_VERSION)/lib" \
 	CFLAGS="-g -O0" \
 	./configure --prefix=$(ZIMBRA_HOME)/zeromq-$(ZMQ_VERSION); \
