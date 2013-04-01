@@ -1921,15 +1921,19 @@ function(oel, nel, inheritClass, inheritStyle) {
         if (style) {
             if (AjxUtil.isString(style)) { // All non-IE browsers
                 nel.setAttribute("style", [nel.getAttribute("style"),style].join(";"));
-            } else {
-                for (var attribute in style) {
-                    if (style[attribute]) {
+            } else if (AjxUtil.isString(style.cssText)) {
+				if (style.cssText) {
+					nel.setAttribute("style", [nel.getAttribute("style"),style.cssText].join(";"));
+				}
+			} else {
+				for (var attribute in style) {
+					if (style[attribute]) {
 						try {
-                        	nel.style[attribute] = style[attribute];
+							nel.style[attribute] = style[attribute];
 						} catch (e) {}
-                    }
-                }
-            }
+					}
+				}
+			}
         }
     }
 };
