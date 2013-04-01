@@ -221,14 +221,14 @@ public class PageAddressbook extends AbsTab {
 		
         //assume that this is a list view
 		String listLocator = "div[id='zv__CNS-main']";		
-		String rowLocator  = "div[id^='zli__CNS-main__']";
+		String rowLocator  = "li[id^='zli__CNS-main__']";
 	    String noResultLocator = "td.NoResults";		
 		String fileAsLocator = " td[id^=zlif__CNS-main__][id$=__fileas]";
 		
 		//actually this is a search view
 		if (zIsInSearchView()) {
 			listLocator= "div[id=zv__CNS-SR-Contacts-1]";	
-		   	rowLocator= "div[id^=zli__CNS-SR-Contacts-1__]";
+		   	rowLocator= "li[id^=zli__CNS-SR-Contacts-1__]";
 		   	fileAsLocator=" td[id^=zlif__CNS-SR-Contacts-1__][id$=__fileas]";
 		}
 
@@ -237,19 +237,19 @@ public class PageAddressbook extends AbsTab {
            return false;
 		}
 		
-		if (!this.sIsElementPresent("css=" + listLocator + ">" + rowLocator)) {
-			throw new HarnessException("css=" + listLocator + ">" + rowLocator + " not present");
+		if (!this.sIsElementPresent("css=" + listLocator + " " + rowLocator)) {
+			throw new HarnessException("css=" + listLocator + " " + rowLocator + " not present");
 		}
 		
 		//Get the number of contacts (String) 
-		int count = this.sGetCssCount("css=" + listLocator + ">" + rowLocator);
+		int count = this.sGetCssCount("css=" + listLocator + " " + rowLocator);
 		
 		logger.info(myPageName() + " zIsContactDisplayed: number of contacts: "+ count);
 
 		// Get each contact's data from the table list
 		for (int i = 1; i <= count && !isContactFound; i++) {
-			String commonLocator = "css=" + listLocator + ">div:nth-child(" + i +")";
-
+			String commonLocator = "css=" + listLocator + " li:nth-child(" + i +")";
+														
 			String contactType = getContactType(commonLocator);
 		    
 			String contactDisplayedLocator = commonLocator + fileAsLocator;
@@ -277,14 +277,14 @@ public class PageAddressbook extends AbsTab {
 
 		//assume that this is a list view
 		String listLocator = "div[id='zv__CNS-main']";		
-		String rowLocator  = "div[id^='zli__CNS-main__']";
+		String rowLocator  = "li[id^='zli__CNS-main__']";
         String fileAsLocator = " td[id^=zlif__CNS-main__][id$=__fileas]";
         String noResultLocator = " td.NoResults";
         
 		//actually this is a search view
 		if (zIsInSearchView()) {
 			listLocator= "div[id=zv__CNS-SR-Contacts-1]";	
-		   	rowLocator= "div[id^=zli__CNS-SR-Contacts-1__]";
+		   	rowLocator= "li[id^=zli__CNS-SR-Contacts-1__]";
 		   	fileAsLocator=" td[id^=zlif__CNS-SR-Contacts-1__][id$=__fileas]";
 		}
 
@@ -293,17 +293,17 @@ public class PageAddressbook extends AbsTab {
 			return list;
 		}
 		
-		if (!this.sIsElementPresent("css=" + listLocator + ">" + rowLocator)) {
-			throw new HarnessException("css=" + listLocator + ">" + rowLocator + " not present");
+		if (!this.sIsElementPresent("css=" + listLocator + " " + rowLocator)) {
+			throw new HarnessException("css=" + listLocator + " " + rowLocator + " not present");
 		}
 
-	    int count = this.sGetCssCount("css=" + listLocator + ">" + rowLocator);
+	    int count = this.sGetCssCount("css=" + listLocator + " " + rowLocator);
 		
 		logger.info(myPageName() + " zListGetContacts: number of contacts: "+ count);
 
 		// Get each contact's data from the table list
 		for (int i = 1; i <= count; i++) {
-			String commonLocator = "css=" + listLocator + ">div:nth-child(" + i +")";
+			String commonLocator = "css=" + listLocator + " li:nth-child(" + i +")";
 						
 		    if (sIsElementPresent(commonLocator + " div[class*=" + contactType + "]")) {
 				
@@ -886,22 +886,22 @@ public class PageAddressbook extends AbsTab {
 	private String getContactLocator(String contact) throws HarnessException {
 		//assume that this is a list view
 		String listLocator = "div[id='zv__CNS-main']";		
-		String rowLocator  = "div[id^='zli__CNS-main__']";
+		String rowLocator  = "li[id^='zli__CNS-main__']";
 	    		
 		String contactLocator = null;
 		
 		//actually this is a search view
 		if (zIsInSearchView()) {
 			listLocator= "div[id=zv__CNS-SR-Contacts-1]";	
-		   	rowLocator= "div[id^=zli__CNS-SR-Contacts-1__]";
+		   	rowLocator= "li[id^=zli__CNS-SR-Contacts-1__]";
 		}
 		
-		if (!this.sIsElementPresent("css=" + listLocator + ">" + rowLocator)) {
-			throw new HarnessException("css=" + listLocator + ">" + rowLocator + " not present");
+		if (!this.sIsElementPresent("css=" + listLocator + " " + rowLocator)) {
+			throw new HarnessException("css=" + listLocator + " " + rowLocator + " not present");
 		}
 		
 		//Get the number of contacts (String) 
-	    int count = this.sGetCssCount("css=" + listLocator + ">" + rowLocator);
+	    int count = this.sGetCssCount("css=" + listLocator + " " + rowLocator);
 		logger.debug(myPageName() + " zListItem: number of contacts: "+ count);
 
 		if ( count == 0 )
@@ -910,7 +910,7 @@ public class PageAddressbook extends AbsTab {
 		// Get each contact's data from the table list
 		for (int i = 1; i<=count; i++) { 
 
-			String itemLocator = "css=" + listLocator + ">div:nth-child(" + i +")";
+			String itemLocator = "css=" + listLocator + " li:nth-child(" + i +")";
 			if ( !this.sIsElementPresent(itemLocator) ) {
 				throw new HarnessException("unable to locate item " + itemLocator);
 			}
@@ -941,7 +941,7 @@ public class PageAddressbook extends AbsTab {
     //get selected contacts locators
 	private ArrayList<String> getSelectedContactLocator() throws HarnessException {
 		String listLocator = "div#zv__CNS-main";				
-		String rowLocator = "div[id^='zli__CNS-main__']";
+		String rowLocator = "li[id^='zli__CNS-main__']";
 		
 		
 	    ArrayList<String> arrayList = new ArrayList<String>();
@@ -953,7 +953,7 @@ public class PageAddressbook extends AbsTab {
 		    return arrayList; //an empty arraylist
 			
 		//Get the number of contacts (String) 
-		int count = sGetCssCount("css=" + listLocator + ">" + rowLocator);
+		int count = sGetCssCount("css=" + listLocator + " " + rowLocator);
 
 		logger.debug(myPageName() + " getSelectedContactLocator: number of contacts: "+ count);
 
@@ -962,7 +962,7 @@ public class PageAddressbook extends AbsTab {
 
 		// Get each contact's data from the table list
 		for (int i = 1; i<=count; i++) {
-			String itemLocator = "css=" + listLocator + " div:nth-child(" + i +")";
+			String itemLocator = "css=" + listLocator + " li:nth-child(" + i +")";
         			
 			if ( !sIsElementPresent(itemLocator) ) {
 				logger.info("reach the end of list - unable to locate item " + itemLocator);
