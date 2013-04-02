@@ -1,50 +1,50 @@
-<zimlet name="com_zimbra_travelagent" version="2.05" label="Travel Agent" description="Search travel reservations.">
 <!--
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Zimlets
  * Copyright (C) 2006, 2007, 2009, 2010, 2011 VMware, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
 -->
-<include>com_zimbra_travelagent.js</include>
-<include>TravelAgentFlightFindView.js</include>
-<include>TravelAgentCarFindView.js</include>
-<include>TravelAgentHotelFindView.js</include>
-<include>TravelAgentAirportLookupDlg.js</include>
-<resource>sidestep.gif</resource>
-<resource>hotel.gif</resource>
-<resource>air.gif</resource>
-<resource>car.gif</resource>
-<resource>hotwire.gif</resource>
-<resource>travelocity.gif</resource>
-<resource>kayak.gif</resource>
-<includeCSS>com_zimbra_travelagent.css</includeCSS>	
-<handlerObject>Com_Zimbra_TravelAgent</handlerObject>
-	<zimletPanelItem label="Travel Agent" icon="Globe">
-		<toolTipText>Search travel reservations.</toolTipText>
-		<dragSource type="ZmContact" />
-		<dragSource type="ZmAppt" />
-		<contextMenu>
-			<menuItem label="Preferences..." id="PREFERENCES" />
-			<menuItem label="Book a flight" id="BOOKAFLIGHT" />
-			<menuItem label="Book a car" id="BOOKACAR" />			
-			<menuItem label="Book a hotel" id="BOOKAHOTEL" />				
-		</contextMenu>
-	</zimletPanelItem>
-	<userProperties>
-		<property type="string" minLength="3" maxLength="4"  name="myairport" label="My airport" visible="true" value="SFO"/>
-		<property type="boolean"  name="search_sidestep" label="Show SideStep.com button" visible="true" value="true"/>
-		<property type="boolean"  name="search_travelocity" label="Show Travelocity.com button" visible="true" value="true"/>
-		<property type="boolean"  name="search_hotwire" label="Show Hotwire.com button" visible="true" value="true"/>		
-	</userProperties>
+<zimlet name="com_zimbra_travelagent" version="2.05" label="Travel Agent" description="Search travel reservations.">
+    <include>com_zimbra_travelagent.js</include>
+    <include>TravelAgentFlightFindView.js</include>
+    <include>TravelAgentCarFindView.js</include>
+    <include>TravelAgentHotelFindView.js</include>
+    <include>TravelAgentAirportLookupDlg.js</include>
+    <resource>sidestep.gif</resource>
+    <resource>hotel.gif</resource>
+    <resource>air.gif</resource>
+    <resource>car.gif</resource>
+    <resource>hotwire.gif</resource>
+    <resource>travelocity.gif</resource>
+    <resource>kayak.gif</resource>
+    <includeCSS>com_zimbra_travelagent.css</includeCSS>
+    <handlerObject>Com_Zimbra_TravelAgent</handlerObject>
+    <zimletPanelItem label="Travel Agent" icon="Globe">
+        <toolTipText>Search travel reservations.</toolTipText>
+        <dragSource type="ZmContact" />
+        <dragSource type="ZmAppt" />
+        <contextMenu>
+            <menuItem label="Preferences..." id="PREFERENCES" />
+            <menuItem label="Book a flight" id="BOOKAFLIGHT" />
+            <menuItem label="Book a car" id="BOOKACAR" />
+            <menuItem label="Book a hotel" id="BOOKAHOTEL" />
+        </contextMenu>
+    </zimletPanelItem>
+    <userProperties>
+        <property type="string" minLength="3" maxLength="4"  name="myairport" label="My airport" visible="true" value="SFO"/>
+        <property type="boolean"  name="search_sidestep" label="Show SideStep.com button" visible="true" value="true"/>
+        <property type="boolean"  name="search_travelocity" label="Show Travelocity.com button" visible="true" value="true"/>
+        <property type="boolean"  name="search_hotwire" label="Show Hotwire.com button" visible="true" value="true"/>
+    </userProperties>
 </zimlet>
 

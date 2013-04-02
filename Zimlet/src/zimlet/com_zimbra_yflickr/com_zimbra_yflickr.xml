@@ -1,35 +1,38 @@
-<zimlet name="com_zimbra_yflickr" version="0.2" label="Flickr" description="Flickr">
 <!--
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Zimlets
  * Copyright (C) 2007, 2008, 2009, 2010 VMware, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
 -->
-	<include>com_zimbra_yflickr.js</include>
+<zimlet name="com_zimbra_yflickr"
+        version="0.2"
+        label="Flickr"
+        description="Flickr">
+    <include>com_zimbra_yflickr.js</include>
     <include>photoset.js</include>
     <include>flickr.js</include>
-	<includeCSS>com_zimbra_yflickr.css</includeCSS>
-	<handlerObject>Com_Zimbra_Yflickr_handlerObj</handlerObject>
+    <includeCSS>com_zimbra_yflickr.css</includeCSS>
+    <handlerObject>Com_Zimbra_Yflickr_handlerObj</handlerObject>
 
-	<zimletPanelItem label="Flickr" icon="FLICKR-panelIcon">
-    	<toolTipText>Quick link to Flickr.</toolTipText>
-    	<contextMenu>
-			<menuItem label="Authorize" id="YflickrAuthorize" icon="AUTHORIZE-panelIcon" />
-			<menuItem label="Visit Flickr" id="WWW.FLICKR.COM" icon="FLICKR-panelIcon">
-				<canvas type="window" title="Flickr Website" width="800" height="600" />
-				<actionUrl target="http://www.flickr.com" />
-    		</menuItem>
-    	</contextMenu>
-	</zimletPanelItem>
+    <zimletPanelItem label="Flickr" icon="FLICKR-panelIcon">
+        <toolTipText>Quick link to Flickr.</toolTipText>
+        <contextMenu>
+            <menuItem label="Authorize" id="YflickrAuthorize" icon="AUTHORIZE-panelIcon" />
+            <menuItem label="Visit Flickr" id="WWW.FLICKR.COM" icon="FLICKR-panelIcon">
+                <canvas type="window" title="Flickr Website" width="800" height="600" />
+                <actionUrl target="http://www.flickr.com" />
+            </menuItem>
+        </contextMenu>
+    </zimletPanelItem>
 
 </zimlet>

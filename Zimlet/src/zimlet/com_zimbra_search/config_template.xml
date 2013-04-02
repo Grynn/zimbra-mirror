@@ -1,27 +1,27 @@
-<zimletConfig name="com_zimbra_search" version="1.0">
 <!--
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Zimlets
  * Copyright (C) 2006, 2007 VMware, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
 -->
-  <global>
+<zimletConfig name="com_zimbra_search" version="1.0">
+    <global>
 
-    <property name="google-account">pub-8230960882754720</property>
+        <property name="google-account">pub-8230960882754720</property>
 
-    <property name="google-search-code"><![CDATA[
-    <!-- Search Google -->
-      <form method="get" action="http://www.google.com/custom" target="_blank">
+        <property name="google-search-code"><![CDATA[
+        <!-- Search Google -->
+        <form method="get" action="http://www.google.com/custom" target="_blank">
         <input type="text" name="q" size="31" value="${prop.query}"></input>
         <input type="hidden" name="sa" value="Google Search"></input>
         <input type="hidden" name="client" value="${prop.acct}"></input>
@@ -31,24 +31,24 @@
         <input type="hidden" name="oe" value="ISO-8859-1"></input>
         <input type="hidden" name="cof" value="GALT:008000;GL:1;DIV:336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1"></input>
         <input type="hidden" name="hl" value="en"></input>
-      </form>
-    <!-- Search Google -->
-    ]]></property>
+        </form>
+        <!-- Search Google -->
+        ]]></property>
 
-    <property name="wikipedia-search-code"><![CDATA[
-      <form action="http://en.wikipedia.org/wiki/Special:Search" target="_blank">
+        <property name="wikipedia-search-code"><![CDATA[
+        <form action="http://en.wikipedia.org/wiki/Special:Search" target="_blank">
         <input name="search" value="${prop.query}" type="text">
         <input name="go" value="Go" type="hidden">
-      </form>
-    ]]></property>
+        </form>
+        ]]></property>
 
-    <property name="yahoo-search-code"><![CDATA[
-      <!-- generated at http://builder.search.yahoo.com/, then cleaned up -->
-      <form method="get" action="http://search.yahoo.com/search" target="_blank">
+        <property name="yahoo-search-code"><![CDATA[
+        <!-- generated at http://builder.search.yahoo.com/, then cleaned up -->
+        <form method="get" action="http://search.yahoo.com/search" target="_blank">
         <input name="fr" value="zim-maila" type="hidden" />
         <input type="text" name="p" value="${prop.query}" />
-      </form>
-    ]]></property>
+        </form>
+        ]]></property>
 
-  </global>
+    </global>
 </zimletConfig>

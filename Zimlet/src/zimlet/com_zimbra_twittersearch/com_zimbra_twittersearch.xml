@@ -1,23 +1,26 @@
-<zimlet name="com_zimbra_twittersearch" version="0.2" label="${msg.label}"
 <!--
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Zimlets
  * Copyright (C) 2010, 2011 VMware, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
 -->
-	description="${msg.description}" target="main view-window" >
-	<include>twittersearch.js</include>
-	<include>templates/TwitterSearch.template.js</include>
-	<includeCSS>twittersearch.css</includeCSS>
-	<handlerObject>com_zimbra_twittersearch_handlerObject</handlerObject>
+<zimlet name="com_zimbra_twittersearch"
+        version="0.2"
+        label="${msg.label}"
+        description="${msg.description}"
+        target="main view-window" >
+    <include>twittersearch.js</include>
+    <include>templates/TwitterSearch.template.js</include>
+    <includeCSS>twittersearch.css</includeCSS>
+    <handlerObject>com_zimbra_twittersearch_handlerObject</handlerObject>
 </zimlet>

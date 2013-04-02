@@ -1,38 +1,41 @@
-<zimlet name="com_zimbra_ysearch" version="1.1" label="${msg.label}" description="${msg.description}">
 <!--
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Zimlets
  * Copyright (C) 2008, 2009, 2010 VMware, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
 -->
-	<include>ysearch.js</include>
-	<include>yahoosearch.js</include>
+<zimlet name="com_zimbra_ysearch"
+        version="1.1"
+        label="${msg.label}"
+        description="${msg.description}">
+    <include>ysearch.js</include>
+    <include>yahoosearch.js</include>
     <includeCSS>ysearch.css</includeCSS>
     <includeCSS>yahoosearch.css</includeCSS>
-	<resource>ylogo.gif</resource>
-	<handlerObject>Com_Zimbra_Ysearch</handlerObject>
+    <resource>ylogo.gif</resource>
+    <handlerObject>Com_Zimbra_Ysearch</handlerObject>
 
-	<zimletPanelItem label="Yahoo! Search" icon="YLogo">
-		<toolTipText>Perform a search using Yahoo!</toolTipText>
-		<contextMenu>
-			<menuItem label="Preferences..." id="prefs"/>
-		</contextMenu>
-	</zimletPanelItem>
+    <zimletPanelItem label="Yahoo! Search" icon="YLogo">
+        <toolTipText>Perform a search using Yahoo!</toolTipText>
+        <contextMenu>
+            <menuItem label="Preferences..." id="prefs"/>
+        </contextMenu>
+    </zimletPanelItem>
 
-	<userProperties>
-		<property type="boolean" name="autocomplete" label="Autocomplete Search Results" value="true"/>
-		<property type="boolean" name="pane" label="Display Search Results in Zimbra Window" value="true"/>
-		<property type="boolean" name="tab" label="Display Search Tab (if in Zimbra window)" value="true"/>
-		<property type="boolean" name="nav" label="Display Back &amp; Forward Buttons in Search Tab (will not always work correctly)" value="false"/>
-	</userProperties>
+    <userProperties>
+        <property type="boolean" name="autocomplete" label="Autocomplete Search Results" value="true"/>
+        <property type="boolean" name="pane" label="Display Search Results in Zimbra Window" value="true"/>
+        <property type="boolean" name="tab" label="Display Search Tab (if in Zimbra window)" value="true"/>
+        <property type="boolean" name="nav" label="Display Back &amp; Forward Buttons in Search Tab (will not always work correctly)" value="false"/>
+    </userProperties>
 </zimlet>
