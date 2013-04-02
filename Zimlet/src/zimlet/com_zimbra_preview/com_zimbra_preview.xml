@@ -1,20 +1,23 @@
-<zimlet name="com_zimbra_preview" version="1.0" target="main" description="Enable Preview View in Briefcase">
 <!--
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Zimlets
  * Copyright (C) 2010 VMware, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
 -->
-	<include>preview.js</include>
-	<handlerObject>Com_Zimbra_Preview</handlerObject>
+<zimlet name="com_zimbra_preview"
+        version="1.0"
+        target="main"
+        description="Enable Preview View in Briefcase">
+    <include>preview.js</include>
+    <handlerObject>Com_Zimbra_Preview</handlerObject>
 </zimlet>

@@ -1,28 +1,30 @@
-<zimlet name="com_zimbra_hellofolders_zd" version="0.1" description="Creates Folders when clicked in different accounts in ZD">
 <!--
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Zimlets
  * Copyright (C) 2011 VMware, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
 -->
-  <include>hellofolders.js</include>
-  <handlerObject>com_zimbra_hellofolders_zd</handlerObject>
-  <zimletPanelItem label="Hello Folders ZD" icon="zimbraIcon">
-    <toolTipText>Creates Folders when clicked in different accounts in ZD</toolTipText>
-		 <contextMenu>
-			<menuItem label="Create folder in default account" icon="MsgStatusUnread" id="hellofolderszd_defaultAccount"/>
-			<menuItem label="Create folder in active account" icon="MsgStatusUnread" id="hellofolderszd_activeAccount"/>
-			<menuItem label="Create folder in Zimbra account" icon="MsgStatusUnread" id="hellofolderszd_zimbraAccount"/>
-		</contextMenu>
-  </zimletPanelItem>
+<zimlet name="com_zimbra_hellofolders_zd"
+        version="0.1"
+        description="Creates Folders when clicked in different accounts in ZD">
+    <include>hellofolders.js</include>
+    <handlerObject>com_zimbra_hellofolders_zd</handlerObject>
+    <zimletPanelItem label="Hello Folders ZD" icon="zimbraIcon">
+        <toolTipText>Creates Folders when clicked in different accounts in ZD</toolTipText>
+        <contextMenu>
+            <menuItem label="Create folder in default account" icon="MsgStatusUnread" id="hellofolderszd_defaultAccount"/>
+            <menuItem label="Create folder in active account" icon="MsgStatusUnread" id="hellofolderszd_activeAccount"/>
+            <menuItem label="Create folder in Zimbra account" icon="MsgStatusUnread" id="hellofolderszd_zimbraAccount"/>
+        </contextMenu>
+    </zimletPanelItem>
 </zimlet>

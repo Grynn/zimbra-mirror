@@ -1,28 +1,30 @@
-<zimlet name="com_zimbra_gdocs" version="0.1" description="Get the docs from Google Docs">
 <!--
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Zimlets
  * Copyright (C) 2010 VMware, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
 -->
-  <include>gdocs.js</include>
-  <include>oauth.js</include>
-  <include>sha1.js</include>
-  <includeCSS>gdocs.css</includeCSS>
-  <handlerObject>com_zimbra_gdocs</handlerObject>
-  <userProperties>
+<zimlet name="com_zimbra_gdocs"
+        version="0.1"
+        description="Get the docs from Google Docs">
+    <include>gdocs.js</include>
+    <include>oauth.js</include>
+    <include>sha1.js</include>
+    <includeCSS>gdocs.css</includeCSS>
+    <handlerObject>com_zimbra_gdocs</handlerObject>
+    <userProperties>
         <property type="string" name="gdocs_is_connected" value="false"/>
         <property type="string" name="gdocs_access_token" value=""/>
         <property type="string" name="gdocs_access_token_secret" value=""/>
-  </userProperties>
+    </userProperties>
 </zimlet>
