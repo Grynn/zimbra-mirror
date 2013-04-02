@@ -2554,4 +2554,24 @@ public class PageCalendar extends AbsTab {
 		}
 	}
 	
+	public boolean zClickToRefreshOnceIfApptDoesntExists (String apptSubject) throws HarnessException {
+
+		SleepUtil.sleepMedium();
+		
+		if ( sIsElementPresent("css=td.appt_name:contains('" + apptSubject + "')")) {
+			return true;
+		
+		} else if ( sIsElementPresent("css=td.appt_30_name:contains('" + apptSubject + "')")) {
+			return true;
+
+		} else if ( sIsElementPresent("css=td.appt_new_name:contains('" + apptSubject + "')")) {
+			return true;
+			
+		} else if ( sIsElementPresent("css=td.appt_allday_name:contains('" + apptSubject + "')")) {
+			return true;
+			
+		} else {
+			return false;
+		}
+	}
 }
