@@ -10,6 +10,7 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 ZIMBRA_HOME ?= /opt/zimbra
 
 PATCH	:=
+
 ifdef BETA
 	include $(POSTFIX_ROOT)/../beta_versions.def
 else
@@ -27,12 +28,16 @@ PCRE_INCLUDE := -I/usr/include/pcre
 PCRE_LIB := -lpcre
 
 MYSQL_VERSION ?= standard-$(MYSQL_VERSION_STRING)-pc-linux-gnu-i686-glibc23
+ifdef MARIADB
+	MYSQL_INC := /opt/zimbra/mysql-$(MYSQL_VERSION)/include/mysql
+else
+	MYSQL_INC := /opt/zimbra/mysql-$(MYSQL_VERSION)/include
+endif
 MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
 
 SYSTEM_LIB := /usr/lib
 
 LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib:/opt/zimbra/openldap-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib:/opt/zimbra/bdb-$(BDB_VERSION)/lib
-MYSQL_INC := /opt/zimbra/mysql-$(MYSQL_VERSION)/include
 MYSQL_LIB := /opt/zimbra/mysql-$(MYSQL_VERSION)/lib
 
 

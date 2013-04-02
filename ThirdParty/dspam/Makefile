@@ -17,7 +17,11 @@ else
 	include $(DSPAM_ROOT)/../versions.def
 endif
 
-MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include
+ifdef MARIADB
+	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
+else
+	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include
+endif
 MYSQL_LIB_DIR := $(ZIMBRA_HOME)/mysql/lib
 
 DSPAM_TGZ_TARGET := \
