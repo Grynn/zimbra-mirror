@@ -163,7 +163,7 @@ function() {
 		'\nauthorize: true\n'
 	].join("");
 	script.type = "text/javascript";
-	script.src = "http://platform.linkedin.com/in.js";
+	script.src = "https://platform.linkedin.com/in.js";
 
 	document.getElementsByTagName('head')[0].appendChild(script); //must be done to execute the code in the script tag.
 };
