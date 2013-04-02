@@ -184,7 +184,7 @@ public class FormApptNew extends AbsForm {
 
 	public String zGetSuggestedLocation(String apptLocation)
 			throws HarnessException {
-		return "css=div[id='zv__CSLP'] div[class$='ZmLocationSuggestion']:contains('"
+		return "css=div[id='zv__CSLP'] div[id^='zli__CSLP__']:contains('"
 				+ apptLocation + "')";
 	}
 
