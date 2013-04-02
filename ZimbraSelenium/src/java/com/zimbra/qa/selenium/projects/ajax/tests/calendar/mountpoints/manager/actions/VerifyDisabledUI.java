@@ -91,10 +91,6 @@ public class VerifyDisabledUI extends CalendarWorkWeekTest {
 		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
 		app.zTreeCalendar.zSelectMountedFolder(mountpointname);
 		
-		// Verify Reply menu is disabled
-		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, apptSubject);
-		ZAssert.assertTrue(app.zPageCalendar.zVerifyDisabledControl(Button.O_REPLY_DISABLED), "Verify 'Reply' menu is disabled");
-		
 		// Verify Share Calendar menu is disabled
 		app.zTreeCalendar.zTreeItem(Action.A_RIGHTCLICK, mountpointname);
 		ZAssert.assertTrue(app.zPageCalendar.zVerifyDisabledControl(Button.O_SHARE_CALENDAR_DISABLED), "Verify 'Share Calendar' menu is disabled");
