@@ -54,7 +54,6 @@ UNZIP	:= $(shell which unzip)
 CMIRROR	?= http://zre-matrix.eng.vmware.com/cpan/
 
 BDB_INCLUDE	:= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
-MYSQL_INCLUDE	:= $(ZIMBRA_HOME)/mysql/include/mysql
 LDAP_INCLUDE 	:= $(ZIMBRA_HOME)/openldap/include
 SASL_INCLUDE	:= $(ZIMBRA_HOME)/cyrus-sasl/include
 
