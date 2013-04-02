@@ -64,6 +64,7 @@ build:
 		--with-ssl=/opt/zimbra/openssl-$(OPENSSL_VERSION) \
 		--without-gnutls \
 		--with-ca-bundle=/opt/zimbra/curl-$(CURL_VERSION)/share/curl/ca-bundle.crt \
+		--enable-ipv6 \
 		--with-zlib=$(LIB_DIR) \
 		--with-libidn=$(LIB_DIR))
 	(cd curl-$(CURL_VERSION);  LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) $(MAKE) $(MAKEARGS))
