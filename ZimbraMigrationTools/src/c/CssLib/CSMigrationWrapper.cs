@@ -107,6 +107,7 @@ public class MigrationOptions
     public string SpecialCharRep;
     public bool IsMaintainenceMode;
     public long LangID;
+    public Int32 MaxRetries;
     
 }
 
@@ -369,8 +370,13 @@ public class CSMigrationWrapper
     private void ProcessItems(MigrationAccount Acct, bool isServer, dynamic user, dynamic folder,
         ZimbraAPI api, string path, MigrationOptions options)
     {
+        int trial = 0;
+      do
+      {
+          Acct.IsCompletedMigration = true;
         DateTime dt = DateTime.UtcNow;
         dynamic[] itemobjectarray = null ;
+        trial++;
         
         try
         {
@@ -1142,6 +1148,10 @@ public class CSMigrationWrapper
                             iProcessedItems++;
                         }
                     }
+                    /*if (Acct.IsCompletedMigration == false)
+                    {
+                        ProcessItems(Acct, isServer, user, folder, api, path, options);
+                    }*/
                 }
             }
         }
@@ -1150,7 +1160,9 @@ public class CSMigrationWrapper
             Log.err("CSmigrationwrapper --- GetItemsForFolder returned null for itemfolderlist");
             return;
         }
-    }
+    } while((!(Acct.IsCompletedMigration)) &&(trial < options.MaxRetries));
+
+}
 
     public void StartMigration(MigrationAccount Acct, MigrationOptions options, bool isServer = true,
         LogLevel logLevel = LogLevel.Info, bool isPreview = false, bool doRulesAndOOO = true)      
@@ -1348,6 +1360,8 @@ public class CSMigrationWrapper
             if (!isPreview)
             {
                 ProcessItems(Acct, isServer, user, folder, api, path, options);
+
+                
             }
         }
 
@@ -1516,6 +1530,7 @@ public class CSMigrationWrapper
 
         return false;
     }
+} 
 
-  }
+
 }

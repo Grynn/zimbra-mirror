@@ -113,6 +113,13 @@ public class AdvancedImportOptions
         get { return m_LangID; }
         set { m_LangID = value; }
     }
+
+    private Int32 m_MaxRetries;
+    public Int32 MaxRetries
+    {
+        get { return m_MaxRetries; }
+        set { m_MaxRetries = value; }
+    }
 }
 
 public class Folder
