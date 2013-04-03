@@ -74,7 +74,7 @@ public class DragAndDropContactGroup extends AjaxCommonTest  {
 		
     
 		app.zPageAddressbook.zDragAndDrop(
-				"css=td#zlif__CNS-main__" + group.getId() + "__fileas:contains("+ group.getName() + ")",
+				"css=div#zlif__CNS-main__" + group.getId() + "__fileas:contains("+ group.getName() + ")",
 				"css=td#zti__main_Contacts__" + folder.getId() + "_textCell:contains("+ folder.getName() + ")");
 			
 	  
@@ -111,7 +111,7 @@ public class DragAndDropContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
 		app.zPageAddressbook.zDragAndDrop(
-				"css=td#zlif__CNS-main__" + group.getId() + "__fileas:contains("+ group.getName() + ")",
+				"css=div#zlif__CNS-main__" + group.getId() + "__fileas:contains("+ group.getName() + ")",
 				"css=td#zti__main_Contacts__" + trash.getId() + "_textCell:contains("+ trash.getName() + ")");
 
         

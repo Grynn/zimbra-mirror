@@ -344,18 +344,18 @@ public class PageAddressbook extends AbsTab {
 			throw new HarnessException("Contact List is not present "+ "id='zv__CNS-main'");
 
 		//Get the number of contacts (String) 
-		int count = this.sGetCssCount("css=div[id='zv__CNS-main']>div[id^=zli__CNS-main__]");
+		int count = this.sGetCssCount("css=div[id='zv__CNS-main'] li[id^=zli__CNS-main__]");
 		
 		logger.info(myPageName() + " zListGetContacts: number of contacts: "+ count);
 
 		// Get each contact's data from the table list
 		for (int i = 1; i <= count; i++) {
-			String commonLocator = "css=div[id='zv__CNS-main'] div:nth-child("+ i +")";
+			String commonLocator = "css=div[id='zv__CNS-main'] li:nth-child("+ i +")";
 
 			String contactType = getContactType(commonLocator);
 		    
 			ContactItem ci=null;
-			String contactDisplayedLocator = commonLocator + " td[id^=zlif__CNS-main__][id$=__fileas]";
+			String contactDisplayedLocator = commonLocator + " div[id^=zlif__CNS-main__][id$=__fileas]";
 			String fileAs = sGetText(contactDisplayedLocator);
 		    logger.info(" found " + fileAs);
 		    
