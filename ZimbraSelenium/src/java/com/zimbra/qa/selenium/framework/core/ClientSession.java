@@ -119,6 +119,10 @@ public class ClientSession {
 				DesiredCapabilities desiredCapabilities = DesiredCapabilities.internetExplorer();
 				//desiredCapabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
 				desiredCapabilities.setCapability("ignoreProtectedModeSettings", true);
+				String iedriverPath = null;
+				if((iedriverPath = ZimbraSeleniumProperties.getStringProperty("iedriver.path"))!=null){
+					System.setProperty("webdriver.ie.driver",iedriverPath);
+				}
 				webDriver = new InternetExplorerDriver(desiredCapabilities);	
 			}
 			else if(ZimbraSeleniumProperties.getStringProperty("browser").contains("googlechrome")){
