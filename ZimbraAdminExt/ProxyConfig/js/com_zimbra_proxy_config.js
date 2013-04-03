@@ -109,8 +109,8 @@ ZaProxyConfig.DEFAULT_IMAP_SSL_PORT_ZCS = 7993;
 
 ZaProxyConfig.DEFAULT_POP3_PORT = 110;
 ZaProxyConfig.DEFAULT_POP3_PORT_ZCS = 7110;
-ZaProxyConfig.DEFAULT_POP3_SSL_PORT = 900;
-ZaProxyConfig.DEFAULT_POP3_SSL_PORT_ZCS = 7900;
+ZaProxyConfig.DEFAULT_POP3_SSL_PORT = 995;
+ZaProxyConfig.DEFAULT_POP3_SSL_PORT_ZCS = 7995;
 
 //append model definitions to ZaGlobalConfig.myXModel
 if (ZaGlobalConfig && ZaGlobalConfig.myXModel) {
