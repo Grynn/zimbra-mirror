@@ -146,11 +146,11 @@ public class DialogWarning extends AbsDialog {
 
 		}else if (button == Button.B_SAVE_WITH_CONFLICT) {
 
-			locator = "css= div[id$='RESC_CONFLICT_DLG_button9'] td[id$='RESC_CONFLICT_DLG_button9_title']:contains('Save')";
+			locator = "css= div[id^='RESC_CONFLICT_DLG_button'] td[id^='RESC_CONFLICT_DLG_']:contains('Save')";
 
 		}else if (button == Button.B_CANCEL_CONFLICT) {
 
-			locator = "css= div[id$='RESC_CONFLICT_DLG_button10'] td[id$='RESC_CONFLICT_DLG_button10_title']:contains('Cancel')";
+			locator = "css= div[id^='RESC_CONFLICT_DLG_button'] td[id^='RESC_CONFLICT_DLG_']:contains('Cancel')";
 
 		}  else {
 			throw new HarnessException("no logic defined for button "+ button);
