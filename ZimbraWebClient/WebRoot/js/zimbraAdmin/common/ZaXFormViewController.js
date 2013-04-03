@@ -398,7 +398,7 @@ function () {
 
 ZaXFormViewController.prototype._findAlias = function (alias) {
     var types = [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES] ; 
-    var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(alias, types), types, null, false);
+    var searchQuery = new ZaSearchQuery(ZaSearch.searchAliasByNameQuery(alias, types), types, null, false);
 	// this search should only return one result
 	var results = ZaSearch.searchByQueryHolder(searchQuery, 1, null, null);
 	return results.list.getArray()[0];
