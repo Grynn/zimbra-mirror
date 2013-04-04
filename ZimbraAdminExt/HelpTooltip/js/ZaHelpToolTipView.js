@@ -63,7 +63,7 @@ ZaToolTipView.prototype._createView = function(canvas) {
     html[i++] = "<tr><td><div";
     html[i++] = " style='text-align: left; font-weight:bold' ";
     html[i++] = ">" + com_zimbra_tooltip.llAttributeName +"</div></td></tr>";
-    html[i++] = "<tr><td><div id=\"" + ZaToolTipView.toolTipArributeId + "\"";
+    html[i++] = "<tr><td><div style='word-wrap: break-word;' id=\"" + ZaToolTipView.toolTipArributeId + "\"";
     html[i++] = "></div></td></tr>";
     html[i++] = "</table></div>";
     html[i++] = "</td></tr>";
