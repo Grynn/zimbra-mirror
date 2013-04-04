@@ -452,7 +452,7 @@ function(username, password) {
 		this.auth = new ZaAuthenticate(this._appCtxt);
 		this.auth.execute(username, password,callback);
 	} catch (ex) {
-		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED || ex.code == ZmCsfeException.SVC_PERM_DENIED ) {
+		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED || ex.code == ZmCsfeException.SVC_PERM_DENIED || ex.code == ZmCsfeException.SVC_FAILURE ) {
 			this._showLoginDialog(false);
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_FAILED);
 			return;
@@ -489,7 +489,7 @@ function (resp) {
 	//if login failed - hide splash screen, show login dialog
 	if(resp.isException && resp.isException()) {
 		var ex = resp.getException();
-		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED || ex.code == ZmCsfeException.SVC_PERM_DENIED)
+		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED || ex.code == ZmCsfeException.SVC_PERM_DENIED || ex.code == ZmCsfeException.SVC_FAILURE)
 		{
 			this._showLoginDialog(false);
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_FAILED);
