@@ -1160,6 +1160,7 @@ public class CSMigrationWrapper
             Log.err("CSmigrationwrapper --- GetItemsForFolder returned null for itemfolderlist");
             return;
         }
+        Log.info("CSmigrationwrapper -- processItems trial # ", trial);
     } while((!(Acct.IsCompletedMigration)) &&(trial < options.MaxRetries));
 
 }
