@@ -69,6 +69,7 @@ function() {
 	this._successCount = 0;
 	this._updateActionMenu();
 	appCtxt.setStatusMsg(this.getMessage("LinkedInImageZimlet_linkedInScanningStarted"));
+	this._batchCmd = new ZmBatchCommand(true, null, true);
 	for (var i = 0; i < contacts.length; i++) {
 		var contact = contacts[i];
 		contact = contactList._realizeContact(contact);
@@ -83,6 +84,11 @@ function(success) {
 	if (this._itemsLeftToScan > 0) {
 		return;
 	}
+	this._batchCmd.run(this._handleBatchModifyResponse.bind(this), null);
+};
+
+LinkedInImageZimlet.prototype._handleBatchModifyResponse =
+function(result) {
 	var msg = this.getMessage("LinkedInImageZimlet_linkedInScanningSummary").replace("{0}", this._totalItemsToScan).replace("{1}", this._successCount);
 	var dlg = appCtxt.getMsgDialog();
 	dlg.reset();
@@ -92,11 +98,13 @@ function(success) {
 	this._updateActionMenu();
 };
 
+
 LinkedInImageZimlet.prototype._setLinkedInImage =
 function(contact) {
 	var firstName = contact.getAttr(ZmContact.F_firstName);
 	var lastName = contact.getAttr(ZmContact.F_lastName);
 	if (!firstName || !lastName) {
+		//todo - need to update image anyway maybe
 		this._updateJob(false);
 		return;
 	}
@@ -114,11 +122,9 @@ function(contact, result) {
 	if (result.numResults !== 0 && people.values && people.values.length > 0) {
 		image = people.values[0].pictureUrl;
 	}
-	this._updateJob(image);
 	//I set even if null to allow future removal of images (on LinkedIn side) to reflect.
-	var attr = {};
-	attr[ZmContact.F_zimletImage] = image;
-	contact.modify(attr, null, true);
+	contact.addModifyZimletImageToBatch(this._batchCmd, image);
+	this._updateJob(image);
 };
 
 LinkedInImageZimlet.prototype._handleLinkedInImageSearchError =
@@ -133,18 +139,21 @@ function() {
 	this._itemsLeftToClear = contacts.length;
 	this._updateActionMenu();
 	appCtxt.setStatusMsg(this.getMessage("LinkedInImageZimlet_linkedInClearingStarted"));
+	var batchCmd = new ZmBatchCommand(true, null, true);
 	for (var i = 0; i < contacts.length; i++) {
 		var contact = contacts[i];
 		contact = contactList._realizeContact(contact);
-		this._itemsLeftToClear--;
 		if (!contact.getAttr(ZmContact.F_zimletImage)) {
 			continue;
 		}
-		var attr = {};
-		attr[ZmContact.F_zimletImage] = "";
-		contact.modify(attr, null, true);
+		contact.addModifyZimletImageToBatch(batchCmd, "");
 	}
-	//this is approximate as the modify requests might have not yet ben finished, but good enough I believe. Can update count in callback instead, but keeping it simple.
+	this._itemsLeftToClear = 0;
+	batchCmd.run(this._handleBatchClearResponse.bind(this), null);
+};
+
+LinkedInImageZimlet.prototype._handleBatchClearResponse =
+function(result) {
 	appCtxt.setStatusMsg(this.getMessage("LinkedInImageZimlet_linkedInClearingFinished"));
 	this._updateActionMenu();
 };
