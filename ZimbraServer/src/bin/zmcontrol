@@ -57,13 +57,14 @@ my %startorder = (
 	"proxy"		=> 50,
 	"antispam" 	=> 60,
 	"antivirus"	=> 70,
+	"opendkim"	=> 75,
 	"archiving"	=> 80,
 	"cbpolicyd"	=> 85,
 	"snmp" 		=> 90,
 	"spell" 	=> 100,
 	"mta" 		=> 110,
 	"stats"		=> 120,
-  "vmware-ha" => 150,  # this should remain last
+	"vmware-ha" => 150,  # this should remain last
 );
 
 my %stoporder = ( 
@@ -75,6 +76,7 @@ my %stoporder = (
 	"proxy"		=> 50,
 	"antispam" 	=> 60,
 	"antivirus"	=> 70,
+	"opendkim"	=> 75,
 	"archiving"	=> 80,
 	"cbpolicyd"	=> 85,
 	"snmp" 		=> 90,
@@ -89,6 +91,7 @@ my %allservices = (
 	"antivirus" => "/opt/zimbra/bin/zmantivirusctl", 
 	"antispam" => "/opt/zimbra/bin/zmantispamctl", 
 	"archiving" => "/opt/zimbra/bin/zmarchivectl",
+	"opendkim" => "/opt/zimbra/bin/zmopendkimctl",
 	"convertd" => "/opt/zimbra/bin/zmconvertctl",
 	"mta" => "/opt/zimbra/bin/zmmtactl", 
 	"mailbox" => "/opt/zimbra/bin/zmstorectl", 
@@ -105,11 +108,12 @@ my %allservices = (
 );
 
 my %rewrites = ( 
-	"antivirus" => "antivirus amavis", 
-	"antispam" => "antispam amavis", 
-	"archiving" => "archiving amavis", 
-	"mta" => "amavis antispam antivirus mta sasl", 
-	"mailbox" => "webxml mailbox", 
+	"antivirus" => "antivirus amavis",
+	"antispam" => "antispam amavis",
+	"archiving" => "archiving amavis",
+	"opendkim" => "opendkim",
+	"mta" => "amavis antispam antivirus opendkim mta sasl",
+	"mailbox" => "webxml mailbox",
 	"proxy" => "proxy",
 );
 

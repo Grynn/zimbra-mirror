@@ -101,7 +101,6 @@ class MtaConfig():
 		self.sections = {}
 		self.sectionMap = {
 				"amavis"     : "mta",
-				"opendkim"   : "mta",
 				"sasl"       : "mta",
 				"webxml"     : "mailbox",
 				"nginx"      : "proxy",

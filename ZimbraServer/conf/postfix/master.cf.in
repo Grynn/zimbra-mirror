@@ -7,11 +7,11 @@
 #               (yes)   (yes)   (yes)   (never) (100)
 # ==========================================================================
 smtp      inet  n       -       n       -       -       smtpd
-	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10030
+%%uncomment SERVICE:opendkim%%	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10030
 %%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_filter=[%%zimbraLocalBindAddress%%]:10027
 %%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_options=speed_adjust
 465    inet  n       -       n       -       -       smtpd
-	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10030
+%%uncomment SERVICE:opendkim%%	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10030
 	-o smtpd_tls_wrappermode=yes 
 	-o smtpd_sasl_auth_enable=yes
 	-o smtpd_client_restrictions=
@@ -25,7 +25,7 @@ smtp      inet  n       -       n       -       -       smtpd
 %%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_filter=[%%zimbraLocalBindAddress%%]:10027
 %%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_options=speed_adjust
 submission inet n      -       n       -       -       smtpd
-	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10030
+%%uncomment SERVICE:opendkim%%	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10030
 	-o smtpd_etrn_restrictions=reject
 	-o smtpd_sasl_auth_enable=%%zimbraMtaSaslAuthEnable%%
 	-o smtpd_tls_security_level=%%zimbraMtaTlsSecurityLevel%%
