@@ -118,10 +118,25 @@ if ($size > 0) {
   $storeserver=1;
 }
 
+$mesg = $ldap->search(
+          base=>"",
+          filter=>"(&(objectClass=zimbraServer)(cn=$host)(zimbraServiceEnabled=mailbox))",
+          scope=>"sub",
+        );
+
+$size = $mesg->count;
+my $mtaserver=0;
+if ($size > 0) {
+  $mtaserver=1;
+}
+
+$size = $mesg->count;
+
 my $mailboxd_java_options = getLocalConfig("mailboxd_java_options");
 my $zimbra_zmjava_options = getLocalConfig("zimbra_zmjava_options");
 
 my $antispam_mysql_host = getLocalConfig("antispam_mysql_host");
+my $mysql_bind_address = getLocalConfig("mysql_bind_address");
 
 if ($zimbraIPMode eq "ipv4") {
   my $ans = getDnsRecords($host, 'A');
@@ -151,16 +166,24 @@ if ($zimbraIPMode eq "ipv4") {
     } else {
       setLocalConfig("mailboxd_java_options", $mailboxd_java_options);
     }
-  }
-  if ( $antispam_mysql_host =~ /localhost/ || $antispam_mysql_host =~ /::1/ || $antispam_mysql_host =~ /127.0.0.1/ ) {
-    if ($dryrun) {
-      print "Would set antispam_mysql_host to 127.0.0.1\n";
-    } else {
-      setLocalConfig("antispam_mysql_host", "127.0.0.1");
+    if ( $mysql_bind_address =~ /localhost/ || $mysql_bind_address =~ /::1/ || $mysql_bind_address =~ /127.0.0.1/ ) {
+      if ($dryrun) {
+        print "Would set mysql_bind_address to 127.0.0.1\n";
+      } else {
+        setLocalConfig("mysql_bind_address", "127.0.0.1");
+      }
     }
   }
-}
-elsif ($zimbraIPMode eq "both") {
+  if($mtaserver){
+    if ( $antispam_mysql_host =~ /localhost/ || $antispam_mysql_host =~ /::1/ || $antispam_mysql_host =~ /127.0.0.1/ ) {
+      if ($dryrun) {
+        print "Would set antispam_mysql_host to 127.0.0.1\n";
+      } else {
+        setLocalConfig("antispam_mysql_host", "127.0.0.1");
+      }
+    }
+  }
+} elsif ($zimbraIPMode eq "both") {
   my $ans = getDnsRecords($host, 'A');
   if (!defined($ans)) {
     print "Error: Unable to resolve $host A record\n";
@@ -192,16 +215,24 @@ elsif ($zimbraIPMode eq "both") {
     } else {
       setLocalConfig("mailboxd_java_options", $mailboxd_java_options);
     }
-  }
-  if ( $antispam_mysql_host =~ /localhost/ || $antispam_mysql_host =~ /::1/ || $antispam_mysql_host =~ /127.0.0.1/ ) {
-    if ($dryrun) {
-      print "Would set antispam_mysql_host to ::1\n";
-    } else {
-      setLocalConfig("antispam_mysql_host", "::1");
+    if ( $mysql_bind_address =~ /localhost/ || $mysql_bind_address =~ /::1/ || $mysql_bind_address =~ /127.0.0.1/ ) {
+      if ($dryrun) {
+        print "Would set mysql_bind_address to ::1\n";
+      } else {
+        setLocalConfig("mysql_bind_address", "::1");
+      }
     }
   }
-}
-elsif ($zimbraIPMode eq "ipv6") {
+  if ($mtaserver) {
+    if ( $antispam_mysql_host =~ /localhost/ || $antispam_mysql_host =~ /::1/ || $antispam_mysql_host =~ /127.0.0.1/ ) {
+      if ($dryrun) {
+        print "Would set antispam_mysql_host to ::1\n";
+      } else {
+        setLocalConfig("antispam_mysql_host", "::1");
+      }
+    }
+  }
+} elsif ($zimbraIPMode eq "ipv6") {
   my $ans = getDnsRecords($host, 'AAAA');
   if (!defined($ans)) {
     print "Error: Unable to resolve $host AAAA record\n";
@@ -229,16 +260,24 @@ elsif ($zimbraIPMode eq "ipv6") {
     } else {
       setLocalConfig("mailboxd_java_options", $mailboxd_java_options);
     }
-  }
-  if ( $antispam_mysql_host =~ /localhost/ || $antispam_mysql_host =~ /::1/ || $antispam_mysql_host =~ /127.0.0.1/ ) {
-    if ($dryrun) {
-      print "Would set antispam_mysql_host to ::1\n";
-    } else {
-      setLocalConfig("antispam_mysql_host", "::1");
+    if ( $mysql_bind_address =~ /localhost/ || $mysql_bind_address =~ /::1/ || $mysql_bind_address =~ /127.0.0.1/ ) {
+      if ($dryrun) {
+        print "Would set mysql_bind_address to ::1\n";
+      } else {
+        setLocalConfig("mysql_bind_address", "::1");
+      }
     }
   }
-}
-else {
+  if ($mtaserver) {
+    if ( $antispam_mysql_host =~ /localhost/ || $antispam_mysql_host =~ /::1/ || $antispam_mysql_host =~ /127.0.0.1/ ) {
+      if ($dryrun) {
+        print "Would set antispam_mysql_host to ::1\n";
+      } else {
+        setLocalConfig("antispam_mysql_host", "::1");
+      }
+    }
+  }
+} else {
   print "Error: Unknown IP mode $zimbraIPMode\n";
   exit 1;
 }
