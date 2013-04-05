@@ -75,6 +75,7 @@ ZaServer.A_zimbraVmwareHAServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_
 ZaServer.A_zimbraMtaSaslAuthEnable = "zimbraMtaSaslAuthEnable";
 ZaServer.A_zimbraMtaDnsLookupsEnabled = "zimbraMtaDnsLookupsEnabled";
 ZaServer.A_zimbraMtaRelayHost = "zimbraMtaRelayHost";
+ZaServer.A_zimbraMtaFallbackRelayHost = "zimbraMtaFallbackRelayHost";
 ZaServer.A_zimbraMtaTlsAuthOnly = "zimbraMtaTlsAuthOnly";
 ZaServer.A_zimbraMtaMyNetworks = "zimbraMtaMyNetworks";
 //milter server
@@ -522,6 +523,7 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_zimbraMtaSaslAuthEnable, ref:"attrs/" +  ZaServer.A_zimbraMtaSaslAuthEnable, type: _COS_ENUM_, choices: ["yes", "no"] },
 		{id:ZaServer.A_zimbraMtaTlsAuthOnly, ref:"attrs/" +  ZaServer.A_zimbraMtaTlsAuthOnly, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 		{id:ZaServer.A_zimbraMtaRelayHost, ref:"attrs/" +  ZaServer.A_zimbraMtaRelayHost,  type: _COS_HOSTNAME_OR_IP_, maxLength: 256 },
+        {id:ZaServer.A_zimbraMtaFallbackRelayHost, ref:"attrs/" + ZaServer.A_zimbraMtaFallbackRelayHost, type: _COS_HOSTNAME_OR_IP_, maxLength: 256 },
 		{id:ZaServer.A_zimbraMtaMyNetworks, ref:"attrs/" +  ZaServer.A_zimbraMtaMyNetworks, type:_COS_STRING_, maxLength: 10240 },
 		{id:ZaServer.A_zimbraMtaDnsLookupsEnabled, ref:"attrs/" +  ZaServer.A_zimbraMtaDnsLookupsEnabled, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 		//milter server

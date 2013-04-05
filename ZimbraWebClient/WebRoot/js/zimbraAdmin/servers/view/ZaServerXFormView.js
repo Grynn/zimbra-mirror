@@ -604,8 +604,17 @@ ZaServerXFormView.SERVICE_TAB_ATTRS = [ZaServer.A_zimbraLdapServiceEnabled, ZaSe
 	ZaServer.A_zimbraAntiVirusServiceEnabled, ZaServer.A_zimbraSpellServiceEnabled, ZaServer.A_zimbraLoggerServiceEnabled];
 ZaServerXFormView.SERVICE_TAB_RIGHTS = [];
 
-ZaServerXFormView.MTA_TAB_ATTRS = [ZaServer.A_zimbraMtaSaslAuthEnable, ZaServer.A_zimbraMtaTlsAuthOnly, ZaServer.A_zimbraSmtpHostname,
-	ZaServer.A_SmtpPort, ZaServer.A_zimbraMtaRelayHost, ZaServer.A_SmtpTimeout, ZaServer.A_zimbraMtaMyNetworks, ZaServer.A_zimbraMtaDnsLookupsEnabled];
+ZaServerXFormView.MTA_TAB_ATTRS = [
+    ZaServer.A_zimbraMtaSaslAuthEnable,
+    ZaServer.A_zimbraMtaTlsAuthOnly,
+    ZaServer.A_zimbraSmtpHostname,
+    ZaServer.A_SmtpPort,
+    ZaServer.A_zimbraMtaRelayHost,
+    ZaServer.A_zimbraMtaFallbackRelayHost,
+    ZaServer.A_SmtpTimeout,
+    ZaServer.A_zimbraMtaMyNetworks,
+    ZaServer.A_zimbraMtaDnsLookupsEnabled
+];
 ZaServerXFormView.MTA_TAB_RIGHTS = [];
 
 ZaServerXFormView.AUTH_TAB_ATTRS = [ZaServer.A_zimbraSpnegoAuthPrincipal, ZaServer.A_zimbraSpnegoAuthTargetName];
@@ -902,17 +911,32 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 							{ref:ZaServer.A_SmtpPort, type:_OUTPUT_, label:ZaMsg.NAD_MTA_WebMailPort, width:"4em"},
 
 							{
-								ref:ZaServer.A_zimbraMtaRelayHost, type:_SUPER_HOSTPORT_,
-								label:ZaMsg.NAD_MTA_RelayMTA,
+                                ref: ZaServer.A_zimbraMtaRelayHost,
+                                type: _SUPER_HOSTPORT_,
+                                label: ZaMsg.NAD_MTA_RelayMTA,
                                 colSpan: 1,
-							    onClick: "ZaController.showTooltip",
-								toolTipContent: ZaMsg.tt_MTA_RelayMTA,resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-							    bmolsnr:true,
-							    elementChanged: function(elementValue,instanceValue, event) {
-									this.getForm().itemChanged(this, elementValue, event);
-									this.getForm().itemChanged(this.getParentItem(), elementValue, event);
-						  		}
-				      		},
+                                onClick: "ZaController.showTooltip",
+                                toolTipContent: ZaMsg.tt_MTA_RelayMTA,
+                                resetToSuperLabel: ZaMsg.NAD_ResetToGlobal,
+                                bmolsnr: true,
+                                elementChanged: function(elementValue,instanceValue, event) {
+                                    this.getForm().itemChanged(this, elementValue, event);
+                                    this.getForm().itemChanged(this.getParentItem(), elementValue, event);
+                                }
+                            },
+                              {
+                                  ref: ZaServer.A_zimbraMtaFallbackRelayHost,
+                                  type: _SUPER_HOSTPORT_,
+                                  label: ZaMsg.NAD_MTA_FallbackRelay,
+                                  colSpan: 1,
+                                  toolTipContent: ZaMsg.tt_MTA_FallbackRelay,
+                                  resetToSuperLabel: ZaMsg.NAD_ResetToGlobal,
+                                  bmolsnr: true,
+                                  elementChanged: function(elementValue,instanceValue, event) {
+                                      this.getForm().itemChanged(this, elementValue, event);
+                                      this.getForm().itemChanged(this.getParentItem(), elementValue, event);
+                                  }
+                              },
 
                             {ref:ZaServer.A_SmtpTimeout, type:_TEXTFIELD_,
                               label:ZaMsg.NAD_MTA_WebMailTimeout, width: "4em",
