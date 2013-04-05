@@ -2306,8 +2306,8 @@ public abstract class AbsSeleniumObject {
 			    } else {
 				we = getElement(locator);
 			    }
-			    
-			    sendKeys(locator,text, we);
+			    we.clear();
+			    we.sendKeys(text);
 			} else {
 			    ClientSessionFactory.session().selenium().type(locator, text);
 			}

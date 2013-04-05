@@ -81,6 +81,7 @@ public class TagDocument extends FeatureBriefcaseTest {
 		DialogTag dialogTag = (DialogTag) app.zPageBriefcase
 				.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG, null);
 
+		SleepUtil.sleepSmall();
 		dialogTag.zSetTagName(tagName);
 		dialogTag.zClickButton(Button.B_OK);
 
