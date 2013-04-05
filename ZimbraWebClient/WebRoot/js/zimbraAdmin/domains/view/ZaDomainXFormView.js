@@ -1272,7 +1272,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                               trueValue: "TRUE",
                               falseValue: "FALSE",
                               resetToSuperLabel: ZaMsg.NAD_ResetToGlobal,
-                              msgName: ZaMsg.LBL_zimbraForceClearCookies,
+                              msgName: ZaMsg.MSG_zimbraForceClearCookies,
                               label: ZaMsg.LBL_zimbraForceClearCookies,
                               labelLocation: _LEFT_,
                               onChange: ZaDomainXFormView.onFormFieldChanged

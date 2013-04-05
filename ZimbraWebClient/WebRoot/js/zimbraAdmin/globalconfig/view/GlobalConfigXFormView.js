@@ -1301,6 +1301,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                           trueValue: "TRUE",
                                           falseValue: "FALSE",
                                           label: ZaMsg.LBL_zimbraForceClearCookies,
+                                          msgName: ZaMsg.MSG_zimbraForceClearCookies,
                                           labelLocation: _LEFT_
                                       }
                                   ]
