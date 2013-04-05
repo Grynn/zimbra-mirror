@@ -354,11 +354,18 @@ GlobalConfigXFormView.INTEROP_TAB_ATTRS = [ZaGlobalConfig.A_zimbraFreebusyExchan
 	ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg];
 GlobalConfigXFormView.INTEROP_TAB_RIGHTS = [ZaGlobalConfig.CHECK_EXCHANGE_AUTH_CONFIG_RIGHT];
 
-GlobalConfigXFormView.AUTH_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSpnegoAuthEnabled, ZaGlobalConfig.A_zimbraSpnegoAuthRealm,
-    ZaGlobalConfig.A_zimbraSpnegoAuthErrorURL, ZaGlobalConfig.A_zimbraWebClientLoginURL,
-    ZaGlobalConfig.A_zimbraWebClientLogoutURL, ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA,
-    ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA, ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedIP,
-    ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedIP];
+GlobalConfigXFormView.AUTH_TAB_ATTRS = [
+    ZaGlobalConfig.A_zimbraSpnegoAuthEnabled,
+    ZaGlobalConfig.A_zimbraSpnegoAuthRealm,
+    ZaGlobalConfig.A_zimbraSpnegoAuthErrorURL,
+    ZaGlobalConfig.A_zimbraWebClientLoginURL,
+    ZaGlobalConfig.A_zimbraWebClientLogoutURL,
+    ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA,
+    ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA,
+    ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedIP,
+    ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedIP,
+    ZaGlobalConfig.A_zimbraForceClearCookies
+];
 GlobalConfigXFormView.AUTH_TAB_RIGHTS = [];
 
 GlobalConfigXFormView.SKIN_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSkinForegroundColor, ZaGlobalConfig.A_zimbraSkinBackgroundColor,ZaGlobalConfig.A_zimbraSkinSecondaryColor,
@@ -1287,7 +1294,15 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                                       ref:".", type:_TEXTFIELD_, label:null,width:"200px"
                                                   }
                                               ]
-                                            }
+                                            },
+                                      {
+                                          ref: ZaGlobalConfig.A_zimbraForceClearCookies,
+                                          type: _CHECKBOX_,
+                                          trueValue: "TRUE",
+                                          falseValue: "FALSE",
+                                          label: ZaMsg.LBL_zimbraForceClearCookies,
+                                          labelLocation: _LEFT_
+                                      }
                                   ]
                             }
                     ]

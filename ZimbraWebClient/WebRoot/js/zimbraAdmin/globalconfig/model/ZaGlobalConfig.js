@@ -179,6 +179,7 @@ ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA = "zimbraWebClientLoginURLAllo
 ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA = "zimbraWebClientLogoutURLAllowedUA";
 ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedIP = "zimbraWebClientLoginURLAllowedIP";
 ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedIP = "zimbraWebClientLogoutURLAllowedIP";
+ZaGlobalConfig.A_zimbraForceClearCookies = "zimbraForceClearCookies";
 
 // Auto provision
 ZaGlobalConfig.A_zimbraAutoProvBatchSize = "zimbraAutoProvBatchSize";
@@ -494,6 +495,13 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA, type:_LIST_, listItem:{type:_STRING_}},
 		{ id:ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedIP, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedIP, type:_LIST_, listItem:{type:_STRING_}},
         { id:ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedIP, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedIP, type:_LIST_, listItem:{type:_STRING_}},
+        // Clear Cookies
+        {
+            id: ZaGlobalConfig.A_zimbraForceClearCookies,
+            ref: "attrs/" + ZaGlobalConfig.A_zimbraForceClearCookies,
+            type: _ENUM_,
+            choices: ZaModel.BOOLEAN_CHOICES
+        },
         // web client authentication
         { id:ZaGlobalConfig.A_zimbraMailSSLClientCertMode, ref:"attrs/" +  ZaGlobalConfig.A_zimbraMailSSLClientCertMode, type:_STRING_, choices:["Disabled","NeedClientAuth","WantClientAuth"]},
         { id:ZaGlobalConfig.A_zimbraMailSSLClientCertPort, ref:"attrs/" +  ZaGlobalConfig.A_zimbraMailSSLClientCertPort, type:_PORT_},

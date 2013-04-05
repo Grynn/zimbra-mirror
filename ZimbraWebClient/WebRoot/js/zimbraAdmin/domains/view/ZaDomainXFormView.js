@@ -1161,15 +1161,23 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                     onChange:ZaDomainXFormView.onFormFieldChanged
                     }
                 ]},
-                { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_WEBCLIENT_Configure, colSpan:"*",
-                    visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
-                        [ZaDomain.A_zimbraWebClientLoginURL,
-                         ZaDomain.A_zimbraWebClientLogoutURL,
-                         ZaDomain.A_zimbraWebClientLoginURLAllowedUA,
-                         ZaDomain.A_zimbraWebClientLogoutURLAllowedUA,
-                         ZaDomain.A_zimbraWebClientLoginURLAllowedIP,
-                         ZaDomain.A_zimbraWebClientLogoutURLAllowedIP
-                         ]]
+                {
+                    type: _ZA_TOP_GROUPER_,
+                    label: ZaMsg.NAD_WEBCLIENT_Configure,
+                    colSpan: "*",
+                    visibilityChecks: [
+                        [
+                            ZATopGrouper_XFormItem.isGroupVisible,
+                            [
+                                ZaDomain.A_zimbraWebClientLoginURL,
+                                ZaDomain.A_zimbraWebClientLogoutURL,
+                                ZaDomain.A_zimbraWebClientLoginURLAllowedUA,
+                                ZaDomain.A_zimbraWebClientLogoutURLAllowedUA,
+                                ZaDomain.A_zimbraWebClientLoginURLAllowedIP,
+                                ZaDomain.A_zimbraWebClientLogoutURLAllowedIP,
+                                ZaDomain.A_zimbraForceClearCookies
+                            ]
+                        ]
                     ],
                       items:[
                           { ref: ZaDomain.A_zimbraWebClientLoginURL,useParentTable: false,
@@ -1255,6 +1263,19 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                                 width: "150px"}
                             ],
                             onChange:ZaDomainXFormView.onFormFieldChanged
+                          },
+                          {
+                              ref: ZaDomain.A_zimbraForceClearCookies,
+                              useParentTable: false,
+                              colSpan: 2,
+                              type: _CHECKBOX_,
+                              trueValue: "TRUE",
+                              falseValue: "FALSE",
+                              resetToSuperLabel: ZaMsg.NAD_ResetToGlobal,
+                              msgName: ZaMsg.LBL_zimbraForceClearCookies,
+                              label: ZaMsg.LBL_zimbraForceClearCookies,
+                              labelLocation: _LEFT_,
+                              onChange: ZaDomainXFormView.onFormFieldChanged
                           }
                       ]
                 }

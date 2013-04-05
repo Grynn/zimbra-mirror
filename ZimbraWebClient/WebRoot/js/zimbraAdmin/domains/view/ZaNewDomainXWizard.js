@@ -1373,6 +1373,18 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                            {ref:".", type:_TEXTFIELD_,
                                             width: "150px"}
                                         ]
+                                      },
+                                      {
+                                          ref: ZaDomain.A_zimbraForceClearCookies,
+                                          useParentTable: false,
+                                          colSpan: 2,
+                                          type: _CHECKBOX_,
+                                          trueValue: "TRUE",
+                                          falseValue: "FALSE",
+                                          resetToSuperLabel: ZaMsg.NAD_ResetToGlobal,
+                                          msgName: ZaMsg.LBL_zimbraForceClearCookies,
+                                          label: ZaMsg.LBL_zimbraForceClearCookies,
+                                          labelLocation: _LEFT_
                                       }
                                   ]
                             }
