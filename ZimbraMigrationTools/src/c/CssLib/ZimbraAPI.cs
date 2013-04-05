@@ -2729,7 +2729,7 @@ public class ZimbraAPI
 
                     int ind = 0;
                     int  mnIndex =0;
-                    if (FolderPath.Contains("Inbox"))
+                    if ((FolderPath.Contains("Inbox")) || (FolderPath.Contains("Calendar")) || ((FolderPath.Contains("Contacts"))) || ((FolderPath.Contains("Tasks"))) ||(FolderPath.Contains("Junk")) || (FolderPath.Contains("Drafts")))
                     { mnIndex = 3; }
                     else
                         mnIndex = 2;
