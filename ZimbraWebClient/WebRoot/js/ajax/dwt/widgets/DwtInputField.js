@@ -945,6 +945,15 @@ function(){
     this._inputField.onfocus = DwtInputField._focusHdlr;
 };
 
+/*
+ * enables the onKeyDown handler
+ * bug fix # 80423 - Firefox loses the handler
+ */
+DwtInputField.prototype.enableKeyDownHdlr =
+function() {
+    this._inputField.onkeydown = DwtInputField._keyDownHdlr;
+};
+
 DwtInputField.prototype.moveCursorToEnd =
 function() {
 	Dwt.moveCursorToEnd(this._inputField);
