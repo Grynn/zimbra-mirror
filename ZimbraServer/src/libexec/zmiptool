@@ -171,6 +171,9 @@ if ($zimbraIPMode eq "ipv4") {
         print "Would set mysql_bind_address to 127.0.0.1\n";
       } else {
         setLocalConfig("mysql_bind_address", "127.0.0.1");
+        my ${mysql_mycnf} = "/opt/zimbra/conf/my.cnf";
+        system("/opt/zimbra/libexec/zminiutil --backup=.pre --section=mysqld --key=bind-address --unset ${mysql_mycnf}");
+        system("/opt/zimbra/libexec/zminiutil --backup=.pre-${targetVersion}-bind --section=mysqld --key=bind-address --set --value=127.0.0.1 ${mysql_mycnf}");
       }
     }
   }
@@ -220,6 +223,9 @@ if ($zimbraIPMode eq "ipv4") {
         print "Would set mysql_bind_address to ::1\n";
       } else {
         setLocalConfig("mysql_bind_address", "::1");
+        my ${mysql_mycnf} = "/opt/zimbra/conf/my.cnf";
+        system("/opt/zimbra/libexec/zminiutil --backup=.pre --section=mysqld --key=bind-address --unset ${mysql_mycnf}");
+        system("/opt/zimbra/libexec/zminiutil --backup=.pre-${targetVersion}-bind --section=mysqld --key=bind-address --set --value=::1 ${mysql_mycnf}");
       }
     }
   }
@@ -265,6 +271,9 @@ if ($zimbraIPMode eq "ipv4") {
         print "Would set mysql_bind_address to ::1\n";
       } else {
         setLocalConfig("mysql_bind_address", "::1");
+        my ${mysql_mycnf} = "/opt/zimbra/conf/my.cnf";
+        system("/opt/zimbra/libexec/zminiutil --backup=.pre --section=mysqld --key=bind-address --unset ${mysql_mycnf}");
+        system("/opt/zimbra/libexec/zminiutil --backup=.pre-${targetVersion}-bind --section=mysqld --key=bind-address --set --value=::1 ${mysql_mycnf}");
       }
     }
   }
