@@ -215,34 +215,51 @@ if ($debug) {
 
 if ($space_alarm == 6) {
   if ($mdb_alarm ==2) {
-    print "Critical! LDAP primary MDB database is nearly full and cannot expand due to limited free disk space.\n";
+    print "CRITICAL! LDAP primary MDB database is nearly full and cannot expand due to limited free disk space.\n";
   } else {
-    print "Warning! LDAP primary MDB database is near the maximum size and cannot expand due to limited free disk space.\n";
+    print "WARNING! LDAP primary MDB database is near the maximum size and cannot expand due to limited free disk space.\n";
   }
   exit 1;
 }
 
 if ($space_alarm == 5) {
   if ($alog_alarm ==2) {
-    print "Critical! LDAP accesslog MDB database is nearly full and cannot expand due to limited free disk space.\n";
+    print "CRITICAL! LDAP accesslog MDB database is nearly full and cannot expand due to limited free disk space.\n";
   } else {
-    print "Warning! LDAP accesslog MDB database is near the maximum size and cannot expand due to limited free disk space.\n";
+    print "WARNING! LDAP accesslog MDB database is near the maximum size and cannot expand due to limited free disk space.\n";
   }
   exit 1;
 }
 
 if ($space_alarm == 4) {
-  print "Critical! LDAP primary and accesslog MDB databases are nearly full and cannot expand due to limited free disk space.\n";
+  print "CRITICAL! LDAP primary and accesslog MDB databases are nearly full and cannot expand due to limited free disk space.\n";
   exit 1;
 }
 
+my $growth=0;
 if ($mdb_alarm && $ldap_monitor_alert_only eq "false") {
-   #Do zmlocalconfig bits
+   $growth =$mdb_growth_size + $ldap_db_maxsize;
+   print "Growing primary MDB database size from $ldap_db_maxsize to $growth.\n";
+   setLocalConfig("ldap_db_maxsize", "$growth");
 } elsif ($mdb_alarm) {
+  if ($mdb_alarm == 2) {
+    print "CRITICAL! LDAP primary MDB database is ".$ldap_monitor_critical*100."% full.\n";
+  } else {
+    print "WARNING! LDAP primary MDB database is ".$ldap_monitor_warning*100."% full.\n";
+  }
 }
 
+$growth=0;
 if ($alog_alarm && $ldap_monitor_alert_only eq "false") {
+   $growth =$alog_growth_size + $ldap_db_maxsize;
+   print "Growing accesslog MDB database size from $ldap_accesslog_maxsize to $growth.\n";
+   setLocalConfig("ldap_db_maxsize", "$growth");
 } elsif ($alog_alarm) {
+  if ($alog_alarm == 2) {
+    print "CRITICAL! LDAP accesslog MDB database is ".$ldap_monitor_critical*100."% full.\n";
+  } else {
+    print "WARNING! LDAP accesslog MDB database is ".$ldap_monitor_warning*100."% full.\n";
+  }
 }
 
 sub setLocalConfig {
