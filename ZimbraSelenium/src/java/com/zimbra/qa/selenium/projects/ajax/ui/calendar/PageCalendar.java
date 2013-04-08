@@ -50,6 +50,8 @@ public class PageCalendar extends AbsTab {
 		public static final String ViewListMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_CAL_LIST_VIEW']";
 		public static final String ViewScheduleMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_SCHEDULE_VIEW']";
 		
+		public static final String MonthButton = "css=td[id='zb__CLD__MONTH_VIEW_title']";
+		
 		public static final String OpenMenu = "id=VIEW_APPOINTMENT_title";
 		public static final String PrintMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_PRINT']";
 		public static final String AcceptMenu = "id=REPLY_ACCEPT_title";
@@ -140,6 +142,7 @@ public class PageCalendar extends AbsTab {
 		public static final String CalendarViewMonthCSS			= "css=div#"+ CalendarViewMonthDivID;
 		public static final String CalendarViewScheduleCSS		= "css=div#"+ CalendarViewScheduleDivID;
 		public static final String CalendarViewFreeBusyCSS		= "css=div#"+ CalendarViewFreeBusyDivID;
+		public static final String CalendarWorkWeekViewApptCount	= "css=div[class='calendar_body'] div[id^='zli__CLWW__']";
 		
 		public static final String CalendarViewDayItemCSS		= CalendarViewDayCSS + " div[id^='zli__CLD__']>table[id^='zli__CLD__']";
 		public static final String CalendarViewWeekItemCSS		= CalendarViewWeekCSS + " div[id^='zli__CLW__']>table[id^='zli__CLW__']";
@@ -154,11 +157,15 @@ public class PageCalendar extends AbsTab {
 		public static final String TodayHighlighted = "css=div[class='calendar_heading_day_today']";
 		public static final String TodaySelelcted = "css=div[class='calendar_heading_day_today-selected']";	
 		//move appt
-		public static final String MoveToolbar = "css=td[id='zb__CLD__MOVE_MENU_left_icon']";	
+		public static final String MoveToolbar = "css=td[id='zb__CLD__MOVE_MENU_left_icon']";
 		public static final String MoveFolderOption = "css=div[class='ZmFolderChooser'] div[class='DwtTreeItemLevel1ChildDiv'] td[class='DwtTreeItem-Text']:contains('";  // append the foldername and close the parenthesis
 		public static final String MoveToNewFolderOption = "css=div[id='ZmMoveButton_CAL'] div[id='ZmMoveButton_CAL|NEWFOLDER']";
 		public static final String LocationName= "css=div[class='DwtDialog'] div[id$='_content'] table tr td:nth-child(2) input";
 		public static final String zAttachmentsLabel= "css= tr[id$='_attachment_container'] fieldset[class='ZmFieldset']:contains('Attachments')";
+		
+		public static final String NextPage = "css=div[id='zb__CAL__Nav__PAGE_FORWARD'] div[class='ImgRightArrow']";
+		public static final String PreviousPage = "css=div[id='zb__CAL__Nav__PAGE_BACK'] div[class='ImgLeftArrow']";
+		                                          
 	}
 
 	public PageCalendar(AbsApplication application) {
@@ -228,13 +235,16 @@ public class PageCalendar extends AbsTab {
 	}
 	
 	public String zGetApptLocator(String apptSubject) throws HarnessException {
-		boolean apptExists;
-		apptExists = sIsElementPresent("css=td.appt_name:contains('" + apptSubject + "')");
-		if (apptExists == false) {
-			return "css=td.appt_new_name:contains('" + apptSubject + "')";
-		} else {
+		SleepUtil.sleepSmall();
+		if (sIsElementPresent("css=td.appt_name:contains('" + apptSubject + "')") == true) {
 			return "css=td.appt_name:contains('" + apptSubject + "')";
-		}	
+		} else if (sIsElementPresent("css=td.appt_new_name:contains('" + apptSubject + "')") == true) {
+			return "css=td.appt_new_name:contains('" + apptSubject + "')";
+		} else if (sIsElementPresent("css=span[id^='zli__CLM__']['_subject']:contains('" + apptSubject + "')") == true) {
+			return "css=span[id^='zli__CLM__']['_subject']:contains('" + apptSubject + "')";
+		} else {
+			return null;
+		}
 	}
 	
 	public boolean zGetApptLocatorFreeBusyView(String attendeeEmail, String apptSubject) throws HarnessException {
@@ -262,6 +272,14 @@ public class PageCalendar extends AbsTab {
 	
 	public String zGetNeedsActionDropdownValue() throws HarnessException {
 		return sGetText("css=td[id$='_responseActionSelectCell'] td[id$='_select_container'] td[id$='_title']");	
+	}
+	
+	public int zGetApptCountWorkWeekView() throws HarnessException {
+		return sGetCssCount(Locators.CalendarWorkWeekViewApptCount);
+	}
+	
+	public int zGetApptCountMonthView(String apptSubject) throws HarnessException {
+		return sGetCssCount("css=span[id^='zli__CLM__']:contains('" + apptSubject + "')");
 	}
 	
 	public String zGetReadOnlyApptLocator(String apptSubject) throws HarnessException {
@@ -299,6 +317,10 @@ public class PageCalendar extends AbsTab {
 		} else {
 			return false;
 		}	
+	}
+	
+	public String zGetRecurringLink() throws HarnessException {
+		return sGetText("css=div[id$='repeatDesc']");
 	}
 	
 	public boolean zVerifyDisabledControl(Button buttonName) throws HarnessException {
@@ -1629,7 +1651,7 @@ public class PageCalendar extends AbsTab {
 			}
 			
 		
-		}else if (button == Button.B_SAVE_WITH_CONFLICT) {
+		} else if (button == Button.B_SAVE_WITH_CONFLICT) {
 			locator = Locators.OrganizerSaveButton;
 			this.zClickAt(locator, "");
 			SleepUtil.sleepMedium();
@@ -1641,9 +1663,23 @@ public class PageCalendar extends AbsTab {
 			}else{
 				return null;
 			}
-			
 		
-		}else if (button == Button.O_LISTVIEW_TAG) {
+		} else if (button == Button.B_MONTH) {
+
+			locator = Locators.MonthButton;
+			page = null;
+			
+		} else if (button == Button.B_NEXT_PAGE) {
+
+			locator = Locators.NextPage;
+			page = null;
+			
+		} else if (button == Button.B_PREVIOUS_PAGE) {
+
+			locator = Locators.PreviousPage;
+			page = null;
+			
+		} else if (button == Button.O_LISTVIEW_TAG) {
 
 			locator = "css=[id=zb__CLD__TAG_MENU_dropdown]";
 			page = null;
@@ -1751,6 +1787,7 @@ public class PageCalendar extends AbsTab {
 
 		}
 
+		SleepUtil.sleepSmall();
 		return (page);
 	}
 

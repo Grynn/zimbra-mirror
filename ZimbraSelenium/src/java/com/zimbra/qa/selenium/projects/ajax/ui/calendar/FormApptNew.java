@@ -22,6 +22,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 /**
  * The <code>FormMailNew<code> object defines a compose new message view
@@ -83,9 +84,38 @@ public class FormApptNew extends AbsForm {
 		public static final String EveryYearButton = "css=td[id$='_title']:contains('Every Year')";
 		public static final String CustomMenuItem = "css=div[id*='_Menu'] div[id^='CUS'] td[id$='title']:contains('Custom')";
 		public static final String CustomButton = "css=td[id$='_title']:contains('Custom')";
-		public static final String RepeatEnabled = "css=div[id$='_repeatDesc']div[class='FakeAnchor']";
-		public static final String RepeatDisabled = "css=div[id$='_repeatDesc']div[class='DisabledText']";
-
+		public static final String CustomizedLink = "css=div[id$='_repeatDesc']div[class='FakeAnchor']";
+		public static final String CustomizedLinkDisabled = "css=div[id$='_repeatDesc']div[class='DisabledText']";
+		
+		public static final String EveryDayRadioButton = "css=div[id='REPEAT_DAILY_DIV'] input[id='DAILY_DEFAULT']";
+		public static final String EveryWeekdayRadioButton = "css=div[id='REPEAT_DAILY_DIV'] input[id='DAILY_WEEKDAY']";
+		public static final String EveryXdaysRadioButton = "css=div[id='REPEAT_DAILY_DIV'] input[id='DAILY_FIELD_RADIO']";
+		public static final String EveryXdaysEditField = "css=div[id$='_content'] td input[id='RECUR_DAILY_FIELD']";
+		
+		public static final String EveryXRadioButton = "css=div[id='REPEAT_WEEKLY_DIV'] input[id='WEEKLY_DEFAULT']";
+		public static final String EveryXDropdown = "css=div[id='REPEAT_WEEKLY_DIV'] td[id='WEEKLY_SELECT'] td[id$='_title']";
+		public static final String EveryXweeksOnRadioButton = "css=div[id='REPEAT_WEEKLY_DIV'] input[id='WEEKLY_FIELD_RADIO']";
+		public static final String EveryXweeksOnEditField = "css=div[id='REPEAT_WEEKLY_DIV'] input[id='RECUR_WEEKLY_FIELD']";
+		public static final String SundayCheckBox = "css=div[id='REPEAT_WEEKLY_DIV'] input[id='WEEKLY_CHECKBOX_NAME_1']";
+		public static final String MondayCheckBox = "css=div[id='REPEAT_WEEKLY_DIV'] input[id='WEEKLY_CHECKBOX_NAME_2']";
+		public static final String TuesdayCheckBox = "css=div[id='REPEAT_WEEKLY_DIV'] input[id='WEEKLY_CHECKBOX_NAME_3']";
+		public static final String WednesdayCheckBox = "css=div[id='REPEAT_WEEKLY_DIV'] input[id='WEEKLY_CHECKBOX_NAME_4']";
+		public static final String ThursdayCheckBox = "css=div[id='REPEAT_WEEKLY_DIV'] input[id='WEEKLY_CHECKBOX_NAME_5']";
+		public static final String FridayCheckBox = "css=div[id='REPEAT_WEEKLY_DIV'] input[id='WEEKLY_CHECKBOX_NAME_6']";
+		public static final String SaturdayCheckBox = "css=div[id='REPEAT_WEEKLY_DIV'] input[id='WEEKLY_CHECKBOX_NAME_7']";
+		
+		public static final String DayXofEveryYmonthsRadioButton = "css=div[id='REPEAT_MONTHLY_DIV'] input[id='MONTHLY_DEFAULT']";
+		public static final String TheXYofEveryZmonthsRadioButton = "css=div[id='REPEAT_MONTHLY_DIV'] input[id='MONTHLY_FIELD_RADIO']";
+		
+		public static final String EveryYearOnXYRadioButton = "css=div[id='REPEAT_YEARLY_DIV'] input[id='YEALY_DEFAULT']";
+		public static final String TheXYofEveryZRadioButton = "css=div[id='REPEAT_YEARLY_DIV'] input[id='YEARLY_FIELD_RADIO']";
+		
+		public static final String NoEndDateRadioButton = "css=div[id$='_content'] td input[id='NO_END_DATE_RADIO']";
+		public static final String EndAfterXoccurrencesRadioButton = "css=div[id$='_content'] td input[id='END_AFTER_RADIO']";
+		public static final String EndAfterXoccurrencesEditField = "css=div[id$='_content'] td input[id='RECUR_END_INTERVAL_FIELD']";
+		public static final String EndByXDateRadioButton = "css=div[id$='_content'] td input[id='END_BY_RADIO']";
+		public static final String EndByXDateEditField = "css=div[id$='_content'] td input[id='RECUR_END_BY_FIELD']";
+		
 		public static final String DeleteZimletContextMenu = "css=div[id^='POPUP_'] td[id='DELETE_title']";
 		public static final String EditZimletContextMenu = "css=div[id^='POPUP_'] td[id='EDIT_title']";
 		public static final String ExpandZimletContextMenu = "css=div[id^='POPUP_'] td[id='EXPAND_title']";
@@ -152,7 +182,7 @@ public class FormApptNew extends AbsForm {
 		logger.info("new " + FormApptNew.class.getCanonicalName());
 
 	}
-
+	
 	@Override
 	public String myPageName() {
 		return (this.getClass().getName());
@@ -1097,7 +1127,133 @@ public class FormApptNew extends AbsForm {
 		}
 
 	}
+	
+	private void zRepeatCore(Button recurringType, Button repeat, String repeatOption1, Button end, String endOption1) throws HarnessException {
+		
+		logger.info(myPageName() + " zRepeat(recurringType, " + repeat + ", " + repeatOption1 + ", " + end + ", " + endOption1 + ")");
+		
+		if (recurringType.equals(null) || repeat.equals(null) || end.equals(null)) {
+			throw new HarnessException("Repeat options can't be null!");
+		}
+		
+		SleepUtil.sleepSmall();
+		this.zClickAt(Locators.NoneButton, "");
+		
+		if (!recurringType.equals(Button.O_CUSTOM_MENU)) {
+			
+			if (recurringType.equals(Button.O_EVERY_DAY_MENU)) {
+				this.sClickAt(Locators.EveryDayMenuItem, "");
+				this.sClickAt(Locators.CustomizedLink,"");
+				
+				if (repeat.equals(Button.B_EVERY_DAY_RADIO_BUTTON)) {
+					this.sClickAt(Locators.EveryDayRadioButton, "");
+					
+				} else if (repeat.equals(Button.B_EVERY_WEEKDAY_RADIO_BUTTON)) {
+					this.sClickAt(Locators.EveryWeekdayRadioButton, "");
+					
+				} else if (repeat.equals(Button.B_EVERY_X_DAYS_RADIO_BUTTON)) {
+					this.sClickAt(Locators.EveryXdaysRadioButton, "");
+					
+				} else if (repeat.equals(Button.E_EVERY_X_DAYS_EDIT_FIELD)) {
+					this.sType(Locators.EveryXdaysRadioButton, repeatOption1);
+				}
+				
+			} else if (recurringType.equals(Button.O_EVERY_WEEK_MENU)) {
+				this.sClickAt(Locators.EveryWeekMenuItem, "");
+				this.sClickAt(Locators.CustomizedLink,"");
+				
+				if (repeat.equals(Button.B_EVERY_X_RADIO_BUTTON)) {
+					this.sClickAt(Locators.EveryXRadioButton, "");
+					
+				} else if (repeat.equals(Button.B_EVERY_X_WEEKS_ON_RADIO_BUTTON)) {
+					this.sClickAt(Locators.EveryXweeksOnRadioButton, "");
+					
+				} else if (repeat.equals(Button.E_EVERY_X_WEEKS_ON_EDIT_FIELD)) {
+					this.sType(Locators.EveryXweeksOnEditField, repeatOption1);
+					
+				} else if (repeat.equals(Button.B_SUNDAY_CHECK_BOX)) {
+					this.sClickAt(Locators.SundayCheckBox, repeatOption1);
+				
+				} else if (repeat.equals(Button.B_MONDAY_CHECK_BOX)) {
+					this.sClickAt(Locators.MondayCheckBox, repeatOption1);
 
+				} else if (repeat.equals(Button.B_TUESDAY_CHECK_BOX)) {
+					this.sClickAt(Locators.TuesdayCheckBox, repeatOption1);
+
+				} else if (repeat.equals(Button.B_WEDNESDAY_CHECK_BOX)) {
+					this.sClickAt(Locators.WednesdayCheckBox, repeatOption1);
+
+				} else if (repeat.equals(Button.B_THURSDAY_CHECK_BOX)) {
+					this.sClickAt(Locators.ThursdayCheckBox, repeatOption1);
+
+				} else if (repeat.equals(Button.B_FRIDAY_CHECK_BOX)) {
+					this.sClickAt(Locators.FridayCheckBox, repeatOption1);
+
+				} else if (repeat.equals(Button.B_SATURDAY_CHECK_BOX)) {
+					this.sClickAt(Locators.SaturdayCheckBox, repeatOption1);
+					
+				}
+				
+			} else if (recurringType.equals(Button.O_EVERY_MONTH_MENU)) {
+				this.sClickAt(Locators.EveryMonthMenuItem, "");
+				this.sClickAt(Locators.CustomizedLink,"");
+				
+				if (repeat.equals(Button.B_DAY_X_OF_EVERY_Y_MONTHS_RADIO_BUTTON)) {
+					this.sClickAt(Locators.DayXofEveryYmonthsRadioButton, "");
+					
+				} else if (repeat.equals(Button.B_THE_X_Y_OF_EVERY_Z_MONTHS_RADIO_BUTTON)) {
+					this.sClickAt(Locators.TheXYofEveryZmonthsRadioButton, "");
+					
+				}
+				
+			} else if (recurringType.equals(Button.O_EVERY_YEAR_MENU)) {
+				this.sClickAt(Locators.EveryYearMenuItem, "");
+				this.sClickAt(Locators.CustomizedLink,"");
+				
+				if (repeat.equals(Button.B_EVERY_YEAR_ON_X_Y_RADIO_BUTTON)) {
+					this.sClickAt(Locators.EveryYearOnXYRadioButton, "");
+					
+				} else if (repeat.equals(Button.B_THE_X_Y_OF_EVERY_Z_RADIO_BUTTON)) {
+					this.sClickAt(Locators.TheXYofEveryZRadioButton, "");
+
+				}
+				
+			}
+		
+			if (end.equals(Button.B_NO_END_DATE_RADIO_BUTTON)) {
+				this.sClickAt(Locators.NoEndDateRadioButton, "");
+				
+			} else if (repeat.equals(Button.B_END_AFTER_X_OCCURRENCES_RADIO_BUTTON)) {
+				this.sClickAt(Locators.EndAfterXoccurrencesRadioButton, "");
+
+			} else if (repeat.equals(Button.B_END_AFTER_X_OCCURRENCES_EDIT_FIELD)) {
+				this.sType(Locators.EndAfterXoccurrencesEditField, repeatOption1);
+				
+			} else if (repeat.equals(Button.B_END_BY_DATE_RADIO_BUTTON)) {
+				this.sClickAt(Locators.EndByXDateRadioButton, "");
+				
+			} else if (repeat.equals(Button.E_END_BY_DATE_EDIT_FIELD)) {
+				this.sClickAt(Locators.EndByXDateEditField, "");
+			}	
+	
+		}
+		
+		DialogCustomRepeat dlgCustomRepeat = (DialogCustomRepeat) new DialogCustomRepeat(DialogCustomRepeat.DialogWarningID.DialogCustomRepeat, MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+		dlgCustomRepeat.zClickButton(Button.B_OK);
+		
+		SleepUtil.sleepSmall();
+	}
+	
+	public void zRepeat(Button recurringType, Button repeat, Button end) throws HarnessException {
+		zRepeatCore(recurringType, repeat, "", end, "");
+		
+	}
+	
+	public void zRepeat(Button recurringType, Button repeat, String repeatOption1, Button end, String endOption1) throws HarnessException {
+		zRepeatCore(recurringType, repeat, repeatOption1, end, endOption1);
+		
+	}
+	
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");

@@ -282,11 +282,41 @@ public class ZDate {
 	public String toMMM_dC_yyyy() throws HarnessException {
 		return (format("MMM d, yyyy"));
 	}
+	
+	public String toMMMMM_dC() throws HarnessException {
+		return (format("MMMMM d"));
+	}
 
 	public String toMMM_dd_yyyy_A_hCmm_a() throws HarnessException {
 		return (format("MMM d, yyyy @ h:mm a"));
 	}
 
+	public String getCurrentDay() throws HarnessException {
+		String currentDay = null;
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_WEEK);
+		
+		if (day == 1) {
+			currentDay = "Tuesday";
+		
+		} else if (day == 2) {
+			currentDay = "Tuesday";
+			
+		} else if (day == 3) {
+			currentDay = "Tuesday";
+			
+		} else if (day == 4) {
+			currentDay = "Wednesday";
+			
+		} else if (day == 5 || day == 6) { //see CalendarWorkWeekTest, If UTC is Friday, tests may fail if the TZ offset puts the date into Saturday.
+			currentDay = "Thursday";
+			
+		} else if (day == 7) {
+			currentDay = "Tuesday";
+		}	
+		
+		return currentDay;
+	}
 
 	protected String format(String format) throws HarnessException {
 		try {
