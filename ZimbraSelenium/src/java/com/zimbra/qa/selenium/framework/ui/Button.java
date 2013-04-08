@@ -415,6 +415,9 @@ public class Button {
 	public static final Button B_SUGGESTEDLOCATION = new Button("B_SUGGESTEDLOCATION");
 	public static final Button B_TAGAPPOINTMENTMENU = new Button("B_TAGAPPOINTMENTMENU");
 	public static final Button B_LOCATIONMENU = new Button("B_LOCATIONMENU");
+	public static final Button B_NEXT_PAGE = new Button("B_NEXT_PAGE");
+	public static final Button B_PREVIOUS_PAGE = new Button("B_PREVIOUS_PAGE");
+	public static final Button B_MONTH = new Button("B_MONTH");
 	
 	public static final Button B_VIEW = new Button("B_VIEWTOOLBAR");
 	public static final Button O_LISTVIEW_DAY = new Button("O_LISTVIEW_DAY");
@@ -498,7 +501,46 @@ public class Button {
 	public static final Button B_OPEN_THE_SERIES = new Button("B_OPEN_THE_SERIES");
 	public static final Button B_DELETE_THIS_INSTANCE = new Button("B_DELETE_THIS_INSTANCE");
 	public static final Button B_DELETE_THE_SERIES = new Button("B_DELETE_THE_SERIES");
-
+	
+	public static final Button O_EVERY_DAY_MENU = new Button("O_EVERY_DAY_MENU");
+	public static final Button O_EVERY_WEEK_MENU = new Button("O_EVERY_WEEK_MENU");
+	public static final Button O_EVERY_MONTH_MENU = new Button("O_EVERY_MONTH_MENU");
+	public static final Button O_EVERY_YEAR_MENU = new Button("O_EVERY_YEAR_MENU");
+	public static final Button O_CUSTOM_MENU = new Button("O_CUSTOM_MENU");
+	
+	public static final Button B_EVERY_DAY_RADIO_BUTTON = new Button("B_EVERY_DAY_RADIO_BUTTON");
+	public static final Button B_EVERY_WEEKDAY_RADIO_BUTTON = new Button("B_EVERY_WEEKDAY_RADIO_BUTTON");
+	public static final Button B_EVERY_X_DAYS_RADIO_BUTTON = new Button("B_EVERY_X_DAYS_RADIO_BUTTON");
+	public static final Button E_EVERY_X_DAYS_EDIT_FIELD = new Button("E_EVERY_X_DAYS_EDIT_FIELD");
+	
+	public static final Button B_EVERY_X_RADIO_BUTTON = new Button("B_EVERY_X_RADIO_BUTTON");
+	public static final Button O_EVERY_X_DROP_DOWN = new Button("O_EVERY_X_DROP_DOWN");
+	public static final Button B_EVERY_X_WEEKS_ON_RADIO_BUTTON = new Button("B_EVERY_X_WEEKS_ON_RADIO_BUTTON");
+	public static final Button E_EVERY_X_WEEKS_ON_EDIT_FIELD = new Button("E_EVERY_X_WEEKS_ON_EDIT_FIELD");
+	public static final Button B_SUNDAY_CHECK_BOX = new Button("B_SUNDAY_CHECK_BOX");
+	public static final Button B_MONDAY_CHECK_BOX = new Button("B_MONDAY_CHECK_BOX");
+	public static final Button B_TUESDAY_CHECK_BOX = new Button("B_TUESDAY_CHECK_BOX");
+	public static final Button B_WEDNESDAY_CHECK_BOX = new Button("B_WEDNESDAY_CHECK_BOX");
+	public static final Button B_THURSDAY_CHECK_BOX = new Button("B_THURSDAY_CHECK_BOX");
+	public static final Button B_FRIDAY_CHECK_BOX = new Button("B_FRIDAY_CHECK_BOX");
+	public static final Button B_SATURDAY_CHECK_BOX = new Button("B_SATURDAY_CHECK_BOX");
+	
+	public static final Button B_DAY_X_OF_EVERY_Y_MONTHS_RADIO_BUTTON = new Button("B_DAY_X_OF_EVERY_Y_MONTHS_RADIO_BUTTON");
+	public static final Button E_DAY_X_OF_EVERY_Y_MONTHS_EDIT_FIELD = new Button("E_DAY_X_OF_EVERY_Y_MONTHS_EDIT_FIELD");
+	public static final Button B_THE_X_Y_OF_EVERY_Z_MONTHS_RADIO_BUTTON = new Button("B_THE_X_Y_OF_EVERY_Z_MONTHS_RADIO_BUTTON");
+	public static final Button E_THE_X_Y_OF_EVERY_Z_MONTHS_EDIT_FIELD = new Button("E_THE_X_Y_OF_EVERY_Z_MONTHS_EDIT_FIELD");
+	
+	public static final Button B_EVERY_YEAR_ON_X_Y_RADIO_BUTTON = new Button("B_EVERY_YEAR_ON_X_Y_RADIO_BUTTON");
+	public static final Button E_EVERY_YEAR_ON_X_Y_EDIT_FIELD = new Button("E_EVERY_YEAR_ON_X_Y_EDIT_FIELD");
+	public static final Button B_THE_X_Y_OF_EVERY_Z_RADIO_BUTTON = new Button("B_THE_X_Y_OF_EVERY_Z_RADIO_BUTTON");
+	public static final Button E_THE_X_Y_OF_EVERY_Z_EDIT_FIELD = new Button("E_THE_X_Y_OF_EVERY_Z_EDIT_FIELD");
+	
+	public static final Button B_NO_END_DATE_RADIO_BUTTON = new Button("B_NO_END_DATE_RADIO_BUTTON");
+	public static final Button B_END_AFTER_X_OCCURRENCES_RADIO_BUTTON = new Button("B_END_AFTER_X_OCCURRENCES_RADIO_BUTTON");
+	public static final Button B_END_AFTER_X_OCCURRENCES_EDIT_FIELD = new Button("B_END_AFTER_X_OCCURRENCES_EDIT_FIELD");
+	public static final Button B_END_BY_DATE_RADIO_BUTTON = new Button("B_END_BY_DATE_RADIO_BUTTON");
+	public static final Button E_END_BY_DATE_EDIT_FIELD = new Button("E_END_BY_DATE_EDIT_FIELD");
+	
 	// Calendar dialogs
 	public static final Button B_SEND_CANCELLATION = new Button("B_SEND_CANCELLATION");
 	public static final Button B_EDIT_CANCELLATION = new Button("B_EDIT_CANCELLATION");
