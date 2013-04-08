@@ -33,7 +33,7 @@ if ($id ne "zimbra") {
   exit (1);
 }
 
-my ($add, $bits, $help, $query, $update, $domain, $delete, $selector);
+my ($add, $bits, $help, $query, $update, $domain, $delete, $selector, $subdomain);
 
 my $opts_good = GetOptions(
         'h|help' => \$help,
@@ -43,6 +43,7 @@ my $opts_good = GetOptions(
         'q|query' => \$query,
         'r|remove' => \$delete,
         's|selector=s' => \$selector,
+        'S|subdomains' => \$subdomain,
         'u|update' => \$update,
 );
 
@@ -141,14 +142,18 @@ if($add) {
     my $ug = Data::UUID->new;
     $selector = $ug->create_str();
   }
+  my $subflag="";
+  if ($subdomain) {
+    $subflag="--nosubdomains";
+  }
   if ($bits) {
      if ($bits < 1024) {
        print "Bit size less than 1024 is not allowed, as it is insecure.\n";
      } else {
-      `$keygen -b $bits -s $selector -d $domain -D /opt/zimbra/data/tmp`;
+      `$keygen $subflag -b $bits -s $selector -d $domain -D /opt/zimbra/data/tmp`;
      }
   } else {
-    `$keygen -s $selector -d $domain -D /opt/zimbra/data/tmp`;
+    `$keygen $subflag -s $selector -d $domain -D /opt/zimbra/data/tmp`;
   }
   my $privatekey = "${zimbra_home}/data/tmp/${selector}.private";
   my $publickey = "${zimbra_home}/data/tmp/${selector}.txt";
@@ -175,7 +180,12 @@ if($add) {
       ]
     );
     if ($mesg->code) {
-      print "Error: Failed to update LDAP: " . ldap_error_name($mesg->code) ."\n";
+      my $error_name = $mesg->error_name;
+      if ($error_name eq 'LDAP_CONSTRAINT_VIOLATION') {
+        print "Error: Failed to update LDAP: Selector $selector is already in use.\n";
+      } else {
+        print "Error: Failed to update LDAP: " . ldap_error_name($mesg->code) ."\n";
+      }
       exit 1;
     } else {
       print "DKIM Data added to LDAP for domain $domain with selector $selector\n";
@@ -247,14 +257,18 @@ if($add) {
     my $ug = Data::UUID->new;
     $selector = $ug->create_str();
   }
+  my $subflag="";
+  if ($subdomain) {
+    $subflag="--nosubdomains";
+  }
   if ($bits) {
      if ($bits < 1024) {
        print "Bit size less than 1024 is not allowed, as it is insecure.\n";
      } else {
-      `$keygen -b $bits -s $selector -d $domain -D /opt/zimbra/data/tmp`;
+      `$keygen $subflag -b $bits -s $selector -d $domain -D /opt/zimbra/data/tmp`;
      }
   } else {
-    `$keygen -s $selector -d $domain -D /opt/zimbra/data/tmp`;
+    `$keygen $subflag -s $selector -d $domain -D /opt/zimbra/data/tmp`;
   }
   my $privatekey = "${zimbra_home}/data/tmp/${selector}.private";
   my $publickey = "${zimbra_home}/data/tmp/${selector}.txt";
@@ -278,7 +292,12 @@ if($add) {
       ]
     );
     if ($mesg->code) {
-      print "Error: Failed to update LDAP: " . ldap_error_name($mesg->code) ."\n";
+      my $error_name = $mesg->error_name;
+      if ($error_name eq 'LDAP_CONSTRAINT_VIOLATION') {
+        print "Error: Failed to update LDAP: Selector $selector is already in use.\n";
+      } else {
+        print "Error: Failed to update LDAP: " . ldap_error_name($mesg->code) ."\n";
+      }
       exit 1;
     } else {
       print "DKIM Data added to LDAP for domain $domain with selector $selector\n";
@@ -336,7 +355,7 @@ $ldap->unbind();
 exit;
 
 sub usage() {
-  print "Usage: $0 [-a [-b]] [-q] [-r] [-s selector] [-u [-b]] [-d domain]\n";
+  print "Usage: $0 [-a [-b]] [-q] [-r] [-s selector] [-S] [-u [-b]] [-d domain]\n";
   print "-a: Add new key pair and selector for domain\n";
   print "-b: Optional parameter specifying the number of bits for the new key.\n";
   print "    Only works with -a and -u.  Default when not specified is 1024 bits.\n";
@@ -345,6 +364,8 @@ sub usage() {
   print "-q: Query DKIM information for domain\n";
   print "-r: Remove DKIM keys for domain\n";
   print "-s: Use custom selector string instead of random UUID\n";
+  print "-S: Generate keys with subdomain data.  This must be used if you want to sign both example.com and sub.example.com separately.\n";
+  print "    Only works with -a and -u.  Default is not to set this flag.\n";
   print "-u: Update keys for domain\n";
   print "One of [a, q, r, or u] must be supplied\n";
   print "For -q, search can be either by selector or domain\n";
