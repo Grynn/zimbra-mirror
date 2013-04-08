@@ -236,6 +236,26 @@ describe	CK_HELO_GENERIC		Relay used name indicative of a Dynamic Pool or Generi
 #score		CK_HELO_GENERIC		0.25
 ##} CK_HELO_GENERIC
 
+##{ COMPENSATION
+
+describe COMPENSATION     "Compensation"
+#score    COMPENSATION     1.50	# limit
+##} COMPENSATION
+
+##{ COMPENSATION if !plugin(Mail::SpamAssassin::Plugin::DKIM)
+
+if !plugin(Mail::SpamAssassin::Plugin::DKIM)
+  meta   COMPENSATION     __COMPENSATION && !__DOS_HAS_LIST_UNSUB && !__HAS_X_LOOP && !__HAS_ERRORS_TO && !__UNSUB_LINK && !__OPERA_MID_NON_OP && !__FB_S_STOCK && !__COMMENT_EXISTS && !__NOT_SPOOFED && !__LOCAL_PP_NONPPURL && !__NOT_A_PERSON && !__SUBSCRIPTION_INFO && !__DKIM_EXISTS && !__HAS_SENDER && !__RP_MATCHES_RCVD
+endif
+##} COMPENSATION if !plugin(Mail::SpamAssassin::Plugin::DKIM)
+
+##{ COMPENSATION ifplugin Mail::SpamAssassin::Plugin::DKIM
+
+ifplugin Mail::SpamAssassin::Plugin::DKIM
+  meta   COMPENSATION     __COMPENSATION && !__DOS_HAS_LIST_UNSUB && !__HAS_X_LOOP && !__HAS_ERRORS_TO && !__UNSUB_LINK && !__OPERA_MID_NON_OP && !__FB_S_STOCK && !__COMMENT_EXISTS && !__NOT_SPOOFED && !__LOCAL_PP_NONPPURL && !__NOT_A_PERSON && !__SUBSCRIPTION_INFO && !__DKIM_EXISTS && !__HAS_SENDER && !__RP_MATCHES_RCVD && !__DKIM_DEPENDABLE
+endif
+##} COMPENSATION ifplugin Mail::SpamAssassin::Plugin::DKIM
+
 ##{ CORRUPT_FROM_LINE_IN_HDRS
 
 meta CORRUPT_FROM_LINE_IN_HDRS (MISSING_HEADERS && __BODY_STARTS_WITH_FROM_LINE && MISSING_DATE && NO_RELAYS)
@@ -625,6 +645,12 @@ describe FB_NOT_PHONE_NUM3      Looks like a fake phone number (3)
 body     FB_NOT_SCHOOL          /(?!school)[\$s5]ch[o0][o0][il1\|]/i
 describe FB_NOT_SCHOOL          Looks like school but it's not!
 ##} FB_NOT_SCHOOL
+
+##{ FB_NOT_SEXUAL
+
+body     FB_NOT_SEXUAL          /[^Ss]exual/
+describe FB_NOT_SEXUAL          Almost Sexual but not.
+##} FB_NOT_SEXUAL
 
 ##{ FB_NUMYO
 
@@ -1964,7 +1990,7 @@ describe MONEY_ATM_CARD   Lots of money on an ATM card
 
 ##{ MONEY_FORM_SHORT
 
-meta     MONEY_FORM_SHORT    __MONEY_FORM_SHORT && !__DOS_HAS_LIST_UNSUB && !__VIA_ML && !__HTML_LINK_IMAGE && !__UPPERCASE_URI && !__THREADED && !__COMMENT_EXISTS && !__TAG_EXISTS_CENTER && !__THREAD_INDEX_GOOD 
+meta     MONEY_FORM_SHORT    __MONEY_FORM_SHORT && !__DOS_HAS_LIST_UNSUB && !__VIA_ML && !__HTML_LINK_IMAGE && !__UPPERCASE_URI && !__THREADED && !__COMMENT_EXISTS && !__TAG_EXISTS_CENTER
 describe MONEY_FORM_SHORT    Lots of money if you fill out a short form
 ##} MONEY_FORM_SHORT
 
@@ -2511,13 +2537,13 @@ meta SUBJECT_NEEDS_ENCODING    (!__SUBJECT_ENCODED_B64 && !__SUBJECT_ENCODED_QP)
 
 ##{ SUBJ_BROKEN_WORD
 
-meta        SUBJ_BROKEN_WORD       __SUBJ_BROKEN_WORD && !__RP_MATCHES_RCVD && !__COMMENT_EXISTS && !__MIME_QP && !__DOS_HAS_LIST_UNSUB && !__HAS_IN_REPLY_TO && !__THREADED && !__MSGID_JAVAMAIL && !__DKIM_EXISTS && !__RCD_RDNS_MAIL_MESSY && !__MSGID_OK_DIGITS 
+meta        SUBJ_BROKEN_WORD       __SUBJ_BROKEN_WORD && !__RP_MATCHES_RCVD && !__COMMENT_EXISTS && !__MIME_QP && !__DOS_HAS_LIST_UNSUB && !__HAS_IN_REPLY_TO && !__THREADED && !__MSGID_JAVAMAIL && !__DKIM_EXISTS && !__RCD_RDNS_MAIL_MESSY && !__LOCAL_PP_NONPPURL
 describe    SUBJ_BROKEN_WORD       Subject contains odd word break
 ##} SUBJ_BROKEN_WORD
 
 ##{ SUBJ_BROKEN_WORDS
 
-meta        SUBJ_BROKEN_WORDS      __SUBJ_BROKEN_WORD > 1 && !__RP_MATCHES_RCVD && !__COMMENT_EXISTS && !__MIME_QP && !__DOS_HAS_LIST_UNSUB && !__HAS_IN_REPLY_TO && !__THREADED && !__MSGID_JAVAMAIL && !__DKIM_EXISTS && !__RCD_RDNS_MAIL_MESSY && !__MSGID_OK_DIGITS 
+meta        SUBJ_BROKEN_WORDS      __SUBJ_BROKEN_WORD > 1 && !__RP_MATCHES_RCVD && !__COMMENT_EXISTS && !__MIME_QP && !__DOS_HAS_LIST_UNSUB && !__HAS_IN_REPLY_TO && !__THREADED && !__MSGID_JAVAMAIL && !__DKIM_EXISTS && !__RCD_RDNS_MAIL_MESSY && !__LOCAL_PP_NONPPURL
 describe    SUBJ_BROKEN_WORDS      Subject contains multiple odd word breaks
 ##} SUBJ_BROKEN_WORDS
 
@@ -2629,11 +2655,6 @@ header TVD_FINGER_02    Content-Type =~ /^text\/plain(?:; (?:format=flowed|chars
 rawbody TVD_FLOAT_GENERAL       /\bstyle\s*=\s*"[^"]*\bfloat\s*:\s*[a-z]+\s*">\s*[a-zA-Z]+\s*</i
 ##} TVD_FLOAT_GENERAL
 
-##{ TVD_FROM_1
-
-header TVD_FROM_1       From:addr =~ /[^\@0-9]{2}\d{3}\.(?:com|net|org|info|biz)$/i
-##} TVD_FROM_1
-
 ##{ TVD_FUZZY_DEGREE ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
 
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
@@ -2716,13 +2737,6 @@ describe TVD_PH_REC	Message has a phrase standard for phishing mails
 body TVD_PH_SEC		/\byour .{0,40}account .{0,40}security/i
 describe TVD_PH_SEC	Message has a phrase standard for phishing mails
 ##} TVD_PH_SEC
-
-##{ TVD_PH_SUBJ_META1
-
-meta 		TVD_PH_SUBJ_META1	(__TVD_PH_SUBJ_ACCOUNTS_PRE + __TVD_PH_SUBJ_SEC_MEASURES + __TVD_PH_SUBJ_UPDATE + __TVD_PH_SUBJ_URGENT + __TVD_PH_SUBJ_ACCOUNTS_POST > 0)
-#score 		TVD_PH_SUBJ_META1	1.25
-describe 	TVD_PH_SUBJ_META1	Email has a Phishy looking subject line
-##} TVD_PH_SUBJ_META1
 
 ##{ TVD_PP_PHISH
 
@@ -2857,26 +2871,6 @@ ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 #  score        T_CDISP_SZ_MANY      2.0  # limit
 endif
 ##} T_CDISP_SZ_MANY ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-
-##{ T_COMPENSATION
-
-describe T_COMPENSATION     "Compensation"
-#score    T_COMPENSATION     1.50	# limit
-##} T_COMPENSATION
-
-##{ T_COMPENSATION if !plugin(Mail::SpamAssassin::Plugin::DKIM)
-
-if !plugin(Mail::SpamAssassin::Plugin::DKIM)
-  meta   T_COMPENSATION     __COMPENSATION && !__DOS_HAS_LIST_UNSUB && !__HAS_X_LOOP && !__HAS_ERRORS_TO && !__UNSUB_LINK && !__OPERA_MID_NON_OP && !__FB_S_STOCK && !__COMMENT_EXISTS && !__NOT_SPOOFED && !__LOCAL_PP_NONPPURL && !__NOT_A_PERSON && !__SUBSCRIPTION_INFO && !__DKIM_EXISTS && !__HAS_SENDER && !__RP_MATCHES_RCVD
-endif
-##} T_COMPENSATION if !plugin(Mail::SpamAssassin::Plugin::DKIM)
-
-##{ T_COMPENSATION ifplugin Mail::SpamAssassin::Plugin::DKIM
-
-ifplugin Mail::SpamAssassin::Plugin::DKIM
-  meta   T_COMPENSATION     __COMPENSATION && !__DOS_HAS_LIST_UNSUB && !__HAS_X_LOOP && !__HAS_ERRORS_TO && !__UNSUB_LINK && !__OPERA_MID_NON_OP && !__FB_S_STOCK && !__COMMENT_EXISTS && !__NOT_SPOOFED && !__LOCAL_PP_NONPPURL && !__NOT_A_PERSON && !__SUBSCRIPTION_INFO && !__DKIM_EXISTS && !__HAS_SENDER && !__RP_MATCHES_RCVD && !__DKIM_DEPENDABLE
-endif
-##} T_COMPENSATION ifplugin Mail::SpamAssassin::Plugin::DKIM
 
 ##{ T_CTYPE_NULL ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
 
@@ -5188,17 +5182,7 @@ header __TVD_PH_SUBJ_59		Subject =~ /\bquestion from (?:[a-z_,-]+ )*?member\b/i
 
 header __TVD_PH_SUBJ_ACCESS_POST	Subject =~ /\b(?:(?:re-?)?activat[a-z]*|secure|verify|restore|flagged|limited|unusual|report|notif(?:y|ication)|suspen(?:d|ded|sion)) (?:[a-z_,-]+ )*?access\b/i
 
-header __TVD_PH_SUBJ_ACCOUNTS_POST	Subject =~ /\b(?:(?:re-?)?(?:activat[a-z]*|verify|validate)|secure|restore|flagged|limited|unusual|update|report|notif(?:y|ication)|suspen(?:d|ded|sion)|co(?:n|m)firm[a-z]*) (?:[-a-z_,]+ )*?accounts?\b/i
-
-header __TVD_PH_SUBJ_ACCOUNTS_PRE	Subject =~ /\baccounts? (?:[a-z_,-]+ )*?(?:record[a-z]*|suspen[a-z]+|notif(?:y|ication)|security|updated?|verifications?|confirm[a-z]+)\b/i
-
 meta __TVD_PH_SUBJ_META		__TVD_PH_SUBJ_00 || __TVD_PH_SUBJ_02 || __TVD_PH_SUBJ_04 || __TVD_PH_SUBJ_15 || __TVD_PH_SUBJ_17 || __TVD_PH_SUBJ_18 || __TVD_PH_SUBJ_19 || __TVD_PH_SUBJ_29 || __TVD_PH_SUBJ_31 || __TVD_PH_SUBJ_36 || __TVD_PH_SUBJ_37 || __TVD_PH_SUBJ_38 || __TVD_PH_SUBJ_39 || __TVD_PH_SUBJ_41 || __TVD_PH_SUBJ_52 || __TVD_PH_SUBJ_54 || __TVD_PH_SUBJ_56 || __TVD_PH_SUBJ_58 || __TVD_PH_SUBJ_59 || __TVD_PH_SUBJ_ACCESS_POST
-
-header __TVD_PH_SUBJ_SEC_MEASURES	Subject =~ /\bsecurity (?:[a-z_,-]+ )*?measures?\b/i
-
-header __TVD_PH_SUBJ_UPDATE		Subject =~ /\bupdate (?:[a-z_,-]+ )*?(?:access|credit|records?|info(?:rmation)?)\b/i
-
-header __TVD_PH_SUBJ_URGENT		Subject =~ /^urgent(?:[\s\W]*$|.{1,40}(?:alert|response|assistance|proposal|reply|warning|noti(?:ce|fication)|greeting|matter))/i
 
 header      __TVD_SUBJ_NUM_OBFU    Subject =~ /[a-z]{3,}\d+[a-z]{2,}/i
 
