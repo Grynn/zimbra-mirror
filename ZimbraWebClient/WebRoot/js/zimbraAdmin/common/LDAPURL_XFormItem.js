@@ -56,7 +56,7 @@ LDAPURL_XFormItem.prototype.initializeItems = function () {
 }
 
 LDAPURL_XFormItem.prototype.items = [
-	{type:_OUTPUT_, width:"35px", ref:".", labelLocation:_NONE_, label:null,
+	{type:_OUTPUT_, width:"40px", ref:".", labelLocation:_NONE_, label:null,
 		getDisplayValue:function(itemVal) {
              var val ;
 
