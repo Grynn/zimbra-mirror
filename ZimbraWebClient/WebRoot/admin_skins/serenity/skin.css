@@ -130,6 +130,11 @@ BODY {
 	width:100px;
 }
 
+.skin_container_username_div {
+    text-overflow: ellipsis;
+    width: 82px;
+}
+
 /* Josh: Selectors with asterisks aren't a good idea because there's limit   */
 /* on how far down they'll apply, and applying the same style to every level */
 /* defeats the purpose of inheritance, but I'll leave them alone for now.    */
