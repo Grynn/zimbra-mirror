@@ -743,10 +743,10 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	a.onclick = function (evt) {
 		var showing = ZaGlobalAdvancedStatsPage.showhide("loggertable" + id);
 		var target = ZaGlobalAdvancedStatsPage.getTarget(evt);
-		ZaGlobalAdvancedStatsPage.setText(target, (showing ? " - " : " + ") + ZaMsg.NAD_AdvStatsChartSettingsLabel);
+		ZaGlobalAdvancedStatsPage.setText(target, (showing ? ZaMsg.NAD_AdvStatsHideChartSettingsLabel : ZaMsg.NAD_AdvStatsShowChartSettingsLabel));
 		return false; //disable the default action from broswer, such as jumping to other page
 	}
-	ZaGlobalAdvancedStatsPage.setText(a, " - " + ZaMsg.NAD_AdvStatsChartSettingsLabel);
+	ZaGlobalAdvancedStatsPage.setText(a, ZaMsg.NAD_AdvStatsHideChartSettingsLabel);
 	form.appendChild(a);
 	
 	//span = document.createElement("span");
