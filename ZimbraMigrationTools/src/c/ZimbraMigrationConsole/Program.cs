@@ -1139,7 +1139,7 @@ class Program
                         string accountname = ZCSID;
                         if (!accountname.Contains("@"))
                         {
-                            accountname = accountname + "@" + (ZCSDomain == "" ? ZCSHost : ZCSDomain);
+                            accountname = accountname + "@" + (((ZCSDomain == "") || (ZCSDomain == null)) ? ZCSHost : ZCSDomain);
                         }
                         string accountid = (Pstfile != "") ? Pstfile : userid;
 
