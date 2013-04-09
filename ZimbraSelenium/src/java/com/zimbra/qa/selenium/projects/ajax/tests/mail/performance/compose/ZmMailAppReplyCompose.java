@@ -101,5 +101,28 @@ public class ZmMailAppReplyCompose extends AjaxCommonTest {
 		PerfMetrics.waitTimestamp(token);
 	}
 	
+	@Test(description = "Measure the time to load reply-compose window for invite conversation with 7mb attachment", groups = { "performance" })
+	public void ZmMailAppReplyCompose_04() throws HarnessException {
+
+		String mime = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/inviteMessageWith7MBAttachment.txt";
+		String subject = "Invite Message with 7 MB attachment";
+
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mime));
+
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailAppCompose, "Load Reply-Compose window for invite conversation with 7mb attachment");
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail display = (DisplayMail)app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Click Accept -> Edit Reply , which will open a new reply compose
+		@SuppressWarnings("unused")
+		FormMailNew editReply = (FormMailNew)display.zPressButtonPulldown(Button.B_ACCEPT, Button.O_ACCEPT_EDIT_REPLY);
+
+		PerfMetrics.waitTimestamp(token);
+	}
+	
 }
 
