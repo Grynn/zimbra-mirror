@@ -98,7 +98,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 		
 		
 		// Verify meeting disappears from the view
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify meeting is deleted from organizer's calendar");
+		ZAssert.assertEquals(app.zPageCalendar.zIsAppointmentExists(apptSubject), false, "Verify meeting is deleted from organizer's calendar");
 		
 		// Verify meeting is deleted from attendee's calendar
 		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
@@ -240,7 +240,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 
 		
 		//-- Verification
-		ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), "Verify meeting is not deleted from organizer's calendar");
+		ZAssert.assertTrue(app.zPageCalendar.zIsAppointmentExists(apptSubject), "Verify meeting is not deleted from organizer's calendar");
 		
 		// Verify meeting is not deleted from attendee's calendar
 		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")");
@@ -316,7 +316,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 		
 		// Verify the appointment does not appear in the organizers calendar
 		SleepUtil.sleepSmall(); //test fails without sleep
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify meeting is deleted from organizer's calendar");
+		ZAssert.assertEquals(app.zPageCalendar.zIsAppointmentExists(apptSubject), false, "Verify meeting is deleted from organizer's calendar");
 		
 		// Verify meeting is deleted from attendee's calendar && receive meeting cancellation message
 		SleepUtil.sleepLong(); //importSOAP gives wrong response without sleep
@@ -396,7 +396,7 @@ public class CancelMeeting extends CalendarWorkWeekTest {
 		//-- Verification
 		
 		// Verify the meeting no longer appears in the organizer's calendar
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify meeting is deleted from organizer's calendar");
+		ZAssert.assertEquals(app.zPageCalendar.zIsAppointmentExists(apptSubject), false, "Verify meeting is deleted from organizer's calendar");
 		
 
 		// Verify the meeting no longer appears in the attendee's calendar

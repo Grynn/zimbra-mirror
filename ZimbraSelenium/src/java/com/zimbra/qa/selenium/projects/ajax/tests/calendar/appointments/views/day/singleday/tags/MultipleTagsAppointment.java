@@ -93,9 +93,9 @@ public class MultipleTagsAppointment extends AjaxCommonTest {
 		
 		// Verify search result from UI
 		app.zTreeCalendar.zTreeItem(Action.A_LEFTCLICK, tag1);
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), true, "Verify search result after clicking to tag1");
+		ZAssert.assertEquals(app.zPageCalendar.zIsAppointmentExists(apptSubject), true, "Verify search result after clicking to tag1");
 		app.zTreeCalendar.zTreeItem(Action.A_LEFTCLICK, tag2);
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), true, "Verify search result after clicking to tag2");
+		ZAssert.assertEquals(app.zPageCalendar.zIsAppointmentExists(apptSubject), true, "Verify search result after clicking to tag2");
 	}
 	
 }

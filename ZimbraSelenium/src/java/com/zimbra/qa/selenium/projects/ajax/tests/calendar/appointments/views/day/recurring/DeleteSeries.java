@@ -134,9 +134,9 @@ public class DeleteSeries extends AjaxCommonTest {
 
 
         // Verify the appointment is not in the GUI view
-        // ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify instance is deleted from the calendar");
-        boolean deleted = app.zPageCalendar.zWaitForElementDeleted(app.zPageCalendar.zGetApptLocator(apptSubject), "10000");
-	ZAssert.assertEquals(deleted, true, "Verify instance is deleted from the calendar");
+        ZAssert.assertEquals(app.zPageCalendar.zIsAppointmentExists(apptSubject), false, "Verify instance is deleted from the calendar");
+        //boolean deleted = app.zPageCalendar.zWaitForElementDeleted(app.zPageCalendar.zGetApptLocator(apptSubject), "10000");
+        //ZAssert.assertEquals(deleted, true, "Verify instance is deleted from the calendar");
 
         
 	}
@@ -224,9 +224,9 @@ public class DeleteSeries extends AjaxCommonTest {
 
 
         // Verify the appointment is not in the GUI view
-        // ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify instance is deleted from the calendar");
-        boolean deleted = app.zPageCalendar.zWaitForElementDeleted(app.zPageCalendar.zGetApptLocator(apptSubject), "10000");
-	ZAssert.assertEquals(deleted, true, "Verify instance is deleted from the calendar");
+        ZAssert.assertEquals(app.zPageCalendar.zIsAppointmentExists(apptSubject), false, "Verify instance is deleted from the calendar");
+        //boolean deleted = app.zPageCalendar.zWaitForElementDeleted(app.zPageCalendar.zGetApptLocator(apptSubject), "10000");
+        //ZAssert.assertEquals(deleted, true, "Verify instance is deleted from the calendar");
 
         
 	}
@@ -322,9 +322,9 @@ public class DeleteSeries extends AjaxCommonTest {
 
 
         // Verify the appointment is not in the GUI view
-        // ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify instance is deleted from the calendar");
-        boolean deleted = app.zPageCalendar.zWaitForElementDeleted(app.zPageCalendar.zGetApptLocator(apptSubject), "10000");
-	ZAssert.assertEquals(deleted, true, "Verify instance is deleted from the calendar");
+        ZAssert.assertEquals(app.zPageCalendar.zIsAppointmentExists(apptSubject), false, "Verify instance is deleted from the calendar");
+        //boolean deleted = app.zPageCalendar.zWaitForElementDeleted(app.zPageCalendar.zGetApptLocator(apptSubject), "10000");
+        //ZAssert.assertEquals(deleted, true, "Verify instance is deleted from the calendar");
 
         
 

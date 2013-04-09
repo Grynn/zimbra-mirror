@@ -90,7 +90,7 @@ public class GetAppointment extends AjaxCommonTest {
 		app.zPageCalendar.zWaitForElementPresent("css=div[id*=zli__CLD__]");
 		
 		//verify appt displayed in day view
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(subject)), true, "Verify appointment present in day view");
+		ZAssert.assertEquals(app.zPageCalendar.zIsAppointmentExists(subject), true, "Verify appointment present in day view");
 		
 	}
 }

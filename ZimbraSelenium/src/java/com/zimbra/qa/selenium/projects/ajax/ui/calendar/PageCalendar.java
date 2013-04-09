@@ -234,19 +234,6 @@ public class PageCalendar extends AbsTab {
 		
 	}
 	
-	public String zGetApptLocator(String apptSubject) throws HarnessException {
-		SleepUtil.sleepSmall();
-		if (sIsElementPresent("css=td.appt_name:contains('" + apptSubject + "')") == true) {
-			return "css=td.appt_name:contains('" + apptSubject + "')";
-		} else if (sIsElementPresent("css=td.appt_new_name:contains('" + apptSubject + "')") == true) {
-			return "css=td.appt_new_name:contains('" + apptSubject + "')";
-		} else if (sIsElementPresent("css=span[id^='zli__CLM__']['_subject']:contains('" + apptSubject + "')") == true) {
-			return "css=span[id^='zli__CLM__']['_subject']:contains('" + apptSubject + "')";
-		} else {
-			return null;
-		}
-	}
-	
 	public boolean zGetApptLocatorFreeBusyView(String attendeeEmail, String apptSubject) throws HarnessException {
 		boolean attendeeEmailRow, apptSubjectRow;
 		attendeeEmailRow = sIsElementPresent("css=div[id='zv__CLFB'] td[id$='_NAME_'] div[class='ZmSchedulerInputDisabled']:contains('" + attendeeEmail + "')");
@@ -258,8 +245,28 @@ public class PageCalendar extends AbsTab {
 		}	
 	}
 	
+	public String zGetApptLocator(String apptSubject) throws HarnessException {
+		SleepUtil.sleepSmall();
+		if (sIsElementPresent("css=td.appt_name:contains('" + apptSubject + "')") == true) {
+			return "css=td.appt_name:contains('" + apptSubject + "')";
+		} else if (sIsElementPresent("css=td.appt_new_name:contains('" + apptSubject + "')") == true) {
+			return "css=td.appt_new_name:contains('" + apptSubject + "')";
+		} else if (sIsElementPresent("css=span[id^='zli__CLM__']['_subject']:contains('" + apptSubject + "')") == true) {
+			return "css=span[id^='zli__CLM__']['_subject']:contains('" + apptSubject + "')";
+		} else {
+			throw new HarnessException("Unable to locate subject: "+ apptSubject);
+		}
+	}
+	
 	public boolean zIsAppointmentExists(String apptSubject) throws HarnessException {
-		return sIsElementPresent(zGetApptLocator(apptSubject));
+		SleepUtil.sleepMedium();
+		if (sIsElementPresent("css=td.appt_name:contains('" + apptSubject + "')") == true || 
+				sIsElementPresent("css=td.appt_new_name:contains('" + apptSubject + "')") == true || 
+				sIsElementPresent("css=span[id^='zli__CLM__']['_subject']:contains('" + apptSubject + "')") == true) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public boolean zGetViewApptLocator() throws HarnessException {

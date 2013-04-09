@@ -87,7 +87,7 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
 		dlgConfirm.zClickButton(Button.B_YES);
 		dlgConfirm.zWaitForClose();
 		SleepUtil.sleepMedium(); //testcase failing due to timing issue so added sleep
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify appointment is deleted");
+		ZAssert.assertEquals(app.zPageCalendar.zIsAppointmentExists(apptSubject), false, "Verify appointment is deleted");
 	}
 	
 	@Bugs(ids = "69132")
@@ -128,7 +128,7 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
 		dlgConfirm.zClickButton(Button.B_YES);
 		dlgConfirm.zWaitForClose();
 		SleepUtil.sleepMedium(); //testcase failing due to timing issue so added sleep
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify appointment is deleted");
+		ZAssert.assertEquals(app.zPageCalendar.zIsAppointmentExists(apptSubject), false, "Verify appointment is deleted");
 	}
 	
 	@DataProvider(name = "DataProviderShortcutKeys")

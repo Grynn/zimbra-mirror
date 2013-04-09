@@ -93,7 +93,7 @@ public class UnTagAppointment extends AjaxCommonTest {
 		// Verify search result from UI
 		app.zTreeCalendar.zTreeItem(Action.A_LEFTCLICK, tag1);
 		SleepUtil.sleepMedium();
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify search result after clicking tag");
+		ZAssert.assertEquals(app.zPageCalendar.zIsAppointmentExists(apptSubject), false, "Verify search result after clicking tag");
 	}
 	
 	@Test(description = "Untag tagged appointment using context menu in day view",

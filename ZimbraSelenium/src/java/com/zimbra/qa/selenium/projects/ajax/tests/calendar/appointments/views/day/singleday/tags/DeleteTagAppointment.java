@@ -128,7 +128,7 @@ public class DeleteTagAppointment extends AjaxCommonTest {
         DialogConfirmDeleteAppointment dlgConfirm = (DialogConfirmDeleteAppointment)app.zPageCalendar.zToolbarPressButton(Button.B_DELETE);
 		dlgConfirm.zClickButton(Button.B_YES);
 		SleepUtil.sleepMedium(); //testcase fails here due to timing issue so added sleep
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(app.zPageCalendar.zGetApptLocator(apptSubject)), false, "Verify appointment is deleted");
+		ZAssert.assertEquals(app.zPageCalendar.zIsAppointmentExists(apptSubject), false, "Verify appointment is deleted");
 		
 	}
 }
