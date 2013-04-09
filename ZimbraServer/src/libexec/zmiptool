@@ -120,7 +120,7 @@ if ($size > 0) {
 
 $mesg = $ldap->search(
           base=>"",
-          filter=>"(&(objectClass=zimbraServer)(cn=$host)(zimbraServiceEnabled=mailbox))",
+          filter=>"(&(objectClass=zimbraServer)(cn=$host)(zimbraServiceEnabled=mta))",
           scope=>"sub",
         );
 
