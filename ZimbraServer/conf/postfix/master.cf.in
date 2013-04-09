@@ -164,7 +164,7 @@ smtp-amavis unix -      -       n       -       10  smtp
 #
 [%%zimbraLocalBindAddress%%]:10027 inet n   n       n       -       -       spawn
 	-o smtp_send_xforward_command=yes
-	user=zimbra argv=/opt/zimbra/postfix-journal/bin/postjournal
+	user=zimbra argv=/opt/zimbra/libexec/postjournal
 
 [%%zimbraLocalBindAddress%%]:10028 inet n  -       n       -       -  smtpd
 	-o smtpd_authorized_xforward_hosts=127.0.0.0/8
