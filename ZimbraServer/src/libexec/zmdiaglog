@@ -226,10 +226,11 @@ Usage: zmdiaglog [-adtjzZh]
     -d    - Log destination (Default $DEFAULT_DEST)
     -t    - Timeout in seconds for hanging commands (Default $DEFAULT_TIMEOUT)
     -j    - Also include the output of /opt/zimbra/libexec/zmjavawatch
-    -z    - Create a zip file of the data collected by zmdiaglog
+    -z    - Archive data collected by zmdiaglog into a zip file and leave data
+            collection directory intact.
     -Z    - Archive data collected by zmdiaglog into a zip file AND remove
             data collection directory.
-    -h    - This help message
+    -h    - Display this help message.
 EOF
 }
 
@@ -438,14 +439,15 @@ sub run() {
     chomp($dirname);
     chomp($dirname = `basename $dirname`);
     if ($options{'z'} || $options{'Z'}) {
-      logmsg "Zipping up contents of $destination into $destination.zip\n";
+      logmsg "Zipping contents of $destination into $destination.zip\n";
+      $LOG_FILE = "$destination/$LOG_FILE";
       chdir('..');
-      my $rc = 0xffff & system("nice -n 19 zip -9r $dirname.zip $dirname/");
+      my $rc = 0xffff & system("nice -n 19 zip -9r $dirname.zip $dirname/ >> $LOG_FILE 2>&1");
 	  if (($rc == 0) && (-e "$destination.zip")) {
       	logmsg "\n *** Zipfile \"$destination.zip\" created.\n";
 		remove_data_dir($destination) if ($options{'Z'});
       } else {
-		logmsg "$destination.zip could not be created. Leaving data collection directory intact.\n";
+		logmsg "An error occurred creating $destination.zip. Leaving data collection directory intact.\n";
 	    logmsg "$0 run complete\n";
       }
     } else {
