@@ -5,6 +5,8 @@ use XML::Simple;
 use Getopt::Long;
 use Filesys::Df;
 use POSIX;
+use Mail::Mailer;
+use Net::LDAP;
 
 if ( ! -d "/opt/zimbra/openldap/etc" ) {
   print "ERROR: openldap does not appear to be installed - exiting\n";
@@ -34,15 +36,17 @@ if ($help) {
 
 my $localxml = XMLin("/opt/zimbra/conf/localconfig.xml");
 
-my $ldap_monitor_mdb = $localxml->{key}->{ldap_monitor_mdb};
-my $ldap_monitor_alert_only = $localxml->{key}->{ldap_monitor_alert_only};
-my $ldap_monitor_warning = $localxml->{key}->{ldap_monitor_warning};
-my $ldap_monitor_critical = $localxml->{key}->{ldap_monitor_critical};
-my $ldap_monitor_growth = $localxml->{key}->{ldap_monitor_growth};
+my $ldap_monitor_mdb = $localxml->{key}->{ldap_monitor_mdb}->{value};
+my $ldap_monitor_alert_only = $localxml->{key}->{ldap_monitor_alert_only}->{value};
+my $ldap_monitor_warning = $localxml->{key}->{ldap_monitor_warning}->{value};
+my $ldap_monitor_critical = $localxml->{key}->{ldap_monitor_critical}->{value};
+my $ldap_monitor_growth = $localxml->{key}->{ldap_monitor_growth}->{value};
 my $ldap_db_maxsize = $localxml->{key}->{ldap_db_maxsize}->{value};
 my $ldap_accesslog_maxsize = $localxml->{key}->{ldap_accesslog_maxsize}->{value};
 my $ldap_is_master = $localxml->{key}->{ldap_is_master}->{value};
 my $zimbra_home = $localxml->{key}->{zimbra_home}->{value};
+my $server = $localxml->{key}->{zimbra_server_hostname}->{value};
+my $report=[];
 
 chomp($ldap_monitor_mdb);
 chomp($ldap_monitor_alert_only);
@@ -211,56 +215,98 @@ if ($debug) {
   print "space_alarm=$space_alarm\n";
   print "mdb_growth_size=$mdb_growth_size\n";
   print "alog_growth_size=$alog_growth_size\n";
+  print "server:$server\n";
 }
 
 if ($space_alarm == 6) {
   if ($mdb_alarm ==2) {
-    print "CRITICAL! LDAP primary MDB database is nearly full and cannot expand due to limited free disk space.\n";
+    my $subject="CRITICAL DATABASE ALERT for $server\n";
+    my $msg="CRITICAL! LDAP primary MDB database is nearly full and cannot expand due to limited free disk space.\n";
+	push (@$report,$msg);
+	sendEmailReport($subject, $report);
   } else {
-    print "WARNING! LDAP primary MDB database is near the maximum size and cannot expand due to limited free disk space.\n";
+    my $subject="WARNING DATABASE ALERT for $server.\n";
+    my $msg="WARNING! LDAP primary MDB database is near the maximum size and cannot expand due to limited free disk space.\n";
+	push (@$report,$msg);
+	sendEmailReport($subject, $report);
   }
-  exit 1;
+  exit 0;
 }
 
 if ($space_alarm == 5) {
   if ($alog_alarm ==2) {
-    print "CRITICAL! LDAP accesslog MDB database is nearly full and cannot expand due to limited free disk space.\n";
+    my $subject="CRITICAL DATABASE ALERT for $server\n";
+    my $msg="CRITICAL! LDAP accesslog MDB database is nearly full and cannot expand due to limited free disk space.\n";
+	push (@$report,$msg);
+	sendEmailReport($subject, $report);
   } else {
-    print "WARNING! LDAP accesslog MDB database is near the maximum size and cannot expand due to limited free disk space.\n";
+    my $subject="WARNING DATABASE ALERT for $server.\n";
+    my $msg="WARNING! LDAP accesslog MDB database is near the maximum size and cannot expand due to limited free disk space.\n";
+	push (@$report,$msg);
+	sendEmailReport($subject, $report);
   }
-  exit 1;
+  exit 0;
 }
 
 if ($space_alarm == 4) {
-  print "CRITICAL! LDAP primary and accesslog MDB databases are nearly full and cannot expand due to limited free disk space.\n";
-  exit 1;
+  my $subject="CRITICAL DATABASE ALERT for $server.\n";
+  my $msg="CRITICAL! LDAP primary and accesslog MDB databases are nearly full and cannot expand due to limited free disk space.\n";
+  push (@$report,$msg);
+  sendEmailReport($subject, $report);
+  exit 0;
 }
 
 my $growth=0;
-if ($mdb_alarm && $ldap_monitor_alert_only eq "false") {
-   $growth =$mdb_growth_size + $ldap_db_maxsize;
-   print "Growing primary MDB database size from $ldap_db_maxsize to $growth.\n";
-   setLocalConfig("ldap_db_maxsize", "$growth");
-} elsif ($mdb_alarm) {
-  if ($mdb_alarm == 2) {
-    print "CRITICAL! LDAP primary MDB database is ".$ldap_monitor_critical*100."% full.\n";
+if ($mdb_alarm) { 
+  if ($ldap_monitor_alert_only eq "false") {
+    $growth =$mdb_growth_size + $ldap_db_maxsize;
+	if ($debug) {
+	  print "growth:$growth\n";
+    }
+	my $subject="LDAP PRIMARY DATABASE GROWTH ALERT\n";
+    my $msg="Growing primary MDB database size from $ldap_db_maxsize to $growth.\n"; 
+    setLocalConfig("ldap_db_maxsize", "$growth");
+    push (@$report,$msg);
+	sendEmailReport($subject, $report);
+  } elsif ($mdb_alarm == 2) {
+    my $subject="CRITICAL DATABASE ALERT for $server.\n";
+    my $msg="CRITICAL! LDAP primary MDB database is " . $ldap_monitor_critical*100 . "% full.\n";
+    push (@$report,$msg);
+    sendEmailReport($subject, $report);
   } else {
-    print "WARNING! LDAP primary MDB database is ".$ldap_monitor_warning*100."% full.\n";
+    my $subject="WARNIG DATABASE ALERT for $server.\n";
+    my $msg="WARNING! LDAP primary MDB database is " . $ldap_monitor_warning*100 . "% full.\n";
+    push (@$report,$msg);
+    sendEmailReport($subject, $report);
   }
 }
 
 $growth=0;
-if ($alog_alarm && $ldap_monitor_alert_only eq "false") {
-   $growth =$alog_growth_size + $ldap_db_maxsize;
-   print "Growing accesslog MDB database size from $ldap_accesslog_maxsize to $growth.\n";
-   setLocalConfig("ldap_db_maxsize", "$growth");
-} elsif ($alog_alarm) {
-  if ($alog_alarm == 2) {
-    print "CRITICAL! LDAP accesslog MDB database is ".$ldap_monitor_critical*100."% full.\n";
+if ($alog_alarm) {
+  if ($ldap_monitor_alert_only eq "false") {
+    $growth =$alog_growth_size + $ldap_db_maxsize;
+	if ($debug) {
+	  print "growth:$growth\n";
+    }
+	my $subject="LDAP ACCESSLOG DATABASE GROWTH ALERT\n";
+    my $msg="Growing accesslog MDB database size from $ldap_accesslog_maxsize to $growth.\n";
+    setLocalConfig("ldap_db_maxsize", "$growth");
+    push (@$report,$msg);
+    sendEmailReport($subject, $report);
+  } elsif ($alog_alarm == 2) {
+    my $subject="CRITICAL DATABASE ALERT for $server.\n";
+    my $msg="CRITICAL! LDAP accesslog MDB database is " . $ldap_monitor_critical*100 . "% full.\n";
+    push (@$report,$msg);
+    sendEmailReport($subject, $report);
   } else {
-    print "WARNING! LDAP accesslog MDB database is ".$ldap_monitor_warning*100."% full.\n";
+    my $subject="WARNIG DATABASE ALERT for $server.\n";
+    my $msg="WARNING! LDAP accesslog MDB database is " . $ldap_monitor_warning*100 . "% full.\n";
+    push (@$report,$msg);
+    sendEmailReport($subject, $report);
   }
 }
+
+exit 0;
 
 sub setLocalConfig {
   my $key = shift;
@@ -274,4 +320,79 @@ sub runCommand {
   my $rc;
   $rc = 0xffff & system("$cmd > /dev/null 2>&1 ");
   return $rc;
+}
+
+sub getLdapConfigValue {
+    my $attrib = shift;
+
+    return (undef) unless ($attrib);
+
+    my $val = getLdapServerConfigValue($attrib);
+    print "Server: $val\n" if $debug;
+    $val = getLdapGlobalConfigValue($attrib) if ($val eq "");
+    print "Global: $val\n" if $debug;
+    return $val;
+}
+
+sub getLdapServerConfigValue {
+    my $attrib = shift;
+
+    return (undef) unless ($attrib);
+    open( CONF, "/opt/zimbra/bin/zmprov -l gs $server '$attrib' |" )
+      or die("Open server config failed: $!");
+
+    my ( $key, $val );
+    while (<CONF>) {
+        chomp;
+        next if (/^#/);
+        ( $key, $val ) = split( /:\s*/, $_, 2 );
+        last if ($val);
+    }
+    return $val;
+}
+
+sub getLdapGlobalConfigValue {
+    my $attrib = shift;
+
+    return (undef) unless ($attrib);
+
+    open( CONF, "/opt/zimbra/bin/zmprov -l gcf '$attrib' |" )
+      or die("Open global config failed: $!");
+
+    my ( $key, $val );
+    while (<CONF>) {
+        chomp;
+        ( $key, $val ) = split( /:\s*/, $_, 2 );
+        last if ($val);
+    }
+    return $val;
+}
+
+sub sendEmailReport {
+  my $subject = shift;
+  my $msg = shift;
+  my $localxml = XMLin("/opt/zimbra/conf/localconfig.xml");
+
+  my $from_address= $localxml->{key}->{smtp_source}->{value};
+  my $to_address = $localxml->{key}->{smtp_destination}->{value};
+
+  my $smtphost = getLdapConfigValue("zimbraSmtpHostname");
+
+  return if (scalar @$msg == 0);
+  print "Sending ldap MDB error report to $to_address via $smtphost\n" if $debug;
+  eval {
+    my $mailer = Mail::Mailer->new("smtp", Server => $smtphost);
+    $mailer->open( { From => $from_address,
+                   To   => $to_address,
+                   Subject => $subject,
+                })
+    or warn "ERROR: Can't open: $!\n";
+    print $mailer $msg;
+    $mailer->close();
+  };
+  if ($@) {
+    print("Failed to email report: $@\n");
+  } else {
+    print "Email report sent to $to_address\n" if $debug;
+  }
 }
