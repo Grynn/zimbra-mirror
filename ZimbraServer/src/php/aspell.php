@@ -130,7 +130,7 @@ if ($text != NULL) {
 <form action="aspell.php" method="post" enctype="multipart/form-data">
     <p>Type in some words to spell check:</p>
     <textarea NAME="text" ROWS="10" COLS="80"></textarea>
-    <p>Dictionary: <input type="text" name="dictionary" value="<?php print $dictionary; ?>" size="8"/></p>
+    <p>Dictionary: <input type="text" name="dictionary" size="8"/></p>
     <p>Ignore: <input type="text" name="ignore" size="40"/></p>
     <p><input type="checkbox" name="ignoreAllCaps" value="on">IgnoreAllCaps</input></p>
     <p><input type="submit" /></p>
