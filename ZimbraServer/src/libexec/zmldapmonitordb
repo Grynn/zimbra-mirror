@@ -396,3 +396,9 @@ sub sendEmailReport {
     print "Email report sent to $to_address\n" if $debug;
   }
 }
+
+sub usage() {
+  print "Usage: $0 [-d] [-h]\n";
+  print "  -d: debug information.\n";
+  print "  -h: this help message.\n";
+}
