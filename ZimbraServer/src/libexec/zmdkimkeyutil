@@ -18,7 +18,7 @@ use lib '/opt/zimbra/zimbramon/lib';
 use Net::LDAP;
 use Net::LDAP::Util qw ( ldap_error_name );
 use XML::Simple;
-use Getopt::Long;
+use Getopt::Long qw(:config no_ignore_case);
 use Data::UUID;
 
 if ( ! -d "/opt/zimbra/opendkim" ) {
