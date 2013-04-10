@@ -110,6 +110,7 @@ PRE_PERL_LIBS	:= \
 	Sub::Uplevel \
 	Test::Exception \
 	Test::Warn \
+	Net::CIDR \
 	Socket::Linux
 
 PERL_LIBS 	:= \
