@@ -69,7 +69,8 @@ public class SuggestALocation extends CalendarWorkWeekTest {
         
         // Select the location from suggested location pane
         FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        apptForm.zToolbarPressButton(Button.B_SUGGESTALOCATION); 
+        apptForm.zToolbarPressButton(Button.B_SUGGESTALOCATION);
+        SleepUtil.sleepLong(); //specific sleep for suggested location pane because it searches free resources dynamically
         apptForm.zPressButton(Button.B_SUGGESTEDLOCATION, apptLocation);
         
         // Verify 'free' location appears in suggested locations pane

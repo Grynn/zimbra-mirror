@@ -1063,6 +1063,7 @@ public class FormApptNew extends AbsForm {
 		if (appt.getAttendees() != null) {
 			zFillField(Field.Attendees, appt.getAttendees());
 			SleepUtil.sleepSmall();
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
 		}
 
@@ -1223,17 +1224,13 @@ public class FormApptNew extends AbsForm {
 			if (end.equals(Button.B_NO_END_DATE_RADIO_BUTTON)) {
 				this.sClickAt(Locators.NoEndDateRadioButton, "");
 				
-			} else if (repeat.equals(Button.B_END_AFTER_X_OCCURRENCES_RADIO_BUTTON)) {
+			} else if (end.equals(Button.B_END_AFTER_X_OCCURRENCES_RADIO_BUTTON)) {
 				this.sClickAt(Locators.EndAfterXoccurrencesRadioButton, "");
-
-			} else if (repeat.equals(Button.B_END_AFTER_X_OCCURRENCES_EDIT_FIELD)) {
-				this.sType(Locators.EndAfterXoccurrencesEditField, repeatOption1);
+				this.sType(Locators.EndAfterXoccurrencesEditField, endOption1);
 				
-			} else if (repeat.equals(Button.B_END_BY_DATE_RADIO_BUTTON)) {
+			} else if (end.equals(Button.B_END_BY_DATE_RADIO_BUTTON)) {
 				this.sClickAt(Locators.EndByXDateRadioButton, "");
-				
-			} else if (repeat.equals(Button.E_END_BY_DATE_EDIT_FIELD)) {
-				this.sClickAt(Locators.EndByXDateEditField, "");
+				this.sType(Locators.EndByXDateEditField, endOption1);
 			}	
 	
 		}
