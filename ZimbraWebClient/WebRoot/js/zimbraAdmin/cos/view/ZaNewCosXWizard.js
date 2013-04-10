@@ -273,6 +273,10 @@ ZaNewCosXWizard.isMailFeatureEnabled = function () {
 	return (this.getInstanceValue(ZaCos.A_zimbraFeatureMailEnabled) == "TRUE");
 }
 
+ZaCosXFormView.isContactsFeatureEnabled = function () {
+    return this.getInstanceValue(ZaCos.A_zimbraFeatureContactsEnabled) == "TRUE";
+}
+
 ZaNewCosXWizard.isCalendarFeatureEnabled = function () {
 	return this.getInstanceValue(ZaCos.A_zimbraFeatureCalendarEnabled)=="TRUE";
 }
@@ -281,9 +285,9 @@ ZaNewCosXWizard.isMailForwardingEnabled = function () {
 	return (this.getInstanceValue(ZaCos.A_zimbraFeatureMailForwardingEnabled) == "TRUE");
 }
 
-ZaNewCosXWizard.isMailFeatureEnabled = function () {
-	return (this.getInstanceValue(ZaCos.A_zimbraFeatureMailEnabled) == "TRUE");
-}
+//ZaNewCosXWizard.isMailFeatureEnabled = function () {
+//	return (this.getInstanceValue(ZaCos.A_zimbraFeatureMailEnabled) == "TRUE");
+//}
 
 ZaNewCosXWizard.isBriefcaseFeatureEnabled = function () {
 	return (this.getInstanceValue(ZaCos.A_zimbraFeatureBriefcasesEnabled) == "TRUE");
@@ -292,6 +296,7 @@ ZaNewCosXWizard.isBriefcaseFeatureEnabled = function () {
 ZaNewCosXWizard.FEATURE_TAB_ATTRS = [ZaCos.A_zimbraFeatureMailEnabled,
 	ZaCos.A_zimbraFeatureReadReceiptsEnabled,
 	ZaCos.A_zimbraFeatureContactsEnabled,
+    ZaCos.A_zimbraFeatureDistributionListFolderEnabled,
 	ZaCos.A_zimbraFeatureCalendarEnabled,
 	ZaCos.A_zimbraFeatureTasksEnabled,
 	//ZaCos.A_zimbraFeatureNotebookEnabled,
@@ -631,6 +636,31 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
                         {ref:ZaCos.A_zimbraFeatureIdentitiesEnabled, type:_WIZ_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureIdentitiesEnabled,label:ZaMsg.LBL_zimbraFeatureIdentitiesEnabled,trueValue:"TRUE", falseValue:"FALSE"},
                         {ref:ZaCos.A_zimbraFeatureReadReceiptsEnabled, type:_WIZ_CHECKBOX_,label:ZaMsg.LBL_zimbraFeatureReadReceiptsEnabled,trueValue:"TRUE", falseValue:"FALSE"}
 
+                ]
+            },
+            {
+                type: _ZAWIZ_TOP_GROUPER_,
+                label: ZaMsg.NAD_zimbraContactFeature,
+                id: "cos_form_features_contact",
+                enableDisableChecks: [ZaCosXFormView.isContactsFeatureEnabled],
+                enableDisableChangeEventSources: [ZaCos.A_zimbraFeatureContactsEnabled],
+                visibilityChecks: [
+                    [
+                        ZATopGrouper_XFormItem.isGroupVisible,
+                        [
+                            ZaCos.A_zimbraFeatureDistributionListFolderEnabled
+                        ]
+                    ]
+                ],
+                items: [
+                    {
+                        ref: ZaCos.A_zimbraFeatureDistributionListFolderEnabled,
+                        type: _WIZ_CHECKBOX_,
+                        msgName: ZaMsg.MSG_zimbraFeatureDistributionListFolderEnabled,
+                        label: ZaMsg.LBL_zimbraFeatureDistributionListFolderEnabled,
+                        trueValue: "TRUE",
+                        falseValue: "FALSE"
+                    }
                 ]
             },
             {type:_ZAWIZ_TOP_GROUPER_,  label:ZaMsg.NAD_zimbraCalendarFeature, id:"cos_form_features_calendar",
