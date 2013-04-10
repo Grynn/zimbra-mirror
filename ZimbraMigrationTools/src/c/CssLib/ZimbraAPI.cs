@@ -1459,7 +1459,11 @@ public class ZimbraAPI
 
         writer.WriteStartElement("inv");
         writer.WriteAttributeString("method", "REQUEST");
-        writer.WriteAttributeString("fb", appt["fb"]);
+        
+        if (appt["fb"].Length > 0)
+        {
+            writer.WriteAttributeString("fb", appt["fb"]);
+        }
         writer.WriteAttributeString("transp", appt["transp"]);
 
         if (appt["allDay"].Length > 0)

@@ -786,6 +786,7 @@ public class CSMigrationWrapper
                     Log.err("CSmigrationwrapper MAPI edgecase",errMesg);
                     Acct.LastProblemInfo = new ProblemInfo(Acct.AccountName, errMesg, ProblemInfo.TYPE_ERR);
                     Acct.IsCompletedMigration = false;
+                    options.SkipPrevMigrated = true;
                     while (iProcessedItems < itemobjectarray.Count())
                     {
                         Log.debug("Processing folder", folder.Name, "-- Total items:", folder.ItemCount);
