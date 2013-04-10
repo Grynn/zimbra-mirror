@@ -151,7 +151,7 @@ DwtColorPicker.prototype._createHtmlFromTemplate = function(templateId, data) {
         var button = this._defaultColorButton = new DwtColorPicker.Button({parent:this});
         button.setText(data.noFillLabel || AjxMsg.colorsUseDefault);
         button.replaceElement(buttonEl);
-        button.addSelectionListener(new AjxListener(this, this._handleColorSelect, [null]));
+        button.addSelectionListener(new AjxListener(this, this._handleColorSelect, [0]));
     }
 
     // set color handlers
