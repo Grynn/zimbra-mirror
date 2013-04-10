@@ -436,33 +436,6 @@ public class PagePreferences extends AbsTab {
 		return (page);
 	}
 	
-	/**
-	 * Check/Uncheck a checkbox (just returns if checkbox already checked)
-	 * @param locator The locator for the checkbox
-	 * @param status The desired status of the checkbox (true=checked, false=unchecked)
-	 * @throws HarnessException 
-	 */
-	public void zCheckboxSet(String locator, boolean status) throws HarnessException {
-		
-		if ( !this.sIsElementPresent(locator) ) {
-			throw new HarnessException(locator + " no present!");
-		}
-		
-		if ( this.sIsChecked(locator) == status ) {
-			logger.debug("checkbox status matched.  not doing anything");
-			return;
-		}
-		
-		if ( status == true ) {
-			this.sCheck(locator);
-		} else {
-			this.sUncheck(locator);
-		}
-		
-		this.zWaitForBusyOverlay();
-		
-	}
-	
 	public void zCheckboxSet(Button checkbox, boolean status) throws HarnessException {
 		
 		logger.info(myPageName() + " zPressButton("+ checkbox +")");
