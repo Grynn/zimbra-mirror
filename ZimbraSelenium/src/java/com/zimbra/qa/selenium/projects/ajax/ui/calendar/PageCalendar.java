@@ -2411,13 +2411,14 @@ public class PageCalendar extends AbsTab {
 			int count = this.sGetCssCount(itemsLocator);
 			logger.info(itemsLocator +" count: "+ count);
 
-			for (int i = 1; i <= count; i++) {
+			//for (int i = 1; i <= count; i++) {
 
-				AppointmentItem item = parseMonthViewNonAllDay(itemsLocator + ":nth-of-type("+ i +")");
+				//AppointmentItem item = parseMonthViewNonAllDay(itemsLocator + ":nth-of-type("+ i +")");
+				AppointmentItem item = parseMonthViewNonAllDay(itemsLocator);
 				items.add(item);
 				logger.info(item.prettyPrint());
 
-			}
+			//}
 
 		}
 		
