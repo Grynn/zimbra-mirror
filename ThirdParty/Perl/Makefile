@@ -249,7 +249,7 @@ XML_PARSER := \
 	XML-Parser-2.41
 
 NET_SERVER := \
-	Net-Server-2.005
+	Net-Server-2.007
 
 PERL_LDAP := \
 	perl-ldap-0.53
