@@ -2,7 +2,7 @@
  * ***** BEGIN LICENSE BLOCK *****
  * 
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2011, 2012 VMware, Inc.
+ * Copyright (C) 2011 VMware, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -20,138 +20,65 @@ import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.MailItem;
-import com.zimbra.qa.selenium.framework.items.RecipientItem;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
 public class ZimbraPrefAutoAddAddressEnabledTrue extends AjaxCommonTest {
 
-	@SuppressWarnings("serial")
 	public ZimbraPrefAutoAddAddressEnabledTrue() {
-		super.startingPage = app.zPageMail;
+
+		super.startingPage = app.zPagePreferences;
+		
 		super.startingAccountPreferences = new HashMap<String, String>() {
+			private static final long serialVersionUID = 2485388299568483622L;
 			{				
-		 		put("zimbraPrefAutoAddAddressEnabled", "TRUE");
+		 		put("zimbraPrefAutoAddAddressEnabled", "FALSE");
 			}
 		};
 	}
 
 	/**
-	 * Test case : Opt-in Add New Contacts To emailed contact
-	 * Verify receivers' addresses of out-going mails automatically added to "Emailed Contacts" folder 
+	 * Test case : Verify select checkbox works (e.g make the option changed to opt-out)
 	 * @throws HarnessException
 	 */
 	@Test(
-			description = " send message to 1 receiver, the address should be added into Emailed Contact", 
-			groups = { "smoke" })
-	public void SendEmailTo1Receiver() throws HarnessException {
-		
-		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.EmailedContacts);
+			description= "Select the checkbox to set zimbraPrefAutoAddAddressEnabled=true ", 
+			groups= {"functional" })
+	public void ZimbraPrefAutoAddAddressEnabledTrue_01() throws HarnessException {
 
-		ZimbraAccount receiver = new ZimbraAccount();
-		receiver.provision();
-		receiver.authenticate();
-		
-		// Create the message data to be sent
-		MailItem mail = new MailItem();
-		mail.dToRecipients.add(new RecipientItem(receiver));
-		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		mail.dBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
+		//-- DATA Setup
 		
 		
-		// Open the new mail form
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
-		ZAssert.assertNotNull(mailform, "Verify the new form opened");
 		
-		// Fill out the form with the data
-		mailform.zFill(mail);
+		//-- GUI Actions
 		
-		// Send the message
-		mailform.zSubmit();
+		// Navigate to preferences -> addressbook
+		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.AddressBook);
+
+		// Uncheck the box
+		app.zPagePreferences.zCheckboxSet("css=input[id$=_AUTO_ADD_ADDRESS]", true);
+			
+		// Click save
+		app.zPagePreferences.zToolbarPressButton(Button.B_SAVE);		
+
+		
+		
+		//-- VERIFICATION
 
 		app.zGetActiveAccount().soapSend(
-					"<SearchRequest xmlns='urn:zimbraMail' types='contact'>"
-				+		"<query>"+ receiver.EmailAddress +"</query>"
-				+	"</SearchRequest>");
+                   "<GetPrefsRequest xmlns='urn:zimbraAccount'>"
+                 +     "<pref name='zimbraPrefAutoAddAddressEnabled'/>"
+                 + "</GetPrefsRequest>");
 
-		String email = app.zGetActiveAccount().soapSelectValue("//mail:cn//mail:a[@n='email']", null);
-		ZAssert.assertEquals(email, receiver.EmailAddress, "Verify the recipient is in the contacts folder");
+		String value = app.zGetActiveAccount().soapSelectValue("//acct:pref[@name='zimbraPrefAutoAddAddressEnabled']", null);
+		ZAssert.assertEquals(value, "TRUE", "Verify the zimbraPrefAutoAddAddressEnabled preference was changed to 'TRUE'");
 
-		String folder = app.zGetActiveAccount().soapSelectValue("//mail:cn", "l");
-		ZAssert.assertEquals(folder, emailedContacts.getId(), "Verify the recipient is in the Emailed Contacts folder");
-
+		
 	}
-
-	
-	/**
-	 * Test case : Opt-in Add New Contacts To emailed contact
-	 * Verify receivers' addresses of out-going mails automatically added to "Emailed Contacts" folder 
-	 * @throws HarnessException
-	 */
-	@Test(
-			description = " send message to 2 receiver, the addresses should be added into Emailed Contact", 
-			groups = { "functional" })
-	public void SendEmailTo2Receivers() throws HarnessException {
-
-		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.EmailedContacts);
-		
-		ZimbraAccount receiver1 = new ZimbraAccount();
-		receiver1.provision();
-		receiver1.authenticate();
-		
-		ZimbraAccount receiver2 = new ZimbraAccount();
-		receiver2.provision();
-		receiver2.authenticate();
-		
-		// Create the message data to be sent
-		MailItem mail = new MailItem();
-		mail.dToRecipients.add(new RecipientItem(receiver1));
-		mail.dToRecipients.add(new RecipientItem(receiver2));
-		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		mail.dBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
-		
-		
-		// Open the new mail form
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
-		ZAssert.assertNotNull(mailform, "Verify the new form opened");
-		
-		// Fill out the form with the data
-		mailform.zFill(mail);
-		
-		// Send the message
-		mailform.zSubmit();
-
-		app.zGetActiveAccount().soapSend(
-				"<SearchRequest xmlns='urn:zimbraMail' types='contact'>"
-			+		"<query>"+ receiver1.EmailAddress +"</query>"
-			+	"</SearchRequest>");
-		
-		String email1 = app.zGetActiveAccount().soapSelectValue("//mail:cn//mail:a[@n='email']", null);
-		ZAssert.assertEquals(email1, receiver1.EmailAddress, "Verify the recipient is in the contacts folder");
-
-		String folder1 = app.zGetActiveAccount().soapSelectValue("//mail:cn", "l");
-		ZAssert.assertEquals(folder1, emailedContacts.getId(), "Verify the recipient is in the Emailed Contacts folder");
-
-		app.zGetActiveAccount().soapSend(
-				"<SearchRequest xmlns='urn:zimbraMail' types='contact'>"
-			+		"<query>"+ receiver2.EmailAddress +"</query>"
-			+	"</SearchRequest>");
-
-		String email2 = app.zGetActiveAccount().soapSelectValue("//mail:cn//mail:a[@n='email']", null);
-		ZAssert.assertEquals(email2, receiver2.EmailAddress, "Verify the recipient is in the contacts folder");
-
-		String folder2 = app.zGetActiveAccount().soapSelectValue("//mail:cn", "l");
-		ZAssert.assertEquals(folder2, emailedContacts.getId(), "Verify the recipient is in the Emailed Contacts folder");
-
-	}
-	
 
 	
 }
