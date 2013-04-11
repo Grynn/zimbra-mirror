@@ -309,6 +309,11 @@ public class PagePreferences extends AbsTab {
 			locator = "css=div[id='zb__FRV__ADD_FILTER_RULE'] td[id$='_title']";
 			page = new DialogEditFilter(MyApplication,((AppAjaxClient) MyApplication).zPagePreferences);
 	
+		} else if ( button == Button.B_ACTIVITY_STREAM_SETTINGS ) {
+
+			locator = "css=div[id$='_ACTIVITY_STREAM_BUTTON'] td[id$='_title']";
+			page = new DialogActivityStream(MyApplication,((AppAjaxClient) MyApplication).zPagePreferences);
+
 		} else if ( button == Button.B_NEW_QUICK_COMMAND ) {
 			
 			locator = "css=div[id='zb__QCV__ADD_QUICK_COMMAND'] td[id$='_title']";

@@ -557,6 +557,8 @@ public class Button {
 	// Preferences
 	public static final Button B_CHANGE_PASSWORD 		= new Button("B_CHANGE_PASSWORD");
 	public static final Button B_NEW_FILTER 			= new Button("B_NEW_FILTER");
+	public static final Button B_ACTIVITY_STREAM_SETTINGS		= new Button("B_ACTIVITY_STREAM_SETTINGS");
+	public static final Button B_ACTIVITY_STREAM_ENABLE			= new Button("B_ACTIVITY_STREAM_ENABLE");
 	public static final Button B_NEW_QUICK_COMMAND		= new Button("B_NEW_QUICK_COMMAND");
 	public static final Button B_EDIT_QUICK_COMMAND		= new Button("B_EDIT_QUICK_COMMAND");
 	public static final Button B_DELETE_QUICK_COMMAND	= new Button("B_DELETE_QUICK_COMMAND");
