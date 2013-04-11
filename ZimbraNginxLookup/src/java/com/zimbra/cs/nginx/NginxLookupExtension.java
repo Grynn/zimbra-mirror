@@ -860,7 +860,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                 if (req.authMethod.equalsIgnoreCase(AUTHMETH_CERTAUTH)) {
                 	// for cert auth, no need to find the real route, just
                 	// send back zm_auth_token or zm_admin_auth_token
-                	sendResult(req, "127.0.0.1", "9999", authUser);
+                	sendResult(req, "127.0.0.1", "9999", authUser, false);
                 	return;
                 }
 
@@ -961,7 +961,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                     if(doDnsLookup) {
                         mailhost = this.getIPByIPMode(mailhost).getHostAddress();
                     }
-                    sendResult(req, mailhost, port, authUser);
+                    sendResult(req, mailhost, port, authUser, false);
                     return;
                 }
                 
@@ -992,10 +992,11 @@ public class NginxLookupExtension implements ZimbraExtension {
                             useExternalRoute = false;
                         } else
                             useExternalRoute = domain.useExternalRoute();
-                    } else
+                    } else {
                         useExternalRoute = ProvisioningConstants.TRUE.equals(useExtRouteOnAcct);
+                    }
                 }
-                
+
                 if (useExternalRoute) {
                     ZimbraLog.nginxlookup.debug("fetching external route for user " + authUserWithRealDomainName);
                     
@@ -1042,7 +1043,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                 if(doDnsLookup) {
                 	mailhost = this.getIPByIPMode(mailhost).getHostAddress();
                 }
-                sendResult(req, mailhost, port, authUser);
+                sendResult(req, mailhost, port, authUser, useExternalRoute);
             } catch (NginxLookupException e) {
                 throw e;
             } catch (ServiceException e) {
@@ -1101,8 +1102,10 @@ public class NginxLookupExtension implements ZimbraExtension {
          * @param port        The requested mail server port
          * @param authUser    If not null, then this value is sent back to override the login
          *                     user name, (usually) with a domain suffix added
+         * @param useExternalRoute If true, then LC zimbra_reverseproxy_external_route_include_domain is checked
+         *                          to strip down the domain part of the authUser for external users
          */
-        private void sendResult(NginxLookupRequest req, String addr, String port, String authUser) throws UnknownHostException {
+        private void sendResult(NginxLookupRequest req, String addr, String port, String authUser, boolean useExternalRoute) throws UnknownHostException {
             ZimbraLog.nginxlookup.debug("mailhost=" + addr);
             ZimbraLog.nginxlookup.debug("port=" + port);
 
@@ -1111,15 +1114,6 @@ public class NginxLookupExtension implements ZimbraExtension {
             resp.addHeader(AUTH_STATUS, "OK");
             resp.addHeader(AUTH_SERVER, addr);
             resp.addHeader(AUTH_PORT, port);
-            
-            if (authUser != null) {
-                ZimbraLog.nginxlookup.debug("rewrite " + AUTH_USER + " to: " + authUser);
-                /* encode authUser, %-->%25 ' '-->%20 */
-                authUser = authUser.replace(" ", "%20");
-                authUser = authUser.replace("%", "%25");
-                resp.addHeader(AUTH_USER, authUser);
-            }
-
             try {
                 if (StringUtil.equal(prov.getDomainByEmailAddr(authUser).getName(), 
                         prov.getConfig().getDefaultDomainName())) {
@@ -1130,6 +1124,19 @@ public class NginxLookupExtension implements ZimbraExtension {
             } catch (ServiceException e) {
                 // turn off alias cache if authUser is empty or if any error
                 resp.addHeader(AUTH_CACHE_ALIAS, "FALSE");
+            }
+
+            if (useExternalRoute && !LC.zimbra_reverseproxy_external_route_include_domain.booleanValue() 
+                    && authUser.indexOf('@') != -1) {
+                authUser = authUser.substring(0, authUser.indexOf('@'));
+            }
+
+            if (authUser != null) {
+                ZimbraLog.nginxlookup.debug("rewrite " + AUTH_USER + " to: " + authUser);
+                /* encode authUser, %-->%25 ' '-->%20 */
+                authUser = authUser.replace(" ", "%20");
+                authUser = authUser.replace("%", "%25");
+                resp.addHeader(AUTH_USER, authUser);
             }
 
             if (req.authMethod.equalsIgnoreCase(AUTHMETH_GSSAPI)) {
