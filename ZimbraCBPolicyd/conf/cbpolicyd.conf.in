@@ -87,7 +87,7 @@ log_file=@@cbpolicyd_log_file@@
 #
 # Example: Solaris 
 #log_mail=local0@syslog:stream,/dev/log
-log_mail=local0@syslog:unix
+log_mail=@@cbpolicyd_log_mail@@
 
 # Things to log in extreme detail
 # modules 	- Log detailed module running information
