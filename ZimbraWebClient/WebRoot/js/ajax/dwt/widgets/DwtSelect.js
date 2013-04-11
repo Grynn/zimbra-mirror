@@ -577,6 +577,7 @@ function(anId) {
 DwtSelect.prototype.dynamicButtonWidth = 
 function() {
 	this._isDynamicButtonWidth = true; //if this is set, set this so fixedButtonWidth doesn't change this.
+	this._selectEl.style.width = "auto"; //set to default in case fixedButtonWidth was called before setting it explicitely.
 	this._pseudoItemsEl.style.display =  "none";
 };
 
