@@ -1036,7 +1036,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                     mailhost = vals.get(Provisioning.A_zimbraReverseProxyMailHostAttribute);
                 if (mailhost == null)
                     throw new NginxLookupException("mailhost not found for user: "+req.user);
-                
+
                 if (port == null)
                     port = getPortByMailhostAndProto(zlc, config, req, mailhost);
 
@@ -1102,8 +1102,8 @@ public class NginxLookupExtension implements ZimbraExtension {
          * @param port        The requested mail server port
          * @param authUser    If not null, then this value is sent back to override the login
          *                     user name, (usually) with a domain suffix added
-         * @param useExternalRoute If true, then LC zimbra_reverseproxy_external_route_include_domain is checked
-         *                          to strip down the domain part of the authUser for external users
+         * @param useExternalRoute If true, then LC zimbra_reverseproxy_externalroute_include_original_authusername is checked
+         *                          to return original req username unmodified
          */
         private void sendResult(NginxLookupRequest req, String addr, String port, String authUser, boolean useExternalRoute) throws UnknownHostException {
             ZimbraLog.nginxlookup.debug("mailhost=" + addr);
@@ -1126,9 +1126,8 @@ public class NginxLookupExtension implements ZimbraExtension {
                 resp.addHeader(AUTH_CACHE_ALIAS, "FALSE");
             }
 
-            if (useExternalRoute && !LC.zimbra_reverseproxy_external_route_include_domain.booleanValue() 
-                    && authUser.indexOf('@') != -1) {
-                authUser = authUser.substring(0, authUser.indexOf('@'));
+            if (useExternalRoute && LC.zimbra_reverseproxy_externalroute_include_original_authusername.booleanValue()) {
+                authUser = req.user;
             }
 
             if (authUser != null) {
