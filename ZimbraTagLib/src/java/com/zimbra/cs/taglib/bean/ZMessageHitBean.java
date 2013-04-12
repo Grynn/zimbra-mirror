@@ -80,6 +80,8 @@ public class ZMessageHitBean extends ZSearchHitBean {
 
     public String getDisplaySender() { return BeanUtils.getAddr(mHit.getSender()); }
 
+    public List<ZEmailAddress> getAddresses() { return mHit.getAddresses(); }
+
     public String getDisplayAddresses() { return BeanUtils.getAddrs(mHit.getAddresses()); }    
 
     public boolean getContentMatched() { return mHit.getContentMatched(); }
