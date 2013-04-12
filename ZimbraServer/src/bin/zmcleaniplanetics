@@ -423,7 +423,7 @@ sub fold {
 # Print help
 #
 sub print_help {
-    print "Usage: perl ZmCleanIPlanetICS.pl -d <domain name> [-i <iPlanet file>]";
+    print "Usage: $0 -d <domain name> [-i <iPlanet file>]";
     print "[-o <output file> ] [-l <log file>] [-h help]\n";
     print "\t-h: display this help message\n";
     print "\t-d: use the domain specified in <domain name>\n";
