@@ -18,6 +18,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.mountpoints.manager.
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -30,6 +32,7 @@ public class Accept extends CalendarWorkWeekTest {
 		super.startingPage = app.zPageCalendar;
 	}
 	
+	@Bugs(ids = "81647")
 	@Test(	description = "Assistant right clicks to calendar invite from shared calendar and accepts the invite OBO boss",
 			groups = { "smoke" })
 			

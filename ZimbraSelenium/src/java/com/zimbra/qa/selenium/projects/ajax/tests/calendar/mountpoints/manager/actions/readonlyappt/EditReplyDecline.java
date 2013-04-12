@@ -34,7 +34,7 @@ public class EditReplyDecline extends CalendarWorkWeekTest {
 		super.startingPage = app.zPageCalendar;
 	}
 	
-	@Bugs(ids = "80559")
+	@Bugs(ids = "80559,81647")
 	@Test(	description = "Assistant right clicks to calendar invite from shared calendar and declines the invite OBO boss (Notify organizer)",
 			groups = { "functional" })
 			

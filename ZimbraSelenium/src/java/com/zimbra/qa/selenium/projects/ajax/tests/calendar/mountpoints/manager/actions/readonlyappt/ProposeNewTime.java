@@ -34,7 +34,7 @@ public class ProposeNewTime extends CalendarWorkWeekTest {
 		super.startingPage = app.zPageCalendar;
 	}
 	
-	@Bugs(ids = "80559")
+	@Bugs(ids = "80559,81647")
 	@Test(	description = "Assistant right clicks to calendar invite from shared calendar and proposes new time OBO boss",
 			groups = { "functional" })
 			
