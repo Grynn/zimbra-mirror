@@ -256,9 +256,13 @@ sub compareCSN($$) {
     $x =~ s/$/Z/;
     $y =~ s/$/Z/;
     my $tdelta = DateCalc($y,$x);
-    $tdelta =~ s/^(.)0:0:/$1/;
-    $tdelta =~ s/^\+(.*)$/$1s ahead/g;
-    $tdelta =~ s/^\-(.*)$/$1s behind/g;
-    foreach ("w","d", "h", "m") { $tdelta =~ s/:/$_ /;}
+    if ($tdelta =~ /\-/) {
+      $tdelta=~ s/\-//;
+      $tdelta.="s behind";
+    } elsif ($tdelta =~ /\+/) {
+      $tdelta=~ s/\+//;
+      $tdelta.="s ahead";
+    }
+    foreach ("y", "M", "w","d", "h", "m") { $tdelta =~ s/:/$_ /;}
     return $tdelta;
 }
