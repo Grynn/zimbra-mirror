@@ -5,7 +5,7 @@ cyrus_src=cyrus-sasl-${cyrus_version}
 
 heimdal_version=1.5.2
 openssl_version=1.0.1e
-curl_version=7.29.0
+curl_version=7.30.0
 xml2_version=2.7.8
 
 openssl_lib_dir=/opt/zimbra/openssl-${openssl_version}/lib
