@@ -355,7 +355,7 @@ sub getLocalConfig {
   return $main::loaded{lc}{$key}
     if (exists $main::loaded{lc}{$key});
 
-  my $val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null`;
+  my $val = `/opt/zimbra/bin/zmlocalconfig -s -m nokey ${key} 2> /dev/null`;
   chomp $val;
   $main::loaded{lc}{$key} = $val;
   return $val;
