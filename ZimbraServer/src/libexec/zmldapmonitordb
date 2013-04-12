@@ -376,12 +376,13 @@ sub sendEmailReport {
   my $from_address= $localxml->{key}->{smtp_source}->{value};
   my $to_address = $localxml->{key}->{smtp_destination}->{value};
 
-  my $smtphost = getLdapConfigValue("zimbraSmtpHostname");
+  my $smtphost = getLdapConfigValue("zimbraSmtpHostname") || "localhost";
+  my $smtpport = getLdapConfigValue("zimbraSmtpPort") || "25";
 
   return if (scalar @$msg == 0);
   print "Sending ldap MDB error report to $to_address via $smtphost\n" if $debug;
   eval {
-    my $mailer = Mail::Mailer->new("smtp", Server => $smtphost);
+    my $mailer = Mail::Mailer->new("smtp", Server => $smtphost, Port => $smtpport);
     $mailer->open( { From => $from_address,
                    To   => $to_address,
                    Subject => $subject,

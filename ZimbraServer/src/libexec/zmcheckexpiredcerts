@@ -79,6 +79,7 @@ sub sendEmailReport {
   my $from_address = getLocalConfig("smtp_source");
   my $to_address = ($mailto ? $mailto : getLocalConfig("smtp_destination"));
   my $smtphost = getLdapConfigValue("zimbraSmtpHostname") || "localhost";
+  my $smtpport = getLdapConfigValue("zimbraSmtpPort") || 25;
   my $zimbra_server_hostname = getLocalConfig("zimbra_server_hostname");
   push(@$msg, "\n\nThe Administration Console and CLI Certificate Tools guide provides\n");
   push(@$msg, "instructions on how to replace you self-signed or commercial certificate.\n");
@@ -87,7 +88,7 @@ sub sendEmailReport {
     
   print "Sending report to $to_address via $smtphost\n" if $debug;
   eval {
-    my $mailer = Mail::Mailer->new("smtp", Server => $smtphost);
+    my $mailer = Mail::Mailer->new("smtp", Server => $smtphost, Port => $smtpport);
     $mailer->open( { From => $from_address,
                    To   => $to_address,
                    Subject => $subject,

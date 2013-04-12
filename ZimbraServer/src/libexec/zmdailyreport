@@ -218,12 +218,13 @@ sub sendEmailReport {
     my $from_address = getLocalConfig("smtp_source");
     my $to_address   = getLocalConfig("smtp_destination");
     my $smtphost     = getLdapConfigValue("zimbraSmtpHostname") || "localhost";
+    my $smtpport     = getLdapConfigValue("zimbraSmtpPort") || 25;
 
     warn("DEBUG: Sending daily report to $to_address via $smtphost\n")
       if ($Debug);
 
     eval {
-        my $mailer = Mail::Mailer->new( "smtp", Server => $smtphost );
+        my $mailer = Mail::Mailer->new( "smtp", Server => $smtphost, Port => $smtpport );
         $mailer->open(
             {
                 From    => $from_address,
