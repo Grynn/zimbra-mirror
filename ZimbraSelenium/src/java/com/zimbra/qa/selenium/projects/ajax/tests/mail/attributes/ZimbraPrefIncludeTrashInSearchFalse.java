@@ -14,74 +14,39 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.qa.selenium.projects.ajax.tests.preferences.general.searches;
+package com.zimbra.qa.selenium.projects.ajax.tests.mail.attributes;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.MailItem;
-import com.zimbra.qa.selenium.framework.items.RecipientItem;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.RecipientItem.RecipientType;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.core.*;
 
 
-public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
+public class ZimbraPrefIncludeTrashInSearchFalse extends PrefGroupMailByMessageTest {
 
-	@SuppressWarnings("serial")
-	public ZimbraPrefIncludeTrashInSearch() {
-		logger.info("New "+ ZimbraPrefIncludeTrashInSearch.class.getCanonicalName());
+	public ZimbraPrefIncludeTrashInSearchFalse() {
+		logger.info("New "+ ZimbraPrefIncludeTrashInSearchFalse.class.getCanonicalName());
 		
-		// All tests start at the login page
-		super.startingPage = app.zPagePreferences;
+		super.startingAccountPreferences.put("zimbraPrefIncludeTrashInSearch", "FALSE");
 
-		// Make sure we are using an account with conversation view
-		super.startingAccountPreferences = new HashMap<String, String>() {{
-				    put("zimbraPrefIncludeTrashInSearch", "TRUE");
-				}};
-
-			
-		
 	}
 	
 
-	@Test(	description = "Verify zimbraPrefIncludeTrashInSearch setting when set to TRUE",
+	@Test(	
+			description = "Verify when zimbraPrefIncludeTrashInSearch=FALSE, that trash is *not* included in search",
 			groups = { "functional" })
-	public void ZimbraPrefIncludeTrashInSearchTrue_01() throws HarnessException {
+	public void ZimbraPrefIncludeTrashInSearchFalse_02() throws HarnessException {
 		
-
-		// Go to "General"
-		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.General);
-		
-		// Determine the status of the checkbox
-		boolean checked = app.zPagePreferences.zGetCheckboxStatus("zimbraPrefIncludeTrashInSearch");
-		
-		// Since zimbraPrefIncludeSpamInSearch is set to TRUE, the checkbox should be checked
-		ZAssert.assertTrue(checked, "Verify if zimbraPrefIncludeTrashInSearch is TRUE, the preference box is checked" );
-		
-		// Click cancel to close preferences
-		app.zPagePreferences.zNavigateAway(Button.B_NO);
-		
-	}
-
-	@Test(	description = "Verify when zimbraPrefIncludeTrashInSearch=TRUE, that trash is included in search",
-			groups = { "functional" })
-	public void ZimbraPrefIncludeTrashInSearchTrue_02() throws HarnessException {
-		
-		// Check that the setting is correct
-		ZimbraPrefIncludeTrashInSearchTrue_01();
+		//-- DATA setup
 		
 		String query = "query" + ZimbraSeleniumProperties.getUniqueString();
-		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),
-		      FolderItem.SystemFolder.Inbox);
+		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox);
+		FolderItem trashFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Trash);
 		
 		MailItem message1 = new MailItem();
 		message1.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
@@ -96,16 +61,12 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		message2.dBodyText = query; 
 		
 		
-		// Determine the folder ID's for inbox and trash
-		app.zGetActiveAccount().soapSend("<GetFolderRequest xmlns = 'urn:zimbraMail'/>");
-		String inboxId = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='Inbox']", "id");
-		String trashId = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='Trash']", "id");
 		
 		
 		// Add a message to the inbox
 		app.zGetActiveAccount().soapSend(
 				"<AddMsgRequest xmlns='urn:zimbraMail'>" +
-                	"<m l='"+ inboxId +"'>" +
+                	"<m l='"+ inboxFolder.getId() +"'>" +
                     	"<content>" + message1.generateMimeString() + "</content>" +
                     "</m>" +
                 "</AddMsgRequest>");
@@ -114,19 +75,24 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		// Add a message to the trash
 		app.zGetActiveAccount().soapSend(
 				"<AddMsgRequest xmlns='urn:zimbraMail'>" +
-                	"<m l='"+ trashId +"'>" +
+                	"<m l='"+ trashFolder.getId() +"'>" +
                     	"<content>" + message2.generateMimeString() + "</content>" +
                     "</m>" +
                 "</AddMsgRequest>");
 
-		// Go to mail
-		app.zPageMail.zNavigateTo();
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inboxFolder);
+		
+		
+		//-- GUI Actions
+		
+		
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
 		// Search for the query
 		app.zPageSearch.zAddSearchQuery(query);
 		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
+		
+		
+		//-- Verification
 		
 		// Verify that both messages are in the list
 		List<MailItem> items = app.zPageSearch.zListGetMessages();
@@ -145,14 +111,15 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 				break;
 			}
 		}
+
+		/*
 		String listItem = "css=div[id*=zl__CLV-SR-Mail][class=DwtListView] [id*=zli__CLV-SR-Mail]";
 		ZAssert.assertTrue(app.zPageSearch.sIsElementPresent(listItem + ":contains(" + message1.dSubject + ")"), "Verify the message in the inbox is found");
 		ZAssert.assertTrue(app.zPageSearch.sIsElementPresent(listItem + ":contains(" + message2.dSubject + ")"), "Verify the message in the trash is found");
-
-		/*
-		ZAssert.assertTrue(found1, "Verify the message in the inbox is found");
-		ZAssert.assertTrue(found2, "Verify the message in the trash is found");
 		*/
+
+		ZAssert.assertTrue(found1, "Verify the message in the inbox is found");
+		ZAssert.assertFalse(found2, "Verify the message in the trash is *not* found");
 		
 	}
 
