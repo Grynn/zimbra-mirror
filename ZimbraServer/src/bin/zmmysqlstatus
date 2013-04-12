@@ -49,6 +49,10 @@ if ($usage) {
     exit(0);
 }
 
+if ($user eq "root") {
+  $password = getLocalConfig("mysql_root_password");
+}
+
 # Descriptions of status variables for verbose mode
 my %descriptions = (
     "Connections" =>
