@@ -33,6 +33,11 @@ GetOptions("help" => \$help,
     "force" => \$force,
     "verbose+" => \$verbose);
 
+if (!$opts_good) {
+  print STDERR "\n";
+  usage();
+}
+
 &usage if ($help);
 
 $c{zmlocalconfig}="/opt/zimbra/bin/zmlocalconfig";
@@ -80,9 +85,9 @@ exit 0;
 sub usage {
   print "\n";
   print "Usage: $0 [-h] [-f] [-v]\n";
-  print " --help: print this usage statement.\n";
-  print " --force: Force the rename, bypassing safety checks.\n";
-  print " --verbose: Set the verbosity level.\n";
+  print " -h|--help: print this usage statement.\n";
+  print " -f|--force: Force the rename, bypassing safety checks.\n";
+  print " -v|--verbose: Set the verbosity level.\n";
   print "\n";
   exit 0; 
 }
