@@ -2021,7 +2021,7 @@ public abstract class AbsSeleniumObject {
 		logger.info("zWaitForElementInvisible(" + locator + ")");
 		if (ZimbraSeleniumProperties.isWebDriver())	{
 			logger.info("...WebDriver...findElement.getLocation()");
-			if(waitForElementVisible(locator, false, 5)){
+			if(waitForElementVisible(locator, false, 15)){
 				return;
 			}
 		}else{
