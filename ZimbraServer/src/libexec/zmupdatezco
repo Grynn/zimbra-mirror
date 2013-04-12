@@ -27,7 +27,7 @@ download_dir=${mailboxd_directory}/webapps/zimbra/downloads
 client_file=$1
 
 if [ x${client_file} = "x" ]; then
-    echo 'Usage: $0 <filename>'
+    echo "Usage: $0 <filename>"
     exit 1
 fi
 
