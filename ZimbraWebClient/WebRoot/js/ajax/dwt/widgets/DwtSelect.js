@@ -592,8 +592,12 @@ function(){
 	}
 	this._pseudoItemsEl.style.display = "block"; //in case this function was called before. This will fix the width of the _selectEl to match the options.
     var elm = this._selectEl;
-    var width = elm.offsetWidth;
-    elm.style.width = width + "px";
+	var width = elm.offsetWidth;
+	//offsetWidth is 0 if some parent (ancestor) has display:none which is the case only in Prefs pages when the select is setup.
+	//don't set width to 0px in this case as it acts inconsistent - filling the entire space. Better to keep it just dynamic.
+	if (width) {
+		elm.style.width = width + "px";
+	}
     this._pseudoItemsEl.style.display = "none";
 };
 
