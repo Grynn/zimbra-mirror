@@ -73,6 +73,7 @@ public class GetZimlets extends AjaxCommonTest {
 		// JudasPriest: 9 zimlets in NETWORK
 		//	Archive
 		//	Cisco Click2Call
+		//  LinkedIn Image - http://bugzilla.zimbra.com/show_bug.cgi?id=81078
 		//	Mitel Click2Call
 		//	Phone
 		//	SearchHighlighter
@@ -83,15 +84,16 @@ public class GetZimlets extends AjaxCommonTest {
 		//
 		// JudasPriest: 5 zimlets in FOSS
 		//	Archive
+		//  LinkedIn Image - http://bugzilla.zimbra.com/show_bug.cgi?id=81078
 		//	Phone
 		//	SearchHighlighter
 		//	WebEx
 		//	Yahoo! Emoticons
 		//
 		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
-		    ZAssert.assertEquals(count, 5, "Verify 5 zimlets are shown in the preferences page");
+		    ZAssert.assertEquals(count, 6, "Verify 6 zimlets are shown in the preferences page");
 		}else{
-		    ZAssert.assertEquals(count, 9, "Verify 9 zimlets are shown in the preferences page");
+		    ZAssert.assertEquals(count, 10, "Verify 10 zimlets are shown in the preferences page");
 		}
 	}
 	
