@@ -77,7 +77,6 @@ public class FlagMail extends PrefGroupMailByMessageTest {
             	+		"</m>"
 				+	"</AddMsgRequest>");
 		
-		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
 
 		
 		// Mount it
@@ -95,10 +94,10 @@ public class FlagMail extends PrefGroupMailByMessageTest {
 		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
 
 		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
 		// Flag the item
-		app.zPageMail.zListItem(Action.A_MAIL_FLAG, mail.dSubject);
+		app.zPageMail.zListItem(Action.A_MAIL_FLAG, subject);
 
 		
 		// A "Permission Denied" error popup should occur
@@ -113,7 +112,7 @@ public class FlagMail extends PrefGroupMailByMessageTest {
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// Make sure the server does not show "flagged" for the owner
-		mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
+		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
 		ZAssert.assertStringDoesNotContain(mail.getFlags(), "f", "Verify the message is not flagged in the server");
 
 		
@@ -161,7 +160,6 @@ public class FlagMail extends PrefGroupMailByMessageTest {
             	+		"</m>"
 				+	"</AddMsgRequest>");
 		
-		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
 
 		// Mount it
 		app.zGetActiveAccount().soapSend(
@@ -178,7 +176,7 @@ public class FlagMail extends PrefGroupMailByMessageTest {
 		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
 
 		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
 		// Flag the item
 		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKFLAG);
@@ -195,7 +193,7 @@ public class FlagMail extends PrefGroupMailByMessageTest {
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		
 		// Make sure the server does not show "flagged" for the owner
-		mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
+		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
 		ZAssert.assertStringDoesNotContain(mail.getFlags(), "f", "Verify the message is not flagged in the server");
 
 		
