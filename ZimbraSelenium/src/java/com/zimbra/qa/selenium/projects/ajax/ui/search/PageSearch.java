@@ -744,25 +744,15 @@ public class PageSearch extends AbsTab {
 		
 		/*
 
-		  <div class="Row SimpleContact SimpleContact RowOdd" id="zli__CNS-SR-Contacts-1__297">
-		    <table width="100%">
-		      <tbody>
-		        <tr id="zlif__CNS-SR-Contacts-1__297__rw">
-		          <td style="vertical-align:middle;" width="20">
-		            <center>
-		              <div class="ImgContact" id="zlif__CNS-SR-Contacts-1__297__type"></div>
-		            </center>
-		          </td>
-
-		          <td id="zlif__CNS-SR-Contacts-1__297__fileas" style="vertical-align:middle;">&nbsp;bbbb, aaaa</td>
-
-		          <td style="vertical-align:middle;" width="16" class="Tag">
-		            <div class="ImgBlank_16" id="zlif__CNS-SR-Contacts-1__297__tg"></div>
-		          </td>
-		        </tr>
-		      </tbody>
-		    </table>
-		  </div>
+		<li id="zli__CNS-SR-Contacts-1__257" class="Row SimpleContact SimpleContact RowEven Row-selected SimpleContact">
+		  	<div id="zlif__CNS-SR-Contacts-1__257__rw">
+		  		<div id="zlif__CNS-SR-Contacts-1__257__type" class="ZmContactIcon ImgContact"></div>
+	  			<div id="zlif__CNS-SR-Contacts-1__257__fileas">last13660676917405, first13660676917404</div>
+	  			<div class="ZmListFlagsWrapper">
+	  				<div id="zlif__CNS-SR-Contacts-1__257__tg" class="Tag ImgBlank_16"></div>
+  				</div>
+			</div>
+		</li>
 
 	 */
 
@@ -775,7 +765,7 @@ public class PageSearch extends AbsTab {
 		// TODO
 		
 		// Get the fileAs
-		locator = top + " td[id$='__fileas']";
+		locator = top + " div[id$='__fileas']";
 		if ( this.sIsElementPresent(locator) ) {
 			item.setAttribute("fileAs", this.sGetText(locator));
 		}
@@ -789,7 +779,7 @@ public class PageSearch extends AbsTab {
 		List<ContactItem> items = new ArrayList<ContactItem>();
 
 		String listLocator = "css=div[id^='zv__CNS-SR-Contacts-']";
-		String rowLocator = "div[id*='zli__CNS-SR-Contacts']";
+		String rowLocator = "li[id^='zli__CNS-SR-Contacts']";
 
 		// Make sure the button exists
 		if ( !this.sIsElementPresent(listLocator) )
