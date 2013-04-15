@@ -41,6 +41,19 @@ public class UndoDeleteContact extends AjaxCommonTest {
 
 	}
 
+	/**
+	 * @throws HarnessException
+	 */
+	@BeforeClass( groups = { "always" } )
+	public void TagContactBeforeClass() throws HarnessException {
+		logger.info("TagContactBeforeClass: start");
+		
+		// Rest the ZWC user
+		ZimbraAccount.ResetAccountZWC();
+		
+		logger.info("TagContactBeforeClass: finish");
+	}
+
 	@Test(description = "Undone deleted contact", groups = { "functional" })
 	public void UndoDeleteContact_01() throws HarnessException {
 
