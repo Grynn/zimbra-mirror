@@ -90,26 +90,32 @@ public class FlagMail extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
-		// Click on the mountpoint
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+		try {
+			
+			// Click on the mountpoint
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+	
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+			
+			// Flag the item
+			app.zPageMail.zListItem(Action.A_MAIL_FLAG, subject);
+	
+			
+			// A "Permission Denied" error popup should occur
+			DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
+			ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
+			ZAssert.assertTrue(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is active");
+			
+			// Close the dialog
+			dialog.zClickButton(Button.B_OK);
+		
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
 
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
-		
-		// Flag the item
-		app.zPageMail.zListItem(Action.A_MAIL_FLAG, subject);
-
-		
-		// A "Permission Denied" error popup should occur
-		DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
-		ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
-		ZAssert.assertTrue(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is active");
-		
-		// Close the dialog
-		dialog.zClickButton(Button.B_OK);
-		
-		// Sync any changes
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		}
 
 		// Make sure the server does not show "flagged" for the owner
 		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
@@ -172,25 +178,32 @@ public class FlagMail extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
-		// Click on the mountpoint
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+		try {
 
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
-		
-		// Flag the item
-		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKFLAG);
-		
-		// A "Permission Denied" error popup should occur
-		DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
-		ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
-		ZAssert.assertTrue(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is active");
-		
-		// Close the dialog
-		dialog.zClickButton(Button.B_OK);
+			// Click on the mountpoint
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+	
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+			
+			// Flag the item
+			app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKFLAG);
+			
+			// A "Permission Denied" error popup should occur
+			DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
+			ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
+			ZAssert.assertTrue(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is active");
+			
+			// Close the dialog
+			dialog.zClickButton(Button.B_OK);
 
 		
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
 		
 		// Make sure the server does not show "flagged" for the owner
 		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");

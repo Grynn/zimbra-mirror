@@ -104,20 +104,28 @@ public class TagMessage extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
-		// Click on the mountpoint
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+		try {
 
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			// Click on the mountpoint
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+	
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			
+	
+			// Click new tag
+			DialogTag dialogTag = (DialogTag) app.zPageMail.zToolbarPressPulldown(
+					Button.B_TAG, Button.O_TAG_NEWTAG);
+			dialogTag.zSetTagName(tagName);
+			dialogTag.zClickButton(Button.B_OK);
 		
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
 
-		// Click new tag
-		DialogTag dialogTag = (DialogTag) app.zPageMail.zToolbarPressPulldown(
-				Button.B_TAG, Button.O_TAG_NEWTAG);
-		dialogTag.zSetTagName(tagName);
-		dialogTag.zClickButton(Button.B_OK);
-		
-		
+		}
+
 		
 		//-- VERIFICATION
 		//
@@ -209,18 +217,26 @@ public class TagMessage extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
-		// Click on the mountpoint
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+		try {
 
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			// Click on the mountpoint
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+	
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			
+			// Tag the item
+			DialogTagPicker dialogTag = (DialogTagPicker)app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_TAG);
+			dialogTag.zClickTreeTag(tag);
+			dialogTag.zClickButton(Button.B_OK);
 		
-		// Tag the item
-		DialogTagPicker dialogTag = (DialogTagPicker)app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_TAG);
-		dialogTag.zClickTreeTag(tag);
-		dialogTag.zClickButton(Button.B_OK);
-		
-		
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
+
 		
 		//-- VERIFICATION
 		//

@@ -93,29 +93,37 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
-		// Click on the mountpoint
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+		try {
 
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
-		
-		// Verify delete is disabled
-		ZAssert.assertTrue(app.zPageMail.sIsElementPresent("css=div[id='zb__TV-main__DELETE'].ZDisabled"), "Verify Delete button is disabled");
-		
-		// Delete the item
-		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+			// Click on the mountpoint
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+	
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			
+			// Verify delete is disabled
+			ZAssert.assertTrue(app.zPageMail.sIsElementPresent("css=div[id='zb__TV-main__DELETE'].ZDisabled"), "Verify Delete button is disabled");
+			
+			// Delete the item
+			app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+	
+			
+			// A "Permission Denied" error popup should NOT occur
+			DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
+			ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
+			ZAssert.assertFalse(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is active");
+					
+			// Make sure the server does not show "flagged" for the owner
+			mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
+			ZAssert.assertNotNull(mail, "Verify the message still exists in accountA's mailbox");
 
-		
-		// A "Permission Denied" error popup should NOT occur
-		DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
-		ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
-		ZAssert.assertFalse(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is active");
-				
-		// Make sure the server does not show "flagged" for the owner
-		mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
-		ZAssert.assertNotNull(mail, "Verify the message still exists in accountA's mailbox");
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
 
-		
+		}
+
 	}
 
 	
@@ -173,21 +181,29 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
-		// Click on the mountpoint
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+		try {
 
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			// Click on the mountpoint
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+	
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			
+			// Delete the item
+			app.zPageMail.zKeyboardKeyEvent(KeyEvent.VK_DELETE);
+			
+			// A "Permission Denied" error popup should NOT occur
+			DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
+			ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
+			ZAssert.assertFalse(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is active");
 		
-		// Delete the item
-		app.zPageMail.zKeyboardKeyEvent(KeyEvent.VK_DELETE);
-		
-		// A "Permission Denied" error popup should NOT occur
-		DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
-		ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
-		ZAssert.assertFalse(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is active");
-		
-		
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
+
 		// Make sure the server does not show "flagged" for the owner
 		mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
 		ZAssert.assertNotNull(mail, "Verify the message still exists in accountA's mailbox");

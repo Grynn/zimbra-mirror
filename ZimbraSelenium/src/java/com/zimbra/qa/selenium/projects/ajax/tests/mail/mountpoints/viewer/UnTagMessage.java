@@ -105,22 +105,31 @@ public class UnTagMessage extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
-		// Click on the mountpoint
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+		try {
 
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			// Click on the mountpoint
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+	
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			
+			
+			
+			//-- VERIFICATION
+			//
+			
+			// Make sure the tag icon is disabled
+			String locator = "css=div#zb__TV-main__TAG_MENU div.ImgTag.ZDisabledImage";
+			boolean disabled = app.zPageMail.sIsElementPresent(locator);
+			ZAssert.assertTrue(disabled, "Verify that the tag menu is disabled: "+ locator);
 		
-		
-		
-		//-- VERIFICATION
-		//
-		
-		// Make sure the tag icon is disabled
-		String locator = "css=div#zb__TV-main__TAG_MENU div.ImgTag.ZDisabledImage";
-		boolean disabled = app.zPageMail.sIsElementPresent(locator);
-		ZAssert.assertTrue(disabled, "Verify that the tag menu is disabled: "+ locator);
-		
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
+
 	}
 
 	
@@ -192,27 +201,35 @@ public class UnTagMessage extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
-		// Click on the mountpoint
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+		try {
 
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
-		
-		// Un Tag the item (shortcut)
-		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_REMOVETAG);
+			// Click on the mountpoint
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+	
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			
+			// Un Tag the item (shortcut)
+			app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_REMOVETAG);
+	
+	
+			
+			//-- VERIFICATION
+			//
+			
+			// A "Permission Denied" error popup should occur
+			DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
+			ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
+			ZAssert.assertTrue(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is active");
+			dialog.zClickButton(Button.B_OK);
 
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
 
-		
-		//-- VERIFICATION
-		//
-		
-		// A "Permission Denied" error popup should occur
-		DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
-		ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
-		ZAssert.assertTrue(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is active");
-		dialog.zClickButton(Button.B_OK);
+		}
 
-				
 
 		
 	}

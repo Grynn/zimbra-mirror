@@ -90,19 +90,28 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
-		// Click on the mountpoint
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+		try {
 
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
-		
-		// Click delete
-		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+			// Click on the mountpoint
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+	
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+			
+			// Click delete
+			app.zPageMail.zToolbarPressButton(Button.B_DELETE);
 
-//		// A warning dialog will appear
-//		DialogWarning dialog = app.zPageMain.zGetWarningDialog(DialogWarning.DialogWarningID.EmptyFolderWarningMessage);
-//		ZAssert.assertNotNull(dialog, "Verify the dialog pops up");
-//		dialog.zClickButton(Button.B_OK);
+//			// A warning dialog will appear
+//			DialogWarning dialog = app.zPageMain.zGetWarningDialog(DialogWarning.DialogWarningID.EmptyFolderWarningMessage);
+//			ZAssert.assertNotNull(dialog, "Verify the dialog pops up");
+//			dialog.zClickButton(Button.B_OK);
+
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
 
 		// Verify the message is now in the local trash
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Trash);
@@ -190,20 +199,29 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
-		// Click on the mountpoint
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+		try {
 
-		// Select the item
-		app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, subject1);
-		app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, subject2);
+			// Click on the mountpoint
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+	
+			// Select the item
+			app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, subject1);
+			app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, subject2);
+	
+			// Click delete
+			app.zPageMail.zToolbarPressButton(Button.B_DELETE);
 
-		// Click delete
-		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+//			// A warning dialog will appear
+//			DialogWarning dialog = app.zPageMain.zGetWarningDialog(DialogWarning.DialogWarningID.EmptyFolderWarningMessage);
+//			ZAssert.assertNotNull(dialog, "Verify the dialog pops up");
+//			dialog.zClickButton(Button.B_OK);
 
-//		// A warning dialog will appear
-//		DialogWarning dialog = app.zPageMain.zGetWarningDialog(DialogWarning.DialogWarningID.EmptyFolderWarningMessage);
-//		ZAssert.assertNotNull(dialog, "Verify the dialog pops up");
-//		dialog.zClickButton(Button.B_OK);
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
 
 		// Verify the message is now in the local trash
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Trash);

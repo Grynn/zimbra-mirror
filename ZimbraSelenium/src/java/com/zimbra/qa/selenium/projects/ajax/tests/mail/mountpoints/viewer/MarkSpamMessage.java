@@ -92,26 +92,34 @@ public class MarkSpamMessage extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
-		// Click on the mountpoint
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+		try {
 
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			// Click on the mountpoint
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+	
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			
+			
+			// Verify that the toolbar button is disabled		
+			String locator = "css=div[id='ztb__TV-main'] div[id='zb__TV-main__SPAM']";
+	
+			ZAssert.assertTrue(
+					app.zPageMail.sIsElementPresent(locator),
+					"Verify the spam button is present");
+			
+			ZAssert.assertTrue(
+					app.zPageMail.sIsElementPresent(locator + "[class*='ZDisabled']"),
+					"Verify the spam button is disabled");
 		
 		
-		// Verify that the toolbar button is disabled		
-		String locator = "css=div[id='ztb__TV-main'] div[id='zb__TV-main__SPAM']";
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
 
-		ZAssert.assertTrue(
-				app.zPageMail.sIsElementPresent(locator),
-				"Verify the spam button is present");
-		
-		ZAssert.assertTrue(
-				app.zPageMail.sIsElementPresent(locator + "[class*='ZDisabled']"),
-				"Verify the spam button is disabled");
-		
-		
-		
+		}
+
 	}
 
 	
@@ -173,21 +181,29 @@ public class MarkSpamMessage extends PrefGroupMailByMessageTest {
 		// For some reason, it takes a bit of time for this share to show up
 		SleepUtil.sleepMedium();
 				
-		// Click on the mountpoint
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+		try {
 
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			// Click on the mountpoint
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
+	
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+			
+			// Spam the item
+			app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKSPAM);
+			
+			// http://bugzilla.zimbra.com/show_bug.cgi?id=63796
+			// A "Permission Denied" error popup should not occur
+			DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
+			ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
+			ZAssert.assertFalse(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is not active");
 		
-		// Spam the item
-		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKSPAM);
-		
-		// http://bugzilla.zimbra.com/show_bug.cgi?id=63796
-		// A "Permission Denied" error popup should not occur
-		DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
-		ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
-		ZAssert.assertFalse(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is not active");
-		
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
 
 		// Verify the message is still in the owner's folder
 		mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
