@@ -363,6 +363,21 @@ public class  ZFolderBean {
         return getRgbColor(mFolder.getColor(), mFolder.getDefaultView());
     }
 
+    public int getRgbColorIndex() {
+        if( getRgb()!=null ) {
+            /* when rgb is set, a custom color is used. Hence returning 0 */
+            return 0;
+        }
+        else {
+            return getRgbColorIndex(mFolder.getColor(), mFolder.getDefaultView());
+        }
+    }
+
+    /* This function is to get string property names from ZhMsg.properties by colorIndex */
+    public String getRgbColorMsg() {
+        return ZFolder.RGB_COLORS_MSG[getRgbColorIndex()];
+    }
+
     public static String getRgbColor(Color color, View view) {
         int colorIndex = (int) color.getValue();
         if (color == Color.DEFAULTCOLOR) {
@@ -373,7 +388,18 @@ public class  ZFolderBean {
         }
         return ZFolder.RGB_COLORS[colorIndex];
     }
-    
+
+    public static int getRgbColorIndex (Color color, View view) {
+                if (color == Color.DEFAULTCOLOR) {
+                    if (view == View.contact || view == View.task)
+                        return (int) Color.GRAY.getValue();
+                    else
+                        return (int) Color.ORANGE.getValue();
+                }
+        return (int) color.getValue();
+    }
+
+
     public String getImage() {
         if (getIsSearchFolder()) {
             return "startup/ImgSearchFolder.png";
