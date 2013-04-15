@@ -727,18 +727,26 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 		
 		//-- GUI
 		
-		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-				
-		// Click in Drafts
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, drafts);
+		try {
+			
+			// Click Get Mail button
+			app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+					
+			// Click in Drafts
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, drafts);
+			
+			// Select the conversation or message (in 8.X, only messages are shown in drafts, not conversations)
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+			
+			// Click Delete
+			app.zPageMail.zToolbarPressButton(Button.B_DELETE);
 		
-		// Select the conversation or message (in 8.X, only messages are shown in drafts, not conversations)
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
-		
-		// Click Delete
-		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
-		
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
 
 
 		//-- Verification

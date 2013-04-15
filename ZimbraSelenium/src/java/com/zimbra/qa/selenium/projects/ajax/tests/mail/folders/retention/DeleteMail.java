@@ -92,27 +92,36 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 		
 		//-- GUI
 		
-		
-		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		try {
 				
-		// Click on the subfolder
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, folder);
+			// Click Get Mail button
+			app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+					
+			// Click on the subfolder
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, folder);
+			
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+			
+			// Click delete
+			app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+			
+			
+			//-- Verification
+			
+			// A dialog will appear confirming deletion
+			DialogWarning warning = (DialogWarning) app.zPageMain.zGetWarningDialog(DialogWarningID.DeleteItemWithinRetentionPeriod);
+			warning.zWaitForActive();
+			
+			warning.zClickButton(Button.B_OK);
 		
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
-		
-		// Click delete
-		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
-		
-		
-		//-- Verification
-		
-		// A dialog will appear confirming deletion
-		DialogWarning warning = (DialogWarning) app.zPageMain.zGetWarningDialog(DialogWarningID.DeleteItemWithinRetentionPeriod);
-		warning.zWaitForActive();
-		
-		warning.zClickButton(Button.B_OK);
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
+
 		
 		// Verify the message is in the trash
 		MailItem message = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +") is:anywhere");
@@ -180,28 +189,36 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 		
 		//-- GUI
 		
+		try {
+			
+			// Click Get Mail button
+			app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+					
+			// Click on the subfolder
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, folder);
+			
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+			
+			// Click delete
+			app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+			
+			
+			//-- Verification
+			
+			// A dialog will appear confirming deletion
+			DialogWarning warning = (DialogWarning) app.zPageMain.zGetWarningDialog(DialogWarningID.DeleteItemWithinRetentionPeriod);
+			warning.zWaitForActive();
+			
+			warning.zClickButton(Button.B_CANCEL);
 		
-		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-				
-		// Click on the subfolder
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, folder);
-		
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
-		
-		// Click delete
-		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
-		
-		
-		//-- Verification
-		
-		// A dialog will appear confirming deletion
-		DialogWarning warning = (DialogWarning) app.zPageMain.zGetWarningDialog(DialogWarningID.DeleteItemWithinRetentionPeriod);
-		warning.zWaitForActive();
-		
-		warning.zClickButton(Button.B_CANCEL);
-		
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
+
 		// Verify the message is in the trash
 		MailItem message = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +") is:anywhere");
 		ZAssert.assertNotNull(message, "Verify message remains in the mailbox");
@@ -268,37 +285,44 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 		
 		//-- GUI
 		
-		
-		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-				
-		// Click on the subfolder
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, folder);
-		
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
-		
-		// Click shift-del
-		
-		/* 
-		 * Note: there will be two dialogs on this action:
-		 * 1. This item is within the retention period (DialogWarningID.DeleteItemWithinRetentionPeriod)
-		 * 2. Are you sure you want to permanently delete this item? (DialogWarningID.PermanentlyDeleteTheItem)
-		 * 
-		 * Luckily, both warning dialogs share the same div (<div id='OkCancel' .../>).  However,
-		 * if the ID's change in the future, then the zPageMail.zKeyboardShortcut() method may need
-		 * to be reworked.  The test cases for hard delete may need to do the zGetWarningDialog() instead.
-		 * 
-		 * 
-		 */ 
-		DialogWarning dialog = (DialogWarning)app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_HARDELETE);
-		dialog.zClickButton(Button.B_OK);
-		
-		DialogWarning warning = (DialogWarning) app.zPageMain.zGetWarningDialog(DialogWarningID.PermanentlyDeleteTheItem);
-		warning.zWaitForActive();
-		warning.zClickButton(Button.B_OK);
+		try {
+			
+			// Click Get Mail button
+			app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+					
+			// Click on the subfolder
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, folder);
+			
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+			
+			// Click shift-del
+			
+			/* 
+			 * Note: there will be two dialogs on this action:
+			 * 1. This item is within the retention period (DialogWarningID.DeleteItemWithinRetentionPeriod)
+			 * 2. Are you sure you want to permanently delete this item? (DialogWarningID.PermanentlyDeleteTheItem)
+			 * 
+			 * Luckily, both warning dialogs share the same div (<div id='OkCancel' .../>).  However,
+			 * if the ID's change in the future, then the zPageMail.zKeyboardShortcut() method may need
+			 * to be reworked.  The test cases for hard delete may need to do the zGetWarningDialog() instead.
+			 * 
+			 * 
+			 */ 
+			DialogWarning dialog = (DialogWarning)app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_HARDELETE);
+			dialog.zClickButton(Button.B_OK);
+			
+			DialogWarning warning = (DialogWarning) app.zPageMain.zGetWarningDialog(DialogWarningID.PermanentlyDeleteTheItem);
+			warning.zWaitForActive();
+			warning.zClickButton(Button.B_OK);
 
-		
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
+
 		
 		//-- Verification
 		
@@ -364,33 +388,40 @@ public class DeleteMail extends PrefGroupMailByMessageTest {
 		
 		//-- GUI
 		
+		try {
+			
+			// Click Get Mail button
+			app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+					
+			// Click on the subfolder
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, folder);
+			
+			// Select the item
+			app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+			
+			// Click shift-del
+			
+			/* 
+			 * Note: there will be two dialogs on this action:
+			 * 1. This item is within the retention period (DialogWarningID.DeleteItemWithinRetentionPeriod)
+			 * 2. Are you sure you want to permanently delete this item? (DialogWarningID.PermanentlyDeleteTheItem)
+			 * 
+			 * Luckily, both warning dialogs share the same div (<div id='OkCancel' .../>).  However,
+			 * if the ID's change in the future, then the zPageMail.zKeyboardShortcut() method may need
+			 * to be reworked.  The test cases for hard delete may need to do the zGetWarningDialog() instead.
+			 * 
+			 * 
+			 */ 
+			DialogWarning dialog = (DialogWarning)app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_HARDELETE);
+			dialog.zClickButton(Button.B_CANCEL);
 		
-		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-				
-		// Click on the subfolder
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, folder);
-		
-		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
-		
-		// Click shift-del
-		
-		/* 
-		 * Note: there will be two dialogs on this action:
-		 * 1. This item is within the retention period (DialogWarningID.DeleteItemWithinRetentionPeriod)
-		 * 2. Are you sure you want to permanently delete this item? (DialogWarningID.PermanentlyDeleteTheItem)
-		 * 
-		 * Luckily, both warning dialogs share the same div (<div id='OkCancel' .../>).  However,
-		 * if the ID's change in the future, then the zPageMail.zKeyboardShortcut() method may need
-		 * to be reworked.  The test cases for hard delete may need to do the zGetWarningDialog() instead.
-		 * 
-		 * 
-		 */ 
-		DialogWarning dialog = (DialogWarning)app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_HARDELETE);
-		dialog.zClickButton(Button.B_CANCEL);
-		
-		
+		} finally {
+			
+			// Select the inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox));
+
+		}
+
 		
 		//-- Verification
 		
