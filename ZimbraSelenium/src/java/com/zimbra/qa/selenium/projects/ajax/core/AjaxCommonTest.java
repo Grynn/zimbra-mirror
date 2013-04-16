@@ -32,9 +32,8 @@ import com.thoughtworks.selenium.*;
 import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
 
 /**
@@ -88,8 +87,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
 public class AjaxCommonTest {
 	
 	protected static Logger logger = LogManager.getLogger(AjaxCommonTest.class);
-	public final boolean isRunningDesktopTest = ZimbraSeleniumProperties.getStringProperty(
-			ZimbraSeleniumProperties.getLocalHost() + ".desktop.test", "false").toLowerCase().equals("true") ? true : false;
+
 
 	private WebDriverBackedSelenium _webDriverBackedSelenium = null;
 	private WebDriver _webDriver = null;
@@ -99,13 +97,8 @@ public class AjaxCommonTest {
 	 */
 	protected AppAjaxClient app = null;
 
-	protected OsType osType = null;
-	private final static String _accountFlavor = "Zimbra";
-	public final static String defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
 	private Repository _repository = new Repository();
 
-	// Configurable from config file or input parameters
-	protected String[] desktopZimlets = null;
 
 	/**
 	 * BeforeMethod variables
@@ -118,6 +111,9 @@ public class AjaxCommonTest {
 	protected Map<String, String> startingAccountPreferences = null;
 	protected Map<String, String> startingAccountZimletPreferences = null;
 
+	
+	
+	
 	protected AjaxCommonTest() {
 		logger.info("New "+ AjaxCommonTest.class.getCanonicalName());
 
@@ -185,7 +181,6 @@ public class AjaxCommonTest {
       // Make sure there is a new default account
 		ZimbraAccount.ResetAccountZWC();
 
-		osType = OperatingSystem.getOSType();
 
 		try
 		{
@@ -290,77 +285,7 @@ public class AjaxCommonTest {
 
 	}
 
-	/**
-	 * Add default account using HTTP post
-	 * @throws HarnessException
-	 */
-	public void addDefaultAccount() throws HarnessException {
-		logger.info("Creating new account...");
-		String serverScheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
-		String serverName = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
-		ZimbraDesktopProperties zdp = ZimbraDesktopProperties.getInstance();
-		String connectionPort = zdp.getConnectionPort();
 
-		String emailServerName = ZimbraSeleniumProperties.getStringProperty("adminName", "admin@localhost").split("@")[1];
-		String emailServerPort = ZimbraSeleniumProperties.getStringProperty("server.port", "80");
-		String securityType = serverScheme.equals("http") ? "&security=cleartext" : "";
-		String accountSetupUrl = new StringBuilder(serverScheme).append("://")
-		.append(serverName). append(":")
-		.append(connectionPort).append("/")
-		.append("zimbra/desktop/accsetup.jsp?at=")
-		.append(zdp.getSerialNumber()).append("&accountId=&verb=add&accountFlavor=")
-		.append(_accountFlavor).append("&accountName=")
-		.append(defaultAccountName).append("&email=")
-		.append(ZimbraAccount.AccountZWC().EmailAddress).append("&password=")
-		.append(ZimbraAccount.AccountZWC().Password).append("&host=") 
-		.append(emailServerName).append("&port=")
-		.append(emailServerPort).append("&syncFreqSecs=900&debugTraceEnabled=on")
-		.append(securityType).toString();
-		logger.info("accountSetupUrl: " + accountSetupUrl);
-		GeneralUtility.doHttpPost(accountSetupUrl);
-
-		String accountUrl = new StringBuilder(serverScheme).append("://")
-		.append(serverName). append(":")
-		.append(connectionPort).append("/")
-		.append("?at=")
-		.append(zdp.getSerialNumber()).toString();
-		logger.debug("Selenium is opening: " + accountUrl);
-		ClientSessionFactory.session().selenium().open(accountUrl);
-		GeneralUtility.waitForElementPresent(app.zPageLogin,
-				PageLogin.Locators.zBtnLoginDesktop);
-	}
-
-	/**
-	 * Delete Desktop account through HTTP Post
-	 * @param accountName Account Name to be deleted
-	 * @param accountId Account ID to be deleted
-	 * @param accountType Account Type (usually: zimbra)
-	 * @param accountFlavor Account Flavor (usually: Zimbra) 
-	 * @throws HarnessException
-	 */
-	public void deleteDesktopAccount(String accountName, String accountId,
-			String accountType, String accountFlavor) throws HarnessException {
-		String serverScheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
-		String serverName = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
-		ZimbraDesktopProperties zdp = ZimbraDesktopProperties.getInstance();
-		String connectionPort = zdp.getConnectionPort();
-		String accountDeleteUrl = new StringBuilder(serverScheme).append("://")
-		.append(serverName). append(":")
-		.append(connectionPort).append("/")
-		.append("zimbra/desktop/accsetup.jsp?at=")
-		.append(zdp.getSerialNumber()).append("&accountId=")
-		.append(accountId).append("&verb=del&accountFlavor=")
-		.append(accountFlavor).append("&accountName=")
-		.append(accountName).append("&accountType=")
-		.append(accountType).toString();
-
-		logger.info("accountDeleteUrl: " + accountDeleteUrl);
-		GeneralUtility.doHttpPost(accountDeleteUrl);
-
-		ClientSessionFactory.session().selenium().refresh();
-		GeneralUtility.waitForElementPresent(app.zPageLogin,
-				PageLogin.Locators.zAddNewAccountButton);
-	}
 
 	/**
 	 * Global BeforeMethod

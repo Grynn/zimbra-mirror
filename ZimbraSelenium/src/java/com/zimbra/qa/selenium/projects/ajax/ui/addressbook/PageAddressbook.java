@@ -26,10 +26,8 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 public class PageAddressbook extends AbsTab {
 
@@ -127,16 +125,8 @@ public class PageAddressbook extends AbsTab {
 
 		boolean active=sIsElementPresent("css=div[id='zb__App__Contacts'][class*=ZSelected]");
 			
-		String locator = null;
-		// On Zimbra Desktop, there is no Address book folder, but there is only
-		// account root folder
-      if(ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-	      locator = TreeMail.Locators.zTreeItems.replace(TreeMail.stringToReplace,
-	            AjaxCommonTest.defaultAccountName);
-	   } else {
-		   //make sure Addressbook folder is displayed
-		   locator = "css=div#ztih__main_Contacts__ADDRBOOK_div";
-		}
+		String locator = "css=div#ztih__main_Contacts__ADDRBOOK_div";
+
 
       active &= this.sIsElementPresent(locator);		   
 		return (active);
