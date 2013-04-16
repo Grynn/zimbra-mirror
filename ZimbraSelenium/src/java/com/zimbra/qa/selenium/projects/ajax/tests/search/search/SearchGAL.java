@@ -17,7 +17,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.search.search;
 
 
-import java.util.List;
+import java.util.*;
 
 import org.testng.annotations.Test;
 
@@ -27,11 +27,11 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 public class SearchGAL extends AjaxCommonTest {
-	
-	
+
+
 	public SearchGAL() {
 		logger.info("New "+ SearchGAL.class.getCanonicalName());
-		
+
 		// All tests start at the login page
 		super.startingPage = app.zPageAddressbook;
 
@@ -39,31 +39,36 @@ public class SearchGAL extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 
 	}
-	
+
 
 	@Test(	description = "Search for a GAL contact",
 			groups = { "functional" })
-	public void SearchGAL_01() throws HarnessException {
-		
+			public void SearchGAL_01() throws HarnessException {
+
 		//-- Data
-		
+
 		// Create a GAL Account
-		String first = "first"+ ZimbraSeleniumProperties.getUniqueString();
-		String last = "last"+ ZimbraSeleniumProperties.getUniqueString();
+		final String first = "first"+ ZimbraSeleniumProperties.getUniqueString();
+		final String last = "last"+ ZimbraSeleniumProperties.getUniqueString();
 		ZimbraAccount accountGAL = new ZimbraAccount();
-		accountGAL.setPref("givenName", first);
-		accountGAL.setPref("sn", last);
-		accountGAL.setPref("displayName", first + " " + last);
+		Map<String,String> attrs = new HashMap<String, String>() {
+			private static final long serialVersionUID = -939087302049217526L;
+			{
+				put("givenName", first);
+				put("sn", last);
+				put("displayName", first + " " + last);
+			}};
+		accountGAL.setAccountPreferences(attrs);
 		accountGAL.provision();
 		accountGAL.authenticate();
- 
-		
+
+
 		//-- GUI
-		
+
 		// Refresh
 		app.zPageAddressbook.zRefresh();
-		
-		
+
+
 		// Remember to close the search view
 		try {
 
@@ -77,28 +82,28 @@ public class SearchGAL extends AjaxCommonTest {
 
 			ZAssert.assertEquals(contacts.size(), 1, "Verify only the one message was returned");
 			ZAssert.assertStringContains(contacts.get(0).getAttribute("fileAs", ""), first, "Verify the contact is shown in the results");
-			
+
 		} finally {
 			// Remember to close the search view
 			app.zPageSearch.zClose();
 		}
-				
+
 	}
-	
+
 	@Test(	description = "Search for a non-existing GAL contact",
 			groups = { "functional" })
-	public void SearchGAL_02() throws HarnessException {
-		
+			public void SearchGAL_02() throws HarnessException {
+
 		//-- Data
-		
+
 		String doesnotexist = "contact" + ZimbraSeleniumProperties.getUniqueString();
-		
+
 		//-- GUI
-		
+
 		// Refresh
 		app.zPageAddressbook.zRefresh();
-		
-		
+
+
 		// Remember to close the search view
 		try {
 
@@ -111,12 +116,12 @@ public class SearchGAL extends AjaxCommonTest {
 			ZAssert.assertNotNull(contacts, "Verify the message list exists");
 
 			ZAssert.assertEquals(contacts.size(), 0, "Verify no results");
-			
+
 		} finally {
 			// Remember to close the search view
 			app.zPageSearch.zClose();
 		}
-			
+
 	}
 
 

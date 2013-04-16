@@ -74,13 +74,20 @@ public class ZimbraAccount {
 	public String ZimbraId = null;
 	public String EmailAddress = null;
 	public String Password = null;
+	public String DisplayName = null;
 	public boolean accountIsDirty = false;
 	protected String ZimbraPrefLocale = Locale.getDefault().toString();
 	protected String MyAuthToken = null;
 	protected String MyClientAuthToken = null;
-	protected Map<String, String> preferences = new HashMap<String, String>();
 	public final static String clientAccountName = "local@host.local";
 
+	// Account Attributes
+	// These attributes are set per each test class
+	protected Map<String, String> startingAccountPreferences = new HashMap<String, String>();
+	// These attributes are set for the zimlets per each test case
+	protected Map<String, String> startingUserZimletPreferences = new HashMap<String, String>();
+	
+	
 	/*
 	 * Create an account with the email address account<num>@<testdomain>
 	 * The password is set to config property "adminPwd"
@@ -95,15 +102,11 @@ public class ZimbraAccount {
 	 */
 	public ZimbraAccount(String email, String password) {
 
-		try {
-			if ( email == null ) {
-				setPref("displayName", ZimbraSeleniumProperties.getStringProperty("locale").toLowerCase().replace("_", "") + ZimbraSeleniumProperties.getUniqueString());
-				email = getPref("displayName") + "@" + ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
-			} else {
-				setPref("displayName", email.split("@")[0]);
-			}
-		} catch (HarnessException e) {
-			logger.error(e);
+		if ( email == null ) {
+			DisplayName = ZimbraSeleniumProperties.getStringProperty("locale").toLowerCase().replace("_", "") + ZimbraSeleniumProperties.getUniqueString();
+			email = DisplayName + "@" + ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
+		} else {
+			DisplayName = email.split("@")[0];
 		}
 		
 		EmailAddress = email;
@@ -347,13 +350,18 @@ public class ZimbraAccount {
 			domain.provision();
 			
 
-
+			
 			// Build the list of default preferences
+			Map<String, String> attributes = new HashMap<String, String>();
+			
+			attributes.putAll(accountAttrs);				// Lowest priority, add defaults
+			attributes.put("displayName", DisplayName);	// Put display name from constructor
+			attributes.putAll(startingAccountPreferences);		// Highest priority, add preferences from test case
+			
+			// Add the display name
+						
 			StringBuilder prefs = new StringBuilder();
-			for (Map.Entry<String, String> entry : accountAttrs.entrySet()) {
-				prefs.append(String.format("<a n='%s'>%s</a>", entry.getKey(), entry.getValue()));
-			}
-			for (Map.Entry<String, String> entry : preferences.entrySet()) {
+			for (Map.Entry<String, String> entry : attributes.entrySet()) {
 				prefs.append(String.format("<a n='%s'>%s</a>", entry.getKey(), entry.getValue()));
 			}
 
@@ -468,14 +476,158 @@ public class ZimbraAccount {
 		return (this);
 	}
 
-	  /**
-    * Modify user prefences using ModifyPrefsRequest with the default SERVER
-    * host destination type
-    * @param preferences Preferences to be modified through SOAP
-    * @throws HarnessException 
-    */
-   public ZimbraAccount modifyPreferences(Map<String, String> preferences) {
-      return modifyPreferences(preferences, SOAP_DESTINATION_HOST_TYPE.SERVER);
+	/**
+	 * Set this accounts Zimlet preferences table.
+	 * 
+	 * These preferences are set per test class and specific to the test case features.
+	 * These preferences are the *account* preferences set by the administrator, as compared to
+	 * the *user* preferences set by the end-user.
+	 * 
+	 * 
+	 * @param preferences
+	 * @throws HarnessException
+	 */
+	public void setUserZimletPreferences(Map<String, String> preferences) throws HarnessException {
+		if ( preferences == null || preferences.isEmpty() ) { 
+			return;
+		}
+		this.startingUserZimletPreferences = new HashMap<String, String>(preferences);
+	}
+	
+	/**
+	 * Compare this accounts preferences to another table.
+	 * 
+	 * This is useful in determining if the account settings are correct
+	 * for a particular test case
+	 * 
+	 * 
+	 * @param preferences
+	 * @return
+	 */
+	public boolean compareUserZimletPreferences(Map<String, String> preferences) {
+		return (this.startingUserZimletPreferences.equals(preferences));
+	}
+	
+	/**
+	 * Use ModifyAccountRequest to modify this account per specified preferences
+	 * 
+	 * @param preferences
+	 * @return
+	 * @throws HarnessException
+	 */
+	public ZimbraAccount modifyUserZimletPreferences(Map<String, String> preferences) throws HarnessException {
+		
+		if ( preferences == null || preferences.isEmpty() ) {
+			// Nothing to modify
+			logger.warn("modifyAccountPreferences called with null or empty preferences");
+			return (this);
+		}
+		
+		// Remember the specified preferences (useful for comparison)
+		this.setUserZimletPreferences(preferences);
+		
+		for (Map.Entry<String, String> entry : preferences.entrySet()) {
+			ExecuteHarnessMain.tracer.trace(EmailAddress +" zimletPreferences: "+ entry.getKey() + "=" + entry.getValue());
+		}
+
+		StringBuilder sb = new StringBuilder();
+		for (Map.Entry<String, String> entry : preferences.entrySet()) {
+			sb.append(String.format("<zimlet xmlns='' name='%s' presence='%s'/>", entry.getKey(), entry.getValue()));
+		}
+
+		this.soapSend(
+				"<ModifyZimletPrefsRequest xmlns='urn:zimbraAccount'>" +
+					sb.toString() +
+				"</ModifyZimletPrefsRequest>");
+
+		return (this);
+
+	}
+
+	/**
+	 * Set this accounts preferences table.
+	 * 
+	 * These preferences are set per test class and specific to the test case features.
+	 * These preferences are the *account* preferences set by the administrator, as compared to
+	 * the *user* preferences set by the end-user.
+	 * 
+	 * 
+	 * @param preferences
+	 * @throws HarnessException
+	 */
+	public void setAccountPreferences(Map<String, String> preferences) throws HarnessException {
+		if ( preferences == null || preferences.isEmpty() ) { 
+			return;
+		}
+		this.startingAccountPreferences = new HashMap<String, String>(preferences);
+	}
+	
+	/**
+	 * Compare this accounts preferences to another table.
+	 * 
+	 * This is useful in determining if the account settings are correct
+	 * for a particular test case
+	 * 
+	 * 
+	 * @param preferences
+	 * @return
+	 */
+	public boolean compareAccountPreferences(Map<String, String> preferences) {
+		return (this.startingAccountPreferences.equals(preferences));
+	}
+	
+	/**
+	 * Use ModifyAccountRequest to modify this account per specified preferences
+	 * 
+	 * These preferences are the *account* preferences set by the administrator, as compared to
+	 * the *user* preferences set by the end-user.
+	 * 
+	 * 
+	 * @param preferences
+	 * @return
+	 * @throws HarnessException
+	 */
+	public ZimbraAccount modifyAccountPreferences(Map<String, String> preferences) throws HarnessException {
+		
+		if ( preferences == null || preferences.isEmpty() ) {
+			// Nothing to modify
+			logger.warn("modifyAccountPreferences called with null or empty preferences");
+			return (this);
+		}
+		
+		// Remember the specified preferences (useful for comparison)
+		this.setAccountPreferences(preferences);
+
+		// Build the SOAP <a/> elements from the map
+		StringBuilder attributes = new StringBuilder();
+		for (Map.Entry<String, String> entry : preferences.entrySet()) {
+			attributes.append(String.format("<a n='%s'>%s</a>", entry.getKey(), entry.getValue()));
+		}
+		
+	
+		// Use the global admin to modify the account
+		ZimbraAdminAccount.GlobalAdmin().soapSend(
+				"<ModifyAccountRequest xmlns='urn:zimbraAdmin'>"
+				+		"<id>"+ this.ZimbraId +"</id>"
+				+		attributes.toString()
+				+	"</ModifyAccountRequest>");
+
+
+		// Set the flag so the account is reset for the next test
+		this.accountIsDirty = true;
+		
+		return (this);
+
+	}
+	
+	/**
+     * Modify user preferences using ModifyPrefsRequest with the default SERVER
+     * host destination type
+     * @param preferences Preferences to be modified through SOAP
+     * @throws HarnessException 
+     */
+   public ZimbraAccount modifyUserPreferences(Map<String, String> preferences) {
+      return modifyUserPreferences(preferences, SOAP_DESTINATION_HOST_TYPE.SERVER);
 
    }
 
@@ -485,7 +637,7 @@ public class ZimbraAccount {
     * @param destinationType The destination Host Type: SERVER or CLIENT
     * @throws HarnessException
     */
-   public ZimbraAccount modifyPreferences(Map<String, String> preferences,
+   public ZimbraAccount modifyUserPreferences(Map<String, String> preferences,
          SOAP_DESTINATION_HOST_TYPE destinationType) {
 
       // Test Case Trace logging
@@ -574,57 +726,6 @@ public class ZimbraAccount {
 
 	}
 
-	/**
-	 * Modify user zimlet preferences using ModifyZimletPrefsRequest
-	 * @param zimletPreferences Zimlet Preferences to be modified through SOAP
-	 * @param destinationType The destination Host Type: SERVER or CLIENT
-	 * @throws HarnessException
-	 */
-	public ZimbraAccount modifyZimletPreferences(Map<String, String> preferences) {
-		return modifyZimletPreferences(preferences, SOAP_DESTINATION_HOST_TYPE.SERVER);
-	}
-
-
-	/**
-	 * Modify user zimlet preferences using ModifyZimletPrefsRequest
-	 * @param zimletPreferences Zimlet Preferences to be modified through SOAP
-	 * @param destinationType The destination Host Type: SERVER or CLIENT
-	 * @throws HarnessException
-	 */
-	public ZimbraAccount modifyZimletPreferences(Map<String, String> zimletPreferences,
-			SOAP_DESTINATION_HOST_TYPE destinationType) {
-
-		for (Map.Entry<String, String> entry : zimletPreferences.entrySet()) {
-			ExecuteHarnessMain.tracer.trace(EmailAddress +" zimletPreferences: "+
-					entry.getKey() + "=" + entry.getValue());
-		}
-
-		StringBuilder sb = new StringBuilder();
-		for (Map.Entry<String, String> entry : zimletPreferences.entrySet()) {
-			sb.append(String.format("<zimlet xmlns='' name='%s' presence='%s'/>",
-					entry.getKey(), entry.getValue()));
-		}
-
-		if ( sb.length() <= 0 )
-			return (this); // Nothing to modify
-
-		try
-		{
-			soapSend(
-					"<ModifyZimletPrefsRequest xmlns='urn:zimbraAccount'>" +
-					sb.toString() +
-					"</ModifyZimletPrefsRequest>",
-					destinationType);
-
-			Element[] response = soapSelectNodes("//acct:ModifyZimletPrefsResponse");
-			if ( response == null || response.length != 1 )
-				throw new HarnessException("Unable to modify preference "+ soapLastResponse());
-		} catch (HarnessException e) {
-			logger.error("Unable to modify preference", e);
-		}
-		return (this);
-	}
-
 
 	/**
 	 * Get a user preference value
@@ -638,32 +739,6 @@ public class ZimbraAccount {
 
 		String value = soapSelectValue("//acct:pref[@name='"+ pref +"']", null);
 		return (value);
-	}
-
-	/**
-	 * Set a user preference.  This method only changes the ZimbraAccount object.  The
-	 * harness must still call ModifyPrefsRequest, CreateAccountRequest, ModifyAccountRequest,
-	 * etc.
-	 * 
-	 */
-	public void setPref(String key, String value) throws HarnessException {
-
-		preferences.put(key, value);
-		
-	}
-	
-	public String getPref(String key) throws HarnessException {
-		
-		return (preferences.get(key));
-		
-	}
-	
-	public void clearPref(String key) throws HarnessException {
-		
-		if ( preferences.containsKey(key) ) {
-			preferences.remove(key);
-		}
-		
 	}
 
 	/**

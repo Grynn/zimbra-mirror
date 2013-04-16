@@ -59,7 +59,7 @@ public class TrustedEmailAddrMsgView extends AjaxCommonTest {
          }
       };
 
-      account.modifyPreferences(userLevelPreferences);
+      account.modifyUserPreferences(userLevelPreferences);
 
       // Refresh is needed by synching ZD to ZCS, then reload the page by logging out,
       // then relaunch ZD

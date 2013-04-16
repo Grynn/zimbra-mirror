@@ -257,7 +257,7 @@ public class HtmlCommonTest {
 		//
 		if ( (startingAccountZimletPreferences != null) && (!startingAccountZimletPreferences.isEmpty()) ) {
 			logger.debug("commonTestBeforeMethod: startingAccountPreferences are defined");
-			ZimbraAccount.AccountHTML().modifyZimletPreferences(startingAccountZimletPreferences);
+			ZimbraAccount.AccountHTML().modifyUserZimletPreferences(startingAccountZimletPreferences);
 		}
 
 		// If AccountHTML is not currently logged in, then login now

@@ -48,7 +48,7 @@ public class DisableZimlet extends AjaxCommonTest {
                 put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
             }};
 
-      super.startingAccountZimletPreferences = new HashMap<String, String>() {{
+      super.startingUserZimletPreferences = new HashMap<String, String>() {{
             put("com_zimbra_phone", "disabled");
             }};
    }

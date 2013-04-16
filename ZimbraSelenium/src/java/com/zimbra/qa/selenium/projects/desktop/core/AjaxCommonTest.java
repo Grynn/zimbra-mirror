@@ -620,7 +620,7 @@ public class AjaxCommonTest {
 		//
 		if ( (startingAccountPreferences != null) && (!startingAccountPreferences.isEmpty()) ) {
 			logger.debug("commonTestBeforeMethod: startingAccountPreferences are defined");
-         ZimbraAccount.AccountZDC().modifyPreferences(startingAccountPreferences, destType);
+         ZimbraAccount.AccountZDC().modifyUserPreferences(startingAccountPreferences, destType);
 
          /**StringBuilder settings = new StringBuilder();
 			for (Map.Entry<String, String> entry : startingAccountPreferences.entrySet()) {
@@ -642,8 +642,7 @@ public class AjaxCommonTest {
 		//
 		if ( (startingAccountZimletPreferences != null) && (!startingAccountZimletPreferences.isEmpty()) ) {
 			logger.debug("commonTestBeforeMethod: startingAccountPreferences are defined");
-			ZimbraAccount.AccountZDC().modifyZimletPreferences(startingAccountZimletPreferences,
-					destType);
+			ZimbraAccount.AccountZDC().modifyUserZimletPreferences(startingAccountZimletPreferences);
 		}
 
 		// If a startingPage is defined, then make sure we are on that page
@@ -756,9 +755,7 @@ public class AjaxCommonTest {
 			}
 
 			currentAccount.authenticateToMailClientHost();
-			currentAccount.modifyZimletPreferences(defaultZimlets,
-			      SOAP_DESTINATION_HOST_TYPE.CLIENT);
-
+			currentAccount.modifyUserZimletPreferences(defaultZimlets);
 		}
 
 	     String testCaseResult = String.valueOf(testResult.getStatus());
