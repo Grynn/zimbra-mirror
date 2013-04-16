@@ -16,7 +16,7 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose.autocomplete;
 
-import java.util.List;
+import java.util.*;
 
 import org.testng.annotations.*;
 
@@ -48,14 +48,20 @@ public class AutoCompleteSearchTerms extends PrefGroupMailByMessageTest {
 	public void AutCompleteSearchTerms_01() throws HarnessException {
 		
 		// See bug 46718
-		String StopWordsFirstName = "It" + ZimbraSeleniumProperties.getUniqueString();
-		String StopWordsLastName = "Be" + ZimbraSeleniumProperties.getUniqueString();
+		final String StopWordsFirstName = "It" + ZimbraSeleniumProperties.getUniqueString();
+		final String StopWordsLastName = "Be" + ZimbraSeleniumProperties.getUniqueString();
 
 
+		// Create a GAL Entry
 		ZimbraAccount StopWordsAccount = new ZimbraAccount();
-		StopWordsAccount.setPref("givenName", StopWordsFirstName);
-		StopWordsAccount.setPref("sn", StopWordsLastName);
-		StopWordsAccount.setPref("displayName", StopWordsFirstName + " " + StopWordsLastName);
+		Map<String,String> attrs = new HashMap<String, String>() {
+			private static final long serialVersionUID = -939087202049217426L;
+			{
+				put("givenName", StopWordsFirstName);
+				put("sn", StopWordsLastName);
+				put("displayName", StopWordsFirstName + " " + StopWordsLastName);
+			}};
+		StopWordsAccount.setAccountPreferences(attrs);
 		StopWordsAccount.provision();
 		StopWordsAccount.authenticate();
 
@@ -103,13 +109,19 @@ public class AutoCompleteSearchTerms extends PrefGroupMailByMessageTest {
 	public void AutCompleteSearchTerms_02() throws HarnessException {
 		
 		// See bug 46950
-		String QueryWordsFirstName = "Andrew" + ZimbraSeleniumProperties.getUniqueString();
-		String QueryWordsLastName = "Subject" + ZimbraSeleniumProperties.getUniqueString();
+		final String QueryWordsFirstName = "Andrew" + ZimbraSeleniumProperties.getUniqueString();
+		final String QueryWordsLastName = "Subject" + ZimbraSeleniumProperties.getUniqueString();
 
+		// Create a GAL Entry
 		ZimbraAccount QueryWordsAccount = new ZimbraAccount();
-		QueryWordsAccount.setPref("givenName", QueryWordsFirstName);
-		QueryWordsAccount.setPref("sn", QueryWordsLastName);
-		QueryWordsAccount.setPref("displayName", QueryWordsFirstName + " " + QueryWordsLastName);
+		Map<String,String> attrs = new HashMap<String, String>() {
+			private static final long serialVersionUID = -939087202048117526L;
+			{
+				put("givenName", QueryWordsFirstName);
+				put("sn", QueryWordsLastName);
+				put("displayName", QueryWordsFirstName + " " + QueryWordsLastName);
+			}};
+			QueryWordsAccount.setAccountPreferences(attrs);
 		QueryWordsAccount.provision();
 		QueryWordsAccount.authenticate();
 

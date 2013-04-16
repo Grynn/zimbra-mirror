@@ -16,7 +16,7 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose.autocomplete;
 
-import java.util.List;
+import java.util.*;
 
 import org.testng.annotations.*;
 
@@ -55,7 +55,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		
 		if ( SampleAccount == null ) {
 			SampleAccount = new ZimbraAccount();
-			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.DisplayName = FirstName + " " + LastName;
 			SampleAccount.provision();
 			SampleAccount.authenticate();
 		}
@@ -100,7 +100,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		
 		if ( SampleAccount == null ) {
 			SampleAccount = new ZimbraAccount();
-			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.DisplayName = FirstName + " " + LastName;
 			SampleAccount.provision();
 			SampleAccount.authenticate();
 		}
@@ -147,7 +147,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		
 		if ( SampleAccount == null ) {
 			SampleAccount = new ZimbraAccount();
-			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.DisplayName = FirstName + " " + LastName;
 			SampleAccount.provision();
 			SampleAccount.authenticate();
 		}
@@ -194,7 +194,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		
 		if ( SampleAccount == null ) {
 			SampleAccount = new ZimbraAccount();
-			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.DisplayName = FirstName + " " + LastName;
 			SampleAccount.provision();
 			SampleAccount.authenticate();
 		}
@@ -241,7 +241,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		
 		if ( SampleAccount == null ) {
 			SampleAccount = new ZimbraAccount();
-			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.DisplayName = FirstName + " " + LastName;
 			SampleAccount.provision();
 			SampleAccount.authenticate();
 		}
@@ -257,7 +257,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		mailform.zFillField(Field.Body, body);
 
 		// Auto complete a name
-		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, SampleAccount.getPref("displayName"));
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, SampleAccount.DisplayName);
 		AutocompleteEntry found = null;
 		for (AutocompleteEntry entry : entries) {
 			if ( entry.getAddress().contains(SampleAccount.EmailAddress) ) {
@@ -288,7 +288,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		
 		if ( SampleAccount == null ) {
 			SampleAccount = new ZimbraAccount();
-			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.DisplayName = FirstName + " " + LastName;
 			SampleAccount.provision();
 			SampleAccount.authenticate();
 		}
@@ -338,7 +338,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		String firstname = "Ethan" + ZimbraSeleniumProperties.getUniqueString();
 		for (int i = 0; i < count; i++) {
 			ZimbraAccount account = new ZimbraAccount();
-			account.setPref("displayName", firstname + " Johnson" + ZimbraSeleniumProperties.getUniqueString());
+			SampleAccount.DisplayName = firstname + " Johnson" + ZimbraSeleniumProperties.getUniqueString();
 			account.provision();
 			account.authenticate();
 		}
@@ -397,10 +397,20 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 			groups = { "functional" })
 	public void AutoCompleteGAL_10() throws HarnessException {
 		
+		final String givenName = "Thomas" + ZimbraSeleniumProperties.getUniqueString();
+		final String sn = "O'Connor" + ZimbraSeleniumProperties.getUniqueString();
+		final String displayName = givenName + " " + sn;
+		
+		// Create a GAL Entry
 		ZimbraAccount account = new ZimbraAccount();
-		account.setPref("givenName", "Thomas" + ZimbraSeleniumProperties.getUniqueString());
-		account.setPref("sn", "O'Connor" + ZimbraSeleniumProperties.getUniqueString());
-		account.setPref("displayName", account.getPref("givenName") + " " + account.getPref("sn"));
+		Map<String,String> attrs = new HashMap<String, String>() {
+			private static final long serialVersionUID = -939087202049217526L;
+			{
+				put("givenName", givenName);
+				put("sn", sn);
+				put("displayName", displayName);
+			}};
+		account.setAccountPreferences(attrs);
 		account.provision();
 		account.authenticate();
 		
@@ -449,7 +459,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 
 		if ( SampleAccount == null ) {
 			SampleAccount = new ZimbraAccount();
-			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.DisplayName = FirstName + " " + LastName;
 			SampleAccount.provision();
 			SampleAccount.authenticate();
 		}
@@ -498,7 +508,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 
 		if ( SampleAccount == null ) {
 			SampleAccount = new ZimbraAccount();
-			SampleAccount.setPref("displayName", FirstName + " " + LastName);
+			SampleAccount.DisplayName = FirstName + " " + LastName;
 			SampleAccount.provision();
 			SampleAccount.authenticate();
 		}
@@ -544,26 +554,52 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 			groups = { "functional" })
 	public void AutoCompleteGAL_Bug40959() throws HarnessException {
 		
+		final String givenName1 = "Mike";
+		final String sn1 = "Carter" + ZimbraSeleniumProperties.getUniqueString();
+		final String displayName1 = givenName1 + " " + sn1;
+		Map<String,String> attrs1 = new HashMap<String, String>() {
+			private static final long serialVersionUID = -919087202049217526L;
+			{
+				put("givenName", givenName1);
+				put("sn", sn1);
+				put("displayName", displayName1);
+			}};
+
+		final String givenName2 = "Mike";
+		final String sn2 = "Mitchell" + ZimbraSeleniumProperties.getUniqueString();
+		final String displayName2 = givenName1 + " " + sn1;
+		Map<String,String> attrs2 = new HashMap<String, String>() {
+			private static final long serialVersionUID = -939077202049217526L;
+			{
+				put("givenName", givenName2);
+				put("sn", sn2);
+				put("displayName", displayName2);
+			}};
+
+		final String givenName3 = "Mike";
+		final String sn3 = "Murphy" + ZimbraSeleniumProperties.getUniqueString();
+		final String displayName3 = givenName1 + " " + sn1;
+		Map<String,String> attrs3 = new HashMap<String, String>() {
+			private static final long serialVersionUID = -939077202049216526L;
+			{
+				put("givenName", givenName3);
+				put("sn", sn3);
+				put("displayName", displayName3);
+			}};
 
 		// Create 3 Mikes
 		ZimbraAccount account1 = new ZimbraAccount();
-		account1.setPref("givenName", "Mike");
-		account1.setPref("sn", "Carter" + ZimbraSeleniumProperties.getUniqueString());
-		account1.setPref("displayName", account1.getPref("givenName") + " " + account1.getPref("sn"));
+		account1.setAccountPreferences(attrs1);
 		account1.provision();
 		account1.authenticate();
 
 		ZimbraAccount account2 = new ZimbraAccount();
-		account2.setPref("givenName", "Mike");
-		account2.setPref("sn", "Mitchell" + ZimbraSeleniumProperties.getUniqueString());
-		account2.setPref("displayName", account2.getPref("givenName") + " " + account2.getPref("sn"));
+		account2.setAccountPreferences(attrs2);
 		account2.provision();
 		account2.authenticate();
 
 		ZimbraAccount account3 = new ZimbraAccount();
-		account3.setPref("givenName", "Mike");
-		account3.setPref("sn", "Murphy" + ZimbraSeleniumProperties.getUniqueString());
-		account3.setPref("displayName", account3.getPref("givenName") + " " + account3.getPref("sn"));
+		account2.setAccountPreferences(attrs3);
 		account3.provision();
 		account3.authenticate();
 
@@ -596,9 +632,9 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 			}
 		}
 		
-		ZAssert.assertNull(found1, "Verify 'mike m' does not match "+ account1.getPref("displayName"));
-		ZAssert.assertNotNull(found2, "Verify 'mike m' does match "+ account2.getPref("displayName"));
-		ZAssert.assertNotNull(found3, "Verify 'mike m' does match "+ account3.getPref("displayName"));
+		ZAssert.assertNull(found1, "Verify 'mike m' does not match "+ account1.DisplayName);
+		ZAssert.assertNotNull(found2, "Verify 'mike m' does match "+ account2.DisplayName);
+		ZAssert.assertNotNull(found3, "Verify 'mike m' does match "+ account3.DisplayName);
 		
 		// Cancel the compose
 		DialogWarning dialog = (DialogWarning)mailform.zToolbarPressButton(Button.B_CANCEL);

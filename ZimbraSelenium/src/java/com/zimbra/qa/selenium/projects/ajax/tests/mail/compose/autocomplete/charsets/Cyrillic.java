@@ -16,6 +16,8 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose.autocomplete.charsets;
 
+import java.util.*;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
@@ -112,11 +114,20 @@ public class Cyrillic extends PrefGroupMailByMessageTest {
 			groups = { "functional" })
 	public void AutoComplete_02() throws HarnessException {
 		
-		// Create a contact
+		final String givenName = "\u0422\u0435\u0441\u0442\u043e\u0432\u0430\u044f" + ZimbraSeleniumProperties.getUniqueString();
+		final String sn = "Wilson" + ZimbraSeleniumProperties.getUniqueString();
+		final String displayName = givenName + " " + sn;
+		
+		// Create a GAL Entry
 		ZimbraAccount contact = new ZimbraAccount();
-		contact.setPref("givenName", "\u0422\u0435\u0441\u0442\u043e\u0432\u0430\u044f" + ZimbraSeleniumProperties.getUniqueString());
-		contact.setPref("sn", "Wilson" + ZimbraSeleniumProperties.getUniqueString());
-		contact.setPref("displayName", contact.getPref("givenName") + " " + contact.getPref("sn"));
+		Map<String,String> attrs = new HashMap<String, String>() {
+			private static final long serialVersionUID = -939087201049217526L;
+			{
+				put("givenName", givenName);
+				put("sn", sn);
+				put("displayName", displayName);
+			}};
+			contact.setAccountPreferences(attrs);
 		contact.provision();
 		contact.authenticate();
 		
@@ -139,7 +150,7 @@ public class Cyrillic extends PrefGroupMailByMessageTest {
 		//mailform.zFillField(Field.To, contact.getPref("givenName"));
 		//mailform.zAutocompleteFillField(Field.To, ";");
 		//workaround
-		mailform.zAutocompleteFillField(Field.To, contact.getPref("givenName"));
+		mailform.zAutocompleteFillField(Field.To, givenName);
 		
 		// Type ';'
 		if  (ZimbraSeleniumProperties.isWebDriver()) {

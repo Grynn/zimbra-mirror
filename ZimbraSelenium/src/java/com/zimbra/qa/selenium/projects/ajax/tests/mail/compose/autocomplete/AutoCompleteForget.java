@@ -16,7 +16,7 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose.autocomplete;
 
-import java.util.List;
+import java.util.*;
 
 import org.testng.annotations.Test;
 
@@ -207,11 +207,20 @@ public class AutoCompleteForget extends PrefGroupMailByMessageTest {
 			groups = { "functional" })
 	public void AutoCompleteForget_03() throws HarnessException {
 		
+		final String givenName = "Christopher" + ZimbraSeleniumProperties.getUniqueString();
+		final String sn = "White" + ZimbraSeleniumProperties.getUniqueString();
+		final String displayName = givenName + " " + sn;
+		
 		// Create a GAL Entry
 		ZimbraAccount account = new ZimbraAccount();
-		account.setPref("givenName", "Christopher" + ZimbraSeleniumProperties.getUniqueString());
-		account.setPref("sn", "White" + ZimbraSeleniumProperties.getUniqueString());
-		account.setPref("displayName", account.getPref("givenName") + " " + account.getPref("sn"));
+		Map<String,String> attrs = new HashMap<String, String>() {
+			private static final long serialVersionUID = -939087202049217526L;
+			{
+				put("givenName", givenName);
+				put("sn", sn);
+				put("displayName", displayName);
+			}};
+		account.setAccountPreferences(attrs);
 		account.provision();
 		account.authenticate();
 		
@@ -243,7 +252,7 @@ public class AutoCompleteForget extends PrefGroupMailByMessageTest {
 		mailform.zFillField(Field.Body, body);
 		
 		// Auto complete a name
-		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, account.getPref("givenName"));
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, givenName);
 		AutocompleteEntry found = null;
 		for (AutocompleteEntry entry : entries) {
 			if ( entry.getAddress().contains(account.EmailAddress) ) {
@@ -451,10 +460,20 @@ public class AutoCompleteForget extends PrefGroupMailByMessageTest {
 	public void AutoCompleteForget_05() throws HarnessException {
 		
 		// Create a GAL Entry
+		final String givenName1 = "Mark" + ZimbraSeleniumProperties.getUniqueString();
+		final String sn1 = "Martin" + ZimbraSeleniumProperties.getUniqueString();
+		final String displayName1 = givenName1 + " " + sn1;
+		
+		// Create a GAL Entry
 		ZimbraAccount account1 = new ZimbraAccount();
-		account1.setPref("givenName", "Mark" + ZimbraSeleniumProperties.getUniqueString());
-		account1.setPref("sn", "Martin" + ZimbraSeleniumProperties.getUniqueString());
-		account1.setPref("displayName", account1.getPref("givenName") + " " + account1.getPref("sn"));
+		Map<String,String> attrs1 = new HashMap<String, String>() {
+			private static final long serialVersionUID = -939087202048217526L;
+			{
+				put("givenName", givenName1);
+				put("sn", sn1);
+				put("displayName", displayName1);
+			}};
+		account1.setAccountPreferences(attrs1);
 		account1.provision();
 		account1.authenticate();
 		
@@ -470,10 +489,20 @@ public class AutoCompleteForget extends PrefGroupMailByMessageTest {
 			+		"</m>"
 			+	"</SendMsgRequest>");
 
+		final String givenName2 = "Mark" + ZimbraSeleniumProperties.getUniqueString();
+		final String sn2 = "Martin" + ZimbraSeleniumProperties.getUniqueString();
+		final String displayName2 = givenName2 + " " + sn2;
+		
+		// Create a GAL Entry
 		ZimbraAccount account2 = new ZimbraAccount();
-		account2.setPref("givenName", "Mark" + ZimbraSeleniumProperties.getUniqueString());
-		account2.setPref("sn", "Martin" + ZimbraSeleniumProperties.getUniqueString());
-		account2.setPref("displayName", account2.getPref("givenName") + " " + account2.getPref("sn"));
+		Map<String, String> attrs2 = new HashMap<String, String>() {
+			private static final long serialVersionUID = -939087201048217526L;
+			{
+				put("givenName", givenName2);
+				put("sn", sn2);
+				put("displayName", displayName2);
+			}};
+		account2.setAccountPreferences(attrs2);
 		account2.provision();
 		account2.authenticate();
 		

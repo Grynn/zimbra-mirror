@@ -16,7 +16,7 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose.autocomplete.charsets;
 
-import java.util.List;
+import java.util.*;
 
 import org.testng.annotations.Test;
 
@@ -107,11 +107,20 @@ public class Spanish extends PrefGroupMailByMessageTest {
 			groups = { "functional" })
 	public void AutoComplete_02() throws HarnessException {
 		
-		// Create a contact
+		final String givenName = "Ñáéíóúñ" + ZimbraSeleniumProperties.getUniqueString();
+		final String sn = "Wilson" + ZimbraSeleniumProperties.getUniqueString();
+		final String displayName = givenName + " " + sn;
+		
+		// Create a GAL Entry
 		ZimbraAccount contact = new ZimbraAccount();
-		contact.setPref("givenName", "Ñáéíóúñ" + ZimbraSeleniumProperties.getUniqueString());
-		contact.setPref("sn", "Wilson" + ZimbraSeleniumProperties.getUniqueString());
-		contact.setPref("displayName", contact.getPref("givenName") + " " + contact.getPref("sn"));
+		Map<String,String> attrs = new HashMap<String, String>() {
+			private static final long serialVersionUID = -939077202049217526L;
+			{
+				put("givenName", givenName);
+				put("sn", sn);
+				put("displayName", displayName);
+			}};
+		contact.setAccountPreferences(attrs);
 		contact.provision();
 		contact.authenticate();
 		
@@ -130,7 +139,7 @@ public class Spanish extends PrefGroupMailByMessageTest {
 		mailform.zFillField(Field.Body, body);
 
 		// Set the To field
-		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, contact.getPref("givenName"));
+		List<AutocompleteEntry> entries = mailform.zAutocompleteFillField(Field.To, givenName);
 		AutocompleteEntry found = null;
 		for (AutocompleteEntry entry : entries) {
 			if ( entry.getAddress().contains(contact.EmailAddress) ) {
