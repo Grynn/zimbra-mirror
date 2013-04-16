@@ -599,9 +599,18 @@ function () {
 	formPage.addVolumeDlg.popup();		
 }
 
-ZaServerXFormView.SERVICE_TAB_ATTRS = [ZaServer.A_zimbraLdapServiceEnabled, ZaServer.A_zimbraMailboxServiceEnabled,ZaServer.A_zimbraMailProxyServiceEnabled,
-	ZaServer.A_zimbraMtaServiceEnabled, ZaServer.A_zimbraSnmpServiceEnabled, ZaServer.A_zimbraAntiSpamServiceEnabled,
-	ZaServer.A_zimbraAntiVirusServiceEnabled, ZaServer.A_zimbraSpellServiceEnabled, ZaServer.A_zimbraLoggerServiceEnabled];
+ZaServerXFormView.SERVICE_TAB_ATTRS = [
+    ZaServer.A_zimbraLdapServiceEnabled,
+    ZaServer.A_zimbraMailboxServiceEnabled,
+    ZaServer.A_zimbraMailProxyServiceEnabled,
+    ZaServer.A_zimbraMtaServiceEnabled,
+    ZaServer.A_zimbraSnmpServiceEnabled,
+    ZaServer.A_zimbraAntiSpamServiceEnabled,
+    ZaServer.A_zimbraAntiVirusServiceEnabled,
+    ZaServer.A_zimbraOpenDKIMServiceEnabled,
+    ZaServer.A_zimbraSpellServiceEnabled,
+    ZaServer.A_zimbraLoggerServiceEnabled
+];
 ZaServerXFormView.SERVICE_TAB_RIGHTS = [];
 
 ZaServerXFormView.MTA_TAB_ATTRS = [
@@ -850,7 +859,22 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						  	  [ZaItem.hasWritePermission,ZaServer.A_zimbraServiceEnabled]],
 						  	  label: ZaMsg.NAD_Service_VmwareHA,
 					  	      onChange: ZaServerXFormView.onFormFieldChanged
-						  	}
+						  	},
+                              {
+                                  ref: ZaServer.A_zimbraOpenDKIMServiceEnabled,
+                                  type: _CHECKBOX_,
+                                  enableDisableChangeEventSources: [ZaServer.A_zimbraOpenDKIMServiceInstalled],
+                                  enableDisableChecks: [
+                                      [
+                                          XForm.checkInstanceValue, ZaServer.A_zimbraOpenDKIMServiceInstalled, true
+                                      ],
+                                      [
+                                          ZaItem.hasWritePermission, ZaServer.A_zimbraOpenDKIMServiceEnabled
+                                      ]
+                                  ],
+                                  label: ZaMsg.NAD_Service_OpenDKIM,
+                                  onChange: ZaServerXFormView.onFormFieldChanged
+                              }
 						]}
 					]
 				};
