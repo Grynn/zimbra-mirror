@@ -53,9 +53,9 @@ public class GetValidLocaleTag extends ZimbraSimpleTag {
             return;
         }
         ZAuthToken authToken = ZJspSession.getAuthToken((PageContext)ctxt);
+        String soapUri = ZJspSession.getSoapURL((PageContext)ctxt);
         SoapHttpTransport transport = null;
         try {
-            String soapUri = ZJspSession.getSoapURL((PageContext)ctxt);
         	transport = new SoapHttpTransport(soapUri);
      		transport.setAuthToken(authToken);
         	XMLElement req = new XMLElement(AccountConstants.GET_AVAILABLE_LOCALES_REQUEST);

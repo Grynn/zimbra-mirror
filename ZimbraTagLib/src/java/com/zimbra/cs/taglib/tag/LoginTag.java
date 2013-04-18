@@ -18,9 +18,7 @@ import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.HttpUtil;
 import com.zimbra.common.util.ZimbraCookie;
-import com.zimbra.common.util.ngxlookup.NginxAuthServer;
 import com.zimbra.cs.taglib.ZJspSession;
-import com.zimbra.cs.taglib.ngxlookup.NginxRouteLookUpConnector;
 import com.zimbra.client.ZMailbox;
 
 import javax.servlet.http.HttpServletRequest;
@@ -111,15 +109,15 @@ public class LoginTag extends ZimbraSimpleTag {
             options.setClientIp(ZJspSession.getRemoteAddr(pageContext));
 
             options.setNoSession(true);
-
+            
             if (mPrefs != null && mPrefs.length() > 0) {
                 options.setPrefs(Arrays.asList(mPrefs.split(",")));
             }
-
+            
             if (mAttrs != null && mAttrs.length() > 0) {
                 options.setAttrs(Arrays.asList(mAttrs.split(",")));
             }
-
+            
             if (mAuthToken != null) {
                 options.setAuthToken(mAuthToken);
                 options.setAuthAuthToken(true);
@@ -130,24 +128,10 @@ public class LoginTag extends ZimbraSimpleTag {
                 if (mNewPassword != null && mNewPassword.length() > 0)
                     options.setNewPassword(mNewPassword);
             }
+            options.setUri(mUrl == null ? ZJspSession.getSoapURL(pageContext): mUrl);
+			options.setRequestedSkin(mRequestedSkin);
 
-            if (mUrl == null) {
-                if (!(ZJspSession.servicesInstalled.contains("zimbra") && ZJspSession.servicesInstalled.contains("service") &&
-                        ZJspSession.servicesInstalled.contains("zimbraAdmin") && ZJspSession.servicesInstalled.contains("zimlets"))
-                        || ZJspSession.servicesInstalled.contains("zimbra")) {
-                    String protocol = (ZJspSession.isProtocolModeHttps() ? "httpssl" : "http");
-                    NginxAuthServer nginxLookUpServer = NginxRouteLookUpConnector.getClient().getRouteforAccount(mUsername, "username",
-                            protocol, request.getHeader("X-Forwarded-For"), request.getHeader("Host"), request.getHeader("Virtual-Host"));
-                    // TO DO nginxLookUpServer == null
-                    mUrl = protocol + "://" + nginxLookUpServer.getNginxAuthServer() + "/service/soap";
-                } else {
-                    mUrl = ZJspSession.getSoapURL(pageContext);
-                }
-            }
-            options.setUri(mUrl);
-            options.setRequestedSkin(mRequestedSkin);
-
-            ZMailbox mbox = ZMailbox.getMailbox(options);
+			ZMailbox mbox = ZMailbox.getMailbox(options);
             HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
 
             String refer = mbox.getAuthResult().getRefer();

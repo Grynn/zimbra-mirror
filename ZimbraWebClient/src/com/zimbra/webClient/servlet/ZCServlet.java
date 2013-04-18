@@ -15,30 +15,15 @@
 
 package com.zimbra.webClient.servlet;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.naming.*;
 
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.taglib.memcached.MemcachedConnector;
-import com.zimbra.cs.taglib.ngxlookup.NginxRouteLookUpConnector;
-import com.zimbra.cs.util.Zimbra;
-
-public class ZCServlet extends HttpServlet implements Filter
+public class ZCServlet extends HttpServlet
 {
+    
     private static final String PARAM_AUTH_TOKEN = "authToken";
     private static final String PARAM_QUERY_STRING_TO_CARRY = "qs";
     private static final String PARAM_AUTH_TOKEN_LIFETIME = "atl";
@@ -47,13 +32,13 @@ public class ZCServlet extends HttpServlet implements Filter
     private static String httpsPort;
     private static String httpPort;
     private static String protocolMode;
-    private static List<String> servicesInstalled;
     private static final String DEFAULT_HTTPS_PORT = "443";
     private static final String DEFAULT_HTTP_PORT = "80";
     private static final String PROTO_MIXED = "mixed";
     private static final String PROTO_HTTP = "http";
     private static final String PROTO_HTTPS = "https";
-
+    
+    
     static 
     {
         try {
@@ -72,7 +57,7 @@ public class ZCServlet extends HttpServlet implements Filter
             } else {
                 httpPort = ":" + httpPort;    
             }
-            servicesInstalled = Arrays.asList(((String) envCtx.lookup("zimbraServicesInstalled")).split(","));
+            
         } catch (NamingException ne) {
             protocolMode = PROTO_HTTP;
             httpsPort = "";
@@ -217,37 +202,6 @@ public class ZCServlet extends HttpServlet implements Filter
     {
         return getReqParameter(req, paramName, null);
     }
-
-    public void destroy() {
-        if (!(servicesInstalled.contains("zimbra") && servicesInstalled.contains("service") &&
-                servicesInstalled.contains("zimbraAdmin") && servicesInstalled.contains("zimlets"))
-                || servicesInstalled.contains("zimbra")) {
-            try {
-                MemcachedConnector.shutdown();
-                NginxRouteLookUpConnector.shutdown();
-            } catch (ServiceException e) {
-                ZimbraLog.soap.error("ServiceException in MemcachedConnector/NginxRouteLookUpConnector while disconnecting", e);
-            }
-        }
-      }
-
-	@Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain) throws IOException, ServletException {
-        chain.doFilter(request, response);
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        if (!(servicesInstalled.contains("zimbra") && servicesInstalled.contains("service") &&
-                servicesInstalled.contains("zimbraAdmin") && servicesInstalled.contains("zimlets"))
-                || servicesInstalled.contains("zimbra")) {
-            try {
-                MemcachedConnector.startup();
-                NginxRouteLookUpConnector.startup();
-            } catch (ServiceException e) {
-                Zimbra.halt("Exception during MemCached Connector startup, aborting WebClient server, please check your config", e);
-            }
-        }
-    }
+    
+	
 }
