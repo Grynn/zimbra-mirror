@@ -29,7 +29,7 @@ if ($> ne $uid) {
   &usage
 }
 
-GetOptions("help" => \$help, 
+my $opts_good = GetOptions("help" => \$help, 
     "force" => \$force,
     "verbose+" => \$verbose);
 
