@@ -42,6 +42,7 @@ http
     access_log ${web.logfile} upstream;
 
     # Set proxy timeout
+    proxy_connect_timeout ${web.upstream.connect.timeout};
     proxy_read_timeout ${web.upstream.read.timeout};
     proxy_send_timeout ${web.upstream.send.timeout};
 
