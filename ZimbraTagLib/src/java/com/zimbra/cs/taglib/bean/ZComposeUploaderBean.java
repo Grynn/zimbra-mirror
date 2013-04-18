@@ -657,7 +657,7 @@ public class ZComposeUploaderBean {
                 maxSize = Provisioning.getInstance().getLocalServer().getLongAttr(
                                 Provisioning.A_zimbraFileUploadMaxSize, DEFAULT_MAX_SIZE);
             } else {
-                maxSize = Provisioning.getInstance().getLocalServer().getLongAttr(
+                maxSize = Provisioning.getInstance().getConfig().getLongAttr(
                                 Provisioning.A_zimbraMtaMaxMessageSize, DEFAULT_MAX_SIZE);
                 if (maxSize == 0) {
                     /* zimbraMtaMaxMessageSize=0 means "no limit".
