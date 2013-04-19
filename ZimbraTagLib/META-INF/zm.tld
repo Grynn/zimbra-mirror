@@ -7509,6 +7509,12 @@
     </function>
 
     <function>
+            <name>getFolderRgbColorMsg</name>
+            <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+            <function-signature>java.lang.String getFolderRgbColorMsg(java.lang.String,java.lang.String)</function-signature>
+    </function>
+
+    <function>
         <name>stripHtmlComments</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String stripHtmlComments(java.lang.String)</function-signature>

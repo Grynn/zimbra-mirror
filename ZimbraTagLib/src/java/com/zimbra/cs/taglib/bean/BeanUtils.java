@@ -1229,6 +1229,10 @@ public class BeanUtils {
         return ZFolderBean.getRgbColor(Color.fromString(color), View.fromString(view));
     }
 
+    public static String getFolderRgbColorMsg(String color, String view) throws ServiceException {
+            return ZFolderBean.getRgbColorMsg(Color.fromString(color), View.fromString(view));
+    }
+
     public static boolean actionSet(Map param, String action) {
         return param.containsKey(action) || param.containsKey(action+".x");
     }

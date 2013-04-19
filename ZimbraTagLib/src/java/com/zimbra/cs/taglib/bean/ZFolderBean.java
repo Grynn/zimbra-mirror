@@ -378,6 +378,10 @@ public class  ZFolderBean {
         return ZFolder.RGB_COLORS_MSG[getRgbColorIndex()];
     }
 
+    public static String getRgbColorMsg(Color color, View view) {
+            return ZFolder.RGB_COLORS_MSG[getRgbColorIndex(color, view)];
+        }
+
     public static String getRgbColor(Color color, View view) {
         int colorIndex = (int) color.getValue();
         if (color == Color.DEFAULTCOLOR) {
