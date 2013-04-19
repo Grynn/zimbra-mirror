@@ -50,7 +50,9 @@ if ($usage) {
 }
 
 if ($user eq "root") {
-  $password = getLocalConfig("mysql_root_password");
+  if (!($password)) {
+    $password = getLocalConfig("mysql_root_password");
+  }
 }
 
 # Descriptions of status variables for verbose mode
