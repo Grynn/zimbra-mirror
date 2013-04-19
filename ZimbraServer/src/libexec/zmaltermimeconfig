@@ -89,7 +89,7 @@ sub usage {
   print " -f|--force: Force the rename, bypassing safety checks.\n";
   print " -v|--verbose: Set the verbosity level.\n";
   print "\n";
-  exit 0; 
+  exit 1; 
 }
 
 sub writeFile($$) {
