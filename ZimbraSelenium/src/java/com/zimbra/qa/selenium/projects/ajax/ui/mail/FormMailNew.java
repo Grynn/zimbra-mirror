@@ -65,7 +65,7 @@ public class FormMailNew extends AbsForm {
 		public static final String zOptionsButton	= "css=div[id^='ztb__COMPOSE'] td[id$='__COMPOSE_OPTIONS_title']";
 		public static final String zIncludeOriginalAsAttachmentMenu	= "css=div[id$='_CAL_REPLY']:contains('Include Original As Attachment')";		
 
-		public static final String zToField				= "css=div>input[id^=zv__COMPOSE][id$=_to_control]";
+		public static final String zToField				= "css=div>input[id^='zv__COMPOSE'][id$='_to_control']";
 		public static final String zCcField				= "css=[id^=zv__COMPOSE][id$=_cc_control]";
 		public static final String zBccField			= "css=[id^=zv__COMPOSE][id$=_bcc_control]";
 		public static final String zSubjectField		= "css=div[id^=zv__COMPOSE] input[id$=_subject_control]";
@@ -690,23 +690,22 @@ public class FormMailNew extends AbsForm {
 
 					try {
 
-						this.sSelectFrame("index=0"); // iframe index is 0 based
-
-						locator = "css=body[id='tinymce']";
+						locator = "css=iframe[id$='_content_ifr']";
 
 						if (!this.sIsElementPresent(locator))
 							throw new HarnessException("Unable to locate compose body");
 
 						this.sFocus(locator);
-						this.zClick(locator);
-						
+						this.zClickAt(locator,"");
+
 						/*
 						 * Oct 25, 2011: The new TinyMCE editor broke sType().  Use zKeyboard instead,
 						 * however, it is preferred to use sType() if possible, but I can't find a
 						 * solution right now. 
 						 */
 						// this.sType(locator, value);
-						this.zKeyboard.zTypeCharacters(value);
+						//this.zKeyboard.zTypeCharacters(value);
+						zTypeFormattedText(locator, value);
 
 					} finally {
 						// Make sure to go back to the original iframe
@@ -830,24 +829,23 @@ public class FormMailNew extends AbsForm {
 		}
 		
 		if ( mail.dBodyText != null ) {
-		    if(ZimbraSeleniumProperties.isWebDriver()){
-			String textBody = "css=textarea[id*=content]";
-			sType(textBody, mail.dBodyText);
-			sFireEvent(textBody, "keyup");
-		    }else{
-			zFillField(Field.Body, mail.dBodyText);
-		    }
+			if(ZimbraSeleniumProperties.isWebDriver()){
+				String textBody = "css=textarea[id*=content]";
+				sType(textBody, mail.dBodyText);
+				sFireEvent(textBody, "keyup");
+			}else{
+				zFillField(Field.Body, mail.dBodyText);
+			}
 		}
 		if ( mail.dBodyHtml != null ) {
-		    if(ZimbraSeleniumProperties.isWebDriver()){
-			//String bodyLocator = "css=body[id=tinymce]";
-			String bodyLocator = "css=iframe[id*=ifr]";
-			zWaitForElementPresent(bodyLocator, "10000");
-			sClickAt(bodyLocator,"");
-			zTypeFormattedText(bodyLocator, mail.dBodyHtml);
-		    }else{
-			zFillField(Field.Body, mail.dBodyHtml);
-		    }
+			if(ZimbraSeleniumProperties.isWebDriver()){
+				String bodyLocator = "css=iframe[id*='ifr']";
+				zWaitForElementPresent(bodyLocator, "10000");
+				sClickAt(bodyLocator,"");
+				zTypeFormattedText(bodyLocator, mail.dBodyHtml);
+			}else{
+				zFillField(Field.Body, mail.dBodyHtml);
+			}
 		}
 		
 		

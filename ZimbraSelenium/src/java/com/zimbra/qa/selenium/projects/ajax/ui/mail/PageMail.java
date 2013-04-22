@@ -1482,7 +1482,7 @@ public class PageMail extends AbsTab {
 			//pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
 			pulldownLocator="css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_dropdown]";
 			optionLocator="css=div[id='ADD_SIGNATURE'] tr[id='POPUP_ADD_SIGNATURE']> td[id='ADD_SIGNATURE_dropdown']>div[class='ImgCascade']";
-			dynamicLocator ="css=td[id*='_title']td:contains('"+ name + "')";
+			dynamicLocator ="css=td[id$='_title']:contains('"+ name + "')";
 			page = null;
 
 		}else if ((pulldown == Button.B_OPTIONS)&& (option == Button.O_ADD_FWD_SIGNATURE)) {
@@ -1496,7 +1496,7 @@ public class PageMail extends AbsTab {
 			//pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
 			pulldownLocator="css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_dropdown]";
 			optionLocator="css=div[id$='_FORWARD_ATT'] div[id^='ADD_SIGNATURE'] tr[id^='POPUP_ADD_SIGNATURE']>td[id$='_dropdown']>div[class='ImgCascade']";
-			dynamicLocator ="css=td[id*='_title']td:contains('"+ name + "')";
+			dynamicLocator ="css=td[id$='_title']:contains('"+ name + "')";
 			page = null;
 
 		}else if ((pulldown == Button.B_OPTIONS)&& (option == Button.O_ADD_Reply_SIGNATURE)||(option==Button.O_ADD_ReplyAll_SIGNATURE)) {
@@ -1507,7 +1507,7 @@ public class PageMail extends AbsTab {
 			String name = (String)dynamic;
 			pulldownLocator="css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_dropdown]";
 			optionLocator="css=div[id$='_REPLY'] div[id^='ADD_SIGNATURE'] tr[id^='POPUP_ADD_SIGNATURE']>td[id$='_dropdown']>div[class='ImgCascade']";
-			dynamicLocator ="css=td[id*='_title']td:contains('"+ name + "')";
+			dynamicLocator ="css=td[id$='_title']:contains('"+ name + "')";
 			page = null;
 
 		} else if ( pulldown == Button.B_ACTIONS ) {
@@ -1590,8 +1590,8 @@ public class PageMail extends AbsTab {
 							+ " optionLocator " + optionLocator
 							+ " not present!");
 				}
-
-				this.zClickAt(optionLocator,"");
+				this.sMouseOver(optionLocator);
+				//this.zClickAt(optionLocator,"");
 
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
@@ -1603,8 +1603,9 @@ public class PageMail extends AbsTab {
 				if (!this.sIsElementPresent(dynamicLocator)) {
 					throw new HarnessException(dynamicLocator+ " not present!");
 				}
-
+			//	this.sMouseOver(dynamicLocator);
 				this.zClickAt(dynamicLocator,"");
+				SleepUtil.sleepMedium();
 
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
