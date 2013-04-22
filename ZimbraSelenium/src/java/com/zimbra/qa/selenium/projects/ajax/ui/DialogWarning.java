@@ -52,6 +52,8 @@ public class DialogWarning extends AbsDialog {
 		public static final DialogWarningID PermanentlyRemoveTheAttachment = new DialogWarningID("YesNoMsgDialog");
 		public static final DialogWarningID DeleteItemWithinRetentionPeriod = new DialogWarningID("OkCancel");
 		public static final DialogWarningID DeleteAppointment = new DialogWarningID("YesNo");
+		
+		public static final DialogWarningID ComposeOptionsChangeWarning = new DialogWarningID("OkCancel");
 
 		// See bug: http://bugzilla.zimbra.com/show_bug.cgi?id=63353
 		// In main, the dialog id is <div id='OkCancel' .../>
