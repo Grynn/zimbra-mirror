@@ -260,13 +260,11 @@ sub updateSyslog {
       if ( $rsyslog == 0 ) {
         s/^\*\.info/\*\.info;local0.none;local1.none;auth.none/;
       }
-      if ( $rsyslog == 1 && ($platform =~ /RHEL6/ || $platform eq "F13_64" || $platform =~ /CentOS6/ || $platform =~ /F11/)) {
-        s/^\*\.info/\*\.info;local0.none;local1.none;auth.none/;
-      }
-      if ($rsyslog == 1 || -e "/etc/init.d/sysklogd") {
+      if ($rsyslog == 1 ) {
         s/;mail.none//g;
-      }
-      if ( $rsyslog == 1 || -e "/etc/init.d/sysklogd" ) {
+        if ($platform =~ /RHEL6/ || $platform =~ /CentOS6/ ) {
+          s/^\*\.info/\*\.info;local0.none;local1.none;mail.none;auth.none/;
+        }
         s/^\*\.\*;auth,authpriv.none/\*\.\*;auth,authpriv.none;local0.none;local1.none;mail.none/;
         s/^\*\.=debug;\\/\*.=debug;\\\n\tlocal0,local1.none;\\/;
         s/^\*\.=info;\*\.=notice;\*\.=warn;\\/\*.=info;\*.=notice;\*.=warn;\\\n\tlocal0,local1.none;\\/;
@@ -448,22 +446,12 @@ if ( !$edited ) {
   exit 1;
 }
 
-if ( $platform eq "openSUSE_10.2" ) {
-  `/sbin/rcsyslog restart > /dev/null 2>&1`;
-  exit 0;
-}
-
-if ( $platform eq "SuSE10" || $platform eq "SLES10_64" || $platform eq "SuSEES10" ) {
-  `/sbin/SuSEconfig --module syslog-ng`;
-  exit 0;
-}
-
 if ( $platform eq "SLES11_64" ) {
   `/etc/init.d/syslog restart > /dev/null 2>&1`;
   exit 0;
 }
 
-if ( ($platform =~ /UBUNTU10/ || $platform =~ /UBUNTU12/) && -f "/etc/rsyslog.conf" ) {
+if ($platform =~ /UBUNTU/ && -f "/etc/rsyslog.conf" ) {
   if ( -e "/usr/sbin/service" ) {
     `/usr/sbin/service rsyslog restart`;
     exit 0;
@@ -472,18 +460,7 @@ if ( ($platform =~ /UBUNTU10/ || $platform =~ /UBUNTU12/) && -f "/etc/rsyslog.co
     exit 1;
   }
 }
-if ( $platform =~ /UBUNTU/ || $platform =~ /DEBIAN4/ ) {
-  if ( -e "/etc/init.d/sysklogd" ) {
-    `/etc/init.d/sysklogd restart > /dev/null 2>&1`;
-    exit 0;
-  } elsif ( $rsyslog == 1 ) {
-    `/etc/init.d/rsyslog restart > /dev/null 2>&1`;
-    exit 0;
-  } else {
-    print "Unable to restart syslog.  Please do it manually.\n";
-    exit 1;
-  }
-} elsif ( $platform =~ /DEBIAN5/ || $platform =~ /DEBIAN6/ || $platform =~ /F10/ || $platform =~ /F11/ || $platform =~ /RHEL6/ || $platform =~ /CentOS6/ ) {
+if ( $platform =~ /RHEL6/ || $platform =~ /CentOS6/ ) {
   if ( -e "/etc/init.d/rsyslog" ) {
     `/etc/init.d/rsyslog restart> /dev/null 2>&1`;
     exit 0;
