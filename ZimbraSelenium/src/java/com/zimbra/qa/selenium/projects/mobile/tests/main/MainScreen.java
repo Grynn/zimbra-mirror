@@ -59,7 +59,7 @@ public class MainScreen extends MobileCommonTest {
 	public void MainScreen_02() throws HarnessException {
 				
 		// The copyright doesn't seem to be translated
-		//use "\u00a9" (char)169 for Copyright ©
+		//use "\u00a9" (char)169 for Copyright
 		
 		String copyright = "Copyright " + "\u00a9" + " 2005-2013 VMware, Inc. VMware and Zimbra are registered trademarks or trademarks of VMware, Inc.";
 		

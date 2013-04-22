@@ -764,7 +764,7 @@ public abstract class AbsSeleniumObject {
 
 	/**
      * Enter HTML formatted text into a iframe specified by locator.
-     * @param locator selenium locator, e.g. css=iframe[id^=’iframe_DWT’]
+     * @param locator selenium locator, e.g. css=iframe[id^=iframe_DWT]
      * @param html HTML string, e.g. <strong><i>foo</i></strong>
      * @throws HarnessException
      */

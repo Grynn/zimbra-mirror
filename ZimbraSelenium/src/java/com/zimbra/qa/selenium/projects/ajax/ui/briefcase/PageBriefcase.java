@@ -535,7 +535,7 @@ public class PageBriefcase extends AbsTab {
 		if (pulldownLocator != null) {
 
 			// Make sure the locator exists
-			if (!this.sIsElementPresent(pulldownLocator)) {
+			if (!this.zWaitForElementPresent(pulldownLocator,"3000")) {
 				throw new HarnessException("Button " + pulldown + " option "
 						+ option + " pulldownLocator " + pulldownLocator
 						+ " not present!");

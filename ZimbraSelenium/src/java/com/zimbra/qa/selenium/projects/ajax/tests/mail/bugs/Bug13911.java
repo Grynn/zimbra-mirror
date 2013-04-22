@@ -49,8 +49,8 @@ public class Bug13911 extends PrefGroupMailByMessageTest {
 
 		
 		String subject = "subject13010064065623";
-		String bodyBeforeImage = "K\u00e6re alle"; // Kære alle
-		String bodyAfterImage = "Problemet best\u00E5r"; // Problemet består
+		String bodyBeforeImage = "K\u00e6re alle"; 
+		String bodyAfterImage = "Problemet best\u00E5r";
 
 		String MimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/private/mime/Bugs/Bug13911";
 		LmtpInject.injectFile(ZimbraAccount.AccountZWC().EmailAddress, new File(MimeFolder));
