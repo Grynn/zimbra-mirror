@@ -34,7 +34,7 @@ $default_ldap = {
 	bind_password => '@@ldap_amavis_password@@',
 };
 
-$max_servers = 10;            # num of pre-forked children (2..30 is common), -m
+$max_servers = @@amavis_max_servers@@;            # num of pre-forked children (2..30 is common), -m
 $daemon_user  = 'zimbra';     # (no default;  customary: vscan or amavis), -u
 $daemon_group = 'zimbra';     # (no default;  customary: vscan or amavis), -g
 
