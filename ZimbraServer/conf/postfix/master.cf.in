@@ -16,10 +16,9 @@ smtp      inet  n       -       n       -       -       smtpd
 	-o smtpd_sasl_auth_enable=yes
 	-o smtpd_client_restrictions=
 	-o smtpd_data_restrictions=
-	-o smtpd_end_of_data_restrictions=
 	-o smtpd_helo_restrictions=
 	-o smtpd_recipient_restrictions=
-	-o smtpd_relay_restrictions=permit_sasl_authenticated,reject
+	-o smtpd_relay_restrictions=%%contains VAR:zimbraServiceEnabled cbpolicyd^ check_policy_service inet:localhost:@@cbpolicyd_bind_port@@,%%permit_sasl_authenticated,reject
 	-o syslog_name=postfix/smtps
 	-o milter_macro_daemon_name=ORIGINATING
 %%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_filter=[%%zimbraLocalBindAddress%%]:10027
@@ -31,10 +30,9 @@ submission inet n      -       n       -       -       smtpd
 	-o smtpd_tls_security_level=%%zimbraMtaTlsSecurityLevel%%
 	-o smtpd_client_restrictions=permit_sasl_authenticated,reject
 	-o smtpd_data_restrictions=
-	-o smtpd_end_of_data_restrictions=
 	-o smtpd_helo_restrictions=
 	-o smtpd_recipient_restrictions=
-	-o smtpd_relay_restrictions=permit_sasl_authenticated,reject
+	-o smtpd_relay_restrictions=%%contains VAR:zimbraServiceEnabled cbpolicyd^ check_policy_service inet:localhost:@@cbpolicyd_bind_port@@,%%permit_sasl_authenticated,reject
 	-o syslog_name=postfix/submission
 	-o milter_macro_daemon_name=ORIGINATING
 %%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_filter=[%%zimbraLocalBindAddress%%]:10027

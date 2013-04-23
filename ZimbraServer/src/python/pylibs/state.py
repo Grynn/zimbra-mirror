@@ -885,7 +885,7 @@ class State:
 				val = ""
 
 		elif re.match(r"contains", sr):
-			f = sr.split(',',2)
+			f = sr.split('^',2)
 			st = f[0]
 			if len(f) > 2:
 				replace = f[1].strip()
