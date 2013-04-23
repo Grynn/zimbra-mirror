@@ -132,8 +132,8 @@ if ($size > 0) {
 
 $size = $mesg->count;
 
-my $mailboxd_java_options = getLocalConfig("mailboxd_java_options");
-my $zimbra_zmjava_options = getLocalConfig("zimbra_zmjava_options");
+my $mailboxd_java_options = getLocalConfigRaw("mailboxd_java_options");
+my $zimbra_zmjava_options = getLocalConfigRaw("zimbra_zmjava_options");
 
 my $antispam_mysql_host = getLocalConfig("antispam_mysql_host");
 my $mysql_bind_address = getLocalConfig("mysql_bind_address");
@@ -349,13 +349,26 @@ USAGE
         exit (1);
 
 }
-sub getLocalConfig {
+
+sub getLocalConfigRaw {
   my $key = shift;
 
   return $main::loaded{lc}{$key}
     if (exists $main::loaded{lc}{$key});
 
   my $val = `/opt/zimbra/bin/zmlocalconfig -s -m nokey ${key} 2> /dev/null`;
+  chomp $val;
+  $main::loaded{lc}{$key} = $val;
+  return $val;
+}
+
+sub getLocalConfig{
+  my $key = shift;
+
+  return $main::loaded{lc}{$key}
+    if (exists $main::loaded{lc}{$key});
+
+  my $val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null`;
   chomp $val;
   $main::loaded{lc}{$key} = $val;
   return $val;
