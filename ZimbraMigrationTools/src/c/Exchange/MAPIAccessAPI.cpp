@@ -1091,6 +1091,14 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
 		dloge(lpwstrStatus);
 		Zimbra::Util::CopyString(lpwstrRetVal,cex.ShortDescription().c_str());
     }
+	catch (MAPIAppointmentException &aex)
+    {
+        lpwstrStatus = FormatExceptionInfo(aex.ErrCode(), (LPWSTR)aex.Description().c_str(),
+            (LPSTR)aex.SrcFile().c_str(), aex.SrcLine());
+		dloge("MAPIAccessAPI -- MAPIAppointmentException");
+		dloge(lpwstrStatus);
+		Zimbra::Util::CopyString(lpwstrRetVal,aex.ShortDescription().c_str());
+    }
 ZM_EXIT: 
 	if(lpwstrStatus)
 		Zimbra::Util::FreeString(lpwstrStatus);
