@@ -9,7 +9,7 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 
 ZIMBRA_HOME ?= /opt/zimbra
 
-PATCH	:=
+PATCH	:= patch -g0 -p1 < ../patches/tw.patch;
 
 ifdef BETA
 	include $(POSTFIX_ROOT)/../beta_versions.def

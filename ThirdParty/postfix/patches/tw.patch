@@ -1,0 +1,23 @@
+--- postfix-2.10.0/src/trivial-rewrite/resolve.c.orig	2013-04-24 16:13:14.230682988 -0700
++++ postfix-2.10.0/src/trivial-rewrite/resolve.c	2013-04-24 16:13:18.866898321 -0700
+@@ -324,9 +324,18 @@
+ 	    tok822_free(tree->head);
+ 	    tree->head = 0;
+ 	}
+-	/* XXX must be localpart only, not user@domain form. */
+-	if (tree->head == 0)
++	/* XXX Re-resolve the surrogate, in case not in user@domain form. */
++	if (tree->head == 0) {
+ 	    tree->head = tok822_scan(var_empty_addr, &tree->tail);
++	    continue;
++	}
++
++	/* XXX Re-resolve with myhostname for backwards compatibility. */
++	if (domain == 0 && saved_domain == 0) {
++	    tok822_sub_append(tree, tok822_alloc('@', (char *) 0));
++	    tok822_sub_append(tree, tok822_scan(var_myhostname, (TOK822 **) 0));
++	    continue;
++	}
+ 
+ 	/*
+ 	 * We're done. There are no domains left to strip off the address,
