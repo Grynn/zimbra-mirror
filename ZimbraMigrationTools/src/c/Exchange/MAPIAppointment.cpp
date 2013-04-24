@@ -220,7 +220,14 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
  	Zimbra::Mapi::Appt appt(m_pMessage, m_mapiStore->GetInternalMAPIStore());
 
     // save off the default timezone info for this appointment
-    hr = appt.GetTimezone(_olkTz, &_pTzString);
+	try
+	{
+		hr = appt.GetTimezone(_olkTz, &_pTzString);
+	}
+	catch(...)
+	{
+		hr=E_FAIL;
+	}
 	if (SUCCEEDED(hr))
     {
 		// get the timezone info for this appt
