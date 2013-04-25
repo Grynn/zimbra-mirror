@@ -1,0 +1,21 @@
+--- postfix-2.10.0/conf/postfix-script.orig	2013-04-25 15:06:48.500668441 -0700
++++ postfix-2.10.0/conf/postfix-script	2013-04-25 15:31:00.983475878 -0700
+@@ -254,11 +254,13 @@
+ 	ls -lLd $queue_directory | egrep '^.....(w|...w)' >/dev/null && \
+ 		$WARN group or other writable: $queue_directory
+ 
+-	todo="$config_directory/*"
+-	test -n "$check_shared_files" && todo="$daemon_directory/* $todo"
+-
+-	find $todo ! -user root \
+-		-exec $WARN not owned by root: {} \;
++	todo=""
++	test -n "$check_shared_files" && todo="$daemon_directory/*"
++	if [ $todo != "" ]
++	then
++		find $todo ! -user root \
++			-exec $WARN not owned by root: {} \;
++	fi
+ 
+ 	todo="$config_directory/."
+ 	test -n "$check_shared_files" && todo="$daemon_directory/. $todo"
