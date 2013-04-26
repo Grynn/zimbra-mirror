@@ -118,7 +118,7 @@ case "$1" in
       fi
       status=1
       for ((i=0; i < 12; i++)); do
-        $NC -z ${zimbra_server_hostname} ${zimbra_mail_service_port} >/dev/null 2>&1
+        $NC -z localhost ${zimbra_mail_service_port} >/dev/null 2>&1
         if [ $? = 0 ]; then
           status=0
           break
