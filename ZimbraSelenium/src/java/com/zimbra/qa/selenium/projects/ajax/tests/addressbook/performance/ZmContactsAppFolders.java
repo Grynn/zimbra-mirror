@@ -56,7 +56,8 @@ public class ZmContactsAppFolders extends AjaxCommonTest {
 
 		// Currently in the mail app
 		// Navigate to the addressbook
-		app.zPageAddressbook.zNavigateTo();
+		//app.zPageAddressbook.zNavigateTo();
+		app.zPageAddressbook.zClickAt("css=td[id='zb__App__Contacts_title']","");
 
 		PerfMetrics.waitTimestamp(token);
 
@@ -87,7 +88,8 @@ public class ZmContactsAppFolders extends AjaxCommonTest {
 
 		// Currently in the mail app
 		// Navigate to the addressbook
-		app.zPageAddressbook.zNavigateTo();
+		//app.zPageAddressbook.zNavigateTo();
+		app.zPageAddressbook.zClickAt("css=td[id='zb__App__Contacts_title']","");
 
 		PerfMetrics.waitTimestamp(token);
 

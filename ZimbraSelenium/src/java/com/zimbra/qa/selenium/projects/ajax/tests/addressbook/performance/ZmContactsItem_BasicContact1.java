@@ -57,8 +57,8 @@ public class ZmContactsItem_BasicContact1 extends AjaxCommonTest{
             "Load the basic contact view");
 
       // Select the contact
-      app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs);;
-
+   //  app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs);;       
+      app.zPageAddressbook.zClickAt("css=div[id='zv__CNS-main'] li[id^='zli__CNS-main'] div[id$='__fileas']:contains('"+contactItem.fileAs+"')","");
       PerfMetrics.waitTimestamp(token);
 
    }

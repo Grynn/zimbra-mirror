@@ -52,16 +52,17 @@ public class ZmContactsApp_InList_BasicContact1 extends AjaxCommonTest {
    @Test(description = "Measure the time to load address book page with 1 contact item",
          groups = {"performance"}, dataProvider = "DataProvider_LoadingApp_1Contact")
    public void ZmContactsApp_01(String logMessage) throws HarnessException {
-      ContactItem.createContactItem(app.zGetActiveAccount());
+	   ContactItem.createContactItem(app.zGetActiveAccount());
 
-      PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmContactsApp,
-            logMessage);
-      app.zPageAddressbook.zNavigateTo();
+	   PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmContactsApp,
+			   logMessage);
+	   //  app.zPageAddressbook.zNavigateTo();
+	   app.zPageAddressbook.zClickAt("css=td[id='zb__App__Contacts_title']","");
 
-      PerfMetrics.waitTimestamp(token);
+	   PerfMetrics.waitTimestamp(token);
 
-      // Wait for the app to load
-      app.zPageAddressbook.zWaitForActive();
+	   // Wait for the app to load
+	   app.zPageAddressbook.zWaitForActive();
    }
 
    @Test(description = "Measure the time to load address book page with 100 contact items",
@@ -80,7 +81,8 @@ public class ZmContactsApp_InList_BasicContact1 extends AjaxCommonTest {
 
       PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmContactsApp,
             "Load the Address Book app, 100 contacts in list");
-      app.zPageAddressbook.zNavigateTo();
+    //  app.zPageAddressbook.zNavigateTo();
+      app.zPageAddressbook.zClickAt("css=td[id='zb__App__Contacts_title']","");
 
       PerfMetrics.waitTimestamp(token);
 
