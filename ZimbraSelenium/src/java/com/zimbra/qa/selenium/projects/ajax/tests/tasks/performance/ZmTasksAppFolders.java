@@ -56,7 +56,8 @@ public class ZmTasksAppFolders extends AjaxCommonTest {
 
 		// Currently in the mail app
 		// Navigate to the addressbook
-		app.zPageTasks.zNavigateTo();
+		//app.zPageTasks.zNavigateTo();
+		 app.zPageAddressbook.zClickAt("css=td[id='zb__App__Tasks_title']","");
 
 		PerfMetrics.waitTimestamp(token);
 
@@ -75,8 +76,8 @@ public class ZmTasksAppFolders extends AjaxCommonTest {
 		for (int i = 0; i < 100; i++) {
 			app.zGetActiveAccount().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
-						"<folder name='task"+ ZimbraSeleniumProperties.getUniqueString() + "' view='task' l='"+ root.getId() +"'/>" +
-					"</CreateFolderRequest>");
+					"<folder name='task"+ ZimbraSeleniumProperties.getUniqueString() + "' view='task' l='"+ root.getId() +"'/>" +
+			"</CreateFolderRequest>");
 		}
 
 
@@ -87,13 +88,13 @@ public class ZmTasksAppFolders extends AjaxCommonTest {
 
 		// Currently in the mail app
 		// Navigate to the addressbook
-		app.zPageTasks.zNavigateTo();
+		//app.zPageTasks.zNavigateTo();
+		app.zPageAddressbook.zClickAt("css=td[id='zb__App__Tasks_title']","");
 
 		PerfMetrics.waitTimestamp(token);
 
 		// Wait for the app to load
 		app.zPageTasks.zWaitForActive();
-
 
 	}
 
