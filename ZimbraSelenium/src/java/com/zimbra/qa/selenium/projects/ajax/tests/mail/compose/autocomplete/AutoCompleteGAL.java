@@ -338,7 +338,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		String firstname = "Ethan" + ZimbraSeleniumProperties.getUniqueString();
 		for (int i = 0; i < count; i++) {
 			ZimbraAccount account = new ZimbraAccount();
-			SampleAccount.DisplayName = firstname + " Johnson" + ZimbraSeleniumProperties.getUniqueString();
+			account.DisplayName = firstname + " Johnson" + ZimbraSeleniumProperties.getUniqueString();
 			account.provision();
 			account.authenticate();
 		}
@@ -567,7 +567,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 
 		final String givenName2 = "Mike";
 		final String sn2 = "Mitchell" + ZimbraSeleniumProperties.getUniqueString();
-		final String displayName2 = givenName1 + " " + sn1;
+		final String displayName2 = givenName2 + " " + sn2;
 		Map<String,String> attrs2 = new HashMap<String, String>() {
 			private static final long serialVersionUID = -939077202049217526L;
 			{
@@ -578,7 +578,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 
 		final String givenName3 = "Mike";
 		final String sn3 = "Murphy" + ZimbraSeleniumProperties.getUniqueString();
-		final String displayName3 = givenName1 + " " + sn1;
+		final String displayName3 = givenName3 + " " + sn3;
 		Map<String,String> attrs3 = new HashMap<String, String>() {
 			private static final long serialVersionUID = -939077202049216526L;
 			{
@@ -599,7 +599,7 @@ public class AutoCompleteGAL extends PrefGroupMailByMessageTest {
 		account2.authenticate();
 
 		ZimbraAccount account3 = new ZimbraAccount();
-		account2.setAccountPreferences(attrs3);
+		account3.setAccountPreferences(attrs3);
 		account3.provision();
 		account3.authenticate();
 
