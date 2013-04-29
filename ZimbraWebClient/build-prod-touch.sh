@@ -11,6 +11,6 @@
 
 cd WebRoot/t
 echo "[Touch client production build started]"
-ant -buildfile build-prod-touch.xml
+ant -buildfile build-prod-touch.xml -Dbuild.mode=$1
 echo "[Touch client production build ended]"
 cd ../..
