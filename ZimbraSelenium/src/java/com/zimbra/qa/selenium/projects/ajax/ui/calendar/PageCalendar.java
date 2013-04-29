@@ -165,6 +165,7 @@ public class PageCalendar extends AbsTab {
 		
 		public static final String NextPage = "css=div[id='zb__CAL__Nav__PAGE_FORWARD'] div[class='ImgRightArrow']";
 		public static final String PreviousPage = "css=div[id='zb__CAL__Nav__PAGE_BACK'] div[class='ImgLeftArrow']";
+		public static final String ImgPrivateAppt = "css= div[class='ImgReadOnly']";
 		                                          
 	}
 
