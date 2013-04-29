@@ -90,7 +90,7 @@ public class FormApptNew extends AbsForm {
 		public static final String EveryDayRadioButton = "css=div[id='REPEAT_DAILY_DIV'] input[id='DAILY_DEFAULT']";
 		public static final String EveryWeekdayRadioButton = "css=div[id='REPEAT_DAILY_DIV'] input[id='DAILY_WEEKDAY']";
 		public static final String EveryXdaysRadioButton = "css=div[id='REPEAT_DAILY_DIV'] input[id='DAILY_FIELD_RADIO']";
-		public static final String EveryXdaysEditField = "css=div[id$='_content'] td input[id='RECUR_DAILY_FIELD']";
+		public static final String EveryXdaysEditField = "css=input[id='RECUR_DAILY_FIELD']";
 		
 		public static final String EveryXRadioButton = "css=div[id='REPEAT_WEEKLY_DIV'] input[id='WEEKLY_DEFAULT']";
 		public static final String EveryXDropdown = "css=div[id='REPEAT_WEEKLY_DIV'] td[id='WEEKLY_SELECT'] td[id$='_title']";
@@ -1154,10 +1154,8 @@ public class FormApptNew extends AbsForm {
 					
 				} else if (repeat.equals(Button.B_EVERY_X_DAYS_RADIO_BUTTON)) {
 					this.sClickAt(Locators.EveryXdaysRadioButton, "");
-					
-				} else if (repeat.equals(Button.E_EVERY_X_DAYS_EDIT_FIELD)) {
-					this.sType(Locators.EveryXdaysRadioButton, repeatOption1);
-				}
+					this.sType(Locators.EveryXdaysEditField, repeatOption1);
+				} 
 				
 			} else if (recurringType.equals(Button.O_EVERY_WEEK_MENU)) {
 				this.sClickAt(Locators.EveryWeekMenuItem, "");
@@ -1165,6 +1163,10 @@ public class FormApptNew extends AbsForm {
 				
 				if (repeat.equals(Button.B_EVERY_X_RADIO_BUTTON)) {
 					this.sClickAt(Locators.EveryXRadioButton, "");
+					if (!repeatOption1.equals("")) {
+						this.sClickAt("css=td[id='WEEKLY_SELECT'] td[id$='_title']", "");
+						this.sClickAt("css=div[id^='POPUP_DWT'] td[id$='_title']:contains('" + repeatOption1 + "')", "");
+					}
 					
 				} else if (repeat.equals(Button.B_EVERY_X_WEEKS_ON_RADIO_BUTTON)) {
 					this.sClickAt(Locators.EveryXweeksOnRadioButton, "");
@@ -1201,10 +1203,11 @@ public class FormApptNew extends AbsForm {
 				
 				if (repeat.equals(Button.B_DAY_X_OF_EVERY_Y_MONTHS_RADIO_BUTTON)) {
 					this.sClickAt(Locators.DayXofEveryYmonthsRadioButton, "");
-					
+				
 				} else if (repeat.equals(Button.B_THE_X_Y_OF_EVERY_Z_MONTHS_RADIO_BUTTON)) {
 					this.sClickAt(Locators.TheXYofEveryZmonthsRadioButton, "");
-					
+					this.sClickAt("css=td[id='MONTHLY_WEEKDAY_SELECT'] td[id$='_title']", "");
+					this.sClickAt("css=div[id*='Menu_'] td[id$='_title']:contains('Monday')", "");        
 				}
 				
 			} else if (recurringType.equals(Button.O_EVERY_YEAR_MENU)) {
@@ -1216,7 +1219,6 @@ public class FormApptNew extends AbsForm {
 					
 				} else if (repeat.equals(Button.B_THE_X_Y_OF_EVERY_Z_RADIO_BUTTON)) {
 					this.sClickAt(Locators.TheXYofEveryZRadioButton, "");
-
 				}
 				
 			}
