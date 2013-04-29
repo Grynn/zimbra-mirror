@@ -1058,6 +1058,7 @@ ZaAccountXFormView.FEATURE_TAB_ATTRS = [ZaAccount.A_zimbraFeatureManageZimlets,
 	ZaAccount.A_zimbraFeatureReadReceiptsEnabled,
 	ZaAccount.A_zimbraFeatureMailEnabled,
 	ZaAccount.A_zimbraFeatureContactsEnabled,
+    ZaAccount.A_zimbraFeatureDistributionListFolderEnabled,
 	ZaAccount.A_zimbraFeatureCalendarEnabled,
 	ZaAccount.A_zimbraFeatureTasksEnabled,
 	//ZaAccount.A_zimbraFeatureNotebookEnabled,
@@ -2191,6 +2192,38 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							}							
 						]
 					},
+                    {
+                        type: _ZA_TOP_GROUPER_,
+                        label: ZaMsg.NAD_zimbraContactFeature,
+                        id: "account_form_features_contact",
+                        enableDisableChecks: [
+                            [
+                                XForm.checkInstanceValue,
+                                ZaAccount.A_zimbraFeatureContactsEnabled,
+                                "TRUE"
+                            ]
+                        ],
+                        enableDisableChangeEventSources: [ZaAccount.A_zimbraFeatureContactsEnabled, ZaAccount.A_COSId],
+                        visibilityChecks: [
+                            [
+                                ZATopGrouper_XFormItem.isGroupVisible,
+                                [
+                                    ZaAccount.A_zimbraFeatureDistributionListFolderEnabled
+                                ]
+                            ]
+                        ],
+                        items: [
+                            {
+                                ref: ZaAccount.A_zimbraFeatureDistributionListFolderEnabled,
+                                type: _SUPER_CHECKBOX_,
+                                resetToSuperLabel: ZaMsg.NAD_ResetToCOS,
+                                msgName: ZaMsg.MSG_zimbraFeatureDistributionListFolderEnabled,
+                                checkBoxLabel: ZaMsg.LBL_zimbraFeatureDistributionListFolderEnabled,
+                                trueValue: "TRUE",
+                                falseValue: "FALSE"
+                            }
+                        ]
+                    },
 					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraCalendarFeature, id:"account_form_features_calendar",colSizes:["auto"],numCols:1,
 						visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 							[ZaAccount.A_zimbraFeatureGroupCalendarEnabled,

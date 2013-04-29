@@ -427,6 +427,10 @@ ZaNewAccountXWizard.isIMFeatureEnabled = function () {
 	return (this.getInstanceValue(ZaAccount.A_zimbraFeatureIMEnabled) == "TRUE");
 }
 
+ZaNewAccountXWizard.isContactsFeatureEnabled = function () {
+    return this.getInstanceValue(ZaAccount.A_zimbraFeatureDistributionListFolderEnabled) == "TRUE";
+}
+
 ZaNewAccountXWizard.isCalendarFeatureEnabled = function () {
 	return this.getInstanceValue(ZaAccount.A_zimbraFeatureCalendarEnabled)=="TRUE";
 }
@@ -1265,6 +1269,39 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 					});
 			
 		};
+        if (ZAWizTopGrouper_XFormItem.isGroupVisible(
+                entry,
+                [
+                    ZaAccount.A_zimbraFeatureContactsEnabled,
+                    ZaAccount.A_zimbraFeatureDistributionListFolderEnabled
+                ],
+                []
+            )
+            ) {
+            featuresCase.items.push(
+                {
+                    type: _ZAWIZ_TOP_GROUPER_,
+                    label: ZaMsg.NAD_zimbraContactFeature,
+                    id: "account_wiz_features_contact",
+                    enableDisableChecks: [ZaNewAccountXWizard.isContactsFeatureEnabled],
+                    enableDisableChangeEventSources: [
+                        ZaAccount.A_zimbraFeatureContactsEnabled,
+                        ZaAccount.A_COSId
+                    ],
+                    items: [
+                        {
+                            ref: ZaAccount.A_zimbraFeatureDistributionListFolderEnabled,
+                            type: _SUPER_WIZ_CHECKBOX_,
+                            resetToSuperLabel: ZaMsg.NAD_ResetToCOS,
+                            msgName: ZaMsg.MSG_zimbraFeatureDistributionListFolderEnabled,
+                            checkBoxLabel: ZaMsg.LBL_zimbraFeatureDistributionListFolderEnabled,
+                            trueValue: "TRUE",
+                            falseValue: "FALSE"
+                        }
+                    ]
+                }
+            );
+        }
 		if  (ZAWizTopGrouper_XFormItem.isGroupVisible(
 					entry,
 					[ZaAccount.A_zimbraFeatureGroupCalendarEnabled,
