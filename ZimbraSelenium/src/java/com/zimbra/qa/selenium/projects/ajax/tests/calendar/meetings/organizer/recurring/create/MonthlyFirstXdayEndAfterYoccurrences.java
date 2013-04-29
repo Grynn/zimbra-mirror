@@ -12,7 +12,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 public class MonthlyFirstXdayEndAfterYoccurrences extends CalendarWorkWeekTest {
 
 	public MonthlyFirstXdayEndAfterYoccurrences() {
-		logger.info("New "+ MonthlyFirstXdayEndByY.class.getCanonicalName());
+		logger.info("New "+ MonthlyFirstXdayEndAfterYoccurrences.class.getCanonicalName());
 		super.startingPage = app.zPageCalendar;
 	}
 	
