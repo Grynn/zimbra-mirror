@@ -1158,7 +1158,7 @@ class Program
                             int stat = zimbraAPI.Logon(
                                     ZCSHost,
                                     ZCSPort,
-                                    ZCSID,
+                                    accountname,
                                     ZCSPwd, UseSSL, false);
 
                             if (stat != 0)
