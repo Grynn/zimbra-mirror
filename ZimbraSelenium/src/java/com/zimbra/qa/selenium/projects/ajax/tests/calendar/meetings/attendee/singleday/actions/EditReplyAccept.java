@@ -124,7 +124,7 @@ public class EditReplyAccept extends CalendarWorkWeekTest {
 		
 		ZimbraAccount.AccountA().soapSend(
 					"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
-				+		"<query>inid:"+ inboxId + " " + "subject:(" + "Accept " + apptSubject + ")" + " " + "content:(" + modifiedBody + " " + "Yes, I will attend." + ")" + "</query>"
+				+		"<query>inid:"+ inboxId + " " + "subject:(" + "Accept " + apptSubject + ")" + " " + "content:(" + modifiedBody + ")" + "</query>"
 				+	"</SearchRequest>");
 		
 		String messageId = ZimbraAccount.AccountA().soapSelectValue("//mail:m", "id");

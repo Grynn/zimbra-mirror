@@ -124,7 +124,7 @@ public class EditReplyDecline extends CalendarWorkWeekTest {
 		
 		ZimbraAccount.AccountA().soapSend(
 					"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
-				+		"<query>inid:"+ inboxId + " " + "subject:(" + "Decline " + apptSubject + ")" + " " + "content:(" + modifiedBody + " " + "No, I won't attend." + ")" + "</query>"
+				+		"<query>inid:"+ inboxId + " " + "subject:(" + "Decline " + apptSubject + ")" + " " + "content:(" + modifiedBody + ")" + "</query>"
 				+	"</SearchRequest>");
 		
 		String messageId = ZimbraAccount.AccountA().soapSelectValue("//mail:m", "id");
