@@ -1,5 +1,6 @@
 %%contains VAR:zimbraServiceEnabled cbpolicyd^ check_policy_service inet:localhost:@@cbpolicyd_bind_port@@%%
 reject_non_fqdn_recipient
+permit_mynetworks
 reject_unlisted_recipient
 %%contains VAR:zimbraMtaRestriction reject_invalid_helo_hostname%%
 %%contains VAR:zimbraMtaRestriction reject_non_fqdn_helo_hostname%%
