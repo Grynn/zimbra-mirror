@@ -28,6 +28,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 
 public class CancelComposeHtml extends PrefGroupMailByMessageTest {
@@ -48,11 +49,7 @@ public class CancelComposeHtml extends PrefGroupMailByMessageTest {
 		
 		
 		// Create the message data to be sent
-		// Create the message data to be sent
-		MailItem mail = new MailItem();
-		mail.dToRecipients.add(new RecipientItem(ZimbraAccount.AccountA()));
-		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		mail.dBodyHtml = "body" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
 
 		// Open the new mail form
@@ -62,7 +59,7 @@ public class CancelComposeHtml extends PrefGroupMailByMessageTest {
 		
 		
 		// Fill out the form with the data
-		mailform.zFill(mail);
+		mailform.zFillField(Field.Body, body);
 		
 
 		
@@ -94,10 +91,8 @@ public class CancelComposeHtml extends PrefGroupMailByMessageTest {
 		Shortcut shortcut = Shortcut.S_ESCAPE;
 
 		// Create the message data to be sent
-		MailItem mail = new MailItem();
-		mail.dToRecipients.add(new RecipientItem(ZimbraAccount.AccountA()));
-		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		mail.dBodyHtml = "body" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
+		String Subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		
 
 		// Open the new mail form
@@ -106,7 +101,8 @@ public class CancelComposeHtml extends PrefGroupMailByMessageTest {
 		
 		
 		// Fill out the form with the data
-		mailform.zFill(mail);
+		mailform.zFillField(Field.Subject, Subject);
+		mailform.zFillField(Field.Body, body);		
 		
 		DialogWarning warning =(DialogWarning)app.zPageMail.zKeyboardShortcut(shortcut);
 		ZAssert.assertNotNull(warning, "Verify the dialog is opened");
@@ -118,8 +114,8 @@ public class CancelComposeHtml extends PrefGroupMailByMessageTest {
 		
 		MailItem found = null;
 		for (MailItem m : messages) {
-			logger.info("Subject: looking for "+ mail.dSubject +" found: "+ m.gSubject);
-			if ( mail.dSubject.equals(m.gSubject) ) {
+			logger.info("Subject: looking for "+ Subject +" found: "+ m.gSubject);
+			if ( Subject.equals(m.gSubject) ) {
 				found = m;
 				break;
 			}
