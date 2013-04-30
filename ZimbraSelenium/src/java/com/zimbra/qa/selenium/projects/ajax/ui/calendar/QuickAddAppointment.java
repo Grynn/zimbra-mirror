@@ -272,9 +272,9 @@ public class QuickAddAppointment extends AbsTab {
 	}
 	
 	public void zMoreDetails() throws HarnessException {
-		SleepUtil.sleepMedium(); // for testing because auto-complete to attendee fails
+		SleepUtil.sleepMedium(); // for testing because adding attendee fails
 		this.zClickAt(Locators.MoreDetailsButtonQuickAdd, "");
-		SleepUtil.sleepVeryLong(); //UI takes time to draw and auto-complete attendees so tests fails
+		SleepUtil.sleepVeryLong(); //UI takes time to draw so adding attendee fails
 	}
 	
 	public void zFill(IItem item) throws HarnessException {
