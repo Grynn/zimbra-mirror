@@ -1873,6 +1873,9 @@ ngx_mail_close_connection(ngx_connection_t *c)
     ngx_log_debug1(NGX_LOG_DEBUG_MAIL, c->log, 0,
                    "close mail connection: %d", c->fd);
 
+    if (c->destroyed) {
+        return;
+    }
 #if (NGX_MAIL_SSL)
 
     if (c->ssl) {
