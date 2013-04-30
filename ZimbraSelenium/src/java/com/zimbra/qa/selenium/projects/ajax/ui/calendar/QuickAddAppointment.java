@@ -28,6 +28,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Locators;
 
 @SuppressWarnings("unused")
 public class QuickAddAppointment extends AbsTab {
@@ -272,9 +273,9 @@ public class QuickAddAppointment extends AbsTab {
 	}
 	
 	public void zMoreDetails() throws HarnessException {
-		SleepUtil.sleepMedium(); // for testing because adding attendee fails
+		SleepUtil.sleepMedium(); // for testing because test fails intermittently
 		this.zClickAt(Locators.MoreDetailsButtonQuickAdd, "");
-		SleepUtil.sleepVeryLong(); //UI takes time to draw so adding attendee fails
+		SleepUtil.sleepLong(); //UI takes time to draw so adding attendee fails
 	}
 	
 	public void zFill(IItem item) throws HarnessException {
@@ -383,9 +384,30 @@ public class QuickAddAppointment extends AbsTab {
 		
 	}
 
-	@Override
-	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
-		// TODO Auto-generated method stub
+	public AbsPage zClick(Button button) throws HarnessException {
+		SleepUtil.sleepSmall();
+		if (button.equals(Button.B_SUGGESTALOCATION)) {
+			this.sClickAt("css=div[id$='_suggest_location']:contains('Suggest a location')", "");
+			SleepUtil.sleepMedium();
+		} else if (button.equals(Button.B_SUGGESTEDLOCATION)) {
+			this.sClickAt("css=div[id$='_suggest_view'] div[id^='zli__CSLP__DWT']:contains('" + 111 + "')", "");
+			SleepUtil.sleepMedium();
+			
+		} else {
+			throw new HarnessException("no logic defined for button " + button);
+		}
+		return null;
+	}
+	
+	public AbsPage zClick(Button button, String value) throws HarnessException {
+		SleepUtil.sleepSmall();
+		if (button.equals(Button.B_SUGGESTEDLOCATION)) {
+			this.sClickAt("css=div[id$='_suggest_view'] div[id^='zli__CSLP__DWT']:contains('" + value + "')", "");
+			SleepUtil.sleepMedium();
+			
+		} else {
+			throw new HarnessException("no logic defined for button " + button);
+		}
 		return null;
 	}
 
@@ -406,6 +428,12 @@ public class QuickAddAppointment extends AbsTab {
 	public boolean zIsActive() throws HarnessException {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

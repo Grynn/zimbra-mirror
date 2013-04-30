@@ -14,34 +14,32 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.singleday.minicalendar;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.singleday.quickadd;
 
 import java.util.Calendar;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
-import com.zimbra.qa.selenium.framework.items.AppointmentItem;
-import com.zimbra.qa.selenium.framework.items.MailItem;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.QuickAddAppointment;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Field;
 
-public class CreateMeeting extends CalendarWorkWeekTest {
-
-	public CreateMeeting() {
-		logger.info("New "+ CreateMeeting.class.getCanonicalName());
+public class SuggestALocation extends CalendarWorkWeekTest {	
+	
+	public SuggestALocation() {
+		logger.info("New "+ SuggestALocation.class.getCanonicalName());
 		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Bugs(ids = "81945")
-	@Test(	description = "Create meeting invite from mini-calendar's date using quick add dialog",
-			groups = { "smoke" }
-	)
-	public void CreateMeeting_01() throws HarnessException {
+	@Test(description = "Suggest a free location while creating appointment from quick add dialog",
+			groups = { "functional" })
+	public void SuggestALocation_01() throws HarnessException {
 		
-		// Create appointment
 		AppointmentItem appt = new AppointmentItem();
 		Calendar now = this.calendarWeekDayUTC;
 		ZimbraResource location = new ZimbraResource(ZimbraResource.Type.LOCATION);
@@ -53,14 +51,15 @@ public class CreateMeeting extends CalendarWorkWeekTest {
 		apptContent = ZimbraSeleniumProperties.getUniqueString();
 		
 		appt.setSubject(apptSubject);
-		appt.setStartTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0));
-		appt.setEndTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0));
-		appt.setLocation(apptLocation);
+		appt.setStartTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 8, 0, 0));
+		appt.setEndTime(new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 10, 0, 0));
 	
 		// Quick add appointment dialog
 		QuickAddAppointment quickAddAppt = new QuickAddAppointment(app) ;
 		quickAddAppt.zNewAppointmentUsingMiniCal();
 		quickAddAppt.zFill(appt);
+		quickAddAppt.zClick(Button.B_SUGGESTALOCATION);
+		quickAddAppt.zClick(Button.B_SUGGESTEDLOCATION, apptLocation);
 		quickAddAppt.zMoreDetails();
 		
 		// Add attendees and body from main form
@@ -75,15 +74,15 @@ public class CreateMeeting extends CalendarWorkWeekTest {
 		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
 		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
 		ZAssert.assertEquals(actual.getSubject(), apptSubject, "Subject: Verify the appointment data");
-		ZAssert.assertEquals(actual.getAttendees(), apptAttendee, "Attendees: Verify the appointment data");
-		ZAssert.assertEquals(actual.getLocation(), apptLocation, "Loction: Verify the appointment data");
+		ZAssert.assertStringContains(actual.getAttendees(), apptAttendee, "Attendees: Verify the appointment data");
+		ZAssert.assertStringContains(actual.getLocation(), apptLocation, "Loction: Verify the appointment data");
 		ZAssert.assertEquals(actual.getContent(), apptContent, "Content: Verify the appointment data");
 
 		// Verify the attendee receives the meeting
 		AppointmentItem received = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
 		ZAssert.assertEquals(received.getSubject(), apptSubject, "Subject: Verify the appointment data");
-		ZAssert.assertEquals(received.getAttendees(), apptAttendee, "Attendees: Verify the appointment data");
-		ZAssert.assertEquals(actual.getLocation(), apptLocation, "Loction: Verify the appointment data");
+		ZAssert.assertStringContains(received.getAttendees(), apptAttendee, "Attendees: Verify the appointment data");
+		ZAssert.assertStringContains(actual.getLocation(), apptLocation, "Loction: Verify the appointment data");
 		ZAssert.assertEquals(received.getContent(), apptContent, "Content: Verify the appointment data");
 
 		// Verify the attendee receives the invitation
@@ -94,6 +93,7 @@ public class CreateMeeting extends CalendarWorkWeekTest {
 		// Verify location free/busy status shows as psts=AC	
 		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation +"']", "ptst");
 		ZAssert.assertEquals(locationStatus, "AC", "Verify that the location status shows as 'ACCEPTED'");
+		
 	}
-
+	
 }
