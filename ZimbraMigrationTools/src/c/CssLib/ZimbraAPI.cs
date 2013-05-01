@@ -3111,7 +3111,9 @@ public class ZimbraAPI
 
                     int ind = 0;
                     int  mnIndex =0;
-                    if ((FolderPath.Contains("Inbox")) || (FolderPath.Contains("Calendar")) || ((FolderPath.Contains("Contacts"))) || ((FolderPath.Contains("Tasks"))) ||(FolderPath.Contains("Junk")) || (FolderPath.Contains("Drafts")))
+                    if ((words[2]==("Inbox")) || (words[2]==("Calendar")) || (words[2]==("Contacts")) || (words[2]==("Tasks")) ||(words[2]==("Junk")) || (words[2]==("Drafts")))
+                    
+                    //if ((FolderPath.Contains("Inbox")) || (FolderPath.Contains("Calendar")) || ((FolderPath.Contains("Contacts"))) || ((FolderPath.Contains("Tasks"))) ||(FolderPath.Contains("Junk")) || (FolderPath.Contains("Drafts")))
                     { mnIndex = 3; }
                     else
                         mnIndex = 2;
