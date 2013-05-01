@@ -22,6 +22,7 @@ use Getopt::Std;
 use POSIX qw(strftime);
 use File::Spec;
 use File::Path;
+use File::Copy qw/cp/;
 use Zimbra::Mon::Zmstat;
 
 use vars qw(
@@ -340,7 +341,7 @@ sub run() {
     
     if ($HAVE_LSOF) {
         logmsg "Saving output of LSOF\n";
-        qx(lsof > lsof.out 2>&1);
+        qx(lsof -n > lsof.out 2>&1);
     } else {
         logmsg "'lsof' is not installed, will not check fd status\n";
     }
@@ -369,10 +370,21 @@ sub run() {
     logmsg "Saving server configuration\n";
     exec_with_timeout("$SU '$ZMPROV gs $ZMHOSTNAME' > zmprov-gs.txt 2>&1", $timeout);
     exec_with_timeout("$SU '$ZMPROV gacf' > zmprov-gacf.txt 2>&1", $timeout);
-    system("cp /opt/zimbra/conf/localconfig.xml $destination/");
     exec_with_timeout("$SU '$ZMLOCALCONFIG -x -s' > zmlocalconfig-x-s.txt 2>&1", $timeout);
     exec_with_timeout("$SU '$ZMLOCALCONFIG -n' > zmlocalconfig-n.txt 2>&1", $timeout);
-    system("cp /opt/zimbra/conf/my.cnf $destination/");
+    
+    my @conf_files = (
+                "/opt/zimbra/conf/cbpolicyd.conf",
+                "/opt/zimbra/conf/localconfig.xml",
+                "/opt/zimbra/conf/my.cnf",
+                "/opt/zimbra/postfix/conf/main.cf",
+                "/opt/zimbra/postfix/conf/master.cf",
+                "/opt/zimbra/conf/zmconfigd.cf"
+                );
+    cp $_, $destination for @conf_files;
+
+    # Copy hidden .install_history file to a visible file
+    cp "/opt/zimbra/.install_history", "$destination/install_history";
 
     mkdir("$destination/logs");
     mkdir("$destination/stats");
@@ -388,15 +400,31 @@ sub run() {
         close(CONF_OUT);
     } else {
         logmsg "Copying ZCS statistics chart config\n";
-        system("cp $ZMSTAT_CONF stats/");
+        cp $ZMSTAT_CONF, "$destination/stats";
     }
     my $today = strftime("%Y-%m-%d", localtime(time()));
     my $t_today = strftime("%Y_%m_%d", localtime(time()));
+    
     logmsg "Copying current ZCS logs\n";
-    system("cp /opt/zimbra/log/audit.log /opt/zimbra/log/my*.log /opt/zimbra/log/mailbox.log /opt/zimbra/log/zmmailboxd.out /opt/zimbra/log/access_log.$today /opt/zimbra/log/$t_today.trace.log /var/log/zimbra.log /opt/zimbra/log/hs_err_pid* /opt/zimbra/log/zmconfigd.log /opt/zimbra/log/sync.log $destination/logs/ 2> /dev/null");
-    system("cp /opt/zimbra/db/data/*.err $destination/logs/ 2> /dev/null");
+    my @log_files = (
+                "/opt/zimbra/log/access_log.$today",
+                "/opt/zimbra/log/audit.log",
+                "/opt/zimbra/log/cbpolicyd.log",
+                "/opt/zimbra/log/mailbox.log",
+                "/opt/zimbra/log/sync.log",
+                "/opt/zimbra/log/$t_today.trace.log",
+                "/opt/zimbra/log/zmconfigd.log",
+                "/opt/zimbra/log/zmmailboxd.out",
+                "/var/log/zimbra.log",
+                glob("/opt/zimbra/db/data/*.err"),
+                glob("/opt/zimbra/log/hs_err_pid*"),
+                glob("/opt/zimbra/log/my*.log"),
+                glob("/opt/zimbra/log/zmsetup*.txt")
+                );
+    cp $_, "$destination/logs" for @log_files;
+    
     logmsg "Copying today's ZCS statistics\n";
-    system("cp /opt/zimbra/zmstat/*.csv $destination/stats/");
+    cp $_, "$destination/stats" for glob("/opt/zimbra/zmstat/*.csv");
     
     my $yesterday = time() - (24 * 60 * 60);
     my $yesterday_stats_dir = strftime("%Y-%m-%d", localtime($yesterday));
@@ -406,29 +434,30 @@ sub run() {
         my $zuser = $Zimbra::Mon::Zmstat::LC{zimbra_user};
         my ($zuid,$zgid) = (getpwnam($zuser))[2,3];
         chown $zuid, $zgid, "$destination/stats/$yesterday_stats_dir";
-        system("cp /opt/zimbra/zmstat/$yesterday_stats_dir/* $destination/stats/$yesterday_stats_dir/");
+        cp $_, "$destination/stats/$yesterday_stats_dir" for glob("/opt/zimbra/zmstat/$yesterday_stats_dir/*");
     }
 
     my $systemlogfile = "/var/log/messages";
       $systemlogfile = "/var/log/system.log" if (isMac());
     if (-f $systemlogfile) {
       logmsg "Copying system log $systemlogfile\n";
-      system("cp $systemlogfile $destination/logs/");
+      cp $systemlogfile, "$destination/logs";
     }
 
     if (-f "/opt/zimbra/log/nginx.log") {
       logmsg "Copying nginx log /opt/zimbra/log/nginx.log\n";
-      system("cp /opt/zimbra/log/nginx.log $destination/logs/");
+      cp "/opt/zimbra/log/nginx.log", "$destination/logs";
     }
    
     if (-f "/opt/zimbra/log/nginx.access.log") {
       logmsg "Copying nginx access log /opt/zimbra/log/nginx.access.log\n";
-      system("cp /opt/zimbra/log/nginx.access.log $destination/logs/");
+      cp "/opt/zimbra/log/nginx.access.log", "$destination/logs/";
     }
    
     if (-f "/etc/ld.so.conf") { 
       logmsg "Copying ld.so configuration\n";
-      system("cp /etc/ld.so.conf /etc/ld.so.conf.d/* $destination/ld.so.conf/");
+      my @ld_files = ("/etc/ld.so.conf", glob("/etc/ld.so.conf.d/*"));
+      cp $_, "$destination/ld.so.conf" for @ld_files;
     } else {
       logmsg "ld.so.conf not present...skipping copy.\n";
     }
