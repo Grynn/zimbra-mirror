@@ -21,6 +21,7 @@ use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Mon::Zmstat;
 use Zimbra::Mon::Logger;
 use Data::Dumper;
+use Scalar::Util qw(looks_like_number);
 
 # Initial version will support forked process monitoring.  I/O accounting
 # will fail in a threaded environment /proc/PID/io does not account task/TID
@@ -127,9 +128,9 @@ sub delta_stat($$$$) {
     my $stat = shift;
 
     #  Handle the possibility that proc stats are not obtained due to a process dying before stat data is actually retrieved.
-    if (!defined($curr_stats->{$pid}->{$stat})) {
+    if (!looks_like_number($curr_stats->{$pid}->{$stat})) {
         0;
-    } elsif (!defined($prev_stats->{$pid}->{$stat})) {
+    } elsif (!looks_like_number($prev_stats->{$pid}->{$stat})) {
         $curr_stats->{$pid}->{$stat};
     } else {
         $curr_stats->{$pid}->{$stat} - $prev_stats->{$pid}->{$stat};
