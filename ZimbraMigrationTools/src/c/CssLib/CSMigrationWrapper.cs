@@ -108,6 +108,7 @@ public class MigrationOptions
     public bool IsMaintainenceMode;
     public long LangID;
     public Int32 MaxRetries;
+    public string DateFilterItem;
     
 }
 
@@ -524,7 +525,7 @@ public class CSMigrationWrapper
                                                 }
                                             }
                                         }
-                                        if (options.DateFilter != null)
+                                        if ((options.DateFilter != null) && (options.DateFilterItem.Contains(itemtype)))
                                         {
                                             try
                                             {

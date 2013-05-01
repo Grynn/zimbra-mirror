@@ -72,6 +72,12 @@ public class AdvancedImportOptions
         get { return m_MaxMessageSize; }
         set { m_MaxMessageSize = value; }
     }
+    private string m_DateFilterItem;
+    public string DateFilterItem
+    {
+        get { return m_DateFilterItem; }
+        set { m_DateFilterItem = value; }
+    }
     private bool m_IsMaxMessageSize;
     public bool IsMaxMessageSize
     {

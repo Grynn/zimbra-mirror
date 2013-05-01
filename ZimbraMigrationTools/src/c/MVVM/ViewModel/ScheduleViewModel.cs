@@ -682,6 +682,7 @@ public class ScheduleViewModel: BaseViewModel
             itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.Rules;
         if (ovm.ImportOOOOptions)
             itemFolderFlags = itemFolderFlags | ItemsAndFoldersOptions.OOO;
+        importOpts.DateFilterItem = ovm.DateFilterItem;
         importOpts.ItemsAndFolders = itemFolderFlags;
         importOpts.DateFilter = (ovm.IsOnOrAfter) ? ovm.MigrateONRAfter : null;
         importOpts.MessageSizeFilter = (ovm.IsMaxMessageSize) ? ovm.MaxMessageSize : null;

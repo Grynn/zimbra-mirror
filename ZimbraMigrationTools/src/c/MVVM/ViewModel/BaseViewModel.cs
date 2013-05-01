@@ -218,7 +218,8 @@ public class BaseViewModel: INotifyPropertyChanged
         m_config.AdvancedImportOptions.MaxMessageSize =
             (optionsModel.IsMaxMessageSize) ? optionsModel.MaxMessageSize
             : "";
-
+        m_config.AdvancedImportOptions.DateFilterItem =optionsModel.DateFilterItem ;
+        
         m_config.AdvancedImportOptions.SpecialCharReplace = optionsModel.SpecialCharReplace;
         m_config.AdvancedImportOptions.CSVDelimiter = optionsModel.CSVDelimiter;
         m_config.AdvancedImportOptions.LangID = optionsModel.LangID;

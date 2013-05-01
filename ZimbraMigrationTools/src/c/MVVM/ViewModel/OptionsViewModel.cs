@@ -54,6 +54,7 @@ public class OptionsViewModel: BaseViewModel
         MigrateONRAfter = config.AdvancedImportOptions.MigrateOnOrAfter.ToShortDateString();
         IsOnOrAfter = config.AdvancedImportOptions.IsOnOrAfter;
         MaxMessageSize = config.AdvancedImportOptions.MaxMessageSize;
+        DateFilterItem = config.AdvancedImportOptions.DateFilterItem;
         IsSkipPrevMigratedItems = config.AdvancedImportOptions.IsSkipPrevMigratedItems;
         IsMaxMessageSize = config.AdvancedImportOptions.IsMaxMessageSize;
         IsSkipFolders = config.AdvancedImportOptions.IsSkipFolders;
@@ -381,6 +382,19 @@ public class OptionsViewModel: BaseViewModel
             m_config.AdvancedImportOptions.MaxMessageSize = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("MaxMessageSize"));
+        }
+    }
+
+    public string DateFilterItem
+    {
+        get { return m_config.AdvancedImportOptions.DateFilterItem; }
+        set
+        {
+            if (value == m_config.AdvancedImportOptions.DateFilterItem)
+                return;
+            m_config.AdvancedImportOptions.DateFilterItem = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("DateFilterItem"));
         }
     }
     public bool IsMaxMessageSize
