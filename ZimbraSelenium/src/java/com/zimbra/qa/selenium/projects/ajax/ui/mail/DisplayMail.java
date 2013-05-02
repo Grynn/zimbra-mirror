@@ -463,6 +463,8 @@ public class DisplayMail extends AbsDisplay {
 	
 	public AbsPage zPressButtonPulldown(Button pulldown, String option) throws HarnessException {
 		
+		SleepUtil.sleepMedium(); //test fails because it immidiately tries to select dropdown
+		
 		logger.info(myPageName() + " zPressButtonPulldown(" + pulldown + ", " + option + ")");
 		
 		tracer.trace("Click pulldown " + pulldown + " then " + option);
