@@ -613,59 +613,66 @@ public class ExecuteHarnessMain {
 
 		@Override
 		public void afterInvocation(IInvokedMethod method, ITestResult result) {
-			logger.debug("ErrorDialogListener:afterInvocation ...");
+			if ( method.isTestMethod() ) {
 
-			boolean check = "true".equals(ZimbraSeleniumProperties.getStringProperty("dialog.error.aftertest.check", "true"));
-			boolean dismiss = "true".equals(ZimbraSeleniumProperties.getStringProperty("dialog.error.aftertest.dismiss", "true"));
-			if ( !check ) {
-				return;
-			}
-			
-			
-			String locator = "css=div#ErrorDialog";
 
-			try{
-			    
-			    boolean present = sIsElementPresent(locator);
-			    if ( present ) {
+				logger.info("ErrorDialogListener:afterInvocation ...");
 
-				logger.info("ErrorDialogListener:afterInvocation ... present="+ present);
 
-				Number left = sGetElementPositionLeft(locator);
-				if ( left.intValue() > 0 ) {
-
-				    logger.info("ErrorDialogListener:afterInvocation ... left="+ left);
-
-				    Number top = sGetElementPositionTop(locator);
-
-				    if ( top.intValue()>0 ) {
-
-					logger.info("ErrorDialogListener:afterInvocation ... top="+ top);
-
-					if ( dismiss ) {
-							
-					    String bLocator = locator + " td[id^='OK_'] td[id$='_title']";
-					    sMouseDownAt(bLocator, "");
-					    sMouseUpAt(bLocator, "");
-							
-					} else {
-							
-					    // Log the error
-					    // Take a snapshot
-					    logger.error(new HarnessException("Error Dialog is visible"));
-							
-					    // Set the test as failed
-					    result.setStatus(ITestResult.FAILURE);
-
-					}
-				    }
+				boolean check = "true".equals(ZimbraSeleniumProperties.getStringProperty("dialog.error.aftertest.check", "true"));
+				boolean dismiss = "true".equals(ZimbraSeleniumProperties.getStringProperty("dialog.error.aftertest.dismiss", "true"));
+				if ( !check ) {
+					return;
 				}
-			    }
-			}catch(Exception ex){
-			    logger.error(new HarnessException("ErrorDialogListener:afterInvocation "), ex);
+
+
+				String locator = "css=div#ErrorDialog";
+
+				try{
+
+					boolean present = sIsElementPresent(locator);
+					if ( present ) {
+
+						logger.info("ErrorDialogListener:afterInvocation ... present="+ present);
+
+						Number left = sGetElementPositionLeft(locator);
+						if ( left.intValue() > 0 ) {
+
+							logger.info("ErrorDialogListener:afterInvocation ... left="+ left);
+
+							Number top = sGetElementPositionTop(locator);
+
+							if ( top.intValue()>0 ) {
+
+								logger.info("ErrorDialogListener:afterInvocation ... top="+ top);
+
+								if ( dismiss ) {
+
+									String bLocator = locator + " td[id^='OK_'] td[id$='_title']";
+									sMouseDownAt(bLocator, "");
+									sMouseUpAt(bLocator, "");
+
+								} else {
+
+									// Log the error
+									// Take a snapshot
+									logger.error(new HarnessException("Error Dialog is visible"));
+
+									// Set the test as failed
+									result.setStatus(ITestResult.FAILURE);
+
+								}
+							}
+						}
+					}
+				}catch(Exception ex){
+					logger.error(new HarnessException("ErrorDialogListener:afterInvocation ", ex), ex);
+				}
+
+				logger.info("ErrorDialogListener:afterInvocation ... done");
+
 			}
-			
-			logger.debug("ErrorDialogListener:afterInvocation ... done");
+
 		}
 
 		@Override
