@@ -151,4 +151,19 @@ bind_pw = ${ldap_postfix_password}
 timeout = 30
 EOF
 
+cat<<EOF > ${confdir}/ldap-slm.cf
+server_host = ${ldap_url}
+server_port = ${ldap_port}
+search_base =
+query_filter = (&(|(zimbraMailDeliveryAddress=%s)(zimbraMailAlias=%s))(zimbraMailStatus=enabled))
+result_attribute = zimbraAllowFromAddress,zimbraMailAlias,zimbraMailDeliveryAddress
+version = 3
+start_tls = ${STARTTLS}
+tls_ca_cert_dir = /opt/zimbra/conf/ca
+bind = yes
+bind_dn = uid=zmpostfix,cn=appaccts,cn=zimbra
+bind_pw = ${ldap_postfix_password}
+timeout = 30
+EOF
+
 chgrp ${postfix_owner} ${confdir}/ldap-*.cf
