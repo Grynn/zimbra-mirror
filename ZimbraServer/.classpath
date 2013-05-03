@@ -66,8 +66,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/slf4j-log4j12-1.6.4.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/slf4j-api-1.6.4.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/tnef-1.8.0.jar" sourcepath="/ZimbraCommon/jars-internal/jars-src/tnef-1.8.0-src.zip">
-	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/tnef-1.8.0.jar" sourcepath="/ZimbraCommon/jars-internal/jars-src/tnef-1.8.0-src.zip"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/xercesImpl-2.9.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.4.2-zimbra.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-charset.jar"/>
@@ -93,7 +92,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/junixsocket-1.3.jar" sourcepath="/ZimbraCommon/jars-src/junixsocket-1.3.zip"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/icu4j-4.8.1.1.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/ews_2010.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/ews_2010.jar" sourcepath="/ZimbraCommon/jars-src/ews_2010-sources.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jackson-all-1.9.2.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jamm-0.2.5.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/antlr-3.2.jar"/>

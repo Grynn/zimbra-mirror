@@ -40,6 +40,7 @@
     <property name="common.classes.dir" location="${common.dir}/build/classes"/>
     <property name="common.jarfile" location="${common.dir}/build/zimbracommon.jar"/>
     <property name="common.jars.dir" location="${common.dir}/jars"/>
+    <property name="common.sourcejars.dir" location="${common.dir}/jars-src"/>
     <property name="common.internal.jars.dir" location="${common.dir}/jars-internal/jars"/>
 
     <!-- ZimbraNative -->
