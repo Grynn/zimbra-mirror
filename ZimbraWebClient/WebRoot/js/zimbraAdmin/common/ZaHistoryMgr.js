@@ -43,7 +43,7 @@ function (historyObject) {
     if (last && last.equal(historyObject))
         return;
     if (window.console && window.console.log)
-        window.console.log("Add Hisotry " + historyObject.path);
+        window.console.log("Add History " + historyObject.path);
     this._history.add(historyObject);
     // Here we always relocates the currentLocation to the current page.
     this._currentLocation = this._history.size() -1;
