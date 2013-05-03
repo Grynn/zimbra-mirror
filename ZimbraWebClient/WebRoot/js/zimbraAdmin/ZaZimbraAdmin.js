@@ -100,6 +100,7 @@ ZaZimbraAdmin._SERVER_STATISTICS_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SERVER_STATISTICS_TAB_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SERVER_LIST_FOR_STATISTICS_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._HELP_CENTER_HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._HELP_CENTER_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 
 ZaZimbraAdmin._HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._XFORM_VIEW = ZaZimbraAdmin.VIEW_INDEX++;

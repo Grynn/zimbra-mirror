@@ -756,11 +756,22 @@ function() {
             parent: ZaMsg.OVP_home,
             id: ZaId.getTreeItemId(ZaId.PANEL_APP, ZaId.PANEL_HOME, null, "helpCenter"),
             text: ZaMsg.zimbraHelpCenter,
+            className: "AdminHomeTreeItem",
+            defaultSelectedItem: 1,
             mappingId: ZaZimbraAdmin._HELP_CENTER_HOME_VIEW,
             image: "Help"
     });
+    tree.addTreeItemData(ti);
 
-    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._HELP_CENTER_HOME_VIEW] = ZaZimbraAdmin.prototype._helpListener;
+    ti = new ZaTreeItemData(
+        {
+            parent: ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.zimbraHelpCenter]),
+            id: ZaId.getTreeItemId(ZaId.PANEL_APP, "helpCenter", null, "helpCenter"),
+            text: ZaMsg.zimbraHelpCenter,
+            mappingId: ZaZimbraAdmin._HELP_CENTER_VIEW
+        }
+    );
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._HELP_CENTER_VIEW] = ZaZimbraAdmin.prototype._helpListener;
     tree.addTreeItemData(ti);
 
 	//Instrumentation code start
