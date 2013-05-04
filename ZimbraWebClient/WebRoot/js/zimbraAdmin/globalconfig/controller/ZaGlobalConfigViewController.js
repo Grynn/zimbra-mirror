@@ -220,17 +220,55 @@ function () {
                         restrictions.push("check_policy_service "+tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaPolicyService][ix]);
                 }
 
-		//check RBLs
-		var numRBLs = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].length;
-		if( (numRBLs !=  this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].length) ||
-			(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].join(""))) {
-			dirty = true;
-		}
-		for(var ix=0;ix<numRBLs;ix++) {
-			restrictions.push("reject_rbl_client "+tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient][ix]);
-		}
-	
-		if (dirty) {
+        // Check reject_rbl_client - List of Client RBLs
+        var numRblClient = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].length;
+        if (numRblClient != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].length
+            ||
+            tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].join("")
+            ) {
+            dirty = true;
+        }
+        for (var ix = 0 ; ix < numRblClient; ix++) {
+            restrictions.push("reject_rbl_client " + tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient][ix]);
+        }
+
+        // Check reject_rhsbl_client - List of Client RHSBLs
+        var numRHSblClient = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblClient].length;
+        if (numRHSblClient != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblClient].length
+            ||
+            tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblClient].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblClient].join("")
+            ) {
+            dirty = true;
+        }
+        for (var ix = 0 ; ix < numRHSblClient; ix++) {
+            restrictions.push("reject_rhsbl_client " + tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblClient][ix]);
+        }
+
+        // Check reject_rhsbl_reverse_client - List of Reverse Client RHSBLs
+        var numRHSblReverseClient = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblReverseClient].length;
+        if (numRHSblReverseClient != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblReverseClient].length
+            ||
+            tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblReverseClient].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblReverseClient].join("")
+            ) {
+            dirty = true;
+        }
+        for (var ix = 0 ; ix < numRHSblReverseClient; ix++) {
+            restrictions.push("reject_rhsbl_reverse_client " + tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblReverseClient][ix]);
+        }
+
+        // Check reject_rhsbl_sender - List of Sender RHSBLs
+        var numRHSblSender = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblSender].length;
+        if (numRHSblSender != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblSender].length
+            ||
+            tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblSender].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblSender].join("")
+            ) {
+            dirty = true;
+        }
+        for (var ix = 0 ; ix < numRHSblSender; ix++) {
+            restrictions.push("reject_rhsbl_sender " + tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblSender][ix]);
+        }
+
+        if (dirty) {
 			tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction] = restrictions;
 		}
 	}

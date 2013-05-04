@@ -81,7 +81,10 @@ ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname = "_"+ZaGlobalConfig.A_zimbraMta
 ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_unknown_sender_domain";
 //rbl check
 ZaGlobalConfig.A_zimbraMtaRejectRblClient = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_rbl_client";
-  
+ZaGlobalConfig.A_zimbraMtaRejectRHSblClient = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_rhsbl_client";
+ZaGlobalConfig.A_zimbraMtaRejectRHSblReverseClient = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_rhsbl_reverse_client";
+ZaGlobalConfig.A_zimbraMtaRejectRHSblSender = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_rhsbl_sender";
+
 //Domain
 ZaGlobalConfig.A_zimbraGalLdapFilterDef = "zimbraGalLdapFilterDef";
 ZaGlobalConfig.A_zimbraGalMaxResults = "zimbraGalMaxResults";
@@ -295,36 +298,64 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
 			this.attrs["_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_"+component] = true;
 		}
 	}
-	
-	//init list of RBLs
-	this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient] = [];
-        this.attrs[ZaGlobalConfig.A_zimbraMtaPolicyService] = [];	
-	// convert restrictions to hidden fields for xform binding
-	var restrictions = this.attrs[ZaGlobalConfig.A_zimbraMtaRestriction];
-	if (restrictions) {
-		if (AjxUtil.isString(restrictions)) {
-			restrictions = [ restrictions ];
-		}
-		for (var i = 0; i < restrictions.length; i++) {
-			if(restrictions[i].indexOf("reject_rbl_client")>-1) {
-				var restriction = restrictions[i];
-				var chunks = restriction.split(" ");
-				if(chunks && chunks.length>0) {
-					this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].push(chunks[1]);
-				}
-			} else if (restrictions[i].indexOf("check_policy_service")>-1){
-				var restriction = restrictions[i];
-                                var chunks = restriction.split(" ");
-                                if(chunks && chunks.length>0) {
-                                        this.attrs[ZaGlobalConfig.A_zimbraMtaPolicyService].push(chunks[1]);
-                                }
 
-                        } else {
-				var restriction = restrictions[i];
-				this.attrs["_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_"+restriction] = true;
-			}
-		}
-	}
+    // init reject_rbl_client - List of Client RBLs
+    this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient] = [];
+    // init reject_rhsbl_client - List of Client RHSBLs
+    this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblClient] = [];
+    // init reject_rhsbl_reverse_client - List of Reverse Client RHSBLs
+    this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblReverseClient] = [];
+    // init reject_rhsbl_sender - List of Sender RHSBLs
+    this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblSender] = [];
+
+    this.attrs[ZaGlobalConfig.A_zimbraMtaPolicyService] = [];
+
+    // convert restrictions to hidden fields for xform binding
+    var restrictions = this.attrs[ZaGlobalConfig.A_zimbraMtaRestriction];
+
+    if (restrictions) {
+        if (AjxUtil.isString(restrictions)) {
+            restrictions = [ restrictions ];
+        }
+
+        for (var i = 0; i < restrictions.length; i++) {
+            if (restrictions[i].indexOf("reject_rbl_client") > -1) {
+                var restriction = restrictions[i];
+                var chunks = restriction.split(" ");
+                if(chunks && chunks.length>0) {
+                    this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].push(chunks[1]);
+                }
+            } else if (restrictions[i].indexOf("reject_rhsbl_client") > -1) {
+                var restriction = restrictions[i];
+                var chunks = restriction.split(" ");
+                if(chunks && chunks.length>0) {
+                    this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblClient].push(chunks[1]);
+                }
+            } else if (restrictions[i].indexOf("reject_rhsbl_reverse_client") > -1) {
+                var restriction = restrictions[i];
+                var chunks = restriction.split(" ");
+                if(chunks && chunks.length>0) {
+                    this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblReverseClient].push(chunks[1]);
+                }
+            } else if (restrictions[i].indexOf("reject_rhsbl_sender") > -1) {
+                var restriction = restrictions[i];
+                var chunks = restriction.split(" ");
+                if(chunks && chunks.length>0) {
+                    this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRHSblSender].push(chunks[1]);
+                }
+            } else if (restrictions[i].indexOf("check_policy_service") > -1){
+                var restriction = restrictions[i];
+                var chunks = restriction.split(" ");
+                if(chunks && chunks.length>0) {
+                    this.attrs[ZaGlobalConfig.A_zimbraMtaPolicyService].push(chunks[1]);
+                }
+            } else {
+                var restriction = restrictions[i];
+                this.attrs["_" + ZaGlobalConfig.A_zimbraMtaRestriction + "_" + restriction] = true;
+            }
+        }
+    }
+
 	if(this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin] != null && !(this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin] instanceof Array)) {
 		this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin] = [this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin]];
 	}
@@ -448,8 +479,43 @@ ZaGlobalConfig.myXModel = {
                 //check policy service
                 { id:ZaGlobalConfig.A_zimbraMtaPolicyService, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaPolicyService, type: _LIST_, listItem:{type:_STRING_}},
 
-                //rbl check
-		{ id:ZaGlobalConfig.A_zimbraMtaRejectRblClient, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectRblClient, type: _LIST_, listItem:{type:_STRING_}},
+        // reject_rbl_client - List of Client RBLs
+        {
+            id: ZaGlobalConfig.A_zimbraMtaRejectRblClient,
+            ref: "attrs/" + ZaGlobalConfig.A_zimbraMtaRejectRblClient,
+            type: _LIST_,
+            listItem: {
+                type: _STRING_
+            }
+        },
+        // reject_rhsbl_client - List of Client RHSBLs
+        {
+            id: ZaGlobalConfig.A_zimbraMtaRejectRHSblClient,
+            ref: "attrs/" + ZaGlobalConfig.A_zimbraMtaRejectRHSblClient,
+            type: _LIST_,
+            listItem: {
+                type: _STRING_
+            }
+        },
+        // reject_rhsbl_reverse_client - List of Reverse Client RHSBLs
+        {
+            id: ZaGlobalConfig.A_zimbraMtaRejectRHSblReverseClient,
+            ref: "attrs/" + ZaGlobalConfig.A_zimbraMtaRejectRHSblReverseClient,
+            type: _LIST_,
+            listItem: {
+                type: _STRING_
+            }
+        },
+        // reject_rhsbl_sender - List of Sender RHSBLs
+        {
+            id: ZaGlobalConfig.A_zimbraMtaRejectRHSblSender,
+            ref: "attrs/" + ZaGlobalConfig.A_zimbraMtaRejectRHSblSender,
+            type: _LIST_,
+            listItem: {
+                type: _STRING_
+            }
+        },
+
 		// smtp
 		{ id:ZaGlobalConfig.A_zimbraSmtpTimeout, ref:"attrs/" + ZaGlobalConfig.A_zimbraSmtpTimeout, type:_NUMBER_, minInclusive: 0 },
 		// pop
