@@ -1024,14 +1024,12 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 						},
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_AV_Settings,
 						  items: [
-					  	    {ref: ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, type: _INPUT_,
-					  	     label: ZaMsg.NAD_Virus_DefUpdateFreq, width: "3em",
-					  	     getDisplayValue: function(value) { return parseInt(value); },
-					  	     elementChanged: function(elementValue, instanceValue, event) {
-						     instanceValue = elementValue+"h";
-							   	this.getForm().itemChanged(this, instanceValue, event);
-							 }
-					  	    },
+                              {
+                                  ref: ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency,
+                                  type: _INPUT_,
+                                  label: ZaMsg.NAD_Virus_DefUpdateFreq,
+                                  width: "5em"
+                              },
 				  	    	{ ref: ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, type: _CHECKBOX_,
 					   	      label: ZaMsg.NAD_Virus_BlockEncrypted,
 							  trueValue:"TRUE", falseValue:"FALSE"
