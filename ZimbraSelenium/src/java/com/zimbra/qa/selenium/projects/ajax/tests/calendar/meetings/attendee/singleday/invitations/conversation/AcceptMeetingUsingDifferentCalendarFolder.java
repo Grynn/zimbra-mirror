@@ -111,6 +111,8 @@ public class AcceptMeetingUsingDifferentCalendarFolder extends CalendarWorkWeekT
 				+		"<folder name='" + folderName + "' l='" + root.getId() + "' view='appointment'/>"
 				+	"</CreateFolderRequest>");
 		FolderItem folderSOAP = FolderItem.importFromSOAP(app.zGetActiveAccount(), folderName);
+		
+		SleepUtil.sleepMedium(); //created folder not visible after hitting Refresh, lets see after wait..
 
 		
 		// --------------- Login to attendee & accept invitation ----------------------------------------------------
@@ -195,6 +197,8 @@ public class AcceptMeetingUsingDifferentCalendarFolder extends CalendarWorkWeekT
 				+		"<folder name='" + folderName + "' l='" + root.getId() + "' view='appointment'/>"
 				+	"</CreateFolderRequest>");
 		FolderItem folderSOAP = FolderItem.importFromSOAP(app.zGetActiveAccount(), folderName);
+		
+		SleepUtil.sleepMedium(); //created folder not visible after hitting Refresh, lets see after wait..
 		
 		// --------------- Creating invitation (organizer) ----------------------------
 		
@@ -284,6 +288,8 @@ public class AcceptMeetingUsingDifferentCalendarFolder extends CalendarWorkWeekT
 				+		"<folder name='" + folderName + "' l='" + root.getId() + "' view='appointment'/>"
 				+	"</CreateFolderRequest>");
 		FolderItem folderSOAP = FolderItem.importFromSOAP(app.zGetActiveAccount(), folderName);
+		
+		SleepUtil.sleepMedium(); //created folder not visible after hitting Refresh, lets see after wait..
 
 		// --------------- Login to attendee & accept invitation ----------------------------------------------------
 
@@ -406,6 +412,8 @@ public class AcceptMeetingUsingDifferentCalendarFolder extends CalendarWorkWeekT
 				+		"<folder name='" + folderName + "' l='" + root.getId() + "' view='appointment'/>"
 				+	"</CreateFolderRequest>");
 		FolderItem folderSOAP = FolderItem.importFromSOAP(app.zGetActiveAccount(), folderName);
+		
+		SleepUtil.sleepMedium(); //created folder not visible after hitting Refresh, lets see after wait..
 
 		// --------------- Login to attendee & accept invitation ----------------------------------------------------
 
@@ -525,6 +533,8 @@ public class AcceptMeetingUsingDifferentCalendarFolder extends CalendarWorkWeekT
 				+		"<folder name='" + folderName + "' l='" + root.getId() + "' view='appointment'/>"
 				+	"</CreateFolderRequest>");
 		FolderItem folderSOAP = FolderItem.importFromSOAP(app.zGetActiveAccount(), folderName);
+		
+		SleepUtil.sleepMedium(); //created folder not visible after hitting Refresh, lets see after wait..
 
 		// --------------- Login to attendee & accept invitation ----------------------------------------------------
 
