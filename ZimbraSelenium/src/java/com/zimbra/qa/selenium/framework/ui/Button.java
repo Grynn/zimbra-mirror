@@ -410,9 +410,14 @@ public class Button {
 	public static final Button B_REFRESH = new Button("B_REFRESH");
 	public static final Button B_SUGGESTATIME = new Button("B_SUGGESTATIME");
 	public static final Button B_SUGGESTALOCATION = new Button("B_SUGGESTALOCATION");
+	public static final Button B_SHOW_TIMES_ANYWAY = new Button("B_SHOW_TIMES_ANYWAY");
+	public static final Button O_SUGGESTION_PREFERENCES = new Button("O_SUGGESTION_PREFERENCES");
 	public static final Button B_10AM = new Button("B_10AM");
-	public static final Button B_SELECT_FIRST_FREE_TIME_FROM_SUGGEST_PANE = new Button("B_SELECT_FIRST_FREE_TIME_FROM_SUGGEST_PANE");	
+	public static final Button B_SELECT_FIRST_FREE_TIME_FROM_SUGGEST_PANE = new Button("B_SELECT_FIRST_FREE_TIME_FROM_SUGGEST_PANE");
 	public static final Button B_SUGGESTEDLOCATION = new Button("B_SUGGESTEDLOCATION");
+	public static final Button B_ONLY_INCLUDE_MY_WORKING_HOURS = new Button("B_ONLY_INCLUDE_MY_WORKING_HOURS");
+	public static final Button B_ONLY_INCLUDE_OTHER_ATTENDEES_WORKING_HOURS = new Button("B_ONLY_INCLUDE_OTHER_ATTENDEES_WORKING_HOURS");
+	public static final Button F_NAME_EDIT_FIELD = new Button("F_NAME_EDIT_FIELD");
 	public static final Button B_TAGAPPOINTMENTMENU = new Button("B_TAGAPPOINTMENTMENU");
 	public static final Button B_LOCATIONMENU = new Button("B_LOCATIONMENU");
 	public static final Button B_NEXT_PAGE = new Button("B_NEXT_PAGE");
