@@ -56,7 +56,9 @@ public class ZmCalendarAppFolders extends AjaxCommonTest {
 
 		// Currently in the mail app
 		// Navigate to the addressbook
-		app.zPageCalendar.zNavigateTo();
+		//app.zPageCalendar.zNavigateTo();
+		
+		app.zPageCalendar.zClickAt("css=td[id='zb__App__Calendar_title']","");
 
 		PerfMetrics.waitTimestamp(token);
 
@@ -87,7 +89,9 @@ public class ZmCalendarAppFolders extends AjaxCommonTest {
 
 		// Currently in the mail app
 		// Navigate to the addressbook
-		app.zPageCalendar.zNavigateTo();
+		//app.zPageCalendar.zNavigateTo();
+		
+		app.zPageCalendar.zClickAt("css=td[id='zb__App__Calendar_title']","");
 
 		PerfMetrics.waitTimestamp(token);
 
