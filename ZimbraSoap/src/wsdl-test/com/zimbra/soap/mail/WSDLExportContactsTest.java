@@ -72,6 +72,6 @@ public class WSDLExportContactsTest {
        String content = resp.getContent();
        Assert.assertNotNull("<content> contents", content);
        String firstPart = content.substring(0, 15);
-       Assert.assertEquals("First part of <content> ", "\"Prénom\";\"Nom\";", firstPart);
+       Assert.assertEquals("First part of <content> ", "\"Pr\u00E9nom\";\"Nom\";", firstPart);
     }
 }
