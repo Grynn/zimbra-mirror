@@ -24,6 +24,7 @@
 # Required-Start: $network $remote_fs $syslog $time nscd cron
 # Required-Stop:  $network $remote_fs $syslog $time
 # Default-Start:  3 5
+# Default-Stop:   0 1 6
 # Description:    Zimbra mail service
 ### END INIT INFO
 
