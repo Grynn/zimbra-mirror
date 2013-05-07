@@ -20,8 +20,6 @@ import java.io.File;
 import java.util.HashMap;
 
 import org.testng.annotations.Test;
-
-import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.performance.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -36,14 +34,14 @@ public class ZmMailItemHTML extends AjaxCommonTest {
 	@SuppressWarnings("serial")
 	public ZmMailItemHTML() throws HarnessException {
 		logger.info("New "+ ZmMailItemHTML.class.getCanonicalName());
-		
+
 		super.startingPage = app.zPageMail;
 
-		
+
 		super.startingAccountPreferences = new HashMap<String, String>() {{
-				    put("zimbraPrefGroupMailBy", "message");
-				    put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
-				}};
+			put("zimbraPrefGroupMailBy", "message");
+			put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
+		}};
 
 
 	}
@@ -58,7 +56,6 @@ public class ZmMailItemHTML extends AjaxCommonTest {
 
 		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mime));
 
-
 		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
@@ -66,7 +63,8 @@ public class ZmMailItemHTML extends AjaxCommonTest {
 		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailItem, "Load preview pane, html message, initial load");
 
 		// Select the message so that it shows in the reading pane
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		//app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		app.zPageMail.zClickAt("css=ul[id='zl__TV-main__rows'] li[id^='zli__TV-main__']  div span[id$='__su']:contains('"+subject+"')","");
 
 		PerfMetrics.waitTimestamp(token);
 
@@ -80,8 +78,6 @@ public class ZmMailItemHTML extends AjaxCommonTest {
 		String subject = "Subject13155016716713";
 
 		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mime));
-
-
 		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
@@ -89,12 +85,11 @@ public class ZmMailItemHTML extends AjaxCommonTest {
 		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailItem, "Load preview pane, html message, 1 message");
 
 		// Select the message so that it shows in the reading pane
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		//app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		app.zPageMail.zClickAt("css=ul[id='zl__TV-main__rows'] li[id^='zli__TV-main__']  div span[id$='__su']:contains('"+subject+"')","");
 
 		PerfMetrics.waitTimestamp(token);
 
 	}
-
-
 
 }

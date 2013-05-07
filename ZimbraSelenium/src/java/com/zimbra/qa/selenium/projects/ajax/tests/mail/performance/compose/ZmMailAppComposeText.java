@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.ui.Button;
+
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.performance.PerfKey;
 import com.zimbra.qa.selenium.framework.util.performance.PerfMetrics;
@@ -32,7 +32,8 @@ public class ZmMailAppComposeText extends AjaxCommonTest {
 		PerfToken token = PerfMetrics.startTimestamp(PerfKey.ZmMailAppCompose,"Load the compose window in text view");
 
 		// Click the new button
-		app.zPageMail.zToolbarPressButton(Button.B_NEW);
+		//app.zPageMail.zToolbarPressButton(Button.B_NEW);
+		app.zPageMail.zClickAt("css=div[id$='__NEW_MENU'] td[id$='__NEW_MENU_title']","");
 
 		PerfMetrics.waitTimestamp(token);
 
