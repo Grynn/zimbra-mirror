@@ -1,0 +1,111 @@
+Date: Wed, 8 May 2013 13:40:44 -0700 (PDT)
+From: foo@example.com
+To: bar@example.com
+Subject: Bug81565
+MIME-Version: 1.0
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_43_1902030928.1368045644484"
+Thread-Topic: Bug81565
+Thread-Index: Edd9+iyK13GPqEOsVEKNBOPY8iBqEw==
+
+------=_Part_43_1902030928.1368045644484
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_44_2139721301.1368045644486"
+
+------=_Part_44_2139721301.1368045644486
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+The following is a new meeting request:
+
+Subject: Bug81565 
+Organizer: foo@example.com 
+
+Location: Location 
+Time: Sunday, May 8, 2016, 2:00:00 PM - 3:00:00 PM GMT -08:00 US/Canada Pacific
+ 
+Invitees: bar@example.com 
+
+
+*~*~*~*~*~*~*~*~*~*
+
+Content
+------=_Part_44_2139721301.1368045644486
+Content-Type: text/calendar; charset=utf-8; method=REQUEST; name=meeting.ics
+Content-Transfer-Encoding: 7bit
+
+BEGIN:VCALENDAR
+PRODID:Zimbra-Calendar-Provider
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VTIMEZONE
+TZID:America/Los_Angeles
+BEGIN:STANDARD
+DTSTART:16010101T020000
+TZOFFSETTO:-0800
+TZOFFSETFROM:-0700
+RRULE:FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=11;BYDAY=1SU
+TZNAME:PST
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010101T020000
+TZOFFSETTO:-0700
+TZOFFSETFROM:-0800
+RRULE:FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=2SU
+TZNAME:PDT
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:9f7350db-92df-47d0-b01f-8c08c33115c8
+SUMMARY:Bug81565
+LOCATION:Location
+ATTENDEE;CN=vmwen2;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:mail
+ to:vmwen2@zqa-062.eng.vmware.com
+ORGANIZER:mailto:vmwen1@zqa-062.eng.vmware.com
+DTSTART;TZID="America/Los_Angeles":20160508T140000
+DTEND;TZID="America/Los_Angeles":20160508T150000
+STATUS:CONFIRMED
+CLASS:PUBLIC
+X-MICROSOFT-CDO-INTENDEDSTATUS:BUSY
+TRANSP:OPAQUE
+LAST-MODIFIED:20130508T204044Z
+DTSTAMP:20130508T204044Z
+SEQUENCE:0
+DESCRIPTION:The following is a new meeting request:\n\nSubject: Bug81565 \nO
+ rganizer: vmwen1@zqa-062.eng.vmware.com \n\nLocation: Location \nTime: Sunda
+ y\, May 8\, 2016\, 2:00:00 PM - 3:00:00 PM GMT -08:00 US/Canada Pacific\n \n
+ Invitees: vmwen2@zqa-062.eng.vmware.com \n\n\n*~*~*~*~*~*~*~*~*~*\n\nContent
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER;RELATED=START:-PT5M
+DESCRIPTION:Reminder
+END:VALARM
+END:VEVENT
+END:VCALENDAR
+------=_Part_44_2139721301.1368045644486--
+
+------=_Part_43_1902030928.1368045644484
+Content-Type: image/png; name=Capture.PNG
+Content-Disposition: attachment; filename=Capture.PNG
+Content-Transfer-Encoding: base64
+
+iVBORw0KGgoAAAANSUhEUgAAAGwAAABuCAIAAABNzGGRAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMsSURBVHhe7ZtdTsMwEIR7/0txJ56RSlFFidI2
+O579c8xEvDE7u/PZiRMkLhddIiACIiACIiACIiACIiACIiACIiACIvB/CFw/Lwc//4fDQNJjZMhv
+B5qtJEXQcJqVKL3NwqEhqhakSVAIKVkEZQgLp8mJUTqTh5efD2U4ghDDM3EMCZxkcgKOScnDbedF
+GR411XBGjqmBk8zn4pgUssB2Fo4FUVNb9HNMjVdm3smxLGRBox6OBcGKW1RzjIr3PPeo885htHyn
+L+XonPVWfnwh/gcOSPlLTR1EesRHITLrcRfTgR7SdI4R0PPdC/HrXSPQgZsTNHfJuMm2VXj7FohD
+y4xn+VNmELx+fTx+kHPmhebXASkHIzB0wBpwggPZ/jDdELyjNE/bYwezHIwAAmFk4ASC+Baun+Dz
+42Z7L0+1E7OejBkQbys25zNxaohDw3WdzqOvYuiTMWQbjg7XC3FovSGOgRDB4bq+WLhX2gaIJkdk
+zTK+nXd9ITS4CElFaPyvx1Evhs5Hh02SoLNMiU0HVCxDhAgCIrJlRO9lSmw6oGIZIkQQEJEtI3ov
+U2LTARXLECGCgIhsGdF7mRKbDqhYhggRBERky4je85T8/KHo8B9jnN+XNr67wjNEb+02ITcJygjR
+cRP0VoV8ESJwUE0vDq67HyJKB9RxMXqr5rqX6cfiI0Y9Tf82vM0cf42C8G+E0Y5bvb97PEFiM4bs
+BZrjIhB3twONgyucFOK5NqMTYsq9TL91O8P4tyGx9ilHivOQLeYY8ixO3Ikhq8ptLrDqBATnv6n9
+EHP3oOem9mdDdmJIlyKIeTd1YAAE+rMmcADbavIRufFyD+WXULlB7fVxK7jBGgjSJ0z2rCcjmMSR
+puApdO9+t4Fn+hlq3QCCDGZgwc0QBCDIhsvQWxUUPdSml8ho99DooWajSbr0oaETzLq44H0TQudY
+4pEqlTlZM10r6SC9MrMmeyPxsjXJEavsszG986/KV9inEmVhrKZWeTSbAnW39QPtTjBff4TpfFNr
+IhEQAREQAREQAREQAREQAREQAREQAREQAREQAREQAREQAREQAREQAREQgW/MJq15Bqod4AAAAABJ
+RU5ErkJggg==
+------=_Part_43_1902030928.1368045644484--
+
+
