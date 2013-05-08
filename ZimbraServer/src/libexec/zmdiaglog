@@ -98,41 +98,28 @@ sub save_heap_info($$$$) {
 	my $histo_cmd;
 	my $dump_cmd;
 	my $dump_file;
-	if ($version eq '1.6') {
-		$histo_cmd = "$JMAP -histo:live $pid";
-		$dump_cmd  = "$SU '$JMAP -dump:live,file=$destination/heapdump.live $pid'";
-		$dump_file = "$destination/heapdump.live";
-	} elsif ($version eq '1.5') {
-		$histo_cmd = "$JMAP -histo $pid";
-		$dump_cmd  = "$JMAP -heap:format=b $pid";
-		$dump_file = "$destination/heap.bin";
-	}
-    logmsg "Retrieving JVM heap histogram\n";
+	
+	$histo_cmd = "$JMAP -histo:live $pid";
+    $dump_file = "$destination/heapdump-live.hprof";
+	$dump_cmd  = "$SU '$JMAP -dump:live,file=$dump_file $pid'";
+	
+    logmsg "Retrieving JVM $version heap histogram\n";
     exec_with_timeout("$SU '$histo_cmd' > heap.histo 2>&1", $timeout);
-    logmsg "Saving JVM heapdump\n";
+    logmsg "Saving JVM $version heapdump\n";
     my $success = exec_with_timeout("$dump_cmd", $timeout);
     my $dumped = -f "$dump_file";
-    if ((!$dumped || !$success) && $version eq '1.6') {
-        logmsg "Failed to save heapdump, attempting forced dump\n";
-        exec_with_timeout("$SU '$JMAP -F -dump:file=$destination/heapdump.snapshot $pid'", $timeout);
-        $dumped = -f 'heapdump.snapshot';
-    }
     $dumped && $success;
 }
 
 sub save_jvm_core($$) {
     my ($JAVA_VERSION, $mailboxd_pid) = @_;
     if ($HAVE_GCORE) {
-        logmsg "Failed collecting heapdump.  Collecting JVM coredump\n";
+        logmsg "Live heap dump could not be collected. Collecting JVM coredump\n";
         # longer timeout for gcore because it can take a lot longer
         my $got_core = exec_with_timeout("gcore $mailboxd_pid", 300);
         logmsg "Converting coredump to heap snapshot\n";
         if ($got_core) {
-            if ($JAVA_VERSION eq "1.6") {
-                qx($JMAP -dump:file=heapdump.snapshot $JAVA core.$mailboxd_pid);
-            } else {
-                qx($JMAP -heap:format=b $JAVA core.$mailboxd_pid);
-            }
+            qx($JMAP -dump:file=heapdump.snapshot $JAVA core.$mailboxd_pid);
         }
         unlink("core.$mailboxd_pid");
     } elsif (!$HAVE_GCORE) {
@@ -218,12 +205,15 @@ sub exec_with_timeout($$) {
     }
     $result;
 }
-sub HELP_MESSAGE {
+sub usage {
     my $fd = shift;
     print $fd <<"EOF";
-Usage: zmdiaglog [-adtjzZh]
+Usage: 
+zmdiaglog [-h]
+zmdiaglog [-a | -c] [-d DESTINATION] [-t TIMEOUT] [-j] [-z | -Z]
 
-    -a    - Do everything: also gather JVM heapdump/coredump
+    -a    - Do everything: plus collect live JVM heap dump
+    -c    - Use instead of -a to parse heap dump from JVM core dump
     -d    - Log destination (Default $DEFAULT_DEST)
     -t    - Timeout in seconds for hanging commands (Default $DEFAULT_TIMEOUT)
     -j    - Also include the output of /opt/zimbra/libexec/zmjavawatch
@@ -264,10 +254,10 @@ sub run() {
     my %options;
     $options{'d'} = $DEFAULT_DEST;
     $options{'t'} = $DEFAULT_TIMEOUT;
-    getopts('d:t:jhazZ', \%options);
+    getopts('d:t:jhaczZ', \%options);
     
     if ($options{'h'}) {
-        HELP_MESSAGE(\*STDERR);
+        usage(\*STDERR);
         exit(0);
     }
     if ($< != 0) {
@@ -275,6 +265,12 @@ sub run() {
         exit 1;
     }
     
+    if ($options{'a'} && $options{'c'}) {
+        print STDERR "ERROR: Specify only one of -a or -c.\n";
+        usage(\*STDERR);
+        exit 1;
+    }
+
     my $destination = $options{'d'};
     $destination    = File::Spec->rel2abs($destination);
     my $timeout     = $options{'t'};
@@ -288,7 +284,7 @@ sub run() {
     chdir($destination);
     
     my $mailboxd_pid = get_pid();
-    logmsg "No '-a' argument, skipping heap and coredump collection.\n"
+    logmsg "No '-a' argument, skipping heap/coredump collection.\n"
             if (!$options{'a'});
     logmsg "ZCS mailboxd pid: $mailboxd_pid\n";
     logmsg "Saving diagnostic logging output to: $destination\n";
@@ -362,7 +358,8 @@ sub run() {
     
     my $dumped = save_heap_info($JAVA_VERSION, $destination,
         $mailboxd_pid, $timeout) if ($options{'a'});
-    save_jvm_core($JAVA_VERSION, $mailboxd_pid) if (!$dumped && $options{'a'});
+
+    save_jvm_core($JAVA_VERSION, $mailboxd_pid) if ($options{'c'} || (!$dumped && $options{'a'}));
 
 	logmsg "Heap dump processing complete. It is now safe to restart mailboxd.\n";
     logmsg "Saving output of zmdumpenv\n";
