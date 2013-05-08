@@ -19,6 +19,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose;
 import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -265,6 +266,8 @@ public class ReplyAllMail extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
+		try {
+			
 		// Click in sent
 		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Sent));
 		
@@ -276,6 +279,13 @@ public class ReplyAllMail extends PrefGroupMailByMessageTest {
 
 		// Send the message
 		mailform.zSubmit();
+
+		} finally {
+			
+			// Click back to inbox
+			app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox));
+
+		}
 
 
 
@@ -338,8 +348,128 @@ public class ReplyAllMail extends PrefGroupMailByMessageTest {
 			
 
 		}
+		
+	}
 
+	@Bugs(	ids = "79880")
+	@Test(	description = "Verify user account is not To/Cc when mismatched case)",
+			groups = { "functional" })
+	public void ReplyMail_04() throws HarnessException {
+
+		// Steps:
+		// 1. Receive message to your account, but First.Last@domain.com specified in To
+		// 2. Reply-All from the first.last@domain.com account
+		// 3. Verify the sent message does not contain To/Cc for first.last@domain.com or First.Last@domain.com
+		
+		//-- DATA
+		
+		// Send a message from the account
+		
+		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ ZimbraAccount.AccountB().EmailAddress +"'/>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress.toUpperCase() +"'/>" +
+						"<su>"+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>content" + ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+						"</mp>" +
+						"</m>" +
+				"</SendMsgRequest>");
+
+
+
+		//-- GUI
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the item
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Reply the item
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_REPLYALL);
+
+		// Send the message
+		mailform.zSubmit();
+
+
+
+		//-- Verification
+		
+		// Verify the active account is not in the To/Cc
+		MailItem message = MailItem.importFromSOAP(app.zGetActiveAccount(), "in:sent subject:("+ subject +")");
+		ZAssert.assertNotNull(message, "verify the message in the sent folder");
+		
+		for ( RecipientItem r : message.dToRecipients) {
+			ZAssert.assertNotEqual(r.dEmailAddress.toLowerCase(), app.zGetActiveAccount().EmailAddress.toLowerCase(), "Verify active account is not in the To field");
+		}
+		for ( RecipientItem r : message.dCcRecipients) {
+			ZAssert.assertNotEqual(r.dEmailAddress.toLowerCase(), app.zGetActiveAccount().EmailAddress.toLowerCase(), "Verify active account is not in the Cc field");
+		}
 
 	}
+	
+	@Bugs(	ids = "79880")
+	@Test(	description = "Verify user account is not To/Cc when mismatched case)",
+			groups = { "functional" })
+	public void ReplyMail_05() throws HarnessException {
+
+		// Steps:
+		// 1. Receive message to your account, but First.Last@domain.com specified in Cc
+		// 2. Reply-All from the first.last@domain.com account
+		// 3. Verify the sent message does not contain To/Cc for first.last@domain.com or First.Last@domain.com
+		
+		//-- DATA
+		
+		// Send a message from the account
+		
+		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ ZimbraAccount.AccountB().EmailAddress +"'/>" +
+						"<e t='c' a='"+ app.zGetActiveAccount().EmailAddress.toUpperCase() +"'/>" +
+						"<su>"+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>content" + ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+						"</mp>" +
+						"</m>" +
+				"</SendMsgRequest>");
+
+
+
+		//-- GUI
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the item
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Reply the item
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_REPLYALL);
+
+		// Send the message
+		mailform.zSubmit();
+
+
+
+		//-- Verification
+		
+		// Verify the active account is not in the To/Cc
+		MailItem message = MailItem.importFromSOAP(app.zGetActiveAccount(), "in:sent subject:("+ subject +")");
+		ZAssert.assertNotNull(message, "verify the message in the sent folder");
+		
+		for ( RecipientItem r : message.dToRecipients) {
+			ZAssert.assertNotEqual(r.dEmailAddress.toLowerCase(), app.zGetActiveAccount().EmailAddress.toLowerCase(), "Verify active account is not in the To field");
+		}
+		for ( RecipientItem r : message.dCcRecipients) {
+			ZAssert.assertNotEqual(r.dEmailAddress.toLowerCase(), app.zGetActiveAccount().EmailAddress.toLowerCase(), "Verify active account is not in the Cc field");
+		}
+
+	}
+
 
 }
