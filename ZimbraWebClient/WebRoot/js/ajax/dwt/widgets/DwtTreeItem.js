@@ -136,6 +136,22 @@ function() {
 	DwtComposite.prototype.dispose.call(this);
 };
 
+/**
+ * override DwtControl.prototype.getData to take care of special case of KEY_OBJECT of type ZmOrganizer. See bug 82027
+ * @param key
+ * @return {*}
+ */
+DwtTreeItem.prototype.getData =
+function(key) {
+	var obj = this._data[key];
+	if (key !== Dwt.KEY_OBJECT || !obj || !obj.isZmOrganizer) {
+		return obj;
+	}
+	//special case for ZmOrganizer instance of the Dwt.KEY_OBJECT attribute.
+	//bug 82027 - the folder attributes such as name could be wrong after refresh block+ rename when new instance was created but not set to the item Dwt.KEY_OBJECT attribute.
+	var cachedOrganizer = obj && appCtxt.cacheGet(obj.id);
+	return cachedOrganizer || obj; //just in case somehow it's no longer cached. No idea if could happen.
+};
 
 /**
  * Checks if the item is checked.
