@@ -31,137 +31,144 @@ com_zimbra_webex_HandlerObject.prototype.constructor = com_zimbra_webex_HandlerO
 var WebExZimlet = com_zimbra_webex_HandlerObject;
 
 /**
+ * Stores WebEx accountName property.
+ */
+WebExZimlet.PROP_ACCOUNTNAME = {propId: "webexZimlet_accountname", label: "WebExZimlet_accountName", defaultVal: "", extraLabel: ""};
+
+/**
  * Stores WebEx userName property.
  */
-WebExZimlet.PROP_USERNAME = {propId:"webexZimlet_username", label:"WebExZimlet_userName", defaultVal:"", extraLabel:""};
+WebExZimlet.PROP_USERNAME = {propId: "webexZimlet_username", label: "WebExZimlet_userName", defaultVal: "", extraLabel: ""};
 
 /**
  * Stores WebEx password property.
  */
-WebExZimlet.PROP_PASSWORD = {propId:"webexZimlet_pwd", label:"WebExZimlet_password", defaultVal:"", extraLabel:"", objType:"password"};
+WebExZimlet.PROP_PASSWORD = {propId: "webexZimlet_pwd", label: "WebExZimlet_password", defaultVal: "", extraLabel: "", objType: "password"};
 
 /**
  * Stores WebEx company id property.
  */
-WebExZimlet.PROP_COMPANY_ID = {propId:"webexZimlet_companyId", label:"WebExZimlet_companyId", defaultVal:"",
-	extraLabel:""};
+WebExZimlet.PROP_COMPANY_ID = {propId: "webexZimlet_companyId", label: "WebExZimlet_companyId", defaultVal: "", extraLabel: ""};
 
 /**
  * Stores WebEx Alternate Host property.
  */
-WebExZimlet.PROP_ALT_HOSTS = {propId:"WebExZimlet_altHosts", label:"WebExZimlet_altHosts", defaultVal:"",extraLabel:""};
+WebExZimlet.PROP_ALT_HOSTS = {propId: "WebExZimlet_altHosts", label: "WebExZimlet_altHosts", defaultVal: "", extraLabel: ""};
 
 /**
  * Stores calendar that is associated with a particular WebEx Account
  */
-WebExZimlet.PROP_ASSOCIATED_CALENDAR = {propId:"webexZimlet_AssociatedCalendar", label:"WebExZimlet_useThisAccountFor", defaultVal:"", extraLabel:""};
+WebExZimlet.PROP_ASSOCIATED_CALENDAR = {propId: "webexZimlet_AssociatedCalendar", label: "WebExZimlet_useThisAccountFor", defaultVal: "", extraLabel: ""};
 
 /**
  * Stores Meeting password for a particular account
  */
-WebExZimlet.PROP_MEETING_PASSWORD = {propId:"webexZimlet_meetingPwd", label:"WebExZimlet_meetingPwd", defaultVal:"", extraLabel:"WebExZimlet_optional"};
+WebExZimlet.PROP_MEETING_PASSWORD = {propId: "webexZimlet_meetingPwd", label: "WebExZimlet_meetingPwd", defaultVal: "", extraLabel: "WebExZimlet_optional"};
 
 /**
  * Stores toll-free phone number property
  */
-WebExZimlet.PROP_TOLL_FREE_PHONE_NUMBER = {propId:"webexZimlet_tollFreePH", label:"WebExZimlet_tollFreeNumber", defaultVal:"", extraLabel:""};
+WebExZimlet.PROP_TOLL_FREE_PHONE_NUMBER = {propId: "webexZimlet_tollFreePH", label: "WebExZimlet_tollFreeNumber", defaultVal: "", extraLabel: ""};
 
 /**
  * Stores toll phone number property.
  */
-WebExZimlet.PROP_TOLL_PHONE_NUMBER = {propId:"webexZimlet_tollPH", label:"WebExZimlet_tollNumber", defaultVal:"", extraLabel:""};
+WebExZimlet.PROP_TOLL_PHONE_NUMBER = {propId: "webexZimlet_tollPH", label: "WebExZimlet_tollNumber", defaultVal: "", extraLabel: ""};
 
 /**
  * Stores WebEx international phone number property.
  */
-WebExZimlet.PROP_OTHER_PHONE_NUMBERS = {propId:"webexZimlet_otherPH", label:"WebExZimlet_otherPhoneNumbers", defaultVal:"", extraLabel:""};
+WebExZimlet.PROP_OTHER_PHONE_NUMBERS = {propId: "webexZimlet_otherPH", label: "WebExZimlet_otherPhoneNumbers", defaultVal: "", extraLabel: ""};
 
 /**
  * Stores WebEx phone passcode property.
  */
-WebExZimlet.PROP_PHONE_PASSCODE = {propId:"webexZimlet_phonePasscode", label:"WebExZimlet_phonePasscode", defaultVal:"", extraLabel:"WebExZimlet_digitsOnly"};
+WebExZimlet.PROP_PHONE_PASSCODE = {propId: "webexZimlet_phonePasscode", label: "WebExZimlet_phonePasscode", defaultVal: "", extraLabel: "WebExZimlet_digitsOnly"};
 
 /**
  * An Array w/ just account properties. Helps in drawing account specific UI
  */
-WebExZimlet.SINGLE_WEBEX_ACCNT_PROPS = [WebExZimlet.PROP_USERNAME,WebExZimlet.PROP_PASSWORD,
-	WebExZimlet.PROP_COMPANY_ID, WebExZimlet.PROP_MEETING_PASSWORD, WebExZimlet.PROP_ALT_HOSTS];
+WebExZimlet.SINGLE_WEBEX_ACCNT_PROPS = [WebExZimlet.PROP_USERNAME, WebExZimlet.PROP_PASSWORD,
+	WebExZimlet.PROP_COMPANY_ID, WebExZimlet.PROP_MEETING_PASSWORD,
+	WebExZimlet.PROP_ALT_HOSTS];
 
 /**
  * An Array w/ just tele-conf properties.  Used in drawing tele-conf specific UI
  */
 WebExZimlet.WEBEX_TELECONF_PROPS = [WebExZimlet.PROP_TOLL_FREE_PHONE_NUMBER,
-	WebExZimlet.PROP_TOLL_PHONE_NUMBER,WebExZimlet.PROP_OTHER_PHONE_NUMBERS,
+	WebExZimlet.PROP_TOLL_PHONE_NUMBER, WebExZimlet.PROP_OTHER_PHONE_NUMBERS,
 	WebExZimlet.PROP_PHONE_PASSCODE];
 
 /**
  * An array with all properties.
  */
-WebExZimlet.ALL_ACCNT_PROPS = [WebExZimlet.PROP_USERNAME,WebExZimlet.PROP_PASSWORD,
-	WebExZimlet.PROP_COMPANY_ID,WebExZimlet.PROP_MEETING_PASSWORD,
-	WebExZimlet.PROP_ASSOCIATED_CALENDAR,WebExZimlet.PROP_TOLL_FREE_PHONE_NUMBER,
-	WebExZimlet.PROP_TOLL_PHONE_NUMBER,WebExZimlet.PROP_OTHER_PHONE_NUMBERS,
+WebExZimlet.ALL_ACCNT_PROPS = [WebExZimlet.PROP_ACCOUNTNAME, WebExZimlet.PROP_USERNAME,
+	WebExZimlet.PROP_PASSWORD, WebExZimlet.PROP_COMPANY_ID, WebExZimlet.PROP_MEETING_PASSWORD,
+	WebExZimlet.PROP_ASSOCIATED_CALENDAR, WebExZimlet.PROP_TOLL_FREE_PHONE_NUMBER,
+	WebExZimlet.PROP_TOLL_PHONE_NUMBER, WebExZimlet.PROP_OTHER_PHONE_NUMBERS,
 	WebExZimlet.PROP_PHONE_PASSCODE, WebExZimlet.PROP_ALT_HOSTS];
 
 
 /**
  * Stores append meeting password  property
  */
-WebExZimlet.PROP_APPEND_WEBEX_MEETING_PWD = {propId:"webexZimlet_appendWebexMeetingPassword", label:"WebExZimlet_appendMeetingPwd", defaultVal:"NONE", extraLabel:""};
+WebExZimlet.PROP_APPEND_WEBEX_MEETING_PWD = {propId: "webexZimlet_appendWebexMeetingPassword", label: "WebExZimlet_appendMeetingPwd", defaultVal: "NONE", extraLabel: ""};
 
 /**
  * Stores append toll free property property
  */
-WebExZimlet.PROP_APPEND_TOLL_FREE_PHONE_NUMBER = {propId:"webexZimlet_appendTollFreeConfNumber", label:"WebExZimlet_appendToolFreeNumber", defaultVal:"NONE", extraLabel:""};
+WebExZimlet.PROP_APPEND_TOLL_FREE_PHONE_NUMBER = {propId: "webexZimlet_appendTollFreeConfNumber", label: "WebExZimlet_appendToolFreeNumber", defaultVal: "NONE", extraLabel: ""};
 
 /**
  * Stores append toll phone property
  */
-WebExZimlet.PROP_APPEND_TOLL_PHONE_NUMBER = {propId:"webexZimlet_appendTollConfNumber", label:"WebExZimlet_appendTollConfNumber", defaultVal:"NONE", extraLabel:""};
+WebExZimlet.PROP_APPEND_TOLL_PHONE_NUMBER = {propId: "webexZimlet_appendTollConfNumber", label: "WebExZimlet_appendTollConfNumber", defaultVal: "NONE", extraLabel: ""};
 
 
 /**
  * Stores append passcode property
  */
-WebExZimlet.PROP_APPEND_PHONE_PASSCODE = {propId:"webexZimlet_appendPhonePasscode", label:"WebExZimlet_appendPhonePasscode", defaultVal:"NONE", extraLabel:""};
+WebExZimlet.PROP_APPEND_PHONE_PASSCODE = {propId: "webexZimlet_appendPhonePasscode", label: "WebExZimlet_appendPhonePasscode", defaultVal: "NONE", extraLabel: ""};
 
 
 /**
  * Helps draw append options UI
  */
 WebExZimlet.APPEND_SUB_OPTIONS = [WebExZimlet.PROP_APPEND_WEBEX_MEETING_PWD,
-	WebExZimlet.PROP_APPEND_TOLL_FREE_PHONE_NUMBER,WebExZimlet.PROP_APPEND_TOLL_PHONE_NUMBER,
+	WebExZimlet.PROP_APPEND_TOLL_FREE_PHONE_NUMBER, WebExZimlet.PROP_APPEND_TOLL_PHONE_NUMBER,
 	WebExZimlet.PROP_APPEND_PHONE_PASSCODE];
 
 /**
  * Array with all General options. This entire list is stored  in Zimbra DB
  */
 WebExZimlet.ALL_GENERAL_PROPS = [WebExZimlet.PROP_APPEND_WEBEX_MEETING_PWD,
-	WebExZimlet.PROP_APPEND_TOLL_FREE_PHONE_NUMBER,WebExZimlet.PROP_APPEND_TOLL_PHONE_NUMBER,
+	WebExZimlet.PROP_APPEND_TOLL_FREE_PHONE_NUMBER, WebExZimlet.PROP_APPEND_TOLL_PHONE_NUMBER,
 	WebExZimlet.PROP_APPEND_PHONE_PASSCODE];
 
 /**
  * Map Zimbra TimeZone Name to WebEx TimeZone Id
  *
  */
-WebExZimlet.WebExToZimbraTZIDMap = {"Etc/GMT+12" : "0", "Pacific/Midway" : "1", "Pacific/Honolulu" : "2", "America/Anchorage" : "3", "America/Los_Angeles" : "4", "America/Tijuana" : "4",
-	"America/Phoenix" : "5","America/Chihuahua" : "6", "America/Denver" : "6", "America/Chicago" : "7", "America/Guatemala" : "7", "America/Mexico_City" : "8", "America/Regina" : "9", "America/Bogota" : "10",
-	"America/New_York" : "11", "America/Indiana/Indianapolis" : "12", "America/Halifax" : "13", "America/Guyana" : "13", "America/La_Paz" : "13", "America/Manaus" : "13", "America/Santiago" : "13",
-	"America/Caracas" : "14", "America/St_Johns" : "15", "America/Sao_Paulo" : "16", "America/Argentina/Buenos_Aires" : "17", "America/Godthab" : "17", "America/Montevideo" : "17",
-	"Atlantic/South_Georgia" : "18", "Atlantic/Azores" : "19", "Atlantic/Cape_Verde" : "19", "Africa/Casablanca" : "20", "Africa/Monrovia" : "20", "Europe/London" : "21", "Africa/Algiers" : "21",
-	"Africa/Windhoek" : "22", "Europe/Belgrade" : "22", "Europe/Warsaw" : "22", "Europe/Brussels" : "23", "Europe/Berlin" : "25", "Europe/Athens" : "26", "Africa/Cairo" : "28",
-	"Africa/Harare" : "29", "Asia/Amman" : "29", "Asia/Beirut" : "29", "Europe/Helsinki" : "30", "Europe/Minsk" : "30", "Asia/Jerusalem" : "31", "Asia/Baghdad" : "32", "Europe/Moscow" : "33",
-	"Africa/Nairobi" : "34", "Asia/Kuwait" : "35", "Asia/Tehran" : "35", "Asia/Muscat" : "36", "Asia/Baku" : "37", "Asia/Tbilisi" : "37", "Asia/Yerevan" : "37", "Asia/Kabul" : "38", "Asia/Tashkent" : "39",
-	"Asia/Yekaterinburg" : "39", "Asia/Karachi" : "40", "Asia/Kolkata" : "41", "Asia/Colombo" : "42", "Asia/Dhaka" : "42", "Asia/Novosibirsk" : "43", "Asia/Rangoon" : "43", "Asia/Bangkok" : "44",
-	"Asia/Krasnoyarsk" : "44", "Asia/Hong_Kong" : "45", "Asia/Irkutsk" : "45", "Australia/Perth" : "46", "Asia/Kuala_Lumpur" : "47", "Asia/Taipei" : "48", "Asia/Tokyo" : "49", "Asia/Seoul" : "50", "Asia/Yakutsk" : "51",
-	"Australia/Adelaide" : "52", "Australia/Darwin" : "53", "Asia/Vladivostok" : "54", "Australia/Brisbane" : "54", "Australia/Sydney" : "55", "Pacific/Guam" : "56", "Australia/Hobart" : "57",
-	"Asia/Magadan" : "59", "Pacific/Auckland" : "60", "Pacific/Fiji" : "61", "Pacific/Tongatapu" : "61"};
+WebExZimlet.WebExToZimbraTZIDMap = {"Etc/GMT+12": "0", "Pacific/Midway": "1", "Pacific/Honolulu": "2", "America/Anchorage": "3", "America/Los_Angeles": "4", "America/Tijuana": "4",
+	"America/Phoenix": "5","America/Chihuahua": "6", "America/Denver": "6", "America/Chicago": "7", "America/Guatemala": "7", "America/Mexico_City": "8", "America/Regina": "9", "America/Bogota": "10",
+	"America/New_York": "11", "America/Indiana/Indianapolis": "12", "America/Halifax": "13", "America/Guyana": "13", "America/La_Paz": "13", "America/Manaus": "13", "America/Santiago": "13",
+	"America/Caracas": "14", "America/St_Johns": "15", "America/Sao_Paulo": "16", "America/Argentina/Buenos_Aires": "17", "America/Godthab": "17", "America/Montevideo": "17",
+	"Atlantic/South_Georgia": "18", "Atlantic/Azores": "19", "Atlantic/Cape_Verde": "19", "Africa/Casablanca": "20", "Africa/Monrovia": "20", "Europe/London": "21", "Africa/Algiers": "21",
+	"Africa/Windhoek": "22", "Europe/Belgrade": "22", "Europe/Warsaw": "22", "Europe/Brussels": "23", "Europe/Berlin": "25", "Europe/Athens": "26", "Africa/Cairo": "28",
+	"Africa/Harare": "29", "Asia/Amman": "29", "Asia/Beirut": "29", "Europe/Helsinki": "30", "Europe/Minsk": "30", "Asia/Jerusalem": "31", "Asia/Baghdad": "32", "Europe/Moscow": "33",
+	"Africa/Nairobi": "34", "Asia/Kuwait": "35", "Asia/Tehran": "35", "Asia/Muscat": "36", "Asia/Baku": "37", "Asia/Tbilisi": "37", "Asia/Yerevan": "37", "Asia/Kabul": "38", "Asia/Tashkent": "39",
+	"Asia/Yekaterinburg": "39", "Asia/Karachi": "40", "Asia/Kolkata": "41", "Asia/Colombo": "42", "Asia/Dhaka": "42", "Asia/Novosibirsk": "43", "Asia/Rangoon": "43", "Asia/Bangkok": "44",
+	"Asia/Krasnoyarsk": "44", "Asia/Hong_Kong": "45", "Asia/Irkutsk": "45", "Australia/Perth": "46", "Asia/Kuala_Lumpur": "47", "Asia/Taipei": "48", "Asia/Tokyo": "49", "Asia/Seoul": "50", "Asia/Yakutsk": "51",
+	"Australia/Adelaide": "52", "Australia/Darwin": "53", "Asia/Vladivostok": "54", "Australia/Brisbane": "54", "Australia/Sydney": "55", "Pacific/Guam": "56", "Australia/Hobart": "57",
+	"Asia/Magadan": "59", "Pacific/Auckland": "60", "Pacific/Fiji": "61", "Pacific/Tongatapu": "61"};
 
 
 /**
  * Map Zimbra's short Weekday name to WebEx's Weekday
  */
 WebExZimlet.WEEK_NAME_MAP = { "MO": "MONDAY","TU": "TUESDAY","WE": "WEDNESDAY","TH": "THURSDAY","FR": "FRIDAY", "SA": "SATURDAY", "SU": "SUNDAY"};
+
+var webExZimletInstance;
 
 /**
  * Initializes the zimlet.
@@ -170,7 +177,9 @@ WebExZimlet.WEEK_NAME_MAP = { "MO": "MONDAY","TU": "TUESDAY","WE": "WEDNESDAY","
 WebExZimlet.prototype.init = function() {
 	this.metaData = appCtxt.getActiveAccount().metaData;
 	WebExZimlet.PROP_COMPANY_ID["defaultVal"] = this.getUserProperty("webexZimlet_companyId");
+	this._currentWebExAccountNumber = 1;
 	//this._displayGeneralPrefsDlg();
+	webExZimletInstance = this;
 };
 
 /**
@@ -1003,7 +1012,7 @@ WebExZimlet.prototype._getWebExBodyString = function(joinMeetingUrl, editorType,
 	var html = [];
 	html.push(noHeader ? "" : this._getMeetingDetailshdr(this.getMessage("WebExZimlet_teleconferenceDetails"), editorType));
 	if (editorType == "HTML") {
-		html.push("<table width='94%' align='center'><tr><td>");
+		html.push("<table width='100%'><tr><td>");
 		html.push("<div style='border-bottom:1px solid #6E6E6E; border-right:1px solid #6E6E6E; border-left:1px solid #CECECE;'>");
 		html.push("<table width='100%' class='ZPropertySheet' cellspacing='6'>");
 	}
@@ -1040,7 +1049,7 @@ WebExZimlet.prototype._getWebExBodyString = function(joinMeetingUrl, editorType,
 	var html = [];
 	html.push(noHeader ? "" : this._getMeetingDetailshdr(this.getMessage("WebExZimlet_webExDetails"), editorType));
 	if (editorType == "HTML") {
-		html.push("<table width='94%' align='center'><tr><td>");
+		html.push("<table width='100%'><tr><td>");
 		html.push("<div style='border-bottom:1px solid #6E6E6E; border-right:1px solid #6E6E6E; border-left:1px solid #CECECE;'>");
 		html.push("<table width='100%' class='ZPropertySheet' cellspacing='6'>");
 	}
@@ -1079,7 +1088,7 @@ WebExZimlet.prototype._getMeetingDetailsRow = function(name, val, editorType, no
 	}
 	if (editorType == "HTML") {
 		val = val.replace(/\n/g, "<br/>");//make sure to replace newLine to br
-		var rStyle = !isRowOdd ? " style='background-color:#FBF9F4' " : " style='background-color:#FEFDFC' ";
+		var rStyle = !isRowOdd ? " style='background-color:#FBF9F4;' " : " style='background-color:#FEFDFC;' ";
 		return ["<tr ",rStyle,"><td width='20%'><b>",name,"</b> </td><td> ", val, "</td></tr>"].join("");
 	} else {
 		if (noDelimiter) {
@@ -1098,14 +1107,10 @@ WebExZimlet.prototype._getMeetingDetailsRow = function(name, val, editorType, no
  */
 WebExZimlet.prototype._getMeetingDetailshdr = function(hdrName, editorType) {
 	if (editorType == "HTML") {
-		return	["<br/>",
-			"<table width='94%' align='center'><tr><td>",
-			"<div style='background:#808080;border-bottom:1px solid #6E6E6E;border-right:1px solid #6E6E6E;font-weight:bold;color:white;padding:2px;'>",
-			"<b>",hdrName,"</b>",
-			"</div>", "</tr></td></table>"].join("");
+		return	["<div class='webExZimlet_hdr' style='margin-top:1em;'>", hdrName, "</div>"].join("");
 	} else {
 		return	["\n--------------------------------------------------------------------",
-			,"\n",hdrName,
+			,"\n", hdrName,
 			"\n--------------------------------------------------------------------\n"].join("");
 	}
 };
@@ -1170,8 +1175,10 @@ WebExZimlet.prototype.menuItemSelected = function(itemId) {
 			this._displayGeneralPrefsDlg();
 			break;
 		case "START_JOIN_MEETING":
-			var postCallback = new AjxCallback(this, this._showAppointmentsList);
-			this._showSelectAccountDlg({postCallback:postCallback, appt:null, showOptions:false});
+			//var postCallback = new AjxCallback(this, this._showAppointmentsList);
+			//this._showSelectAccountDlg({postCallback:postCallback, appt:null, showOptions:false});
+			//So, it's calling _showSelectAccointDlg first, then that calls _showAppointmentsList.  I need to add select-account into appojntmentslist.  Tricky.
+			this._showAppointmentsList();
 			break;
 		case "START_QUICK_MEETING":
 			this._showOneClickDlg();
@@ -1269,11 +1276,28 @@ function() {
 		return;
 	}
 	this._accPrefsDlgView = new DwtComposite(this.getShell());
-	this._accPrefsDlgView.setSize("530", "400");
+	this._accPrefsDlgView.setSize("560", "400");
 	//this._accPrefsDlgView.getHtmlElement().style.background = "white";
 	this._accPrefsDlgView.getHtmlElement().style.overflow = "auto";
-	this._accPrefsDlgView.getHtmlElement().innerHTML = this._createAccPrefsView();
-	this.accPrefsDlg = new ZmDialog({parent:this.getShell(), title:this.getMessage("WebExZimlet_manageAccounts"), view:this._accPrefsDlgView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	
+	/*tabs*************/
+	//This is about where the tab stuff is going to have to go...
+	//Add the tab-bar
+	//add 5 DwtComposites?  For the individual account panels.
+	this._addPrefsDlgViewTabView = new DwtTabView({parent:this._accPrefsDlgView, id:"webExZimlet_accountTabView"});
+	this._addPrefsDlgViewTabView.setSize("560", "420"); //Good - this fixes the resizing-on-tab-change bug.
+	
+	
+	this._addressPrefsViewPage = [];
+	this._tabKeys = []
+	for (var ii = 1; ii < 6; ii++) {
+		this._addressPrefsViewPage[ii] = new DwtTabViewPage(this._addPrefsDlgViewTabView, "", Dwt.STATIC_STYLE, "WebExZimlet_addressPage" + ii);
+		this._addressPrefsViewPage[ii].getHtmlElement().innerHTML = this._createAccPrefsView(ii);
+		this._tabKeys[ii] = this._addPrefsDlgViewTabView.addTab("webExZimletTab" + ii, this._addressPrefsViewPage[ii]);
+	}
+	this.accPrefsDlg = new ZmDialog({parent: this.getShell(), title: this.getMessage("WebExZimlet_manageAccounts"),
+		view: this._accPrefsDlgView, standardButtons: [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON],
+		extraButtons: [new DwtDialog_ButtonDescriptor("webex_zimlet_add_tab_button", "Add Account", DwtDialog.ALIGN_LEFT, new AjxCallback(this, this._addAccountTab))]});
 	this.accPrefsDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._accPrefsOkBtnListner));
 	this._addTestAccountButtons();
 	this._addHelpLinkListeners();
@@ -1326,15 +1350,22 @@ function(propId) {
 
 /**
  * Adds test WebEx account buttons.
+ * Also add 'add phone settings' button
  */
-WebExZimlet.prototype._addTestAccountButtons =
-function() {
+WebExZimlet.prototype._addTestAccountButtons = function() {
 	for (var i = 1; i < 6; i++) {
 		var btn = new DwtButton({parent:this.getShell()});
 		btn.setText(AjxMessageFormat.format(this.getMessage("WebExZimlet_validateWebExAccntNumber"),i));
 		btn.setImage("WEBEX-panelIcon");
 		btn.addSelectionListener(new AjxListener(this, this._testWebExAccount, [i]));
 		document.getElementById("webExZimlet_TestAccountBtn" + i).appendChild(btn.getHtmlElement());
+		
+		//And the phone settings button -- RBAIN
+		//btn = new DwtButton({parent:this.getShell()});
+		//AjxMessageFormat.format(this.getMessage("WebExZimlet_addTeleConfSettings"),i));
+		//btn.setImage("WEBEX-panelIcon");
+		//btn.addSelectionListener(new AjxListener(this, this._showPhoneSettings, [i]));
+		//document.getElementById("webExZimlet_ShowPhoneBtn" + i).appendChild(btn.getHtmlElement());
 	}
 };
 
@@ -1343,16 +1374,14 @@ function() {
  *
  * @param {AjxCallback} postCallback  a callback
  */
-WebExZimlet.prototype._getAccPrefsMetaData =
-function(postCallback) {
+WebExZimlet.prototype._getAccPrefsMetaData = function(postCallback) {
 	setTimeout(AjxCallback.simpleClosure(this._doGetAccPrefsMetaData, this, postCallback), 500);
 };
 
 /**
  * @private Called by _getAccPrefsMetaData after .5 secs to avoid race condition in some browsers
  */
-WebExZimlet.prototype._doGetAccPrefsMetaData =
-function(postCallback) {
+WebExZimlet.prototype._doGetAccPrefsMetaData = function(postCallback) {
 	this.metaData.get("webexZimletAccountPreferences", null, new AjxCallback(this, this._handleGetAccPrefsMetaData, postCallback));
 };
 
@@ -1362,8 +1391,7 @@ function(postCallback) {
  * @param {AjxCallback} postCallback  a callback
  * @param {object} result	 the response
  */
-WebExZimlet.prototype._handleGetAccPrefsMetaData =
-function(postCallback, result) {
+WebExZimlet.prototype._handleGetAccPrefsMetaData = function(postCallback, result) {
 	this._webexZimletAccountPreferences = null; //nullify old data
 	try {
 		this._webexZimletAccountPreferences = result.getResponse().BatchResponse.GetMailboxMetadataResponse[0].meta[0]._attrs;
@@ -1481,11 +1509,13 @@ WebExZimlet.prototype._validateCurrentAccount = function(accntNumber) {
 
 /**
  * Sets data to account preferences.
- *
+ * Loads data into the form.
  */
-WebExZimlet.prototype._setDataToAccPrefsDlg =
-function() {
+WebExZimlet.prototype._setDataToAccPrefsDlg = function() {
 	try {
+		var tabBar = this._addPrefsDlgViewTabView.getTabBar();
+		var tabs = tabBar.getItems(); //array of tab buttons.  (5 of them)
+
 		for (var indx = 1; indx < 6; indx++) {
 			var useDefaultVals = true;
 			if(this._isAccountConfigured(indx)) {
@@ -1501,6 +1531,11 @@ function() {
 				} else {
 					val = this._webexZimletAccountPreferences[key];
 				}
+				
+				if (objId == WebExZimlet.PROP_ACCOUNTNAME.propId) {
+					tabs[indx - 1].setText(val);
+				}				
+				
 				if (val == "N/A" || val == "" || val == undefined || val == "undefined") {
 					continue;
 				}
@@ -1509,14 +1544,43 @@ function() {
 				} else {
 					this._setMenuValue(key, val);
 				}
+				
 			}
+			this.hideOrShowTab(indx, true);
 		}
+		//if there's NO visible tabs, set the first tab to be visible & focussed.
+		/*
+		if (!anyTabsVisible) {
+			tabs[0].setVisibility(true);
+		}
+		*/
 		this.accPrefsDlg.popup();
 		this._addAccntPrefsTabControl();
+		
+			/*
+			//set tab visibility.  
+			//If any of these are filled in, display it.
+			if(this._webexZimletAccountPreferences[WebExZimlet.PROP_USERNAME.propId + indx] != "" &&
+				this._webexZimletAccountPreferences[WebExZimlet.PROP_USERNAME.propId + indx] != "N/A"
+				&& this._webexZimletAccountPreferences[WebExZimlet.PROP_PASSWORD.propId + indx] != "" &&
+				this._webexZimletAccountPreferences[WebExZimlet.PROP_PASSWORD.propId + indx] != "N/A" &&
+				this._webexZimletAccountPreferences[WebExZimlet.PROP_MEETING_PASSWORD.propId + indx] != "" &&
+				this._webexZimletAccountPreferences[WebExZimlet.PROP_MEETING_PASSWORD.propId + indx] != "N/A" &&
+				this._webexZimletAccountPreferences[WebExZimlet.PROP_ALT_HOSTS.propId + indx] != "" &&
+				this._webexZimletAccountPreferences[WebExZimlet.PROP_ALT_HOSTS.propId + indx] != "N/A"
+			) {	
+				tabs[indx - 1].setVisibility(true);  
+				anyTabsVisible = true;
+			} else {
+				tabs[indx - 1].setVisibility(false);  
+			}
+			*/
+		
 	} catch(ex) {
 		this._showErrorMessage(ex);
 		return;
 	}
+	
 };
 
 /**
@@ -1539,22 +1603,22 @@ function(menuId, val) {
 /**
  * Creates Account preferences view
  */
-WebExZimlet.prototype._createAccPrefsView =
-function() {
+WebExZimlet.prototype._createAccPrefsView = function(tabIndex) {
 	this._accntPrefsObjsHash = [];
 	this._accntPrefsHelpObjsHash = [];
 	var html = [];
 	if (!AjxEnv.isIE) {//w/o this, stupid IE will break
-		html.push("<table width='96%' align='center'><tr><td>");
+		html.push("<table width='100%'><tr><td>");
 	}
-	for (var indx = 1; indx < 6; indx++) {
+	indx = tabIndex;
+	//for (var indx = 1; indx < 6; indx++) {
 		if (indx == 1) {
 			var notes = this.getMessage("WebExZimlet_account1UsedAsDefaultForUnAssociatedCal");
 		} else {
 			var notes = "";
 		}
 		html.push(this._getAccountPrefsHtml(indx, notes));
-	}
+	//}
 	if (!AjxEnv.isIE) {//w/o this, stupid IE will break
 		html.push("</td></tr></table>");
 	}
@@ -1567,16 +1631,23 @@ function() {
  * @param {string} indx	  the account number
  * @param {string} notes	 the string with some additional notes
  */
-WebExZimlet.prototype._getAccountPrefsHtml =
-function(indx, notes) {
+ //This is where the tab-form gets set up.
+ 
+WebExZimlet.prototype._getAccountPrefsHtml = function(indx, notes) {
 	var html = [];
 	var j = 0;
 	var prefLabel = this.getMessage("WebExZimlet_accountNumber").replace("{0}", indx);
-	html.push("<div class='webExZimlet_YellowBold'>");
-	html.push("<div class='webExZimlet_grayAccntHdr'>", prefLabel, "</div>")
-	html.push("<div class='webExZimlet_lightGray'>", this.getMessage("WebExZimlet_accountSettings"), "</div>");
+	html.push("<div class='webExZimlet_background'>");
+	//html.push("<div class='webExZimlet_acctHdr'>", prefLabel, "</div>")
+	html.push("<div class='webExZimlet_subHdr'>", this.getMessage("WebExZimlet_accountSettings"), "</div>");
 
-	html.push("<table class='webExZimlet_table ZPropertySheet' cellspacing='6'>");
+	html.push("<table class='webExZimlet_table ZPropertySheet' cellspacing='6' width='100%'>");
+	//Put accountname stuff here. - RBAIN
+	html.push("<tr><td class='ZmFieldLabelRight'>", this.getMessage(WebExZimlet.PROP_ACCOUNTNAME.label),
+		"</td><td><input id='", WebExZimlet.PROP_ACCOUNTNAME.propId + indx, "' type='text' onkeyup='webex_zimlet_update_tab(" , indx, ")' />",
+		"&nbsp; <a href='javascript:void(0)' id='", Dwt.getNextId(), "' style='color:red;font-weight:bold;' onclick='webExZimletInstance.deleteTab(",indx, ")'>",
+		this.getMessage("WebExZimlet_delete") + "","</a></td></tr>");
+		
 	for (var i = 0; i < WebExZimlet.SINGLE_WEBEX_ACCNT_PROPS.length; i++) {
 		var obj = WebExZimlet.SINGLE_WEBEX_ACCNT_PROPS[i];
 		var type = obj.objType ? obj.objType : "text";
@@ -1585,38 +1656,49 @@ function(indx, notes) {
 		if (obj.propId == WebExZimlet.PROP_COMPANY_ID.propId ||  obj.propId == WebExZimlet.PROP_ALT_HOSTS.propId) {
 			var helpLinkId = Dwt.getNextId();
 			this._accntPrefsHelpObjsHash.push({helpLinkId:helpLinkId, propId:obj.propId});
-			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", id, "'  type='", type, "'/>",
+			html.push("<tr><td class='ZmFieldLabelRight' width='30%'><label>", this.getMessage(obj.label), "</label></td>",
+				"<td><input id='", id, "'  type='", type, "'/>",
 				"&nbsp; <a href='javascript:void(0)' id='",helpLinkId,"'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>");
 		} else {
-			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", id, "'  type='", type, "'/>",
-				"<label style='color:gray;'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
+			html.push("<tr><td class='ZmFieldLabelRight' width='30%'><label>", this.getMessage(obj.label), "</label></td>",
+				"<td><input id='", id, "'  type='", type, "'/>",
+				"&nbsp; <label style='color:gray;'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
 		}
 	}
+	//setting property for selecting associated calendar
+	var obj = WebExZimlet.PROP_ASSOCIATED_CALENDAR;
+	html.push("<tr><td class='ZmFieldLabelRight' width='30%'>", this.getMessage(obj.label),
+		"</td><td><label style='color:gray;'>", this._getCalendarFoldersList(indx), "&nbsp; <label style='color:gray;'>", this.getMessage(obj.extraLabel),
+		"</label></td></tr>");
 
-	html.push("<tr><td></td><td id='webExZimlet_TestAccountBtn", indx, "' ></td></tr>");
-	html.push("</table>");
-
-	html.push("<br/><div class='webExZimlet_lightGray'>", this.getMessage("WebExZimlet_teleConfSettings"), "</div>");
-	html.push("<table class='webExZimlet_table ZPropertySheet' cellspacing='6'>");
+	//buttons to verify account and show phone settings
+	html.push("<tr><td width='30%'></td><td><table class='ZPropertySheet' cellspacing='6'><tr>",
+		"<td id='webExZimlet_TestAccountBtn", indx, "' ></td>",
+		"<td><a href='javascript:void(0)' id='", Dwt.getNextId(), "' onclick='webExZimletInstance._showPhoneSettings(",indx, ")'>",
+		this.getMessage("WebExZimlet_addTeleConfSettings"), "</a></td></tr></table></td></tr></table>");
+	
+	//everything from this point on down needs to be hidden by default.
+	html.push("<br/><div id='webex_zimlet_phone_info", indx, "'><div class='webExZimlet_subHdr'>",
+		"<table width='100%'><tr><td style='font-weight:bold;'>", this.getMessage("WebExZimlet_teleConfSettings"),
+		"</td><td style='text-align:right'><a href='javascript:void(0)' id='", Dwt.getNextId(),
+		"' onclick='webExZimletInstance._hidePhoneSettings(",indx, ")'>",
+		this.getMessage("WebExZimlet_removeTeleConfSettings"), "</a></td></tr></table></div>");
+	html.push("<table class='webExZimlet_table ZPropertySheet' cellspacing='6' width='100%'>");
 	for (var i = 0; i < WebExZimlet.WEBEX_TELECONF_PROPS.length; i++) {
 		var obj = WebExZimlet.WEBEX_TELECONF_PROPS[i];
 		var id = [obj.propId , indx].join("");
 		this._accntPrefsObjsHash.push(id);
 		if (obj.propId != WebExZimlet.PROP_OTHER_PHONE_NUMBERS.propId) {
-			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", id,
-					"'  type='text'/>", "<label style='color:gray;'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
+			html.push("<tr><td class='ZmFieldLabelRight' width='30%'>", this.getMessage(obj.label), "</td>",
+					"<td><input id='", id, "' type='text'/>",
+					"&nbsp; <label style='color:gray;'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
 		} else {
-			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><textarea id='", id,
-					"' rows='5' cols='20'></textarea>", "<label style='color:gray;'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
+			html.push("<tr><td class='ZmFieldLabelRight' width='30%'>", this.getMessage(obj.label), "</td>",
+					"<td><textarea id='", id, "' rows='5' cols='20'></textarea>",
+					"&nbsp; <label style='color:gray;'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
 		}
 	}
 	html.push("</table>");
-
-	html.push("<br/><div class='webExZimlet_lightGray'>", this.getMessage("WebExZimlet_associateCalendarHdr"), "</div>");
-	var obj = WebExZimlet.PROP_ASSOCIATED_CALENDAR;
-	html.push("<div style='padding:5px'><label style='color:blue;font-weight:bold'>", this.getMessage(obj.label),
-			"</label><label style='color:gray;'>", this._getCalendarFoldersList(indx), "<label style='color:gray;'>", this.getMessage(obj.extraLabel),
-			"</label></div></div><br/><br/>");
 
 	return html.join("");
 };
@@ -1626,8 +1708,7 @@ function(indx, notes) {
  *
  * @param {number} indx	the account number
  */
-WebExZimlet.prototype._testWebExAccount =
-function(indx) {
+WebExZimlet.prototype._testWebExAccount = function(indx) {
 	var userName = document.getElementById(WebExZimlet.PROP_USERNAME.propId + indx).value;
 	var pwd = document.getElementById(WebExZimlet.PROP_PASSWORD.propId + indx).value;
 	var cId = document.getElementById(WebExZimlet.PROP_COMPANY_ID.propId + indx).value;
@@ -1652,7 +1733,8 @@ function(result) {
 
 	var dlg = appCtxt.getMsgDialog();
 	dlg.reset();//reset dialog since we could be using it
-	dlg.setMessage(this.getMessage("WebExZimlet_testPassed"));
+	dlg.setTitle(this.getMessage("WebExZimlet_testSucceeded"));
+	dlg.setMessage(this.getMessage("WebExZimlet_testPassed"), DwtMessageDialog.INFO_STYLE, this.getMessage("WebExZimlet_testSucceeded"));
 	dlg.popup();
 };
 
@@ -1860,8 +1942,8 @@ function() {
 WebExZimlet.prototype._createGeneralPrefsView =
 function() {
 	var html = [];
-	html.push("<div class='webExZimlet_YellowBold '>");
-	html.push("<div class='webExZimlet_gray'>", this.getMessage("WebExZimlet_appendMeetingInfoToSubOrLoc"), "</div>");
+	html.push("<div class='webExZimlet_background '>");
+	html.push("<div class='webExZimlet_subHdr'>", this.getMessage("WebExZimlet_appendMeetingInfoToSubOrLoc"), "</div>");
 	html.push("<table class='ZPropertySheet' cellspacing='6'>");
 	for (var i = 0; i < WebExZimlet.APPEND_SUB_OPTIONS.length; i++) {
 		var obj = WebExZimlet.APPEND_SUB_OPTIONS[i];
@@ -1997,8 +2079,7 @@ function(apptId, meetingKey, seriesMeetingKey) {
  * @param {object} params.appt Appointment
  * @param {boolean} params.showOptions If true, then account option fields are displayed
  */
-WebExZimlet.prototype._showSelectAccountDlg =
-function(params) {
+WebExZimlet.prototype._showSelectAccountDlg = function(params) {
 	var postCallback = new AjxCallback(this, this._doShowSelectAccountDlg, params);
 	this._getAccPrefsMetaData(postCallback);
 };
@@ -2008,8 +2089,7 @@ function(params) {
  *
  * @param {AjxCallback} postCallback A callback
  */
-WebExZimlet.prototype._doShowSelectAccountDlg =
-function(params) {
+WebExZimlet.prototype._doShowSelectAccountDlg = function(params) {
 	var postCallback = params.postCallback;
 	var appt = params.appt;
 	var showOptions = params.showOptions ? true : false;
@@ -2120,17 +2200,21 @@ function(selectHtml) {
 		this._showSelectAccntsDlg._altHostFieldId = "WebExZimlet_showSelectAccntsDlg_altHostFieldId";
 		this._showSelectAccntsDlg._altHelpLinkId = "WebExZimlet_showSelectAccntsDlg_altHelpLinkId";
 		this._showSelectAccntsDlg._mPwdFieldId = "WebExZimlet_showSelectAccntsDlg_mPwdFieldId";
-		html.push("<div style='padding:5px;'>", this.getMessage("WebExZimlet_webExAccntToUse"), " <span>", selectHtml, "</span></div>");
-		html.push("<br/>");
-		html.push("<div id='webexZimlet_showSelectAccnts_OptionsDiv' >");
-		html.push("<div><b>",this.getMessage("WebExZimlet_getAccounts"),"</b></div>");
-		html.push("<table class='webExZimlet_table ZPropertySheet' cellspacing='6'>");
-		html.push("<tr><td>", this.getMessage(WebExZimlet.PROP_ALT_HOSTS.label), "</td><td><input  id='", this._showSelectAccntsDlg._altHostFieldId, "'  type='text'/>",
-				"&nbsp; <a href='javascript:void(0)' id='",this._showSelectAccntsDlg._altHelpLinkId,"'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>");
-		html.push("<tr><td>", this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.label), "</td><td><input id='", this._showSelectAccntsDlg._mPwdFieldId, "'  type='text'/>",
-				"<label style='color:gray;'>", this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.extraLabel), "</label></td></tr>");
-		html.push("</table>");
-		html.push("</div>");
+		html.push("<div class='webExZimlet_background' style='width:500px;'>",
+			"<table class='ZPropertySheet' cellspacing='6' width='100%' style='margin-bottom:.5em;'><tr>",
+			"<td class='ZmFieldLabelRight' width='30%'>", this.getMessage("WebExZimlet_webExAccntToUse"), "</td>",
+			"<td><span>", selectHtml, "</span></td></tr></table>",
+			"<div id='webexZimlet_showSelectAccnts_OptionsDiv' >",
+			"<div class='webExZimlet_subHdr'>",this.getMessage("WebExZimlet_getAccounts"),"</div>",
+			"<table class='webExZimlet_table ZPropertySheet' cellspacing='6' width='100%'>",
+			"<tr><td class='ZmFieldLabelRight' width='30%'>", this.getMessage(WebExZimlet.PROP_ALT_HOSTS.label), "</td>",
+			"<td><input  id='", this._showSelectAccntsDlg._altHostFieldId, "'  type='text'/>",
+			"&nbsp; <a href='javascript:void(0)' id='",this._showSelectAccntsDlg._altHelpLinkId,"'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>",
+			"<tr><td class='ZmFieldLabelRight' width='30%'>", this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.label), "</td>",
+			"<td><input id='", this._showSelectAccntsDlg._mPwdFieldId, "'  type='text'/>",
+			"&nbsp; <label style='color:gray;'>", this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.extraLabel), "</label></td></tr>",
+			"</table>",
+			"</div></div>");
 
 		return html.join("");
 	} catch(ex) {
@@ -2156,15 +2240,15 @@ function() {
 
 /**
  * Shows WebEx appointments list for a given account number.
- * @param {number} accountNumber	the account number
+ * Revised - account number gets selected in the meeting list dlg form.
  */
-WebExZimlet.prototype._showAppointmentsList =
-function(accountNumber) {
+//WebExZimlet.prototype._showAppointmentsList = function(accountNumber) {
+WebExZimlet.prototype._showAppointmentsList = function() {
 	if (!this._webexZimletAccountPreferences) {
-		var postCallback = new AjxCallback(this, this._showMeetingListDlg, [accountNumber, "NOW_ON"]);
+		var postCallback = new AjxCallback(this, this._showMeetingListDlg, ["NOW_ON"]);
 		this._getAccPrefsMetaData(postCallback);
 	} else {
-		this._showMeetingListDlg(accountNumber, "NOW_ON");
+		this._showMeetingListDlg("NOW_ON");
 	}
 };
 
@@ -2174,9 +2258,14 @@ function(accountNumber) {
  * @param {number} accountNumber	the account number
  * @param {string} listType Specifies what constraints should be put for the list. If null, then "NOW_ON" is used
  */
-WebExZimlet.prototype._getMeetingsList =
-function(accountNumber, listType) {
-	appCtxt.getAppController().setStatusMsg(this.getMessage("WebExZimlet_pleaseWait"), ZmStatusView.LEVEL_INFO);
+WebExZimlet.prototype._getMeetingsList = function(accountNumber, listType) {
+	if (document.getElementById("webex_meetingsearch_resultfield")) {
+		document.getElementById("webex_meetingsearch_resultfield").innerHTML = "<div style='text-align:center;vertical-align:middle'>" + this.getMessage("WebExZimlet_findingMeetings") + "</div>";
+	} else {
+		appCtxt.getAppController().setStatusMsg(this.getMessage("WebExZimlet_pleaseWait"), ZmStatusView.LEVEL_INFO);
+	}
+	//Put the wait msg in the table section instead.
+	//
 	try {
 		this._setCurrentAccntInfoFromAccntNumber(accountNumber);
 	} catch(ex) {
@@ -2233,36 +2322,38 @@ function(accountNumber, listType) {
 	AjxRpc.invoke(request, this.postUri(), {"Content-Type":"text/xml"}, new AjxCallback(this, this._handleGetMeetingsList, [listType]), false, false);	
 };
 
-WebExZimlet.prototype._handleGetMeetingsList = 
-function(listType, result) {
+WebExZimlet.prototype._handleGetMeetingsList = function(listType, result) {
 	var objResult = this.xmlToObject(result);
+	/*  It needs to load the popup even if there's no meetings currently available.
 	if (!this._validateWebExResult(objResult, this.getMessage("WebExZimlet_unableToGetMeetingInfo"))) {
 		return;
 	}
+	*/
 	this._setMeetingListView(objResult, listType);
 	this._addShowMeetingListListeners();	
 };
 /**
  * Shows WebEx meeting list dialog.
  * @param {int} accountNumber WebEx Account Number
+ * Revised - account number needs to be selected in this form.
+ * Use this._currentWebExAccountNumber instead?
  * @param {string} listType Specifies what constraints should be put for the list. If null, then "NOW_ON" is used
  */
-WebExZimlet.prototype._showMeetingListDlg =
-function(accountNumber, listType) {
+WebExZimlet.prototype._showMeetingListDlg = function(listType) {
 	if (this._meetingLstDlg) {
-		this._meetingListDlgView.getHtmlElement().innerHTML = ["<label style='font-weight:bold;font-size:12px;color:blue;'>",this.getMessage("WebExZimlet_pleaseWait"),"</div>"].join("");
+		this._meetingListDlgView.getHtmlElement().innerHTML = ["<label style='font-weight:bold;font-size:12px;'>",this.getMessage("WebExZimlet_pleaseWait"),"</div>"].join("");
 		this._meetingLstDlg.popup();
-		this._getMeetingsList(accountNumber, listType);
+		this._getMeetingsList(this._currentWebExAccountNumber, listType);
 		return;
 	}
 	this._meetingListDlgView = new DwtComposite(this.getShell());
 	this._meetingListDlgView.setSize("570", "200");
-	this._meetingListDlgView.getHtmlElement().style.background = "white";
+	//this._meetingListDlgView.getHtmlElement().style.background = "white";
 	this._meetingListDlgView.getHtmlElement().style.overflow = "auto";
-	this._meetingListDlgView.getHtmlElement().innerHTML =  ["<label style='font-weight:bold;font-size:12px;color:blue;'>",this.getMessage("WebExZimlet_pleaseWait"),"</div>"].join("");
+	this._meetingListDlgView.getHtmlElement().innerHTML =  ["<label style='font-weight:bold;font-size:12px;'>",this.getMessage("WebExZimlet_pleaseWait"),"</div>"].join("");
 	this._meetingLstDlg = new ZmDialog({parent: this.getShell(), title:this.getMessage("WebExZimlet_startOrJoinWebExMeeting") , view:this._meetingListDlgView, standardButtons:[DwtDialog.CANCEL_BUTTON]});
 	this._meetingLstDlg.popup();
-	this._getMeetingsList(accountNumber, listType);
+	this._getMeetingsList(this._currentWebExAccountNumber, listType);
 };
 
 /**
@@ -2274,6 +2365,9 @@ WebExZimlet.prototype._addShowMeetingListListeners = function() {
 	}
 	var callback = AjxCallback.simpleClosure(this._meetingListTypesMenuHandler, this);
 	document.getElementById("webExZimlet_meetingsListTypesMenu").onchange = callback;
+	//XXX Do the same sort of thing here for the account-number selector.
+	var callback2 = AjxCallback.simpleClosure(this._meetingListAccountsMenuHandler, this);
+	document.getElementById("webExZimlet_meetingsListAccountsMenu").onchange = callback2;
 };
 
 /**
@@ -2281,6 +2375,18 @@ WebExZimlet.prototype._addShowMeetingListListeners = function() {
  */
 WebExZimlet.prototype._meetingListTypesMenuHandler = function() {
 	var type = document.getElementById("webExZimlet_meetingsListTypesMenu").value;
+	this._getMeetingsList(this._currentWebExAccountNumber, type);
+};
+
+
+/**
+ * Handler for account menu change
+ * Rbain
+ */
+WebExZimlet.prototype._meetingListAccountsMenuHandler = function() {
+	var type = document.getElementById("webExZimlet_meetingsListTypesMenu").value;
+	//XXX - call the account-number getter, it should set _currentWebExAccountNumber.
+	this._currentWebExAccountNumber = document.getElementById("webExZimlet_meetingsListAccountsMenu").value;
 	this._getMeetingsList(this._currentWebExAccountNumber, type);
 };
 
@@ -2322,43 +2428,64 @@ WebExZimlet.prototype._onStartLinkClicked = function(params) {
  * @param {string} listType	 Type of the list
  */
 WebExZimlet.prototype._setMeetingListView = function(objResult, listType) {
-	var mtgs = objResult.body.bodyContent.meeting;
-	if (!mtgs) {
-		mtgs = [];
-	} else if (!(mtgs instanceof Array)) {
-		mtgs = [mtgs];
+	var mtgs;
+	if (!objResult || !objResult.body || !objResult.body.bodyContent) {
+		mtgs = []
+	} else {
+		mtgs = objResult.body.bodyContent.meeting;
+		if (!mtgs) {
+			mtgs = [];
+		} else if (!(mtgs instanceof Array)) {
+			mtgs = [mtgs];
+		}
 	}
+
 	this._startMeetingStartLinkIdMap = {};
 	var html = [];
-	html.push("<div class='webExZimlet_lightGray'>", "Show meetings: ", this._getMeetingListTypesMenu(listType), "</div>");
-	html.push("<table class='webex_hoverTable' cellspacing=0px width=100%>");
-	html.push("<tr align=left><th>", this.getMessage("WebExZimlet_host"), "</th><th width=50%>", this.getMessage("WebExZimlet_meetingName"),
-			"</th><th>", this.getMessage("WebExZimlet_startTime"), "</th><th>", this.getMessage("WebExZimlet_action"), "</th></tr>");
-	var isOdd = true;
-	for (var i = 0; i < mtgs.length; i++) {
-		var cls = "RowEven";
-		var mtg = mtgs[i];
-		var startLinkId = Dwt.getNextId();
-		this._startMeetingStartLinkIdMap[startLinkId] = {meetingKey: mtg.meetingKey.toString(), hostWebExId: mtg.hostWebExID.toString()}
-		if (!isOdd) {
-			cls = "RowOdd";
-		}
 
-		html.push("<tr class='", cls, "'>",
+	html.push("<div class='webExZimlet_background'>",
+		"<table class='ZPropertySheet' cellspacing='6' width='100%' style='margin-bottom:.5em;'>",
+		"<tr><td class='ZmFieldLabelRight' width='30%'>", this.getMessage("WebExZimlet_webExAccntToUse"), "</td>",
+		"<td>", this._getAccountsSelectListMenuHtml("webExZimlet_meetingsListAccountsMenu"), "</td></tr>",
+		"<tr><td class='ZmFieldLabelRight' width='30%'>", this.getMessage("WebExZimlet_showMeetings"), "</td>",
+		"<td>", this._getMeetingListTypesMenu(listType), "</td></tr>",
+		"</table>");
+
+	html.push("<div id='webex_meetingsearch_resultfield'>"); //The result table OR 'loading...' type messages go here.
+	html.push("<table class='webex_hoverTable' id='webex_hoverTable' width=100%>");
+	if (mtgs.length == 0) { 
+		html.push("<tr class='", cls, "'>", "<td colspan='4' align='center'>", this.getMessage("WebExZimlet_noMeetingsFound"), "</td>","</tr>");
+	} else {
+
+		html.push("<tr align=left><th>", this.getMessage("WebExZimlet_host"), "</th>",
+			"<th width=50%>", this.getMessage("WebExZimlet_meetingName"), "</th>",
+			"<th>", this.getMessage("WebExZimlet_startTime"), "</th>",
+			"<th>", this.getMessage("WebExZimlet_action"), "</th></tr>");
+		var isOdd = true;
+		for (var i = 0; i < mtgs.length; i++) {
+			var cls = "RowEven";
+			var mtg = mtgs[i];
+			var startLinkId = Dwt.getNextId();
+			this._startMeetingStartLinkIdMap[startLinkId] = {meetingKey: mtg.meetingKey.toString(), hostWebExId: mtg.hostWebExID.toString()}
+			if (!isOdd) {
+				cls = "RowOdd";
+			}
+
+			html.push("<tr class='", cls, "'>",
 				"<td>", mtg.hostWebExID, "</td>",
 				"<td>", AjxStringUtil.urlComponentDecode(mtg.confName), "</td>",
 				"<td>", mtg.startDate, "<br/><label style='color:gray;font-size:10px'>", this._getTimeZoneName(mtg.timeZone.toString()), "</label></td>",
 				"<td><a href='javascript:void(0)' id='", startLinkId, "' >", this.getMessage("WebExZimlet_startJoin"), "</a></td>",
 				"</tr>");
-		isOdd = !isOdd;
+			isOdd = !isOdd;
+		}
 	}
-	html.push("</table>");
+	html.push("</table></div></div>");
 
 	this._meetingListDlgView.getHtmlElement().innerHTML = html.join("");
 };
 
-WebExZimlet.prototype._getMeetingListTypesMenu =
-function(listType) {
+WebExZimlet.prototype._getMeetingListTypesMenu = function(listType) {
 	if (!listType) {
 		listType = "NOW_ON";
 	}
@@ -2394,8 +2521,7 @@ function(timeZone) {
  * Shows one click dialog.
  * @param {string} attendees A string with email addresses
  */
-WebExZimlet.prototype._showOneClickDlg =
-function(attendees) {
+WebExZimlet.prototype._showOneClickDlg = function(attendees) {
 	if(!attendees) {
 		attendees = "";
 	}
@@ -2652,7 +2778,7 @@ function(objResult, customMsg) {
 				extMsg = this.getMessage("WebExZimlet_invalidAlternateHost");
 			}
 			
-			msg.push("<br/><b>", this.getMessage("WebExZimlet_failureReason"), " </b><label style='color:red;font:bold'>", objResult.header.response.reason, "<br/>", extMsg, "</label>");
+			msg.push("<br/><b>", this.getMessage("WebExZimlet_failureReason"), " </b><label style='color:red;font-weight:bold;'>", objResult.header.response.reason, "<br/>", extMsg, "</label>");
 		}
 		this._showErrorMessage(msg.join(""));
 		return false;
@@ -2696,7 +2822,12 @@ WebExZimlet.prototype._getAccountsSelectListMenuHtml = function(id) {
 			userName = this.getMessage("WebExZimlet_notConfigured");
 		}
 		var label = AjxMessageFormat.format(this.getMessage("WebExZimlet_accntNumberAndName"), [i, userName]);
-		html.push("<option value='", i, "'>", label, "</option>");
+		if (i == this._currentWebExAccountNumber) {
+			selected = " selected";
+		} else {
+			selected = "";
+		}
+				html.push("<option value='", i, "'", selected , ">", label, "</option>");
 	}
 	html.push("</select>");
 	return html.join("");
@@ -2796,3 +2927,201 @@ WebExZimlet.prototype._getValidEmailsAsString = function(fieldId) {
     return ccEmails.join(";");
 };
 
+function webex_zimlet_update_tab(index) {
+	var src = document.getElementById("webexZimlet_accountname" + index);
+	var tabBar = webExZimletInstance._addPrefsDlgViewTabView.getTabBar();
+	var tabs = tabBar.getItems(); //array of tab buttons.  (5 of them)
+	tabs[index - 1].setText(src.value);
+}
+
+WebExZimlet.prototype.isTabEmpty = function(tabIndex) {
+
+	for (i = 0; i < WebExZimlet.ALL_ACCNT_PROPS.length; i++) {
+		objId = WebExZimlet.ALL_ACCNT_PROPS[i].propId;
+		key = objId + tabIndex;
+			
+		if ((objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == -1) &&
+			(objId.indexOf(WebExZimlet.PROP_COMPANY_ID.propId) == -1)){
+			if (document.getElementById(key).value && document.getElementById(key).value != "") {
+				return false; //not empty
+			}
+		} else {
+			continue; //skip this one.
+		}
+	}
+	
+	return true;
+}
+
+/**
+ * Tab Index 
+ * Clear all fields on that tab.
+ * Hide the tab.
+ */
+WebExZimlet.prototype.deleteTab = function(tabIndex) {
+	var i;
+	var objId;
+	var key;
+	var originalTabIndex = tabIndex;
+	
+	//If this isn't the fifth tab, shift each tab down one spot.
+	while (tabIndex < 5) {
+		//go through all fields on this tab, copy the value from the next tab over.
+		for (i = 0; i < WebExZimlet.ALL_ACCNT_PROPS.length; i++) {
+			objId = WebExZimlet.ALL_ACCNT_PROPS[i].propId;
+			key = objId + tabIndex;
+			nextKey = objId + (tabIndex + 1);
+
+			if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == -1) {
+				document.getElementById(key).value = document.getElementById(nextKey).value;
+			} else {
+				this._setMenuValue(key, document.getElementById(nextKey).value);  //test this one...
+			}
+		}
+		webex_zimlet_update_tab(tabIndex);
+		tabIndex++;
+	}
+	if (tabIndex == 5 ) {
+		//blank them all.
+		for (i = 0; i < WebExZimlet.ALL_ACCNT_PROPS.length; i++) {
+			var objId = WebExZimlet.ALL_ACCNT_PROPS[i].propId;
+			var key = objId + tabIndex;
+
+			if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == -1) {
+				document.getElementById(key).value = "";
+			} else {
+				this._setMenuValue(key, "");
+			}
+		}
+		webex_zimlet_update_tab(tabIndex);
+	}
+	
+	if (originalTabIndex < 5) {
+		this.hideOrShowTab(originalTabIndex + 1, false);  //call this to hide the tab.
+	}
+	this.hideOrShowTab(originalTabIndex, true);
+	
+	if (this.isTabEmpty(originalTabIndex) && originalTabIndex > 1) {
+		tabIndex = originalTabIndex - 1;
+		var bar = this._addPrefsDlgViewTabView.getTabBar();
+		var button = bar.getItem(tabIndex); 
+		//alert("Switch to tab " + tabIndex + " (" + this._tabKeys[tabIndex] + ")");
+		button.focus();
+		this._addPrefsDlgViewTabView.switchToTab(this._tabKeys[tabIndex]); 
+	}
+}
+
+/**
+ * Check tab's fields - if the 'important' ones are empty, hide it.
+ * otherwise allow it to be shown.
+ * returns: boolean visibility.  (True = visible)
+ */
+WebExZimlet.prototype.hideOrShowTab = function(tabIndex, moveFocus) {
+	var noValues = true;
+	
+	if (tabIndex == 1) {
+		noValues = false;  //never turn the first 'page' invisible, but do turn phone info off if needed.
+	} else {
+	
+		for (i = 0; i < WebExZimlet.ALL_ACCNT_PROPS.length; i++) {
+			objId = WebExZimlet.ALL_ACCNT_PROPS[i].propId;
+			key = objId + tabIndex;
+				
+			if ((objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == -1) &&
+				(objId.indexOf(WebExZimlet.PROP_COMPANY_ID.propId) == -1)){
+				if (document.getElementById(key).value && document.getElementById(key).value != "") {
+					noValues = false;
+					break;
+				}
+			} else {
+				continue; //skip this one.
+			}
+		}
+	}
+	if (noValues) {
+		var bar = this._addPrefsDlgViewTabView.getTabBar();
+		var button = bar.getItem(tabIndex - 1); //zero indexed.
+		
+		button.setVisibility(false);
+		
+		this._hidePhoneSettings(tabIndex);
+		return false;
+	} else {
+		this.hideOrShowPhone(tabIndex);
+		return true;
+	}
+}
+
+/**
+ *  Scan through the phone fields - if all empty, hide the phone fields.
+ */
+WebExZimlet.prototype.hideOrShowPhone = function(tabIndex) {
+	var noValues = true;
+
+	for (var i = 0; i < WebExZimlet.WEBEX_TELECONF_PROPS.length; i++) {
+		var objId = WebExZimlet.WEBEX_TELECONF_PROPS[i].propId;
+		key = objId + tabIndex;
+
+		if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == -1) {
+			if (document.getElementById(key).value && document.getElementById(key).value != "") {
+				noValues = false;
+				break;
+			}
+		} else {
+			continue; //skip this one.
+		}
+	}
+	
+	if (noValues) {
+		this._hidePhoneSettings(tabIndex);
+	} else {
+		this._showPhoneSettings(tabIndex);
+	}
+	
+}
+
+
+WebExZimlet.prototype._addAccountTab = function() {
+	//Go through the tabs, find the first blank one
+	for (var ii = 1; ii < 6; ii++) {
+		if (this.isTabEmpty(ii)) {
+			//turn tab button visible, open tab.
+			var bar = this._addPrefsDlgViewTabView.getTabBar();
+			var button = bar.getItem(ii - 1); //zero indexed.
+		
+			button.setVisibility(true);
+			this._addPrefsDlgViewTabView.switchToTab(this._tabKeys[ii]); 
+			return;
+
+		}
+	}
+	
+	//if there are none, pop up a message.
+	appCtxt.getAppController().setStatusMsg("Only five accounts available.");
+}
+
+WebExZimlet.prototype._showPhoneSettings = function(index) {
+	document.getElementById("webex_zimlet_phone_info" + index).style.display ="block";
+}
+
+/**
+ * Also blanks all the fields.
+ */
+WebExZimlet.prototype._hidePhoneSettings = function(index) {
+	for (var i = 0; i < WebExZimlet.WEBEX_TELECONF_PROPS.length; i++) {
+		var objId = WebExZimlet.WEBEX_TELECONF_PROPS[i].propId;
+		var key = objId + index;
+
+		var val;
+		if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == -1) {
+			document.getElementById(key).value = "";
+		} /*
+		else {
+			this._setMenuValue(key, val);
+		}
+		*/
+	}
+
+
+	document.getElementById("webex_zimlet_phone_info" + index).style.display = "none";
+}
