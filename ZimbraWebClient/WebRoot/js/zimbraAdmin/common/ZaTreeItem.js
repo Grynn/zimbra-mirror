@@ -75,41 +75,21 @@ function(index, realizeDeferred, forceNode) {
         }
     }
 
+    if (!this._contextEnabled){
+        var tableNode = document.getElementById(this._htmlElId + "_table");
+        tableNode.style.tableLayout = "fixed";
+        tableNode.style.width = "100%";
+
+        this._textCell.style.width = "100%";
+    }
+
     this._adjustText();
 }
 
 ZaTreeItem.prototype._adjustText = function() {
-    var tableNode = document.getElementById(this._htmlElId + "_table");
-    if (tableNode && this._textCell && this._text) {
-        var currentTextSize = AjxStringUtil.getWidth(this._text);
-        // ToDo compute the DOM's width
-        // 202: Total Left Panel Width
-        // 16: first type image 16 expanded image 5 padding before text
-        var allowedSize = 202 - 16 - 16 - 5;
-        if (this._count !== undefined) {
-            allowedSize = allowedSize - 16;
-        }
-
-        if (allowedSize < currentTextSize) {
-            var displayText = this._getDisplayText (currentTextSize, allowedSize);
-            this._textCell.innerHTML = displayText;
-            this.setToolTipContent(this._text);
-        } else {
-            this.setToolTipContent("");
-        }
-
-    }
+    this.setToolTipContent(this._text);
 }
 
-ZaTreeItem.prototype._getDisplayText = function (currentTextSize, allowedSize) {
-    var totalNumber = (this._text && this._text.length) ? this._text.length: 0;
-    var maxNumberOfLetters= Math.floor(allowedSize * totalNumber / currentTextSize);
-    var displayText  = "";
-    if(maxNumberOfLetters > 0){
-        displayText = this._text.substring(0, maxNumberOfLetters)
-    }
-    return displayText;
-}
 /**
  * Sets the text.
  *
