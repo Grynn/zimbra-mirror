@@ -52,11 +52,11 @@ public class MonthlyFirstXdayEndAfterYoccurrences extends CalendarWorkWeekTest {
 		SleepUtil.sleepLong(); //SOAP gives wrong response
 		
 		app.zGetActiveAccount().soapSend(
-				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-10).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(10).toMillis() +"'>"
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-30).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(30).toMillis() +"'>"
 			+		"<query>"+ apptSubject +"</query>"
 			+	"</SearchRequest>");
 	
-		String attendeeInvId = app.zGetActiveAccount().soapSelectValue("//mail:appt", "invId");
+		String attendeeInvId = app.zGetActiveAccount().soapSelectValue("//mail:appt", "id");
 		app.zGetActiveAccount().soapSend("<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ attendeeInvId +"'/>");
 		
 		String ruleFrequency = app.zGetActiveAccount().soapSelectValue("//mail:appt//mail:rule", "freq");
@@ -65,7 +65,7 @@ public class MonthlyFirstXdayEndAfterYoccurrences extends CalendarWorkWeekTest {
 		String wkday = app.zGetActiveAccount().soapSelectValue("//mail:appt//mail:wkday", "day");
 
 		// Verify appointment exists on server meeting with correct recurring details
-		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
+		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-30), appt.getEndTime().addDays(30));
 		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
 		ZAssert.assertEquals(actual.getSubject(), appt.getSubject(), "Subject: Verify the appointment data");
 		ZAssert.assertEquals(actual.getAttendees(), apptAttendee, "Attendees: Verify the appointment data");
@@ -81,7 +81,7 @@ public class MonthlyFirstXdayEndAfterYoccurrences extends CalendarWorkWeekTest {
 		ZAssert.assertEquals(locationStatus, "AC", "Verify that the location status shows as 'ACCEPTED'");
 		
 		ZimbraAccount.AccountA().soapSend(
-				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-10).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(10).toMillis() +"'>"
+				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-30).toMillis() +"' calExpandInstEnd='"+ endUTC.addDays(30).toMillis() +"'>"
 			+		"<query>"+ apptSubject +"</query>"
 			+	"</SearchRequest>");
 	
@@ -94,7 +94,7 @@ public class MonthlyFirstXdayEndAfterYoccurrences extends CalendarWorkWeekTest {
 		wkday = app.zGetActiveAccount().soapSelectValue("//mail:appt//mail:wkday", "day");
 
 		// Verify the attendee receives the meeting with correct recurring details
-		AppointmentItem received = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
+		AppointmentItem received = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-30), appt.getEndTime().addDays(30));
 		ZAssert.assertNotNull(received, "Verify the new appointment is created");
 		ZAssert.assertEquals(received.getSubject(), appt.getSubject(), "Subject: Verify the appointment data");
 		ZAssert.assertEquals(received.getAttendees(), apptAttendee, "Attendees: Verify the appointment data");
