@@ -667,13 +667,13 @@ public class FormApptNew extends AbsForm {
 	
 	public void zSetTomorrowDate() throws HarnessException{
 	    Calendar c = Calendar.getInstance();
-	    c.add(Calendar.DATE, 1);
+	    c.add(Calendar.DATE, 2);
 	    this.zTypeKeys("css=input[id$='_startDateField']", new SimpleDateFormat("MM/dd/yyyy").format(c.getTime()));
 	}
 	
 	public String zGetTomorrowDate() throws HarnessException{
 		Calendar c = Calendar.getInstance();
-	    c.add(Calendar.DATE, 1);	    
+	    c.add(Calendar.DATE, 2);	    
 	    return new SimpleDateFormat("yyyyMMdd").format(c.getTime());
 	}
 
