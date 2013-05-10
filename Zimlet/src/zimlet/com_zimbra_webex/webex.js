@@ -1088,7 +1088,7 @@ WebExZimlet.prototype._getMeetingDetailsRow = function(name, val, editorType, no
 	}
 	if (editorType == "HTML") {
 		val = val.replace(/\n/g, "<br/>");//make sure to replace newLine to br
-		var rStyle = !isRowOdd ? " style='background-color:#FBF9F4;' " : " style='background-color:#FEFDFC;' ";
+		var rStyle = " style='background-color:" + (isRowOdd ? "#FEFDFC" : "#FBF9F4") + ";' ";
 		return ["<tr ",rStyle,"><td width='20%'><b>",name,"</b> </td><td> ", val, "</td></tr>"].join("");
 	} else {
 		if (noDelimiter) {
@@ -1518,7 +1518,7 @@ WebExZimlet.prototype._setDataToAccPrefsDlg = function() {
 
 		for (var indx = 1; indx < 6; indx++) {
 			var useDefaultVals = true;
-			if(this._isAccountConfigured(indx)) {
+			if (this._isAccountConfigured(indx)) {
 				useDefaultVals = false;
 			}
 			for (var i = 0; i < WebExZimlet.ALL_ACCNT_PROPS.length; i++) {
@@ -1528,20 +1528,22 @@ WebExZimlet.prototype._setDataToAccPrefsDlg = function() {
 				var val;
 				if (useDefaultVals) {
 					val = WebExZimlet.ALL_ACCNT_PROPS[i].defaultVal;
-				} else {
+				}
+				else {
 					val = this._webexZimletAccountPreferences[key];
 				}
 				
-				if (objId == WebExZimlet.PROP_ACCOUNTNAME.propId) {
+				if (objId === WebExZimlet.PROP_ACCOUNTNAME.propId) {
 					tabs[indx - 1].setText(val);
 				}				
 				
-				if (val == "N/A" || val == "" || val == undefined || val == "undefined") {
+				if (val === "N/A" || val === "" || val === undefined || val === "undefined") {
 					continue;
 				}
-				if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == -1) {
+				if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) === -1) {
 					document.getElementById(key).value = val;
-				} else {
+				}
+				else {
 					this._setMenuValue(key, val);
 				}
 				
@@ -1576,9 +1578,9 @@ WebExZimlet.prototype._setDataToAccPrefsDlg = function() {
 			}
 			*/
 		
-	} catch(ex) {
+	}
+	catch(ex) {
 		this._showErrorMessage(ex);
-		return;
 	}
 	
 };
@@ -1610,13 +1612,9 @@ WebExZimlet.prototype._createAccPrefsView = function(tabIndex) {
 	if (!AjxEnv.isIE) {//w/o this, stupid IE will break
 		html.push("<table width='100%'><tr><td>");
 	}
-	indx = tabIndex;
+	var indx = tabIndex;
 	//for (var indx = 1; indx < 6; indx++) {
-		if (indx == 1) {
-			var notes = this.getMessage("WebExZimlet_account1UsedAsDefaultForUnAssociatedCal");
-		} else {
-			var notes = "";
-		}
+		var notes = indx === 1 ? this.getMessage("WebExZimlet_account1UsedAsDefaultForUnAssociatedCal") : "";
 		html.push(this._getAccountPrefsHtml(indx, notes));
 	//}
 	if (!AjxEnv.isIE) {//w/o this, stupid IE will break
@@ -1712,8 +1710,8 @@ WebExZimlet.prototype._testWebExAccount = function(indx) {
 	var userName = document.getElementById(WebExZimlet.PROP_USERNAME.propId + indx).value;
 	var pwd = document.getElementById(WebExZimlet.PROP_PASSWORD.propId + indx).value;
 	var cId = document.getElementById(WebExZimlet.PROP_COMPANY_ID.propId + indx).value;
-	var params = {hostName: userName, hostPwd:pwd,  companyId: cId}
-	if(userName.length == 0 || pwd.length == 0 || cId.length == 0) {
+	var params = {hostName: userName, hostPwd:pwd,  companyId: cId};
+	if (userName.length === 0 || pwd.length === 0 || cId.length === 0) {
 		appCtxt.getAppController().setStatusMsg(this.getMessage("WebExZimlet_userPwdCIdRequired"), ZmStatusView.LEVEL_WARNING);
 		return;
 	}
@@ -2202,17 +2200,33 @@ function(selectHtml) {
 		this._showSelectAccntsDlg._mPwdFieldId = "WebExZimlet_showSelectAccntsDlg_mPwdFieldId";
 		html.push("<div class='webExZimlet_background' style='width:500px;'>",
 			"<table class='ZPropertySheet' cellspacing='6' width='100%' style='margin-bottom:.5em;'><tr>",
-			"<td class='ZmFieldLabelRight' width='30%'>", this.getMessage("WebExZimlet_webExAccntToUse"), "</td>",
+			"<td class='ZmFieldLabelRight' width='30%'>",
+			this.getMessage("WebExZimlet_webExAccntToUse"),
+			"</td>",
 			"<td><span>", selectHtml, "</span></td></tr></table>",
 			"<div id='webexZimlet_showSelectAccnts_OptionsDiv' >",
-			"<div class='webExZimlet_subHdr'>",this.getMessage("WebExZimlet_getAccounts"),"</div>",
+			"<div class='webExZimlet_subHdr'>",
+			this.getMessage("WebExZimlet_getAccounts"),
+			"</div>",
 			"<table class='webExZimlet_table ZPropertySheet' cellspacing='6' width='100%'>",
-			"<tr><td class='ZmFieldLabelRight' width='30%'>", this.getMessage(WebExZimlet.PROP_ALT_HOSTS.label), "</td>",
-			"<td><input  id='", this._showSelectAccntsDlg._altHostFieldId, "'  type='text'/>",
-			"&nbsp; <a href='javascript:void(0)' id='",this._showSelectAccntsDlg._altHelpLinkId,"'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>",
-			"<tr><td class='ZmFieldLabelRight' width='30%'>", this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.label), "</td>",
-			"<td><input id='", this._showSelectAccntsDlg._mPwdFieldId, "'  type='text'/>",
-			"&nbsp; <label style='color:gray;'>", this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.extraLabel), "</label></td></tr>",
+			"<tr><td class='ZmFieldLabelRight' width='30%'>",
+			this.getMessage(WebExZimlet.PROP_ALT_HOSTS.label),
+			"</td>",
+			"<td><input  id='",
+			this._showSelectAccntsDlg._altHostFieldId,
+			"'  type='text'/>",
+			"&nbsp; <a href='javascript:void(0)' id='",this._showSelectAccntsDlg._altHelpLinkId,"'>",
+			this.getMessage("WebExZimlet_help"),
+			"</a></td></tr>",
+			"<tr><td class='ZmFieldLabelRight' width='30%'>",
+			this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.label),
+			"</td>",
+			"<td><input id='",
+			this._showSelectAccntsDlg._mPwdFieldId,
+			"'  type='text'/>",
+			"&nbsp; <label style='color:gray;'>",
+			this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.extraLabel),
+			"</label></td></tr>",
 			"</table>",
 			"</div></div>");
 
@@ -2261,7 +2275,8 @@ WebExZimlet.prototype._showAppointmentsList = function() {
 WebExZimlet.prototype._getMeetingsList = function(accountNumber, listType) {
 	if (document.getElementById("webex_meetingsearch_resultfield")) {
 		document.getElementById("webex_meetingsearch_resultfield").innerHTML = "<div style='text-align:center;vertical-align:middle'>" + this.getMessage("WebExZimlet_findingMeetings") + "</div>";
-	} else {
+	}
+	else {
 		appCtxt.getAppController().setStatusMsg(this.getMessage("WebExZimlet_pleaseWait"), ZmStatusView.LEVEL_INFO);
 	}
 	//Put the wait msg in the table section instead.
@@ -2363,10 +2378,10 @@ WebExZimlet.prototype._addShowMeetingListListeners = function() {
 	for (var id in this._startMeetingStartLinkIdMap) {
 		document.getElementById(id).onclick = AjxCallback.simpleClosure(this._onStartLinkClicked, this, this._startMeetingStartLinkIdMap[id]);
 	}
-	var callback = AjxCallback.simpleClosure(this._meetingListTypesMenuHandler, this);
+	var callback = this._meetingListTypesMenuHandler.bind(this);
 	document.getElementById("webExZimlet_meetingsListTypesMenu").onchange = callback;
 	//XXX Do the same sort of thing here for the account-number selector.
-	var callback2 = AjxCallback.simpleClosure(this._meetingListAccountsMenuHandler, this);
+	var callback2 = this._meetingListAccountsMenuHandler.bind(this);
 	document.getElementById("webExZimlet_meetingsListAccountsMenu").onchange = callback2;
 };
 
@@ -2428,17 +2443,7 @@ WebExZimlet.prototype._onStartLinkClicked = function(params) {
  * @param {string} listType	 Type of the list
  */
 WebExZimlet.prototype._setMeetingListView = function(objResult, listType) {
-	var mtgs;
-	if (!objResult || !objResult.body || !objResult.body.bodyContent) {
-		mtgs = []
-	} else {
-		mtgs = objResult.body.bodyContent.meeting;
-		if (!mtgs) {
-			mtgs = [];
-		} else if (!(mtgs instanceof Array)) {
-			mtgs = [mtgs];
-		}
-	}
+	var mtgs = AjxUtil.toArray(objResult && objResult.body && objResult.body.bodyContent && objResult.body.bodyContent.meeting);
 
 	this._startMeetingStartLinkIdMap = {};
 	var html = [];
@@ -2822,12 +2827,8 @@ WebExZimlet.prototype._getAccountsSelectListMenuHtml = function(id) {
 			userName = this.getMessage("WebExZimlet_notConfigured");
 		}
 		var label = AjxMessageFormat.format(this.getMessage("WebExZimlet_accntNumberAndName"), [i, userName]);
-		if (i == this._currentWebExAccountNumber) {
-			selected = " selected";
-		} else {
-			selected = "";
-		}
-				html.push("<option value='", i, "'", selected , ">", label, "</option>");
+		var selected  = (i === this._currentWebExAccountNumber ? " selected" : "");
+		html.push("<option value='", i, "'", selected , ">", label, "</option>");
 	}
 	html.push("</select>");
 	return html.join("");
@@ -2936,22 +2937,19 @@ function webex_zimlet_update_tab(index) {
 
 WebExZimlet.prototype.isTabEmpty = function(tabIndex) {
 
-	for (i = 0; i < WebExZimlet.ALL_ACCNT_PROPS.length; i++) {
-		objId = WebExZimlet.ALL_ACCNT_PROPS[i].propId;
-		key = objId + tabIndex;
-			
-		if ((objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == -1) &&
-			(objId.indexOf(WebExZimlet.PROP_COMPANY_ID.propId) == -1)){
-			if (document.getElementById(key).value && document.getElementById(key).value != "") {
-				return false; //not empty
-			}
-		} else {
-			continue; //skip this one.
+	for (var i = 0; i < WebExZimlet.ALL_ACCNT_PROPS.length; i++) {
+		var objId = WebExZimlet.ALL_ACCNT_PROPS[i].propId;
+		var key = objId + tabIndex;
+		if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) !== -1 || objId.indexOf(WebExZimlet.PROP_COMPANY_ID.propId) !== -1) {
+		    continue;
+		}
+		var value = document.getElementById(key).value;
+		if (value && value !== "") {
+		    return false; //not empty
 		}
 	}
-	
 	return true;
-}
+};
 
 /**
  * Tab Index 
@@ -2959,43 +2957,27 @@ WebExZimlet.prototype.isTabEmpty = function(tabIndex) {
  * Hide the tab.
  */
 WebExZimlet.prototype.deleteTab = function(tabIndex) {
-	var i;
-	var objId;
-	var key;
 	var originalTabIndex = tabIndex;
 	
 	//If this isn't the fifth tab, shift each tab down one spot.
-	while (tabIndex < 5) {
+	while (tabIndex <= 5) {
 		//go through all fields on this tab, copy the value from the next tab over.
-		for (i = 0; i < WebExZimlet.ALL_ACCNT_PROPS.length; i++) {
-			objId = WebExZimlet.ALL_ACCNT_PROPS[i].propId;
-			key = objId + tabIndex;
-			nextKey = objId + (tabIndex + 1);
+		for (var i = 0; i < WebExZimlet.ALL_ACCNT_PROPS.length; i++) {
+			var objId = WebExZimlet.ALL_ACCNT_PROPS[i].propId;
+			var key = objId + tabIndex;
+			var nextKey = objId + (tabIndex + 1);
+			var nextValue = tabIndex === 5 ? "" : document.getElementById(nextKey).value;
 
-			if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == -1) {
-				document.getElementById(key).value = document.getElementById(nextKey).value;
-			} else {
-				this._setMenuValue(key, document.getElementById(nextKey).value);  //test this one...
+			if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) === -1) {
+				document.getElementById(key).value = nextValue;
+			}
+			else {
+				this._setMenuValue(key, nextValue);  //test this one...
 			}
 		}
 		webex_zimlet_update_tab(tabIndex);
 		tabIndex++;
 	}
-	if (tabIndex == 5 ) {
-		//blank them all.
-		for (i = 0; i < WebExZimlet.ALL_ACCNT_PROPS.length; i++) {
-			var objId = WebExZimlet.ALL_ACCNT_PROPS[i].propId;
-			var key = objId + tabIndex;
-
-			if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == -1) {
-				document.getElementById(key).value = "";
-			} else {
-				this._setMenuValue(key, "");
-			}
-		}
-		webex_zimlet_update_tab(tabIndex);
-	}
-	
 	if (originalTabIndex < 5) {
 		this.hideOrShowTab(originalTabIndex + 1, false);  //call this to hide the tab.
 	}
@@ -3009,7 +2991,7 @@ WebExZimlet.prototype.deleteTab = function(tabIndex) {
 		button.focus();
 		this._addPrefsDlgViewTabView.switchToTab(this._tabKeys[tabIndex]); 
 	}
-}
+};
 
 /**
  * Check tab's fields - if the 'important' ones are empty, hide it.
@@ -3017,27 +2999,8 @@ WebExZimlet.prototype.deleteTab = function(tabIndex) {
  * returns: boolean visibility.  (True = visible)
  */
 WebExZimlet.prototype.hideOrShowTab = function(tabIndex, moveFocus) {
-	var noValues = true;
-	
-	if (tabIndex == 1) {
-		noValues = false;  //never turn the first 'page' invisible, but do turn phone info off if needed.
-	} else {
-	
-		for (i = 0; i < WebExZimlet.ALL_ACCNT_PROPS.length; i++) {
-			objId = WebExZimlet.ALL_ACCNT_PROPS[i].propId;
-			key = objId + tabIndex;
-				
-			if ((objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == -1) &&
-				(objId.indexOf(WebExZimlet.PROP_COMPANY_ID.propId) == -1)){
-				if (document.getElementById(key).value && document.getElementById(key).value != "") {
-					noValues = false;
-					break;
-				}
-			} else {
-				continue; //skip this one.
-			}
-		}
-	}
+	//never turn the first 'page' invisible, but do turn phone info off if needed.
+	var noValues = tabIndex !== 1 && this.isTabEmpty(tabIndex);
 	if (noValues) {
 		var bar = this._addPrefsDlgViewTabView.getTabBar();
 		var button = bar.getItem(tabIndex - 1); //zero indexed.
@@ -3046,63 +3009,56 @@ WebExZimlet.prototype.hideOrShowTab = function(tabIndex, moveFocus) {
 		
 		this._hidePhoneSettings(tabIndex);
 		return false;
-	} else {
-		this.hideOrShowPhone(tabIndex);
-		return true;
 	}
-}
+
+	this.hideOrShowPhone(tabIndex);
+	return true;
+};
 
 /**
  *  Scan through the phone fields - if all empty, hide the phone fields.
  */
 WebExZimlet.prototype.hideOrShowPhone = function(tabIndex) {
-	var noValues = true;
 
 	for (var i = 0; i < WebExZimlet.WEBEX_TELECONF_PROPS.length; i++) {
 		var objId = WebExZimlet.WEBEX_TELECONF_PROPS[i].propId;
-		key = objId + tabIndex;
+		var key = objId + tabIndex;
 
-		if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == -1) {
-			if (document.getElementById(key).value && document.getElementById(key).value != "") {
-				noValues = false;
-				break;
+		if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) === -1) {
+			if (document.getElementById(key).value && document.getElementById(key).value !== "") {
+				//there's a value, so show phone settings
+				this._showPhoneSettings(tabIndex);
+				return;
 			}
-		} else {
-			continue; //skip this one.
 		}
 	}
-	
-	if (noValues) {
-		this._hidePhoneSettings(tabIndex);
-	} else {
-		this._showPhoneSettings(tabIndex);
-	}
-	
-}
 
+	//no values were found - hide phone settings.
+	this._hidePhoneSettings(tabIndex);
+};
 
 WebExZimlet.prototype._addAccountTab = function() {
 	//Go through the tabs, find the first blank one
-	for (var ii = 1; ii < 6; ii++) {
-		if (this.isTabEmpty(ii)) {
-			//turn tab button visible, open tab.
-			var bar = this._addPrefsDlgViewTabView.getTabBar();
-			var button = bar.getItem(ii - 1); //zero indexed.
-		
-			button.setVisibility(true);
-			this._addPrefsDlgViewTabView.switchToTab(this._tabKeys[ii]); 
-			return;
-
+	for (var i = 1; i < 6; i++) {
+		if (!this.isTabEmpty(i)) {
+			continue;
 		}
+		//turn tab button visible, open tab.
+		var bar = this._addPrefsDlgViewTabView.getTabBar();
+		var button = bar.getItem(i - 1); //zero indexed.
+		
+		button.setVisibility(true);
+		this._addPrefsDlgViewTabView.switchToTab(this._tabKeys[i]);
+		return;
 	}
 	
 	//if there are none, pop up a message.
 	appCtxt.getAppController().setStatusMsg("Only five accounts available.");
-}
+};
 
 WebExZimlet.prototype._showPhoneSettings = function(index) {
-	document.getElementById("webex_zimlet_phone_info" + index).style.display ="block";
-}
+	document.getElementById("webex_zimlet_phone_info" + index).style.display = "block";
+};
 
 /**
  * Also blanks all the fields.
@@ -3112,8 +3068,7 @@ WebExZimlet.prototype._hidePhoneSettings = function(index) {
 		var objId = WebExZimlet.WEBEX_TELECONF_PROPS[i].propId;
 		var key = objId + index;
 
-		var val;
-		if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == -1) {
+		if (objId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) === -1) {
 			document.getElementById(key).value = "";
 		} /*
 		else {
@@ -3124,4 +3079,4 @@ WebExZimlet.prototype._hidePhoneSettings = function(index) {
 
 
 	document.getElementById("webex_zimlet_phone_info" + index).style.display = "none";
-}
+};
