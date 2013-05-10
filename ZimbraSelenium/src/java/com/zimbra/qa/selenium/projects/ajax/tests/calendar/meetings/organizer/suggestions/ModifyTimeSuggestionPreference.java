@@ -46,7 +46,7 @@ public class ModifyTimeSuggestionPreference extends CalendarWorkWeekTest {
 		
 		String apptSubject, apptAttendee, apptContent;
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
-		apptAttendee = ZimbraAccount.AccountA().EmailAddress;
+		apptAttendee = ZimbraAccount.AccountC().EmailAddress;
 		apptContent = ZimbraSeleniumProperties.getUniqueString();
 		
 		appt.setSubject(apptSubject);
@@ -98,14 +98,14 @@ public class ModifyTimeSuggestionPreference extends CalendarWorkWeekTest {
 		ZAssert.assertEquals(endDateTime, apptForm.zGetTomorrowDate() + "T110000", "Verify end date/time after picking up time from suggest pane'");
 		
 		// Verify the attendee receives the meeting
-		AppointmentItem received = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ appt.getSubject() +")");
+		AppointmentItem received = AppointmentItem.importFromSOAP(ZimbraAccount.AccountC(), "subject:("+ appt.getSubject() +")");
 		ZAssert.assertNotNull(received, "Verify the new appointment is created");
 		ZAssert.assertEquals(received.getSubject(), appt.getSubject(), "Subject: Verify the appointment data");
 		ZAssert.assertEquals(received.getAttendees(), apptAttendee, "Attendees: Verify the appointment data");
 		ZAssert.assertEquals(received.getContent(), appt.getContent(), "Content: Verify the appointment data");
 
 		// Verify the attendee receives the invitation
-		MailItem invite = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ appt.getSubject() +")");
+		MailItem invite = MailItem.importFromSOAP(ZimbraAccount.AccountC	(), "subject:("+ appt.getSubject() +")");
 		ZAssert.assertNotNull(invite, "Verify the invite is received");
 		ZAssert.assertEquals(invite.dSubject, appt.getSubject(), "Subject: Verify the appointment data");
 		

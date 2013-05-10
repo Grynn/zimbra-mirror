@@ -243,7 +243,16 @@ public class ZimbraAccount {
 		return (_AccountB);
 	}
 	private static ZimbraAccount _AccountB = null;
-
+	
+	public static synchronized ZimbraAccount AccountC() {
+		if ( _AccountC == null ) {
+			_AccountC = new ZimbraAccount();
+			_AccountC.provision();
+			_AccountC.authenticate();
+		}
+		return (_AccountC);
+	}
+	private static ZimbraAccount _AccountC = null;
 
 	/**
 	 * Reset all static accounts.  This method should be used before/after
@@ -255,6 +264,7 @@ public class ZimbraAccount {
 	public static void reset() {
 		ZimbraAccount._AccountA = null;
 		ZimbraAccount._AccountB = null;
+		ZimbraAccount._AccountC = null;
 		ZimbraAccount._AccountHTML = null;
 		ZimbraAccount._AccountZDC = null;
 		ZimbraAccount._AccountZMC = null;
