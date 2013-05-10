@@ -421,6 +421,57 @@ public class PageMail extends AbsTab {
 
 			locator = "id='"+ Locators.zViewMenuDropdownBtnID +"'";
 
+		} else if ( button == Button.B_SELECT_ALL ) {
+
+			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
+				locator = "css=div#zv__TV-main td[id$='__se'] div[id$='__se']";
+			} else {
+				locator = "css=div#zv__CLV-main td[id$='__se'] div[id$='__se']";
+			}
+			page = null;
+			
+			// FALLTHROUGH
+			
+//			this.zClick(locator);
+//			this.zWaitForBusyOverlay();
+//			return (null);
+
+		} else if ( button == Button.B_SHIFT_SELECT_ALL ) {
+
+			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
+				locator = "css=div#zv__TV-main td[id$='__se'] div[id$='__se']";
+			} else {
+				locator = "css=div#zv__CLV-main td[id$='__se'] div[id$='__se']";
+			}
+			page = null;
+
+			if (ZimbraSeleniumProperties.isWebDriver()){
+				
+				// WEBDRIVER:
+				// Need something like:
+				// aBuilder.keyDown(Keys.SHIFT).click(checkbox1).click(checkbox2).keyUp(Keys.SHIFT).perform();
+				// See https://groups.google.com/forum/#!topic/webdriver/plAWUa2E3Lw
+
+				logger.info("...WebDriver...click()");
+				final org.openqa.selenium.interactions.Actions builder = new org.openqa.selenium.interactions.Actions(webDriver());
+				org.openqa.selenium.interactions.Action action = builder.keyDown(Keys.SHIFT).click(getElement(locator)).keyUp(Keys.SHIFT).build();
+				action.perform();
+				
+			} else {
+
+				// SELENIUM:
+				// I don't see how it can be done.  The selenium click() method uses JS, which
+				// doesn't care what state the keyboard is currently in.  So, this does not work:
+				// robot.keyPress(VK_SHIFT)
+				// this.zClick(locator)
+				// robot.keyRelease(VK_SHIFT)
+				
+				throw new HarnessException("Shift-Click is dependent on WebDriver.");
+			}
+			
+			this.zWaitForBusyOverlay();
+			return (page);
+			
 		} else if ( button == Button.B_MAIL_LIST_SORTBY_FLAGGED ) {
 
 			locator = "css=td[id='zlh__TV-main__fg'] div[class='ImgFlagRed']";
