@@ -181,7 +181,7 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Mark ON to mounted calendar folder and select the appointment
-		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
+		//app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
 		app.zTreeCalendar.zSelectMountedFolder(mountpointname);
 		app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
 		
