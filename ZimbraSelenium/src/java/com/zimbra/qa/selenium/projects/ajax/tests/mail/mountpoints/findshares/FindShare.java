@@ -22,6 +22,7 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -46,6 +47,7 @@ public class FindShare extends PrefGroupMailByMessageTest {
 		
 	}
 	
+	@Bugs(ids = "82125")
 	@Test(	description = "Search for a share from another user.  Add it.",
 			groups = { "functional" })
 	public void CreateMountpoint_01() throws HarnessException {
