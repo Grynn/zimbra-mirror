@@ -378,11 +378,14 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
                 }
 				if (ret == NULL)	// FBS bug 71630 -- 3/22/12
 				{
+					pIt[L"assistantPhone"] = SysAllocString((cd.AssistantPhone).c_str());
 					pIt[L"birthday"] = SysAllocString((cd.Birthday).c_str());
 					pIt[L"anniversary"] = SysAllocString((cd.Anniversary).c_str());
 					pIt[L"callbackPhone"] = SysAllocString((cd.CallbackPhone).c_str());
 					pIt[L"carPhone"] = SysAllocString((cd.CarPhone).c_str());
 					pIt[L"company"] = SysAllocString((cd.Company).c_str());
+					pIt[L"companyPhone"] = SysAllocString((cd.CompanyPhone).c_str());
+					pIt[L"department"] = SysAllocString((cd.Department).c_str());
 					pIt[L"email"] = SysAllocString((cd.Email1).c_str());
 					pIt[L"email2"] = SysAllocString((cd.Email2).c_str());
 					pIt[L"email3"] = SysAllocString((cd.Email3).c_str());
@@ -404,9 +407,10 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
 					pIt[L"mobilePhone"] = SysAllocString((cd.MobilePhone).c_str());
 					pIt[L"namePrefix"] = SysAllocString((cd.NamePrefix).c_str());
 					pIt[L"nameSuffix"] = SysAllocString((cd.NameSuffix).c_str());
+					pIt[L"nickname"] = SysAllocString((cd.NickName).c_str());
 					pIt[L"notes"] = SysAllocString((cd.Notes).c_str());
 					pIt[L"otherCity"] = SysAllocString((cd.OtherCity).c_str());
-					pIt[L"outerCountry"] = SysAllocString((cd.OtherCountry).c_str());
+					pIt[L"otherCountry"] = SysAllocString((cd.OtherCountry).c_str());
 					pIt[L"otherFax"] = SysAllocString((cd.OtherFax).c_str());
 					pIt[L"otherPhone"] = SysAllocString((cd.OtherPhone).c_str());
 					pIt[L"otherPostalCode"] = SysAllocString((cd.OtherPostalCode).c_str());
@@ -418,6 +422,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
 					pIt[L"workCountry"] = SysAllocString((cd.WorkCountry).c_str());
 					pIt[L"workFax"] = SysAllocString((cd.WorkFax).c_str());
 					pIt[L"workPhone"] = SysAllocString((cd.WorkPhone).c_str());
+					pIt[L"workPhone2"] = SysAllocString((cd.WorkPhone2).c_str());
 					pIt[L"workPostalCode"] = SysAllocString((cd.WorkPostalCode).c_str());
 					pIt[L"workState"] = SysAllocString((cd.WorkState).c_str());
 					pIt[L"workStreet"] = SysAllocString((cd.WorkStreet).c_str());

@@ -888,10 +888,13 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
 			MAPIContact mapicontact(*m_zmmapisession, msg);
 			ContactItemData *cd = (ContactItemData *)&itemData;
 
+			cd->AssistantPhone = mapicontact.AssistantPhone();
 			cd->Birthday = mapicontact.Birthday();
 			cd->CallbackPhone = mapicontact.CallbackPhone();
 			cd->CarPhone = mapicontact.CarPhone();
 			cd->Company = mapicontact.Company();
+			cd->CompanyPhone = mapicontact.CompanyPhone();
+			cd->Department = mapicontact.Department();
 			cd->Email1 = mapicontact.Email();
 			cd->Email2 = mapicontact.Email2();
 			cd->Email3 = mapicontact.Email3();
@@ -935,6 +938,7 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
 			cd->WorkCountry = mapicontact.WorkCountry();
 			cd->WorkFax = mapicontact.WorkFax();
 			cd->WorkPhone = mapicontact.WorkPhone();
+			cd->WorkPhone2 = mapicontact.WorkPhone2();
 			cd->WorkPostalCode = mapicontact.WorkPostalCode();
 			cd->WorkState = mapicontact.WorkState();
 			cd->WorkStreet = mapicontact.WorkStreet();

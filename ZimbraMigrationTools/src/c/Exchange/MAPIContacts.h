@@ -42,7 +42,7 @@ private:
         pr_business_address_country, pr_business_address_postal_code, pr_business_address_state,
         pr_business_address_street, pr_contact_user1_idx, pr_contact_user2_idx,
         pr_contact_user3_idx, pr_contact_user4_idx, pr_contact_oneoffmemebrs, pr_imaddress,
-        pr_anniversary;
+        pr_anniversary, pr_department, pr_nickname, pr_assistantphone, pr_business2_phone, pr_company_phone;
 
     // index of props
     typedef enum _ContactsPropIdx
@@ -51,7 +51,8 @@ private:
         N_MAIL2DISPNAME, N_MAIL3, N_MAIL3EID, N_MAIL3TYPE, N_MAIL3DISPNAME, N_FILEAS,
         N_FILEAS_ID, N_BUS_CITY, N_BUS_COUNTRY, N_BUS_ZIP, N_BUS_STATE, N_BUS_STREET,
         N_CONTACT_USER1_IDX, N_CONTACT_USER2_IDX, N_CONTACT_USER3_IDX, N_CONTACT_USER4_IDX,
-        N_CONTACT_ONEOFFMEMEBRS_IDX, N_IMADDRESS, N_ANNIVERSARY, N_NUM_NAMES
+        N_CONTACT_ONEOFFMEMEBRS_IDX, N_IMADDRESS, N_ANNIVERSARY, N_NUM_NAMES, N_DEPARTMENT, N_NICKNAME, N_ASSISTANT_TELEPHONE_NUMBER,
+        N_OFFICE2_TELEPHONE_NUMBER, N_COMPANY_MAIN_PHONE_NUMBER
     } ContactsPropIdx;
 
     // this enum defines the order of the props
@@ -73,7 +74,7 @@ private:
         C_OFFICE_TELEPHONE_NUMBER, C_BUSINESS_ADDRESS_POSTAL_CODE, C_BUSINESS_ADDRESS_STATE,
         C_BUSINESS_ADDRESS_STREET, C_BUSINESS_HOME_PAGE, C_BIRTHDAY, C_CONTACT_USER1_IDX,
         C_CONTACT_USER2_IDX, C_CONTACT_USER3_IDX, C_CONTACT_USER4_IDX, C_ONEOFFMEMEBRS_IDX,
-        C_IMADDRESS, C_ANNIVERSARY, C_NUM_PROPS
+        C_IMADDRESS, C_ANNIVERSARY, C_DEPARTMENT, C_NICKNAME, C_ASSISTANT_TELEPHONE_NUMBER, C_OFFICE2_TELEPHONE_NUMBER, C_COMPANY_MAIN_PHONE_NUMBER, C_NUM_PROPS
     };
 
     enum OLK_FILE_AS
@@ -95,9 +96,12 @@ private:
     LONG m_zimbraFileAsId;
 
     // contact data members
+    wstring m_pAssistantPhone;
     wstring m_pCallbackPhone;
     wstring m_pCarPhone;
     wstring m_pCompany;
+    wstring m_pCompanyPhone;
+    wstring m_pDepartment;
     wstring m_pEmail;
     wstring m_pEmail2;
     wstring m_pEmail3;
@@ -118,6 +122,7 @@ private:
     wstring m_pMobilePhone;
     wstring m_pNamePrefix;
     wstring m_pNameSuffix;
+    wstring m_pNickName;
     wstring m_pNotes;
     wstring m_pOtherCity;
     wstring m_pOtherCountry;
@@ -132,6 +137,7 @@ private:
     wstring m_pWorkCountry;
     wstring m_pWorkFax;
     wstring m_pWorkPhone;
+    wstring m_pWorkPhone2;
     wstring m_pWorkPostalCode;
     wstring m_pWorkState;
     wstring m_pWorkStreet;
@@ -141,7 +147,6 @@ private:
     wstring m_pUserField2;
     wstring m_pUserField3;
     wstring m_pUserField4;
-    wstring m_pNickName;
     wstring m_pDList;
     wstring m_pType;
     wstring m_pPictureID;
@@ -160,10 +165,16 @@ public:
     bool IsPersonalDL() { return m_bPersonalDL; }
     HRESULT GetContactImage(wstring &wstrImagePath,wstring &wstrContentType,wstring &wstrContentDisposition);
 
-	void AddUserDefinedField(ContactUDFields &cudf)
-	{
-		m_vud_Fields.push_back(cudf);
-	}
+    void AddUserDefinedField(ContactUDFields &cudf)
+    {
+        m_vud_Fields.push_back(cudf);
+    }
+
+    void AssistantPhone(LPTSTR pStr)
+    {
+        m_pAssistantPhone = pStr;
+        m_size += m_pAssistantPhone.length();
+    }
 
     void CallbackPhone(LPTSTR pStr)
     {
@@ -181,6 +192,18 @@ public:
     {
         m_pCompany = pStr;
         m_size += m_pCompany.length();
+    }
+
+    void CompanyPhone(LPTSTR pStr)
+    {
+        m_pCompanyPhone = pStr;
+        m_size += m_pCompanyPhone.length();
+    }
+
+    void Department(LPTSTR pStr)
+    {
+        m_pDepartment = pStr;
+        m_size += m_pDepartment.length();
     }
 
     void Email(LPTSTR pStr)
@@ -387,6 +410,12 @@ public:
         m_size += m_pWorkPhone.length();
     }
 
+    void WorkPhone2(LPTSTR pStr)
+    {
+        m_pWorkPhone2 = pStr;
+        m_size += m_pWorkPhone2.length();
+    }
+
     void WorkPostalCode(LPTSTR pStr)
     {
         m_pWorkPostalCode = pStr;
@@ -484,9 +513,12 @@ public:
         m_content_disposition = pStr;
     }
 
+    wstring AssistantPhone() { return m_pAssistantPhone; }
     wstring CallbackPhone() { return m_pCallbackPhone; }
     wstring CarPhone() { return m_pCarPhone; }
     wstring Company() { return m_pCompany; }
+    wstring CompanyPhone() { return m_pCompanyPhone; }
+    wstring Department() { return m_pDepartment; }
     wstring Email() { return m_pEmail; }
     wstring Email2() { return m_pEmail2; }
     wstring Email3() { return m_pEmail3; }
@@ -521,6 +553,7 @@ public:
     wstring WorkCountry() { return m_pWorkCountry; }
     wstring WorkFax() { return m_pWorkFax; }
     wstring WorkPhone() { return m_pWorkPhone; }
+    wstring WorkPhone2() { return m_pWorkPhone2; }
     wstring WorkPostalCode() { return m_pWorkPostalCode; }
     wstring WorkState() { return m_pWorkState; }
     wstring WorkStreet() { return m_pWorkStreet; }

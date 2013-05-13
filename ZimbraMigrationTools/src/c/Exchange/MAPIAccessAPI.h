@@ -64,9 +64,12 @@ enum
 // contact item data
 typedef struct _ContactItemData: BaseItemData
 {
+    wstring AssistantPhone;
     wstring CallbackPhone;
     wstring CarPhone;
     wstring Company;
+    wstring CompanyPhone;
+    wstring Department;
     wstring Email1;
     wstring Email2;
     wstring Email3;
@@ -101,6 +104,7 @@ typedef struct _ContactItemData: BaseItemData
     wstring WorkCountry;
     wstring WorkFax;
     wstring WorkPhone;
+    wstring WorkPhone2;
     wstring WorkPostalCode;
     wstring WorkState;
     wstring WorkStreet;
