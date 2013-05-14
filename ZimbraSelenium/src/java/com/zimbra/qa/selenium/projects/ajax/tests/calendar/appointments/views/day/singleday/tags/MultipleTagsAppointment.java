@@ -22,7 +22,6 @@ import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import java.util.HashMap;
 import org.testng.annotations.Test;
-import com.zimbra.client.ZInvite.ZRole;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;

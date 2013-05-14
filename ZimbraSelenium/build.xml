@@ -22,7 +22,6 @@
 
 	<property name="zimbraqa.dir" location="../ZimbraQA" />
 	<property name="webclient.dir" location="../ZimbraWebClient" />
-	<property name="native.dir" location="../ZimbraNative" />
 	<property name="zimlet.dir" location="../Zimlet" />
 
 	<path id="class.path">
@@ -39,9 +38,6 @@
 			<include name="**/*.jar" />
 		</fileset>
 		<fileset file="${common.jarfile}" />
-		<fileset file="${soap.jarfile}" />
-                <fileset file="${client.jarfile}" />
-		<fileset file="${server.jarfile}" />
 	</path>
 
 	<path id="all.java.path">
@@ -62,23 +58,11 @@
 		<mkdir dir="${build.classes.dir}" />
 	</target>
 
-	<target name="compile-ZimbraServer" depends="compile-ZimbraNative" description="Builds ZimbraServer">
-		<ant dir="${server.dir}" target="jar" inheritAll="false" />
-	</target>
-
-	<target name="compile-ZimbraNative" description="Builds ZimbraNative">
-		<ant dir="${native.dir}" target="jar" inheritAll="false" />		
-	</target>
-
 	<target name="compile-ZimbraCommon" description="Builds ZimbraCommon">
 		<ant dir="${common.dir}" target="jar" inheritAll="false" />
 	</target>
 
-	<target name="compile-ZimbraSoap" description="Builds ZimbraSoap">
-		<ant dir="${soap.dir}" target="jar" inheritAll="false" />
-	</target>
-
-	<target name="compile" depends="build-init,data-files,bundles-jar,coverage-jar,compile-ZimbraCommon,compile-ZimbraSoap,compile-ZimbraServer" description="Compiles the source code">
+	<target name="compile" depends="build-init,data-files,bundles-jar,coverage-jar,compile-ZimbraCommon" description="Compiles the source code">
 		<echo message="compiling framework..." />
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path" nowarn="on">
 			<src refid="all.java.path" />
@@ -218,10 +202,6 @@
 				<include name="guava-*.jar" />
 			</fileset>
 			<fileset file="${common.jarfile}" />
-			<fileset file="${native.jarfile}" />
-			<fileset file="${soap.jarfile}" />
-                        <fileset file="${client.jarfile}" />
-			<fileset file="${server.jarfile}" />
 		</copy>
 
 		<jar destfile="${dist.lib.dir}/zimbrastaf.jar" basedir="${build.staf.selenium}">
@@ -229,7 +209,7 @@
 				<attribute name="Main-Class" value="staf.Driver" />
 				<section name="staf/service/info">
 					<attribute name="Service-Class" value="com.zimbra.qa.selenium.staf.StafIntegration" />
-					<attribute name="Packaged-Jars" value="guava-13.0.1 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.6 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 testng-5.12.1 selenium-java-2.31.0 selenium-server-standalone-2.31.0 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.3 libidn-1.24 log4j-1.2.16 mail mysql-connector-java-5.1.18-bin resources coverage zimbracommon zimbra-native zimbrasoap zimbraclient zimbrastore ant-tar-patched" />
+					<attribute name="Packaged-Jars" value="guava-13.0.1 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.6 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 testng-5.12.1 selenium-java-2.31.0 selenium-server-standalone-2.31.0 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.3 libidn-1.24 log4j-1.2.16 mail mysql-connector-java-5.1.18-bin resources coverage zimbracommon ant-tar-patched" />
 				</section>
 			</manifest>
 		</jar>
