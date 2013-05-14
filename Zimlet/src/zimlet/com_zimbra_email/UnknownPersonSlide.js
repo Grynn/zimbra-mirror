@@ -264,7 +264,7 @@ UnknownPersonSlide.prototype._handleContactDetails =
 function(response, contact) {
 	var attrs = null;
     var id = null;
-	if(response) {
+	if (response) {
 		var data = response.getResponse();
         var r = data.SearchGalResponse;
 		var cn = r.cn;
@@ -274,7 +274,8 @@ function(response, contact) {
 		}
     }
 
-    attrs = attrs || contact && contact.attr || {};
+	//the use of hashCopy is due to bug 81951 - Don't modify the contact attributes.
+    attrs = attrs || (contact && contact.attr && AjxUtil.hashCopy(contact.attr)) || {};
 
     attrs["fullName"] =  this.emailZimlet.fullName || attrs["fullName"] || contact && contact._fileAs;
     this._presentity = attrs["email"] = this.emailZimlet.emailAddress || attrs["email"];        // email is the presence identity
