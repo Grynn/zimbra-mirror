@@ -795,6 +795,36 @@ ZaSettings.mailCharsetChoices = [
 
 ZaSettings.getLocaleChoices = function () {
 
+    if (!ZaSettings.localeChoices) {
+        var soapDoc = AjxSoapDoc.create("GetAvailableLocalesRequest", "urn:zimbraAccount", null);
+        var params = {};
+        params.soapDoc = soapDoc;
+
+        var reqMgrParams = {
+            controller: (ZaApp.getInstance() ? ZaApp.getInstance().getCurrentController() : null),
+            busyMsg: ZaMsg.BUSY_GET_LOCALE
+        }
+
+        var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAvailableLocalesResponse;
+        var locales = resp.locale;
+
+        ZaSettings.localeChoices = [];
+
+        for (var i = 0; i < locales.length; i++) {
+            var displayLabel = locales[i].localName;
+
+            if (locales[i].name != locales[i].localName) {
+                displayLabel += " - " + locales[i].name;
+            }
+
+            ZaSettings.localeChoices.push({
+                value: locales[i].id,
+                label: displayLabel
+            });
+        }
+    }
+
+    /*
     if (! ZaSettings.localeChoices) {
        //getAllLocalesRequest
 //        var soapDoc = AjxSoapDoc.create("GetAllLocalesRequest", ZaZimbraAdmin.URN, null);
@@ -817,6 +847,7 @@ ZaSettings.getLocaleChoices = function () {
             });
         }
     }
+    */
 
     return ZaSettings.localeChoices ;
 }
