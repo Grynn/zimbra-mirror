@@ -2,6 +2,7 @@
 ZaClientUploadController = function(appCtxt, container) {
     ZaXFormViewController.call(this, appCtxt, container, "ZaClientUploadController");
     this._UICreated = false;
+    this._helpURL = location.pathname + "help/admin/html/tools/uploadanewversionofzco.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
     this.tabConstructor = ZaClientUploadXFormView;
 }
 
