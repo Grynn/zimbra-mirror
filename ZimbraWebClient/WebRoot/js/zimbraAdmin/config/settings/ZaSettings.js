@@ -824,31 +824,6 @@ ZaSettings.getLocaleChoices = function () {
         }
     }
 
-    /*
-    if (! ZaSettings.localeChoices) {
-       //getAllLocalesRequest
-//        var soapDoc = AjxSoapDoc.create("GetAllLocalesRequest", ZaZimbraAdmin.URN, null);
-        var soapDoc = AjxSoapDoc.create("GetAvailableLocalesRequest", "urn:zimbraAccount", null);
-        var params = {};
-        params.soapDoc = soapDoc;
-        var reqMgrParams = {
-                controller: (ZaApp.getInstance() ? ZaApp.getInstance().getCurrentController(): null ),
-                busyMsg : ZaMsg.BUSY_GET_LOCALE
-            }
-//        var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllLocalesResponse;
-        var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAvailableLocalesResponse;
-        var locales = resp.locale ;            
-        ZaSettings.localeChoices = [] ;
-
-        for (var i=0; i < locales.length; i ++) {
-            ZaSettings.localeChoices.push({
-                value: locales[i].id,
-                label: locales[i].name
-            });
-        }
-    }
-    */
-
     return ZaSettings.localeChoices ;
 }
 
