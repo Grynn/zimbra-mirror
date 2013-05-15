@@ -59,5 +59,6 @@
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="lib" path="jars/ldtp-1.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraNative"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
