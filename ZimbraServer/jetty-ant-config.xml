@@ -43,6 +43,22 @@
 	    </Arg>
         </Call>
         <Call name="addRule">
+            <Arg>
+                <New class="org.eclipse.jetty.rewrite.handler.RewritePatternRule">
+                    <Set name="pattern">/ews/Exchange.asmx/*</Set>
+                    <Set name="replacement">/service/extension/zimbraews</Set>
+                </New>
+            </Arg>
+        </Call>
+        <Call name="addRule">
+            <Arg>
+                <New class="org.eclipse.jetty.rewrite.handler.RewritePatternRule">
+                    <Set name="pattern">/EWS/Exchange.asmx/*</Set>
+                    <Set name="replacement">/service/extension/zimbraews</Set>
+                </New>
+            </Arg>
+        </Call>        
+        <Call name="addRule">
 	    <Arg>
 		<New class="org.eclipse.jetty.rewrite.handler.RewritePatternRule">
 		    <Set name="pattern">/principals/*</Set>
@@ -199,7 +215,7 @@
     <Ref id="RequestLog">
       <Set name="requestLog">
         <New id="RequestLogImpl" class="org.eclipse.jetty.server.NCSARequestLog">
-          <Arg><SystemProperty name="jetty.home" default="/opt/zimbra/jetty"/>/logs/access_log.yyyy_mm_dd</Arg>
+          <Arg><SystemProperty name="jetty.home" default="/opt/zimbra/jetty"/>/../log/access_log.yyyy_mm_dd</Arg>
           <Set name="logDateFormat">dd/MMM/yyyy:HH:mm:ss Z</Set>
           <Set name="retainDays">30</Set>
           <Set name="append">true</Set>
@@ -210,7 +226,7 @@
     </Ref>
 
     <Set name="stopAtShutdown">true</Set>
-    <Set name="sendServerVersion">false</Set>
-    <Set name="sendDateHeader">true</Set>
+<!--      <Set name="sendServerVersion">false</Set>
+    <Set name="sendDateHeader">true</Set> -->
 
 </Configure>

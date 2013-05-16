@@ -36,15 +36,15 @@
     <copy todir="${lib.dir}" preservelastmodified="true">
       <fileset dir="${common.jars.dir}" includes="*.jar" excludes="${war.exclude}" />
     </copy>
-  </target>
+ </target>
 
   <property name="project.outputDirectory" value="build" />
-  <property name="jetty.version" value="7.6.10.z5" />
+  <property name="jetty.version" value="9.0.3.v20130506" />
   <property name="jetty_run_base" location="/opt/zimbra" />
 
   <path id="jetty.plugin.classpath">
     <fileset dir="/opt/zimbra/jetty/lib">
-      <include name="*.jar" />
+      <include name="**/*.jar" />
       <include name="ext/*.jar" />
       <include name="plus/*.jar" />
       <include name="naming/*.jar" />
@@ -57,14 +57,15 @@
   </path>
 
   <taskdef classpathref="jetty.plugin.classpath" resource="tasks.properties" loaderref="jetty.loader" />
-  <typedef name="selectChannelConnector" classname="org.eclipse.jetty.server.nio.SelectChannelConnector" classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
-  <typedef name="sslConnector" classname="org.eclipse.jetty.server.ssl.SslSocketConnector" classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
-
+  <typedef name="connector" classname="org.eclipse.jetty.ant.types.Connector"
+	           classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
+  <typedef name="webApp" classname="org.eclipse.jetty.ant.AntWebAppContext"
+	          classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
+	
   <target name="jetty.run" depends="jetty.webinf">
-    <jetty tempDirectory="${project.outputDirectory}" jettyXml="jetty-ant-config.xml">
+    <jetty.run tempDirectory="${project.outputDirectory}" jettyXml="jetty-ant-config.xml">
       <connectors>
-        <selectChannelConnector port="7070" />
-        <sslConnector port="7071" keystore="${jetty_run_base}/jetty/etc/keystore" password="zimbra" KeyPassword="zimbra" />
+        <connector port="7070" />
       </connectors>
 
       <systemProperties>
@@ -72,7 +73,7 @@
         <systemproperty name="java.library.path" value="${jetty_run_base}/lib" />
       </systemProperties>
 
-      <webApp name="ZimbraServer" warfile="${jetty_webapps}/service" contextpath="/service">
+      <webApp war="${jetty_webapps}/service" contextpath="/service">
         <lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar" />
         <lib dir="${jetty_run_base}/lib" includes="*.jar" excludes="not-needed.jar" />
         <lib dir="${jetty_run_base}/lib/jars" includes="*.jar" excludes="not-needed.jar" />
@@ -85,7 +86,7 @@
         </attributes>
       </webApp>
 
-      <webApp name="ZimbraWebClient" warfile="${jetty_run_base}/jetty/webapps/zimbra" contextpath="/zimbra">
+      <webApp war="${jetty_run_base}/jetty/webapps/zimbra" contextpath="/zimbra">
         <lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" /> 
         <lib dir="${jetty_run_base}/lib" includes="*.jar" excludes="not-needed.jar" />
         <lib dir="${jetty_run_base}/lib/jars" includes="*.jar" excludes="not-needed.jar" />
@@ -94,7 +95,7 @@
           <attribute name="org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern" value=".*/.*jsp-api-[^/]*\.jar$|.*/.*jsp-[^/]*\.jar$|.*/.*taglibs[^/]*\.jar$"/>
         </attributes>
       </webApp>
-      <webApp name="ZimbraAdmin" warfile="${jetty_run_base}/jetty/webapps/zimbraAdmin" contextpath="/zimbraAdmin">
+      <webApp war="${jetty_run_base}/jetty/webapps/zimbraAdmin" contextpath="/zimbraAdmin">
         <lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
         <lib dir="${jetty_run_base}/lib" includes="*.jar" excludes="not-needed.jar" />
         <lib dir="${jetty_run_base}/lib/jars" includes="*.jar" excludes="not-needed.jar" />
@@ -104,7 +105,7 @@
         </attributes>
       </webApp>
 
-    </jetty>
+    </jetty.run>
   </target>
 
 </project>

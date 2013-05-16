@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
  * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 VMware, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -349,9 +349,9 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
         if (httpSession != null) {
             return;
         }
-        
+
         boolean secureCookie = req.getScheme().equals("https");
-        
+
         /*
          * This is a https req, and we don't have a session yet.
          * This is probably the first req of the session, which means user
@@ -368,21 +368,21 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
          */
         ServletContext servletContext = config.getServletContext();
         if (servletContext instanceof org.eclipse.jetty.servlet.ServletContextHandler.Context) {
-        	org.eclipse.jetty.servlet.ServletContextHandler.Context sContext = 
+        	org.eclipse.jetty.servlet.ServletContextHandler.Context sContext =
         	    (org.eclipse.jetty.servlet.ServletContextHandler.Context)servletContext;
 
             // get the WebAppContext
             org.eclipse.jetty.server.handler.ContextHandler contextHandler = sContext.getContextHandler();
             if (contextHandler instanceof org.eclipse.jetty.servlet.ServletContextHandler) {
-            	org.eclipse.jetty.servlet.ServletContextHandler context = 
+            	org.eclipse.jetty.servlet.ServletContextHandler context =
             	    (org.eclipse.jetty.servlet.ServletContextHandler)contextHandler;
 
                 // get SessionManager
                 org.eclipse.jetty.server.SessionManager sessionManager = context.getSessionHandler().getSessionManager();
                 if (sessionManager instanceof org.eclipse.jetty.server.session.AbstractSessionManager) {
-                    org.eclipse.jetty.server.session.AbstractSessionManager asm = 
+                    org.eclipse.jetty.server.session.AbstractSessionManager asm =
                         (org.eclipse.jetty.server.session.AbstractSessionManager)sessionManager;
-                    asm.setSecureCookies(secureCookie);
+                    asm.getSessionCookieConfig().setSecure(secureCookie);
                     asm.setHttpOnly(true);
                 }
             }
