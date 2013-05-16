@@ -21,7 +21,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.SeparateWindowShowOriginal;
+import com.zimbra.qa.selenium.projects.ajax.ui.SeparateWindow;
 
 public class ShowOriginal extends CalendarWorkWeekTest {
 
@@ -62,7 +62,7 @@ public class ShowOriginal extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Select Actions -> Show original
-		SeparateWindowShowOriginal window = (SeparateWindowShowOriginal)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, Button.O_SHOW_ORIGINAL_MENU, apptSubject);
+		SeparateWindow window = (SeparateWindow)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, Button.O_SHOW_ORIGINAL_MENU, apptSubject);
 		
 		try {
 			window.zWaitForActive();

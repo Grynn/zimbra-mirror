@@ -21,7 +21,7 @@ import java.util.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 
-public class SeparateWindowShowOriginal extends AbsSeparateWindow {
+public class SeparateWindow extends AbsSeparateWindow {
 
 	// Windows that exist before this Show Original is opened
 	protected List<String> existingWindowNames = null;
@@ -35,13 +35,13 @@ public class SeparateWindowShowOriginal extends AbsSeparateWindow {
 	 * The Show Original will not have a window title.  So, we
 	 * must use the window ID's from Selenium
 	 * 
-	 * The SeparateWindowShowOriginal object must be created before
+	 * The SeparateWindow object must be created before
 	 * the window is opened, so that the harness will know
 	 * which new window is opened.
 	 *  
 	 * @param application
 	 */
-	public SeparateWindowShowOriginal(AbsApplication application) {
+	public SeparateWindow(AbsApplication application) {
 		super(application);
 		
 		// Initialize existing names to empty
@@ -76,9 +76,9 @@ public class SeparateWindowShowOriginal extends AbsSeparateWindow {
 		logger.info(myPageName() + " zSetWindowName()");
 		
 		for (String name : super.sGetAllWindowNames()) {
-			if ( existingWindowNames.contains(name) ) {
+			if ( name.contains("selenium_main_app_window") ) {
 				logger.info("Already existing Name: "+ name);
-			} else {
+			} else if ( name.contains("selenium_blank") ) {
 				logger.info("Found my Name: "+ name);
 				this.DialogWindowName = name;
 				this.DialogWindowID = name;

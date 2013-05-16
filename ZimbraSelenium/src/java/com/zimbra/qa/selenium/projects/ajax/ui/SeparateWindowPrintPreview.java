@@ -22,7 +22,7 @@ import java.util.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 
-public class SeparateWindowPrintPreview extends SeparateWindowShowOriginal {
+public class SeparateWindowPrintPreview extends SeparateWindow {
 
 	
 	/**

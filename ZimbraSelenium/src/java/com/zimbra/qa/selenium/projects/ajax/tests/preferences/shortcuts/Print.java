@@ -21,7 +21,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.SeparateWindowShowOriginal;
+import com.zimbra.qa.selenium.projects.ajax.ui.SeparateWindow;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
 
@@ -51,12 +51,12 @@ public class Print extends AjaxCommonTest {
 			throw new HarnessException("Print button does not exist");
 		}
 		
-		SeparateWindowShowOriginal window = null;
+		SeparateWindow window = null;
 		
 		try {
 				
 			// Click Print, which opens a separate window
-			window = new SeparateWindowShowOriginal(app);
+			window = new SeparateWindow(app);
 			window.zInitializeWindowNames();
 			app.zTreePreferences.zClickAt(locator, "");
 			app.zTreePreferences.zWaitForBusyOverlay();

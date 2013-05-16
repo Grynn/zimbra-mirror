@@ -431,8 +431,8 @@ public class PageTasks extends AbsTab{
 			}else if(option == Button.O_SHOW_ORIGINAL){
 				optionLocator= Locators.zShowOrigTaskMenuItem;
 
-				page = new SeparateWindowShowOriginal(this.MyApplication);
-				((SeparateWindowShowOriginal)page).zInitializeWindowNames();
+				page = new SeparateWindow(this.MyApplication);
+				((SeparateWindow)page).zInitializeWindowNames();
 				this.zClickAt(optionLocator,"");
 				this.zWaitForBusyOverlay();
 

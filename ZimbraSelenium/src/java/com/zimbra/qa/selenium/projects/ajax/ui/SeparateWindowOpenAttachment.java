@@ -35,7 +35,7 @@ public class SeparateWindowOpenAttachment extends AbsSeparateWindow {
 	 * The Show Original will not have a window title.  So, we
 	 * must use the window ID's from Selenium
 	 * 
-	 * The SeparateWindowShowOriginal object must be created before
+	 * The SeparateWindow object must be created before
 	 * the window is opened, so that the harness will know
 	 * which new window is opened.
 	 *  

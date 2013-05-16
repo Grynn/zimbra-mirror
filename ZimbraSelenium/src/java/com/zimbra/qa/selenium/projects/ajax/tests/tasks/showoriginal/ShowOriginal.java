@@ -71,12 +71,12 @@ public class ShowOriginal extends AjaxCommonTest {
 		// Select the item
 		app.zPageTasks.zListItem(Action.A_MAIL_CHECKBOX, subject);
 
-		SeparateWindowShowOriginal window = null;
+		SeparateWindow window = null;
 
 		try {
 
 			// Right click the item, select Show Original
-			window = (SeparateWindowShowOriginal) app.zPageTasks.zListItem(Action.A_RIGHTCLICK, Button.O_SHOW_ORIGINAL, subject);
+			window = (SeparateWindow) app.zPageTasks.zListItem(Action.A_RIGHTCLICK, Button.O_SHOW_ORIGINAL, subject);
 			window.zWaitForActive(); // Make sure the window is there
 			SleepUtil.sleepMedium(); 
 			ZAssert.assertTrue(window.zIsActive(),"Verify the window is active");

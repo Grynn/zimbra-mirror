@@ -1213,12 +1213,12 @@ public class PageCalendar extends AbsTab {
 			}else if ( option == Button.O_SHOW_ORIGINAL_MENU ) {
 				
 				optionLocator = Locators.ShowOriginalMenu;
-				page = new SeparateWindowShowOriginal(this.MyApplication);
+				page = new SeparateWindow(this.MyApplication);
 				
 				//optionLocator= Locators.zShowOrigTaskMenuItem;
 				
-				page = new SeparateWindowShowOriginal(this.MyApplication);
-				((SeparateWindowShowOriginal)page).zInitializeWindowNames();
+				page = new SeparateWindow(this.MyApplication);
+				((SeparateWindow)page).zInitializeWindowNames();
 				this.zClickAt(optionLocator,"");
 				this.zWaitForBusyOverlay();
 				
@@ -1400,8 +1400,8 @@ public class PageCalendar extends AbsTab {
 				
 				optionLocator = Locators.ShowOriginalMenu_ViewAppt;
 				
-				page = new SeparateWindowShowOriginal(this.MyApplication);
-				((SeparateWindowShowOriginal)page).zInitializeWindowNames();
+				page = new SeparateWindow(this.MyApplication);
+				((SeparateWindow)page).zInitializeWindowNames();
 				this.zClickAt(optionLocator, "");
 				this.zWaitForBusyOverlay();
 				
