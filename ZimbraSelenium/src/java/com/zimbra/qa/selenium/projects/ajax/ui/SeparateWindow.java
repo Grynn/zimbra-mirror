@@ -105,6 +105,7 @@ public class SeparateWindow extends AbsSeparateWindow {
 			for (int i = 0; i < 15; i++) {
 
 				zSetWindowName();
+				SleepUtil.sleep(5000);
 				if (DialogWindowName != null ) {
 					// Found it
 					return;

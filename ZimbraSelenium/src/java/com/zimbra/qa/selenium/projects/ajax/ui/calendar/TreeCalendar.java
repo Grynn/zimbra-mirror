@@ -156,11 +156,16 @@ public class TreeCalendar extends AbsTree {
 			
 			// Use default actionLocator
 			optionLocator += " div[id^='DETACH_WIN'] td[id$='_title']";
-			page = null; // TODO
 
 			this.zRightClick(actionLocator);
-
-			// FALL THROUGH
+			this.zClickAt(optionLocator,"");
+			
+			page = new SeparateWindow(this.MyApplication);
+			((SeparateWindow)page).zInitializeWindowNames();
+			
+			this.zWaitForBusyOverlay();
+			
+			return (page);
 
 		} else if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_RECOVER_DELETED_ITEMS) ) {
 			
