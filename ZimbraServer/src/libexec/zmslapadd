@@ -68,16 +68,22 @@ fi
 
 comp=0
 computil=
+
+if [ ! -f $SRC ]; then
+	echo "Error: Input file does not exist"
+	exit 1
+fi
+
 if [[ "$SRC" == *".gz" ]]; then
 	if [ x$zgood = "xno" ]; then
-		echo "Error: zcat is missing.\n"
+		echo "Error: zcat is missing."
 		exit 1
 	fi
 	computil=$zcat
 	comp=1
 elif [[ "$SRC" == *".bz2" ]]; then
 	if [ x$bgood = "xno" ]; then
-		echo "Error: bzcat is missing.\n"
+		echo "Error: bzcat is missing."
 		exit 1
 	fi
 	computil=$bzcat
