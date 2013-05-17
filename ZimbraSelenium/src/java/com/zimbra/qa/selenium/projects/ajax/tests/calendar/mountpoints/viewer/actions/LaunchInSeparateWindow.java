@@ -26,7 +26,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.SeparateWindow;
 public class LaunchInSeparateWindow extends CalendarWorkWeekTest {
 
 	public LaunchInSeparateWindow() {
-		logger.info("New "+ OpenInNewWindow.class.getCanonicalName());
+		logger.info("New "+ LaunchInSeparateWindow.class.getCanonicalName());
 		super.startingPage = app.zPageCalendar;
 	}
 	
