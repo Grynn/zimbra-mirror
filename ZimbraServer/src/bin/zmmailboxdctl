@@ -110,21 +110,25 @@ case "$1" in
         -ea -Dfile.encoding=UTF-8 ${mailboxd_java_options} ${spnegoJavaOptions} -Xms${javaXms}m \
         -Xmx${javaXmx}m -Xmn${javaXmn}m < /dev/null > /dev/null 2>&1
       status=$?
-      if [ $status = 0 ]; then
-        echo "done."
-      else
+      if [ $status != 0 ]; then
         echo "failed."
         exit $status
       fi
       status=1
+      MPORT=`${zimbra_home}/bin/zmprov -l gs ${zimbra_server_hostname} zimbraMailPort | grep zimbraMailPort: | awk '{print $2}'`
       for ((i=0; i < 12; i++)); do
-        $NC -z localhost ${zimbra_mail_service_port} >/dev/null 2>&1
+        $NC -z localhost ${MPORT} >/dev/null 2>&1
         if [ $? = 0 ]; then
           status=0
           break
         fi
         sleep 5
       done
+      if [ $status = 0 ]; then
+        echo "done."
+      else
+        echo "failed."
+      fi
       exit $status 
     ;;
 
