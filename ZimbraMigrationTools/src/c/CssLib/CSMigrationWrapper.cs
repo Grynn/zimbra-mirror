@@ -584,6 +584,21 @@ public class CSMigrationWrapper
                                                     Acct.TotalErrors++;
                                                     bError = true;
                                                 }
+                                                if ((historyid != "") && (!bError))
+                                                {
+                                                    try
+                                                    {
+
+                                                        File.AppendAllText(historyfile, historyid); //uncomment after more testing
+                                                        File.AppendAllText(historyfile, "\n");
+
+                                                    }
+                                                    catch (Exception e)
+                                                    {
+                                                        Acct.TotalErrors++;
+                                                        Log.err("CSmigrationwrapper  Exception caught in ProcessItems writing history to the history file", e.Message);
+                                                    }
+                                                }
                                             }
                                             catch (Exception e)
                                             {
@@ -621,6 +636,21 @@ public class CSMigrationWrapper
                                                 
                                                 Acct.TotalErrors++;
                                                 bError = true;
+                                            }
+                                            if ((historyid != "") && (!bError))
+                                            {
+                                                try
+                                                {
+
+                                                    File.AppendAllText(historyfile, historyid); //uncomment after more testing
+                                                    File.AppendAllText(historyfile, "\n");
+
+                                                }
+                                                catch (Exception e)
+                                                {
+                                                    Acct.TotalErrors++;
+                                                    Log.err("CSmigrationwrapper  Exception caught in ProcessItems writing history to the history file", e.Message);
+                                                }
                                             }
                                         }
                                         catch (Exception e)
@@ -692,6 +722,21 @@ public class CSMigrationWrapper
                                                     bError = true;
 
 
+                                                }
+                                                if ((historyid != "") && (!bError))
+                                                {
+                                                    try
+                                                    {
+
+                                                        File.AppendAllText(historyfile, historyid); //uncomment after more testing
+                                                        File.AppendAllText(historyfile, "\n");
+
+                                                    }
+                                                    catch (Exception e)
+                                                    {
+                                                        Acct.TotalErrors++;
+                                                        Log.err("CSmigrationwrapper  Exception caught in ProcessItems writing history to the history file", e.Message);
+                                                    }
                                                 }
 
                                             }
@@ -769,6 +814,21 @@ public class CSMigrationWrapper
 
 
                                                 }
+                                                if ((historyid != "") && (!bError))
+                                                {
+                                                    try
+                                                    {
+
+                                                        File.AppendAllText(historyfile, historyid); //uncomment after more testing
+                                                        File.AppendAllText(historyfile, "\n");
+
+                                                    }
+                                                    catch (Exception e)
+                                                    {
+                                                        Acct.TotalErrors++;
+                                                        Log.err("CSmigrationwrapper  Exception caught in ProcessItems writing history to the history file", e.Message);
+                                                    }
+                                                }
                                             }
                                             catch (Exception e)
                                             {
@@ -796,7 +856,7 @@ public class CSMigrationWrapper
                                         : Acct.migrationFolder.CurrentCountOfItems + 1;
                                 }
                             }
-                            if ((historyid != "") &&(!bError))
+                           /* if ((historyid != "") && (!bError))
                             {
                                 try
                                 {
@@ -810,7 +870,7 @@ public class CSMigrationWrapper
                                     Acct.TotalErrors++;
                                     Log.err("CSmigrationwrapper  Exception caught in ProcessItems writing history to the history file", e.Message);
                                 }
-                            }
+                            }*/
                             iProcessedItems++;
                         }
                     }
