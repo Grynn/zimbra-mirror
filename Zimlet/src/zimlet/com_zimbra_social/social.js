@@ -1777,7 +1777,8 @@ SocialZimlet.prototype._postToTweetOrFB =
 			var noAccountSelected = true;
 
 			var message = this.updateField.value;
-			if (message.length == 0) {
+
+			if (message === "" || message === this.getMessage("whatAreYouDoing")) {
 				return;
 			}
 			if (message.toLowerCase().indexOf("d @") == 0) {
