@@ -212,21 +212,79 @@
         </Arg>
     </Call>
 
-    <Ref id="RequestLog">
-      <Set name="requestLog">
-        <New id="RequestLogImpl" class="org.eclipse.jetty.server.NCSARequestLog">
-          <Arg><SystemProperty name="jetty.home" default="/opt/zimbra/jetty"/>/../log/access_log.yyyy_mm_dd</Arg>
-          <Set name="logDateFormat">dd/MMM/yyyy:HH:mm:ss Z</Set>
-          <Set name="retainDays">30</Set>
-          <Set name="append">true</Set>
-          <Set name="extended">true</Set>
-          <Set name="filenameDateFormat">yyyy-MM-dd</Set>
-        </New>
-      </Set>
-    </Ref>
+	<New id="zimbraSslContextFactory" class="org.eclipse.jetty.util.ssl.SslContextFactory">
+		<Set name="KeyStorePath">/opt/zimbra/jetty/etc/keystore</Set>
+		<Set name="KeyStorePassword">zimbra</Set>
+		<Set name="KeyManagerPassword">zimbra</Set>
+		<Set name="EndpointIdentificationAlgorithm"></Set>
+		<Set name="ExcludeCipherSuites">
+			<Array type="String">
+				<Item>SSL_RSA_WITH_DES_CBC_SHA</Item>
+				<Item>SSL_DHE_RSA_WITH_DES_CBC_SHA</Item>
+				<Item>SSL_DHE_DSS_WITH_DES_CBC_SHA</Item>
+				<Item>SSL_RSA_EXPORT_WITH_RC4_40_MD5</Item>
+				<Item>SSL_RSA_EXPORT_WITH_DES40_CBC_SHA</Item>
+				<Item>SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA</Item>
+				<Item>SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA</Item>
+			</Array>
+		</Set>
+	</New>
+	
+	<New id="httpConfig" class="org.eclipse.jetty.server.HttpConfiguration">
+		<Set name="outputBufferSize">32768</Set>
+		<Set name="requestHeaderSize">8192</Set>
+		<Set name="responseHeaderSize">8192</Set>
+		<Set name="sendServerVersion">false</Set>
+		<Set name="sendDateHeader">false</Set>
+		<Set name="headerCacheSize">512</Set>
+
+		<!-- Uncomment to enable handling of X-Forwarded- style headers <Call name="addCustomizer"> 
+			<Arg><New class="org.eclipse.jetty.server.ForwardedRequestCustomizer"/></Arg> 
+			</Call> -->
+	</New>
+	
+	
+	<New id="sslHttpConfig" class="org.eclipse.jetty.server.HttpConfiguration">
+		<Arg>
+			<Ref refid="httpConfig" />
+		</Arg>
+		<Call name="addCustomizer">
+			<Arg>
+				<New class="org.eclipse.jetty.server.SecureRequestCustomizer" />
+			</Arg>
+		</Call>
+	</New>
+	
+	<Call id="adminHttpsConnector" name="addConnector">
+		<Arg>
+			<New id="admin" class="org.eclipse.jetty.server.ServerConnector">
+				<Arg name="server">
+					<Ref refid="Server" />
+				</Arg>
+				<Arg name="factories">
+					<Array type="org.eclipse.jetty.server.ConnectionFactory">
+						<Item>
+							<New class="org.eclipse.jetty.server.SslConnectionFactory">
+								<Arg name="next">http/1.1</Arg>
+								<Arg name="sslContextFactory">
+									<Ref refid="zimbraSslContextFactory" />
+								</Arg>
+							</New>
+						</Item>
+						<Item>
+							<New class="org.eclipse.jetty.server.HttpConnectionFactory">
+								<Arg name="config">
+									<Ref refid="sslHttpConfig" />
+								</Arg>
+							</New>
+						</Item>
+					</Array>
+				</Arg>
+				<Set name="port">7071</Set>
+				<Set name="idleTimeout">60000</Set>
+			</New>
+		</Arg>
+	</Call>
 
     <Set name="stopAtShutdown">true</Set>
-<!--      <Set name="sendServerVersion">false</Set>
-    <Set name="sendDateHeader">true</Set> -->
-
 </Configure>
