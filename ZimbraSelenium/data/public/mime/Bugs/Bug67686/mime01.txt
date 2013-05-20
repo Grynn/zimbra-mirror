@@ -1,0 +1,44 @@
+From: Foo Bar <foo@zqa-062.eng.vmware.com>
+To: foo@zqa-062.eng.vmware.com,bar@zqa-062.eng.vmware.com,fee@zqa-062.eng.vmware.com
+Subject: Re: subject13690880312762 Account moves - good news!
+Importance: Normal
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="----=_Part_1_1323471551348"
+Date: Fri, 09 Dec 2011 17:58:57 -0500 (EST)
+
+------=_Part_1_1323471551348
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+
+I queued up Alma, Allendale, and Cleary for tonight before I left the office.  I expect the latter two will be completed tonight, then the queue will have room for CCS Sunday and Monday early morning.
+
+I expect Alma and CCS to run over into Tuesday morning, but it may go faster.
+
+Sent from my Verizon Wireless Phone
+
+
+
+----- Reply message -----
+From: "Foo Bar" <foo@zqa-062.eng.vmware.com>
+Date: Fri, Dec 9, 2011 17:51
+Subject: Account moves - good news!
+To: "Foo Bar" <foo@zqa-062.eng.vmware.com>, "Fee Bar" <bar@zqa-062.eng.vmware.com>
+
+I just moved another account to each mail host and I am NOT seeing the issue with the folder list.  
+It is also worth noting that I did not purge the originals (Justin had suggested this could be a memcache issue)
+
+So we're all set to start moving these tonight / tomorrow.   
+
+Alma - mm-ms02
+Cleary - mm-ms04
+CCS - mm-ms05
+Allendale - mm-ms08
+
+
+Matthew 
+
+
+------=_Part_1_1323471551348--
