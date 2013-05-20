@@ -440,6 +440,123 @@ public class TreeMail extends AbsTree {
 
 	}
 
+	/**
+	 * This is the same locators as FolderItem ... hmm. How to combine?
+	 * @param action
+	 * @param tag
+	 * @return
+	 * @throws HarnessException
+	 */
+	protected AbsPage zTreeItem(Action action, TagItem tag) throws HarnessException {
+		AbsPage page = null;
+		String locator = null;
+
+		if ( action == Action.A_LEFTCLICK ) {
+			
+			locator = "css=td[id='zti__main_Mail__"+ tag.getId() +"_textCell']";
+
+			// FALL THROUGH
+
+		} else if ( action == Action.A_RIGHTCLICK ) {
+
+			locator = "css=td[id='zti__main_Mail__"+ tag.getId() +"_textCell']";
+
+			// Select the folder
+			this.zRightClickAt(locator,"");
+
+			// return a context menu
+			return (new ContextMenu(MyApplication));
+
+		} else if ( action == Action.A_TREE_EXPAND ) {
+
+			locator = "css=[id='zti__main_Mail__"+ tag.getId() +"_nodeCell'] div[class='ImgNodeCollapsed']";
+			if ( !this.sIsElementPresent(locator) ) {
+				logger.warn("Trying to expand a folder that probably has no subfolders or is already expanded");
+				return (page);
+			}
+
+			this.sMouseDown(locator);
+
+			this.zWaitForBusyOverlay();
+
+			// No page to return
+			return (null);
+
+		} else if ( action == Action.A_TREE_COLLAPSE ) {
+
+			locator = "css=[id='zti__main_Mail__"+ tag.getId() +"_nodeCell'] div[class='ImgNodeExpanded']";
+			if ( !this.sIsElementPresent(locator) ) {
+				logger.warn("Trying to collapse a folder that probably has no subfolders or is already collapsed");
+				return (page);
+			}
+
+			this.sMouseDown(locator);
+
+			this.zWaitForBusyOverlay();
+
+			// No page to return
+			return (null);
+
+		} else if ( action == Action.A_HOVEROVER ) {
+			
+			locator = "css=td[id='zti__main_Mail__"+ tag.getId() +"_textCell']";
+			page = new TooltipFolder(MyApplication);
+			
+			// If another tooltip is active, sometimes it takes a few seconds for the new text to show
+			// So, wait if the tooltip is already active
+			// Don't wait if the tooltip is not active
+			//
+			
+			if (page.zIsActive()) {
+				
+				// Mouse over
+				this.sMouseOver(locator);
+				this.zWaitForBusyOverlay();
+				
+				// Wait for the new text
+				SleepUtil.sleep(5000);
+				
+				// Make sure the tooltip is active
+				page.zWaitForActive();
+
+			} else {
+				
+				// Mouse over
+				this.sMouseOver(locator);
+				this.zWaitForBusyOverlay();
+
+				// Make sure the tooltip is active
+				page.zWaitForActive();
+
+			}
+						
+			return (page);
+			
+		} else {
+			throw new HarnessException("Action "+ action +" not yet implemented");
+		}
+
+
+		if ( locator == null )
+			throw new HarnessException("locator is null for action "+ action);
+
+
+		// Default behavior.  Click the locator
+		zClickAt(locator,"");
+
+		// If there is a busy overlay, wait for that to finish
+		this.zWaitForBusyOverlay();
+
+		if ( page != null ) {
+
+			// Wait for the page to become active, if it was specified
+			page.zWaitForActive();
+		}
+
+		return (page);
+
+	}
+
 	protected AbsPage zTreeItem(Action action, FolderItem folder) throws HarnessException {
 		AbsPage page = null;
 		String locator = null;
@@ -826,6 +943,8 @@ public class TreeMail extends AbsTree {
 		
 		if ( folder instanceof FolderItem ) {
 			return (zTreeItem(action, (FolderItem)folder));
+		} else if ( folder instanceof TagItem ) {
+			return (zTreeItem(action, (TagItem)folder));
 		} else if ( folder instanceof SavedSearchFolderItem ) {
 			return (zTreeItem(action, (SavedSearchFolderItem)folder));
 		} else if ( folder instanceof ZimletItem ) {
