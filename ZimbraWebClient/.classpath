@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jstl-1.1.0-d13.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/standard.jar"/>
 	<classpathentry kind="lib" path="jars/commons-cli-1.2.jar"/>
-	<classpathentry kind="lib" path="jars/jsp-2.1/ant-1.6.5.jar"/>
-	<classpathentry kind="lib" path="jars/jsp-2.1/jsp-2.1.jar"/>
-	<classpathentry kind="lib" path="jars/jsp-2.1/jsp-api-2.1.jar"/>
+	<classpathentry kind="lib" path="jars/jsp-2.2/javax.servlet.jsp-2.2.0.v201112011158.jar"/>
+	<classpathentry kind="lib" path="jars/jsp-2.2/org.apache.jasper.glassfish-2.2.2.v201112011158.jar"/>
+	<classpathentry kind="lib" path="jars/ant/ant-1.6.5.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/gifencoder.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api-3.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.4.2-zimbra.jar"/>

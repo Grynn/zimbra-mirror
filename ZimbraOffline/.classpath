@@ -43,8 +43,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/xercesImpl-2.9.1.jar"/>
-	<classpathentry kind="lib" path="/ZimbraWebClient/WebRoot/WEB-INF/lib/jstl-1.1.0-d13.jar"/>
-	<classpathentry kind="lib" path="/ZimbraWebClient/WebRoot/WEB-INF/lib/standard.jar"/>
+	<classpathentry kind="lib" path="/ZimbraWebClient/jars/jsp-2.2/javax.servlet.jsp.jstl-1.2.0.v201105211821.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-client-1.0.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-client-meta-1.0.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-core-1.0.jar"/>

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-  <classpathentry kind="lib" path="jars/jsp-api.jar"/>
-  <classpathentry kind="lib" path="jars/jstl-1.1.0-d13.jar"/>
-  <classpathentry kind="lib" path="jars/standard.jar"/>
+  <classpathentry kind="lib" path="jars/javax.servlet.jsp-2.2.0.v201112011158.jar"/>
+  <classpathentry kind="lib" path="jars/jstl-1.2.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-fileupload-1.2.2.jar" sourcepath="/ZimbraCommon/jars-src/commons-fileupload-1.2.2-src.zip">
     <attributes>
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-fileupload-1.2.2-javadoc.zip!/"/>
