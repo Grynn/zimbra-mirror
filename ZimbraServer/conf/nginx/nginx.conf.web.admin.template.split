@@ -1,0 +1,59 @@
+!{explode domain(vhn)}
+# HTTPS Proxy Configuration
+# 
+server
+{
+    server_name             ${vhn}; 
+    ${core.ipboth.enabled}listen                    ${vip}:${web.admin.port};
+    ${core.ipv4only.enabled}listen                  ${vip}:${web.admin.port};
+    ${core.ipv6only.enabled}listen                  ${vip}:${web.admin.port} ipv6only=on;
+    
+    client_max_body_size    0;
+    ssl                     on;
+    ssl_prefer_server_ciphers ${web.ssl.preferserverciphers};
+    ssl_ciphers             ${web.ssl.ciphers};
+    ssl_certificate         ${ssl.crt};
+    ssl_certificate_key     ${ssl.key};
+
+    location /
+    {
+        # Proxy to Zimbra adminclient Upstream
+        proxy_pass          https://${web.admin.upstream.adminclient.name};
+
+        # For audit
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        # For admin console, the proxied request must have ${web.admin.uport}
+        # in Host header. Otherwise, the web client page or error might be returned.
+        #
+        set $relhost $host;
+        if ($host = '') {
+            set $relhost $server_addr;
+        }
+        proxy_set_header Host            $relhost:${web.admin.uport};
+
+        proxy_redirect https://$relhost:${web.admin.uport}/ https://$relhost:${web.admin.port}/;
+    }
+
+   location ^~ /service
+   {
+        # Proxy to Zimbra Upstream
+        proxy_pass          https://${web.admin.upstream.name};
+
+        # For audit
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        # For admin console, the proxied request must have ${web.admin.uport}
+        # in Host header. Otherwise, the web client page or error might be returned.
+        #
+        set $relhost $host;
+        if ($host = '') {
+            set $relhost $server_addr;
+        }
+        proxy_set_header Host            $relhost:${web.admin.uport};
+
+        # Avoid leak the ${web.admin.uport} in the response such as 302 redirection
+        #
+        proxy_redirect https://$relhost:${web.admin.uport}/ https://$relhost:${web.admin.port}/;
+   }
+}
