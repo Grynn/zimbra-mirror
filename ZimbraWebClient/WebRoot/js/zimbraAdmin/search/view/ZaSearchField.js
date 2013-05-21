@@ -911,22 +911,36 @@ ZaSaveSearchDialog.prototype._cancelDoSave = function() {
 }
 
 
-ZaSaveSearchDialog.prototype.show =
-function (name, query, isCreated){
-	if (!this._createUI) {
-		this._nameInputId = Dwt.getNextId();
-		this._queryInputId = Dwt.getNextId();
-		var html = [
-			"<table><tr>",
-			"<td>",  ZaMsg.saved_search_editor_name, "</td>",
-			"<td><div style='overflow:auto;'><input id='", this._nameInputId, "' type=text size=50 maxlength=50 /></div></td></tr>",
-			//"<td>", this._queryInput.getHtmlElement().innerHTML ,"</td></tr>",
-			
-			"<tr><td>",  ZaMsg.saved_search_editor_query, "</td>",	
-			"<td><div style='overflow:auto;'><input id='", this._queryInputId, "' type=text size=50 maxlength=200 /><div></td>",
-			//"<td>", this._nameInput.getHtmlElement().innerHTML ,"</td></tr>",
-			"</tr></table>"
-		] ; 
+ZaSaveSearchDialog.prototype.show = function (name, query, isCreated) {
+    if (!this._createUI) {
+        this._nameInputId = Dwt.getNextId();
+        this._queryInputId = Dwt.getNextId();
+        var html = [
+            "<table style='border-spacing: 7px;'>",
+                "<tbody>",
+                    "<tr>",
+                        "<td>",
+                            ZaMsg.saved_search_editor_name,
+                        "</td>",
+                        "<td>",
+                            "<div style='overflow: auto;'>",
+                                "<input type='text' size='50' maxlength='50' id='", this._nameInputId, "' />",
+                            "</div>",
+                        "</td>",
+                    "</tr>",
+                    "<tr>",
+                        "<td>",
+                            ZaMsg.saved_search_editor_query,
+                        "</td>",
+                        "<td>",
+                            "<div style='overflow: auto;'>",
+                                "<input type='text' size='50' maxlength='200' id='", this._queryInputId, "' />",
+                            "</div>",
+                        "</td>",
+                    "</tr>",
+                "</tbody>",
+            "</table>"
+        ];
 		this.setContent (html.join("")) ;			
 		this._createUI = true ;
 	}
