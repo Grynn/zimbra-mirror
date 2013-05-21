@@ -148,7 +148,7 @@ server
         # For Virtual Hosting
         set $virtual_host $http_host;
         if ($virtual_host = '') {
-            set $virtual_host $server_addr:$server_port;
+            set $virtual_host $server_name:$server_port;
         }
         proxy_set_header Host            $virtual_host;
 
@@ -198,7 +198,7 @@ server
         # For Virtual Hosting
         set $virtual_host $http_host;
         if ($virtual_host = '') {
-            set $virtual_host $server_addr:$server_port;
+            set $virtual_host $server_name:$server_port;
         }
         proxy_set_header Host            $virtual_host;
 
