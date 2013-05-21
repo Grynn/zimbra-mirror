@@ -16,20 +16,50 @@
  */
 namespace CssLib
 {
-public class CosInfo
-{
-    public string CosName {
-        get;
-        set;
-    }
-    public string CosID {
-        get;
-        set;
-    }
-    public CosInfo(string cosname, string cosid)
+    public class CosInfo
     {
-        CosName = cosname;
-        CosID = cosid;
+        public string CosName
+        {
+            get;
+            set;
+        }
+        public string CosID
+        {
+            get;
+            set;
+        }
+        public CosInfo(string cosname, string cosid)
+        {
+            CosName = cosname;
+            CosID = cosid;
+        }
     }
-}
+
+    public class DomainInfo
+    {
+        public string DomainName
+        {
+            get;
+            set;
+        }
+
+        public string DomainID
+        {
+            get;
+            set;
+        }
+
+        public string zimbraDomainDefaultCOSId
+        {
+            get;
+            set;
+        }
+
+        public DomainInfo(string domainname, string domainid, string zimbradomaindefaultcosid)
+        {
+            DomainName = domainname;
+            DomainID = domainid;
+            zimbraDomainDefaultCOSId = zimbradomaindefaultcosid;
+        }
+    }
 }

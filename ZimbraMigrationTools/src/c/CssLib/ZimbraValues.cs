@@ -12,7 +12,9 @@ public class ZimbraValues
         sUrl = "";
         sAuthToken = "";
         sServerVersion = "";
+        sDefaultCosIndex = -1;
         lDomains = new List<string>();
+        lZimbraDomains = new List<DomainInfo>();
         lCOSes = new List<CosInfo>();
         lTags = new List<TagInfo>();
     }
@@ -81,6 +83,26 @@ public class ZimbraValues
             lDomains = value;
         }
     }
+
+    private List<DomainInfo> lZimbraDomains;
+    public List<DomainInfo> ZimbraDomains
+    {
+        get { return lZimbraDomains; }
+        set
+        {
+            lZimbraDomains = value;
+        }
+    }
+
+    private int sDefaultCosIndex;
+    public int DefaultCosIndex {
+        get { return sDefaultCosIndex; }
+        set
+        {
+            sDefaultCosIndex = value;
+        }
+    }
+
     private List<CosInfo> lCOSes;
     public List<CosInfo> COSes {
         get { return lCOSes; }

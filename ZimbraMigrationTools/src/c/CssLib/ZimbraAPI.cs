@@ -745,11 +745,29 @@ public class ZimbraAPI
                 {
                     foreach (XElement domainIns in objIns.Elements())
                     {
+                        string name = "";
+                        string id = "";
+                        string domaindefaultcosid = "";
+
                         foreach (XAttribute domainAttr in domainIns.Attributes())
                         {
                             if (domainAttr.Name == "name")
-                                ZimbraValues.GetZimbraValues().Domains.Add(domainAttr.Value);
+                                name = domainAttr.Value;
+                            if (domainAttr.Name == "id")
+                                id = domainAttr.Value;
                         }
+                        foreach (XElement nelements in domainIns.Elements())
+                        {
+                            foreach (XAttribute nattr in nelements.Attributes())
+                            {
+                                if (nattr.Name == "n" && nattr.Value == "zimbraDomainDefaultCOSId")
+                                {
+                                   domaindefaultcosid = nelements.Value;
+                                }
+                            }
+                        }
+                        if ((name.Length > 0) || (id.Length > 0))
+                            ZimbraValues.GetZimbraValues().ZimbraDomains.Add(new DomainInfo(name, id, domaindefaultcosid));
                     }
                 }
             }
@@ -1160,9 +1178,9 @@ public class ZimbraAPI
 
         string rsp = "";
         WriteSoapLog(sb.ToString(),true);
-        
+
         client.InvokeService(sb.ToString(), out rsp);
-        
+
         WriteSoapLog(rsp.ToString(),false);
         if (client.status == 0)
         {

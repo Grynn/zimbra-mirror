@@ -430,6 +430,8 @@ public class UsersViewModel: BaseViewModel
         }
         SaveDomain();
 
+        UsersViewModel usersViewModel =
+                    ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
         ScheduleViewModel scheduleViewModel =
             ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
 
@@ -459,6 +461,36 @@ public class UsersViewModel: BaseViewModel
                 MessageBox.Show(string.Format("Error accessing account {0}: {1}", acctName,
                     zimbraAPI.LastError), "Zimbra Migration", MessageBoxButton.OK,
                     MessageBoxImage.Error);
+            }
+        }
+        //Logic to get the index of defaulf COS from CosList.
+        for (int i = 0; i < scheduleViewModel.CosList.Count; i++)
+        {
+            if (scheduleViewModel.CosList[i].CosName == "default")
+            {
+                ZimbraValues.GetZimbraValues().DefaultCosIndex = i;
+                break;
+            }
+        }
+
+        foreach (DomainInfo domaininfo in ZimbraValues.GetZimbraValues().ZimbraDomains)
+        {
+            if (domaininfo.DomainName == usersViewModel.DomainList[usersViewModel.CurrentDomainSelection])
+            {
+                if (domaininfo.zimbraDomainDefaultCOSId != "")
+                {
+                    for (int i = 0; i < scheduleViewModel.CosList.Count; i++)
+                    {
+                        if (domaininfo.zimbraDomainDefaultCOSId == scheduleViewModel.CosList[i].CosID)
+                        {
+                            scheduleViewModel.CurrentCOSSelection = i;
+                            break;
+                        }
+                    }
+                }
+                else
+                    scheduleViewModel.CurrentCOSSelection = ZimbraValues.GetZimbraValues().DefaultCosIndex;
+            break;
             }
         }
         lb.SelectedIndex = 5;
@@ -610,6 +642,16 @@ public class UsersViewModel: BaseViewModel
             domainlist = value;
         }
     }
+
+    private ObservableCollection<DomainInfo> domaininfolist = new ObservableCollection<DomainInfo>();
+    public ObservableCollection<DomainInfo> DomainInfoList {
+        get { return domaininfolist; }
+        set
+        {
+            domaininfolist = value;
+        }
+    }
+
     ObjectPickerInfo OPInfo;
     public string Username {
         get { return m_users.Username; }

@@ -149,29 +149,30 @@ public class ConfigViewModelSDest: BaseViewModel
                     ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
                 ScheduleViewModel scheduleViewModel =
                     ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
-                string currentDomain = (usersViewModel.DomainList.Count > 0) ?
-                    usersViewModel.DomainList[usersViewModel.CurrentDomainSelection] : "";
 
+                string currentDomain = (usersViewModel.DomainInfoList.Count > 0) ?
+                    usersViewModel.DomainInfoList[usersViewModel.CurrentDomainSelection].DomainName : "";
+
+                usersViewModel.DomainInfoList.Clear();
                 usersViewModel.DomainList.Clear();
                 scheduleViewModel.CosList.Clear();
-                zimbraAPI.GetAllDomains();
-                for (int i = 0; i < ZimbraValues.GetZimbraValues().Domains.Count; i++)
-                {
-                    string s = ZimbraValues.GetZimbraValues().Domains[i];
 
-                    usersViewModel.DomainList.Add(s);
-                    // if we've loaded a config file where the domain was specified, then set it as selected
-                    if (currentDomain != null)
-                    {
-                        if (currentDomain.Length > 0)
-                        {
-                            if (s == currentDomain)
-                                usersViewModel.CurrentDomainSelection = i;
-                            usersViewModel.DomainsFilledIn = true;
-                        }
-                    }
+                zimbraAPI.GetAllDomains();
+
+                foreach (DomainInfo domaininfo in ZimbraValues.GetZimbraValues().ZimbraDomains)
+                {
+                    string dName = domaininfo.DomainName;
+                    usersViewModel.DomainInfoList.Add(new DomainInfo(domaininfo.DomainName, domaininfo.DomainID, domaininfo.zimbraDomainDefaultCOSId));
+                    usersViewModel.DomainList.Add(dName);
+
+                    if (dName == currentDomain)
+                        usersViewModel.CurrentDomainSelection = usersViewModel.DomainInfoList.Count;
                 }
+                
+                usersViewModel.DomainsFilledIn = true;
+                
                 zimbraAPI.GetAllCos();
+
                 foreach (CosInfo cosinfo in ZimbraValues.GetZimbraValues().COSes)
                 {
                     scheduleViewModel.CosList.Add(new CosInfo(cosinfo.CosName, cosinfo.CosID));
