@@ -18,13 +18,23 @@ import com.google.common.base.Charsets;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.BlobMetaData;
+import com.zimbra.common.util.BlobMetaDataEncodingException;
+import com.zimbra.common.util.HttpUtil;
 import com.zimbra.common.util.RemoteIP;
+import com.zimbra.common.util.ngxlookup.NginxAuthServer;
+import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.taglib.bean.BeanUtils;
+import com.zimbra.cs.taglib.memcached.RouteCache;
+import com.zimbra.cs.taglib.ngxlookup.NginxRouteLookUpConnector;
 import com.zimbra.client.ZAuthResult;
 import com.zimbra.client.ZFolder;
 import com.zimbra.client.ZMailbox;
 import com.zimbra.common.localconfig.LC;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,11 +42,17 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.core.Config;
+
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -49,7 +65,7 @@ public class ZJspSession {
     // AP-TODO: COOKIE_NAME is no longer used, retire
     public static final String COOKIE_NAME = "ZM_AUTH_TOKEN";
     public static final String ZM_LAST_SERVER_COOKIE_NAME = "ZM_LAST_SERVER";
-
+    private static final String C_ID  = "id";
 
     private static final String CONFIG_ZIMBRA_SOAP_URL = "zimbra.soap.url";
     private static final String CONFIG_ZIMBRA_JSP_SESSION_TIMEOUT = "zimbra.jsp.session.timeout";
@@ -79,6 +95,7 @@ public class ZJspSession {
     private static final String PROTO_MIXED = "mixed";
     private static final String PROTO_HTTP = "http";
     private static final String PROTO_HTTPS = "https";
+    private static final String HTTP_SSL = "httpssl";
 
     private static final String sProtocolMode = BeanUtils.getEnvString("protocolMode", PROTO_HTTP);
     private static final boolean MODE_HTTP = sProtocolMode.equals(PROTO_HTTP);
@@ -96,6 +113,16 @@ public class ZJspSession {
     private static final RemoteIP.TrustedIPs TRUSTED_IPS = new RemoteIP.TrustedIPs(
             BeanUtils.getEnvString("trustedIPs", "").split(" "));
 
+    public static List<String> servicesInstalled;
+    static {
+        try {
+            Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+            servicesInstalled = Arrays.asList(((String) envCtx.lookup("zimbraServicesInstalled")).split(","));
+        } catch (NamingException ne) {
+            servicesInstalled = null;
+        }
+    }
     public static boolean secureAuthTokenCookie(HttpServletRequest request) {
         String initMode = request.getParameter(Q_ZINITMODE);
         boolean currentHttps = request.getScheme().equals(PROTO_HTTPS);
@@ -362,7 +389,34 @@ public class ZJspSession {
         return useOffset != null && (useOffset.equalsIgnoreCase("true") || useOffset.equalsIgnoreCase("1"));
     }
 
-    public static synchronized String getSoapURL(PageContext context) {
+    public static synchronized String getSoapURL(PageContext context) throws ServiceException {
+        if (servicesInstalled != null && (!(servicesInstalled.contains("zimbra") && servicesInstalled.contains("service") &&
+                servicesInstalled.contains("zimbraAdmin") && servicesInstalled.contains("zimlets"))
+                && servicesInstalled.contains("zimbra"))) {
+            RouteCache rtCache = RouteCache.getInstance();
+            String accountID;
+            try {
+                accountID = getAccountId(context);
+            } catch (AuthTokenException e) {
+                throw ServiceException.AUTH_REQUIRED();
+            }
+            String route = null;
+            String authProtocol = (MODE_HTTP ? PROTO_HTTP : HTTP_SSL);
+            if (!accountID.equals("99999999-9999-9999-9999-999999999999")) {
+                route = rtCache.get(accountID);
+                if (route == null) {
+                    HttpServletRequest request = (HttpServletRequest) context.getRequest();
+                    NginxAuthServer nginxLookUpServer = NginxRouteLookUpConnector.getClient().getRouteforAccount(accountID, "zimbraId",
+                            authProtocol, HttpUtil.getVirtualHost(request), request.getHeader("Host"), request.getHeader("Virtual-Host"));
+                    rtCache.put(nginxLookUpServer.getNginxAuthUser(), nginxLookUpServer.getNginxAuthServer());
+                    route = nginxLookUpServer.getNginxAuthServer();
+                }
+            } else {
+                 // For Guest Account, no lookup is needed. connect to one of the available upstream servers
+                 route = NginxRouteLookUpConnector.getClient().getUpstreamMailServer(authProtocol);
+            }
+            return ((MODE_HTTP ? PROTO_HTTP : PROTO_HTTPS) + "://" + route + "/service/soap");
+        }
         if (sSoapUrl == null) {
             sSoapUrl = (String) Config.find(context, CONFIG_ZIMBRA_SOAP_URL);
             if (sSoapUrl == null) {
@@ -380,6 +434,35 @@ public class ZJspSession {
             }
         }
         return sSoapUrl;
+    }
+
+    private static String getAccountId (PageContext context) throws AuthTokenException {
+        ZAuthToken authToken = getAuthToken(context);
+        if (authToken == null) {
+            authToken = new ZAuthToken((String) context.getAttribute("zimbra_authToken", PageContext.REQUEST_SCOPE));
+        }
+        if (!authToken.isEmpty()) {
+            String encoded = authToken.getValue();
+            int pos = encoded.indexOf('_');
+            if (pos == -1) {
+                throw new AuthTokenException("invalid authtoken format");
+            }
+            int pos1 = encoded.indexOf('_', pos+1);
+            if (pos1 == -1) {
+                throw new AuthTokenException("invalid authtoken format");
+            }
+            String data = encoded.substring(pos1+1);
+            try {
+                String decoded = new String(Hex.decodeHex(data.toCharArray()));
+                return (String) BlobMetaData.decode(decoded).get(C_ID);
+            } catch (DecoderException e) {
+                throw new AuthTokenException("decoding exception", e);
+            } catch (BlobMetaDataEncodingException e) {
+                throw new AuthTokenException("blob decoding exception", e);
+            }
+        } else {
+            throw new AuthTokenException("invalid authtoken");
+        }
     }
 
     public static ZMailbox getZMailbox(PageContext context) throws JspException {

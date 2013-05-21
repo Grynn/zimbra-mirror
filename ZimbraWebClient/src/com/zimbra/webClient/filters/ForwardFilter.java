@@ -14,9 +14,13 @@
  */
 package com.zimbra.webClient.filters;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -25,17 +29,58 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.taglib.memcached.MemcachedConnector;
+import com.zimbra.cs.taglib.ngxlookup.NginxRouteLookUpConnector;
+import com.zimbra.cs.util.Zimbra;
+
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class ForwardFilter implements Filter {
 
     private ServletContext ctxt;
-    
-    @Override public void init(FilterConfig filterConfig) throws ServletException {
-        ctxt = filterConfig.getServletContext().getContext("/service");
+    private static List<String> servicesInstalled;
+
+    static {
+        try {
+            Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+            servicesInstalled = Arrays.asList(((String)envCtx.lookup("zimbraServicesInstalled")).split(","));
+        } catch (NamingException e) {
+            servicesInstalled = null;
+        }
     }
 
-    @Override public void destroy() { }
+    @Override public void init(FilterConfig filterConfig) throws ServletException {
+        ctxt = filterConfig.getServletContext().getContext("/service");
+        if (servicesInstalled != null && (!(servicesInstalled.contains("zimbra") && servicesInstalled.contains("service") &&
+                servicesInstalled.contains("zimbraAdmin") && servicesInstalled.contains("zimlets"))
+                && servicesInstalled.contains("zimbra"))) {
+            try {
+                MemcachedConnector.startup();
+                NginxRouteLookUpConnector.startup();
+            } catch (ServiceException e) {
+                Zimbra.halt("Exception during MemCached Connector/NginxRouteLookUpConnecter startup, aborting WebClient server, " +
+                        "please check your config", e);
+            }
+        }
+    }
+
+    @Override public void destroy() {
+        if (servicesInstalled != null && (!(servicesInstalled.contains("zimbra") && servicesInstalled.contains("service") &&
+                servicesInstalled.contains("zimbraAdmin") && servicesInstalled.contains("zimlets"))
+                && servicesInstalled.contains("zimbra"))) {
+            try {
+                MemcachedConnector.shutdown();
+                NginxRouteLookUpConnector.shutdown();
+            } catch (ServiceException e) {
+                ZimbraLog.soap.error("ServiceException in MemcachedConnector/NginxRouteLookUpConnector while disconnecting", e);
+            }
+        }
+      }
 
     @Override public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (ctxt == null ||
