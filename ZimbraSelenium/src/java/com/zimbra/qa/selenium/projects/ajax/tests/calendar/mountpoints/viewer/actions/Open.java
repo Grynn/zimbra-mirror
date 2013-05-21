@@ -32,7 +32,7 @@ public class Open extends CalendarWorkWeekTest {
 	
 	@Test(description = "Grantee opens appointment from grantor's calendar and close it without making any changes",
 			groups = { "functional" })
-			
+	
 	public void Open_01() throws HarnessException {
 		
 		String apptSubject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
@@ -49,7 +49,7 @@ public class Open extends CalendarWorkWeekTest {
 		// Create a folder to share
 		ZimbraAccount.AccountA().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+		"<folder name='" + foldername + "' l='" + calendarFolder.getId() + "'/>"
+				+		"<folder name='" + foldername + "' l='" + calendarFolder.getId() + "view='appointment'/>"
 				+	"</CreateFolderRequest>");
 		
 		FolderItem folder = FolderItem.importFromSOAP(ZimbraAccount.AccountA(), foldername);
