@@ -57,8 +57,8 @@ public class NginxRouteLookUpConnector {
             Context initCtx = new InitialContext();
             Context envCtx = (Context) initCtx.lookup("java:comp/env");
 
-            lookUpServers = ((String) envCtx.lookup("nginxLookUpHandlers")).split(",");
-            upstreamMailServers = ((String) envCtx.lookup("upstreamMailServers")).split(",");
+            lookUpServers = ((String) envCtx.lookup("nginxLookUpHandlers")).split("\\s+");
+            upstreamMailServers = ((String) envCtx.lookup("upstreamMailServers")).split("\\s+");
             connectTimeout = (Integer) envCtx.lookup("reverseProxyRouteLookupTimeout");
             retryTimeout = (Integer) envCtx.lookup("memcachedClientTimeout");
         } catch (NamingException ne) {

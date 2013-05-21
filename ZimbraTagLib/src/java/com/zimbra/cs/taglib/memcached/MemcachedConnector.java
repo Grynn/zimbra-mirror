@@ -67,7 +67,7 @@ public class MemcachedConnector {
             Context initCtx = new InitialContext();
             Context envCtx = (Context) initCtx.lookup("java:comp/env");
 
-            serverList = ((String) envCtx.lookup("memcachedServers")).split(",");
+            serverList = ((String) envCtx.lookup("memcachedServers")).split("\\s+");
             useBinaryProtocol = (Boolean) envCtx.lookup("memcachedClientBinaryProtocolEnabled");
             hashAlgorithm = (String) envCtx.lookup("memcachedClientHashAlgorithm");
             expirySeconds = (Integer) envCtx.lookup("memcachedClientExpiry");
