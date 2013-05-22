@@ -166,8 +166,10 @@ public abstract class AbsSeparateWindow extends AbsPage {
 			text = super.sGetBodyText();
 
 		} finally {
-			super.sSelectWindow(MainWindowID);
-			super.sWindowFocus();
+			
+			//commented below code as it always moves focus to main window after getting text
+			//super.sSelectWindow(MainWindowID);
+			//super.sWindowFocus();
 		}
 
 		return (text);
@@ -387,6 +389,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		
 		try {
 			super.sSelectWindow(this.DialogWindowID);
+			DoChangeWindowFocus= true;
 			changeFocus();
 
 			super.sFocus(locator);
@@ -523,7 +526,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 		try {
 			super.sSelectWindow(this.DialogWindowID);
-			changeFocus();
+			//changeFocus();
 
 			if ( !super.sIsElementPresent(locator) )
 				throw new HarnessException("locator not present: "+ locator);

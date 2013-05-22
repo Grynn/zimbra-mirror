@@ -51,7 +51,15 @@ public class SeparateWindow extends AbsSeparateWindow {
 		// to set the new window name
 		this.DialogWindowName = null;
 	}
-
+	
+		public static class Locators {
+		
+			public static final String openApptOnLaunchedWindow = "css= td[class='ZhAppContent']  table[class='ZhCalMonthTable'] td[class$='ZhCalMonthDaySelected'] div[class^='ZhCalMonthAppt']>a";
+			public static final String apptHeaderSubject = "css= td[class$='MsgHdrName']:contains('Subject')";
+			public static final String apptHeaderOrganizer = "css= td[class$='MsgHdrName']:contains('Organizer')";
+			public static final String apptValueSubject = "css= td[class$='MsgHdrValue']:contains('Test')";
+		     
+		}
 	/**
 	 * Call this before the Show Original is opened
 	 */
@@ -107,6 +115,8 @@ public class SeparateWindow extends AbsSeparateWindow {
 				zSetWindowName();
 				SleepUtil.sleep(5000);
 				if (DialogWindowName != null ) {
+					//this.sSelectWindow(DialogWindowName);
+					//this.sWindowFocus();
 					// Found it
 					return;
 				}
@@ -114,10 +124,19 @@ public class SeparateWindow extends AbsSeparateWindow {
 				logger.info("Waiting a second ...");
 				SleepUtil.sleep(1000);
 			}
-		}
+		}else if ( DialogWindowName.contains("selenium_blank")){
+			zSetWindowName();
+			if (DialogWindowName != null ) {
+				this.sSelectWindow(DialogWindowName);
+				this.sWindowFocus();
+				// Found it
+				return;
+			}
+
+		}else{
 
 		throw new HarnessException("Window never became active!");
-
+		}
 	}
 	
 	public boolean zIsActive() throws HarnessException {
