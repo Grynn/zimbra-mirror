@@ -407,7 +407,8 @@ public class ZJspSession {
                 if (route == null) {
                     HttpServletRequest request = (HttpServletRequest) context.getRequest();
                     NginxAuthServer nginxLookUpServer = NginxRouteLookUpConnector.getClient().getRouteforAccount(accountID, "zimbraId",
-                            authProtocol, HttpUtil.getVirtualHost(request), request.getHeader("Host"), request.getHeader("Virtual-Host"));
+                            authProtocol, HttpUtil.getVirtualHost(request), request.getRemoteAddr(), request.getHeader("Host"));
+                    //request.getHeader("Host")
                     rtCache.put(nginxLookUpServer.getNginxAuthUser(), nginxLookUpServer.getNginxAuthServer());
                     route = nginxLookUpServer.getNginxAuthServer();
                 }
