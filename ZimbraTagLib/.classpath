@@ -37,7 +37,6 @@
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-io-9.0.3.v20130506.jar"/>
   <classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
   <classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
-  <classpathentry combineaccessrules="false" kind="src" path="/ZimbraWebClient"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-codec-1.6.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/memcached-2.6.jar"/>
   <classpathentry kind="output" path="build/classes"/>
