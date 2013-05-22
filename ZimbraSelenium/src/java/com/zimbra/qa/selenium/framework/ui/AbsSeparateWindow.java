@@ -166,10 +166,8 @@ public abstract class AbsSeparateWindow extends AbsPage {
 			text = super.sGetBodyText();
 
 		} finally {
-			
-			//commented below code as it always moves focus to main window after getting text
-			//super.sSelectWindow(MainWindowID);
-			//super.sWindowFocus();
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
 		}
 
 		return (text);

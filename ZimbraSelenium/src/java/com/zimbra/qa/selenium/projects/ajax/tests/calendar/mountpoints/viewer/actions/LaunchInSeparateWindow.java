@@ -75,6 +75,7 @@ public class LaunchInSeparateWindow extends CalendarWorkWeekTest {
 		try{
 			// Launch shared folder in separate window through context menu
 			window = (SeparateWindow)app.zTreeCalendar.zTreeItem(Action.A_RIGHTCLICK, Button.B_LAUNCH_IN_SEPARATE_WINDOW, mountpoint);
+			window.zWaitForActive();
 			body = window.sGetBodyText();
 
 			// Verify launched calender in new windows shows all calender data correctly
@@ -167,13 +168,16 @@ public class LaunchInSeparateWindow extends CalendarWorkWeekTest {
 			ZAssert.assertStringContains(body, "Day Work Week Week Month" , "Verify calender views are shown in new window");
 			ZAssert.assertStringContains(body, "Sunday Monday Tuesday Wednesday Thursday Friday Saturday" , "Verify weekday names are shown in new window");
 			ZAssert.assertStringContains(body, foldername, "Verify owners calender name is displayed in new window");
-
+			 
+			
 			// Verify aapointment on launched calender in new windows is clickable and shows appointment details correctly
+			window.zWaitForActive();
 			window.sClickAt(Locators.openApptOnLaunchedWindow, "0,0");
 			SleepUtil.sleepMedium();
 			window.zWaitForActive();
+			
 			String bodyOfAppt = window.sGetBodyText();
-
+			ZAssert.assertStringContains(bodyOfAppt , "Close" , "Verify appt shows Close label");
 			ZAssert.assertStringContains(bodyOfAppt , "Subject :" , "Verify appt shows subject header");
 			ZAssert.assertStringContains(bodyOfAppt , apptSubject , "Verify appt shows correct subject");
 			ZAssert.assertStringContains(bodyOfAppt , app.zGetActiveAccount().EmailAddress , "Verify appt shows correct Email Address");
