@@ -1214,11 +1214,17 @@ public class PageCalendar extends AbsTab {
 				
 				optionLocator = Locators.ShowOriginalMenu;
 				page = new SeparateWindow(this.MyApplication);
+				
+				//optionLocator= Locators.zShowOrigTaskMenuItem;
+				
+				page = new SeparateWindow(this.MyApplication);
 				((SeparateWindow)page).zInitializeWindowNames();
 				this.zClickAt(optionLocator,"");
 				this.zWaitForBusyOverlay();
 				
 				return (page);
+				
+				//throw new HarnessException("implement action:"+ action +" option:"+ option);
 
 			}else if ( option == Button.O_CREATE_A_COPY_MENU) {
 				
