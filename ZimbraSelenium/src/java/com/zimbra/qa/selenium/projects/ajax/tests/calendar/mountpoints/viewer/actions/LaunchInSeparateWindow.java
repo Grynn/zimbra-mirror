@@ -125,7 +125,7 @@ public class LaunchInSeparateWindow extends CalendarWorkWeekTest {
 		ZimbraAccount.AccountA().soapSend(
 				"<FolderActionRequest xmlns='urn:zimbraMail'>"
 				+		"<action id='"+ folder.getId() +"' op='grant'>"
-				+			"<grant d='"+ app.zGetActiveAccount().EmailAddress +"' gt='usr' perm='rwidx' view='appointment'/>"
+				+			"<grant d='"+ app.zGetActiveAccount().EmailAddress +"' gt='usr' perm='r' view='appointment'/>"
 				+		"</action>"
 				+	"</FolderActionRequest>");
 
