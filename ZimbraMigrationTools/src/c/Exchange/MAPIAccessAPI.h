@@ -100,6 +100,7 @@ typedef struct _ContactItemData: BaseItemData
     wstring OtherStreet;
     wstring OtherURL;
     wstring Pager;
+    wstring PrimaryPhone;
     wstring WorkCity;
     wstring WorkCountry;
     wstring WorkFax;

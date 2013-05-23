@@ -55,8 +55,8 @@ MAPIContact::MAPIContact(Zimbra::MAPI::MAPISession &session,
     pr_business_address_state = 0, pr_business_address_street = 0, pr_contact_user1_idx = 0,
     pr_contact_user2_idx = 0, pr_contact_user3_idx = 0, pr_contact_user4_idx = 0,
     pr_contact_oneoffmemebrs = 0, pr_imaddress = 0;
-    pr_anniversary = 0, pr_department = 0, pr_nickname = 0, pr_assistantphone = 0, pr_business2_phone = 0, pr_company_phone = 0;
-
+    pr_anniversary = 0, pr_department = 0, pr_nickname = 0, pr_assistantphone = 0, pr_business2_phone = 0, pr_company_phone = 0, pr_primary_phone = 0;
+	//, pr_primary_phone = 0
     // init named props
     nameIds[0] = 0x8083;
     nameIds[1] = 0x8085;
@@ -120,6 +120,7 @@ MAPIContact::MAPIContact(Zimbra::MAPI::MAPISession &session,
     m_pOtherStreet = L"";
     m_pOtherURL = L"";
     m_pPager = L"";
+    m_pPrimaryPhone = L"";
     m_pWorkCity = L"";
     m_pWorkCountry = L"";
     m_pWorkFax = L"";
@@ -222,6 +223,7 @@ HRESULT MAPIContact::Init()
     pr_assistantphone = SetPropType(pContactTags->aulPropTag[N_ASSISTANT_TELEPHONE_NUMBER], PT_TSTRING);
     pr_business2_phone = SetPropType(pContactTags->aulPropTag[N_OFFICE2_TELEPHONE_NUMBER], PT_TSTRING);
     pr_company_phone = SetPropType(pContactTags->aulPropTag[N_COMPANY_MAIN_PHONE_NUMBER], PT_TSTRING);
+    pr_primary_phone = SetPropType(pContactTags->aulPropTag[N_PRIMARY_TELEPHONE_NUMBER], PT_TSTRING);
     // free the memory we allocated on the head
     for (int i = 0; i < N_NUM_NAMES; i++)
         MAPIFreeBuffer(ppNames[i]);
@@ -249,7 +251,7 @@ HRESULT MAPIContact::Init()
             pr_business_address_street, PR_BUSINESS_HOME_PAGE, PR_BIRTHDAY,
             pr_contact_user1_idx, pr_contact_user2_idx, pr_contact_user3_idx,
             pr_contact_user4_idx, pr_contact_oneoffmemebrs, pr_imaddress,
-            PR_WEDDING_ANNIVERSARY, PR_DEPARTMENT_NAME, PR_NICKNAME, PR_ASSISTANT_TELEPHONE_NUMBER, PR_OFFICE2_TELEPHONE_NUMBER, PR_COMPANY_MAIN_PHONE_NUMBER
+            PR_WEDDING_ANNIVERSARY, PR_DEPARTMENT_NAME, PR_NICKNAME, PR_ASSISTANT_TELEPHONE_NUMBER, PR_OFFICE2_TELEPHONE_NUMBER, PR_COMPANY_MAIN_PHONE_NUMBER, PR_PRIMARY_TELEPHONE_NUMBER
         }
     };
 
@@ -403,6 +405,9 @@ HRESULT MAPIContact::Init()
     if (m_pPropVals[C_OTHER_ADDRESS_COUNTRY].ulPropTag ==
         contactProps.aulPropTag[C_OTHER_ADDRESS_COUNTRY])
         OtherCountry(m_pPropVals[C_OTHER_ADDRESS_COUNTRY].Value.lpszW);
+    if (m_pPropVals[C_PRIMARY_TELEPHONE_NUMBER].ulPropTag ==
+        contactProps.aulPropTag[C_PRIMARY_TELEPHONE_NUMBER])
+        PrimaryPhone(m_pPropVals[C_PRIMARY_TELEPHONE_NUMBER].Value.lpszW);
     if (m_pPropVals[C_PRIMARY_FAX_NUMBER].ulPropTag ==
         contactProps.aulPropTag[C_PRIMARY_FAX_NUMBER])
         OtherFax(m_pPropVals[C_PRIMARY_FAX_NUMBER].Value.lpszW);

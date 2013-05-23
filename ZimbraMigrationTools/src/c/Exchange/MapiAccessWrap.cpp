@@ -423,6 +423,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
 					pIt[L"workFax"] = SysAllocString((cd.WorkFax).c_str());
 					pIt[L"workPhone"] = SysAllocString((cd.WorkPhone).c_str());
 					pIt[L"workPhone2"] = SysAllocString((cd.WorkPhone2).c_str());
+					pIt[L"workPhone3"] = SysAllocString((cd.PrimaryPhone).c_str());
 					pIt[L"workPostalCode"] = SysAllocString((cd.WorkPostalCode).c_str());
 					pIt[L"workState"] = SysAllocString((cd.WorkState).c_str());
 					pIt[L"workStreet"] = SysAllocString((cd.WorkStreet).c_str());
