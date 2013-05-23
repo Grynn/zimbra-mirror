@@ -179,7 +179,7 @@ public class GetZimlets extends AjaxCommonTest {
 		String description = app.zPagePreferences.sGetText(locator + " td[id$='__com_zimbra_webex__ds']");
 		
 		ZAssert.assertEquals(name, "WebEx", "Verify the WebEx entry exists");
-		ZAssert.assertEquals(description, "Easily schedule, start or join WebEx meetings.", "Verify the WebEx description");
+		ZAssert.assertEquals(description, "Easily schedule, start or join WebEx meetings", "Verify the WebEx description");
 		
 		
 	}
