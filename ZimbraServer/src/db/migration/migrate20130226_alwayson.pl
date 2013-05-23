@@ -45,7 +45,7 @@ _EOF_
 sub addItemcacheCheckpointColumn() {
     Migrate::logSql("Adding ITEMCACHE_CHECKPOINT column to mailbox table...");
     my $sql = <<_EOF_;
-ALTER TABLE ADD COLUMN itemcache_checkpoint INTEGER UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE mailbox ADD COLUMN itemcache_checkpoint INTEGER UNSIGNED NOT NULL DEFAULT 0;
 _EOF_
   Migrate::runSql($sql);
 }
