@@ -257,3 +257,9 @@ CREATE TABLE pending_acl_push (
    INDEX i_date (date)
 ) ENGINE = InnoDB;
 
+-- table for db locks
+CREATE TABLE locks (
+	mailbox_id  INTEGER UNSIGNED NOT NULL,
+	PRIMARY KEY (mailbox_id)
+) ENGINE = InnoDB;
+
