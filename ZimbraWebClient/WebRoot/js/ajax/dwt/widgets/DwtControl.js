@@ -2590,7 +2590,8 @@ function() {
 		var ev = DwtShell.focusEvent;
 		ev.dwtObj = this;
 		ev.state = DwtFocusEvent.BLUR;
-		obj.notifyListeners(DwtEvent.ONBLUR, mouseEv);
+		var mouseEv = DwtShell.mouseEvent;
+		this.notifyListeners(DwtEvent.ONBLUR, mouseEv);
 	}
 	this._blur();
 };
@@ -2610,7 +2611,8 @@ function() {
 		var ev = DwtShell.focusEvent;
 		ev.dwtObj = this;
 		ev.state = DwtFocusEvent.FOCUS;
-		obj.notifyListeners(DwtEvent.ONFOCUS, mouseEv);
+		var mouseEv = DwtShell.mouseEvent;
+		this.notifyListeners(DwtEvent.ONFOCUS, mouseEv);
 	}
 	this._focus();
 };
