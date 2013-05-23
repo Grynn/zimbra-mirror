@@ -31,7 +31,7 @@ public class VerifyDisabledUI extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Verify 'Share Calendar' menu remains enabled & 'Reply' menu remains disabled on mountpoint appointment (admin share)",
-			groups = { "test" })
+			groups = { "functional" })
 			
 	public void VerifyDisabledUI_01() throws HarnessException {
 		
