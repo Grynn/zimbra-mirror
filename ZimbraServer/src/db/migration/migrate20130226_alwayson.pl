@@ -23,6 +23,7 @@ Migrate::verifySchemaVersion(92);
 
 addLocksTable();
 addItemcacheCheckpointColumn();
+addCurrentSessionsTable();
 
 Migrate::updateSchemaVersion(92, 93);
 
@@ -45,6 +46,18 @@ sub addItemcacheCheckpointColumn() {
     Migrate::logSql("Adding ITEMCACHE_CHECKPOINT column to mailbox table...");
     my $sql = <<_EOF_;
 ALTER TABLE ADD COLUMN itemcache_checkpoint INTEGER UNSIGNED NOT NULL DEFAULT 0;
+_EOF_
+  Migrate::runSql($sql);
+}
+
+sub addCurrentSessionsTable() {
+    Migrate::logSql("Adding Current Sessions table...");
+    my $sql = <<_EOF_;
+CREATE TABLE IF NOT EXISTS current_sessions (
+	id				INTEGER UNSIGNED NOT NULL,
+	server_id		VARCHAR(127) NOT NULL,
+	PRIMARY KEY (id, server_id)
+) ENGINE = InnoDB;
 _EOF_
   Migrate::runSql($sql);
 }
