@@ -31,7 +31,7 @@ public class VerifyDisabledUI extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Verify 'Share Calendar' menu remains enabled & 'Reply' menu remains disabled on mountpoint appointment (admin share)",
-			groups = { "functional" })
+			groups = { "test" })
 			
 	public void VerifyDisabledUI_01() throws HarnessException {
 		
@@ -49,7 +49,7 @@ public class VerifyDisabledUI extends CalendarWorkWeekTest {
 		// Create a folder to share
 		ZimbraAccount.AccountA().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+		"<folder name='" + foldername + "' l='" + calendarFolder.getId() + "view='appointment'/>"
+				+		"<folder name='" + foldername + "' l='" + calendarFolder.getId() + "' view='appointment'/>"
 				+	"</CreateFolderRequest>");
 		
 		FolderItem folder = FolderItem.importFromSOAP(ZimbraAccount.AccountA(), foldername);
