@@ -89,7 +89,7 @@ public class CreateAllDayMeeting extends CalendarWorkWeekTest {
 		ZAssert.assertNotNull(invite, "Verify the invite is received");
 		ZAssert.assertEquals(invite.dSubject, apptSubject, "Subject: Verify the appointment data");
 		
-		// Verify location free/busy status shows as psts=AC	
+		// Verify location free/busy status shows as ptst=AC	
 		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation +"']", "ptst");
 		ZAssert.assertEquals(locationStatus, "AC", "Verify that the location status shows as 'ACCEPTED'");
 	}

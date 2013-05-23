@@ -107,7 +107,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		ZAssert.assertEquals(appt.getLocation(), apptLocation, "Location: Verify the location is present in the appointment");
 		SleepUtil.sleepVeryLong();
 		
-		// Verify location free/busy status shows as psts=DE
+		// Verify location free/busy status shows as ptst=DE
 		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation +"']", "ptst");
 		ZAssert.assertEquals(locationStatus, "DE", "Verify that the location status shows as 'DECLINED'");
 			
@@ -263,7 +263,7 @@ public class CreateMeetingWithLocationConflict extends CalendarWorkWeekTest {
 		ZAssert.assertEquals(appt.getLocation(), apptLocation, "Location: Verify the location is present in the appointment");
 		SleepUtil.sleepVeryLong();
 		
-		// Verify location free/busy status shows as psts=NE	
+		// Verify location free/busy status shows as ptst=NE	
 		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation +"']", "ptst");
 		ZAssert.assertEquals(locationStatus, "NE", "Verify that the location status shows as 'DECLINCED'");
 		

@@ -100,7 +100,7 @@ public class Delete extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=NE (because "Don't notify organizer)
+		// Verify attendee status shows as ptst=NE (because "Don't notify organizer)
 		ZAssert.assertEquals(attendeeStatus, "NE", "Verify that the attendee status shows as 'NEEDS ACTION' instead of 'DECLINED'");
 
 
@@ -114,7 +114,7 @@ public class Delete extends CalendarWorkWeekTest {
 		
 		String attendeeInvId = app.zGetActiveAccount().soapSelectValue("//mail:appt", "invId");
 
-		// Verify attendee status shows as psts=NE
+		// Verify attendee status shows as ptst=NE
 		ZAssert.assertNull(attendeeInvId, "Verify that appointment is deleted");
 
 	}

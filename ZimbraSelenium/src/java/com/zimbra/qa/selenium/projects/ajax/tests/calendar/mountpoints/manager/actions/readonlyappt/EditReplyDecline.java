@@ -108,7 +108,7 @@ public class EditReplyDecline extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountB().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(attendeeStatus, "DE", "Verify that the attendee status shows as 'DECLINED'");
 		
 		// Verify from and sender address in accept invitation message		
@@ -133,7 +133,7 @@ public class EditReplyDecline extends CalendarWorkWeekTest {
 		
 		attendeeStatus = ZimbraAccount.AccountB().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
 	
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(attendeeStatus, "DE", "Verify that the attendee status shows as 'DECLINED'");
 
 		
@@ -151,7 +151,7 @@ public class EditReplyDecline extends CalendarWorkWeekTest {
 		
 		String myStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(myStatus, "DE", "Verify that the attendee shows as 'DECLINED'");
 		
 		// Verify sent mail for declined appointment notification (action performed by assistant)

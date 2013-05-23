@@ -151,7 +151,7 @@ public class AcceptMeetingUsingDifferentCalendarFolder extends CalendarWorkWeekT
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=AC
+		// Verify attendee status shows as ptst=AC
 		ZAssert.assertEquals(attendeeStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 
 
@@ -171,7 +171,7 @@ public class AcceptMeetingUsingDifferentCalendarFolder extends CalendarWorkWeekT
 		
 		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=AC
+		// Verify attendee status shows as ptst=AC
 		ZAssert.assertEquals(myStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 		
 		// Verify accepted appointment present in new calendar folder
@@ -323,7 +323,7 @@ public class AcceptMeetingUsingDifferentCalendarFolder extends CalendarWorkWeekT
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=AC
+		// Verify attendee status shows as ptst=AC
 		ZAssert.assertEquals(attendeeStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 
 
@@ -343,7 +343,7 @@ public class AcceptMeetingUsingDifferentCalendarFolder extends CalendarWorkWeekT
 		
 		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=AC
+		// Verify attendee status shows as ptst=AC
 		ZAssert.assertEquals(myStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 
 		// Organizer: Search for the appointment response
@@ -447,7 +447,7 @@ public class AcceptMeetingUsingDifferentCalendarFolder extends CalendarWorkWeekT
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=AC
+		// Verify attendee status shows as ptst=AC
 		ZAssert.assertEquals(attendeeStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 
 
@@ -467,7 +467,7 @@ public class AcceptMeetingUsingDifferentCalendarFolder extends CalendarWorkWeekT
 		
 		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=AC
+		// Verify attendee status shows as ptst=AC
 		ZAssert.assertEquals(myStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 
 		// Organizer: Search for the appointment response
@@ -564,7 +564,7 @@ public class AcceptMeetingUsingDifferentCalendarFolder extends CalendarWorkWeekT
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=NE (bug 65356)
+		// Verify attendee status shows as ptst=NE (bug 65356)
 		ZAssert.assertEquals(attendeeStatus, "NE", "Verify that the attendee shows as 'ACCEPTED'");
 
 
@@ -584,7 +584,7 @@ public class AcceptMeetingUsingDifferentCalendarFolder extends CalendarWorkWeekT
 		
 		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=AC
+		// Verify attendee status shows as ptst=AC
 		ZAssert.assertEquals(myStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 
 		// Organizer: Search for the appointment response

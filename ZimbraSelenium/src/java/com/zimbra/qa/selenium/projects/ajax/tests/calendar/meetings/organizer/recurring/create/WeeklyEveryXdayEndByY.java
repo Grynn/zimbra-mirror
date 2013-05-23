@@ -77,7 +77,7 @@ public class WeeklyEveryXdayEndByY extends CalendarWorkWeekTest {
 		ZAssert.assertEquals(weekday, "TU", "Weekday: Verify the appointment data");
 		ZAssert.assertEquals(actual.getContent(), appt.getContent(), "Content: Verify the appointment data");
 		
-		// Verify location free/busy status shows as psts=AC
+		// Verify location free/busy status shows as ptst=AC
 		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation +"']", "ptst");
 		ZAssert.assertEquals(locationStatus, "AC", "Verify that the location status shows as 'ACCEPTED'");
 		

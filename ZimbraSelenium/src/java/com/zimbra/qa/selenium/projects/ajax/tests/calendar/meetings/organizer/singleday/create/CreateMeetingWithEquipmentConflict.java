@@ -87,7 +87,7 @@ public class CreateMeetingWithEquipmentConflict extends CalendarWorkWeekTest {
 		ZAssert.assertEquals(actual.getSubject(), apptSubject2, "Subject: Verify the appointment data");
 		ZAssert.assertEquals(actual.getEquipment().trim(), apptEquipment, "equipment: Verify the Equipment is present in the appointment");
 		
-		// Verify Equipment free/busy status shows as psts=DE
+		// Verify Equipment free/busy status shows as ptst=DE
 		String equipmentStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptEquipment +"']", "ptst");
 		ZAssert.assertEquals(equipmentStatus, "DE", "Verify that the Equipment status shows as 'DECLINED'");
 		
@@ -168,7 +168,7 @@ public class CreateMeetingWithEquipmentConflict extends CalendarWorkWeekTest {
 		ZAssert.assertEquals(actual.getEquipment().trim(), apptEquipment, "equipment: Verify the equipment is present in the appointment");
 		SleepUtil.sleepVeryLong();
 		
-		// Verify Equipment free/busy status shows as psts=NE	
+		// Verify Equipment free/busy status shows as ptst=NE	
 		String equipmentStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptEquipment +"']", "ptst");
 		ZAssert.assertEquals(equipmentStatus, "NE", "Verify that the Equipment status shows as 'NEEDS ACTION'");
 		

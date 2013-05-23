@@ -135,7 +135,7 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(attendeeStatus, "DE", "Verify that the attendee shows as 'DECLINED'");
 
 
@@ -155,7 +155,7 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 		
 		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(myStatus, "DE", "Verify that the attendee shows as 'DECLINED'");
 
 	}
@@ -285,7 +285,7 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(attendeeStatus, "DE", "Verify that the attendee shows as 'DECLINED'");
 
 
@@ -305,7 +305,7 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 		
 		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(myStatus, "DE", "Verify that the attendee shows as 'DECLINED'");
 
 		// Organizer: Search for the appointment response
@@ -395,7 +395,7 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(attendeeStatus, "DE", "Verify that the attendee shows as 'DECLINED'");
 
 
@@ -415,7 +415,7 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 		
 		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(myStatus, "DE", "Verify that the attendee shows as 'DECLINED'");
 
 		// Organizer: Search for the appointment response
@@ -498,7 +498,7 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=NE (bug 65356)
+		// Verify attendee status shows as ptst=NE (bug 65356)
 		ZAssert.assertEquals(attendeeStatus, "NE", "Verify that the attendee shows as 'DECLINED'");
 
 
@@ -518,7 +518,7 @@ public class DeclineMeeting extends CalendarWorkWeekTest {
 		
 		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(myStatus, "DE", "Verify that the attendee shows as 'DECLINED'");
 
 		// Organizer: Search for the appointment response

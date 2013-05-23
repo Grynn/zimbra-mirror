@@ -118,7 +118,7 @@ public class Decline extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountB().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
 	
-		// Verify attendee status shows as psts=NE
+		// Verify attendee status shows as ptst=NE
 		ZAssert.assertEquals(attendeeStatus, "NE", "Verify that the attendee status shows as 'NEEDS ACTION' instead of 'DECLINED'");
 
 		
@@ -136,7 +136,7 @@ public class Decline extends CalendarWorkWeekTest {
 		
 		String myStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(myStatus, "DE", "Verify that the attendee shows as 'DECLINED'");
 		
 		// Verify sent mail not present for declined appointment notification (action performed by assistant)
@@ -222,7 +222,7 @@ public class Decline extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountB().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(attendeeStatus, "DE", "Verify that the attendee status shows as 'DECLINED'");
 		
 		// Verify from and sender address in accept invitation message		
@@ -247,7 +247,7 @@ public class Decline extends CalendarWorkWeekTest {
 		
 		attendeeStatus = ZimbraAccount.AccountB().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
 	
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(attendeeStatus, "DE", "Verify that the attendee status shows as 'DECLINED'");
 
 		
@@ -265,7 +265,7 @@ public class Decline extends CalendarWorkWeekTest {
 		
 		String myStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(myStatus, "DE", "Verify that the attendee shows as 'DECLINED'");
 		
 		// Verify sent mail for declined appointment notification (action performed by assistant)

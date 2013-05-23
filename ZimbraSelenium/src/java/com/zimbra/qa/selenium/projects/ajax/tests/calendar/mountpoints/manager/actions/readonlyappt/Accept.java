@@ -101,7 +101,7 @@ public class Accept extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountB().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=AC
+		// Verify attendee status shows as ptst=AC
 		ZAssert.assertEquals(attendeeStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 		
 		// Verify from and sender address in accept invitation message		
@@ -126,7 +126,7 @@ public class Accept extends CalendarWorkWeekTest {
 		
 		attendeeStatus = ZimbraAccount.AccountB().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
 	
-		// Verify attendee status shows as psts=AC
+		// Verify attendee status shows as ptst=AC
 		ZAssert.assertEquals(attendeeStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 
 		
@@ -144,7 +144,7 @@ public class Accept extends CalendarWorkWeekTest {
 		
 		String myStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=AC
+		// Verify attendee status shows as ptst=AC
 		ZAssert.assertEquals(myStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 		
 		// Verify sent mail for accepted appointment notification (action performed by assistant)
@@ -157,7 +157,7 @@ public class Accept extends CalendarWorkWeekTest {
 		
 		attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ ZimbraAccount.AccountA().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=AC
+		// Verify attendee status shows as ptst=AC
 		ZAssert.assertEquals(attendeeStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 		
 		// Verify from and sender address in accept invitation message		
