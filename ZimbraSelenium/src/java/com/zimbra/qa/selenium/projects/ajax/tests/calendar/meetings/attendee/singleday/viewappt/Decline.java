@@ -103,7 +103,7 @@ public class Decline extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=NE (because "Don't notify organizer)
+		// Verify attendee status shows as ptst=NE (because "Don't notify organizer)
 		ZAssert.assertEquals(attendeeStatus, "NE", "Verify that the attendee status shows as 'NEEDS ACTION' instead of 'DECLINED'");
 
 
@@ -123,7 +123,7 @@ public class Decline extends CalendarWorkWeekTest {
 		
 		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(myStatus, "DE", "Verify that the attendee status shows as 'NEEDS ACTION' instead of 'DECLINED'");
 		
 		// Organizer: Search for the appointment response
@@ -186,7 +186,7 @@ public class Decline extends CalendarWorkWeekTest {
 		DialogConfirmationDeclineAppointment declineAppt = (DialogConfirmationDeclineAppointment) new DialogConfirmationDeclineAppointment(app, app.zPageCalendar);
 		declineAppt.zClickButton(Button.B_NOTIFY_ORGANIZER);
 		declineAppt.zClickButton(Button.B_YES);
-		SleepUtil.sleepVeryLong(); //psts returns wrong value without long delay
+		SleepUtil.sleepVeryLong(); //ptst returns wrong value without long delay
 		
 		// Verify "Declined" value saved properly in the dropdown
 		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_OPEN_MENU, apptSubject);
@@ -211,7 +211,7 @@ public class Decline extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(attendeeStatus, "DE", "Verify that the attendee status shows as 'DECLINED'");
 
 
@@ -231,7 +231,7 @@ public class Decline extends CalendarWorkWeekTest {
 		
 		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(myStatus, "DE", "Verify that the attendee status shows as 'DECLINED'");
 		
 		// Organizer: Search for the appointment response

@@ -98,7 +98,7 @@ public class Accept extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=AC
+		// Verify attendee status shows as ptst=AC
 		ZAssert.assertEquals(attendeeStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 
 
@@ -118,7 +118,7 @@ public class Accept extends CalendarWorkWeekTest {
 		
 		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=AC
+		// Verify attendee status shows as ptst=AC
 		ZAssert.assertEquals(myStatus, "AC", "Verify that the attendee shows as 'ACCEPTED'");
 		
 		// Organizer: Search for the appointment response

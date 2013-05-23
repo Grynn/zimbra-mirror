@@ -97,7 +97,7 @@ public class Decline extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=NE (because "Don't notify organizer)
+		// Verify attendee status shows as ptst=NE (because "Don't notify organizer)
 		ZAssert.assertEquals(attendeeStatus, "NE", "Verify that the attendee status shows as 'NEEDS ACTION' instead of 'DECLINED'");
 
 
@@ -117,8 +117,8 @@ public class Decline extends CalendarWorkWeekTest {
 		
 		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
-		ZAssert.assertEquals(myStatus, "DE", "Verify that the attendee status shows as 'NEEDS ACTION' instead of 'DECLINED'");
+		// Verify attendee status shows as ptst=DE
+		ZAssert.assertEquals(myStatus, "DE", "Verify that the attendee status shows as 'DECLINED' instead of 'NEEDS ACTION'");
 		
 		// Organizer: Search for the appointment response
 		String inboxId = FolderItem.importFromSOAP(ZimbraAccount.AccountA(), FolderItem.SystemFolder.Inbox).getId();
@@ -197,7 +197,7 @@ public class Decline extends CalendarWorkWeekTest {
 		
 		String attendeeStatus = ZimbraAccount.AccountA().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(attendeeStatus, "DE", "Verify that the attendee status shows as 'DECLINED'");
 
 
@@ -217,7 +217,7 @@ public class Decline extends CalendarWorkWeekTest {
 		
 		String myStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ app.zGetActiveAccount().EmailAddress +"']", "ptst");
 
-		// Verify attendee status shows as psts=DE
+		// Verify attendee status shows as ptst=DE
 		ZAssert.assertEquals(myStatus, "DE", "Verify that the attendee status shows as 'DECLINED'");
 		
 		// Organizer: Search for the appointment response
