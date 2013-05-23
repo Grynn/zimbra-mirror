@@ -1,13 +1,13 @@
 --
 -- ***** BEGIN LICENSE BLOCK *****
 -- Zimbra Collaboration Suite Server
--- Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 VMware, Inc.
--- 
+-- Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+--
 -- The contents of this file are subject to the Zimbra Public License
 -- Version 1.3 ("License"); you may not use this file except in
 -- compliance with the License.  You may obtain a copy of the License at
 -- http://www.zimbra.com/license.
--- 
+--
 -- Software distributed under the License is distributed on an "AS IS"
 -- basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 -- ***** END LICENSE BLOCK *****
@@ -51,7 +51,7 @@ CREATE TABLE volume (
 
    UNIQUE INDEX i_name (name),
    UNIQUE INDEX i_path (path(255))   -- Index prefix length of 255 is the max prior to MySQL 4.1.2.  Should be good enough.
-) ENGINE = InnoDB;
+) ENGINE = NDBCLUSTER;
 
 -- This table has only one row.  It points to message and index volumes
 -- to use for newly provisioned mailboxes.
@@ -68,7 +68,7 @@ CREATE TABLE current_volumes (
    CONSTRAINT fk_current_volumes_message_volume_id FOREIGN KEY (message_volume_id) REFERENCES volume(id),
    CONSTRAINT fk_current_volumes_secondary_message_volume_id FOREIGN KEY (secondary_message_volume_id) REFERENCES volume(id),
    CONSTRAINT fk_current_volumes_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)
-) ENGINE = InnoDB;
+) ENGINE = NDBCLUSTER;
 
 INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
     mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
@@ -120,14 +120,14 @@ CREATE TABLE mailbox (
    highest_indexed     VARCHAR(21), -- deprecated
    version             VARCHAR(16),
    last_purge_at       INTEGER UNSIGNED NOT NULL DEFAULT 0,
-   itemcache_checkpoint       INTEGER UNSIGNED NOT NULL DEFAULT 0,
+   itemcache_checkpoint INTEGER UNSIGNED NOT NULL DEFAULT 0,
 
    UNIQUE INDEX i_account_id (account_id),
    INDEX i_index_volume_id (index_volume_id),
    INDEX i_last_backup_at (last_backup_at, id),
 
    CONSTRAINT fk_mailbox_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)
-) ENGINE = InnoDB;
+) ENGINE = NDBCLUSTER;
 
 -- -----------------------------------------------------------------------
 -- deleted accounts
@@ -138,7 +138,7 @@ CREATE TABLE deleted_account (
    account_id  VARCHAR(127) NOT NULL,
    mailbox_id  INTEGER UNSIGNED NOT NULL,
    deleted_at  INTEGER UNSIGNED NOT NULL      -- UNIX-style timestamp
-) ENGINE = InnoDB;
+) ENGINE = NDBCLUSTER;
 
 -- -----------------------------------------------------------------------
 -- mailbox metadata info
@@ -152,7 +152,7 @@ CREATE TABLE mailbox_metadata (
    PRIMARY KEY (mailbox_id, section),
 
    CONSTRAINT fk_metadata_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
-) ENGINE = InnoDB;
+) ENGINE = NDBCLUSTER;
 
 -- -----------------------------------------------------------------------
 -- out-of-office reply history
@@ -167,7 +167,7 @@ CREATE TABLE out_of_office (
    INDEX i_sent_on (sent_on),
 
    CONSTRAINT fk_out_of_office_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
-) ENGINE = InnoDB;
+) ENGINE = NDBCLUSTER;
 
 -- -----------------------------------------------------------------------
 -- etc.
@@ -179,7 +179,7 @@ CREATE TABLE config (
    value        TEXT,
    description  TEXT,
    modified     TIMESTAMP
-) ENGINE = InnoDB;
+) ENGINE = NDBCLUSTER;
 
 -- table for tracking database table maintenance
 CREATE TABLE table_maintenance (
@@ -190,7 +190,7 @@ CREATE TABLE table_maintenance (
    num_rows            INTEGER UNSIGNED NOT NULL,
 
    PRIMARY KEY (table_name, database_name)
-) ENGINE = InnoDB;
+) ENGINE = NDBCLUSTER;
 
 CREATE TABLE service_status (
    server   VARCHAR(255) NOT NULL,
@@ -213,7 +213,7 @@ CREATE TABLE scheduled_task (
    PRIMARY KEY (name, mailbox_id, class_name),
    CONSTRAINT fk_st_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE,
    INDEX i_mailbox_id (mailbox_id)
-) ENGINE = InnoDB;
+) ENGINE = NDBCLUSTER;
 
 -- Mobile Devices
 CREATE TABLE mobile_devices (
@@ -245,7 +245,7 @@ CREATE TABLE mobile_devices (
    PRIMARY KEY (mailbox_id, device_id),
    CONSTRAINT fk_mobile_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE,
    INDEX i_last_used_date (last_used_date)
-) ENGINE = InnoDB;
+) ENGINE = NDBCLUSTER;
 
 -- Tracks ACLs to be pushed to LDAP
 CREATE TABLE pending_acl_push (
@@ -256,11 +256,12 @@ CREATE TABLE pending_acl_push (
    PRIMARY KEY (mailbox_id, item_id, date),
    CONSTRAINT fk_pending_acl_push_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE,
    INDEX i_date (date)
-) ENGINE = InnoDB;
+) ENGINE = NDBCLUSTER;
 
 -- table for db locks
 CREATE TABLE locks (
-	mailbox_id  INTEGER UNSIGNED NOT NULL,
-	PRIMARY KEY (mailbox_id)
-) ENGINE = InnoDB;
+    mailbox_id  INTEGER UNSIGNED NOT NULL,
+    PRIMARY KEY (mailbox_id)
+) ENGINE = NDBCLUSTER;
+
 
