@@ -79,7 +79,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-3.5.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-analyzers-3.5.0.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-2.0.4.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-2.0.4.jar" sourcepath="/ZimbraCommon/jars-src/apache-mina-2.0.4-src.zip"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/guava-13.0.1.jar" sourcepath="/ZimbraCommon/jars-src/guava-13.0.1-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-13.0.1-javadoc.jar!/"/>
