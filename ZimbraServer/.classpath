@@ -10,7 +10,7 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-cli-1.2-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-codec-1.7.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-dbcp-1.4.jar" sourcepath="/ThirdParty/commons-dbcp/src">
 		<attributes>
