@@ -111,6 +111,12 @@ sub processQ {
                                 $qf{FROM} = $data?$data:'MAILER-DAEMON'; 
                         } elsif ($rec eq "L") {
                                 $qf{FILTER} = $data;
+                        } elsif ($rec eq "N") {
+                                if ($data =~ /Received: from/ && $data !~ /127\.0\.0\.1/ && $data !~ /::1/) {
+                                  my ($junk, $rip) = split(/\[/, $data, 2);
+                                  ($rip, $junk) = split(/\]/, $rip, 2);
+                                  $qf{RECEIVED}=$rip;
+                                }
                         } elsif ($rec eq "A") {
                                 my ($aname, $avalue) = ($data =~ /^([^=]+)=(.*)$/);
                                 if ($aname eq "client_address" && defined($avalue)) {
@@ -141,6 +147,7 @@ sub processQ {
 		print "time=", $qf{TIME}, "\n";
 		print "size=", $qf{SIZE}, "\n";
 		print "from=", $qf{FROM}, "\n";
+                if (defined $qf{RECEIVED}) { print "received=", $qf{RECEIVED}, "\n"; }
 		if (defined $qf{ADDR}) { print "addr=", $qf{ADDR}, "\n"; }
 		if (defined $qf{HOST}) { print "host=", $qf{HOST}, "\n"; }
 		if (defined $qf{FILTER}) { print "filter=", $qf{FILTER},"\n"; }
