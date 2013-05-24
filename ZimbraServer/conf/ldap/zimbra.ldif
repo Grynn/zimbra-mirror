@@ -121,6 +121,11 @@ dn: cn=servers,cn=zimbra
 objectclass: organizationalRole
 cn: servers
 
+# for storing alwaysOnCluster info
+dn: cn=alwaysOnClusters,cn=zimbra
+objectclass: organizationalRole
+cn: alwaysOnClusters
+
 # for storing UC service info
 dn: cn=ucservices,cn=zimbra
 objectclass: organizationalRole
