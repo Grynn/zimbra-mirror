@@ -273,9 +273,9 @@ public class QuickAddAppointment extends AbsTab {
 	}
 	
 	public void zMoreDetails() throws HarnessException {
-		SleepUtil.sleepMedium(); // for testing because test fails intermittently
+		SleepUtil.sleepMedium(); //see intermittent bug 81945
 		this.zClickAt(Locators.MoreDetailsButtonQuickAdd, "");
-		SleepUtil.sleepLong(); //UI takes time to draw so adding attendee fails
+		SleepUtil.sleepLong(); //see intermittent bug 81945
 	}
 	
 	public void zFill(IItem item) throws HarnessException {
@@ -301,6 +301,9 @@ public class QuickAddAppointment extends AbsTab {
 			zFillField(Field.Location, appt.getLocation());
 			SleepUtil.sleepSmall();
 			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+			SleepUtil.sleepSmall();
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER); //see intermittent bug 81945
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
 		}
 		
 		// Start date-time
