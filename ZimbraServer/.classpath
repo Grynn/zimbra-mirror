@@ -119,5 +119,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-continuation-9.0.3.v20130506.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-servlet-9.0.3.v20130506.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-servlets-9.0.3.v20130506.jar"/>
+    <classpathentry kind="lib" path="/ZimbraCommon/jars/helix-core-0.6.1-incubating.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

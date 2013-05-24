@@ -2837,4 +2837,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("getAllAlwaysOnClusters");
     }
+
+    @Override
+    public List<Server> getAllServers(String service, String clusterId)
+            throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("getAllServersByClusterId");
+    }
 }
