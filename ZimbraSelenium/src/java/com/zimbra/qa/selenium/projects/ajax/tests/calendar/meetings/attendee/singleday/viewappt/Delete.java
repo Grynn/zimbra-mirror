@@ -165,6 +165,7 @@ public class Delete extends CalendarWorkWeekTest {
 		SleepUtil.sleepVeryLong(); //ptst returns wrong value without long delay
 		
 		// Verify appointment is deleted and read-only view closed
+		app.zPageMail.zToolbarPressButton(Button.B_REFRESH);
 		ZAssert.assertFalse(app.zPageCalendar.zGetViewApptLocator(), "Verify appointment read-only view closed");
 		ZAssert.assertEquals(app.zPageCalendar.zGetViewApptLocator(apptSubject), false, "Verify appointment is deleted");
 		
