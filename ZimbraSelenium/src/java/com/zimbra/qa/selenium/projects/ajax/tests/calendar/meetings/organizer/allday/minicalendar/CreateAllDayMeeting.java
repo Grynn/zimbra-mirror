@@ -18,6 +18,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.organizer.a
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -34,6 +36,7 @@ public class CreateAllDayMeeting extends CalendarWorkWeekTest {
 		super.startingPage = app.zPageCalendar;
 	}
 	
+	@Bugs(ids = "81945")
 	@Test(	description = "Create all day meeting invite from mini-calendar's date using quick add dialog",
 			groups = { "smoke" }
 	)
