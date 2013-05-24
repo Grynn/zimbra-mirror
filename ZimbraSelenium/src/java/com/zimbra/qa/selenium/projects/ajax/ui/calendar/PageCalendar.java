@@ -1460,8 +1460,21 @@ public class PageCalendar extends AbsTab {
 		AbsPage page = null;
 		String optionLocator = null;
 		String subOptionLocator = null;
-
-		String itemsLocator = Locators.CalendarViewWorkWeekItemCSS;		
+		String itemsLocator = null;
+		
+		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
+			itemsLocator = Locators.CalendarViewListCSS;									// LIST
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewDayCSS, 0, 0) ) {
+			itemsLocator = Locators.CalendarViewDayItemCSS;									// DAY
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWorkWeekCSS, 0, 0) ) {
+			itemsLocator = Locators.CalendarViewWorkWeekItemCSS;							// WORKWEEK
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWeekCSS, 0, 0) ) {
+			itemsLocator = Locators.CalendarViewWeekItemCSS;								// WEEK
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewMonthCSS, 0, 0) ) {
+			itemsLocator = Locators.CalendarViewMonthCSS;									// MONTH
+		} else {
+			throw new HarnessException("Unknown calendar view");
+		}
 				
 		if ( this.sIsElementPresent(itemsLocator +" td.appt_name:contains('"+ subject +"')")) {
 			
@@ -1487,10 +1500,7 @@ public class PageCalendar extends AbsTab {
 		
 		if (action == Action.A_RIGHTCLICK) {
 			
-			if ( subOption == Button.O_DELETE ) {
-				subOptionLocator = "css=td#DELETE_SERIES_title";
-				
-			} else if ( subOption == Button.O_ACCEPT_MENU ) {
+			if ( subOption == Button.O_ACCEPT_MENU ) {
 				subOptionLocator = Locators.AcceptRecurringMenu;
 			
 			} else if ( subOption == Button.O_DECLINE_MENU ) {

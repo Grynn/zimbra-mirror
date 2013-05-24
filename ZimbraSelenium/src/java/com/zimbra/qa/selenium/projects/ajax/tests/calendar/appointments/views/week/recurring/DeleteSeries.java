@@ -204,7 +204,7 @@ public class DeleteSeries extends CalendarWorkWeekTest {
         //
         // This is different from the "select an instance and click delete button" usage
         //
-        DialogWarning confirmDelete = (DialogWarning)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_SERIES_MENU, Button.O_DELETE, apptSubject);
+        DialogWarning confirmDelete = (DialogWarning)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_SERIES_MENU, Button.O_DELETE_MENU, apptSubject);
         if (confirmDelete == null) {
         	throw new HarnessException("The 'Confirm Delete' dialog never appeared.");
         }
