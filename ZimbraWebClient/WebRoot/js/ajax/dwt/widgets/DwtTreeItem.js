@@ -133,6 +133,7 @@ function() {
 	this._imageCell = null;
 	this._textCell = null;
 	this._childDiv = null;
+	this._initialized = false;
 	DwtComposite.prototype.dispose.call(this);
 };
 
@@ -317,7 +318,7 @@ function() {
  */
 DwtTreeItem.prototype.setText =
 function(text) {
-	if (this._initialized) {
+	if (this._initialized && this._textCell) {
 		if (!text) text = "";
 		this._text = this._textCell.innerHTML = text;
 	} else {
