@@ -104,6 +104,19 @@ else
   CACERTS=${zimbra_java_home}/jre/lib/security/cacerts
 fi
 
+checkDigest() {
+  if [ x"$DIGEST" != "xmd4" -a x"$DIGEST" != "xmd5" -a \
+       x"$DIGEST" != "xmdc2" -a x"$DIGEST" != "xripemd160" -a \
+       x"$DIGEST" != "xsha" -a x"$DIGEST" != "xsha1" -a \
+       x"$DIGEST" != "xsha224" -a x"$DIGEST" != "xsha256" -a \
+       x"$DIGEST" != "xsha384" -a x"$DIGEST" != "xsha512" -a \
+       x"$DIGEST" != "xwhirlpool" ]; then
+         echo "WARNING: Unknown digest method: $DIGEST"
+         echo "Defaulting digest method to sha1"
+         DIGEST="sha1"
+  fi
+}
+
 backupSSLDirs() {
   if [ x"${1}" != "x" ]; then
     ACTION_ROOT_DIR=${1}
@@ -601,7 +614,7 @@ deployCert() {
   else
     type=$1
     if [ x"$type" != "xself" -a x"$type" != "xcomm" ]; then
-      echo "cert type most be one of self or comm"
+      echo "cert type must be one of self or comm"
       usage
     fi
     shift
@@ -911,7 +924,7 @@ createServerCertReq() {
 
   echo -n "** Creating server cert request ${current_csr}..."
 
-  ${openssl} req -new -nodes -out ${current_csr} -keyout ${current_key} \
+  ${openssl} req -new -${DIGEST} -nodes -out ${current_csr} -keyout ${current_key} \
     -newkey rsa:${KEYSIZE} -config ${zimbra_cert_ssl_conf} \
     -subj "${SUBJECT}" -batch > ${tmpfile} 2>&1
 
@@ -974,6 +987,11 @@ createCert() {
     shift
   fi
 
+  if [ x"${1}" = "x-digest" ]; then
+    DIGEST="${1}"
+    shift
+  fi
+
   initSSLDirs
 
   createCASerial  
@@ -1008,10 +1026,18 @@ createCert() {
   if [ x"${ALLSERVERS}" = "x-allserver" ]; then
     # merge these with cli specified. -bp
     subject_alt_names=`su - zimbra -c "${zimbra_home}/bin/zmprov -m -l gas | xargs "`
-    createCSR self -new -keysize ${KEYSIZE}
+    if [ x"$DIGEST" != "x"]; then
+      createCSR self -new -keysize ${KEYSIZE} -digest ${DIGEST}
+    else
+      createCSR self -new -keysize ${KEYSIZE}
+    fi
     shift
   elif [ ! -s "${server_csr}" -o x"${IS_NEW_CRT}" = "x-new" ]; then
-    createCSR self ${IS_NEW_CRT} -keysize ${KEYSIZE}
+    if [ x"$DIGEST" != "x"]; then
+      createCSR self ${IS_NEW_CRT} -keysize ${KEYSIZE} -digest ${DIGEST}
+    else
+      createCSR self ${IS_NEW_CRT} -keysize ${KEYSIZE}
+    fi
   fi
 
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
@@ -1306,7 +1332,7 @@ createCSR() {
   else
     type=$1
     if [ x"$type" != "xself" -a x"$type" != "xcomm" ]; then
-      echo "$ERROR_PREFIX certificate type most be one of self or comm"
+      echo "$ERROR_PREFIX certificate type must be one of self or comm"
       usage
     fi
     shift
@@ -1324,6 +1350,13 @@ createCSR() {
   else 
     KEYSIZE=1024
   fi
+  
+  if [ x"${1}" = "x-digest" ]; then
+    DIGEST="$1"
+    shift
+    checkDigest
+  fi
+
   #echo "CreateCSR: RSA keysize: $KEYSIZE"
 
   if [ "x${1}" != "x" ]; then 
@@ -1567,8 +1600,8 @@ usage () {
   echo "  $0 -help"
   echo "  $0 createca [-new] [-keysize 1024] [-subject subject]"
   echo "  $0 deployca"
-  echo "  $0 createcsr <self|comm> [-new] [-keysize 1024] [-subject subject] [-subjectAltNames \"host1,host2\"]"
-  echo "  $0 createcrt [-new] [-days validation days] [-keysize 1024] [-subject subject] [-subjectAltNames \"host1,host2\"]"
+  echo "  $0 createcsr <self|comm> [-new] [-digest digest] [-keysize 1024] [-subject subject] [-subjectAltNames \"host1,host2\"]"
+  echo "  $0 createcrt [-new] [-days validation days] [-digest digest] [-keysize 1024] [-subject subject] [-subjectAltNames \"host1,host2\"]"
   echo "  $0 deploycrt <self>"
   echo "  $0 deploycrt <comm> [certfile] [ca_chain_file]"
   echo "  $0 savecrt"
@@ -1599,8 +1632,9 @@ usage () {
   echo "-  migrate moves certs/keys from ZCS installs prior to version 5.0.x"
   echo "-  addcacert appends an otherwise untrusted ssl certificate to the cacerts file."
   echo "     This is primarily for allowance of untrusted ssl certificates in external data sources."
-
-  echo
+  echo "   Default digest mode is sha1.  Other digest mechansims are:"
+  echo "     md4, md5, mdc2, ripemd160, sha, sha224, sha256, sha384, sha512, whirlpool"
+  echo ""
   
   exit 1;
 }
