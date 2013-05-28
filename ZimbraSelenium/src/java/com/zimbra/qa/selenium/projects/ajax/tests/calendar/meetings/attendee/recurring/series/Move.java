@@ -24,6 +24,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 
 public class Move extends CalendarWorkWeekTest {	
 	
@@ -36,7 +37,7 @@ public class Move extends CalendarWorkWeekTest {
 			groups = { "smoke" })
 			
 	public void MoveMeeting_01() throws HarnessException {
-	
+		
 		Calendar now = this.calendarWeekDayUTC;
 		String tz = ZTimeZone.TimeZoneEST.getID();
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 10, 0, 0);
@@ -83,13 +84,10 @@ public class Move extends CalendarWorkWeekTest {
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
        
         // Select the appointment
-        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
-        
-        // move appointment using toolbar menu
-        app.zPageCalendar.zToolbarPressButton(Button.O_MOVE_MENU);
-        app.zPageCalendar.zClickAt(app.zPageCalendar.zGetMoveLocator(name1), "");
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-		
+        DialogMove dialog = (DialogMove) app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_SERIES_MENU, Button.O_MOVE_MENU, apptSubject);
+		dialog.zClickTreeFolder(subfolder1);
+		dialog.zClickButton(Button.B_OK);
+			
 		//-- Server verification
 		AppointmentItem newAppointment = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ apptSubject +")");
 		ZAssert.assertEquals(newAppointment.getFolder(), subfolder1.getId(), "Verify the appointment moved folders");

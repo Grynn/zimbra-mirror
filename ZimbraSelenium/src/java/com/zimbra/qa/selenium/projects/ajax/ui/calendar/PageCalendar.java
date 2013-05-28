@@ -68,7 +68,7 @@ public class PageCalendar extends AbsTab {
 		public static final String ForwardMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_FORWARD_APPT']";
 		public static final String DeleteMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_DELETE']";
 		public static final String CancelMenu = "css=div#zm__Calendar div#DELETE td[id$='_title']";
-		public static final String MoveMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_MOVE']";
+		public static final String MoveMenu = "css=div[id^='zm__Calendar__'] td[id^='MOVE__DWT'][id$='_title']";
 		public static final String TagAppointmentMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_TAG_MENU']";
 		public static final String TagAppointmentNewTagSubMenu = "id=calendar_newtag_title";
 		public static final String TagAppointmentRemoveTagSubMenu = "css=div[id^='TAG_MENU'] div[id^='calendar_removetag'] td[id^='calendar_removetag'][class='ZWidgetTitle']";
@@ -1519,6 +1519,9 @@ public class PageCalendar extends AbsTab {
 				
 				} else if ( subOption == Button.O_CREATE_A_COPY_MENU) {
 					subOptionLocator = Locators.CreateACopyRecurringMenu;
+				
+				} else if ( subOption == Button.O_MOVE_MENU) {
+					subOptionLocator = Locators.MoveMenu;
 					
 				}
 				
@@ -1579,6 +1582,11 @@ public class PageCalendar extends AbsTab {
 			}
 			
 			page = new DialogInformational(DialogInformational.DialogWarningID.InformationalDialog, MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
+			}
+			
+			page = new DialogMove(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 			if ( page.zIsActive() ) {
 				return (page);
 			}

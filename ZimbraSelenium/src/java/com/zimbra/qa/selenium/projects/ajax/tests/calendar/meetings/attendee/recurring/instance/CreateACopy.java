@@ -14,7 +14,7 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.recurring.series;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.recurring.instance;
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
@@ -34,8 +34,8 @@ public class CreateACopy extends CalendarWorkWeekTest {
 	
 	}
 	
-	@Test(description = "Create a copy of meeting invite (Series)",
-			groups = { "smoke" })
+	@Test(description = "Create a copy of meeting invite (Instance)",
+			groups = { "functional" })
 			
 	public void CopyMeeting_01() throws HarnessException {
 
@@ -81,7 +81,7 @@ public class CreateACopy extends CalendarWorkWeekTest {
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
         // Copy appointment
-        DialogInformational dialog = (DialogInformational)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_SERIES_MENU, Button.O_CREATE_A_COPY_MENU, apptSubject);;
+        DialogInformational dialog = (DialogInformational)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_INSTANCE_MENU, Button.O_CREATE_A_COPY_MENU, apptSubject);;
 		dialog.zClickButton(Button.B_OK);
 		
         FormApptNew form = new FormApptNew(app);
@@ -118,8 +118,8 @@ public class CreateACopy extends CalendarWorkWeekTest {
 		
 		String ruleFrequency = ZimbraAccount.AccountA().soapSelectValue("//mail:appt//mail:rule", "freq");
 		String interval = ZimbraAccount.AccountA().soapSelectValue("//mail:appt//mail:interval", "ival");
-		ZAssert.assertEquals(ruleFrequency, "DAI", "Repeat frequency: Verify the appointment data");
-		ZAssert.assertEquals(interval, "1", "Repeat interval: Verify the appointment data");
+		ZAssert.assertNull(ruleFrequency, "Repeat frequency: Verify the appointment data");
+		ZAssert.assertNull(interval, "Repeat interval: Verify the appointment data");
 
 		// Verify the new invitation appears in the attendee2's inbox
 		ZimbraAccount.AccountB().soapSend(
@@ -141,8 +141,8 @@ public class CreateACopy extends CalendarWorkWeekTest {
 		ZimbraAccount.AccountB().soapSend("<GetAppointmentRequest  xmlns='urn:zimbraMail' id='"+ id +"'/>");
 		ruleFrequency = ZimbraAccount.AccountB().soapSelectValue("//mail:appt//mail:rule", "freq");
 		interval = ZimbraAccount.AccountB().soapSelectValue("//mail:appt//mail:interval", "ival");
-		ZAssert.assertEquals(ruleFrequency, "DAI", "Repeat frequency: Verify the appointment data");
-		ZAssert.assertEquals(interval, "1", "Repeat interval: Verify the appointment data");
+		ZAssert.assertNull(ruleFrequency, "Repeat frequency: Verify the appointment data");
+		ZAssert.assertNull(interval, "Repeat interval: Verify the appointment data");
 		
 	}
 
