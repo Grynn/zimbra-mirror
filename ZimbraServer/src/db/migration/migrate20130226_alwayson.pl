@@ -25,7 +25,7 @@ addLocksTable();
 addItemcacheCheckpointColumn();
 addCurrentSessionsTable();
 
-Migrate::updateSchemaVersion(92, 93);
+Migrate::updateSchemaVersion(92, 100);
 
 exit(0);
 
@@ -51,7 +51,7 @@ _EOF_
 }
 
 sub addCurrentSessionsTable() {
-    Migrate::logSql("Adding Current Sessions table...");
+    Migrate::logSql("Adding CURRENT_SESSIONS table...");
     my $sql = <<_EOF_;
 CREATE TABLE IF NOT EXISTS current_sessions (
 	id				INTEGER UNSIGNED NOT NULL,
