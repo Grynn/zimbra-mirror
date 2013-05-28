@@ -47,7 +47,7 @@ ${PATHSEP}${ZMROOT}/lib/jars/apache-log4j-extras-1.0.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/commons-logging.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/commons-cli-1.2.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/commons-httpclient-3.1.jar\
-${PATHSEP}${ZMROOT}/lib/jars/commons-codec-1.6.jar\
+${PATHSEP}${ZMROOT}/lib/jars/commons-codec-1.7.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/guava-13.0.1.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/dom4j-1.5.2.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/log4j-1.2.16.jar\
