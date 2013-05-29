@@ -1,0 +1,7 @@
+# {pkgName}/sass
+
+This folder contains SASS files of various kinds, organized in sub-folders:
+
+    {pkgName}/sass/etc
+    {pkgName}/sass/src
+    {pkgName}/sass/var

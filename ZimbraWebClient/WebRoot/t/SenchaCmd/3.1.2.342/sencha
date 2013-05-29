@@ -1,0 +1,69 @@
+#!/bin/bash
+
+CURDIR=${PWD}
+BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+#------------------------------------------------------------------------------
+# Utility functions and such
+
+function die () {
+    echo $1
+    exit 1
+}
+
+function warn () {
+    echo $1
+}
+
+# Reads property $2 from properties file $1 and echos the value. To call this method do:
+#
+#     V=$(getProp filename property)
+#
+function getProp () {
+    # ignore lines with '#' as the first non-space character (comments)
+    # grep for the property we want
+    # get the last match just in case
+    # strip the "property=" part but leave any '=' characters in the value
+
+    echo `sed '/^[[:space:]]*\#/d' $1 | grep $2  | tail -n 1 | cut -d "=" -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'`
+}
+
+#------------------------------------------------------------------------------
+# Main Script
+
+#echo baseDir=$BASEDIR
+#echo curDir=$CURDIR
+
+if [ ! -f $BASEDIR/sencha.cfg ]; then
+    die "Sencha Cmd folder ($BASEDIR) is missing sencha.cfg - aborting!"
+fi
+
+# Read the version info for this executing version of the SDK Tools:
+toolsCfg=$BASEDIR/sencha.cfg
+jvmArgs=$(getProp $toolsCfg cmd.jvm.args)
+
+
+# For Cygwin, switch $BASEDIR to Windows format before running java
+cygwin=false
+case "`uname`" in
+    CYGWIN*) cygwin=true;;
+esac
+
+if $cygwin; then
+    BASEDIR=`cygpath --absolute --windows "$BASEDIR"`
+fi
+
+
+# Delegate to Java all of the arguments and exit with its exit code:
+java $jvmArgs -jar $BASEDIR/sencha.jar "$@"
+ecode=$?
+# test for the redirect code
+if [ $ecode == 42 ]
+then
+    redirect=$(getProp sencha.redirect redirect)
+    rm sencha.redirect
+    $redirect/sencha "$@"
+    exit $?
+else
+    exit $ecode
+fi

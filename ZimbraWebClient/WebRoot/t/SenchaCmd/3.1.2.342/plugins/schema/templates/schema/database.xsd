@@ -1,0 +1,1021 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           xmlns="com.sencha.database.schema"
+           xmlns:db="com.sencha.database.schema"
+           targetNamespace="com.sencha.database.schema">
+
+    <!--
+    Part of the art form of XML Schema is putting the documentation annotations in places
+    where XML Schema-aware editors pick them up. Visual Studio is perhaps the best at this
+    and picks up documentation on type declarations and displays it on elements (as well
+    as attributes) of those types. NetBeans is not quite as clever and only picks up docs
+    when they are placed on the actual element (or attribute) declaration.
+    
+    The other consideration is that we want to allow two file types to use the schema. That
+    is:
+
+        - database
+        - module
+    
+    This allows whole databases to be declared in one file like so:
+    
+        <database xmlns="com.sencha.database.schema">
+            <entity name="Foo">
+            ...
+        </database>
+    
+    But also allows just a piece of the database (an entity, for example) to be declared
+    like so:
+    
+        <module xmlns="com.sencha.database.schema">
+            <entity name="Foo">
+                ...
+            </entity>
+        </module>
+
+    The multi-file use case is desirable in systems with large numbers of entities. The
+    validation of the whole database schema will take place when all of the files are
+    loaded for processing. This would be drive by a single file containing the database
+    like so:
+    
+        <database xmlns="com.sencha.database.schema">
+            <import src="*.xml"/>
+        </database>
+
+    This assumes that the other modules (and only valid modules) are co-located with an
+    "xml" extension.
+    -->
+
+    <!--
+    ===========================================================================
+    Misc types
+    ===========================================================================
+    -->
+
+    <xs:simpleType name="NonEmptyString">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="Identifier">
+        <xs:restriction base="NonEmptyString">
+            <xs:pattern value="[_a-zA-Z][_a-zA-Z0-9]{0,29}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:attributeGroup name="IfUnless">
+        <xs:attribute name="if" type="NonEmptyString" use="optional"/>
+        <xs:attribute name="unless" type="NonEmptyString" use="optional"/>
+    </xs:attributeGroup>
+
+    <xs:complexType name="Docs">
+        <xs:simpleContent>
+            <xs:extension base="xs:string"/>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="Option">
+        <xs:attribute name="name" type="NonEmptyString" use="required"/>
+        <xs:attribute name="value" type="NonEmptyString" use="required"/>
+        <xs:attribute name="inheritable" type="xs:boolean" default="false">
+            <xs:annotation>
+                <xs:documentation>
+                    Specify "true" for this option to be inherited by contained
+                    elements.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attributeGroup ref="IfUnless"/>
+    </xs:complexType>
+
+    <xs:group name="Options">
+        <xs:sequence>
+            <xs:element name="option" type="Option" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        Declares an "option" on this element. These are consumed by
+                        code generators and other external logic.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:group>
+
+    <xs:group name="MetaData">
+        <xs:sequence>
+            <xs:element name="doc" type="Docs" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Optional documentation for this element.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:group ref="Options"/>
+        </xs:sequence>
+    </xs:group>
+
+    <!--
+    ===========================================================================
+    Column types
+    ===========================================================================
+    -->
+
+    <xs:simpleType name="AccessSpecifier">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="public">
+                <xs:annotation>
+                    <xs:documentation>
+                        This item's access is "public" in generated code.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="protected">
+                <xs:annotation>
+                    <xs:documentation>
+                        This item's accces is "protected" in generated code.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="private">
+                <xs:annotation>
+                    <xs:documentation>
+                        This item's access is "private" in generated code.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ColumnIndexType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="false">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column is not indexed (the default).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="true">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column is indexed (but not unique).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="unique">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column is uniquely indexed.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="BasicColumn">
+        <xs:sequence>
+            <xs:group ref="MetaData"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="Identifier" use="required"/>
+        <xs:attribute name="nullable" type="xs:boolean" use="optional"/>
+        <xs:attribute name="access" type="AccessSpecifier" default="public">
+            <xs:annotation>
+                <!--
+                Visual Studio documents the allowed values via the type declaration, but
+                NetBeans (at least) does not.
+                -->
+                <xs:documentation>
+                    This field's access in generated code, either "public" (the default),
+                    "protected" or "private".
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="indexed" type="ColumnIndexType" default="false">
+            <xs:annotation>
+                <xs:documentation>
+                    Specifies whether this column is indexed (alone) and how. Multi-column
+                    indexing is specified using "index" at the table level.
+                    
+                    Values are "false" (the default), "true" (but not unique) and "unique".
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attributeGroup ref="IfUnless"/>
+    </xs:complexType>
+
+    <xs:complexType name="Reference">
+        <xs:complexContent>
+            <xs:extension base="BasicColumn">
+                <xs:sequence>
+                    <xs:element name="map" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Defines a mapping of a field in the referenced entity to
+                                a faux-field in this entity. For example, a "userId" may
+                                reference a "User" entity and have a mapping of the "name"
+                                field of "User" as "userName". An entity containing one
+                                or more reference mappings is said to be "augmented".
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                            <xs:attribute name="field">
+                                <xs:annotation>
+                                    <xs:documentation>
+                                        The name of a field in the target entity.
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:attribute>
+                            <xs:attribute name="as">
+                                <xs:annotation>
+                                    <xs:documentation>
+                                        The name of the faux-field in this entity.
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:attribute>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="to" type="Identifier" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            The name of the entity to which this reference points.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="role" type="Identifier" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            The role of this reference (default is the same as "to").
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="foreign-key-name" type="Identifier" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            The name of the foreign key.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Column">
+        <xs:complexContent>
+            <xs:extension base="BasicColumn">
+                <xs:sequence>
+                    <xs:element name="foreign-key" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                            <xs:group ref="MetaData"/>
+                            <xs:attribute name="name" type="Identifier" use="optional">
+                                <xs:annotation>
+                                    <xs:documentation>
+                                        The name of the foreign key.
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:attribute>
+                            <xs:attribute name="table" type="Identifier" use="required">
+
+                            </xs:attribute>
+                            <xs:attribute name="column" type="Identifier" use="optional">
+
+                            </xs:attribute>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:attributeGroup name="PrecAndScale">
+        <xs:attribute name="prec" type="xs:unsignedInt" use="required"/>
+        <xs:attribute name="scale" type="xs:unsignedInt" use="optional"/>
+    </xs:attributeGroup>
+
+    <xs:simpleType name="ColumnTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BIT"/>
+            <xs:enumeration value="TINYINT"/>
+            <xs:enumeration value="SMALLINT"/>
+            <xs:enumeration value="INTEGER"/>
+            <xs:enumeration value="BIGINT"/>
+            <xs:enumeration value="FLOAT"/>
+            <xs:enumeration value="REAL"/>
+            <xs:enumeration value="NUMERIC"/>
+            <xs:enumeration value="DECIMAL"/>
+            <xs:enumeration value="CHAR"/>
+            <xs:enumeration value="VARCHAR"/>
+            <xs:enumeration value="LONGVARCHAR"/>
+            <xs:enumeration value="GUID"/>
+            <xs:enumeration value="DATE"/>
+            <xs:enumeration value="TIME"/>
+            <xs:enumeration value="TIMESTAMP"/>
+            <xs:enumeration value="BINARY"/>
+            <xs:enumeration value="VARBINARY"/>
+            <xs:enumeration value="LONGVARBINARY"/>
+            <xs:enumeration value="NULL"/>
+            <xs:enumeration value="BLOB"/>
+            <xs:enumeration value="CLOB"/>
+            <xs:enumeration value="BOOLEANINT"/>
+            <xs:enumeration value="BOOLEANCHAR"/>
+            <xs:enumeration value="DOUBLE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ColumnType">
+        <xs:union memberTypes="ColumnTypeEnum Identifier"/>
+    </xs:simpleType>
+
+    <xs:complexType name="TypeDef">
+        <xs:group ref="MetaData"/>
+
+        <xs:attribute name="name" type="Identifier" use="required"/>
+        <xs:attribute name="type" type="ColumnTypeEnum" use="required"/>
+
+        <xs:attribute name="hasSize" type="xs:boolean" use="optional"/>
+        <xs:attribute name="hasScale" type="xs:boolean" use="optional"/>
+        <xs:attribute name="nullable" type="xs:boolean" use="optional"/>
+        <xs:attribute name="size" type="xs:unsignedInt" use="optional"/>
+        <xs:attribute name="scale" type="xs:unsignedInt" use="optional"/>
+        <xs:attribute name="textual" type="xs:boolean" use="optional"/>
+        <xs:attribute name="sqlType" type="NonEmptyString" use="optional"/>
+        <xs:attribute name="sizelessTpl" type="xs:string" use="optional"/>
+        <xs:attribute name="sizeTpl" type="xs:string" use="optional"/>
+        <xs:attribute name="sizeScaleTpl" type="xs:string" use="optional"/>
+
+        <xs:attributeGroup ref="IfUnless"/>
+    </xs:complexType>
+
+    <xs:complexType name="GenericColumn">
+        <xs:complexContent>
+            <xs:extension base="Column">
+                <xs:attribute name="default" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string"/>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="type" type="ColumnType" use="required"/>
+                <xs:attribute name="size" type="xs:unsignedInt" use="optional"/>
+                <xs:attribute name="scale" type="xs:unsignedInt" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Boolean">
+        <xs:complexContent>
+            <xs:extension base="Column">
+                <xs:attribute name="default" use="optional">
+                    <xs:simpleType>
+                        <xs:union>
+                            <xs:simpleType>
+                                <xs:restriction base="xs:unsignedByte">
+                                    <xs:minInclusive value="0"/>
+                                    <xs:maxInclusive value="1"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                            <xs:simpleType>
+                                <xs:restriction base="xs:boolean"/>
+                            </xs:simpleType>
+                        </xs:union>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Byte">
+        <xs:complexContent>
+            <xs:extension base="Column">
+                <xs:attribute name="default" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:byte"/>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Short">
+        <xs:complexContent>
+            <xs:extension base="Column">
+                <xs:attribute name="default" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:short"/>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Int">
+        <xs:complexContent>
+            <xs:extension base="Column">
+                <xs:attribute name="default" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:int"/>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Long">
+        <xs:complexContent>
+            <xs:extension base="Column">
+                <xs:attribute name="default" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:long"/>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Decimal">
+        <xs:complexContent>
+            <xs:extension base="Column">
+                <xs:attribute name="default" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal"/>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attributeGroup ref="PrecAndScale"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Double">
+        <xs:complexContent>
+            <xs:extension base="Column">
+                <xs:attribute name="default" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:double"/>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Float">
+        <xs:complexContent>
+            <xs:extension base="Column">
+                <xs:attribute name="default" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:float"/>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="String">
+        <xs:complexContent>
+            <xs:extension base="Column">
+                <xs:attribute name="default" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string"/>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="size" type="xs:unsignedInt" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Date">
+        <xs:complexContent>
+            <xs:extension base="Column">
+                <xs:attribute name="default" use="optional">
+<!--                    <xs:simpleType>
+                        <xs:restriction base="xs:date"/>
+                    </xs:simpleType>-->
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Time">
+        <xs:complexContent>
+            <xs:extension base="Column">
+                <xs:attribute name="default" use="optional">
+<!--                    <xs:simpleType>
+                        <xs:restriction base="xs:time"/>
+                    </xs:simpleType>-->
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="DateTime">
+        <xs:complexContent>
+            <xs:extension base="Column">
+                <xs:attribute name="default" use="optional">
+<!--                    <xs:simpleType>
+                        <xs:restriction base="xs:datetime"/>
+                    </xs:simpleType>-->
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Guid">
+        <xs:complexContent>
+            <xs:extension base="Column">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!--
+    ===========================================================================
+    Table et.al.  (entity and matrix as well)
+    ===========================================================================
+    -->
+
+    <xs:group name="Columns">
+        <xs:choice>
+            <xs:element name="boolean" type="Boolean">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a boolean (true or false) or single-bit value (0 or 1).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="byte" type="Byte">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a single byte value (-128 to 127 inclusive).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="short" type="Short">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a two byte integer value (-32,768 to 32,767 inclusive).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="int" type="Int">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a four byte integer value (-2,147,483,648 to 2,147,483,647 inclusive).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="long" type="Long">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores an eight byte integer value (-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807 inclusive).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="decimal" type="Decimal">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a base-10, decimal value. In C#, this type should map to
+                        the "decimal" data type. In Java, this should map to a BigDecimal. In
+                        other cases, this will likely map to a floating point value.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="float" type="Float">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a floating point value equivalent to a 32-bit IEEE 754
+                        floating point number.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="double" type="Double">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a floating point value equivalent to a 64-bit IEEE 754
+                        floating point number.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="string" type="String">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a sequence of characters.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="date" type="Date">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a Date (no time information).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="time" type="Time">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a Time (no date information).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="datetime" type="DateTime">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a Date with Time information.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="guid" type="Guid">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a GUID (sometimes called a "UUID"). This is a 128-bit
+                        integer value but is often stored as a string.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="column" type="GenericColumn">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a generic column that does not fit any other of the
+                        other declared column types. This can provide an "escape" mechanism
+                        to more pecisely oontrol the column generated in the database.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:choice>
+    </xs:group>
+
+    <xs:group name="TableForeignKeys">
+        <xs:choice>
+            <xs:element name="foreign-key">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a generic column that does not fit any other of the
+                        other declared column types. This can provide an "escape" mechanism
+                        to more pecisely oontrol the column generated in the database.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:group ref="MetaData"/>
+                        <xs:element name="column" minOccurs="1" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:attribute name="name" type="Identifier" use="required">
+
+                                </xs:attribute>
+                                <xs:attribute name="to" type="Identifier" use="required">
+
+                                </xs:attribute>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="name" type="Identifier" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The name of the foreign key.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="to" type="Identifier" use="required">
+
+                    </xs:attribute>
+                    <xs:attributeGroup ref="IfUnless"/>
+                </xs:complexType>
+
+                <!--
+                This key set is is used to ensure the foreign key does not use a column
+                more than once.
+                -->
+                <xs:key name="foreignKeyColumnNames">
+                    <xs:selector xpath="./db:column"/>
+                    <xs:field xpath="@name"/>
+                </xs:key>
+
+                <!--
+                This key set is is used to ensure the foreign key does not use a column
+                more than once.
+                -->
+                <xs:key name="foreignKeyToNames">
+                    <xs:selector xpath="./db:column"/>
+                    <xs:field xpath="@to"/>
+                </xs:key>
+            </xs:element>
+        </xs:choice>
+    </xs:group>
+
+    <xs:group name="TableIndexes">
+        <xs:choice>
+            <xs:element name="index">
+                <xs:annotation>
+                    <xs:documentation>
+                        Column stores a generic column that does not fit any other of the
+                        other declared column types. This can provide an "escape" mechanism
+                        to more pecisely oontrol the column generated in the database.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:group ref="MetaData"/>
+                        <xs:element name="column" minOccurs="1" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:attribute name="name" type="Identifier">
+
+                                </xs:attribute>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="name" type="Identifier" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The name of the table index.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="unique" type="xs:boolean" use="required">
+
+                    </xs:attribute>
+                    <xs:attributeGroup ref="IfUnless"/>
+                </xs:complexType>
+
+                <!--
+                This key set is is used to ensure the index does not use a column more
+                than once.
+                -->
+                <xs:key name="indexColumnNames">
+                    <xs:selector xpath="./db:column"/>
+                    <xs:field xpath="@name"/>
+                </xs:key>
+            </xs:element>
+        </xs:choice>
+    </xs:group>
+
+    <xs:complexType name="Entity">
+        <xs:sequence>
+            <xs:group ref="MetaData"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:group ref="Columns"/>
+                <xs:element name="reference" type="Reference">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Column stores a reference (foreign key) to another entity.
+                            The type of this column and the target column it references
+                            comes from the primary key of the target entity.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:choice>
+            <xs:group ref="TableIndexes" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:group ref="TableForeignKeys" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="Identifier" use="required">
+            <xs:annotation>
+                <xs:documentation>
+                    The name of the entity table. Names longer than 30 characters can
+                    cause problems for some databases. This name should conform to the
+                    requirements as a programming language identifier.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="extends" type="Identifier" use="optional"/>
+        <xs:attribute name="abstract" type="xs:boolean" use="optional" default="false"/>
+        <xs:attribute name="primaryKey" type="Identifier" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    Optional primary key column for this table.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attributeGroup ref="IfUnless"/>
+    </xs:complexType>
+
+    <xs:complexType name="Matrix">
+        <xs:sequence>
+            <xs:group ref="MetaData"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="Identifier" use="required">
+            <xs:annotation>
+                <xs:documentation>
+                    The name of the matrix table. Names longer than 30 characters can
+                    cause problems for some databases. This name should conform to the
+                    requirements as a programming language identifier.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="left" type="Identifier" use="required">
+            <xs:annotation>
+                <xs:documentation>
+                    The name of the "left" table joined in this matrix relationship.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="right" type="Identifier" use="required">
+            <xs:annotation>
+                <xs:documentation>
+                    The name of the "right" table joined in this matrix relationship.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="leftName" type="Identifier" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    The name of the left column (holding the FK to the left table). The
+                    default is the name of the left table plus "Id".
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="rightName" type="Identifier" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    The name of the right column (holding the FK to the right table). The
+                    default is the name of the right table plus "Id".
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attributeGroup ref="IfUnless"/>
+    </xs:complexType>
+
+    <xs:complexType name="Table">
+        <xs:sequence>
+            <xs:group ref="MetaData"/>
+            <xs:group ref="Columns" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:group ref="TableIndexes" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:group ref="TableForeignKeys" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="Identifier" use="required">
+            <xs:annotation>
+                <xs:documentation>
+                    The name of the table. Names longer than 30 characters can cause
+                    problems for some databases. This name should conform to the
+                    requirements as a programming language identifier.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="primaryKey" type="Identifier" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    Optional primary key column for this table.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attributeGroup ref="IfUnless"/>
+    </xs:complexType>
+
+    <!--
+    ***************************************************************************
+    -->
+
+    <xs:complexType name="Import">
+        <xs:attribute name="src" type="NonEmptyString" use="required"/>
+        <xs:attributeGroup ref="IfUnless"/>
+    </xs:complexType>
+
+    <xs:group name="TopLevelElements">
+        <!--
+        These are the elements that can be placed in a "database" or "module".
+        -->
+        <xs:choice>
+            <xs:element name="entity" type="Entity">
+                <xs:annotation>
+                    <xs:documentation>
+                        Defines an Entity table.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="matrix" type="Matrix">
+                <xs:annotation>
+                    <xs:documentation>
+                        Defines a matrix (many-to-many) table.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="table" type="Table">
+                <xs:annotation>
+                    <xs:documentation>
+                        Defines a generic (non-entity) table.
+                    </xs:documentation>
+                </xs:annotation>
+
+                <!--
+                This key set ensures that all columns have unique names. It is also used to validate
+                column names like "primaryKey".
+                -->
+                <xs:key name="tableColumnNames">
+                    <xs:selector xpath="./db:bool|./db:byte|./db:short|./db:int|./db:long|./db:decimal|./db:float|./db:double|./db:real|./db:string|./db:guid|./db:column"/>
+                    <xs:field xpath="@name"/>
+                </xs:key>
+
+                <!--
+                This keyref validates that the "primaryKey" references a column in the table.
+                -->
+                <xs:keyref name="tablePK" refer="tableColumnNames">
+                    <xs:selector xpath="."/>
+                    <xs:field xpath="@primaryKey"/>
+                </xs:keyref>
+            </xs:element>
+            <xs:element name="typedef" type="TypeDef">
+                <xs:annotation>
+                    <xs:documentation>
+                        Defines a column type for reuse in entities and tables.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="import" type="Import">
+                <xs:annotation>
+                    <xs:documentation>
+                        Imports a module.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:choice>
+    </xs:group>
+
+    <xs:element name="module">
+        <xs:annotation>
+            <xs:documentation>
+                Declares a part of a database. This element can contain all other types of
+                elements or may import modules or both.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexType>
+            <xs:choice minOccurs="1" maxOccurs="unbounded">
+                <xs:group ref="TopLevelElements"/>
+                <xs:group ref="Options"/>
+            </xs:choice>
+        </xs:complexType>
+
+        <!--
+        This key set is just names of entities. This is used to validate "extends" and
+        "reference" statements to ensure they name an entity in the database. It also
+        ensures that we don't have duplicate entity names.
+        -->
+        <xs:key name="moduleEntityNames">
+            <xs:selector xpath="./db:entity"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+
+        <!--
+        This key set is simply to ensure all table names are unique.
+        -->
+        <xs:key name="moduleTableNames">
+            <xs:selector xpath="./db:entity|./db:matrix|./db:table"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+    </xs:element>
+
+    <xs:element name="database">
+        <xs:annotation>
+            <xs:documentation>
+                Declares a complete database. This element can contain all other types of
+                elements or may import modules or both.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="MetaData"/>
+                <xs:group ref="TopLevelElements" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+
+        <!--
+        This key set is just names of entities. This is used to validate "extends" and
+        "reference" statements to ensure they name an entity in the database. It also
+        ensures that we don't have duplicate entity names.
+        -->
+        <xs:key name="databaseEntityNames">
+            <xs:selector xpath="./db:entity"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+
+        <!--
+        This key set is simply to ensure all table names are unique.
+        -->
+        <xs:key name="databaseTableNames">
+            <xs:selector xpath="./db:entity|./db:matrix|./db:table"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+
+        <!--
+        This keyref ensures that all entities with "extends" attributes name a valid
+        entity as their base.
+        <xs:keyref name="databaseEntityExtends" refer="databaseEntityNames">
+            <xs:selector xpath="./db:entity"/>
+            <xs:field xpath="@extends"/>
+        </xs:keyref>
+        -->
+
+        <!--
+        This keyref ensures that all entities with "reference" columns name a valid
+        entity as the target of the reference.
+        <xs:keyref name="databaseEntityRefs" refer="databaseEntityNames">
+            <xs:selector xpath="./db:entity/db:reference"/>
+            <xs:field xpath="@to"/>
+        </xs:keyref>
+        -->
+    </xs:element>
+
+</xs:schema>

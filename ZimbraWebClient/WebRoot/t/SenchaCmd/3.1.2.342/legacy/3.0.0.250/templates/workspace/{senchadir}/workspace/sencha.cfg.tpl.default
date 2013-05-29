@@ -1,0 +1,7 @@
+# This configuration property (if set) is included by default in all compile commands
+# executed according to this formulation:
+#
+#   sencha compile -classpath=...,$\u007Bframework.classpath},$\u007Bworkspace.classpath},$\u007Bapp.classpath}
+#
+#workspace.classpath=
+workspace.build.dir=$\u007Bworkspace.dir}/build/$\u007Bapp.name}

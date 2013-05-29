@@ -1,0 +1,20 @@
+Ext.define('{modelNamespace}.{name}', {
+    extend: '{baseClass}',
+    
+    config: {
+        fields: [{%
+            values.fields = (function (fields) {
+                for (var ret = [], parts = fields.split(','), i = 0; i < parts.length; ++i) {
+                    var f = parts[i].split(':');
+                    ret.push({ name: f[0], type: f[1] });
+                }
+
+                return ret;
+
+            })(values.fields);
+        %}<tpl for="fields">
+            { name: '{name}', type: '{type}' }{[xindex == xcount ? '' : ',']}</tpl>
+{% /* blank line to reduce merge conflicts w/user edits */ %}
+        ]
+    }
+});

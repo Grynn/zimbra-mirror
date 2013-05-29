@@ -1,0 +1,16 @@
+package.name={pkgName}
+
+package.sass.namespace=Ext
+
+package.classpath=$\u007Bpackage.dir}/src
+package.overrides=$\u007Bpackage.dir}/overrides
+
+package.sass.srcpath=$\u007Bpackage.dir}/sass/src
+package.sass.varpath=$\u007Bpackage.dir}/sass/var
+package.sass.etcpath=$\u007Bpackage.dir}/sass/etc/all.scss
+
+package.build.dir=$\u007Bpackage.dir}/build
+
+#==============================================================================
+# Custom Properties - Place customizations below this line to avoid merge
+# conflicts with newer versions

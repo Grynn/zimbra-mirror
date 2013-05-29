@@ -1,0 +1,94 @@
+<!--
+    Copyright (c) 2012. Sencha Inc.
+    
+    This file is a Sencha Cmd plugin that provides support for Sencha Architect. The big
+    point of contention between the two is regarding code generation. To prevent any
+    surprises, the incompatible generators will fail gracefully in the "-before-generate"
+    target.
+-->
+<project>
+    <!--
+    IMPORTANT: This file is private and should not be edited.
+    -->
+    <target name="init-plugin">
+        <!-- nothing to do here... yet -->
+    </target>
+
+    <target name="enable-architect" unless="architect.enabled">
+        <!--
+        Determine if the project is a Sencha Architect project. Currently, we just check
+        for the presence of the ".architect" file.
+        -->
+        <if>
+            <resourceexists>
+                <file file="${args.path}/.architect"/>
+            </resourceexists>
+            <then>
+                <property name="architect.enabled" value="true"/>
+                <echo>Initializing Sencha Architect / Cmd plugin...</echo>
+            </then>
+<!--
+            <else>
+                <echo>Non-Sencha Architect project - disabling Sencha Architect / Cmd plugin...</echo>
+            </else>-->
+        </if>
+    </target>
+    
+    <target name="-before-generate-view" depends="enable-architect" if="architect.enabled">
+        <fail>Sencha Cmd cannot generate views for a Sencha Architect project.</fail>
+    </target>
+    
+    <target name="-before-generate-form" depends="enable-architect" if="architect.enabled">
+        <fail>Sencha Cmd cannot generate forms for a Sencha Architect project.</fail>
+    </target>
+    
+    <target name="-before-generate-controller" depends="enable-architect" if="architect.enabled">
+        <fail>Sencha Cmd cannot generate controllers for a Sencha Architect project.</fail>
+    </target>
+    
+    <target name="-before-generate-profile" depends="enable-architect" if="architect.enabled">
+        <fail>Sencha Cmd cannot generate profiles for a Sencha Architect project.</fail>
+    </target>
+    
+    <target name="-before-generate-store" depends="enable-architect" if="architect.enabled">
+        <fail>Sencha Cmd cannot generate stores for a Sencha Architect project.</fail>
+    </target>
+    
+    <target name="xxx-before-generate-model" depends="enable-architect" if="architect.enabled">
+    </target>
+
+    <target name="-after-generate-model" depends="enable-architect" if="architect.enabled">
+        <!--
+        After each "sencha generate model" request, we need to synchronize the metadata
+        for the model. Or create it if this is the first generated version. It is very
+        important to support regeneration of models since users ultimately want to have
+        a single point of maintenance of their ERD and the front-end is really just one
+        consumer of that information.
+        -->
+        <x-script-def name="x-architect-update-model">
+            <script src="${cmd.dir}/ant/JSON.js"/>
+            <script src="${cmd.dir}/ant/ant-util.js"/>
+            <script src="${cmd.dir}/js/all.js"/>
+            <script src="${basedir}/architect/plugin.js"/>
+
+            <attribute name="name"/>
+            <attribute name="fields"/>
+
+            var app = new Architect.meta.App({
+                name: project.getProperty('app.name'),
+                path: project.getProperty('args.path')
+            });
+
+            var model = new Architect.meta.Model({
+                pluginDir: joinPath(project.getProperty("basedir"), "architect"),
+                app:       app,
+                name:      '' + attributes.get("name"),
+                fields:    '' + attributes.get("fields")
+            });
+
+            model.update();
+        </x-script-def>
+
+        <x-architect-update-model name="${args.name}" fields="${args.fields}" />
+    </target>
+</project>

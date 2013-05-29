@@ -1,0 +1,292 @@
+<project name="cmd-root-plugin" basedir=".">
+
+    <target name="init-sencha-command">
+        <taskdef resource="com/sencha/ant/antlib.xml" 
+                 classpath="${cmd.dir}/sencha.jar"
+                 loaderref="senchaloader"/>
+    </target>
+
+    <target name="init-properties">
+        <property name="senchadir" value=".sencha"/>
+        <property name="upgrade.temp.dir" location="${args.path}/upgrade-temp"/>
+    </target>
+
+    <target name="init" depends="init-properties,init-sencha-command">
+        <x-script-def name="x-list-mvc-files" language="javascript">
+            <attribute name="dir"/>
+            <attribute name="property"/>
+            <![CDATA[
+                importPackage(java.lang);
+                importPackage(java.io);
+                importPackage(com.sencha.util);
+                importPackage(com.sencha.logging);
+
+                var _logger = SenchaLogManager.getLogger('x-list-mvc-files'),
+                    scanDir = attributes.get('dir'),
+                    propName  = attributes.get('property'),
+                    dirStack = [],
+                    classNames = [],
+                    processFile = function(filename) {
+                        var className = filename.replace(".js", ""),
+                            namespace = dirStack.join('.'),
+                            qualifiedName = namespace + '.' + className;
+                        if(qualifiedName.indexOf('.') == 0) {
+                            qualifiedName = qualifiedName.substring(1);
+                        }
+                        _logger.debug("Detected mvc component {}", qualifiedName);
+                        classNames.push(qualifiedName);
+                    },
+                    walkDirectory = function(scanDir) {
+                        _logger.debug("Scanning for mvc components in {}",
+                            PathUtil.getAbsolutePath(scanDir));
+                        var file, f, name,
+                            files = scanDir.listFiles();
+                        if(files) {
+                            for (f = 0; f < files.length; f++) {
+                                file = files[f];
+                                name = file.getName();
+                                _logger.debug('processing file {}',
+                                    PathUtil.getAbsolutePath(file));
+                                if(file.isDirectory()) {
+                                    dirStack.push(name);
+                                    walkDirectory(file);
+                                    dirStack.pop();
+                                } else {
+                                    if(name.endsWith('.js')) {
+                                        processFile(name);
+                                    }
+                                }
+                            }
+                        }
+                    };
+
+                walkDirectory(new File(scanDir));
+                classNames.sort();
+                project.setProperty(propName, classNames.join(','));
+            ]]>
+        </x-script-def>
+
+    </target>
+
+    <target name="copy-framework-to-workspace-impl">
+        <propertyfile file="${args.path}/${senchadir}/workspace/sencha.cfg">
+            <entry type="string"
+                   operation="="
+                   key="workspace.cmd.version" 
+                   value="${cmd.version}"/>
+        </propertyfile>
+    </target>
+    <target name="-before-copy-framework-to-workspace"/>
+    <target name="-after-copy-framework-to-workspace"/>
+    <target name="copy-framework-to-workspace"
+            depends="init,copy-framework-to-workspace-impl"
+            unless="args.skipCopy"/>
+
+    <target name="generate-workspace-impl" unless="args.skipCreate">
+        <echo>generating into ${args.path} from ${cmd.config.dir}/templates/workspace</echo>
+        <mkdir dir="${args.path}/packages"/>
+        <x-generate dir="${cmd.config.dir}/templates/workspace"
+                    todir="${args.path}">
+            <param name="senchadir" value="${senchadir}"/>
+        </x-generate>
+    </target>
+    <target name="-before-generate-workspace"/>
+    <target name="-after-generate-workspace">
+        <if>
+            <available 
+                file="${args.path}/packages/ext-theme-classic" 
+                type="dir"/>
+            <then>
+                <if>
+                    <available 
+                        file="${args.path}/ext/packages/ext-theme-classic" 
+                        type="dir"/>
+                    <then>
+                        <delete includeemptydirs="true">
+                            <fileset dir="${args.path}/packages">
+                                <include name="ext-theme-*/**/*"/>
+                                <include name="ext-locale-*/**/*"/>
+                                <include name="ext-theme-*"/>
+                                <include name="ext-locale-*"/>
+                            </fileset>
+                        </delete>
+                    </then>
+                </if>
+            </then>
+        </if>
+    </target>
+    <target name="generate-workspace"
+            depends="init,generate-workspace-impl,copy-framework-to-workspace"/>
+
+    <target name="generate-app-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <!--
+        Fix up the base version of app.js when coming from a legacy version or crossing plugin boundaries
+        
+        During an upgrade, the algorithm is:
+            1.) Move app.js to a temp dir
+            2.) Generate the core app to update the base version of the file 
+            3.) Now that the base version has been updated correctly,
+                move app.js back from the temp dir to the app dir
+            4.) Subsequent upgrades should, usually, be non-conflicting because we will only be
+                updating the app.js files' scaffolding, which is not in locations where the user 
+                will be editing the file.
+    -->
+    <target name="before-upgrade" if="args.noappjs">
+        <property name="app.dir" value="${args.path}"/>
+        <move file="${app.dir}/app.js" tofile="${upgrade.temp.dir}/app.js" failonerror="false" quiet="true"/>
+        <if>
+            <not>
+                <available file="${upgrade.temp.dir}/app.js"/>
+            </not>
+            <then>
+                <move file="${app.dir}/app/app.js" tofile="${upgrade.temp.dir}/app.js" failonerror="false" quiet="true"/>
+            </then>
+            <else>
+                <delete file="${app.dir}/app/app.js" failonerror="false" quiet="true"/>
+            </else>
+        </if>
+    </target>
+    <target name="-after-generate-app" unless="args.skipVerStamp">
+        <property name="app.dir" value="${args.path}"/>
+        <x-property-file file="${app.dir}/.sencha/app/sencha.cfg">
+            <entry type="string" 
+                   operation="="
+                   key="app.framework.version" 
+                   value="${framework.version}"/>
+            <entry type="string"
+                   operation="="
+                   key="app.cmd.version" 
+                   value="${cmd.version}"/>
+        </x-property-file>
+    </target>
+    <target name="after-upgrade" if="args.noappjs">
+        <move file="${upgrade.temp.dir}/app.js" tofile="${app.dir}/app.js" failonerror="false" quiet="true"/>
+        <delete dir="${upgrade.temp.dir}" failonerror="false" quiet="true"/>
+    </target>
+    <target name="generate-app"
+            depends="init,before-upgrade,generate-app-impl,after-upgrade"/>
+
+    <!-- ****************************************************************** -->
+
+    <target name="generate-theme-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+
+    <target name="generate-theme"
+            depends="init,generate-theme-impl"/>
+
+    <target name="generate-controller-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+
+    <target name="generate-controller"
+            depends="init,generate-controller-impl"/>
+
+    <target name="generate-profile-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="generate-profile"
+            depends="init,generate-profile-impl"/>
+
+
+    <target name="generate-model-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="generate-model"
+            depends="init,generate-model-impl"/>
+
+    <target name="generate-form-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="generate-form"
+            depends="init,generate-form-impl"/>
+
+
+    <target name="generate-view-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="generate-view"
+            depends="init,generate-view-impl"/>
+
+    <target name="app-build-impl">
+
+        <if>
+            <isset property="args.clean"/>
+            <then>
+                <ant dir="${app.dir}"
+                     inheritall="true"
+                     inheritrefs="true"
+                     target="clean">
+                </ant>
+            </then>
+        </if>
+        <ant dir="${app.dir}"
+             inheritall="true"
+             inheritrefs="true"
+             target="build">
+        </ant>
+    </target>
+
+    <target name="app-build"
+            depends="init,app-build-impl"/>
+
+    <target name="app-upgrade-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="-after-app-upgrade">
+        <x-sencha-command dir="${app.dir}" inheritall="false">
+            ant
+            clean
+        </x-sencha-command>
+    </target>
+    <target name="app-upgrade"
+            depends="init,app-upgrade-impl"/>
+
+    <target name="app-resolve-impl">
+        <script language="javascript">
+            importPackage(java.io);
+            importPackage(com.sencha.util);
+            importPackage(com.sencha.logging);
+            importPackage(com.sencha.tools.external);
+
+            var _logger = SenchaLogManager.getLogger('app-resolve'),
+                runner = new PhantomJsRunner(),
+                args = [
+                    PathUtil.join(project.getProperty("cmd.dir"), 'dependencies.js'),
+                    project.getProperty("args.uri"),
+                    project.getProperty("args.output")
+                ],
+                runnerOut = runner.run(args),
+                exitCode = runnerOut.getExitCode(),
+                stdout = runnerOut.getOutput();
+
+            if(exitCode > 0) {
+                _logger.error("Failed capturing Dependencies");
+                _logger.error(stdout);
+                throw 'Failed capturing dependencies';
+            }
+        </script>
+    </target>
+
+    <target name="app-resolve"
+            depends="init,app-resolve-impl"/>
+
+    <target name="app-refresh-impl">
+    </target>
+    <target name="app-refresh"
+            depends="init,app-refresh-impl"/>
+    
+    <macrodef name="x-upgrade">
+        <attribute name="appcfg"/>
+        <attribute name="workspacecfg"/>
+        <sequential>
+            <x-remove-timestamp file="@{appcfg}"/>
+            <x-remove-timestamp file="@{workspacecfg}"/>
+            
+            <replaceregexp file="@{appcfg}" match="&#10;app\.cmd\.version=.*&#10;" replace=""/>
+            <replaceregexp file="@{appcfg}" match="app\.id=.*&#10;" replace=""/>
+        </sequential>
+    </macrodef>
+</project>

@@ -1,0 +1,55 @@
+# This config file configures the Sencha Package Manager. Properties either have a
+# "repo.local." prefix or a "repo.remote." prefix depending on whether they control
+# a local or remote repository option.
+#
+# This file can use Ant-like property substitution syntax. The following are
+# predefined properties:
+#
+#   * cmd.dir   : The Sencha Cmd installation folder.
+#   * repo.dir  : The repository base directory.
+
+#------------------------------------------------------------------------------
+# This is the name of the user associated with the repository.
+
+repo.local.username={username}
+
+#------------------------------------------------------------------------------
+# Packages added to the repo can be signed by the repo's signing certificate.
+# If the package creator name matches this wildcard (e.g., "foo*"), the package
+# will be signed automatically when added. This list can be a pipe-separated
+# set of name patterns (e.g., "foo*|bar").
+#
+# The default is "{username}" (the user who created this repo). Set to blank
+# or comment out to disable auto-signing.
+#
+# These names come from the package.json file as validated by the certificate
+# used to sign the package. The "repo.local.autosign.trust" config option is
+# useful for establishing the trustworthiness of the package author's name.
+
+repo.local.autosign.match={username}
+
+#------------------------------------------------------------------------------
+# Packages author names can be anything, so this setting is used to determine
+# if the author name is trusted. Since the user's certificate is included in
+# the package, it can be signed by other parties. One of these parties must be
+# found in the signatures of a certificate for it to be auto-signed. This set
+# of certificates is located using the "repo.local.cert.store" option.
+#
+# These trusted names can be wildcards as repo.local.autosign.match (e.g.,
+# "Sencha|My Company").
+
+repo.local.autosign.trust=Sencha
+
+#------------------------------------------------------------------------------
+# This folder is where trusted certificates are stored. The first folder listed
+# should be the writable location where new certificates will be added for the
+# repository. Any other sources listed (comma separated) will be considered as
+# readonly. There must be at least one folder given to store the repository's
+# own certificate. Typically a second (readonly) folder is given to trust the
+# Sencha Cmd certificate store.
+
+repo.local.cert.store=$\u007Brepo.dir}/.sencha/repo/trust,$\u007Bcmd.dir}/trust
+
+#==============================================================================
+# Custom Properties - Place customizations below this line to avoid merge
+# conflicts with newer versions

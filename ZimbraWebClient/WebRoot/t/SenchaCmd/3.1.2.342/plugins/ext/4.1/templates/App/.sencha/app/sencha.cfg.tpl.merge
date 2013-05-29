@@ -1,0 +1,15 @@
+app.name={name}
+app.framework={frameworkName}
+app.classpath=$\u007Bapp.dir}/app,$\u007Bapp.dir}/app.js
+app.build.dir=$\u007Bworkspace.build.dir}/$\u007Bapp.name}
+
+# This property can be modified to change the input and output page file 
+# used in the compile command. (eg: index.aspx, index.jsp ... )
+app.page.name=index.html
+
+# the input page file
+app.page.file=$\u007Bapp.dir}/$\u007Bapp.page.name}
+
+#==============================================================================
+# Custom Properties - Place customizations below this line to avoid merge
+# conflicts with newer versions

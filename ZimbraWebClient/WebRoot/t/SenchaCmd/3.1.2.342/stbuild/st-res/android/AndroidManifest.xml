@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="%s" android:versionCode="%d" android:versionName="%s">
+	<uses-sdk android:minSdkVersion="%s" android:targetSdkVersion="15" />
+%s	<application android:icon="@drawable/icon" android:label="%s">
+		<activity android:name=".STActivity"
+%s			android:label="%s">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+%s
+%s
+%s
+		</activity>
+	</application>
+</manifest>

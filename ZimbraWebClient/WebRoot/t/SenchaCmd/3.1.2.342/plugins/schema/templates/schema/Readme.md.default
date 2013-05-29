@@ -1,0 +1,5 @@
+# Schema
+
+This folder contains the pieces that define a Database Schema. The root of this definition
+is the `database.xml` file in this directory. That file imports definitions from other
+sub-folders such as "entities".

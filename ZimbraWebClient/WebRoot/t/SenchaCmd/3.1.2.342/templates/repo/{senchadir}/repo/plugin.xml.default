@@ -1,0 +1,77 @@
+<project name="cmd-repo-plugin" basedir=".">
+    <!--
+    This file contains targets that area called when various repository actions take
+    place. This script is a bit different than a normal Ant script in that the Package
+    Manager loads this script and holds on to it for its life-time. When this is first
+    initialized, the (optional) "init-plugin" target is executed. After that time,
+    other targets are executed as package commands (e.g., "sencha package add") are
+    performed.
+
+    IMPORTANT: The "args." properties are *reset* on each of these calls. This means
+    that, unlike traditional Ant scripts, these properties change over time. This is
+    limited to "args." properties, however.
+
+    All other configuration properties from the user's application, package and/or
+    workspace (depending on current directory) are loaded and available from the
+    beginning. The order of these property definitions is as follows:
+
+        (command line)
+        ${app.dir}/.sencha/app/sencha.cfg
+        ${package.dir}/.sencha/package/sencha.cfg
+        ${workspace.dir}/.sencha/workspace/sencha.cfg
+        ${cmd.dir}/sencha.cfg
+        ${repo.local.dir}/.sencha/repo/sencha.cfg
+
+    Remember that properties are write-once, so the first of these to set a property
+    is the winner.
+
+    NOTE: The availability of "app.", "package." and "workspace." properties is not
+    typically relevant to the operation of the local repository. They are just loaded
+    automatically based on the current directory at the time Sencha Cmd is launched.
+    -->
+
+<!--
+    <target name="init-plugin">
+    </target>
+-->
+
+<!--
+    <target name="-before-package-sign">
+        <if>
+            <istrue value="${args.creator}"/>
+            <then>
+                <echo>Adding authored pkg file: ${args.pkg.file}</echo>
+            </then>
+            <else>
+                <echo>Adding third-party pkg file: ${args.pkg.file}</echo>
+            </else>
+        </if>
+    </target>
+-->
+
+<!--
+    <target name="-before-package-add">
+        <echo>Adding pkg file: ${args.pkg.file}</echo>
+        <echo>${args.pkg.name} / ${args.pkg.version}</echo>
+    </target>
+-->
+
+<!--
+    <target name="-after-package-add">
+        <echo>Added pkg file: ${args.pkg.file}</echo>
+        <echo>${args.pkg.name} / ${args.pkg.version}</echo>
+    </target>
+-->
+
+<!--
+    <target name="-before-package-remove">
+        <echo>Removing: ${args.pkg.name} / ${args.pkg.version}</echo>
+    </target>
+-->
+
+<!--
+    <target name="-after-package-remove">
+        <echo>Removed: ${args.pkg.name} / ${args.pkg.version}</echo>
+    </target>
+-->
+</project>

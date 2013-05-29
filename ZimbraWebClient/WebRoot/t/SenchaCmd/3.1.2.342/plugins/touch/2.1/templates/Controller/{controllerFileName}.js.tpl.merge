@@ -1,0 +1,17 @@
+Ext.define('{controllerNamespace}.{controllerName}', {
+    extend: 'Ext.app.Controller',
+    
+    config: {
+        // refs: {
+        //     TODO: add refs here
+        // },
+        // control: {
+        //     TODO: add event handlers here    
+        // }
+    },
+    
+    // Called when the Application is launched, remove if not needed
+    launch: function(app) {
+        
+    }
+});

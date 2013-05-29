@@ -1,0 +1,413 @@
+<project name="ext-41-plugin" basedir=".">
+    <!--
+    IMPORTANT: This file is private and should not be edited.
+    -->
+    <import file="${cmd.config.dir}/plugin.xml"/>
+
+    <target name="init-properties"
+            depends="cmd-root-plugin.init-properties">
+        <!--init the defualt app path here-->
+        <property name="args.path" location="${basedir}/../../"/>
+        <property name="templates.dir"
+                  location="${framework.config.dir}/templates"/>
+    </target>
+
+    <!--
+        Copies select files from the base sdk directory into the  new application
+        directory structure
+    -->
+    <target name="copy-framework-to-workspace-impl"
+            depends="cmd-root-plugin.copy-framework-to-workspace-impl">
+        <property name="framework.target.dir" location="${framework.path}"/>
+        <copy todir="${framework.target.dir}">
+            <fileset dir="${framework.dir}"
+                     includes="src/**/*,
+                               builds/**/*,
+                               cmd/**/*,
+                               locale/**/*,
+                               resources/**/*,
+                               *.js,
+                               build.xml,
+                               license.txt"/>
+        </copy>
+
+        <copy todir="${framework.target.dir}/src/ux">
+            <fileset dir="${framework.dir}/examples/ux"
+                     includes="**/*"/>
+        </copy>
+        
+        <propertyfile file="${args.path}/${senchadir}/workspace/sencha.cfg">
+            <!--apply new defaults if unset-->
+            <entry type="string" 
+                   operation="="
+                   key="workspace.packages.dir" 
+                   default="$${workspace.dir}/packages"/>
+            
+            <!--update existing values-->
+            <entry type="string" 
+                   operation="="
+                   key="${framework.name}.dir" 
+                   value="$${workspace.dir}/${framework.relative.path}"/>
+            <entry type="string"
+                   operation="="
+                   key="workspace.cmd.version" 
+                   value="${cmd.version}"/>
+        </propertyfile>
+    </target>
+
+    <scriptdef name="x-generate-uuid" language="javascript">
+        <attribute name="property" />
+        <![CDATA[
+            importClass( java.util.UUID );
+            project.setProperty(
+                attributes.get( "property" ),
+                UUID.randomUUID().toString());
+        ]]>
+    </scriptdef>
+
+    <target name="generate-starter-app">
+        <property name="templates.app.starter.dir" value="${templates.dir}/StarterApp"/>
+
+        <x-generate dir="${templates.app.starter.dir}" 
+                    todir="${args.path}"
+                    store="${args.path}/${senchadir}/app/codegen.json"
+                    basedir="${args.path}">
+            <param name="name" value="${args.name}"/>
+            <param name="appName" value="${args.name}"/>
+            <param name="library" value="all"/>
+            <!-- These are needed for the theme template-->
+            <param name="themeName" value="${args.themeName}"/>
+            <param name="controllerName" value="${args.controllerName}"/>
+            <param name="controllerFileName" value="${args.controllerName}"/>
+            <param name="viewName" value="${args.viewName}"/>
+            <param name="viewFileName" value="${args.viewName}"/>
+            <param name="frameworkName" value="${framework.name}"/>
+            <param name="frameworkPath" value="${framework.path}"/>
+            <param name="senchadir" value="${senchadir}"/>
+            <param name="uniqueId" value="${app.id}"/>
+            <!-- placeholders for mvc structures -->
+            <param name="appModels" value=""/>
+            <param name="appViews" value=""/>
+            <param name="appControllers" value=""/>
+            <param name="appStores" value=""/>
+            <param name="controllerNamespace" value="${args.name}.controller"/>
+            <param name="modelNamespace" value="${args.name}.model"/>
+            <param name="viewNamespace" value="${args.name}.view"/>
+        </x-generate>
+        
+        <x-generate dir="${templates.dir}/Controller" 
+                    todir="${args.path}/app/controller"
+                    store="${args.path}/${senchadir}/app/codegen.json"
+                    basedir="${args.path}">
+            <param name="name" value="${args.name}"/>
+            <param name="appName" value="${args.name}"/>
+            <param name="library" value="all"/>
+            <param name="controllerName" value="${args.controllerName}"/>
+            <param name="controllerFileName" value="${args.controllerName}"/>
+            <param name="controllerNamespace" value="${args.name}.controller"/>
+        </x-generate>
+        
+        <mkdir dir="${args.path}/app/model"/>
+        <mkdir dir="${args.path}/app/store"/>
+    </target>
+
+    <!--
+        Generates an application structure from templates
+        CLI args available as:
+        args.name => the application name
+        args.path => the target path of the new application
+    -->
+    <target name="generate-app-impl">
+        <x-guid property="app.json.id"/>
+        <property name="app.id" value="${app.json.id}"/>
+        
+        <!--default these from args if new app-->
+        <property name="app.dir" value="${args.path}"/>
+        <property name="app.name" value="${args.name}"/>
+
+        <property name="app.cmd.version" value="3.0.0.250"/>
+        <property name="legacy.template.path" 
+                  value="${cmd.config.dir}/legacy/${app.cmd.version}/ext/4.1/templates"/>
+        
+        <local name="app.sencha.cfg"/>
+        <property name="app.sencha.cfg" location="${app.dir}/.sencha/app/sencha.cfg"/>
+        
+        <local name="workspace.sencha.cfg"/>
+        <property name="workspace.sencha.cfg" location="${workspace.dir}/.sencha/workspace/sencha.cfg"/>
+        
+        <if>
+            <isset property="args.upgrade"/>
+            <then>
+                <!--regenerate theme templates-->
+                <if>
+                    <available file="${app.dir}/packages"/>
+                    <then>
+                        <for param="theme.path">
+                            <dirset dir="${app.dir}/packages" includes="*"/>
+                            <sequential>
+                                <basename file="@{theme.path}" property="theme.name"/>
+                                <echo>updating theme ${theme.name}</echo>
+                                <x-generate dir="${templates.dir}/App/packages" 
+                                            todir="${args.path}/packages"
+                                            store="${args.path}/${senchadir}/app/codegen.json"
+                                            basedir="${args.path}"
+                                            original="${legacy.template.path}/App/packages">
+                                    <param name="name" value="${theme.name}"/>
+                                    <param name="themeName" value="${theme.name}"/>
+                                    <param name="frameworkPath" value="${framework.path}"/>
+                                    <param name="frameworkName" value="${framework.name}"/>
+                                    <param name="appName" value="${app.name}"/>
+                                </x-generate>
+                            </sequential>
+                        </for>
+                    </then>
+                </if>
+                
+                <if>
+                    <equals arg1="${workspace.build.dir}" arg2="${workspace.dir}/build/${app.name}"/>
+                    <then>
+                        <x-property-file file="${workspace.config.dir}/sencha.cfg">
+                            <entry type="string" key="workspace.build.dir" operation="="
+                                   value="$${workspace.dir}/build"/>
+                        </x-property-file>
+                    </then>
+                </if>
+                
+                <x-upgrade appcfg="${app.sencha.cfg}"
+                           workspacecfg="${workspace.sencha.cfg}"/>
+            </then>
+            <else>
+                <antcall target="generate-starter-app"/>
+            </else>
+        </if>
+        
+        <x-generate dir="${templates.dir}/App" todir="${args.path}"
+                    store="${args.path}/${senchadir}/app/codegen.json"
+                    basedir="${args.path}"
+                    original="${legacy.template.path}/App">
+            <param name="name" value="${args.name}"/>
+            <param name="appName" value="${args.name}"/>
+            <param name="library" value="all"/>
+            <!-- These are needed for the theme template-->
+            <param name="themeName" value="${args.themeName}"/>
+            <param name="controllerName" value="${args.controllerName}"/>
+            <param name="controllerFileName" value="${args.controllerName}"/>
+            <param name="viewName" value="${args.viewName}"/>
+            <param name="viewFileName" value="${args.viewName}"/>
+            <param name="frameworkName" value="${framework.name}"/>
+            <param name="frameworkPath" value="${framework.path}"/>
+            <param name="senchadir" value="${senchadir}"/>
+            <param name="uniqueId" value="${app.id}"/>
+            <!-- placeholders for mvc structures -->
+            <param name="appModels" value=""/>
+            <param name="appViews" value=""/>
+            <param name="appControllers" value=""/>
+            <param name="appStores" value=""/>
+            <param name="controllerNamespace" value="${args.name}.controller"/>
+            <param name="modelNamespace" value="${args.name}.model"/>
+            <param name="viewNamespace" value="${args.name}.view"/>
+        </x-generate>
+        
+        <if>
+            <x-is-merge-conflict file="${app.sencha.cfg}"/>
+            <then>
+                <!-- we must be an upgrade because you can't have a conflict otherwise -->
+                
+                <echo file="${app.sencha.cfg}" append="true"><![CDATA[
+<<<<<<< Generated
+app.build.dir=$${workspace.build.dir}/$${app.name}
+app.cmd.version=${cmd.version}                    
+=======
+>>>>>>> Custom]]>
+                </echo>
+            </then>
+            <else>
+                <x-property-file file="${app.sencha.cfg}">
+                    <!--apply defaults if not present-->
+                    <entry type="string"
+                           operation="="
+                           key="app.build.dir" 
+                           default="$${workspace.build.dir}/$${app.name}"/>
+                </x-property-file>
+            </else>
+        </if>
+        
+        <if>
+            <isset property="merge.conflicts"/>
+            <then>
+            <fail>Upgrade encountered ${merge.conflicts} merge conflicts. Please resolve all merge conflicts then run 'sencha app refresh'.</fail>
+            </then>
+            <else>
+                <x-sencha-command dir="${args.path}" inheritAll="false">
+                    app
+                    refresh
+                </x-sencha-command>
+            </else>
+        </if>
+
+
+    </target>
+
+    <!--
+        Adds a new theme template application
+        args.name => the theme name
+        args.cssPath => the path to the css file
+    -->
+    <target name="generate-theme-impl">
+        <if>
+            <not><isset property="app.dir"/></not>
+            <then>
+                <fail>Themes for Ext JS 4.1 belong to apps - Please run from an app folder.</fail>
+            </then>
+        </if>
+        <if>
+            <isset property="theme.extend.name"/>
+            <then>
+                <fail>Ext JS 4.1 does not support theme inheritance</fail>
+            </then>
+        </if>
+
+        <x-generate dir="${templates.dir}/App/packages"
+                    todir="${args.path}/packages"
+                    store="${args.path}/${senchadir}/app/codegen.json"
+                    basedir="${args.path}">
+            <param name="name" value="${args.name}"/>
+            <param name="themeName" value="${args.name}"/>
+            <param name="frameworkPath" value="${framework.path}"/>
+            <param name="frameworkName" value="${framework.name}"/>
+            <param name="appName" value="${app.name}"/>
+        </x-generate>
+
+        <x-generate dir="${templates.dir}/StarterApp/resources" todir="${args.path}/resources">
+            <param name="name" value="${args.name}"/>
+            <param name="themeName" value="${args.name}"/>
+            <param name="frameworkPath" value="${framework.path}"/>
+            <param name="frameworkName" value="${framework.name}"/>
+            <param name="appName" value="${app.name}"/>
+        </x-generate>
+    </target>
+
+    <!--
+        Adds a controller class to the application
+        CLI args available as:
+        args.name => the application name
+        args.path => the target path of the new application
+    -->
+    <target name="generate-controller-impl">
+        <x-generate dir="${templates.dir}/Controller"
+        			todir="${args.path}/app/controller"
+                    store="${args.path}/${senchadir}/app/codegen.json"
+                    basedir="${args.path}">
+            <param name="appName" value="${app.name}"/>
+            <param name="name" value="${args.name}"/>
+            <param name="controllerName" value="${args.name}"/>
+            <param name="controllerFileName" value="${args.filename}"/>
+            <param name="controllerNamespace" value="${app.name}.controller"/>
+        </x-generate>
+    </target>
+
+    <!--
+        Adds a profile class to the application
+        CLI args available as:
+        args.name => the application name
+        args.path => the target path of the new application
+    -->
+    <target name="generate-profile-impl">
+        <fail>Generate Profile is a Touch SDK specific command.</fail>
+    </target>
+
+    <!--
+        Adds a model class to the application
+        CLI args available as:
+        args.name => the model name
+        args.path => the target path of the application
+        args.fields => the field definitions to add
+        -fields=name:val,other:otherval,...
+    -->
+    <target name="generate-model-impl">
+        <property name="section" value="model"/>
+
+        <x-generate dir="${templates.dir}/Model" todir="${args.path}/app/model"
+                    store="${args.path}/${senchadir}/app/codegen.json"
+                    basedir="${args.path}">
+            <param name="appName" value="${app.name}"/>
+            <param name="name" value="${args.name}"/>
+            <param name="baseClass" value="${args.base}"/>
+            <param name="modelFileName" value="${args.filename}"/>
+            <param name="modelNamespace" value="${app.name}.model"/>
+            <param name="fields" value="${args.fields}"/>
+        </x-generate>
+    </target>
+
+    <!--
+        Adds a model class to the application
+        CLI args available as:
+        args.name => the model name
+        args.path => the target path of the application
+        args.fields => the field definitions to add
+        -fields=name:val,other:otherval,...
+    -->
+    <target name="generate-view-impl">
+        <property name="section" value="model"/>
+
+        <x-generate dir="${templates.dir}/View" todir="${args.path}/app/view"
+                    store="${args.path}/${senchadir}/app/codegen.json"
+                    basedir="${args.path}">
+            <param name="appName" value="${app.name}"/>
+            <param name="name" value="${args.name}"/>
+            <param name="viewName" value="${args.name}"/>
+            <param name="viewFileName" value="${args.filename}"/>
+            <param name="viewNamespace" value="${app.name}.view"/>
+        </x-generate>
+    </target>
+
+    <target name="app-refresh-impl">
+<echo file="${args.metadatafile}">
+/**
+ * This file is generated by Sencha Cmd and should NOT be edited.  It is 
+ * provided to support globbing requires, custom xtypes, and other 
+ * metadata-driven class system features 
+ */
+</echo>
+        <x-sencha-command>
+            compile
+                exclude
+                    -tag=core
+                and
+                metadata
+                    +append
+                    --base-path=${args.basepath}
+                    +loader-paths
+                    -jsonp=Ext.Loader.addClassPathMappings
+                    -out=${args.metadatafile}
+                and
+                exclude
+                    -tag=framework
+                and
+                include
+                    -namespace=Ext.ux
+                and
+                metadata
+                    --base-path=${args.basepath}
+                    +alternates
+                    +append
+                    -out=${args.metadatafile}
+                and
+                metadata
+                    --base-path=${args.basepath}
+                    +alias
+                    +append
+                    -out=${args.metadatafile}
+        </x-sencha-command>
+    </target>
+
+    <target name="app-upgrade-impl">
+        <x-script-def name="x-app-upgrade" 
+                      src="${framework.config.dir}/app-upgrade.js">
+            <script src="${cmd.config.dir}/ant/JSON.js"/>
+            <script src="${cmd.config.dir}/ant/ant-util.js"/>
+        </x-script-def>
+        <x-app-upgrade/>
+    </target>
+
+</project>

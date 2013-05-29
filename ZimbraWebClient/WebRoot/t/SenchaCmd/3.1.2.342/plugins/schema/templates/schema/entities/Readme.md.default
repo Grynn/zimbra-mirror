@@ -1,0 +1,14 @@
+# Entities for Schema "{schemaName}"
+
+This folder contains the entity definitions in one or more XML files. Each file has one
+`module` defined in it that contains the entities. For example:
+
+    <?xml version="1.0"?>
+    <module xmlns="com.sencha.database.schema">
+        <entity ...
+    </module>
+
+The XML Schema ("com.sencha.database.schema") can be used by most IDE's to provide
+helpful editing assistance like auto-completion. Enabling an XML Schema varies by IDE
+so consult your IDE reference. The XML Schema is an "XSD" file found at this location:
+`"schema/database.xsd"`.

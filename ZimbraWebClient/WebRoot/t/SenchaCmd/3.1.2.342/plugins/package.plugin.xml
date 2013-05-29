@@ -1,0 +1,97 @@
+<!--
+    Copyright (c) 2012-2013, Sencha Inc.
+    
+    This file is a Sencha Cmd plugin that provides support for packages.
+-->
+<project name="cmd-package-plugin">
+    <!-- 
+    <target name="init-plugin">
+        nothing to do here... yet
+    </target>
+    -->
+
+    <target name="init-package-plugin">
+        <property name="senchadir" value=".sencha"/>
+    </target>
+
+    <!-- ****************************************************************** -->
+
+    <target name="generate-package" depends="init-package-plugin">
+        <echo>Generating package ${args.name} of type ${args.type} to ${args.path}</echo>
+        <local name="ext.rel.path"/>
+        <local name="touch.rel.path"/>
+
+        <x-get-relative-path from="${args.path}" to="${ext.dir}"
+                             property="ext.rel.path"/>
+
+        <x-get-relative-path from="${args.path}" to="${touch.dir}"
+                             property="touch.rel.path"/>
+
+        <x-generate dir="${cmd.dir}/templates/package" todir="${args.path}"
+                    store="${args.path}/${senchadir}/package/codegen.json"
+                    basedir="${args.path}">
+            <param name="pkgName" value="${args.name}"/>
+            <param name="pkgType" value="${args.type}"/>
+            <param name="extRelPath" value="${ext.rel.path}"/>
+            <param name="touchRelPath" value="${touch.rel.path}"/>
+            <param name="senchadir" value="${senchadir}"/>
+        </x-generate>
+
+        <x-property-file file="${args.path}/${senchadir}/package/sencha.cfg">
+            <entry type="string" key="package.cmd.version" operation="="
+                   value="${cmd.version}"/>
+        </x-property-file>
+    </target>
+
+    <!-- ****************************************************************** -->
+
+    <target name="package-build" depends="init-package-plugin">
+        <!--default some variables to empty string if not supplied-->
+        <property name="package.base.names" value=""/>
+        <property name="package.requires.names" value=""/>
+
+        <local name="bld-clean"/>
+        <condition property="bld-clean" value="clean">
+            <isset property="args.clean"/>
+        </condition>
+        <property name="bld-clean" value=""/>
+    
+        <x-sencha-command dir="${package.dir}">
+            ant
+                ${bld-clean}
+                build
+        </x-sencha-command>
+    </target>
+
+    <!-- ****************************************************************** -->
+
+    <target name="package-upgrade" depends="init-package-plugin">
+        <echo>Upgrading package ${args.name} ...</echo>
+        <local name="ext.rel.path"/>
+        <local name="touch.rel.path"/>
+        
+        <x-get-relative-path from="${args.path}" to="${ext.dir}"
+                             property="ext.rel.path"/>
+        
+        <x-get-relative-path from="${args.path}" to="${touch.dir}"
+                             property="touch.rel.path"/>
+
+        <x-generate dir="${cmd.dir}/templates/package" todir="${args.path}"
+                    store="${args.path}/${senchadir}/package/codegen.json"
+                    basedir="${args.path}">
+            <param name="pkgName" value="${args.name}"/>
+            <param name="pkgType" value="${args.type}"/>
+            <param name="extRelPath" value="${ext.rel.path}"/>
+            <param name="touchRelPath" value="${touch.rel.path}"/>
+            <param name="senchadir" value="${senchadir}"/>
+        </x-generate>
+
+        <x-property-file file="${args.path}/${senchadir}/package/sencha.cfg">
+            <entry type="string"
+                   operation="="
+                   key="package.cmd.version" 
+                   value="${cmd.version}"/>
+        </x-property-file>
+    </target>
+
+</project>

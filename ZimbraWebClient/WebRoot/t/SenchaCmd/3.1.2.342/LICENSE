@@ -1,0 +1,106 @@
+Sencha Cmd
+Copyright (c) 2012-2013 Sencha Inc. All rights reserved.
+licensing@sencha.com
+
+Commercial License
+------------------------------------------------------------------------------------------
+Sencha Cmd is licensed commercially for free.  Please visit http://www.sencha.com/legal/sencha-tools-software-license-agreement for more details.
+
+
+Third Party Content
+------------------------------------------------------------------------------------------
+The following third party software is distributed with Sencha Cmd and is 
+provided under other licenses and/or has source available from other locations. 
+
+WebKit (LGPL) Copyright (C) 1991 Free Software Foundation, Inc 
+Site: http://www.webkit.org/  
+License: http://www.webkit.org/coding/lgpl-license.html
+
+YUI Compressor (BSD licensed) included in Sencha Touch build tools Copyright © 2012 Yahoo! Inc. 
+Site: http://developer.yahoo.com/yui/compressor/  
+License: http://developer.yahoo.com/yui/license.html
+
+PhantomJS (BSD) 
+Site: http://www.phantomjs.org  
+License: New BSD License
+
+Google Closure Compiler (Apache) Copyright 2009 The Closure Compiler Authors. 
+Site: http://code.google.com/p/closure-compiler/  
+License: http://www.apache.org/licenses/LICENSE-2.0
+
+Open-Vcdiff (Apache) 
+Site: http://code.google.com/p/open-vcdiff/  
+License: http://www.apache.org/licenses/LICENSE-2.0
+
+Google Closure Compiler (Apache) Copyright 2009 The Closure Compiler Authors. 
+Site: http://code.google.com/p/closure-compiler/
+License: http://www.apache.org/licenses/LICENSE-2.0
+
+Mozilla Rhino (MPL) 
+Site: https://developer.mozilla.org/en-US/docs/Rhino 
+License: http://www.mozilla.org/MPL/2.0/
+
+GSON (Apache) 
+Site: http://code.google.com/p/google-gson/ 
+License: http://www.apache.org/licenses/LICENSE-2.0
+
+JANSI (Apache) 
+Site: https://github.com/fusesource/jansi 
+License: http://www.apache.org/licenses/LICENSE-2.0
+
+Ant-contrib (Apache) 
+Site: http://ant-contrib.sourceforge.net/ 
+License: http://www.apache.org/licenses/LICENSE-2.0
+
+Ant (Apache) 
+Site: http://ant.apache.org/ 
+License: http://www.apache.org/licenses/LICENSE-2.0
+
+Apache Velocity (Apache) 
+Site: http://velocity.apache.org/ 
+License: http://www.apache.org/licenses/LICENSE-2.0
+
+Commons-io (Apache) 
+Site: http://commons.apache.org/io/ 
+License: http://www.apache.org/licenses/LICENSE-2.0
+
+slf4j (MIT) Copyright (c) 2004-2011 QOS.ch 
+Site: http://www.slf4j.org/ 
+License: http://www.slf4j.org/license.html
+
+Compass (MIT Style) Copyright (c) 2009 Christopher M. Eppstein
+Site: http://github.com/chriseppstein/compass
+License: http://github.com/chriseppstein/compass/blob/stable/LICENSE.markdown
+
+Sass (MIT)
+Site: http://rubygems.org/gems/sass
+License: http://opensource.org/licenses/MIT
+
+FSSM (MIT) Copyright (c) 2011 Travis Tilley
+Site:http://github.com/ttilley/fssm/blob/master/LICENSE
+License: https://github.com/ttilley/fssm/blob/master/LICENSE
+
+ChunkyPNG (MIT)
+Site: htts://github.com/wvanbergen/chunky_png/wiki
+License: http://opensource.org/licenses/MIT
+
+BSJSONAdditions (MIT Style)
+Site: http://github.com/blakeseely/bsjsonadditions
+License: http://blakeseely.com/svn/public/BSJSONAdditions/trunk/NSScanner+BSJSONAdditions.h
+
+Reachability (OS)
+Site: http://developer.apple.com/library/ios/#samplecode/Reachability
+License: http://developer.apple.com/library/ios/#samplecode/Reachability/Listings/main_m.html#//apple_ref/doc/uid/DTS40007324-main_m-DontLinkElementID_8
+
+Apache Ant for Windows (Apache)
+Site: http://ant.apache.org/bindownload.cgi
+License: http://ant.apache.org/license.html
+
+--
+
+THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND 
+REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
+FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE
+AND THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF
+DEALING. 

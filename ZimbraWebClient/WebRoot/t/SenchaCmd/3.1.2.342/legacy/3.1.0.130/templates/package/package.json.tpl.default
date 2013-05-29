@@ -1,0 +1,7 @@
+{
+    "name": "{pkgName}",
+    "type": "{pkgType}",
+    "version": "1.0.0",
+    "compatVersion": "1.0.0",
+    "requires": []
+}

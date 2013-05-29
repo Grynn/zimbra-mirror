@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>%s</string>
+	<key>CFBundleExecutable</key>
+	<string>stbuild_template</string>
+%s
+	<key>CFBundleIconFiles</key>
+	<array>
+%s	</array>
+	<key>CFBundleIconFile</key>
+	<string>%s</string>
+	<key>CFBundleIdentifier</key>
+	<string>%s</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>%s</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>%s</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>iPhoneSimulator</string>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>%s</string>
+	<key>DTPlatformName</key>
+	<string>iphonesimulator</string>
+	<key>DTSDKName</key>
+	<string>iphonesimulator5.0</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>MinimumOSVersion</key>
+	<string>%s</string>
+	<key>UIDeviceFamily</key>
+	<array>
+%s	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+%s	</array>
+%s
+</dict>
+</plist>
