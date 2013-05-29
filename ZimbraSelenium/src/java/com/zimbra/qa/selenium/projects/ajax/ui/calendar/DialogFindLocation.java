@@ -17,6 +17,7 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 
@@ -89,7 +90,8 @@ public class DialogFindLocation extends DialogWarning {
 		this.sGetCssCount(locator);
 		this.sClickAt(locator, "");
 		this.zWaitForBusyOverlay();
-		this.zWaitForBusyOverlay();
+		SleepUtil.sleepMedium();
+		
 		// If page was specified, make sure it is active
 		if ( page != null ) {
 			// This function (default) throws an exception if never active

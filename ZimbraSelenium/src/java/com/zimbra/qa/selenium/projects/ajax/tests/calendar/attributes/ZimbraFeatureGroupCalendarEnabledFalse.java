@@ -31,17 +31,17 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
-public class zimbraFeatureGroupCalendarEnabledFalse extends CalendarWorkWeekTest {
+public class ZimbraFeatureGroupCalendarEnabledFalse extends CalendarWorkWeekTest {
 
-	public zimbraFeatureGroupCalendarEnabledFalse() {
-		logger.info("New "+ zimbraFeatureGroupCalendarEnabledFalse.class.getCanonicalName());
+	public ZimbraFeatureGroupCalendarEnabledFalse() {
+		logger.info("New "+ ZimbraFeatureGroupCalendarEnabledFalse.class.getCanonicalName());
 		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(
 			description = "Bug 56440 - If zimbraFeatureGroupCalendarEnabled to FALSE then check if user can edit existing appt", 
 			groups = { "functional" })
-	public void zimbraFeatureGroupCalendarEnabledFalse_01() throws HarnessException {
+	public void ZimbraFeatureGroupCalendarEnabledFalse_01() throws HarnessException {
 
 		// Modify the test account and change zimbraFeatureGroupCalendarEnabled to FALSE
 		ZimbraAdminAccount.GlobalAdmin().soapSend(
@@ -58,8 +58,8 @@ public class zimbraFeatureGroupCalendarEnabledFalse extends CalendarWorkWeekTest
 		AppointmentItem appt = new AppointmentItem();
 		String tz, apptSubject, apptBody, editApptSubject, editApptBody;
 		tz = ZTimeZone.TimeZoneEST.getID();
-		apptSubject =  "Edited" + ZimbraSeleniumProperties.getUniqueString();
-		apptBody =  "Edited" + ZimbraSeleniumProperties.getUniqueString();
+		apptSubject =  ZimbraSeleniumProperties.getUniqueString();
+		apptBody =   ZimbraSeleniumProperties.getUniqueString();
 		editApptSubject = "Edited" + ZimbraSeleniumProperties.getUniqueString();
         editApptBody =  "Edited" + ZimbraSeleniumProperties.getUniqueString();
 		

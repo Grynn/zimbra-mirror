@@ -28,17 +28,17 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
-public class zimbraFeatureHtmlComposeEnabledFalse extends CalendarWorkWeekTest {
+public class ZimbraFeatureHtmlComposeEnabledFalse extends CalendarWorkWeekTest {
 
-	public zimbraFeatureHtmlComposeEnabledFalse() {
-		logger.info("New "+ zimbraFeatureHtmlComposeEnabledFalse.class.getCanonicalName());
+	public ZimbraFeatureHtmlComposeEnabledFalse() {
+		logger.info("New "+ ZimbraFeatureHtmlComposeEnabledFalse.class.getCanonicalName());
 		super.startingPage = app.zPageCalendar;
 	}
 	
 	@Test(
 			description = "Bug 59504 - If zimbraFeatureHtmlComposeEnabled to FALSE then check if user can create appt", 
 			groups = { "functional" })
-	public void zimbraFeatureHtmlComposeEnabledFalse_01() throws HarnessException {
+	public void ZimbraFeatureHtmlComposeEnabledFalse_01() throws HarnessException {
 		
 		// Modify the test account and change zimbraFeatureHtmlComposeEnabled to FALSE
 		ZimbraAdminAccount.GlobalAdmin().soapSend(
