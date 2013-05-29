@@ -90,7 +90,7 @@ public class DialogCustomRepeat extends AbsDialog {
 		}
 
 		// Click it
-		zClickAt(locator,"0,0");
+		sClickAt(locator,"0,0");
 
 		// If the app is busy, wait for it to become active
 		zWaitForBusyOverlay();

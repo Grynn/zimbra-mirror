@@ -84,7 +84,7 @@ public class DialogOpenRecurringItem extends AbsDialog {
 					+ locator + " not present!");
 		}
 
-		this.zClickAt(locator,"0,0");
+		this.sClickAt(locator,"0,0");
 		SleepUtil.sleepMedium();
 		
 		// If the app is busy, wait for it to become active

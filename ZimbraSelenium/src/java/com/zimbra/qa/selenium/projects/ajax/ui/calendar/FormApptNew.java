@@ -86,7 +86,7 @@ public class FormApptNew extends AbsForm {
 		public static final String CancelButtonSuggestionPreferencesDialog = "css=div[class='ZmTimeSuggestionPrefDialog'] td[id$='_button1_title']";
 
 		public static final String NoneMenuItem = "css=div[id*='_Menu'] div[id^='NON'] td[id$='title']:contains('None')";
-		public static final String NoneButton = "css=td[id$='_title']:contains('None')";
+		public static final String NoneButton = "css=div[id$='_repeatSelect'] td[id$='_select_container'] td[id$='_title']";
 		public static final String EveryDayMenuItem = "css=div[id*='_Menu'] div[id^='DAI'] td[id$='title']:contains('Every Day')";
 		public static final String EveryDayButton = "css=td[id$='_title']:contains('Every Day')";
 		public static final String EveryWeekMenuItem = "css=div[id*='_Menu'] div[id^='WEE'] td[id$='title']:contains('Every Week')";
