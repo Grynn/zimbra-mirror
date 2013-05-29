@@ -54,7 +54,7 @@ initCBPolicyd() {
     fi
   fi
   echo -n "Converting policyd database templates to sqlite..."
-  for i in core.tsql access_control.tsql quotas.tsql checkhelo.tsql checkspf.tsql greylisting.tsql; do
+  for i in core.tsql access_control.tsql accounting.tsql amavis.tsql quotas.tsql checkhelo.tsql checkspf.tsql greylisting.tsql; do
     ${cbpolicyDir}/share/database/convert-tsql sqlite ${cbpolicyDir}/share/database/$i | sed -e '/^#/d'
   done > ${dbfile}.sq3
   if [ $? != 0 ]; then
