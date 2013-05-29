@@ -46,8 +46,6 @@ public class PrintTask extends AjaxCommonTest {
 
 	}
 
-
-
 	@Test(	
 			description = "Print Task using RightClick -> Print and Verify Contents in Print view",
 			groups = { "functional" }
@@ -91,6 +89,10 @@ public class PrintTask extends AjaxCommonTest {
 				
 			// Right click the item, select Show Original
 			window = (SeparateWindowPrintPreview)app.zPageTasks.zListItem(Action.A_RIGHTCLICK, Button.O_PRINT_MENU, subject);
+			SleepUtil.sleepMedium();
+			
+			//Press esc from keyboard
+			app.zPageTasks.sKeyPressNative("27");
 			window.zWaitForActive();		// Make sure the window is there			
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 
@@ -153,6 +155,10 @@ public class PrintTask extends AjaxCommonTest {
 			
 			//Press keyboard shortcut p
 			window = (SeparateWindowPrintPreview)app.zPageTasks.zKeyboardShortcut(Shortcut.S_PRINTTASK);
+			SleepUtil.sleepMedium();
+			
+			//Press esc from keyboard
+			app.zPageTasks.sKeyPressNative("27");
 			window.zWaitForActive();		// Make sure the window is there			
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 
@@ -249,6 +255,10 @@ public class PrintTask extends AjaxCommonTest {
 			
 			//Pull down Print button and select Print Task folder.
 			window = (SeparateWindowPrintPreview)app.zPageTasks.zToolbarPressPulldown(Button.B_PRINT, Button.O_PRINT_TASKFOLDER);
+			SleepUtil.sleepMedium();
+			
+			//Press esc from keyboard
+			app.zPageTasks.sKeyPressNative("27");
 			window.zWaitForActive();		// Make sure the window is there			
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 
