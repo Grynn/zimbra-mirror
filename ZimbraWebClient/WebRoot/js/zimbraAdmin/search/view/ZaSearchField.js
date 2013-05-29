@@ -916,7 +916,7 @@ ZaSaveSearchDialog.prototype.show = function (name, query, isCreated) {
         this._nameInputId = Dwt.getNextId();
         this._queryInputId = Dwt.getNextId();
         var html = [
-            "<table style='border-spacing: 7px;'>",
+            "<table cellspacing='5' style='border-spacing: 7px;'>",
                 "<tbody>",
                     "<tr>",
                         "<td>",
