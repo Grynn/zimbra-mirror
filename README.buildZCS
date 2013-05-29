@@ -22,6 +22,9 @@ The 1.7 Java JDK must also be installed into /usr/local/java, so that the binary
 Ant must be installed in /usr/local/ant, so that the binary is:
 /usr/local/ant/bin/ant
 
+Sencha Cmd must be installed and the binary in your path.  It can be obtained from
+http://www.sencha.com/products/sencha-cmd/download
+
 These must be installed prior to building, or the builds will fail.
 
 Then, in the ZimbraBuild directory, run:
