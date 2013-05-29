@@ -1,6 +1,0 @@
-{
-    "name": "{name}",
-
-    "requires": [
-    ]
-}

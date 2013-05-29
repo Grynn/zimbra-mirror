@@ -1,3 +1,0 @@
-Ext.define('{controllerNamespace}.{controllerName}', {
-    extend: 'Ext.app.Controller'
-});
