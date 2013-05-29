@@ -56,6 +56,9 @@ public class FormApptNew extends AbsForm {
 		public static final String FolderDisabled = "css=div[id^='APPT_COMPOSE_'] td[id$='_folderSelect'] div[class$='ZHasDropDown ZDisabled ZHasLeftIcon']";
 		public static final String PrivateDisabled = "css=div[id^='APPT_COMPOSE_'] td input[id$='_privateCheckbox'][type='checkbox'][disabled]";
 		
+		public static final String RepeatOptionsDisabled = "css=td[id$='_repeat_options'] div[id^='DWT'][class$='ZHasDropDown ZDisabled']";
+		public static final String RepeatDescriptionDisabled = "css=div[id$='_repeatDesc'][class='DisabledText']";
+
 		public static final String ShowOptionalLink = "css=td[id$='_show_optional']";
 		public static final String ShowEquipmentLink = "css=td[id$='_show_resources']";
 		public static final String CustomizeLink = "css=div[id$='repeatDesc']:contains('Customize')";
@@ -376,6 +379,11 @@ public class FormApptNew extends AbsForm {
 		ZAssert.assertTrue(this.sIsElementPresent(Locators.DisplayDisabled), "Verify display is disabled while attendee propose new time");
 		ZAssert.assertTrue(this.sIsElementPresent(Locators.FolderDisabled), "Verify folder is disabled while attendee propose new time");
 		ZAssert.assertTrue(this.sIsElementPresent(Locators.PrivateDisabled), "Verify private is disabled while attendee propose new time");
+	}
+	
+	public void zVerifyDisabledControlInOpenInstance() throws HarnessException {
+		ZAssert.assertTrue(this.sIsElementPresent(Locators.RepeatOptionsDisabled), "Verify repeat dropdown remains disabled");
+		ZAssert.assertTrue(this.sIsElementPresent(Locators.RepeatDescriptionDisabled), "Verify repeat description remains disabled");
 	}
 	
 	/**

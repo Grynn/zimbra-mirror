@@ -24,6 +24,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.DialogOpenRecurringItem.Confirmation;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
@@ -125,7 +126,7 @@ public class PageCalendar extends AbsTab {
 		public static final String ProposeNewTimeMenu_ViewAppt = "css=div[id^='zm__APPTRO'] td[id^='PROPOSE_NEW_TIME_title']";
 		public static final String DeleteMenu_ViewAppt = "css=div[id^='zm__APPTRO'] td[id^='DELETE_title']";
 		public static final String ShowOriginalMenu_ViewAppt = "css=div[id^='zm__APPTRO'] td[id^='SHOW_ORIG'][id$='_title']";
-
+		
 		// Radio buttons
 		public static final String OpenThisInstanceRadioButton = "css=td input[id*='_defaultRadio']";
 		public static final String OpenTheSeriesRadioButton = "css=td input[id$='_openSeries']";
@@ -596,8 +597,17 @@ public class PageCalendar extends AbsTab {
 			
 			this.sDoubleClick(locator);
 			this.zWaitForBusyOverlay();
+			
 			page = new FormApptNew(this.MyApplication);
-
+			if ( page.zIsActive() ) {
+				return (page);
+			}
+			
+			page = new DialogOpenRecurringItem(Confirmation.OPENRECURRINGITEM, MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+			if ( page.zIsActive() ) {
+				return (page);
+			}
+			
 			SleepUtil.sleepMedium();
 
 			// FALL THROUGH

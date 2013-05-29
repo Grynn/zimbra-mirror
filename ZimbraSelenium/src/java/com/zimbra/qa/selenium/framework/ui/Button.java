@@ -425,6 +425,8 @@ public class Button {
 	public static final Button B_NEXT_PAGE = new Button("B_NEXT_PAGE");
 	public static final Button B_PREVIOUS_PAGE = new Button("B_PREVIOUS_PAGE");
 	public static final Button B_MONTH = new Button("B_MONTH");
+	public static final Button B_REPEAT_DROPDOWN_DISABLED = new Button("B_REPEAT_DROPDOWN_DISABLED");
+	public static final Button B_REPEAT_DESCRIPTION_DISABLED = new Button("B_REPEAT_DESCRIPTION_DISABLED");
 	
 	public static final Button B_VIEW = new Button("B_VIEWTOOLBAR");
 	public static final Button O_LISTVIEW_DAY = new Button("O_LISTVIEW_DAY");
