@@ -39,7 +39,7 @@ public class zimbraFeatureGroupCalendarEnabledFalse extends CalendarWorkWeekTest
 	}
 	
 	@Test(
-			description = "Bug 56440 - If zimbraFeatureGroupCalendarEnabled to FALSE then check if user can edit exisiting appt", 
+			description = "Bug 56440 - If zimbraFeatureGroupCalendarEnabled to FALSE then check if user can edit existing appt", 
 			groups = { "functional" })
 	public void zimbraFeatureGroupCalendarEnabledFalse_01() throws HarnessException {
 
