@@ -11,6 +11,6 @@
 
 cd WebRoot/t
 echo "[Touch client production build started]"
-SenchaCmd/3.1.2.342/sencha app build $1
+sencha app build $1
 echo "[Touch client production build ended]"
 cd ../..
