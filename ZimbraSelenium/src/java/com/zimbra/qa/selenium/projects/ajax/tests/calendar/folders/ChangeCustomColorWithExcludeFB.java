@@ -43,7 +43,7 @@ public class ChangeCustomColorWithExcludeFB extends CalendarWorkWeekTest {
 
 	@Test(	description = "Verify user can set custom color and marking ON to 'Exclude this Calendar' checkbox.", 
 			groups = { "functional" })
-	public void ExcludeFBChangeCustomColorCalendar_01() throws HarnessException {
+	public void ChangeCustomColorWithExcludeFB_01() throws HarnessException {
 
 		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
 		ZAssert.assertNotNull(root, "Verify the inbox is available");
@@ -144,7 +144,7 @@ public class ChangeCustomColorWithExcludeFB extends CalendarWorkWeekTest {
 
 	@Test(	description = "Verify user can set custom color and marking OFF to 'Exclude this Calendar' checkbox.", 
 			groups = { "functional" })
-			public void ExcludeFBChangeCustomColorCalendar_02() throws HarnessException {
+			public void ChangeCustomColorWithExcludeFB_02() throws HarnessException {
 
 		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
 		ZAssert.assertNotNull(root, "Verify the inbox is available");
