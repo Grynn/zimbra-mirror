@@ -143,6 +143,11 @@ public class Button {
 	public static final Button B_MAIL_LIST_SORTBY_SIZE = new Button("B_MAIL_LIST_SORTBY_SIZE");;
 	public static final Button B_MAIL_LIST_SORTBY_RECEIVED = new Button("B_MAIL_LIST_SORTBY_RECEIVED");;
 
+	// MailPage list buttons (group by options)
+	public static final Button B_MAIL_LIST_GROUPBY_FROM = new Button("B_MAIL_LIST_GROUPBY_FROM");;
+	public static final Button B_MAIL_LIST_GROUPBY_DATE = new Button("B_MAIL_LIST_GROUPBY_DATE");;
+	public static final Button B_MAIL_LIST_GROUPBY_SIZE = new Button("B_MAIL_LIST_GROUPBY_SIZE");;
+
 	// MailPage context menu
 	public static final Button O_MARK_AS_READ = new Button("O_MARK_AS_READ");
 	public static final Button O_MARK_AS_UNREAD = new Button("O_MARK_AS_UNREAD");

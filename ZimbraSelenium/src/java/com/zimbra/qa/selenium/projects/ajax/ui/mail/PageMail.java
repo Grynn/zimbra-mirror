@@ -472,6 +472,39 @@ public class PageMail extends AbsTab {
 			this.zWaitForBusyOverlay();
 			return (page);
 			
+		} else if ( 
+				(button == Button.B_MAIL_LIST_GROUPBY_FROM) ||
+				(button == Button.B_MAIL_LIST_GROUPBY_DATE) ||
+				(button == Button.B_MAIL_LIST_GROUPBY_SIZE)
+				) {
+			
+			// Right click on header area -> Group By -> From
+			
+			// Right click on header area (ex: subject)
+			// This locator could probably be more generic.  Right now, it
+			// assumes the message preview is on the bottom
+			locator = "css=td#zlha__TV-main__su";
+			this.zRightClickAt(locator, "", (WebElement[])null);
+			this.zWaitForBusyOverlay();
+			
+			// Hover over Group By
+			locator = "css=td[id$='_title']:contains('Group By')";	// See http://bugzilla.zimbra.com/show_bug.cgi?id=82491
+			this.sMouseOver(locator, (WebElement[])null);
+			this.zWaitForBusyOverlay();
+			
+			// Select From/Date/Size
+			if ( button == Button.B_MAIL_LIST_GROUPBY_FROM ) {
+				locator = "css=div#GROUPBY_FROM td[id$='_title']";
+			} else if ( button == Button.B_MAIL_LIST_GROUPBY_DATE ) {
+				locator = "css=div#GROUPBY_DATE td[id$='_title']";
+			} else if ( button == Button.B_MAIL_LIST_GROUPBY_SIZE ) {
+				locator = "css=div#GROUPBY_SIZE td[id$='_title']";
+			}
+			this.zClick(locator, (WebElement[])null);
+			this.zWaitForBusyOverlay();
+
+			return (null);
+
 		} else if ( button == Button.B_MAIL_LIST_SORTBY_FLAGGED ) {
 
 			locator = "css=td[id='zlh__TV-main__fg'] div[class='ImgFlagRed']";
