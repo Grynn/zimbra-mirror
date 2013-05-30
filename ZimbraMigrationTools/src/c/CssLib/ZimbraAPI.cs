@@ -6,7 +6,6 @@ using System.Text;
 using System.Xml.Linq;
 using System.Xml;
 using System;
-using System.Text.RegularExpressions;
 
 namespace CssLib
 {
@@ -28,7 +27,7 @@ public class ZimbraAPI
     public const int CONTACT_MODE = 2;          // for contacts -- with pictures
     public const int APPT_VALUE_MODE = 3;       // for appts -- with binary
     public const int APPT_EMB_MODE = 4;         // for appts -- embedded messages
-    
+         
     //
 
     // Values
@@ -1912,18 +1911,35 @@ public class ZimbraAPI
             if (!IAmTheOrganizer(appt["orAddr"]))
             {
                 theOrganizer = appt["orAddr"];
-                if (AccountIDContainsPSTPath(AccountID))
-                    theOrganizer = AccountName;
             }
         }
         else
         {
             if (appt["orName"].Length > 0)
+            {
                 theOrganizer = appt["orName"];
-                if (AccountIDContainsPSTPath(AccountID))
-                    theOrganizer = AccountName;
+
+                /*int idxOrg = theOrganizer.IndexOf("@");
+                if (idxOrg == -1)  // can happen if no recip table
+                {
+                    int idxAcct = AccountName.IndexOf("@");
+                    string Name = AccountName.Substring(0, idxAcct);
+                    if (Name == appt["orName"])
+                    {
+                        theOrganizer = AccountName;
+                    }
+                }*/
+            }
             else
+            {
                 theOrganizer = AccountName;
+                if (!IAmTheOrganizer(AccountName))
+                {
+                    theOrganizer = AccountName;
+                }
+
+
+            }
         }
         writer.WriteAttributeString("a", theOrganizer);
         writer.WriteEndElement();
@@ -2212,20 +2228,26 @@ public class ZimbraAPI
             if (!IAmTheOrganizer(appt["orAddr"]))
             {
                 theOrganizer = appt["orAddr"];
-                if (AccountIDContainsPSTPath(AccountID))
-                    theOrganizer = AccountName;
             }
         }
         else
         {
+            
             if (appt["orName"].Length > 0)
+            {
                 theOrganizer = appt["orName"];
-                if (AccountIDContainsPSTPath(AccountID))
-                    theOrganizer = AccountName;
+            }
             else
+            {
                 theOrganizer = AccountName;
-        }
+                if (!IAmTheOrganizer(AccountName))
+                {
+                    theOrganizer = AccountName;
+                }
 
+
+            }
+        }
         writer.WriteAttributeString("a", theOrganizer);
         writer.WriteEndElement();
 
@@ -3348,12 +3370,6 @@ public class ZimbraAPI
                 lastError = client.exceptionMessage;
         }
         return retval;
-    }
-
-    private bool AccountIDContainsPSTPath(string acctId)
-    {
-        Match match = Regex.Match(acctId, @"[A-Za-z0-9\-_\s]+\.pst$", RegexOptions.IgnoreCase);
-        return match.Success;
     }
 
     private bool IAmTheOrganizer(string theOrganizer)
