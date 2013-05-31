@@ -646,7 +646,7 @@ function() {
 	var p = Dwt.toWindow(htmlEl);
 	var mev = new DwtMouseEvent();
 	this._setMouseEvent(mev, {dwtObj:this, target:htmlEl, button:DwtMouseEvent.LEFT, docX:p.x, docY:p.y});
-	DwtButton._dropDownCellMouseDownHdlr(mev);
+	DwtButton._dropDownCellMouseUpHdlr(mev);
 };
 
 /**
