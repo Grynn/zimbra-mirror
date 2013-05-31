@@ -1033,7 +1033,7 @@ createCert() {
     fi
     shift
   elif [ ! -s "${server_csr}" -o x"${IS_NEW_CRT}" = "x-new" ]; then
-    if [ x"$DIGEST" != "x"]; then
+    if [ x"$DIGEST" != "x" ]; then
       createCSR self ${IS_NEW_CRT} -keysize ${KEYSIZE} -digest ${DIGEST}
     else
       createCSR self ${IS_NEW_CRT} -keysize ${KEYSIZE}
