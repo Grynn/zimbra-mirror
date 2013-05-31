@@ -929,7 +929,7 @@ createServerCertReq() {
       -newkey rsa:${KEYSIZE} -config ${zimbra_cert_ssl_conf} \
       -subj "${SUBJECT}" -batch > ${tmpfile} 2>&1
   else
-    ${openssl} req -new -${DIGEST} -nodes -out ${current_csr} -keyout ${current_key} \
+    ${openssl} req -new -nodes -out ${current_csr} -keyout ${current_key} \
       -newkey rsa:${KEYSIZE} -config ${zimbra_cert_ssl_conf} \
       -subj "${SUBJECT}" -batch > ${tmpfile} 2>&1
   fi
