@@ -469,7 +469,7 @@ ngx_mail_zmauth_lookup_result_handler(ngx_zm_lookup_work_t * work) {
         ctx->errmsg.len = p - ctx->errmsg.data;
         s->out = ctx->errmsg;
 
-        if (work->result == ZM_LOOKUP_LOGIN_FAILED && work->wait_time > 0) {
+        if (work->result == ZM_LOOKUP_LOGIN_FAILED && work->wait_time >= 0) {
             ngx_add_timer(ctx->wait_ev, (ngx_msec_t) (work->wait_time * 1000));
 
             s->connection->read->handler = ngx_mail_zmauth_block_read;
