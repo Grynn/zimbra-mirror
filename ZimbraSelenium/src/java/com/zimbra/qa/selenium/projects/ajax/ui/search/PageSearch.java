@@ -149,6 +149,23 @@ public class PageSearch extends AbsTab {
 		
 	}
 
+	/**
+	 * Since the search results can return various types, the normal mechanism
+	 * of returning the AbsPage from the methods is difficult.  For now, add
+	 * a method to return the pages after the other methods are called, such as:
+	 * 
+	 * app.zPageSearch.zListItem(Action.A_LEFTCLICK, "subject");
+	 * DisplayMail display = app.zPageSearch.zGetDisplayMail();
+	 * 
+	 * @return
+	 * @throws HarnessException
+	 */
+	public DisplayMail zGetDisplayMail() throws HarnessException {
+		DisplayMail display = new DisplayMail(MyApplication);
+		display.zWaitForActive();
+		return (display);
+	}
+	
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
