@@ -16,6 +16,8 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.group.messages;
 
+import java.util.*;
+
 import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.*;
@@ -122,8 +124,8 @@ public class GroupByFrom extends PrefGroupMailByMessageTest {
 	
 		
 		// TODO: Verify the grouping
-		// List<MailItem> messages = app.zPageMail.zListGetMessages();
-		// ZAssert.assertGreaterThan(messages.size(), 0, "Verify the messages appear");
+		List<MailItem> messages = app.zPageMail.zListGetMessages();
+		ZAssert.assertGreaterThan(messages.size(), 0, "Verify the messages appear");
 		
 
 	}
