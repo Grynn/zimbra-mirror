@@ -102,13 +102,19 @@ public class FlagMail extends PrefGroupMailByMessageTest {
 			app.zPageMail.zListItem(Action.A_MAIL_FLAG, subject);
 	
 			
-			// A "Permission Denied" error popup should occur
+			// https://bugzilla.zimbra.com/show_bug.cgi?id=73696#c9
+			// A "Permission Denied" error popup *might* occur
 			DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
 			ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
-			ZAssert.assertTrue(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is active");
+			boolean active = dialog.zIsActive();
 			
-			// Close the dialog
-			dialog.zClickButton(Button.B_OK);
+			if ( active ) {
+				// To make sure the client doesn't get confused, close the dialog before
+				// doing verification
+				dialog.zClickButton(Button.B_OK);
+			}
+			
+			ZAssert.assertFalse(active, "Verify the PERM DENIED Error Dialog is active");
 		
 		} finally {
 			
@@ -189,14 +195,20 @@ public class FlagMail extends PrefGroupMailByMessageTest {
 			// Flag the item
 			app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKFLAG);
 			
-			// A "Permission Denied" error popup should occur
+			// https://bugzilla.zimbra.com/show_bug.cgi?id=73696#c9
+			// A "Permission Denied" error popup *might* occur
 			DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
 			ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
-			ZAssert.assertTrue(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is active");
+			boolean active = dialog.zIsActive();
 			
-			// Close the dialog
-			dialog.zClickButton(Button.B_OK);
-
+			if ( active ) {
+				// To make sure the client doesn't get confused, close the dialog before
+				// doing verification
+				dialog.zClickButton(Button.B_OK);
+			}
+			
+			ZAssert.assertFalse(active, "Verify the PERM DENIED Error Dialog is active");
+			
 		
 		} finally {
 			
