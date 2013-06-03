@@ -14,13 +14,9 @@
  */
 package com.zimbra.webClient.filters;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -30,35 +26,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.WebSplitUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.taglib.memcached.MemcachedConnector;
 import com.zimbra.cs.taglib.ngxlookup.NginxRouteLookUpConnector;
 import com.zimbra.cs.util.Zimbra;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 public class ForwardFilter implements Filter {
 
     private ServletContext ctxt;
-    private static List<String> servicesInstalled;
-
-    static {
-        try {
-            Context initCtx = new InitialContext();
-            Context envCtx = (Context) initCtx.lookup("java:comp/env");
-            servicesInstalled = Arrays.asList(((String)envCtx.lookup("zimbraServicesInstalled")).split(","));
-        } catch (NamingException e) {
-            servicesInstalled = null;
-        }
-    }
 
     @Override public void init(FilterConfig filterConfig) throws ServletException {
         ctxt = filterConfig.getServletContext().getContext("/service");
-        if (servicesInstalled != null && (!(servicesInstalled.contains("zimbra") && servicesInstalled.contains("service") &&
-                servicesInstalled.contains("zimbraAdmin") && servicesInstalled.contains("zimlets"))
-                && servicesInstalled.contains("zimbra"))) {
+        if (WebSplitUtil.isZimbraWebClientSplitEnabled()) {
             try {
                 MemcachedConnector.startup();
                 NginxRouteLookUpConnector.startup();
@@ -70,9 +52,7 @@ public class ForwardFilter implements Filter {
     }
 
     @Override public void destroy() {
-        if (servicesInstalled != null && (!(servicesInstalled.contains("zimbra") && servicesInstalled.contains("service") &&
-                servicesInstalled.contains("zimbraAdmin") && servicesInstalled.contains("zimlets"))
-                && servicesInstalled.contains("zimbra"))) {
+        if (WebSplitUtil.isZimbraWebClientSplitEnabled()) {
             try {
                 MemcachedConnector.shutdown();
                 NginxRouteLookUpConnector.shutdown();

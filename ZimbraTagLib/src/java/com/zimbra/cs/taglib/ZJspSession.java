@@ -22,6 +22,7 @@ import com.zimbra.common.util.BlobMetaData;
 import com.zimbra.common.util.BlobMetaDataEncodingException;
 import com.zimbra.common.util.HttpUtil;
 import com.zimbra.common.util.RemoteIP;
+import com.zimbra.common.util.WebSplitUtil;
 import com.zimbra.common.util.ngxlookup.NginxAuthServer;
 import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.taglib.bean.BeanUtils;
@@ -32,9 +33,6 @@ import com.zimbra.client.ZFolder;
 import com.zimbra.client.ZMailbox;
 import com.zimbra.common.localconfig.LC;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,11 +46,9 @@ import org.apache.commons.codec.binary.Hex;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -113,16 +109,6 @@ public class ZJspSession {
     private static final RemoteIP.TrustedIPs TRUSTED_IPS = new RemoteIP.TrustedIPs(
             BeanUtils.getEnvString("trustedIPs", "").split(" "));
 
-    public static List<String> servicesInstalled;
-    static {
-        try {
-            Context initCtx = new InitialContext();
-            Context envCtx = (Context) initCtx.lookup("java:comp/env");
-            servicesInstalled = Arrays.asList(((String) envCtx.lookup("zimbraServicesInstalled")).split(","));
-        } catch (NamingException ne) {
-            servicesInstalled = null;
-        }
-    }
     public static boolean secureAuthTokenCookie(HttpServletRequest request) {
         String initMode = request.getParameter(Q_ZINITMODE);
         boolean currentHttps = request.getScheme().equals(PROTO_HTTPS);
@@ -390,9 +376,7 @@ public class ZJspSession {
     }
 
     public static synchronized String getSoapURL(PageContext context) throws ServiceException {
-        if (servicesInstalled != null && (!(servicesInstalled.contains("zimbra") && servicesInstalled.contains("service") &&
-                servicesInstalled.contains("zimbraAdmin") && servicesInstalled.contains("zimlets"))
-                && servicesInstalled.contains("zimbra"))) {
+        if (WebSplitUtil.isZimbraWebClientSplitEnabled()) {
             RouteCache rtCache = RouteCache.getInstance();
             String accountID;
             try {
@@ -408,7 +392,6 @@ public class ZJspSession {
                     HttpServletRequest request = (HttpServletRequest) context.getRequest();
                     NginxAuthServer nginxLookUpServer = NginxRouteLookUpConnector.getClient().getRouteforAccount(accountID, "zimbraId",
                             authProtocol, HttpUtil.getVirtualHost(request), request.getRemoteAddr(), request.getHeader("Host"));
-                    //request.getHeader("Host")
                     rtCache.put(nginxLookUpServer.getNginxAuthUser(), nginxLookUpServer.getNginxAuthServer());
                     route = nginxLookUpServer.getNginxAuthServer();
                 }

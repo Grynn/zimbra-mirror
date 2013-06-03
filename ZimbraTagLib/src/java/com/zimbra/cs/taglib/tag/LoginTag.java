@@ -17,6 +17,7 @@ package com.zimbra.cs.taglib.tag;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.HttpUtil;
+import com.zimbra.common.util.WebSplitUtil;
 import com.zimbra.common.util.ZimbraCookie;
 import com.zimbra.common.util.ngxlookup.NginxAuthServer;
 import com.zimbra.cs.taglib.ZJspSession;
@@ -132,10 +133,7 @@ public class LoginTag extends ZimbraSimpleTag {
             }
 
             if (mUrl == null) {
-                if (mAuthToken == null && ZJspSession.servicesInstalled != null &&
-                        (!(ZJspSession.servicesInstalled.contains("zimbra") && ZJspSession.servicesInstalled.contains("service") &&
-                        ZJspSession.servicesInstalled.contains("zimbraAdmin") && ZJspSession.servicesInstalled.contains("zimlets"))
-                        && ZJspSession.servicesInstalled.contains("zimbra"))) {
+                if (mAuthToken == null && WebSplitUtil.isZimbraWebClientSplitEnabled()) {
                     String protocol = (ZJspSession.isProtocolModeHttps() ? "httpssl" : "http");
                     NginxAuthServer nginxLookUpServer = NginxRouteLookUpConnector.getClient().getRouteforAccount(mUsername, "username",
                             protocol, HttpUtil.getVirtualHost(request), request.getRemoteAddr(), request.getHeader("Virtual-Host"));
