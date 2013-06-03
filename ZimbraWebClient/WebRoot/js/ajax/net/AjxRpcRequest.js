@@ -99,6 +99,7 @@ AjxRpcRequest.__msxmlVers	= null;
 AjxRpcRequest.prototype.invoke =
 function(requestStr, serverUrl, requestHeaders, callback, method, timeout) {
 
+
 	var asyncMode = (callback != null);
 	var m = requestStr && requestStr.match(/.*"(\w+Request)"/);
 	this.methodName = m ? m[1] : serverUrl || "";	// for debugging
@@ -211,7 +212,6 @@ function(req, callback) {
 		} catch (ex) {
 			// Use default status of 500 above.
 		}
-
 		if (status == 200 || status == 201) {
 			callback.run( {text:req.__httpReq.responseText, xml:req.__httpReq.responseXML, success:true, reqId:req.id} );
 		} else {
@@ -251,3 +251,4 @@ function() {
 	}
 	AjxRpcRequest.__inited = true;
 };
+

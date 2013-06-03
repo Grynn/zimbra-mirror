@@ -465,6 +465,9 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
         if (debug > 0){
             System.out.println("URI = " + uri + " ");
         }
+
+        if ("true".equals(req.getParameter("weboffline"))) return;
+
         if (isDynamicContent(uri)){
             setJspCacheControlHeaders(resp);
         } else {

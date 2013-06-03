@@ -84,7 +84,7 @@ function(/* arg1 ... argN */) {
 
 	// invoke function
 	if (this.func) {
-		return this.func.apply(this.obj || window, args);
+        return this.func.apply(this.obj || window, args);
 	}
 };
 

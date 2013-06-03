@@ -161,6 +161,8 @@ AjxEnv.is1024x768orLower;
 /** HTML5 Support **/
 AjxEnv.supportsHTML5File;
 
+AjxEnv.supported = Modernizr;
+
 
 /** Supports indirect global eval() **/
 AjxEnv.indirectEvalIsGlobal;

@@ -116,6 +116,7 @@ public class SkinResources
 	private static final String T_CSS = "css";
 	private static final String T_HTML = "html";
 	private static final String T_JAVASCRIPT = "javascript";
+    private static final String T_APPCACHE = "appcache";
 
 	private static final String N_SKIN = "skin";
 	private static final String N_IMAGES = "images";
@@ -135,6 +136,12 @@ public class SkinResources
 
 	private static final Pattern RE_VERSION = Pattern.compile("\\d+\\.\\d+");
 
+    /*
+     * this regex will match any of the below pattern
+     * url(/path/name) or url('/path/name') or url("/path/name") or url('/path/name?v=123456789')
+    */
+    private static final Pattern RE_CSSURL = Pattern.compile("^(?!/\\*).*url\\(\'?\"?(.*?)\\??v?=?\\d*\'?\"?\\)");
+
 	private static final String IMAGE_CSS = "img/images.css";
 
 	private static final Map<String, String> TYPES = new HashMap<String, String>();
@@ -144,6 +151,7 @@ public class SkinResources
 		TYPES.put("html", "text/html");
 		TYPES.put("js", "text/javascript");
 		TYPES.put("plain", "text/plain");
+        TYPES.put("appcache", "text/appcache");
 	}
 
 	//
@@ -230,7 +238,7 @@ public class SkinResources
 		String cacheId = serverName + ":" + uri + ":" + client + ":" + skin + "/templates=" + templates + ":" + browserType + ":" + cacheBusterVersion;
 
 		Locale locale = getLocale(req);
-		if (type.equals(T_JAVASCRIPT) || type.equals(T_CSS)) {
+		if (type.equals(T_JAVASCRIPT) || type.equals(T_CSS) || type.equals(T_APPCACHE)) {
 			cacheId += ":" + locale;
 		}
 
@@ -341,7 +349,7 @@ public class SkinResources
 				maxAge = "2595600";
 			}
 			resp.setHeader("Cache-control", "public, max-age="+maxAge);
-			resp.setContentType(contentType);
+			resp.setContentType(type.equals(T_APPCACHE)? "text/plain" : contentType);
 
 			if (compress && file != null) {
 				resp.setHeader("Content-Encoding", "gzip");
@@ -454,12 +462,15 @@ public class SkinResources
 			ext = filenames.substring(dot);
 			filenames = filenames.substring(0, dot);
 		}
+        if (type.equals(T_APPCACHE)) {
+            ext = ".css";
+        }
 
 		ServletContext context = getServletContext();
 
 		String rootDirname = context.getRealPath("/");
 		File rootDir = new File(rootDirname);
-		File fileDir = new File(rootDir, type);
+		File fileDir = new File(rootDir, type.equals(T_APPCACHE) ? "css" : type);
 		String skinDirname = context.getRealPath("/skins/" + skin);
 		File skinDir = new File(skinDirname);
 		File manifestFile = new File(skinDir, SKIN_MANIFEST);
@@ -531,7 +542,7 @@ public class SkinResources
 			List<File> files = new LinkedList<File>();
 
 			if (filename.equals(N_SKIN)) {
-				if (type.equals(T_CSS)) {
+				if (type.equals(T_CSS) || type.equals(T_APPCACHE)) {
 					for (File file : manifest.getFiles(type)) {
 						files.add(file);
 						String cssFilename = file.getName().replaceAll("\\.css$", "");
@@ -588,14 +599,14 @@ public class SkinResources
 				File file = new File(dir, filenameExt);
 				if (ZimbraLog.webclient.isDebugEnabled())
 					ZimbraLog.webclient.debug("DEBUG: file " + file.getAbsolutePath());
-				if (!file.exists() && type.equals(T_CSS) && filename.equals(N_IMAGES)) {
+				if (!file.exists() && (type.equals(T_CSS) || type.equals(T_APPCACHE)) && filename.equals(N_IMAGES)) {
 					file = new File(rootDir, IMAGE_CSS);
 					dir = file.getParentFile();
 					if (ZimbraLog.webclient.isDebugEnabled())
 						ZimbraLog.webclient.debug("DEBUG: !file.exists() " + file.getAbsolutePath());
 				}
 				files.add(file);
-				if (type.equals(T_CSS) || type.equals(T_JAVASCRIPT)) {
+				if (type.equals(T_CSS) || type.equals(T_APPCACHE) || type.equals(T_JAVASCRIPT)) {
 					addLocaleFiles(files, requestedLocale, dir, filename, ext);
 				}
 			}
@@ -617,6 +628,125 @@ public class SkinResources
 
 		// return data
 		out.flush();
+		if (type.equals(T_APPCACHE)) {
+			//create the full manifest file.
+			StringBuffer sb = new StringBuffer();
+			sb.append("CACHE MANIFEST\n\n");
+			sb.append("#version ").append(cacheBusterVersion).append(" \n");
+			sb.append("CACHE:\n");
+			sb.append("\n#images\n\n");
+			sb.append("/img/zimbra.gif\n"); //TODO remove this hardcoded image.
+			sb.append("/img/zimbra.png\n"); //TODO remove this hardcoded image.
+			sb.append("\n#style sheet images\n\n");
+			//find all the css rules with a url in it
+			Set<String> imgSet = new LinkedHashSet();
+			for(String s: cout.toString().split("\\r?\\n")) {
+				//run the regex on each line
+				Matcher m = RE_CSSURL.matcher(s.trim());
+				if (m.find()) {
+					imgSet.add(m.group(1)); //use linked hash set to avoid duplicate images
+				}
+			}
+			//ignore some url's TODO see if we can cleanup the ignoreList
+			List<String> ignoreList = Arrays.asList("msgview.css,/img/ie-custom-icons/ie-custom-icons.png,/img/logo/apple-touch-icon.png,/img/dwt/Expand.gif,/img/dwt/Collapse.gif".split(","));
+			imgSet.removeAll(ignoreList);
+
+			sb.append(StringUtil.join("\n",imgSet));
+
+			String debugStr = req.getParameter(P_DEBUG);
+			String debug = "";
+			if (debugStr != null && !"".equals(debugStr)) {
+				debug = "debug=" + debugStr + "&";
+			}
+			String localeStr = req.getParameter(P_LOCALE);
+			String locale = "";
+			if (localeStr != null && !"".equals(localeStr)) {
+				locale = "locale=" + localeStr + "&";
+			}
+
+			sb.append("\n\n#style sheets\n");
+			//create the url of the css files
+			sb.append("\n").append(appContextPath).append("/css/").append(filenames).append(".css?")
+			  .append(debug).append(locale).append("skin=").append(skin);
+
+			sb.append("\n").append(appContextPath).append("/css/msgview.css");
+			sb.append("\n\n#resources\n");
+			//create the resources url
+			sb.append("\n").append(appContextPath).append("/res/I18nMsg,AjxMsg,ZMsg,ZmMsg,AjxKeys,ZmKeys,ZdMsg," +
+					"AjxTemplateMsg.js?");
+			sb.append(debug).append("skin=").append(skin);
+			if (localeStr != null && !"".equals(localeStr)) {
+				sb.append("&language=").append(requestedLocale.getLanguage());
+				sb.append("&country=").append(requestedLocale.getCountry());
+			}
+
+			sb.append("\n").append(appContextPath).append("/js/skin.js?");
+			sb.append(debug).append(locale).append("skin=").append(skin);
+			if (client != null && !"".equals(client)) {
+				sb.append("&client=").append(client);
+			}
+
+			String compressStr = req.getParameter(P_COMPRESS);
+			if (compressStr != null && !"".equals(compressStr)) {
+				sb.append("&compress=").append(compressStr);
+			}
+
+			String templatesStr = req.getParameter(P_TEMPLATES);
+			if (templatesStr != null && !"".equals(templatesStr)) {
+				sb.append("&templates=").append(templatesStr);
+			}
+			sb.append("\n\n#javascript files\n");
+
+			if (debugStr != null && (debugStr.equals(Boolean.TRUE.toString()) || debugStr.equals("1"))) {
+				cout = new CharArrayWriter(4096 << 2); // 16K buffer to start
+				String[] allPackages = "Startup1_1,Startup1_2,Boot,Startup2,CalendarCore,Calendar,CalendarAppt,ContactsCore,Contacts,MailCore,Mail,BriefcaseCore,Briefcase,PreferencesCore,Preferences,TasksCore,Tasks,Extras,Share,Zimlet,ZimletApp,Alert,ImportExport,BrowserPlus,Voicemail".split(",");
+				for(String name: allPackages) {
+					File file = new File(rootDir,"js/" + name + "_appcache.js");
+					preprocess(file, cout, null, null, null, null, null, requestedLocale);
+				}
+				sb.append("\n");
+				sb.append(cout.toString().replaceAll("<%=contextPath%>",appContextPath));
+				//TODO find a way to get this template files list
+				sb.append("\n").append(appContextPath).append("/templates/abook/Contacts.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/calendar/Appointment.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/calendar/Calendar.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/data/ImportExport.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/dwt/Widgets.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/mail/Message.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/prefs/Options.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/prefs/Pages.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/prefs/Widgets.template.js");
+				/*sb.append("\n").append(appContextPath).append("/templates/share/App.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/share/Dialogs.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/share/ Quota.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/share/Widgets.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/tasks/Tasks.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/voicemail/Voicemail.template.js");*/
+				sb.append("\n").append(appContextPath).append("/templates/zimbra/Widgets.template.js");
+
+				//sb.append("\n").append(appContextPath).append("/zimbra/");
+				sb.append("\n");
+
+			} else {
+				//hardcoded prod deploy manifest js files
+				//TODO find which apps have been enabled and add only those manifest files here.
+				sb.append("\n").append(appContextPath).append("/js/Startup1_1_all.js.zgz");
+				sb.append("\n").append(appContextPath).append("/js/Startup1_2_all.js.zgz");
+				sb.append("\n").append(appContextPath).append("/js/MailCore_all.js.zgz");
+				sb.append("\n").append(appContextPath).append("/js/Startup2_all.js.zgz");
+				sb.append("\n").append(appContextPath).append("/js/CalendarCore_all.js.zgz");
+				sb.append("\n").append(appContextPath).append("/js/Calendar_all.js.zgz");
+				//sb.append("\n").append(appContextPath).append("/js/Share_all.js.zgz");
+				sb.append("\n").append(appContextPath).append("/js/Zimlet_all.js.zgz");
+				sb.append("\n").append(appContextPath).append("/js/ContactsCore_all.js.zgz");
+				sb.append("\n").append(appContextPath).append("/js/Extras_all.js.zgz");
+				sb.append("\n").append(appContextPath).append("/js/Contacts_all.js.zgz");
+				sb.append("\n").append(appContextPath).append("/js/TasksCore_all.js.zgz");
+				sb.append("\n");
+			}
+			sb.append("\nNETWORK:\n").append("*\n");
+			return sb.toString();
+		}
 		return cout.toString();
 	}
 
@@ -712,11 +842,13 @@ public class SkinResources
 						   String commentContinue,
 						   String commentEnd)
 			throws IOException {
-		out.println(commentStart);
-		out.print(commentContinue);
-		out.println("File: " + file.getAbsolutePath().replaceAll("^.*/webapps/",""));
-		out.println(commentEnd);
-		out.println();
+		if (commentStart != null) {
+			out.println(commentStart);
+			out.print(commentContinue);
+			out.println("File: " + file.getAbsolutePath().replaceAll("^.*/webapps/",""));
+			out.println(commentEnd);
+			out.println();
+		}
 
 		BufferedReader in = new BufferedReader(new FileReader(file));
 		Stack<Boolean> ignore = new Stack<Boolean>();
@@ -1353,7 +1485,7 @@ public class SkinResources
 		}
 
 		public List<File> getFiles(String type) {
-			if (type.equals(SkinResources.T_CSS)) return cssFiles();
+			if (type.equals(SkinResources.T_CSS) || type.equals(SkinResources.T_APPCACHE)) return cssFiles();
 			if (type.equals(SkinResources.T_HTML)) return htmlFiles();
 			if (type.equals(SkinResources.T_JAVASCRIPT)) return scriptFiles();
 			return null;

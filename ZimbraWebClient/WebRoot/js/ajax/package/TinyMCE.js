@@ -1,4 +1,4 @@
-AjxPackage.require("ajax.3rdparty.tinymce.tiny_mce_src");
+AjxPackage.require("ajax.3rdparty.tinymce.tiny_mce_jquery_src");
 AjxPackage.require("ajax.3rdparty.tinymce.themes.advanced.editor_template_src");
 AjxPackage.require("ajax.3rdparty.tinymce.themes.advanced.Zmeditor_template");
 AjxPackage.require("ajax.3rdparty.tinymce.langs.en");

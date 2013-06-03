@@ -873,7 +873,7 @@ function(img, focused) {
 
 DwtTreeItem.prototype._setSelected =
 function(selected, noFocus) {
-	if (this._selected != selected) {
+	if (this._selected != selected && !this._disposed) {
 		this._selected = selected;
 		if (!this._initialized) {
 			this._initialize();

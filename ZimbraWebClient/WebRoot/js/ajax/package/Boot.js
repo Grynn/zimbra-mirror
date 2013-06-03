@@ -1,3 +1,4 @@
+AjxPackage.require("ajax.3rdparty.modernizr.modernizr");
 AjxPackage.require("ajax.boot.AjxJson");
 AjxPackage.require("ajax.boot.AjxEnv");
 AjxPackage.require("ajax.boot.AjxCallback");

@@ -37,6 +37,7 @@ extends Task {
     private static final String OUTPUT_JS = "js";
     private static final String OUTPUT_HTML = "html";
 	private static final String OUTPUT_ALL = "all";
+    private static final String OUTPUT_APPCACHE = "appcache";
 
     //
     // Data
@@ -46,6 +47,7 @@ extends Task {
     private File destFile;
 	private File jsFile;
 	private File htmlFile;
+    private File acFile;
 	private List<Source> sources = new LinkedList<Source>();
 	private File dependsFile;
 	private String output = OUTPUT_JS;
@@ -65,6 +67,7 @@ extends Task {
 	private boolean isJs = true;
 	private boolean isHtml = false;
 	private boolean isAll = false;
+    private boolean isAppCache = false;
 
 	//
     // Public methods
@@ -84,6 +87,10 @@ extends Task {
 		this.htmlFile = file;
 	}
 
+    public void setAppCacheDestFile(File file) {
+        this.acFile = file;
+    }
+
 	public void setJsDir(File dir) {
 		Source source = new Source();
 		source.setDir(dir);
@@ -101,6 +108,7 @@ extends Task {
 		this.isAll = OUTPUT_ALL.equals(output);
 		this.isHtml = this.isAll || OUTPUT_HTML.equals(output);
 		this.isJs = this.isAll || OUTPUT_JS.equals(output) || !this.isHtml;
+        this.isAppCache = this.isAll || OUTPUT_APPCACHE.equals(output);
 	}
 
     public void setBasePath(String basepath) {
@@ -151,6 +159,7 @@ extends Task {
 		PrintWriter jsOut = null;
 		PrintWriter htmlOut = null;
 		PrintWriter dependsOut = null;
+        PrintWriter appCacheOut = null;
 		try {
 			if (this.isJs) {
 				File file = this.jsFile != null ? this.jsFile : this.destFile;
@@ -161,6 +170,11 @@ extends Task {
 				File file = this.htmlFile != null ? this.htmlFile : this.destFile;
 				log("Jamming to ",file.toString());
 				htmlOut = new PrintWriter(new FileWriter(file));
+			}
+			if (this.isAppCache) {
+				File file = this.acFile != null ? this.acFile : this.destFile;
+				log("Creating App cache for ",file.toString());
+				appCacheOut = new PrintWriter(new FileWriter(file));
 			}
 
 			if (this.dependsFile != null) {
@@ -187,7 +201,7 @@ extends Task {
                     if (this.isHtml && !isManifest) {
 						printHTML(htmlOut, pkg, files.getBasePath(), files.getExtension());
                     }
-					jamFile(jsOut, htmlOut, file, pkg, packages, wrap, true, dependsOut);
+					jamFile(jsOut, htmlOut, file, pkg, packages, wrap, true, dependsOut,appCacheOut);
                 }
             }
 
@@ -213,6 +227,7 @@ extends Task {
         finally {
 			if (jsOut != null) jsOut.close();
 			if (htmlOut != null) htmlOut.close();
+			if (appCacheOut != null) appCacheOut.close();
 			if (dependsOut != null) dependsOut.close();
 		}
     }
@@ -223,7 +238,7 @@ extends Task {
 
     private void jamFile(PrintWriter jsOut, PrintWriter htmlOut, File ifile,
                          String pkg, List<String> packages,
-                         boolean wrap, boolean top, PrintWriter dependsOut)
+                         boolean wrap, boolean top, PrintWriter dependsOut, PrintWriter appCacheOut)
     throws IOException {
         if (this.verbose) log("file: ",ifile.toString());
         BufferedReader in = new BufferedReader(new FileReader(ifile));
@@ -274,12 +289,16 @@ extends Task {
                         printHTML(htmlOut, require, null, null);
                     }
 
+                    if (this.isAppCache && !path.endsWith("__all__")) {
+                        printAppCache(appCacheOut, require, null, ".js");
+                    }
+
                     // implicitly define and jam on!
                     this.defines.put(path, true);
                     File file = this.getFileForPath(path);
                     String odepth = this.verbose ? this.depth : null;
                     if (this.verbose) this.depth += "  ";
-                    jamFile(jsOut, htmlOut, file, path2package(require), packages, wrap, false, dependsOut);
+                    jamFile(jsOut, htmlOut, file, path2package(require), packages, wrap, false, dependsOut,appCacheOut);
                     if (this.verbose) this.depth = odepth;
                 }
                 continue;
@@ -323,6 +342,15 @@ extends Task {
         out.print(path);
         out.print(extension != null ? extension : this.extension);
         out.println("\"></script>");
+    }
+
+    private void printAppCache(PrintWriter out, String pkg, String basePath, String extension) {
+        if (out == null) return;
+
+        String path = package2path(pkg);
+        out.print(basePath != null ? basePath : this.basepath);
+        out.print(path);
+        out.println(extension != null ? extension : this.extension);
     }
 
     private String matchDefine(String s) {
