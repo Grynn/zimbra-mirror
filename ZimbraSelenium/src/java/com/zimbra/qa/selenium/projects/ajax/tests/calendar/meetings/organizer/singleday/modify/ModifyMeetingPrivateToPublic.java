@@ -84,8 +84,7 @@ public class ModifyMeetingPrivateToPublic extends CalendarWorkWeekTest {
 		ZAssert.assertTrue(app.zPageCalendar.sIsElementPresent(Locators.ImgPrivateAppt), "Private Image is present on the meeting");
 		
         // Open Meeting change the class from Private to Public and Send it
-        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        FormApptNew apptForm = new FormApptNew(app);
+        FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_OPEN, apptSubject);
         appt.setIsPrivate(false);
         apptForm.zFill(appt);
         apptForm.zToolbarPressButton(Button.B_SEND);
@@ -143,8 +142,7 @@ public class ModifyMeetingPrivateToPublic extends CalendarWorkWeekTest {
 		
 		
         // Open Meeting change the class from Public to Private and save it
-        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
-        FormApptNew apptForm = new FormApptNew(app);
+        FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_OPEN, apptSubject);
         appt.setIsPrivate(true);
         apptForm.zFill(appt);
         apptForm.zToolbarPressButton(Button.B_SEND);

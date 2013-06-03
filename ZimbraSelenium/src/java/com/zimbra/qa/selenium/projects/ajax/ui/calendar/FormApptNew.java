@@ -1178,8 +1178,14 @@ public class FormApptNew extends AbsForm {
 		// Is private
 		if (appt.getIsPrivate() == true) {
 			zFillField(Field.Private);
+			SleepUtil.sleepSmall();
 		}
-
+		
+		if (appt.getIsPrivate() == false) {
+		 String locator = "css=input[id$='_privateCheckbox']";
+		 this.sUncheck(locator);
+		 this.zWaitForBusyOverlay();
+		}
 		// Body
 		if (appt.getContent() != null) {
 			zFillField(Field.Body, appt.getContent());

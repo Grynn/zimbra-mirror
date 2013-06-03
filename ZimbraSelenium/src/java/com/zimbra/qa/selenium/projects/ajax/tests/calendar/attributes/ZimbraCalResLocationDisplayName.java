@@ -20,6 +20,7 @@ import java.util.Calendar;
 
 import org.testng.annotations.*;
 
+import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
@@ -49,6 +50,22 @@ public class ZimbraCalResLocationDisplayName extends CalendarWorkWeekTest {
 					"<id> " + location.ZimbraId + "</id> " +
 					"<a n='zimbraCalResLocationDisplayName'>"+ resourceDisplayName +"</a>" +
 				"</ModifyCalendarResourceRequest>");
+		
+		Element[] ModifyCalendarResourceResponse = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//admin:ModifyCalendarResourceRequest");
+		logger.info("ModifyCalendarResourceResponse is')" + ModifyCalendarResourceResponse);
+		
+		if ( (ModifyCalendarResourceResponse == null) || (ModifyCalendarResourceResponse.length == 0)) {
+
+			Element[] soapFault = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//soap:Fault");
+			if ( soapFault != null && soapFault.length > 0 ) {
+			
+				String error = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//zimbra:Code", null);
+				throw new HarnessException("Unable to modify resource : "+ error);
+				
+			}
+		
+			
+		}
 		
 		// Logout and login to pick up the changes
 		app.zPageLogin.zNavigateTo();
@@ -81,7 +98,7 @@ public class ZimbraCalResLocationDisplayName extends CalendarWorkWeekTest {
                "</CreateAppointmentRequest>");
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         
-        FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
+        FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_OPEN, apptSubject);
         apptForm.zToolbarPressButton(Button.B_LOCATION);
         
         DialogFindLocation dialogFindLocation = (DialogFindLocation) new DialogFindLocation(app, app.zPageCalendar);

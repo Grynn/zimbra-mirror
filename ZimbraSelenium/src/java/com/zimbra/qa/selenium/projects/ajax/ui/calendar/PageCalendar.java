@@ -1266,6 +1266,14 @@ public class PageCalendar extends AbsTab {
 				
 				waitForPostfix = false;
 				
+			}if ( option == Button.O_OPEN) {
+				
+				optionLocator = Locators.OpenMenu;
+				this.zClickAt(optionLocator, "");
+				SleepUtil.sleepMedium();
+			    page = new FormApptNew(this.MyApplication);
+				return page;
+				
 			} else {
 
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
