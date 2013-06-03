@@ -382,6 +382,21 @@ public class PageMail extends AbsTab {
 
 			// FALL THROUGH
 
+		} else if ( button == Button.B_READMORE ) {
+
+			if ( !this.sIsElementPresent("css=div[id$='__KEEP_READING']") ) {
+				throw new HarnessException("Keep Reading button not present "+ button);
+			}
+			
+			if ( this.sIsElementPresent("css=div[id$='__KEEP_READING'].ZDisabled")) {
+				throw new HarnessException("Keep Reading button is disabled "+ button);
+			}
+
+			locator = "css=div[id$='__KEEP_READING'] td[id$='_title']";
+			page = null;
+
+			// FALL THROUGH
+
 		} else if ( button == Button.B_NEWWINDOW ) {
 
 			// 8.0: http://bugzilla.zimbra.com/show_bug.cgi?id=73721

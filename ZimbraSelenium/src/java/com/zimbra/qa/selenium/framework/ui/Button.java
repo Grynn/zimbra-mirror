@@ -126,6 +126,7 @@ public class Button {
 	public static final Button B_NEWWINDOW = new Button("B_NEWWINDOW");
 	public static final Button B_LISTVIEW = new Button("B_LISTVIEW");
 	public static final Button B_ARCHIVE = new Button("B_ARCHIVE");
+	public static final Button B_READMORE = new Button("B_READMORE");
 	public static final Button B_SELECT_ALL = new Button("B_SELECT_ALL");
 	public static final Button B_SHIFT_SELECT_ALL = new Button("B_SHIFT_SELECT_ALL");
 
