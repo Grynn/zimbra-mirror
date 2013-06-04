@@ -21,7 +21,6 @@ use Migrate;
 
 Migrate::verifySchemaVersion(92);
 
-addLocksTable();
 addItemcacheCheckpointColumn();
 addCurrentSessionsTable();
 
@@ -30,17 +29,6 @@ Migrate::updateSchemaVersion(92, 100);
 exit(0);
 
 ########################################################################################################################
-
-sub addLocksTable() {
-    Migrate::logSql("Adding LOCKS table...");
-    my $sql = <<_EOF_;
-CREATE TABLE IF NOT EXISTS locks (
-  mailbox_id INTEGER NOT NULL,
-  PRIMARY KEY (mailbox_id)
-) ENGINE = InnoDB;
-_EOF_
-  Migrate::runSql($sql);
-}
 
 sub addItemcacheCheckpointColumn() {
     Migrate::logSql("Adding ITEMCACHE_CHECKPOINT column to mailbox table...");

@@ -151,8 +151,3 @@ CREATE TABLE mobile_devices (
 );
 
 CREATE INDEX i_mobile_devices_last_used_date ON mobile_devices(last_used_date);
-
-CREATE TABLE locks (
-   mailbox_id          BIGINT UNSIGNED NOT NULL,
-   PRIMARY KEY (mailbox_id)
-);

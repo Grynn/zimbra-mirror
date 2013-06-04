@@ -35,9 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.helix.AccessOption;
-import org.apache.helix.ZNRecord;
-import org.apache.helix.store.zk.ZkHelixPropertyStore;
 
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.AccountBy;
@@ -71,7 +68,7 @@ import com.zimbra.cs.ldap.ZLdapFilterFactory.FilterId;
 import com.zimbra.cs.nginx.AbstractNginxLookupLdapHelper.SearchDirResult;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.authenticator.ClientCertAuthenticator;
-import com.zimbra.cs.zookeeper.ServiceDiscovery;
+import com.zimbra.cs.zookeeper.CuratorManager;
 
 public class NginxLookupExtension implements ZimbraExtension {
 
@@ -104,14 +101,6 @@ public class NginxLookupExtension implements ZimbraExtension {
     public void init() throws ExtensionException, ServiceException {
         ExtensionDispatcherServlet.register(this, new NginxLookupHandler());
         CacheExtension.register("reverseproxylookup", new ReverseProxyCache());
-        try {
-            ServiceDiscovery serviceDiscovery = ServiceDiscovery.getInstance();
-            if (serviceDiscovery != null) {
-                serviceDiscovery.setupWatcher();
-            }
-        } catch (Exception e) {
-            throw new ExtensionException("Could not setup zookeeper service discovery watcher", e);
-        }
     }
 
     @Override
@@ -1059,18 +1048,15 @@ public class NginxLookupExtension implements ZimbraExtension {
                     mailhost = vals.get(Provisioning.A_zimbraReverseProxyMailHostAttribute);
 
                 // get active servers
-                ServiceDiscovery serviceDiscovery = ServiceDiscovery.getInstance();
-                if (serviceDiscovery != null) {
-                    Set<String> activeServers = ServiceDiscovery.getInstance().getActiveServers();
-                    String zookey = "/" + authUserWithRealDomainName;
-                    final String MAILHOST = "MAILHOST";
-                    ZkHelixPropertyStore<ZNRecord> propertyStore = serviceDiscovery.getPropertyStore();
-                    ZNRecord record = propertyStore.get(zookey, null, AccessOption.PERSISTENT);
+                CuratorManager curatorManager = CuratorManager.getInstance();
+                if (curatorManager != null) {
+                    Set<String> activeServers = curatorManager.getActiveServers();
+                    String value = curatorManager.getData(authUserWithRealDomainName);
                     boolean foundRecord = false;
-                    if (record != null) {
-                        String serverId = record.getId();
+                    if (value != null) {
+                        String serverId = value.split(":")[0];
                         if (activeServers.contains(serverId)) {
-                            mailhost = record.getSimpleField(MAILHOST);
+                            mailhost = value.split(":")[1];
                             foundRecord = true;
                         }
                     }
@@ -1092,9 +1078,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                                     Server selectedServer = servers.get(random.nextInt(servers.size()));
                                     mailhost = selectedServer.getServiceHostname();
                                     // store this server info in zookeeper
-                                    record = new ZNRecord(selectedServer.getId());
-                                    record.setSimpleField(MAILHOST, mailhost);
-                                    propertyStore.set(zookey, record, AccessOption.PERSISTENT);
+                                    curatorManager.setData(authUserWithRealDomainName, selectedServer.getId() + ":" + mailhost);
                                 }
                             }
                         }
