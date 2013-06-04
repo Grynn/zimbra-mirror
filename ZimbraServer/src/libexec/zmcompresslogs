@@ -72,7 +72,7 @@ sub compressLogFile($) {
 
 sub getLocalConfigValue($) {
   my ($key) = @_;
-  my $val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null`;
+  my $val = qx(/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null);
   chomp $val;
   return $val;
 }

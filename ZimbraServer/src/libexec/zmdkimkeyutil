@@ -150,10 +150,10 @@ if($add) {
      if ($bits < 1024) {
        print "Bit size less than 1024 is not allowed, as it is insecure.\n";
      } else {
-      `$keygen $subflag -b $bits -s $selector -d $domain -D /opt/zimbra/data/tmp`;
+      qx($keygen $subflag -b $bits -s $selector -d $domain -D /opt/zimbra/data/tmp);
      }
   } else {
-    `$keygen $subflag -s $selector -d $domain -D /opt/zimbra/data/tmp`;
+    qx($keygen $subflag -s $selector -d $domain -D /opt/zimbra/data/tmp);
   }
   my $privatekey = "${zimbra_home}/data/tmp/${selector}.private";
   my $publickey = "${zimbra_home}/data/tmp/${selector}.txt";
@@ -265,10 +265,10 @@ if($add) {
      if ($bits < 1024) {
        print "Bit size less than 1024 is not allowed, as it is insecure.\n";
      } else {
-      `$keygen $subflag -b $bits -s $selector -d $domain -D /opt/zimbra/data/tmp`;
+      qx($keygen $subflag -b $bits -s $selector -d $domain -D /opt/zimbra/data/tmp);
      }
   } else {
-    `$keygen $subflag -s $selector -d $domain -D /opt/zimbra/data/tmp`;
+    qx($keygen $subflag -s $selector -d $domain -D /opt/zimbra/data/tmp);
   }
   my $privatekey = "${zimbra_home}/data/tmp/${selector}.private";
   my $publickey = "${zimbra_home}/data/tmp/${selector}.txt";

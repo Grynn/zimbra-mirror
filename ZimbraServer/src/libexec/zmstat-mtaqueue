@@ -29,7 +29,7 @@ sub getHeading() {
 }
 
 sub getQueueStat() {
-    my $out = `postqueue -p 2> /dev/null | tail -1`;
+    my $out = qx(postqueue -p 2> /dev/null | tail -1);
     if (defined($out)) {
         chomp($out);
         if ($out =~ /(\d+) Kbytes in (\d+) Requests/) {

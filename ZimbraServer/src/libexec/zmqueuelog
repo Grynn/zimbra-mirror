@@ -20,7 +20,7 @@ use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Util::Common;
 use Zimbra::Mon::Logger;
 
-my $platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
+my $platform=qx(/opt/zimbra/libexec/get_plat_tag.sh);
 chomp $platform;
 
 my $MNTCMD;
@@ -33,7 +33,7 @@ if ($platform eq "MACOSX") {
 	$DFCMD = "df -ml ";
 }
 
-my $dt = `date "+%Y-%m-%d %H:%M:%S"`;
+my $dt = qx(date "+%Y-%m-%d %H:%M:%S");
 chomp $dt;
 
 checkPid();
@@ -44,7 +44,7 @@ exit 0;
 
 sub checkPid {
 	if (-f "/opt/zimbra/log/zmqueuelog.pid") {
-		my $P = `cat /opt/zimbra/log/zmqueuelog.pid`;
+		my $P = qx(cat /opt/zimbra/log/zmqueuelog.pid);
 		chomp $P;
 		if ($P ne "") {
       system("kill -0 $P 2> /dev/null");
@@ -54,7 +54,7 @@ sub checkPid {
       }
 		}
 	}
-	`echo $$ > "/opt/zimbra/log/zmqueuelog.pid"`;
+	qx(echo $$ > "/opt/zimbra/log/zmqueuelog.pid");
 }
 
 sub clearPid {

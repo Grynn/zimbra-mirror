@@ -30,7 +30,7 @@ if ( $id ne "root" ) {
   exit 1;
 }
 
-my $platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
+my $platform=qx(/opt/zimbra/libexec/get_plat_tag.sh);
 chomp($platform);
 
 my $zimbra_tmp_directory=getLocalConfig("zimbra_tmp_directory");
@@ -52,7 +52,7 @@ if ( $platform =~ /MACOSX/ ) {
 
 my $junk;
 my $TYPE;
-my $LOGHOST=`su - zimbra -c '/opt/zimbra/bin/zmprov -m -l gacf zimbraLogHostname'`;
+my $LOGHOST=qx(su - zimbra -c '/opt/zimbra/bin/zmprov -m -l gacf zimbraLogHostname');
 
 if ( $LOGHOST eq "" ) {
   $TYPE="local";
@@ -447,13 +447,13 @@ if ( !$edited ) {
 }
 
 if ( $platform eq "SLES11_64" ) {
-  `/etc/init.d/syslog restart > /dev/null 2>&1`;
+  qx(/etc/init.d/syslog restart > /dev/null 2>&1);
   exit 0;
 }
 
 if ($platform =~ /UBUNTU/ && -f "/etc/rsyslog.conf" ) {
   if ( -e "/usr/sbin/service" ) {
-    `/usr/sbin/service rsyslog restart`;
+    qx(/usr/sbin/service rsyslog restart);
     exit 0;
   } else {
     print "Unable to restart syslog.  Please do it manually.\n";
@@ -462,15 +462,15 @@ if ($platform =~ /UBUNTU/ && -f "/etc/rsyslog.conf" ) {
 }
 if ( $platform =~ /RHEL6/ || $platform =~ /CentOS6/ ) {
   if ( -e "/etc/init.d/rsyslog" ) {
-    `/etc/init.d/rsyslog restart> /dev/null 2>&1`;
+    qx(/etc/init.d/rsyslog restart> /dev/null 2>&1);
     exit 0;
   } else {
     print "Unable to restart rsyslog.  Please do it manually.\n";
     exit 1;
   }
 } else {
-  my $syslog_PID=`cat /var/run/*syslog*.pid`;
-  `kill -HUP $syslog_PID`;
+  my $syslog_PID=qx(cat /var/run/*syslog*.pid);
+  qx(kill -HUP $syslog_PID);
 }
 
 sub getLocalConfig {
@@ -479,7 +479,7 @@ sub getLocalConfig {
   return $main::loaded{lc}{$key}
     if (exists $main::loaded{lc}{$key});
 
-  my $val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null`;
+  my $val = qx(/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null);
   chomp $val;
   $main::loaded{lc}{$key} = $val;
   return $val;

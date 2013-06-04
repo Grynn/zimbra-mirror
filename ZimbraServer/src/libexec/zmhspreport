@@ -57,9 +57,9 @@ if ($id ne "zimbra") {
 $FORMAT_LINES_PER_PAGE = 100;
 $FORMAT_FORMFEED = "\n";
 
-my $ldappass = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_ldap_password`;
-my $ldapdn  = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_ldap_userdn`;
-my $ldapurl  = `/opt/zimbra/bin/zmlocalconfig -s -m nokey ldap_url`;
+my $ldappass = qx(/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_ldap_password);
+my $ldapdn  = qx(/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_ldap_userdn);
+my $ldapurl  = qx(/opt/zimbra/bin/zmlocalconfig -s -m nokey ldap_url);
 chop($ldappass);
 chop($ldapdn);
 chop($ldapurl);

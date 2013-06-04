@@ -93,13 +93,13 @@ sub sighup {
 }
 
 sub getZimbraLdapPassword() {
-    my $pass = `zmlocalconfig -m nokey -s zimbra_ldap_password`;
+    my $pass = qx(zmlocalconfig -m nokey -s zimbra_ldap_password);
     chomp $pass;
     return $pass;
 }
 
 sub getZimbraUserDN() {
-    my $userdn = `zmlocalconfig -m nokey -s zimbra_ldap_userdn`;
+    my $userdn = qx(zmlocalconfig -m nokey -s zimbra_ldap_userdn);
     chomp $userdn;
     return $userdn;
 }

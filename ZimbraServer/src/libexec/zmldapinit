@@ -98,8 +98,8 @@ if ( -s $outfile ) {
   if ($rc != 0) {
     print "Warning: failed to write $infile\n";
   }
-  `chown $zimbra_user:$zimbra_user $infile`;
-  `chmod 600 $infile`;
+  qx(chown $zimbra_user:$zimbra_user $infile);
+  qx(chmod 600 $infile);
 } else {
   print "Warning: Failed to update root password.\n";
 }
@@ -128,7 +128,7 @@ $ldifout->done ( );
 
 # Start ldap
 
-my $rc=`${zimbra_home}/bin/ldap start`;
+my $rc=qx(${zimbra_home}/bin/ldap start);
 
 if ( $rc eq 0 ) {
 	exit 1;
@@ -249,12 +249,12 @@ sub setLocalConfig {
     return;
   }
   $main::saved{lc}{$key} = $val;
-  `/opt/zimbra/bin/zmlocalconfig -f -e ${key}=\'${val}\' 2> /dev/null`;
+  qx(/opt/zimbra/bin/zmlocalconfig -f -e ${key}=\'${val}\' 2> /dev/null);
 }
 
 sub setLocalConfigRandom {
   my $key = shift;
-  `/opt/zimbra/bin/zmlocalconfig -f -e -r ${key} 2> /dev/null`;
+  qx(/opt/zimbra/bin/zmlocalconfig -f -e -r ${key} 2> /dev/null);
 }
 
 sub getLocalConfig {
@@ -263,7 +263,7 @@ sub getLocalConfig {
   return $main::loaded{lc}{$key}
     if (exists $main::loaded{lc}{$key});
 
-  my $val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null`;
+  my $val = qx(/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null);
   chomp $val;
   $main::loaded{lc}{$key} = $val;
   return $val;

@@ -27,10 +27,10 @@ zmstatInit();
 
 my $DISK_CRIT_THRESHOLD = getLocalConfig("zmdisklog_critical_threshold") || 95;
 my $DISK_WARN_THRESHOLD = getLocalConfig("zmdisklog_warn_threshold") || 85;
-my $hostname = `/opt/zimbra/bin/zmhostname`;
+my $hostname = qx(/opt/zimbra/bin/zmhostname);
 chomp $hostname;
 
-my $platform = `/opt/zimbra/libexec/get_plat_tag.sh`;
+my $platform = qx(/opt/zimbra/libexec/get_plat_tag.sh);
 chomp $platform;
 
 my $DF = '/bin/df -k';

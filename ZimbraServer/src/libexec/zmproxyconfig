@@ -50,7 +50,7 @@ our %loaded = ();
 getopts('a:defhH:i:mop:rstwx:cCn:uU',\%options) or die "Unable to set options\n";
 
 our $ZMPROV = "/opt/zimbra/bin/zmprov -l 1>/dev/null";
-our $platform = `/opt/zimbra/libexec/get_plat_tag.sh`;
+our $platform = qx(/opt/zimbra/libexec/get_plat_tag.sh);
 chomp ($platform);
 
 my $id = getpwuid($<);
@@ -154,7 +154,7 @@ my $zimbra_server_hostname=getLocalConfig("zimbra_server_hostname");
 
 #check SSL to Upstream setting
 if (!$options{u} || !$options{U}) {
-	my @res = `/opt/zimbra/bin/zmprov -l gs $hostname zimbraReverseProxySSLToUpstreamEnabled\n`;
+	my @res = qx(/opt/zimbra/bin/zmprov -l gs $hostname zimbraReverseProxySSLToUpstreamEnabled\n);
     if ($res[1] =~ /zimbraReverseProxySSLToUpstreamEnabled:\ (.+)/) {
         $SSLToUp = $1;
 	}
@@ -693,7 +693,7 @@ sub getLocalConfig {
   return $main::loaded{lc}{$key}
     if (exists $main::loaded{lc}{$key});
 
-  my $val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null`;
+  my $val = qx(/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null);
   chomp $val;
   $main::loaded{lc}{$key} = $val;
   return $val;
@@ -706,7 +706,7 @@ sub getLocalConfig {
 sub getMailMode {
 
     my $sslToUpEnabled = shift;
-    my @res = `/opt/zimbra/bin/zmprov -l gs $hostname zimbraMailMode\n`;
+    my @res = qx(/opt/zimbra/bin/zmprov -l gs $hostname zimbraMailMode\n);
     my $mailMode = "http";
     my $proxyMailMode = "http";
 

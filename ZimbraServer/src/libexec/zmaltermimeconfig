@@ -45,9 +45,9 @@ $c{zimbra_home} = getLocalConfig("zimbra_home");
 $c{zmprov}="$c{zimbra_home}/bin/zmprov -l --";
 
 # ***** Main *****
-my $ldappass = `$c{zmlocalconfig} -s -m nokey zimbra_ldap_password`;
-my $ldapdn  = `$c{zmlocalconfig} -s -m nokey zimbra_ldap_userdn`;
-my $ldapurl  = `$c{zmlocalconfig} -s -m nokey ldap_url`;
+my $ldappass = qx($c{zmlocalconfig} -s -m nokey zimbra_ldap_password);
+my $ldapdn  = qx($c{zmlocalconfig} -s -m nokey zimbra_ldap_userdn);
+my $ldapurl  = qx($c{zmlocalconfig} -s -m nokey ldap_url);
 chop($ldappass);
 chop($ldapdn);
 chop($ldapurl);
@@ -106,7 +106,7 @@ sub getLocalConfig {
   return $loaded{lc}{$key}
     if (exists $loaded{lc}{$key} && !$force);
   print "Getting local config $key=";
-  my $val = `$c{zmlocalconfig} -x -s -m nokey ${key} 2> /dev/null`;
+  my $val = qx($c{zmlocalconfig} -x -s -m nokey ${key} 2> /dev/null);
   chomp $val;
   $loaded{lc}{$key} = $val;
   print "$val\n"; 

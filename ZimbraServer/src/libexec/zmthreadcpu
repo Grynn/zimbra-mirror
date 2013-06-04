@@ -113,8 +113,8 @@ print("Reading CPU usage from column $columnNumber in $procStatsFile1 and $procS
 # Read proc-stats files.
 my $lastcmd = "awk '{print \$1, \$$columnNumber}' $procStatsFile2";
 my $firstcmd = "awk '{print \$1, \$$columnNumber}' $procStatsFile1";
-my @lastarray = `$lastcmd`;
-my @firstarray = `$firstcmd`;
+my @lastarray = qx($lastcmd);
+my @firstarray = qx($firstcmd);
 
 sub trim($)
   {

@@ -69,14 +69,14 @@ sub getOutdir() {
 }
 
 sub getLocalServerName() {
-    my $server = `$ZMLOCALCONFIG -m nokey zimbra_server_hostname`;
+    my $server = qx($ZMLOCALCONFIG -m nokey zimbra_server_hostname);
     chomp($server);
     return $server;
 }
 
 sub getTriggerTimeMinutes($) {
     my $email = shift;
-    my @output = `$ZMPROV -l ga $email`;
+    my @output = qx($ZMPROV -l ga $email);
     my %prefs;
     foreach my $line (@output) {
 	chomp($line);
@@ -224,7 +224,7 @@ sub fixupOneUser($) {
 
     # Get the list of calendar folders.  (one zmmailbox call)
     my %calendars;  # key = id, value = REST path
-    my @foldersOutput = `$ZMMAILBOX -z -m $email gaf`;
+    my @foldersOutput = qx($ZMMAILBOX -z -m $email gaf);
     foreach my $lineFolders (@foldersOutput) {
 	chomp($lineFolders);
 	$lineFolders =~ s/^\s+//;
@@ -326,7 +326,7 @@ sub fixupAllLocalUsers() {
     # Get all accounts and calendar resources on this host.
     system("$ZMPROV -l gaa -s $server > $listFile");
     system("$ZMPROV -l gacr -s $server >> $listFile");
-    my $numTotalAccounts = `grep \@ $listFile | wc -l`;
+    my $numTotalAccounts = qx(grep \@ $listFile | wc -l);
     chomp($numTotalAccounts);
     $numTotalAccounts =~ s/^\s+//;
     $numTotalAccounts =~ s/\s+$//;

@@ -93,8 +93,8 @@ sub trim($) {
   return $val;
 }
 
-my $thishost = trim(`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_server_hostname`);
-my $enable_logging = uc(trim(`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmrcd_logging_enabled 2> /dev/null`));
+my $thishost = trim(qx(/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_server_hostname));
+my $enable_logging = uc(trim(qx(/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmrcd_logging_enabled 2> /dev/null)));
 $enable_logging = "FALSE" unless $enable_logging;
 
 

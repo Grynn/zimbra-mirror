@@ -548,7 +548,7 @@ sub getLocalConfig {
   return $loaded{lc}{$key}
     if (exists $loaded{lc}{$key} && !$force);
   print "Getting local config $key=";
-  my $val = `$c{zmlocalconfig} -x -s -m nokey ${key} 2> /dev/null`;
+  my $val = qx($c{zmlocalconfig} -x -s -m nokey ${key} 2> /dev/null);
   chomp $val;
   $loaded{lc}{$key} = $val;
   print "$val\n"; 

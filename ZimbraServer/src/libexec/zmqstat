@@ -163,10 +163,10 @@ sub processQ {
 
 getLocalConfig('zimbra_home');
 
-$queue_directory = `$ENV{zimbra_home}/postfix/sbin/postconf -h queue_directory`;
+$queue_directory = qx($ENV{zimbra_home}/postfix/sbin/postconf -h queue_directory);
 chomp $queue_directory;
 
-$hash_queue_depth = `$ENV{zimbra_home}/postfix/sbin/postconf -h hash_queue_depth`;
+$hash_queue_depth = qx($ENV{zimbra_home}/postfix/sbin/postconf -h hash_queue_depth);
 chomp $hash_queue_depth;
 
 #$queue_directory="/opt/zimbra/data/postfix/spool";

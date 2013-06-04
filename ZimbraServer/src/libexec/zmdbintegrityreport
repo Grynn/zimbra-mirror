@@ -164,7 +164,7 @@ sub addToReport {
 sub logError {
   my $msg = shift;
   if ($options{m} && !$options{d}) {
-    my $dt = `date "+%Y-%m-%d %H:%M:%S"`;
+    my $dt = qx(date "+%Y-%m-%d %H:%M:%S");
     chomp($dt);
     Zimbra::Mon::Logger::Log("err", "$dt, zmdailyreport: $msg");
   } else {

@@ -26,7 +26,7 @@ exit(0) unless (-f "${zimbra_home}/conf/localconfig.xml");
 
 $SIG{ALRM} = \&catchAlarm;
 
-my $platform=`${zimbra_home}/libexec/get_plat_tag.sh`;
+my $platform=qx(${zimbra_home}/libexec/get_plat_tag.sh);
 chomp $platform;
 
 my $pidFile="${zimbra_home}/log/zmstatuslog.pid";
@@ -42,7 +42,7 @@ if ($platform eq "MACOSX") {
 	$DFCMD = "df -ml ";
 }
 
-my $dt = `date "+%Y-%m-%d %H:%M:%S"`;
+my $dt = qx(date "+%Y-%m-%d %H:%M:%S");
 chomp $dt;
 
 my $hostname;
@@ -76,7 +76,7 @@ sub logStatus {
 
 sub checkPid {
   if (-f "$pidFile") {
-    my $P = `cat $pidFile`;
+    my $P = qx(cat $pidFile);
     chomp $P;
     if ($P ne "") {
       system("kill -0 $P 2> /dev/null");
@@ -86,7 +86,7 @@ sub checkPid {
       }
     }
   }
-  `echo $$ > "$pidFile"`;
+  qx(echo $$ > "$pidFile");
 }
 
 sub clearPid {

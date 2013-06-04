@@ -27,7 +27,7 @@ my $usage = 0;
 my $logDir = "/opt/zimbra/log";
 
 if ($^O !~ /MSWin/i) {
-    $logDir = `zmlocalconfig -x -m nokey zimbra_log_directory`;
+    $logDir = qx(zmlocalconfig -x -m nokey zimbra_log_directory);
     chomp $logDir;
 }
 

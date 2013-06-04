@@ -38,7 +38,7 @@ sub getEnabledProcs() {
 
     my @procs;
     my $svc;
-    my @enabledServices = `zmprov -l gs $hostname | grep zimbraServiceEnabled`;
+    my @enabledServices = qx(zmprov -l gs $hostname | grep zimbraServiceEnabled);
     foreach $svc (@enabledServices) {
         if ($svc =~ /mailbox/) {
             push(@procs, 'mailbox');
@@ -189,7 +189,7 @@ sub getMailboxProcess() {
 sub getMysqlProcess() {
     if (!$isMac) {
         my $zimbraHome = getZimbraHome();
-        my $ps = `cat $zimbraHome/db/mysql.pid`;
+        my $ps = qx(cat $zimbraHome/db/mysql.pid);
         chomp($ps) if (defined($ps));
         my @ret = ({'pid' => $ps});
         return @ret;

@@ -16,13 +16,13 @@
 
 sub handleTerm {
 	print "SIGTERM received, exiting\n";
-	`/opt/zimbra/bin/zmcontrol stop >> /opt/zimbra/log/zcs.log 2>&1`;
+	qx(/opt/zimbra/bin/zmcontrol stop >> /opt/zimbra/log/zcs.log 2>&1);
 	exit 0;
 }
 
 $SIG{TERM} = \&handleTerm;
 
 if ($ARGV[0] eq "start") {
-	`/opt/zimbra/bin/zmcontrol start >> /opt/zimbra/log/zcs.log 2>&1`;
+	qx(/opt/zimbra/bin/zmcontrol start >> /opt/zimbra/log/zcs.log 2>&1);
 	sleep;
 }

@@ -43,7 +43,7 @@ exit (mtaIsRunning() ? 0 : 1);
 
 sub mtaIsRunning {
   if (-f "$pidFile") {
-    my $pid = `cat $pidFile`;
+    my $pid = qx(cat $pidFile);
     $pid =~ s/^\s+//;
     chomp $pid;
     if ($pid ne "") {
