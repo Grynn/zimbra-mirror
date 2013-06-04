@@ -35,7 +35,7 @@ public class CreateACopy extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Create a copy of meeting invite (Series)",
-			groups = { "smoke" })
+			groups = { "functional" })
 			
 	public void CopyMeeting_01() throws HarnessException {
 
@@ -88,8 +88,7 @@ public class CreateACopy extends CalendarWorkWeekTest {
         form.zFillField(Field.Subject, newSubject);
         form.zFillField(Field.Body, newContent);
         form.zFillField(Field.Attendees, attendee2);
-        app.zPageCalendar.zToolbarPressButton(Button.B_SEND);
-        SleepUtil.sleepLong();
+        form.zSubmit();
 		
 		// Verify the new invitation appears in the attendee1's inbox
 		ZimbraAccount.AccountA().soapSend(
