@@ -24,6 +24,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.net.*;
 import java.util.*;
 import java.util.List;
 import java.util.jar.*;
@@ -41,6 +42,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.framework.util.performance.PerfMetrics;
+import com.zimbra.qa.selenium.framework.util.staf.*;
 
 
 
@@ -889,6 +891,42 @@ public class ExecuteHarnessMain {
 			}
 		}
 		
+		private static int mailboxlogcount = 0; 
+		/**
+		 * Generate the mailbox.log filename name
+		 * @param method
+		 * @return
+		 */
+		public static String getMailboxLogFilename(Method method) {
+			String c = method.getDeclaringClass().getCanonicalName().replace(ZimbraQABasePackage, "").replace('.', '/');
+			String m = method.getName();
+			return (String.format("%s/debug/%s/%smailbox%d.txt", outputFolder, c, m, ++mailboxlogcount));
+		}
+
+		public static void getMailboxLog(ITestResult result) throws HarnessException {
+			logger.warn("Copying mailbox.log");
+
+			String command = null;
+			try {
+				final String tomachine = InetAddress.getLocalHost().getHostAddress();
+				final String tofile = getMailboxLogFilename(result.getMethod().getMethod());
+				final String file = "/opt/zimbra/log/mailbox.log";
+				
+				command = "COPY FILE "+ file + " TOFILE " + tofile + " TOMACHINE " + tomachine;
+				
+			} catch (UnknownHostException e) {
+				throw new HarnessException("Unable to copy mailbox.log", e);
+			}
+
+			
+			StafServiceFS staf = new StafServiceFS();
+			staf.execute(command);
+			if ( staf.getSTAFResult().rc != com.ibm.staf.STAFResult.Ok ) {
+				throw new HarnessException("Unable to copy mailbox.log "+ staf.getSTAFResult().result);
+			}
+
+		}
+		
 		@Override
 		public void onFinish(ITestContext context) {
 		}
@@ -936,6 +974,11 @@ public class ExecuteHarnessMain {
 		public static void captureScreen() {
 			getScreenCapture(runningTestCase);
 		}
+		
+		public static void captureMailboxLog() throws HarnessException {
+			getMailboxLog(runningTestCase);
+		}
+		
 		/**
 		 * Add 1 to the passed tests
 		 */
