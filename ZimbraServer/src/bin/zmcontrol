@@ -16,7 +16,7 @@
 
 use strict;
 
-my $id = `id -u -n`;
+my $id = qx(id -u -n);
 chomp $id;
 if ($id ne "zimbra") {die "Run as the zimbra user!\n";}
 
@@ -266,7 +266,7 @@ sub doStartup {
 	}
 	if ($rrc) {
 		$rc = 1;
-		my $out = `cat $zmcontrolLogfile`;
+		my $out = qx(cat $zmcontrolLogfile);
 		print "Failed.\n";
 		print "$out\n\n";
 		exit (1);
@@ -285,7 +285,7 @@ sub doStartup {
 	}
 	if ($rrc) {
 		$rc = 1;
-		my $out = `cat $zmcontrolLogfile`;
+		my $out = qx(cat $zmcontrolLogfile);
 		print "Failed.\n";
 		print "$out\n\n";
 		exit (1);
@@ -305,7 +305,7 @@ sub doStartup {
 		$rrc = $rrc >> 8;
 		if ($rrc) {
 			$rc = 1;
-			my $out = `cat $zmcontrolLogfile`;
+			my $out = qx(cat $zmcontrolLogfile);
 			print "Failed.\n";
 			print "$out\n\n";
 		} else {
@@ -337,7 +337,7 @@ sub doShutdown {
 		$rrc = $rrc >> 8;
 		if ($rrc) {
 			$rc = 1;
-			my $out = `cat $zmcontrolLogfile`;
+			my $out = qx(cat $zmcontrolLogfile);
 			print "Failed.\n";
 			print "$out\n\n";
 		} else {
@@ -445,36 +445,32 @@ sub getHostName {
 }
 
 sub displayVersion {
-	my $platform = `/opt/zimbra/libexec/get_plat_tag.sh`;
+	my $platform = qx(/opt/zimbra/libexec/get_plat_tag.sh);
 	chomp $platform;
 	my $string = "";
 	if ($platform =~ /MACOSX/) {
-    my $release;
-    if (-x "/usr/sbin/pkgutil") {
-      $release=`/usr/sbin/pkgutil --pkg-info com.zimbra.zcs.core  2> /dev/null | grep ^version | awk '{print \$NF}'`;
-    } else {
-		  $release=`grep -C1 CFBundleGetInfoString /Library/Receipts/zimbra-core.pkg/Contents/Info.plist | tail -1 | sed -e 's/\<[^>]*\>//g' -e 's/^ *//g' | awk -F, '{print $1}'`;
-    }
-    chomp($release);
+		my $release;
+		if (-x "/usr/sbin/pkgutil") {
+			$release=qx(/usr/sbin/pkgutil --pkg-info com.zimbra.zcs.core  2> /dev/null | grep ^version | awk '{print \$NF}');
+		} else {
+			$release=qx(grep -C1 CFBundleGetInfoString /Library/Receipts/zimbra-core.pkg/Contents/Info.plist | tail -1 | sed -e 's/\<[^>]*\>//g' -e 's/^ *//g' | awk -F, '{print $1}');
+		}
+		chomp($release);
 		$string = "Release $release $platform";
 	} elsif ($platform =~ /DEBIAN/ || $platform =~ /UBUNTU/) {
-		my $release = `dpkg -s zimbra-core | egrep '^Version:' | sed -e 's/Version: //'`;
+		my $release = qx(dpkg -s zimbra-core | egrep '^Version:' | sed -e 's/Version: //');
 		chomp $release;
-    if ( -x "/opt/vmware/bin/vamicli") {
-      my $appliance_version=`/opt/vmware/bin/vamicli version --appliance | awk '{if ((\$1 ~ /Version/) && (\$2 ~ /-/)) { print \$3} }' 2> /dev/null`;
-      chomp($appliance_version);
-      $string = "ZCA Release $appliance_version\n";
-      $string .= "ZCS Build $release";
-    } else {
-		  $string = "Release $release $platform";
-    }
-	} elsif ($platform =~ /RPL/) {
-		my $release = `conary q zimbra-core | cut -d= -f2`;
-		$string = "Release $release $platform";
-
+		if ( -x "/opt/vmware/bin/vamicli") {
+			my $appliance_version=qx(/opt/vmware/bin/vamicli version --appliance | awk '{if ((\$1 ~ /Version/) && (\$2 ~ /-/)) { print \$3} }' 2> /dev/null);
+			chomp($appliance_version);
+			$string = "ZCA Release $appliance_version\n";
+			$string .= "ZCS Build $release";
+		} else {
+			$string = "Release $release $platform";
+		}
 	} else {
-		my $release = `rpm -q --queryformat "%{version}_%{release}" zimbra-core`;
-		my $inst = localtime (`rpm -q --queryformat "%{installtime}" zimbra-core`);
+		my $release = qx(rpm -q --queryformat "%{version}_%{release}" zimbra-core);
+		my $inst = localtime (qx(rpm -q --queryformat "%{installtime}" zimbra-core));
 		$string = "Release $release $platform";
 	}
 
@@ -541,7 +537,7 @@ sub hasAvailableSpace() {
   $freeMbytes = getLocalConfig("zimbra_disk_threshold") || 100
     unless $freeMbytes;
   my $zimbra_home = "/opt/zimbra";
-  my $platform=`${zimbra_home}/libexec/get_plat_tag.sh`;
+  my $platform=qx(${zimbra_home}/libexec/get_plat_tag.sh);
   chomp $platform;
 
   my $DFCMD = ($platform =~ /MACOSX/ ? "df -ml " : "df -mlP ");

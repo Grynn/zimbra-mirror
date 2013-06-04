@@ -160,7 +160,7 @@ my $strt_time = time();
 ::write_log( 'START', 'START', "Process Started\n" );
 
 # check for zimbra user
-my $user = `id -u -n`;
+my $user = qx(id -u -n);
 chomp( $user );
 if( 'zimbra' ne $user ) { 
     ::write_log( 'Global', 'ERROR',
@@ -1017,10 +1017,10 @@ if( $NOOP != $Op_Mod ) {
 			my $check;
 			if ( $z_name ne $NULLSTR ) {
 				# use the -s option
-	            $check = `/opt/zimbra/bin/zmprov -s $z_name gac | grep -wi "$local_cos"`;
+	            $check = qx(/opt/zimbra/bin/zmprov -s $z_name gac | grep -wi "$local_cos");
 			}
 			else {
-				$check = `/opt/zimbra/bin/zmprov gac | grep -wi "$local_cos"`;
+				$check = qx(/opt/zimbra/bin/zmprov gac | grep -wi "$local_cos");
 			}
     	    chomp $check;
             if( '' eq $check ) {
@@ -1521,17 +1521,17 @@ if( $NOOP != $Op_Mod ) {
         $timeout = $config_obj->get_master_bind_timeout();
         # For Local Zimbra
         # Parameters to connect to server read from zmlocalconfig
-        eval { $z_url = `/opt/zimbra/bin/zmlocalconfig -s |grep ldap_master_url`;};
+        eval { $z_url = qx(/opt/zimbra/bin/zmlocalconfig -s |grep ldap_master_url);};
         chomp( $z_url );
         @temp_array = split( /\ =\ /, $z_url );
         $z_url = $temp_array[1];
 
-        eval { $z_u_name =  `/opt/zimbra/bin/zmlocalconfig -s |grep zimbra_ldap_userdn`;};
+        eval { $z_u_name =  qx(/opt/zimbra/bin/zmlocalconfig -s |grep zimbra_ldap_userdn);};
         chomp( $z_u_name );
         @temp_array = split( /\ =\ /, $z_u_name );
         $z_u_name = $temp_array[1];
 
-        eval { $z_pass = `/opt/zimbra/bin/zmlocalconfig -s |grep zimbra_ldap_password`;};
+        eval { $z_pass = qx(/opt/zimbra/bin/zmlocalconfig -s |grep zimbra_ldap_password);};
         chomp( $z_pass );
         @temp_array = split( /\ =\ /, $z_pass );
         $z_pass = $temp_array[1];
@@ -1881,10 +1881,10 @@ if( $NOOP != $Op_Mod ) {
 				
 				if ( $z_server ne $NULLSTR ) {
 					# use the -s option
-			   		`/opt/zimbra/bin/zmprov -s $z_server -f $zmprov_out_file 2> $zmprov_err_file`;
+			   		qx(/opt/zimbra/bin/zmprov -s $z_server -f $zmprov_out_file 2> $zmprov_err_file);
 				}
 				else {
-			   		`/opt/zimbra/bin/zmprov -f $zmprov_out_file 2> $zmprov_err_file`;
+			   		qx(/opt/zimbra/bin/zmprov -f $zmprov_out_file 2> $zmprov_err_file);
 				}
 				
 				#Check for error while creating accounts
@@ -2003,7 +2003,7 @@ if( $NOOP != $Op_Mod ) {
           	    $COS = lc $COS;
                 $str = "$UID $COS";
                 if( $NOOP != $Op_Mod ) {
-                    #`/opt/zimbra/bin/zmprov sac $str` ;
+                    #qx(/opt/zimbra/bin/zmprov sac $str) ;
 					print ZMPROV "sac $str\n";
                 }   
 
@@ -2025,10 +2025,10 @@ if( $NOOP != $Op_Mod ) {
 	    	close(ZMPROV);
 			if ( $z_server ne $NULLSTR ) {
 				# use the -s option
-		    	`/opt/zimbra/bin/zmprov -s $z_server -f $zmprov_out_file 2> $zmprov_err_file`;
+		    	qx(/opt/zimbra/bin/zmprov -s $z_server -f $zmprov_out_file 2> $zmprov_err_file);
 			}
 			else {
-		    	`/opt/zimbra/bin/zmprov -f $zmprov_out_file 2> $zmprov_err_file`;
+		    	qx(/opt/zimbra/bin/zmprov -f $zmprov_out_file 2> $zmprov_err_file);
 			}
 			
 			#Check for error while creating accounts
@@ -2078,10 +2078,10 @@ if( $NOOP != $Op_Mod ) {
         if( 0 == $config_obj->get_local_delete_admin() ) {
 			if ( $z_server ne $NULLSTR ) {
 				# use the -s option
-            	@temp = `/opt/zimbra/bin/zmprov -s $z_server gaaa`;
+            	@temp = qx(/opt/zimbra/bin/zmprov -s $z_server gaaa);
 			}
 			else {
-				@temp = `/opt/zimbra/bin/zmprov gaaa`;
+				@temp = qx(/opt/zimbra/bin/zmprov gaaa);
 			}
             foreach my $tmp ( @temp ) {
                 chomp( $tmp );
@@ -2174,10 +2174,10 @@ if( $NOOP != $Op_Mod ) {
 						
 						# Close the account
 						if ($z_server ne $NULLSTR) {
-			                `/opt/zimbra/bin/zmprov -s $z_server -f $ZMPROV_DEL_FILE 2> $zmprov_err_file`;
+			                qx(/opt/zimbra/bin/zmprov -s $z_server -f $ZMPROV_DEL_FILE 2> $zmprov_err_file);
 						}
 						else {
-							`/opt/zimbra/bin/zmprov -f $ZMPROV_DEL_FILE 2> $zmprov_err_file`;
+							qx(/opt/zimbra/bin/zmprov -f $ZMPROV_DEL_FILE 2> $zmprov_err_file);
 						}
 						#Check for error while creating accounts
 						unless ( open ( ERR, "<$zmprov_err_file" ) ) {
@@ -2233,10 +2233,10 @@ if( $NOOP != $Op_Mod ) {
 								
 							# Close the account
 							if ($z_server ne $NULLSTR) {
-					            `/opt/zimbra/bin/zmprov -s $z_server ma -f $ZMPROV_DEL_FILE 2> $zmprov_err_file`;
+					            qx(/opt/zimbra/bin/zmprov -s $z_server ma -f $ZMPROV_DEL_FILE 2> $zmprov_err_file);
 							}
 							else {
-								`/opt/zimbra/bin/zmprov -f $ZMPROV_DEL_FILE 2> $zmprov_err_file`;
+								qx(/opt/zimbra/bin/zmprov -f $ZMPROV_DEL_FILE 2> $zmprov_err_file);
 							}
 							#Check for error while creating accounts
 							unless ( open ( ERR, "<$zmprov_err_file" ) ) {
@@ -2757,7 +2757,7 @@ sub write_log {
 #
 sub mail_log {
 
-    my $z_dom = `/opt/zimbra/bin/zmlocalconfig -s |grep zimbra_server_hostname`;
+    my $z_dom = qx(/opt/zimbra/bin/zmlocalconfig -s |grep zimbra_server_hostname);
 	chomp $z_dom;
 	my @temp = split( / = /, $z_dom );
 	unless( open LOG, "$LOGFILE" ) { exit; }
@@ -2782,7 +2782,7 @@ Content-Transfer-Encoding: quoted-printable\n\n";
 
 	print MAIL "\n------=_NextPart_000_004D_01C7543C.9114D120--\n";
 
-	`zmlmtpinject -r admin -s zimbra mail.eml >/dev/null 2>&1`;
+	qx(zmlmtpinject -r admin -s zimbra mail.eml >/dev/null 2>&1);
 	
 	close( LOG );
 	close( MAIL );

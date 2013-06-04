@@ -327,10 +327,10 @@ if (defined($subject)) {
 } else {
     printMsg($out, "Args: --mailbox $mbox --uid $uid --outdir $outdir\n");
 }
-my $date = `date`;
+my $date = qx(date);
 chomp($date);
 printMsg($out, "Date: $date\n");
-my $hostname = `hostname`;
+my $hostname = qx(hostname);
 chomp($hostname);
 printMsg($out, "Hostname: $hostname\n");
 printMsg($out, "\n\n");

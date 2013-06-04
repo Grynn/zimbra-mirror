@@ -69,7 +69,7 @@ sub getDiskInfo() {
     # Get device list.
 
     if ($isMac) {
-        my $devs = `iostat -d | head -1`;
+        my $devs = qx(iostat -d | head -1);
         chomp($devs);
         $devs =~ s/^\s+//;
         $devs =~ s/\s+$//;
@@ -155,7 +155,7 @@ sub getHostAndProcsInfo() {
     $ZIMBRA_HOSTNAME = getZimbraServerHostname();
 
     my $svc;
-    my @enabledServices = `zmprov -l gs $ZIMBRA_HOSTNAME | grep zimbraServiceEnabled`;
+    my @enabledServices = qx(zmprov -l gs $ZIMBRA_HOSTNAME | grep zimbraServiceEnabled);
     foreach $svc (@enabledServices) {
         if ($svc =~ /mailbox/) {
             push(@ENABLED_PROCS, 'mailbox');
@@ -245,7 +245,7 @@ sub cpuPstatConfig() {
 
 _HERE_
 
-    my $numCPUs = `egrep '^cpu[0-9]+' /proc/stat 2> /dev/null | wc -l`;
+    my $numCPUs = qx(egrep '^cpu[0-9]+' /proc/stat 2> /dev/null | wc -l);
     chomp($numCPUs);
     if ($numCPUs > 1) {
         my @categories = ('user', 'nice', 'sys', 'idle', 'iowait', 'irq', 'softirq');

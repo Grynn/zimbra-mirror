@@ -269,7 +269,7 @@ sub runSql($) {
 sub getLocalConfig {
   my ($key,$force) = @_;
 
-  my $val = `/opt/zimbra/bin/zmlocalconfig -q -x -s -m nokey ${key} 2> /dev/null`;
+  my $val = qx(/opt/zimbra/bin/zmlocalconfig -q -x -s -m nokey ${key} 2> /dev/null);
   chomp $val;
   return $val;
 }

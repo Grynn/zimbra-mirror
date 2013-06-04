@@ -50,7 +50,7 @@ sub getProcList() {
 		map {s/service //} @services;
 	} else {
 		if ($server) {
-			eval { @services = `zmprov -l gs $server | grep -i zimbraServiceEnabled | sed -e 's/^zimbraServiceEnabled: //'`; };
+			eval { @services = qx(zmprov -l gs $server | grep -i zimbraServiceEnabled | sed -e 's/^zimbraServiceEnabled: //'); };
 		}
 	}
     if (scalar(@services) < 1) {
