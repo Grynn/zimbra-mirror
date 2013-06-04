@@ -624,39 +624,49 @@ ZaServer.prototype.toString = function() {
 	return this.name;
 }
 
-ZaServer.getServerByName = 
-function(serverName) {
-	if(!serverName)
-		return null;
-	var server = ZaServer.staticServerByNameCacheTable[serverName];
-	if(!server) {
-		domain = new ZaServer();
+ZaServer.staticServerByNameCacheTable = [];
+
+ZaServer.getServerByName = function (serverName) {
+    if (!serverName) {
+        return null;
+    }
+
+    var server = ZaServer.staticServerByNameCacheTable[serverName];
+
+	if (!server) {
+        server = new ZaServer();
 		try {
 			server.load("name", serverName, false, true);
 		} catch (ex) {
             throw (ex);
         }
 
-		ZaServer.putServeToCache(server);
-	} 
-	return server;	
-} 
-
-ZaServer.getServerById = 
-function (serverId) {
-	if(!serverId)
-		return null;
-		
-	var server = ZaServer.staticServerByIdCacheTable[serverId];
-	if(!server) {
-		server = new ZaServer();
-		try {
-			server.load("id", serverId, false, true);
-		} catch (ex) {
-			throw (ex);
-		}
-		ZaServer.putServeToCache(server);
+        ZaServer.staticServerByNameCacheTable[serverName] = server;
 	}
+
+	return server;	
+}
+
+ZaServer.staticServerByIdCacheTable = [];
+
+ZaServer.getServerById = function (serverId) {
+    if(!serverId) {
+        return null;
+    }
+
+    var server = ZaServer.staticServerByIdCacheTable[serverId];
+
+	if (!server) {
+        server = new ZaServer();
+        try {
+            server.load("id", serverId, false, true);
+		} catch (ex) {
+            throw (ex);
+        }
+
+        ZaServer.staticServerByIdCacheTable[serverId] = server;
+	}
+
 	return server;
 }
 
