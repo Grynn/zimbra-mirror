@@ -18,6 +18,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.mountpoints.admin;
 
 import java.util.Calendar;
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -30,7 +32,8 @@ public class VerifyDisabledUI extends CalendarWorkWeekTest {
 		super.startingPage = app.zPageCalendar;
 	}
 	
-	@Test(description = "Verify 'Share Calendar' menu remains enabled & 'Reply' menu remains disabled on mountpoint appointment (admin share)",
+	@Bugs(ids = "82558,80555")
+	@Test(description = "Verify 'Share Calendar' menu & 'Reply' menu remains enabled on mountpoint appointment (admin share)",
 			groups = { "functional" })
 			
 	public void VerifyDisabledUI_01() throws HarnessException {
@@ -90,6 +93,10 @@ public class VerifyDisabledUI extends CalendarWorkWeekTest {
 		// Mark ON to mounted calendar folder and select the appointment
 		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
 		app.zTreeCalendar.zSelectMountedFolder(mountpointname);
+		
+		// Verify Reply menu is enabled
+		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, apptSubject);
+		ZAssert.assertFalse(app.zPageCalendar.zVerifyDisabledControl(Button.O_REPLY_DISABLED), "Verify 'Reply' menu is enabled");
 		
 		// Verify Share Calendar menu is enabled
 		app.zTreeCalendar.zTreeItem(Action.A_RIGHTCLICK, mountpointname);
