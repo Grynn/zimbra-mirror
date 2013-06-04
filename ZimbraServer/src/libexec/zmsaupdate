@@ -1,0 +1,117 @@
+#!/usr/bin/perl
+#
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2013 VMware, Inc.
+#
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.3 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+#
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+#
+use strict;
+use lib '/opt/zimbra/zimbramon/lib';
+use Getopt::Long;
+
+if ( ! -d "/opt/zimbra/conf/spamassassin" ) {
+  print "ERROR: openldap does not appear to be installed - exiting\n";
+  exit(1);
+}
+
+my $id = getpwuid($<);
+chomp $id;
+if ($id ne "zimbra") {
+  print STDERR "Error: must be run as zimbra user\n";
+  exit (1);
+}
+
+my ($help, %loaded);
+
+my $opts_good = GetOptions(
+  'h|help' => \$help,
+);
+
+if (!$opts_good) {
+  print STDERR "\n";
+  usage();
+}
+if ($help) {
+  usage(0);
+}
+
+my $zmlocalconfig = "/opt/zimbra/bin/zmlocalconfig";
+my $rule_updates_enabled = getLocalConfig("antispam_enable_rule_updates");
+if (lc($rule_updates_enabled) =~ /true/) { $rule_updates_enabled= 1; }
+if (lc($rule_updates_enabled) =~ /false/) { $rule_updates_enabled= 0; }
+
+if (!$rule_updates_enabled) {
+  exit;
+}
+
+my $zimbra_home = getLocalConfig("zimbra_home");
+my $sa="${zimbra_home}/zimbramon/bin/sa-update -v --updatedir ${zimbra_home}/conf/spamassassin --allowplugins --refreshmirrors >/dev/null 2>&1";
+my $restart="${zimbra_home}/bin/zmamavisdctl restart norewrite >/dev/null 2>&1";
+my $restart_enabled = getLocalConfig("antispam_enable_restarts");
+my $restart_required;
+
+if (lc($restart_enabled) =~ /true/) { $restart_enabled = 1; }
+if (lc($restart_enabled) =~ /false/) { $restart_enabled = 0; }
+
+qx($sa);
+my $rc = $?>>8;
+if ($rc == 1) {
+  exit;
+} elsif ($rc == 0) {
+  $restart_required=1;
+} else {
+  print "zmsaupdate: Error code downloading update: $rc\n";
+}
+
+if ($restart_required == 0) {
+    exit;
+}
+
+if ($restart_enabled) {
+  qx($restart);
+  $rc = $?>>8;
+} else {
+  exit;
+}
+
+if ($rc == 0) {
+  exit;
+}
+
+print "zmsaupdate: Amavisd restart failed!\n";
+exit 1;
+
+sub usage {
+
+  my ($msg) = (@_);
+
+  $msg && print STDERR "\nERROR: $msg\n";
+  print STDERR <<USAGE;
+  zmsaupdate
+
+  Updates SpamAssassin rules
+
+USAGE
+  exit (1);
+}
+
+sub getLocalConfig {
+  my ($key,$force) = @_;
+
+  return $loaded{lc}{$key}
+    if (exists $loaded{lc}{$key} && !$force);
+
+  my $val = qx($zmlocalconfig -x -s -m nokey ${key} 2> /dev/null);
+  chomp $val;
+  $loaded{lc}{$key} = $val;
+  return $val;
+}
+
