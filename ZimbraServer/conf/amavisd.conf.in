@@ -142,7 +142,8 @@ $sa_tag2_level_deflt = %%range VAR:zimbraSpamTagPercent 0 20%%;  # add 'spam det
 $sa_kill_level_deflt = %%range VAR:zimbraSpamKillPercent 0 20%%;  # triggers spam evasive actions (e.g. blocks mail)
 $sa_dsn_cutoff_level = %%range VAR:zimbraSpamKillPercent 0 20%%;   # spam level beyond which a DSN is not sent
 $sa_crediblefrom_dsn_cutoff_level = %%range VAR:zimbraSpamKillPercent 0 20%%; # likewise, but for a likely valid From
-# $sa_quarantine_cutoff_level = 25; # spam level beyond which quarantine is off
+$sa_quarantine_cutoff_level = %%range VAR:zimbraSpamKillPercent 0 20%%;  # spam level beyond which quarantine is off
+
 $penpals_bonus_score = 8;    # (no effect without a @storage_sql_dsn database)
 $penpals_threshold_high = $sa_kill_level_deflt;  # don't waste time on hi spam
 $bounce_killer_score = 100;  # spam score points to add for joe-jobbed bounces
