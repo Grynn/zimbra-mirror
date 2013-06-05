@@ -41,6 +41,13 @@ public class SuggestALocation extends CalendarWorkWeekTest {
 			groups = { "functional" })
 	public void SuggestALocation_01() throws HarnessException {
 		
+		ZimbraAdminAccount.GlobalAdmin().soapSend(
+                "<AddAccountLoggerRequest xmlns='urn:zimbraAdmin'>"
+          +           "<account by='name'>"+ app.zGetActiveAccount().EmailAddress + "</account>"
+          +           "<logger category='zimbra.soap' level='trace'/>"
+          +     "</AddAccountLoggerRequest>");
+		app.zGetActiveAccount().accountIsDirty = true;
+		
 		AppointmentItem appt = new AppointmentItem();
 		Calendar now = this.calendarWeekDayUTC;
 		ZimbraResource location = new ZimbraResource(ZimbraResource.Type.LOCATION);

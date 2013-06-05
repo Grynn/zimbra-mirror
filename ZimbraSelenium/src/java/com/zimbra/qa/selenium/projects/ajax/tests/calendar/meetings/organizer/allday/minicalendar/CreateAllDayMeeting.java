@@ -42,6 +42,13 @@ public class CreateAllDayMeeting extends CalendarWorkWeekTest {
 	)
 	public void CreateAllDayMeeting_01() throws HarnessException {
 		
+		ZimbraAdminAccount.GlobalAdmin().soapSend(
+                "<AddAccountLoggerRequest xmlns='urn:zimbraAdmin'>"
+          +           "<account by='name'>"+ app.zGetActiveAccount().EmailAddress + "</account>"
+          +           "<logger category='zimbra.soap' level='trace'/>"
+          +     "</AddAccountLoggerRequest>");
+		app.zGetActiveAccount().accountIsDirty = true;
+		
 		// Create appointment
 		AppointmentItem appt = new AppointmentItem();
 		Calendar now = this.calendarWeekDayUTC;
