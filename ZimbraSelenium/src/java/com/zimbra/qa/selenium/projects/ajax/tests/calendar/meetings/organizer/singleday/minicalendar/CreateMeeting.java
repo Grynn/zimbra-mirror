@@ -20,6 +20,7 @@ import java.util.Calendar;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
+import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -94,6 +95,8 @@ public class CreateMeeting extends CalendarWorkWeekTest {
 		// Verify location free/busy status shows as ptst=AC	
 		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation +"']", "ptst");
 		ZAssert.assertEquals(locationStatus, "AC", "Verify that the location status shows as 'ACCEPTED'");
+		
+		ExecuteHarnessMain.ResultListener.captureMailboxLog();
 	}
 
 }

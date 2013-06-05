@@ -20,6 +20,7 @@ import java.util.Calendar;
 import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.core.Bugs;
+import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -93,6 +94,8 @@ public class SuggestALocation extends CalendarWorkWeekTest {
 		// Verify location free/busy status shows as ptst=AC	
 		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation +"']", "ptst");
 		ZAssert.assertEquals(locationStatus, "AC", "Verify that the location status shows as 'ACCEPTED'");
+		
+		ExecuteHarnessMain.ResultListener.captureMailboxLog();
 		
 	}
 	
