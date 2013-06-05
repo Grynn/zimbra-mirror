@@ -490,13 +490,12 @@ public class PageSearch extends AbsTab {
 
 			this.zWaitForBusyOverlay();
 
-//			// Return the displayed mail page object
-//			if ( zGetPropMailView() == SearchView.BY_MESSAGE ) {
-//				page = new DisplayMail(MyApplication);
-//			} else {
-//				page = new DisplayConversation(MyApplication);
-//			}
-			page = null;
+			// Return the displayed mail page object
+			if ( zGetPropMailView() == SearchView.BY_MESSAGE ) {
+				page = new DisplayMail(MyApplication);
+			} else {
+				page = new DisplayConversation(MyApplication);
+			}
 			
 			// FALL THROUGH
 
