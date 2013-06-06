@@ -36,7 +36,7 @@ public class ResourceConflictWhenOOO extends CalendarWorkWeekTest {
 		super.startingPage = app.zPageCalendar;
 	}
 	
-	@Test(description = "Verify if OOO status of Location causes Dobule booking",
+	@Test(description = "Verify if OOO status of Location causes double booking",
 			groups = { "functional" })
 			public void LocationConflictWhenOOO_01() throws HarnessException {
 
