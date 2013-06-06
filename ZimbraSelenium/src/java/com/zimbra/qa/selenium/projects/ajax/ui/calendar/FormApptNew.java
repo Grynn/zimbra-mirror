@@ -1138,6 +1138,9 @@ public class FormApptNew extends AbsForm {
 			zFillField(Field.Location, appt.getLocation());
 			SleepUtil.sleepSmall();
 			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+			this.sClickAt("css= input[id$='_location_input']", "");
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
+			
 		}
 
 		// Equipment
