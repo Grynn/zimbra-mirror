@@ -123,6 +123,9 @@
 			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_linkedin/">
 				<filename name="*.properties"/>
 			</fileset>
+			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_linkedinimage/">
+				<filename name="*.properties"/>
+			</fileset>
 			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_phone/">
 				<filename name="*.properties"/>
 			</fileset>

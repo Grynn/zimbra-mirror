@@ -179,6 +179,7 @@ public class ZimletItem  {
 			com_zimbra_dnd,
 			com_zimbra_email,
 			com_zimbra_linkedin,
+			com_zimbra_linkedinimage,
 			com_zimbra_phone,
 			com_zimbra_social,
 			com_zimbra_srchhighlighter,
