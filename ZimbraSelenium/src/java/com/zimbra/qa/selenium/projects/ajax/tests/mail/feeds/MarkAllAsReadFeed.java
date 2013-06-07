@@ -46,7 +46,8 @@ public class MarkAllAsReadFeed extends PrefGroupMailByMessageTest {
 
 		// Create a subfolder in Inbox
 		String feedname = "feed" + ZimbraSeleniumProperties.getUniqueString();
-		URL feedurl = new URL("http", "rss.news.yahoo.com", 80, "/rss/topstories");
+		// feed.rss=http://zqa-tms.eng.vmware.com/files/Service/RSS/Basic/basic.xml
+		URL feedurl = new URL(ZimbraSeleniumProperties.getStringProperty("feed.rss"));
 
 		app.zGetActiveAccount().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
