@@ -597,6 +597,7 @@ public class Button {
 	public static final Button B_DONTSAVE_KEEP_OPEN = new Button("B_DONTSAVE_KEEP_OPEN");
 	public static final Button B_DISCARD_CLOSE = new Button("B_DISCARD_CLOSE");
     public static final Button B_NEXT_WEEK = new Button("B_NEXT_WEEK ");
+    public static final Button B_NEXT_MONTH =new Button("B_NEXT_MONTH");
 	public static final Button O_TAG_APPT = new Button("O_TAG_APPT");
 	
 

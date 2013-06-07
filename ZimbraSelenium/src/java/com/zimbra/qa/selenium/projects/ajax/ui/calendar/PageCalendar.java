@@ -159,6 +159,7 @@ public class PageCalendar extends AbsTab {
 		public static final String DialogDivCss = "css=div[id='CNF_DEL_YESNO']";
 		
 		public static final String NextWeek = "css= td[id='zb__CAL__Nav__PAGE_FORWARD_left_icon']";
+		public static final String NextMonth = "css= td[id='zb__CAL__Nav__PAGE_FORWARD_left_icon']";
 		public static final String TodayButton = "css=td[id='zb__CLD__TODAY_title']";
 		public static final String TodayHighlighted = "css=div[class='calendar_heading_day_today']";
 		public static final String TodaySelelcted = "css=div[class='calendar_heading_day_today-selected']";	
@@ -301,9 +302,8 @@ public class PageCalendar extends AbsTab {
 	}
 	
 	public int zGetApptCountMonthView(String apptSubject) throws HarnessException {
-		return sGetCssCount("css=span[id^='zli__CLM__']:contains('" + apptSubject + "')");
+		return sGetCssCount("css=td[class='calendar_month_day_item']");
 	}
-	
 	public String zGetReadOnlyApptLocator(String apptSubject) throws HarnessException {
 		return "css=td.appt_new_name:contains('" + apptSubject + "')";
 	}
@@ -1824,6 +1824,11 @@ public class PageCalendar extends AbsTab {
 		} else if (button == Button.B_NEXT_WEEK) {
 	
 			locator = Locators.NextWeek;
+			page = null;
+			
+		} else if (button == Button.B_NEXT_MONTH) {
+	
+			locator = Locators.NextMonth;
 			page = null;
 			
 		} else if (button == Button.O_GO_TO_TODAY_MENU) {
