@@ -776,17 +776,9 @@ public class PerfDatabase {
 		protected DatabaseConnection() throws HarnessException {	
 			logger.info("New "+ this.getClass().getCanonicalName());			
 
-			try {
-
-				Class.forName("com.mysql.jdbc.Driver");
-				
-				dbURL = ZimbraSeleniumProperties.getStringProperty("performance.metrics.db.url", dbDefaultURL);
-				dbUsername = ZimbraSeleniumProperties.getStringProperty("performance.metrics.db.username", dbDefaultUsername);
-				dbUserpass = ZimbraSeleniumProperties.getStringProperty("performance.metrics.db.userpass", dbDefaultUserpass);
-
-			} catch (ClassNotFoundException e) {
-				throw new HarnessException(e);
-			}
+			dbURL = ZimbraSeleniumProperties.getStringProperty("performance.metrics.db.url", dbDefaultURL);
+			dbUsername = ZimbraSeleniumProperties.getStringProperty("performance.metrics.db.username", dbDefaultUsername);
+			dbUserpass = ZimbraSeleniumProperties.getStringProperty("performance.metrics.db.userpass", dbDefaultUserpass);
 
 
 		}
