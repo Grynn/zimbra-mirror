@@ -19,14 +19,8 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
-import com.zimbra.common.soap.Element;
-
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.framework.util.*;
 
 
 
@@ -90,15 +84,18 @@ public class DialogTag extends AbsDialog {
 
 		String locator = null;
 		
-		if ( button == Button.B_OK ) {		
-			locator = "css=div#CreateTagDialog_button2";
+		if ( button == Button.B_OK ) {
+			
+			locator = "css=div#CreateTagDialog td[id^='OK'] td[id$='title']";
 			
 		} else if ( button == Button.B_CANCEL ) {
 			
-			locator = "css=div#CreateTagDialog_button1";
-
+			locator = "css=div#CreateTagDialog td[id^='Cancel'] td[id$='title']";
+			
 		} else {
+			
 			throw new HarnessException("Button "+ button +" not implemented");
+			
 		}
 		
 		// Default behavior, click the locator
@@ -124,36 +121,40 @@ public class DialogTag extends AbsDialog {
 	   zSetTagName(tagName);
 	   zClickButton(Button.B_OK);
 
-	   SOAP_DESTINATION_HOST_TYPE destType = null;
-	   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-	      destType = SOAP_DESTINATION_HOST_TYPE.CLIENT;
-	   } else {
-	      destType = SOAP_DESTINATION_HOST_TYPE.SERVER;
-	   }
-
-	   int maxRetry = 30;
-	   int retry = 0;
-	   boolean found = false;
-
-	   while (retry < maxRetry && !found) {
-	      SleepUtil.sleep(1000);
-	      MyApplication.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>",
-	            destType, MyApplication.zGetActiveAccount().EmailAddress);
-	      Element[] results = MyApplication.zGetActiveAccount().soapSelectNodes(
-	            "//mail:GetTagResponse//mail:tag[@name='" + tagName +"']");
-	      if (results.length == 1) {
-	         found = true;
-	      }
-	      retry ++;
-	   }
-
-	   if (retry == maxRetry) {
-	      throw new HarnessException("The tag is never created after submit");
-	   }
 	}
 	
 	public void zSubmit() throws HarnessException {
-		   zClickButton(Button.B_OK);
+
+		// There seem to be some issues with the busy overlay for the new
+		// tag dialog.  I don't think the client is setting it correctly.
+		// So, check how many tags are on in the mailbox.  Then click
+		// the OK button.  Then, make sure the number of tags increases.
+		//
+		// NOTE: this may break a test case that doesn't actually create
+		// a new tag.  For instance, if you click on a OK when creating
+		// a tag that already exists.
+		//
+		
+		// Determine how many tags are currently in the mailbox
+		this.MyApplication.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");
+		int original = this.MyApplication.zGetActiveAccount().soapSelectNodes("//mail:tag").length;
+
+		// Click OK
+		zClickButton(Button.B_OK);
+
+		// Now, make sure more tags are in the mailbox.
+		boolean found = false;
+		for(int i = 0; i < 30 && !found; i++) {
+
+			this.MyApplication.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");
+			int now = this.MyApplication.zGetActiveAccount().soapSelectNodes("//mail:tag").length;
+
+			found = (now > original);
+
+			SleepUtil.sleep(1000);
+
+		}
+
 	}
 
 	@Override
