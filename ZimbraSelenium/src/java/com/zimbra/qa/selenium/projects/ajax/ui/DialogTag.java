@@ -119,8 +119,7 @@ public class DialogTag extends AbsDialog {
 
 	public void zSubmit(String tagName) throws HarnessException {
 	   zSetTagName(tagName);
-	   zClickButton(Button.B_OK);
-
+	   zSubmit();
 	}
 	
 	public void zSubmit() throws HarnessException {
