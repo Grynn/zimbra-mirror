@@ -1211,7 +1211,7 @@ public class PageCalendar extends AbsTab {
 				page = null;
 				waitForPostfix = true;
 			
-			} else if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_MOVE) ) {
+			} else if ( option == Button.B_MOVE ) {
 				
 				// Use default actionLocator
 				optionLocator = "css=td[id='MOVE_title']";
@@ -1222,18 +1222,7 @@ public class PageCalendar extends AbsTab {
 
 				// FALL THROUGH
 
-			}else if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_CREATE_COPY) ) {
-				
-				// Use default actionLocator
-				optionLocator = "css=td[id='DUPLICATE_APPT_title']";
-				
-				 page = new FormApptNew(this.MyApplication);
-
-				this.zClickAt(optionLocator,"");
-
-				// FALL THROUGH
-
-			}else if ( option == Button.O_SHOW_ORIGINAL_MENU ) {
+			} else if ( option == Button.O_SHOW_ORIGINAL_MENU ) {
 				
 				optionLocator = Locators.ShowOriginalMenu;
 				page = new SeparateWindow(this.MyApplication);
@@ -1247,7 +1236,7 @@ public class PageCalendar extends AbsTab {
 				
 				//throw new HarnessException("implement action:"+ action +" option:"+ option);
 
-			}else if ( option == Button.O_CREATE_A_COPY_MENU) {
+			} else if ( option == Button.O_CREATE_A_COPY_MENU) {
 				
 				optionLocator = Locators.CreateACopyMenu;
 				
@@ -1265,14 +1254,6 @@ public class PageCalendar extends AbsTab {
 				}
 				
 				waitForPostfix = false;
-				
-			}if ( option == Button.O_OPEN) {
-				
-				optionLocator = Locators.OpenMenu;
-				this.zClickAt(optionLocator, "");
-				SleepUtil.sleepMedium();
-			    page = new FormApptNew(this.MyApplication);
-				return page;
 				
 			} else {
 
