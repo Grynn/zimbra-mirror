@@ -530,4 +530,339 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 		
 	}
 
+	
+	@Bugs(	ids = "82704")
+	@Test(	description = "Delete a conversation (1 message) that receives a new message : Delete Toolbar button",
+			groups = { "functional" })
+	public void DeleteConversation_21() throws HarnessException {
+		
+		//-- DATA
+		
+		
+		final String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		final String content1 = "content1"+ ZimbraSeleniumProperties.getUniqueString();
+		final String content2 = "content2"+ ZimbraSeleniumProperties.getUniqueString();
+		final FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+		String folderid;
+		
+		
+		
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>"+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content1 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+
+		
+		//-- GUI
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+				
+		// Send another message to the conversation
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content2 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		// Select the item (this should refresh)
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		
+		// Click delete
+		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+		
+
+
+		//-- Verification
+		
+		// If conversation is 'selected', then all messages should be refreshed and deleted
+		
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>content:("+ content1 +") is:anywhere</query>"
+			+	"</SearchRequest>");
+		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+		ZAssert.assertEquals(folderid, trash.getId(), "Verify the first message is in the trash");
+
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>content:("+ content2 +") is:anywhere</query>"
+			+	"</SearchRequest>");
+		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+		ZAssert.assertEquals(folderid, trash.getId(), "Verify the second message is in the trash");
+
+
+	}
+
+	@Bugs(	ids = "82704")
+	@Test(	description = "Delete a conversation (1 message) that receives a new message : Right click -> Delete",
+			groups = { "functional" })
+	public void DeleteConversation_22() throws HarnessException {
+		
+		//-- DATA
+		
+		
+		final String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		final String content1 = "content1"+ ZimbraSeleniumProperties.getUniqueString();
+		final String content2 = "content2"+ ZimbraSeleniumProperties.getUniqueString();
+		final FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
+		final FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+		String folderid;
+		
+		
+		
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>"+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content1 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+
+		
+		//-- GUI
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+				
+		// Send another message to the conversation
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content2 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		// Right click the item, select delete (this should not refresh)
+		app.zPageMail.zListItem(Action.A_RIGHTCLICK, Button.B_DELETE, subject);
+		
+
+
+		//-- Verification
+		
+		// If conversation is not refreshed, then only the old message should be deleted
+		
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>content:("+ content1 +") is:anywhere</query>"
+			+	"</SearchRequest>");
+		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+		ZAssert.assertEquals(folderid, trash.getId(), "Verify the first message is in the trash");
+
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>content:("+ content2 +") is:anywhere</query>"
+			+	"</SearchRequest>");
+		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+		ZAssert.assertEquals(folderid, inbox.getId(), "Verify the second message is in the inbox");
+
+
+	}
+
+	@Bugs(	ids = "82704")
+	@Test(	description = "Delete a conversation (2 messages) that receives a new message : Delete Toolbar button",
+			groups = { "functional" })
+	public void DeleteConversation_23() throws HarnessException {
+		
+		//-- DATA
+		
+		
+		final String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		final String content1 = "content1"+ ZimbraSeleniumProperties.getUniqueString();
+		final String content2 = "content2"+ ZimbraSeleniumProperties.getUniqueString();
+		final String content3 = "content3"+ ZimbraSeleniumProperties.getUniqueString();
+		final FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+		String folderid;
+		
+		
+		
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>"+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content1 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content2 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+
+		
+		//-- GUI
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+				
+		// Send another message to the conversation
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content3 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		// Select the item (this should refresh)
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		
+		// Click delete
+		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+		
+
+
+		//-- Verification
+		
+		// If conversation is 'selected', then all messages should be refreshed and deleted
+		
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>content:("+ content1 +") is:anywhere</query>"
+			+	"</SearchRequest>");
+		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+		ZAssert.assertEquals(folderid, trash.getId(), "Verify the first message is in the trash");
+
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>content:("+ content2 +") is:anywhere</query>"
+			+	"</SearchRequest>");
+		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+		ZAssert.assertEquals(folderid, trash.getId(), "Verify the second message is in the trash");
+
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>content:("+ content3 +") is:anywhere</query>"
+			+	"</SearchRequest>");
+		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+		ZAssert.assertEquals(folderid, trash.getId(), "Verify the third message is in the trash");
+
+
+	}
+
+	@Bugs(	ids = "82704")
+	@Test(	description = "Delete a conversation (2 messages) that receives a new message : Right click -> Delete",
+			groups = { "functional" })
+	public void DeleteConversation_24() throws HarnessException {
+		
+		//-- DATA
+		
+		
+		final String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		final String content1 = "content1"+ ZimbraSeleniumProperties.getUniqueString();
+		final String content2 = "content2"+ ZimbraSeleniumProperties.getUniqueString();
+		final String content3 = "content3"+ ZimbraSeleniumProperties.getUniqueString();
+		final FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
+		final FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+		String folderid;
+		
+		
+		
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>"+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content1 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>"+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content2 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+
+		
+		//-- GUI
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+				
+		// Send another message to the conversation
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>"+ content3 +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		// Right click the item, select delete (this should not refresh)
+		app.zPageMail.zListItem(Action.A_RIGHTCLICK, Button.B_DELETE, subject);
+		
+
+
+		//-- Verification
+		
+		// If conversation is not refreshed, then only the old message should be deleted
+		
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>content:("+ content1 +") is:anywhere</query>"
+			+	"</SearchRequest>");
+		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+		ZAssert.assertEquals(folderid, trash.getId(), "Verify the first message is in the trash");
+
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>content:("+ content2 +") is:anywhere</query>"
+			+	"</SearchRequest>");
+		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+		ZAssert.assertEquals(folderid, trash.getId(), "Verify the second message is in the trash");
+
+		app.zGetActiveAccount().soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+			+		"<query>content:("+ content3 +") is:anywhere</query>"
+			+	"</SearchRequest>");
+		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+		ZAssert.assertEquals(folderid, inbox.getId(), "Verify the third message is in the inbox");
+
+
+	}
+
 }
