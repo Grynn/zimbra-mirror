@@ -329,7 +329,12 @@ function() {
 	this._selectedOption = null;
 	this._currentSelectedOption = null;
 	if (this._pseudoItemsEl) {
-		this._pseudoItemsEl.innerHTML = "";
+		try {
+			this._pseudoItemsEl.innerHTML = ""; //bug 81504
+		}
+		catch (e) {
+			//do nothing - this happens in IE for some reason. Stupid IE. "Unknown runtime error".
+		}
 	}
 };
 
