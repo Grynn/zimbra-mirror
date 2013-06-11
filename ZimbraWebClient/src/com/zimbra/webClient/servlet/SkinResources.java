@@ -648,8 +648,9 @@ public class SkinResources
 				}
 			}
 			//ignore some url's TODO see if we can cleanup the ignoreList
-			List<String> ignoreList = Arrays.asList("msgview.css,/img/ie-custom-icons/ie-custom-icons.png,/img/logo/apple-touch-icon.png,/img/dwt/Expand.gif,/img/dwt/Collapse.gif,public/tmp/aol.png,public/tmp/jive.png,public/tmp/msn.png,public/tmp/yahoo.png".split(","));
-			imgSet.removeAll(ignoreList);
+			List<String> ignoreList = Arrays.asList("msgview.css,/img/ie-custom-icons/ie-custom-icons.png,/img/logo/apple-touch-icon.png,/img/dwt/Expand.gif,/img/dwt/Collapse.gif,/zimbra/public/tmp/yahoo.png,/zimbra/public/tmp/msn.png,/zimbra/public/tmp/aol.png,/zimbra/public/tmp/jive.png".split(","));
+
+            imgSet.removeAll(ignoreList);
 
 			sb.append(StringUtil.join("\n",imgSet));
 
