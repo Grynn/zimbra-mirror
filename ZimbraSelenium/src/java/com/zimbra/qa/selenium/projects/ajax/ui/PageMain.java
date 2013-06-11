@@ -19,12 +19,11 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
-import org.openqa.selenium.JavascriptExecutor;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning.DialogWarningID;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
 
 
 /**
@@ -285,6 +284,52 @@ public class PageMain extends AbsTab {
 				this.zWaitForBusyOverlay();
 			}
 		}
+	}
+
+	/**
+	 * Change the URL (and reload) to access deep-link pages
+	 * @param uri The URL to access (e.g. ?to=foo@foo.com&body=MsgContent&subject=MsgSubject&view=compose)
+	 * @return the page that opens
+	 * @throws HarnessException 
+	 */
+	public AbsPage zOpenDeeplink(ZimbraURI uri) throws HarnessException {
+		logger.info("PageMain.zOpenDeeplink("+ uri.toString() + ")");
+		
+		AbsPage page = null;
+		
+		
+		if ( !uri.getQuery().containsKey("view") ) {
+			throw new HarnessException("query attribute 'view' must be specified");
+		}
+		
+		if ( uri.getQuery().get("view").equals("compose") ) {
+			
+			page = new FormMailNew(this.MyApplication);
+			
+			// FALL THROUGH
+			
+		} else if ( uri.getQuery().get("view").equals("msg") ) {
+			
+			// page = new DisplayMail(this.MyApplication);
+			throw new HarnessException("implement me!");
+			
+			// FALL THROUGH
+			
+		} else {
+			
+			throw new HarnessException("query attribute 'view' must be specified");
+			
+		}
+		
+		// Re-open the URL
+		this.sOpen(uri.getURL().toString());
+
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+		
+		return (page);
+
 	}
 
 	

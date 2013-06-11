@@ -203,6 +203,14 @@ public class ZimbraURI {
 	}
 	
 	/**
+	 * Get the URI query parameters as a Map
+	 * @return
+	 */
+	public Map<String, String> getQuery() {
+		return (getQueryFromString(myURI.getQuery()));
+	}
+
+	/**
 	 * Get the current browser location
 	 * @return
 	 * @throws URLSyntaxException
