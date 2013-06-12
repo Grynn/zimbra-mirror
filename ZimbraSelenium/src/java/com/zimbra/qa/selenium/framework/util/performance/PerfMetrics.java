@@ -136,12 +136,11 @@ public class PerfMetrics {
 	
 	
 	/**
-	 * Return a map of URL query parameters, required to enable perf metrics from the Zimbra ajax app.
+	 * Return a string of URL query parameters, required to enable perf metrics from the Zimbra ajax app.
 	 * See config.properties performance.metrics.query value (per http://bugzilla.zimbra.com/show_bug.cgi?id=61972#c11 : perfMetric=1)
 	 * @return
 	 */
-	public Map<String, String> getQueryMap() {
-		Map<String, String> map = new HashMap<String, String>();
+	public String getQueryAttributes() {
 		
 		// Use the app property, if specified
 		// i.e. "coverage.query.AJAX"
@@ -154,16 +153,7 @@ public class PerfMetrics {
 			property = appPoperty; // Override the default
 		}
 		
-		for (String p : property.split("&")) {
-			if ( p.contains("=") ) {
-				map.put(p.split("=")[0], p.split("=")[1]);
-			} else {
-				// No value, just use p as the key and null as the value
-				map.put(p, null);
-			}
-		}
-		
-		return (map);
+		return (property);
 	}
 
 	/**

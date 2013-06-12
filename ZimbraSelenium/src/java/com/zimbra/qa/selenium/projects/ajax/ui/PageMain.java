@@ -298,17 +298,17 @@ public class PageMain extends AbsTab {
 		AbsPage page = null;
 		
 		
-		if ( !uri.getQuery().containsKey("view") ) {
+		if ( !uri.getURL().getQuery().contains("view") ) {
 			throw new HarnessException("query attribute 'view' must be specified");
 		}
 		
-		if ( uri.getQuery().get("view").equals("compose") ) {
+		if ( uri.getURL().getQuery().contains("view=compose") ) {
 			
 			page = new FormMailNew(this.MyApplication);
 			
 			// FALL THROUGH
 			
-		} else if ( uri.getQuery().get("view").equals("msg") ) {
+		} else if ( uri.getURL().getQuery().contains("view=msg") ) {
 			
 			// page = new DisplayMail(this.MyApplication);
 			throw new HarnessException("implement me!");

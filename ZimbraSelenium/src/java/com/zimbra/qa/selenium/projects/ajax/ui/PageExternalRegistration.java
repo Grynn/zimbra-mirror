@@ -75,11 +75,11 @@ public class PageExternalRegistration extends PageLogin {
 		this.MyUrl = new ZimbraURI(uri);
 		
 		if ( CodeCoverage.getInstance().isEnabled() ) {
-			this.MyUrl.addQuery(CodeCoverage.getInstance().getQueryMap());
+			this.MyUrl.addQuery(CodeCoverage.getInstance().getQueryAttributes());
 		}
 		
 		if ( PerfMetrics.getInstance().Enabled ) {
-			this.MyUrl.addQuery(PerfMetrics.getInstance().getQueryMap());
+			this.MyUrl.addQuery(PerfMetrics.getInstance().getQueryAttributes());
 		}
 
 	}
