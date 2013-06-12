@@ -702,7 +702,7 @@ public class SkinResources
 				cout = new CharArrayWriter(4096 << 2); // 16K buffer to start
 				String[] allPackages = "Startup1_1,Startup1_2,Boot,Startup2,CalendarCore,Calendar,CalendarAppt,ContactsCore,Contacts,MailCore,Mail,BriefcaseCore,Briefcase,PreferencesCore,Preferences,TasksCore,Tasks,Extras,Share,Zimlet,ZimletApp,Alert,ImportExport,BrowserPlus,Voicemail".split(",");
 				for(String name: allPackages) {
-					File file = new File(rootDir,"js/" + name + "_appcache.js");
+					File file = new File(rootDir,"js/" + name + ".appcache");
 					preprocess(file, cout, null, null, null, null, null, requestedLocale);
 				}
 				sb.append("\n");
