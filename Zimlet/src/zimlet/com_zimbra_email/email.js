@@ -206,6 +206,11 @@ function() {
 	this._createBubbles();
 };
 
+EmailTooltipZimlet.prototype.onApptView =
+function() {
+	this._createBubbles();
+};
+
 EmailTooltipZimlet.prototype._createBubbles =
 function() {
 	DBG.println(AjxDebug.DBG3, "EmailTooltipZimlet._createBubble");
