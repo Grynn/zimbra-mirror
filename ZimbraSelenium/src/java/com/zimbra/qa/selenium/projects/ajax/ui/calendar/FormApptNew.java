@@ -1180,8 +1180,9 @@ public class FormApptNew extends AbsForm {
 
 		// Is private
 		if (appt.getIsPrivate() == true) {
-			zFillField(Field.Private);
-			SleepUtil.sleepSmall();
+			String locator = "css=input[id$='_privateCheckbox']";
+			 this.sCheck(locator);
+			 this.zWaitForBusyOverlay();
 		}
 		
 		if (appt.getIsPrivate() == false) {

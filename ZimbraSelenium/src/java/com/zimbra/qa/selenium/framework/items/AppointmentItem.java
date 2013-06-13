@@ -472,7 +472,7 @@ public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) thr
 	}
 	
 	public boolean setIsPrivate(boolean isPrivate) {
-		dIsPrivate = true;
+		dIsPrivate = isPrivate;
 		return (dIsPrivate);
 	}
 	
