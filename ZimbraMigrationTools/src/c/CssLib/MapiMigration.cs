@@ -106,15 +106,11 @@ namespace CssLib
 
             bool bitness = CompatibilityChk.UnmanagedDllIs64Bit(absolutepath).Value;
 
-           // string InstallPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Office\14\Outlook\", "Bitness", null);
-          /* RegistryKey mykey =  Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Office\14.0\Outlook");
-            string InstallPath= null;
-            //if( mykey != null)
-            {
-           InstallPath = (string)mykey.GetValue("test");
-            }*/
-
             string InstallPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Office\14.0\Outlook", "Bitness", null);
+
+            if (InstallPath == null)
+                InstallPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Office\15.0\Outlook", "Bitness", null);
+
             if (InstallPath != null)
             {
                 //its 64 bit outlook and 64 bit migration
