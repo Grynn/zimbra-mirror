@@ -329,8 +329,7 @@ public class ZimbraURI {
 		}
 		
 		public String toString() {
-			normalize();
-			return (myQuery);
+			return (normalize(myQuery));
 		}
 		
 	    @Override 
@@ -422,10 +421,17 @@ public class ZimbraURI {
 		
 		/**
 		 * Remove duplicate key/value pairs
-		 * @return
+		 * @return null if empty, otherwise the query in String format
 		 */
-		public ZimbraQuery normalize() {
-			return (this);
+		public static String normalize(String query) {
+			if ( query == null ) {
+				return (query);
+			}
+			if ( query.trim().length() == 0 ) {
+				return (null);
+			}
+			// TODO: remove duplicate key/value pairs
+			return (query);
 		}
 		
 
