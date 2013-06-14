@@ -183,6 +183,10 @@ olcAttributeTypes: {45}( 1.3.6.1.4.1.15312.2.2.1.46 NAME 'amavisSaUserName' DE
  SC 'SpamAssassin username (for Bayes and AWL lookups)' EQUALITY caseExactIA5M
  atch SUBSTR caseExactSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256
  } SINGLE-VALUE )
+olcAttributeTypes: {46}( 1.3.6.1.4.1.15312.2.2.1.47 NAME 'amavisDisclaimerOpti
+ ons' DESC 'Altermime disclaimer map data' EQUALITY caseIgnoreIA5Match SUBSTR 
+ caseIgnoreIA5SubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE
+ -VALUE )
 olcObjectClasses: {0}( 1.3.6.1.4.1.15312.2.2.2.1 NAME 'amavisAccount' DESC 'Am
  avisd Account' SUP top AUXILIARY MAY ( amavisVirusLover $ amavisBypassVirusCh
  ecks $ amavisSpamLover $ amavisBypassSpamChecks $ amavisBannedFilesLover $ am
@@ -198,8 +202,8 @@ olcObjectClasses: {0}( 1.3.6.1.4.1.15312.2.2.2.1 NAME 'amavisAccount' DESC 'Am
   $ amavisAddrExtensionVirus $ amavisAddrExtensionSpam $ amavisAddrExtensionBa
  nned $ amavisAddrExtensionBadHeader $ amavisSpamTag3Level $ amavisSpamSubject
  Tag3 $ amavisUncheckedQuarantineTo $ amavisCleanQuarantineTo $ amavisUnchecke
- dLover $ amavisForwardMethod $ amavisSaUserConf $ amavisSaUserName $ cn $ des
- cription ) )
+ dLover $ amavisForwardMethod $ amavisSaUserConf $ amavisSaUserName $ amavisDi
+ sclaimerOptions $ cn $ description ) )
 #--------------------------------------------------------------------------
 #
 # 		GNU Free Documentation License
