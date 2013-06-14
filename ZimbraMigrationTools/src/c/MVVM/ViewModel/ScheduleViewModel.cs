@@ -974,7 +974,7 @@ public class ScheduleViewModel: BaseViewModel
 
     public int GetThreadNum(int usernum)
     {
-        Log.info(" schdeulviewmodel- GetThreadNum");
+        Log.info("Scheduleviewmodel - GetThreadNum");
         int ct = bgwlist.Count;
         for (int i = 0; i < ct; i++)
         {
@@ -1034,7 +1034,7 @@ public class ScheduleViewModel: BaseViewModel
             ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);    // main one
         AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[f.AccountNum];
 
-        Log.info("Schdeuleviewmodel -- Folder_OnChanged");
+        Log.info("Scheduleviewmodel -- Folder_OnChanged");
         int tnum = GetThreadNum(f.AccountNum);
         if (bgwlist[tnum].CancellationPending)
         {
