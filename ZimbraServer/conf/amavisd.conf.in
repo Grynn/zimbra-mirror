@@ -15,7 +15,7 @@ use strict;
 
 # Mandatory Signatures
 %%uncomment VAR:zimbraDomainMandatoryMailSignatureEnabled%%$altermime='/opt/zimbra/altermime/bin/altermime';
-%%uncomment VAR:zimbraDomainMandatoryMailSignatureEnabled%%@altermime_args_disclaimer = qw(--verbose --disclaimer=/opt/zimbra/data/altermime/_OPTION_.txt --disclaimer-html=/opt/zimbra/data/altermime/_OPTION_.html );
+%%uncomment VAR:zimbraDomainMandatoryMailSignatureEnabled%%@altermime_args_disclaimer = qw(--verbose --disclaimer-b64=/opt/zimbra/data/altermime/_OPTION_.b64 --disclaimer=/opt/zimbra/data/altermime/_OPTION_.txt --disclaimer-html=/opt/zimbra/data/altermime/_OPTION_.html );
 %%uncomment VAR:zimbraDomainMandatoryMailSignatureEnabled%%$defang_maps_by_ccat{+CC_CATCHALL} = ['disclaimer'];
 
 #@debug_sender_acl = qw( );

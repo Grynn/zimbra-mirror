@@ -18,6 +18,7 @@ use lib qw(/opt/zimbra/zimbramon/lib /opt/zimbra/libexec/scripts);
 use Net::DNS;
 use Socket;
 use Net::LDAP;
+use MIME::Base64;
 use Getopt::Long;
 
 my (%c,%loaded,%saved,$rc);
@@ -75,6 +76,15 @@ if (lc($enabled) eq "true") {
   my $html = $mesg->entry($i)->get_value('zimbraDomainMandatoryMailSignatureHTML');
   writeFile("$c{zimbra_home}/data/altermime/global-default.txt", "$text");
   writeFile("$c{zimbra_home}/data/altermime/global-default.html", "$html");
+  if ( -f "$c{zimbra_home}/data/altermime/global-default.txt") {
+    open(FILE, "$c{zimbra_home}/data/altermime/global-default.txt");
+    my $buf;
+    while (read(FILE, $buf, 60*57)) {
+      my $b64 = MIME::Base64::encode_base64($buf);
+      writeFile("$c{zimbra_home}/data/altermime/global-default.b64", "$b64");
+    }
+    close(FILE);
+  }
 }
 
 exit 0;
