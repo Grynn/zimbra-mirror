@@ -325,11 +325,31 @@ public class ZimbraURI {
 		}
 		
 		public ZimbraQuery(String query) {
-			myQuery = query;
+			if ( query != null ) {
+				myQuery = query.trim();
+			}
 		}
 		
 		public String toString() {
 			return (normalize(myQuery));
+		}
+		
+		/**
+		 * Remove duplicate key/value pairs
+		 * @return null if empty, otherwise the query in String format
+		 */
+		public static String normalize(String query) {
+			if ( query == null ) {
+				return (query);
+			}
+			while (query.startsWith("&")) {
+				query = query.substring(1).trim();
+			}
+			if ( query.trim().length() == 0 ) {
+				return (null);
+			}
+			// TODO: remove duplicate key/value pairs
+			return (query);
 		}
 		
 	    @Override 
@@ -385,7 +405,21 @@ public class ZimbraURI {
 	    }
 		
 	    public ZimbraQuery addQuery(String attributes) {
-	    	myQuery = myQuery + "&" + attributes;
+	    	
+			if ( myQuery == null ) {
+				myQuery = new String();
+			}
+			
+			if ( myQuery.trim().length() == 0 ) {
+				
+				myQuery = attributes.trim();
+				
+			} else {
+				
+				myQuery = myQuery.trim() + "&" + attributes.trim();
+
+			}
+
 	    	return (this);
 	    }
 	    
@@ -402,36 +436,21 @@ public class ZimbraURI {
 			if ( myQuery.trim().length() == 0 ) {
 				
 				if ( value == null ) {
-					myQuery = key;
+					myQuery = key.trim();
 				} else {
-					myQuery = key +"="+ value;
+					myQuery = key.trim() +"="+ value.trim();
 				}
 				
 			} else {
 				
 				if ( value == null ) {
-					myQuery = myQuery + "&" + key;
+					myQuery = myQuery.trim() + "&" + key.trim();
 				} else {
-					myQuery = myQuery + "&" + key + "=" + value;
+					myQuery = myQuery.trim() + "&" + key.trim() + "=" + value.trim();
 				}
 			}
 
 			return (this);
-		}
-		
-		/**
-		 * Remove duplicate key/value pairs
-		 * @return null if empty, otherwise the query in String format
-		 */
-		public static String normalize(String query) {
-			if ( query == null ) {
-				return (query);
-			}
-			if ( query.trim().length() == 0 ) {
-				return (null);
-			}
-			// TODO: remove duplicate key/value pairs
-			return (query);
 		}
 		
 
