@@ -288,6 +288,81 @@ public class CreateMail extends PrefGroupMailByMessageTest {
 		
 	}
 
+	@DataProvider(name = "DataProviderMailtoBrackets")
+	public Object[][] DataProviderDeleteKeys() {
+	  return new Object[][] {
+			    new Object[] { 
+			    		"First Last <"+ ZimbraAccount.AccountA().EmailAddress +">", 
+			    		"First Last <"+ ZimbraAccount.AccountA().EmailAddress +">" },
+			    new Object[] { 
+			    		"<"+ ZimbraAccount.AccountA().EmailAddress +">", 
+			    		"<"+ ZimbraAccount.AccountA().EmailAddress +">" },
+			    new Object[] { 
+			    		"First <"+ ZimbraAccount.AccountA().EmailAddress +">", 
+			    		"First <"+ ZimbraAccount.AccountA().EmailAddress +">" },
+			    new Object[] { 
+			    		"\"First Last\" <"+ ZimbraAccount.AccountA().EmailAddress +">", 
+			    		"\"First Last\" <"+ ZimbraAccount.AccountA().EmailAddress +">" },
+	  };
+	}
+	
+	@Bugs(	ids = "76182,80816")
+	@Test(	description = "Create a mail with to with angled brackets, i.e. to=First Last<email@domain.com>",
+			dataProvider = "DataProviderMailtoBrackets",
+			groups = { "functional" })
+	public void CreateMail_05(String name, String value) throws HarnessException {
+		
+		
+		
+		//-- DATA
+		
+		
+		// Create the message data to be sent
+		final String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		final String body = "body" + ZimbraSeleniumProperties.getUniqueString();
+		
+		
+		
+		
+		//-- GUI
+		
+		// The account is already authenticated
+		// However, we need to change the URL and open
+		// the deep link form.
+		
+		ZimbraURI uri = new ZimbraURI(ZimbraURI.getCurrentURI());
+		uri.addQuery("view", "compose");	// Setting view=compose will make PageMain return a FormMailNew object
+		uri.addQuery("to", value);
+		uri.addQuery("subject", subject);
+		uri.addQuery("body", body);
+
+		// Open the Deep Link URL: http://server.com/?view=compose&to=addy&subject=text&body=value
+		//
+		FormMailNew mailform = (FormMailNew)app.zPageMain.zOpenDeeplink(uri);
+		ZAssert.assertNotNull(mailform, "Verify the deeplink page opens");
+		ZAssert.assertTrue(mailform.zIsActive(), "Verify the deeplink page opens");
+		
+		// The form should be filled out, so just submit
+		mailform.zSubmit();
+		
+		
+		//-- VERIFICATION
+		app.zGetActiveAccount().soapSend(
+                "<SearchRequest xmlns='urn:zimbraMail' types='message'>" +
+                   "<query>in:sent subject:("+ subject +")</query>" +
+                "</SearchRequest>");
+        String id = app.zGetActiveAccount().soapSelectValue("//mail:SearchResponse/mail:m", "id");
+
+        app.zGetActiveAccount().soapSend(
+                "<GetMsgRequest xmlns='urn:zimbraMail'>" +
+                      "<m id='"+ id +"' />" +
+                    "</GetMsgRequest>");
+        
+        String t = app.zGetActiveAccount().soapSelectValue("//mail:m//mail:e[@t='t']", "a");
+        ZAssert.assertEquals(t, ZimbraAccount.AccountA().EmailAddress, "Verify the message is addressed correctly");
+        
+				
+	}
 
 
 
