@@ -75,10 +75,15 @@ function(line, startIndex) {
  */
 SearchHighlighterZimlet.prototype.generateSpan =
 function(html, idx, obj, spanId, context) {
-	var id = Dwt.getNextId();
-	this._spanIds.push(id);
-	html[idx++] = ["<span id= '",id,"'class='ZmSearchResult'>",AjxStringUtil.htmlEncode(obj),"</span>"].join("");
-	return idx;
+    var currentApp  = appCtxt.getCurrentApp();
+    if (currentApp && currentApp.isZmSearchApp){
+        var id = Dwt.getNextId();
+        this._spanIds.push(id);
+        html[idx++] = ["<span id= '",id,"'class='ZmSearchResult'>",AjxStringUtil.htmlEncode(obj),"</span>"].join("");
+    } else {
+        html[idx++] = AjxStringUtil.htmlEncode(obj);
+    }
+    return idx;
 };
 
 /**
