@@ -188,6 +188,9 @@ public class MailItem implements IItem {
 	}
 	
 	public String getSubject() {
+		if ( dSubject == null ) {
+			return (gSubject);
+		}
 		return (dSubject);
 	}
 	
