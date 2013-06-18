@@ -718,6 +718,41 @@ public class DisplayMail extends AbsDisplay {
 			locator = "implement me!";
 			page = null;
 			
+		} else if ( action == Action.A_HOVEROVER ) {
+			
+			locator = attachment.getLocator() + "a[id$='_main']";
+			page = new TooltipImage(MyApplication);
+			
+			// If another tooltip is active, sometimes it takes a few seconds for the new text to show
+			// So, wait if the tooltip is already active
+			// Don't wait if the tooltip is not active
+			//
+			
+			if (page.zIsActive()) {
+				
+				// Mouse over
+				this.sMouseOver(locator);
+				this.zWaitForBusyOverlay();
+				
+				// Wait for the new text
+				SleepUtil.sleep(5000);
+				
+				// Make sure the tooltip is active
+				page.zWaitForActive();
+
+			} else {
+				
+				// Mouse over
+				this.sMouseOver(locator);
+				this.zWaitForBusyOverlay();
+
+				// Make sure the tooltip is active
+				page.zWaitForActive();
+
+			}
+						
+			return (page);
+			
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
