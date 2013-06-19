@@ -158,10 +158,10 @@ public class ZimbraDomain {
 				+			"<datasource by='id' fullSync='true' reset='true'>"+ DomainGalSyncDatasourceID +"</datasource>"
 				+		"</account>"
 				+	"</SyncGalAccountRequest>");
-		String response = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:SyncGalAccountResponse", null);
+		String syncGalAccountResponse = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:SyncGalAccountResponse", null);
 		
-		if ( response == null) {
-			throw new HarnessException("Unable to sync GAL account");
+		if ( syncGalAccountResponse == null) {
+			throw new HarnessException("Unable to sync GAL account.  Response was: " + ZimbraAdminAccount.GlobalAdmin().soapLastResponse());
 		}
 
 	}

@@ -116,6 +116,36 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 		return (this);
 	}
 
+	public Element soapSend(String request) throws HarnessException {
+		
+		// Tests seem to be running a lot longer, or there are now
+		// so many tests that the authToken timeout for the global
+		// admin expires.
+		//
+		// Either way, check for <Code>service.AUTH_EXPIRED</Code>
+		// and re-auth, if necessary
+		//
+		
+		// Send the request
+		Element response = super.soapSend(request);
+		
+		// Check if re-auth is required
+		String code = this.soapSelectValue("//zimbra:Code", null);
+		if ( "service.AUTH_EXPIRED".equalsIgnoreCase(code) ) {
+			
+			logger.warn("Admin Auth token expired.  Re-authenticating.");
+			
+			// Re-auth
+			this.authenticate();
+			
+			// Re-send SOAP request (this time, ignore errors and bubble back up)
+			response = super.soapSend(request);
+			
+		}
+		
+		return (response);
+	}
+	
 	/**
 	 * Authenticates the admin account (using SOAP admin AuthRequest)
 	 * Sets the authToken
