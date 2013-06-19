@@ -115,20 +115,21 @@ public class ZimbraAPI
      };
 
     Dictionary<string, string> specialFoldersMap_ITA = new Dictionary<string, string>()
-    {{"","0"},{"/MAPIRoot","1"},{"/MAPIRoot/Inbox","2"},{"/MAPIRoot/Deleted Items","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Sent Items","5"},
-        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Contacts","7"},
-        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Conversations","9"},
-        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Wiki","12"},
-        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Chats","14"},
-        {"/MAPIRoot/Tasks","15"},
-        {"/MAPIRoot/In arrivo","2"},{"/MAPIRoot/Cestino","3"},
-        {"/MAPIRoot/Posta indesiderata","4"}, {"/MAPIRoot/Inviati","5"},
-        {"/MAPIRoot/Bozze","6"}, {"/MAPIRoot/Contatti","7"},
-        {"/MAPIRoot/Tag","8"}, {"/MAPIRoot/Conversazioni","9"},
-        {"/MAPIRoot/Agenda","10"}, 
-        {"/MAPIRoot/Contatti usati per email","13"}, {"/MAPIRoot/Chat","14"},
-        {"/MAPIRoot/Impegni","15"}};
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/In arrivo","2"}, {"/MAPIRoot/Posta in arrivo","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Cestino","3"}, {"/MAPIRoot/Posta eliminata","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Posta indesiderata","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Inviati","5"}, {"/MAPIRoot/Posta inviata","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Bozze","6"},
+        {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Contatti","7"},
+        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Tag","8"},
+        {"/MAPIRoot/Conversations","9"}, {"/MAPIRoot/Conversazioni","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Agenda","10"}, {"/MAPIRoot/Calendario","10"},
+        {"/MAPIRoot/Wiki","12"}, 
+        {"/MAPIRoot/Emailed Contacts","13"},{"/MAPIRoot/Contatti usati per email","13"}, {"/MAPIRoot/Contatti Email","13"},
+        {"/MAPIRoot/Chats","14"}, {"/MAPIRoot/Chat","14"},
+        {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Impegni","15"}, {"/MAPIRoot/Attivit\u00e1","15"},
+    };
 
    
     Dictionary<string, string> specialFoldersMap_Ma = new Dictionary<string, string>()
