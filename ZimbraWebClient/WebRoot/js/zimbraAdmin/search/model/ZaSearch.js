@@ -597,6 +597,7 @@ ZaSearch.getObjectNumberBySearch = function (type) {
 
     var num = 0;
     var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", ZaZimbraAdmin.URN, null);
+    soapDoc.getMethod().setAttribute("maxResults", "0");
     soapDoc.setMethodAttribute("types", type);
     soapDoc.setMethodAttribute("countOnly", 1);
 
