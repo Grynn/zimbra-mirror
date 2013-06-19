@@ -795,10 +795,11 @@ public class CodeCoverage {
 	protected boolean InstrumentServer = true;
 	
 	/**
-	 * Return a string of URL query parameters, required to enable code coverage from the Zimbra ajax app
+	 * Return a map of URL query parameters, required to enable code coverage from the Zimbra ajax app
 	 * @return
 	 */
-	public String getQueryAttributes() {
+	public Map<String, String> getQueryMap() {
+		Map<String, String> map = new HashMap<String, String>();
 		
 		// Use the app property, if specified
 		// i.e. "coverage.query.AJAX"
@@ -812,7 +813,16 @@ public class CodeCoverage {
 			property = appPoperty; // Override the default
 		}
 		
-		return (property);
+		for (String p : property.split("&")) {
+			if ( p.contains("=") ) {
+				map.put(p.split("=")[0], p.split("=")[1]);
+			} else {
+				// No value, just use p as the key and null as the value
+				map.put(p, null);
+			}
+		}
+		
+		return (map);
 	}
 
 	// Singleton methods

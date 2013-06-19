@@ -18,7 +18,8 @@ package com.zimbra.qa.selenium.framework.util;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.log4j.LogManager;
@@ -50,8 +51,7 @@ public class ZimbraURI {
 	 * @return true if a reload is required
 	 */
 	public static boolean needsReload() {
-		logger.debug("needsReload?");
-
+		
 		ZimbraURI base = new ZimbraURI(ZimbraURI.getBaseURI());
 		ZimbraURI current = new ZimbraURI(ZimbraURI.getCurrentURI());
 		
@@ -77,15 +77,27 @@ public class ZimbraURI {
 		}
 
 		// Check the query parameters
-		ZimbraQuery baseQuery = new ZimbraQuery(base.getURL().getQuery());
-		ZimbraQuery currentQuery = new ZimbraQuery(current.getURL().getQuery());
-		if ( !baseQuery.equals(currentQuery) ) {
-			logger.info("Host: baseQuery("+ baseQuery.toString() +") != currentQuery("+ currentQuery.toString() +")");
+		Map<String,String> baseMap = ZimbraURI.getQueryFromString(base.getURL().getQuery());
+		Map<String,String> currMap = ZimbraURI.getQueryFromString(current.getURL().getQuery());
+		if ( baseMap.entrySet().size() != currMap.entrySet().size() ) {
+			logger.info("Query: inequal query count");
 			return (true);
 		}
-		
+		for (Map.Entry<String, String> entry : baseMap.entrySet()) {
+			
+			if ( !currMap.containsKey(entry.getKey()) ) {
+				logger.info("Query: current does not contain query key: "+ entry.getKey());
+				return (true); // Missing this key
+			}
+			
+			if ( !currMap.get(entry.getKey()).equals(baseMap.get(entry.getKey())) ) {
+				logger.debug("Query key/value pair do not match: "+ currMap.get(entry.getKey()) + " != " + baseMap.get(entry.getKey()));
+				return (true); // Values don't match
+			}
+
+		}
 				
-		logger.debug("needsReload? No");
+		logger.debug("equal!  no reload is required");
 		return (false);
 		
 	}
@@ -149,10 +161,10 @@ public class ZimbraURI {
 	public URI addQuery(String key, String value) {
 		
 		// Get the current query
-		ZimbraQuery query = new ZimbraQuery(myURI.getQuery());
+		Map<String, String> query = ZimbraURI.getQueryFromString(myURI.getQuery());
 		
 		// Add the new value
-		query.addQuery(key, value);
+		query.put(key, value);
 		
 		// Convert the query into the URL
 		setURL(
@@ -161,20 +173,20 @@ public class ZimbraURI {
 				myURI.getHost(),
 				myURI.getPort(),
 				myURI.getPath(),
-				query.toString(),
+				ZimbraURI.buildQueryFromMap(query),
 				myURI.getFragment());
 
 		return (myURI);
 		
 	}
 	
-	public URI addQuery(String attributes) {
+	public URI addQuery(Map<String, String> map) {
 		
 		// Get the current query
-		ZimbraQuery query = new ZimbraQuery(myURI.getQuery());
+		Map<String, String> query = ZimbraURI.getQueryFromString(myURI.getQuery());
 		
 		// Add the new value
-		query.addQuery(attributes);
+		query.putAll(map);
 		
 		// Convert the query into the URL
 		setURL(
@@ -183,13 +195,21 @@ public class ZimbraURI {
 				myURI.getHost(),
 				myURI.getPort(),
 				myURI.getPath(),
-				query.toString(),
+				ZimbraURI.buildQueryFromMap(query),
 				myURI.getFragment());
 
 		return (myURI);
 
 	}
 	
+	/**
+	 * Get the URI query parameters as a Map
+	 * @return
+	 */
+	public Map<String, String> getQuery() {
+		return (getQueryFromString(myURI.getQuery()));
+	}
+
 	/**
 	 * Get the current browser location
 	 * @return
@@ -225,15 +245,15 @@ public class ZimbraURI {
 		String port = ZimbraSeleniumProperties.getStringProperty("server.port", "7070");
 		
 		String path = null;
-		ZimbraURI.ZimbraQuery query = new ZimbraURI.ZimbraQuery();
+		Map<String, String> queryMap = new HashMap<String, String>();
 		String fragment = null;
 		
 		if ( CodeCoverage.getInstance().isEnabled() ) {
-			query.addQuery(CodeCoverage.getInstance().getQueryAttributes());
+			queryMap.putAll(CodeCoverage.getInstance().getQueryMap());
 		}
 		
 		if ( PerfMetrics.getInstance().Enabled ) {
-			query.addQuery(PerfMetrics.getInstance().getQueryAttributes());
+			queryMap.putAll(PerfMetrics.getInstance().getQueryMap());
 		}
 		
 		if ( ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP ) {
@@ -252,7 +272,7 @@ public class ZimbraURI {
 		      port = zdp.getConnectionPort();
 		      host = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
 		      path = "/desktop/login.jsp";
-		      query.addQuery("at", zdp.getSerialNumber());
+		      queryMap.put("at", zdp.getSerialNumber());
 
 		}
 
@@ -288,15 +308,73 @@ public class ZimbraURI {
 			// FALL THROUGH
 
 		}
-			
+	
+		String query = buildQueryFromMap(queryMap);
+		
 		try {
-			URI uri = new URI(scheme, userinfo, host, Integer.parseInt(port), path, query.toString(), fragment);
+			URI uri = new URI(scheme, userinfo, host, Integer.parseInt(port), path, query, fragment);
 			logger.info("Base uri: "+ uri.toString());
 			return (uri);
 		} catch (URISyntaxException e) {
 			logger.error("unalbe to parse uri", e);
 			return (ZimbraURI.defaultURI());
 		}
+
+	}
+	
+	/**
+	 * Build Query from the map
+	 * @return String
+	 *  
+	 */
+	private static String buildQueryFromMap(Map<String, String> queryMap){
+		// Build the query from the map
+		StringBuilder sb = null;
+		for (Entry<String, String> set : queryMap.entrySet()) {
+			String q;
+			if ( set.getValue() == null ) {
+				q = set.getKey(); // If value is null, just use the key as the parameter value
+			} else {
+				q = set.getKey() +"="+ set.getValue();
+			}
+			if ( sb == null ) {
+				sb = new StringBuilder();
+				sb.append(q);
+			} else {
+				sb.append('&').append(q);
+			}
+		}
+		String query = ( sb == null ? null : sb.toString());
+		
+		return query;
+	}
+	
+	/**
+	 * Convert a query string (i.e. ?key1=value1&key2=value2...)  
+	 * to a map of key/values@param query
+	 * @return
+	 */
+	private static Map<String, String> getQueryFromString(String query) {
+		
+		Map<String, String> map = new HashMap<String, String>();
+
+		if ( query == null || query.trim().length() == 0 ) {
+			return (map);
+		}
+		
+		// Strip any starting '?' character
+		String q = ( query.startsWith("?") ? query.replace("?", "") : query );
+		
+		for (String p : q.split("&")) {
+			if ( p.contains("=") ) {
+				map.put(p.split("=")[0], p.split("=")[1]);
+			} else {
+				// No value, just use p as the key and null as the value
+				map.put(p, null);
+			}
+		}
+		
+		return (map);
 
 	}
 	
@@ -313,241 +391,6 @@ public class ZimbraURI {
 			return (null);
 		}
 
-	}
-	
-	public static class ZimbraQuery {
-		
-		protected final static String separator = "__SEP__";
-		
-		protected String myQuery = new String();
-				
-		public ZimbraQuery() {
-		}
-		
-		public ZimbraQuery(String query) {
-			if ( query != null ) {
-				myQuery = query.trim();
-			}
-		}
-		
-		public String toString() {
-			return (normalize(myQuery));
-		}
-		
-		/**
-		 * Remove duplicate key/value pairs
-		 * @return null if empty, otherwise the query in String format
-		 */
-		public static String normalize(String query) {
-			if ( query == null ) {
-				return (query);
-			}
-			while (query.startsWith("&")) {
-				query = query.substring(1).trim();
-			}
-			if ( query.trim().length() == 0 ) {
-				return (null);
-			}
-			// TODO: remove duplicate key/value pairs
-			return (query);
-		}
-		
-	    @Override 
-	    public boolean equals(Object o) {
-	    	
-	    	if ( o == null ) {
-	    		return (false);
-	    	}
-	    	
-	    	if ( !(o instanceof ZimbraQuery) ) {
-	    		return (false);
-	    	}
-	    	
-	    	ZimbraQuery other = (ZimbraQuery)o;
-	    	
-	    	Map<String, String> mine = ZimbraQuery.buildMapFromQuery(myQuery);
-	    	Map<String, String> theirs = ZimbraQuery.buildMapFromQuery(other.myQuery);
-	    	
-	    	if ( mine.entrySet().size() != theirs.entrySet().size() ) {
-				logger.info("Query: inequal query count: "+ mine.entrySet().size() +" != "+ theirs.entrySet().size());
-				return (false);
-	    	}
-
-			for (Map.Entry<String, String> entry : theirs.entrySet() ) {
-				
-				if ( !mine.containsKey(entry.getKey()) ) {
-					logger.info("Query: mine does not contain query key: "+ entry.getKey());
-					return (false); // Missing this key
-				}
-				
-				String myValue = mine.get(entry.getKey());
-				String theirValue = theirs.get(entry.getKey());
-				
-				if ( myValue == null ) {
-					return ( theirValue == null );
-				}
-
-				if ( theirValue == null ) {
-					return (false);
-				}
-				
-				List<String> myList = Arrays.asList(myValue.split(ZimbraQuery.separator));
-				List<String> theirList = Arrays.asList(theirValue.split(ZimbraQuery.separator));
-				
-				if ( !myList.equals(theirList) ) {
-					return (false);
-				}
-				
-			}
-
-			return (true);
-	    	
-	    }
-		
-	    public ZimbraQuery addQuery(String attributes) {
-	    	
-			if ( myQuery == null ) {
-				myQuery = new String();
-			}
-			
-			if ( myQuery.trim().length() == 0 ) {
-				
-				myQuery = attributes.trim();
-				
-			} else {
-				
-				myQuery = myQuery.trim() + "&" + attributes.trim();
-
-			}
-
-	    	return (this);
-	    }
-	    
-		public ZimbraQuery addQuery(String key, String value) {
-			
-			if ( key == null ) {
-				return (this);
-			}
-			
-			if ( myQuery == null ) {
-				myQuery = new String();
-			}
-			
-			if ( myQuery.trim().length() == 0 ) {
-				
-				if ( value == null ) {
-					myQuery = key.trim();
-				} else {
-					myQuery = key.trim() +"="+ value.trim();
-				}
-				
-			} else {
-				
-				if ( value == null ) {
-					myQuery = myQuery.trim() + "&" + key.trim();
-				} else {
-					myQuery = myQuery.trim() + "&" + key.trim() + "=" + value.trim();
-				}
-			}
-
-			return (this);
-		}
-		
-
-		/**
-		 * Convert a map to a query string (e.g. key1=value1&key2=value2)
-		 * @return String
-		 *  
-		 */
-		public static String buildQueryFromMap(Map<String, String> map){
-			
-			
-			// Build the query from the map
-			StringBuilder sb = null;
-			
-			for (Entry<String, String> set : map.entrySet()) {
-				
-				StringBuilder q = null;
-				if ( set.getValue() == null ) {
-					
-					// No values, so set the query parameter to simply "key", for
-					// example, http://server.com/?key1&key2&key3=value3&key4=value4
-					
-					q = new StringBuilder(set.getKey());
-					
-				} else {
-					
-					// Values are present.  Split into a separated list (if multiple), for
-					// example, http://server.com/?key1=value1a&key1=value1b&key2&key3=value3
-					//
-					
-					for ( String v : set.getValue().split(ZimbraQuery.separator)) {
-						if ( q == null ) {
-							q = (new StringBuilder()).append(set.getKey()).append("=").append(v);
-						} else {
-							q.append("&").append(set.getKey()).append("=").append(v);
-						}
-					}
-					
-				}
-
-				if ( sb == null ) {
-					sb = new StringBuilder(q.toString());
-				} else {
-					sb.append('&').append(q.toString());
-				}
-			}
-			
-			return ( sb == null ? null : sb.toString());
-		}
-		
-		/**
-		 * Convert a query string (i.e. ?key1=value1&key2=value2...)  
-		 * to a map of key/values@param query
-		 * @return
-		 */
-		public static Map<String, String> buildMapFromQuery(String query) {
-			
-			Map<String, String> map = new HashMap<String, String>();
-
-			if ( query == null || query.trim().length() == 0 ) {
-				return (map);
-			}
-			
-			// Strip any starting '?' character
-			String q = ( query.startsWith("?") ? query.replace("?", "") : query );
-			
-			for (String p : q.split("&")) {
-				
-				if ( p.contains("=") ) {
-					
-					String key = p.split("=")[0];
-					String value = p.split("=")[1];
-					
-					if ( map.containsKey(key) ) {
-						
-						// Existing keys should be turned into a separated list of values
-						String existing = map.get(key);
-						map.put(key, existing + ZimbraQuery.separator + value);
-						
-					} else {
-						
-						map.put(key, value);
-						
-					}
-					
-				} else {
-					
-					// No value, just use p as the key and null as the value
-					map.put(p, null);
-					
-				}
-			}
-			
-			return (map);
-
-		}
-		
 	}
 
 }
