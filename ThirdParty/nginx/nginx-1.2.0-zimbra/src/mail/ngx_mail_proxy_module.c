@@ -742,7 +742,7 @@ ngx_mail_proxy_imap_handler(ngx_event_t *rev)
         } else {
             proxy_ip.len = NGX_INET6_ADDRSTRLEN;
         }
-        proxy_ip.data = ngx_palloc(c->pool, NGX_INET_ADDRSTRLEN);
+        proxy_ip.data = ngx_palloc(c->pool, proxy_ip.len);
         proxy_ip.len = ngx_sock_ntop((struct sockaddr*)sockaddr, proxy_ip.data, proxy_ip.len, 0);
         line.len += proxy_ip.len;
 
