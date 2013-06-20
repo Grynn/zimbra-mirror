@@ -32,8 +32,8 @@ DwtToolTip = function(shell, className, dialog) {
 
     // create html
     // NOTE: This id is ok because there's only ever one instance of a tooltip
-    var templateId = "dwt.Widgets#" + this._borderStyle;
-    this._div.innerHTML = AjxTemplate.expand(templateId, "tooltip");
+    var templateId = "dwt.Widgets#DwtToolTip";
+    this._div.innerHTML = AjxTemplate.expand(templateId);
 
     var params = AjxTemplate.getParams(templateId);
     this._offsetX = (params.width != null) ? Number(params.width) : DwtToolTip.POPUP_OFFSET_X;
@@ -61,8 +61,6 @@ DwtToolTip.POPUP_OFFSET_Y = 5;	// default vertical offset from control
 //
 // Data
 //
-
-DwtToolTip.prototype._borderStyle = "DwtToolTip";
 
 //
 // Public methods
