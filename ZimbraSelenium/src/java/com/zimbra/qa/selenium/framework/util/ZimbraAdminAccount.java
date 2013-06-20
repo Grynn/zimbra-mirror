@@ -134,8 +134,11 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 		if ( "service.AUTH_EXPIRED".equalsIgnoreCase(code) ) {
 			
 			logger.warn("Admin Auth token expired.  Re-authenticating.");
+			logger.warn(request);
+			logger.warn(this.soapLastResponse());
 			
 			// Re-auth
+			soapClient.setAuthToken(null);
 			this.authenticate();
 			
 			// Re-send SOAP request (this time, ignore errors and bubble back up)
@@ -152,7 +155,7 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 	 */
 	public ZimbraAccount authenticate() {
 		try {
-			soapSend(
+			super.soapSend(
 					"<AuthRequest xmlns='urn:zimbraAdmin'>" +
 					"<name>"+ EmailAddress +"</name>" +
 					"<password>"+ Password +"</password>" +
