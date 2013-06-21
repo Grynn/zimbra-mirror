@@ -115,6 +115,18 @@ public class Button {
 	// Zimbra Desktop's Accounts page
 	public static final Button B_VALIDATE_AND_SAVE = new Button("B_VALIDATE_AND_SAVE");
 
+	// Main Page buttons and pulldown options
+	public static final Button B_ACCOUNT = new Button("B_ACCOUNT");
+
+	public static final Button O_ADMIN_CONSOLE = new Button("O_ADMIN_CONSOLE");
+	public static final Button O_PRODUCT_HELP = new Button("O_PRODUCT_HELP");
+	public static final Button O_HELP_CENTRAL_ONLINE = new Button("O_HELP_CENTRAL_ONLINE");
+	public static final Button O_NEW_FEATURES = new Button("O_NEW_FEATURES");
+	public static final Button O_ABOUT = new Button("O_ABOUT");
+	public static final Button O_OFFLINE_SETTINGS = new Button("O_OFFLINE_SETTINGS");
+	public static final Button O_CHANGE_PASSWORD = new Button("O_CHANGE_PASSWORD");
+//	public static final Button O_SIGN_OUT = new Button("O_SIGN_OUT");
+
 	// MailPage buttons and pulldown options
 	public static final Button B_GETMAIL = new Button("B_GETMAIL");
 	public static final Button B_LOADFEED = new Button("B_LOADFEED");
