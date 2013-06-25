@@ -48,11 +48,11 @@ background=yes
 # Medium mailserver: 4, 4, 12, 25, 1000
 # Large mailserver: 8, 8, 16, 64, 1000
 #
-#min_servers=4
-#min_spare_servers=4
-#max_spare_servers=12
-#max_servers=25
-#max_requests=1000
+min_servers=@@cbpolicyd_min_servers@@
+min_spare_servers=@@cbpolicyd_min_spare_servers@@
+max_spare_servers=@@cbpolicyd_max_spare_servers@@
+max_servers=@@cbpolicyd_max_servers@@
+max_requests=@@cbpolicyd_max_requests@@
 
 # Log level:
 # 0 - Errors only
