@@ -1260,8 +1260,9 @@ ngx_http_upstream_ssl_init_connection(ngx_http_request_t *r,
 
     c->sendfile = 0;
     u->output.sendfile = 0;
+    ngx_http_upstream_rr_peer_data_t *rrp = (ngx_http_upstream_rr_peer_data_t *)(u->peer.data);
 
-    if (u->conf->ssl_session_reuse) {
+    if (u->conf->ssl_session_reuse && rrp->current != NGX_INVALID_ARRAY_INDEX) {
         if (u->peer.set_session(&u->peer, u->peer.data) != NGX_OK) {
             ngx_http_upstream_finalize_request(r, u,
                                                NGX_HTTP_INTERNAL_SERVER_ERROR);
@@ -1293,7 +1294,9 @@ ngx_http_upstream_ssl_handshake(ngx_connection_t *c)
 
     if (c->ssl->handshaked) {
 
-        if (u->conf->ssl_session_reuse) {
+        ngx_http_upstream_rr_peer_data_t *rrp = (ngx_http_upstream_rr_peer_data_t *)(u->peer.data);
+
+        if (u->conf->ssl_session_reuse && rrp->current != NGX_INVALID_ARRAY_INDEX) {
             u->peer.save_session(&u->peer, u->peer.data);
         }
 
