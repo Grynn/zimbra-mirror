@@ -1358,6 +1358,7 @@ createCSR() {
   fi
   
   if [ x"${1}" = "x-digest" ]; then
+    shift
     DIGEST="$1"
     shift
     checkDigest
