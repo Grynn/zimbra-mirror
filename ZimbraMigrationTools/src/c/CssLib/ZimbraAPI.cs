@@ -65,8 +65,8 @@ public class ZimbraAPI
     Dictionary<string, string> specialFoldersMap_es = new Dictionary<string, string>()
     {{"","0"},{"/MAPIRoot","1"},
         {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Bandeja de entrada","2"},
-        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Elementos eliminados","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Papelera","4"}, {"/MAPIRoot/Correo no deseado","4"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Papelera","3"}, {"/MAPIRoot/Elementos eliminados","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Correo no deseado","4"},
         {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/enviados","5"}, {"/MAPIRoot/Elementos enviados","5"},
         {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Borradores","6"},
         {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Contactos","7"},
