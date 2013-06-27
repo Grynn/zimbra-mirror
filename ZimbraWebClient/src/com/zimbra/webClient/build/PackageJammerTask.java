@@ -290,7 +290,7 @@ extends Task {
                     }
 
                     if (this.isAppCache && !path.endsWith("__all__")) {
-                        printAppCache(appCacheOut, require, null, ".js");
+                        printAppCache(appCacheOut, require, null, null);
                     }
 
                     // implicitly define and jam on!

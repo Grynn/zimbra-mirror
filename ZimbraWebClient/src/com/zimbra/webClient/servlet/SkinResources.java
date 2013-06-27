@@ -349,11 +349,16 @@ public class SkinResources
 				maxAge = "2595600";
 			}
 			resp.setHeader("Cache-control", "public, max-age="+maxAge);
-			resp.setContentType(type.equals(T_APPCACHE)? "text/plain" : contentType);
+			resp.setContentType(type.equals(T_APPCACHE)? "text/cache-manifest" : contentType);
 
 			if (compress && file != null) {
 				resp.setHeader("Content-Encoding", "gzip");
 			}
+            if (type.equals(T_APPCACHE)){
+                resp.setHeader("Expires", "Tue, 24 Jan 2000 17:46:50 GMT");
+	            resp.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+	            resp.setHeader("Pragma", "no-cache");
+            }
 
 			// NOTE: I cast the file length to an int which I think is
 			//	   fine. If the aggregated contents are larger than
@@ -629,14 +634,37 @@ public class SkinResources
 		// return data
 		out.flush();
 		if (type.equals(T_APPCACHE)) {
+            String debugStr = req.getParameter(P_DEBUG);
+			String debug = "";
+			if (debugStr != null && !"".equals(debugStr)) {
+				debug = "debug=" + debugStr + "&";
+			}
+            String skinStr = (getCookie(req, "ZM_CACHE_NEW_SKIN") != null) ? getCookie(req, "ZM_CACHE_NEW_SKIN").getValue() : skin;
+            String localeStr = (getCookie(req, "ZM_CACHE_NEW_LANG") != null) ? getCookie(req, "ZM_CACHE_NEW_LANG").getValue() : null;
+			String locale = "";
+			if (localeStr != null && !"".equals(localeStr)) {
+				locale = "locale=" + localeStr + "&";
+			}
+            if (ZimbraLog.webclient.isDebugEnabled()) {
+			    ZimbraLog.webclient.debug("DEBUG: skin=" + skinStr);
+			    ZimbraLog.webclient.debug("DEBUG: locale=" + localeStr);
+		    }
 			//create the full manifest file.
 			StringBuffer sb = new StringBuffer();
 			sb.append("CACHE MANIFEST\n\n");
 			sb.append("#version ").append(cacheBusterVersion).append(" \n");
 			sb.append("CACHE:\n");
+            sb.append("\n#HTML files\n\n");
+            sb.append("\n");
+            sb.append(appContextPath).append("/");
+            if (!"".equals(debug)){
+               sb.append("?dev=1");
+            }
+			sb.append("\n/img/zimbra.gif\n"); //TODO remove this hardcoded image.
 			sb.append("\n#images\n\n");
 			sb.append("/img/zimbra.gif\n"); //TODO remove this hardcoded image.
 			sb.append("/img/zimbra.png\n"); //TODO remove this hardcoded image.
+            sb.append("/skins/_base/logos/LoginBanner.png?v=").append(cacheBusterVersion).append(" \n"); //TODO remove this hardcoded image.
 			sb.append("\n#style sheet images\n\n");
 			//find all the css rules with a url in it
 			Set<String> imgSet = new LinkedHashSet();
@@ -647,42 +675,42 @@ public class SkinResources
 					imgSet.add(m.group(1)); //use linked hash set to avoid duplicate images
 				}
 			}
-			//ignore some url's TODO see if we can cleanup the ignoreList
-			List<String> ignoreList = Arrays.asList("msgview.css,/img/ie-custom-icons/ie-custom-icons.png,/img/logo/apple-touch-icon.png,/img/dwt/Expand.gif,/img/dwt/Collapse.gif,/zimbra/public/tmp/yahoo.png,/zimbra/public/tmp/msn.png,/zimbra/public/tmp/aol.png,/zimbra/public/tmp/jive.png".split(","));
+            File imgFile = null;
+            for (String fileName : imgSet){
+                imgFile = new File(context.getRealPath(fileName));
+                if (!imgFile.exists()){
+                    continue;
+                }
+                fileName = fileName + "?v=" + cacheBusterVersion;
+                sb.append("\n")
+                .append(fileName);
 
-            imgSet.removeAll(ignoreList);
-
-			sb.append(StringUtil.join("\n",imgSet));
-
-			String debugStr = req.getParameter(P_DEBUG);
-			String debug = "";
-			if (debugStr != null && !"".equals(debugStr)) {
-				debug = "debug=" + debugStr + "&";
-			}
-			String localeStr = req.getParameter(P_LOCALE);
-			String locale = "";
-			if (localeStr != null && !"".equals(localeStr)) {
-				locale = "locale=" + localeStr + "&";
-			}
-
+            }
 			sb.append("\n\n#style sheets\n");
 			//create the url of the css files
-			sb.append("\n").append(appContextPath).append("/css/").append(filenames).append(".css?")
-			  .append(debug).append(locale).append("skin=").append(skin);
+			sb.append("\n").append(appContextPath).append("/css/").append(filenames).append(".css?v=").append(cacheBusterVersion)
+              .append("&").append(debug)
+              .append("skin=").append(skinStr)
+			  .append("&locale=" + localeStr);
 
 			sb.append("\n").append(appContextPath).append("/css/msgview.css");
 			sb.append("\n\n#resources\n");
 			//create the resources url
-			sb.append("\n").append(appContextPath).append("/res/I18nMsg,AjxMsg,ZMsg,ZmMsg,AjxKeys,ZmKeys,ZdMsg," +
-					"AjxTemplateMsg.js?");
-			sb.append(debug).append("skin=").append(skin);
+			sb.append("\n").append(appContextPath).append("/res/I18nMsg,AjxMsg,ZMsg,ZmMsg,AjxKeys,ZmKeys,ZdMsg,AjxTemplateMsg.js?v=")
+                    .append(cacheBusterVersion)
+                    .append('&')
+                    .append(debug);
 			if (localeStr != null && !"".equals(localeStr)) {
-				sb.append("&language=").append(requestedLocale.getLanguage());
-				sb.append("&country=").append(requestedLocale.getCountry());
+				sb.append("language=").append(requestedLocale.getLanguage());
+                String country = requestedLocale.getCountry();
+                if (country != null){
+                    sb.append("&country=").append(country).append("&");
+                }
 			}
+            sb.append("skin=").append(skinStr);
 
 			sb.append("\n").append(appContextPath).append("/js/skin.js?");
-			sb.append(debug).append(locale).append("skin=").append(skin);
+			sb.append(debug).append(locale).append("skin=").append(skinStr);
 			if (client != null && !"".equals(client)) {
 				sb.append("&client=").append(client);
 			}
@@ -706,43 +734,42 @@ public class SkinResources
 					preprocess(file, cout, null, null, null, null, null, requestedLocale);
 				}
 				sb.append("\n");
-				sb.append(cout.toString().replaceAll("<%=contextPath%>",appContextPath));
+				sb.append((cout.toString().replaceAll("<%=contextPath%>",appContextPath)).replaceAll("<%=vers%>", cacheBusterVersion));
 				//TODO find a way to get this template files list
-				sb.append("\n").append(appContextPath).append("/templates/abook/Contacts.template.js");
-				sb.append("\n").append(appContextPath).append("/templates/calendar/Appointment.template.js");
-				sb.append("\n").append(appContextPath).append("/templates/calendar/Calendar.template.js");
-				sb.append("\n").append(appContextPath).append("/templates/data/ImportExport.template.js");
-				sb.append("\n").append(appContextPath).append("/templates/dwt/Widgets.template.js");
-				sb.append("\n").append(appContextPath).append("/templates/mail/Message.template.js");
-				sb.append("\n").append(appContextPath).append("/templates/prefs/Options.template.js");
-				sb.append("\n").append(appContextPath).append("/templates/prefs/Pages.template.js");
-				sb.append("\n").append(appContextPath).append("/templates/prefs/Widgets.template.js");
-				/*sb.append("\n").append(appContextPath).append("/templates/share/App.template.js");
-				sb.append("\n").append(appContextPath).append("/templates/share/Dialogs.template.js");
-				sb.append("\n").append(appContextPath).append("/templates/share/ Quota.template.js");
-				sb.append("\n").append(appContextPath).append("/templates/share/Widgets.template.js");
-				sb.append("\n").append(appContextPath).append("/templates/tasks/Tasks.template.js");
-				sb.append("\n").append(appContextPath).append("/templates/voicemail/Voicemail.template.js");*/
-				sb.append("\n").append(appContextPath).append("/templates/zimbra/Widgets.template.js");
+				sb.append("\n").append(appContextPath).append("/templates/abook/Contacts.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/calendar/Appointment.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/calendar/Calendar.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/data/ImportExport.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/dwt/Widgets.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/mail/Message.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/prefs/Options.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/prefs/Pages.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/prefs/Widgets.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/share/App.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/share/Dialogs.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/share/Quota.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/share/Widgets.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/tasks/Tasks.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/voicemail/Voicemail.template.js?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/templates/zimbra/Widgets.template.js?v=").append(cacheBusterVersion);
 
-				//sb.append("\n").append(appContextPath).append("/zimbra/");
 				sb.append("\n");
 
 			} else {
 				//hardcoded prod deploy manifest js files
 				//TODO find which apps have been enabled and add only those manifest files here.
-				sb.append("\n").append(appContextPath).append("/js/Startup1_1_all.js.zgz");
-				sb.append("\n").append(appContextPath).append("/js/Startup1_2_all.js.zgz");
-				sb.append("\n").append(appContextPath).append("/js/MailCore_all.js.zgz");
-				sb.append("\n").append(appContextPath).append("/js/Startup2_all.js.zgz");
-				sb.append("\n").append(appContextPath).append("/js/CalendarCore_all.js.zgz");
-				sb.append("\n").append(appContextPath).append("/js/Calendar_all.js.zgz");
-				//sb.append("\n").append(appContextPath).append("/js/Share_all.js.zgz");
-				sb.append("\n").append(appContextPath).append("/js/Zimlet_all.js.zgz");
-				sb.append("\n").append(appContextPath).append("/js/ContactsCore_all.js.zgz");
-				sb.append("\n").append(appContextPath).append("/js/Extras_all.js.zgz");
-				sb.append("\n").append(appContextPath).append("/js/Contacts_all.js.zgz");
-				sb.append("\n").append(appContextPath).append("/js/TasksCore_all.js.zgz");
+				sb.append("\n").append(appContextPath).append("/js/Startup1_1_all.js.zgz?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/js/Startup1_2_all.js.zgz?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/js/MailCore_all.js.zgz?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/js/Startup2_all.js.zgz?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/js/CalendarCore_all.js.zgz?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/js/Calendar_all.js.zgz?v=").append(cacheBusterVersion);
+				//sb.append("\n").append(appContextPath).append("/js/Share_all.js.zgz").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/js/Zimlet_all.js.zgz?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/js/ContactsCore_all.js.zgz?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/js/Extras_all.js.zgz?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/js/Contacts_all.js.zgz?v=").append(cacheBusterVersion);
+				sb.append("\n").append(appContextPath).append("/js/TasksCore_all.js.zgz?v=").append(cacheBusterVersion);
 				sb.append("\n");
 			}
 			sb.append("\nNETWORK:\n").append("*\n");
