@@ -82,16 +82,36 @@ public class SeparateWindow extends AbsSeparateWindow {
 	 */
 	public void zSetWindowName() throws HarnessException {
 		logger.info(myPageName() + " zSetWindowName()");
-		
+
 		for (String name : super.sGetAllWindowNames()) {
+			
 			if ( name.contains("selenium_main_app_window") ) {
+				
+				// Main window
 				logger.info("Already existing Name: "+ name);
+				
 			} else if ( name.contains("selenium_blank") ) {
+				
+				// Show Original, etc.
 				logger.info("Found my Name: "+ name);
 				this.DialogWindowName = name;
 				this.DialogWindowID = name;
 				return;
+				
+			} else if ( name.contains("undefined") ) {
+				
+				// Product Help
+				logger.info("Found my Name: "+ name);
+				this.DialogWindowName = name;
+				this.DialogWindowID = name;
+				return;
+				
+			} else {
+				
+				logger.info("Unhandled window name: "+ name);
+				
 			}
+			
 		}
 
 	}

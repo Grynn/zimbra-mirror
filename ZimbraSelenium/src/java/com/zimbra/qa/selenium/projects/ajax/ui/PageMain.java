@@ -270,14 +270,30 @@ public class PageMain extends AbsTab {
 		if (pulldown == Button.B_ACCOUNT) {
 			
 			
-			if (option == Button.O_ABOUT) {
+			if (option == Button.O_PRODUCT_HELP) {
 
 				pulldownLocator = "css=div#skin_outer td#skin_dropMenu div.DwtLinkButtonDropDownArrow";
-				optionLocator = "css=div[id^='POPUP'] div[id='about'] td[id$='_title']";
-				page = new DialogInformational(DialogInformational.DialogWarningID.InformationalDialog, this.MyApplication, this);
-
-				// FALL THROUGH
+				optionLocator = "css=div[id^='POPUP'] div[id='documentation'] td[id$='_title']";
 				
+				SeparateWindow window = new SeparateWindow(this.MyApplication);
+				window.zInitializeWindowNames();
+				
+				this.zClickAt(pulldownLocator, "0,0");
+				this.zWaitForBusyOverlay();
+
+				this.zClickAt(optionLocator, "0,0");
+				this.zWaitForBusyOverlay();
+
+				return (window);
+				
+			} else if (option == Button.O_ABOUT) {
+
+					pulldownLocator = "css=div#skin_outer td#skin_dropMenu div.DwtLinkButtonDropDownArrow";
+					optionLocator = "css=div[id^='POPUP'] div[id='about'] td[id$='_title']";
+					page = new DialogInformational(DialogInformational.DialogWarningID.InformationalDialog, this.MyApplication, this);
+
+					// FALL THROUGH
+					
 			} else {
 				
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
