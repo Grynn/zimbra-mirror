@@ -33,7 +33,7 @@ DIRS	:= openssl \
 	tcmalloc
 else
 DIRS := openssl \
-	mysql \
+	mariadb \
 	bdb \
 	libxml2 \
 	heimdal \
@@ -97,7 +97,7 @@ allclean:
 	rm -rf $(ZIMBRA_HOME)/zimbramon
 	rm -rf $(ZIMBRA_HOME)/data
 
-mysql: force
+mariadb: force
 	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
 bdb: force
