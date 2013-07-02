@@ -38,6 +38,7 @@ public class DialogAddToCalendar extends AbsDialog {
 		// Buttons
 		public static final String zOkButton = "css=div[id='ChooseFolderDialog_buttons'] td[id^='OK_'] td[id$='_title']";
 		public static final String zCancelButton = "css=div[id='ChooseFolderDialog_buttons'] td[id^='Cancel_'] td[id$='_title']";
+		public static final String zNewButton = "css=div[id='ChooseFolderDialog_buttons'] td[id^='New_'] td[id$='_title']";
 	}
 	
 	
@@ -91,6 +92,10 @@ public class DialogAddToCalendar extends AbsDialog {
 		} else if ( button == Button.B_CANCEL ) {
 
 			locator = Locators.zCancelButton;
+		
+		} else if ( button == Button.B_NEW) {
+
+			locator = Locators.zNewButton;
 
 		} else {
 			throw new HarnessException("Button "+ button +" not implemented");
@@ -106,7 +111,7 @@ public class DialogAddToCalendar extends AbsDialog {
 			throw new HarnessException("Button "+ button +" locator "+ locator +" not present!");
 		}
 
-		this.zClick(locator);
+		this.sClickAt(locator, "");
 		SleepUtil.sleepMedium();
 		
 		this.zWaitForBusyOverlay();
