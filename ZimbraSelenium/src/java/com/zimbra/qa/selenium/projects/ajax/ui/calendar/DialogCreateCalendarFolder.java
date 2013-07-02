@@ -21,6 +21,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
 /**
  * Represents a "Add external calendar" dialog box
@@ -100,6 +101,8 @@ public class DialogCreateCalendarFolder extends AbsDialog {
 		//Check the message queue
 		//Stafpostqueue sp = new Stafpostqueue();
 		//sp.waitForPostqueue();
+		
+		SleepUtil.sleepSmall();
 		
 		return (page);
 	}
