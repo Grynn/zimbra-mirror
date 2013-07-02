@@ -29,6 +29,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 
+@SuppressWarnings("unused")
 public class PageCalendar extends AbsTab {
 
 	public static class Locators {
@@ -176,7 +177,6 @@ public class PageCalendar extends AbsTab {
 		
 		public static final String LocationFirstSearchResult = "css= div[class='DwtChooserListView'] div[class='DwtListView-Rows'] div";
 
-		                                          
 	}
 
 	public PageCalendar(AbsApplication application) {
@@ -1225,7 +1225,6 @@ public class PageCalendar extends AbsTab {
 			} else if ( option == Button.O_SHOW_ORIGINAL_MENU ) {
 				
 				optionLocator = Locators.ShowOriginalMenu;
-				page = new SeparateWindow(this.MyApplication);
 				
 				page = new SeparateWindow(this.MyApplication);
 				((SeparateWindow)page).zInitializeWindowNames();
@@ -2655,16 +2654,20 @@ public class PageCalendar extends AbsTab {
 	}
 	
 	public void zWaitForElementAppear(String locator) throws HarnessException {
-		for (int i=0; i<=30; i++) {
-			boolean isElementPresent = this.sIsElementPresent(locator);
+		boolean isElementPresent = false;
+		for (int i=0; i<=50; i++) {
+			isElementPresent = this.sIsElementPresent(locator);
 			if (isElementPresent == false) {
 				SleepUtil.sleepMedium();
 				if (locator == Locators.NewTagMenu_ViewAppt) {
 					this.zClickAt(Locators.TagButton_ViewAppt, "");
 				}
-			} else {
+			} else if (isElementPresent == true) {
 				return;
 			}	
+		}
+		if (isElementPresent == false) {
+			throw new HarnessException("Element not found");
 		}
 	}
 	

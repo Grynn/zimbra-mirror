@@ -195,6 +195,7 @@ public class Button {
 	public static final Button B_REMOVE = new Button("B_REMOVE");
 	public static final Button B_REMOVE_ALL = new Button("B_REMOVE_ALL");
 	public static final Button B_SHOW_NAMES_FROM = new Button("B_SHOW_NAMES_FROM");
+	public static final Button B_RFC822_ATTACHMENT_LINK = new Button("B_RFC822_ATTACHMENT_LINK");
 
 	public static final Button O_SEND_SEND = new Button("O_SEND_SEND");
 	public static final Button O_SEND_SEND_LATER = new Button("O_SEND_SEND_LATER");
@@ -567,6 +568,9 @@ public class Button {
 	public static final Button B_END_AFTER_X_OCCURRENCES_EDIT_FIELD = new Button("B_END_AFTER_X_OCCURRENCES_EDIT_FIELD");
 	public static final Button B_END_BY_DATE_RADIO_BUTTON = new Button("B_END_BY_DATE_RADIO_BUTTON");
 	public static final Button E_END_BY_DATE_EDIT_FIELD = new Button("E_END_BY_DATE_EDIT_FIELD");
+	
+	public static final Button B_ICS_LINK_IN_BODY = new Button("B_ICS_LINK_IN_BODY");
+	public static final Button B_CREATE_NEW_CALENDAR = new Button("B_CREATE_NEW_CALENDAR");
 	
 	// Calendar dialogs
 	public static final Button B_SEND_CANCELLATION = new Button("B_SEND_CANCELLATION");

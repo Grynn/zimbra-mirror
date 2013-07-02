@@ -22,6 +22,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
 public class DialogAddToCalendar extends AbsDialog {
 
@@ -106,7 +107,8 @@ public class DialogAddToCalendar extends AbsDialog {
 		}
 
 		this.zClick(locator);
-
+		SleepUtil.sleepMedium();
+		
 		this.zWaitForBusyOverlay();
 
 		return (page);
@@ -141,15 +143,12 @@ public class DialogAddToCalendar extends AbsDialog {
 
 	}
 	
-	public void zChooseCalendarFolder(FolderItem folder) throws HarnessException {
-		logger.info(myPageName() + " zClickTreeFolder("+ folder +")");
+	public void zChooseCalendarFolder(String folderID) throws HarnessException {
 		
-		if ( folder == null ) 
+		if ( folderID == null ) 
 			throw new HarnessException("folder must not be null");
 		
-		tracer.trace("Click on tree folder with name "+ folder.getName());
-
-		String locator = Locators.DialogDivLocatorCSS + " td[id='zti__ZmChooseFolderDialog_Calendar__"+ folder.getId() +"_textCell']";
+		String locator = Locators.DialogDivLocatorCSS + " td[id='zti__ZmChooseFolderDialog_Calendar__" + folderID + "_textCell']";
 		
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("unable to find folder in tree "+ locator);
