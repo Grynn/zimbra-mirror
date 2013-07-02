@@ -1,0 +1,105 @@
+Date: Sun, 30 Jun 2013 23:49:08 -0700 (PDT)
+From: uwm01@zqa-062.eng.vmware.com
+To: uwm02 <uwm02@zqa-062.eng.vmware.com>
+Message-ID: <1706954645.51.1372661348979.JavaMail.zimbra@zqa-062.eng.vmware.com>
+In-Reply-To: <1957871804.38.1372661314031.JavaMail.zimbra@zqa-062.eng.vmware.com>
+References: <1957871804.38.1372661314031.JavaMail.zimbra@zqa-062.eng.vmware.com>
+Subject: rfc822 attachment invite
+MIME-Version: 1.0
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_49_1970792096.1372661348977"
+X-Originating-IP: [10.16.251.77]
+X-Mailer: Zimbra 9.0.0_BETA1_1922 (ZimbraWebClient - FF12 (Win)/9.0.0_BETA1_1922)
+Thread-Topic: add to calendar using rfc822 attachment
+Thread-Index: PKXf3aTmfSBpr8xhUExKtFyJe2hnvBlfHUb2
+
+------=_Part_49_1970792096.1372661348977
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_50_314986144.1372661348977"
+
+------=_Part_50_314986144.1372661348977
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+body of rfc822 attachment invite. 
+
+------=_Part_50_314986144.1372661348977
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+<html><body><div>body of rfc822 attachment invite.</div></body></html>
+------=_Part_50_314986144.1372661348977--
+
+------=_Part_49_1970792096.1372661348977
+Content-Type: message/rfc822
+Content-Disposition: attachment
+
+Date: Sun, 30 Jun 2013 23:48:34 -0700 (PDT)
+From: uwm01@zqa-062.eng.vmware.com
+To: uwm02 <uwm02@zqa-062.eng.vmware.com>
+Message-ID: <1957871804.38.1372661314031.JavaMail.zimbra@zqa-062.eng.vmware.com>
+In-Reply-To: <1585015001.29.1372661294341.JavaMail.zimbra@zqa-062.eng.vmware.com>
+Subject: add to calendar using rfc822 attachment
+MIME-Version: 1.0
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_34_378831737.1372661314023"
+X-Originating-IP: [10.16.251.77]
+X-Mailer: Zimbra 9.0.0_BETA1_1922 (ZimbraWebClient - FF12 (Win)/9.0.0_BETA1_1922)
+Thread-Topic: add to calendar using rfc822 attachment
+Thread-Index: PKXf3aTmfSBpr8xhUExKtFyJe2hnvA==
+
+------=_Part_34_378831737.1372661314023
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_35_1883474051.1372661314023"
+
+------=_Part_35_1883474051.1372661314023
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+add to calendar using rfc822 attachment 
+
+------=_Part_35_1883474051.1372661314023
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+<html><body><div>add to calendar using rfc822 attachment</div></body></html>
+------=_Part_35_1883474051.1372661314023--
+
+------=_Part_34_378831737.1372661314023
+Content-Type: text/calendar; name="rfc822 attachment invite.ics"
+Content-Disposition: attachment; filename="rfc822 attachment invite.ics"
+Content-Transfer-Encoding: base64
+
+QkVHSU46VkNBTEVOREFSDQpQUk9ESUQ6WmltYnJhLUNhbGVuZGFyLVByb3ZpZGVyDQpWRVJTSU9O
+OjIuMA0KTUVUSE9EOlBVQkxJU0gNCkJFR0lOOlZUSU1FWk9ORQ0KVFpJRDpBc2lhL0tvbGthdGEN
+CkJFR0lOOlNUQU5EQVJEDQpEVFNUQVJUOjE2MDEwMTAxVDAwMDAwMA0KVFpPRkZTRVRUTzorMDUz
+MA0KVFpPRkZTRVRGUk9NOiswNTMwDQpUWk5BTUU6SVNUDQpFTkQ6U1RBTkRBUkQNCkVORDpWVElN
+RVpPTkUNCkJFR0lOOlZFVkVOVA0KVUlEOmM4MmQzZDY2LTQ3MGEtNDAxYy1hNDJlLWE0MWI1ZWY3
+YmU0Ng0KU1VNTUFSWTpyZmM4MjIgaW52aXRlDQpERVNDUklQVElPTjpyZmM4MjIgaW52aXRlIFxu
+DQpYLUFMVC1ERVNDO0ZNVFRZUEU9dGV4dC9odG1sOjxodG1sPjxib2R5IGlkPSdodG1sbW9kZSc+
+PGgzPlRoZSBmb2xsb3dpbmcgaXMgDQogYSBuZXcgbWVldGluZyByZXF1ZXN0OjwvaDM+XG5cbjxw
+PlxuPHRhYmxlIGJvcmRlcj0nMCc+XG48dHI+PHRoIGFsaWduPWxlZnQ+Uw0KIHViamVjdDo8L3Ro
+Pjx0ZD5yZmM4MjIgaW52aXRlIDwvdGQ+PC90cj5cbjx0cj48dGggYWxpZ249bGVmdD5Pcmdhbml6
+ZXI6PC90aD4NCiA8dGQ+dXdtMDFAenFhLTA2Mi5lbmcudm13YXJlLmNvbSA8L3RkPjwvdHI+XG48
+L3RhYmxlPlxuPHA+XG48dGFibGUgYm9yZGVyPScwDQogJz5cbjx0cj48dGggYWxpZ249bGVmdD5U
+aW1lOjwvdGg+PHRkPk1vbmRheVwsIEp1bHkgMVwsIDIwMTNcLCAxMjozMDowMCBQTSAtIA0KIDE6
+MzA6MDAgUE0gR01UICswNTozMCBDaGVubmFpXCwgS29sa2F0YVwsIE11bWJhaVwsIE5ldyBEZWxo
+aVxuIDwvdGQ+PC90cj48L3QNCiBhYmxlPlxuPHA+XG48dGFibGUgYm9yZGVyPScwJz5cbjx0cj48
+dGggYWxpZ249bGVmdD5JbnZpdGVlczo8L3RoPjx0ZD51d20wMkB6DQogcWEtMDYyLmVuZy52bXdh
+cmUuY29tIDwvdGQ+PC90cj5cbjwvdGFibGU+XG48ZGl2Pip+Kn4qfip+Kn4qfip+Kn4qfio8L2Rp
+dj48Yg0KIHI+PGRpdiBzdHlsZT0iZm9udC1mYW1pbHk6IHRpbWVzIG5ldyByb21hblwsIG5ldyB5
+b3JrXCwgdGltZXNcLCBzZXJpZlw7IGZvbnQNCiAtc2l6ZTogMTJwdFw7IGNvbG9yOiAjMDAwMDAw
+Ij48ZGl2PnJmYzgyMiBpbnZpdGU8L2Rpdj48L2Rpdj48L2JvZHk+PC9odG1sPg0KQVRURU5ERUU7
+Q049dXdtMDI7Uk9MRT1SRVEtUEFSVElDSVBBTlQ7UEFSVFNUQVQ9TkVFRFMtQUNUSU9OO1JTVlA9
+VFJVRTptYWlsdA0KIG86dXdtMDJAenFhLTA2Mi5lbmcudm13YXJlLmNvbQ0KT1JHQU5JWkVSOm1h
+aWx0bzp1d20wMUB6cWEtMDYyLmVuZy52bXdhcmUuY29tDQpEVFNUQVJUO1RaSUQ9IkFzaWEvS29s
+a2F0YSI6MjAxMzA3MDFUMTIzMDAwDQpEVEVORDtUWklEPSJBc2lhL0tvbGthdGEiOjIwMTMwNzAx
+VDEzMzAwMA0KU1RBVFVTOkNPTkZJUk1FRA0KQ0xBU1M6UFVCTElDDQpYLU1JQ1JPU09GVC1DRE8t
+SU5URU5ERURTVEFUVVM6QlVTWQ0KVFJBTlNQOk9QQVFVRQ0KTEFTVC1NT0RJRklFRDoyMDEzMDcw
+MVQwNjQ0NTBaDQpEVFNUQU1QOjIwMTMwNzAxVDA2NDQ1MFoNClNFUVVFTkNFOjANCkJFR0lOOlZB
+TEFSTQ0KQUNUSU9OOkRJU1BMQVkNClRSSUdHRVI7UkVMQVRFRD1TVEFSVDotUFQ1TQ0KREVTQ1JJ
+UFRJT046UmVtaW5kZXINCkVORDpWQUxBUk0NCkVORDpWRVZFTlQNCkVORDpWQ0FMRU5EQVINCg==
+
+------=_Part_34_378831737.1372661314023--
+
+------=_Part_49_1970792096.1372661348977--

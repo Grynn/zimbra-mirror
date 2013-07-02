@@ -1,0 +1,16 @@
+Date: Tue, 10 Aug 2010 07:22:15 -0700 (PDT)
+From: Tony X <testuser@test.com>
+To: testuser@test.com
+Message-ID: <9882018.1551.1281450410215.JavaMail.tonster@dilbert>
+Subject: test ics
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: Zimbra 6.0.7_GA_2473.RHEL4_64 (Zimbra Desktop/2.0_10520_Windows)
+
+testing with ics in message body...
+
+http://sports.yahoo.com/mlb/teams/det/ical.ics
+
+Tony Publiski
+Zimbra Support
