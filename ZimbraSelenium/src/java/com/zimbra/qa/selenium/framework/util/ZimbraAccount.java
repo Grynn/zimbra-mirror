@@ -1019,6 +1019,21 @@ public class ZimbraAccount {
 		  * @return
 		  */
 		 public String setAuthToken(String token) {
+			 
+			 
+			 if ( token == null ) {
+			
+				 // If the authToken is null, then we need to
+				 // also clear the mTransport, which has a cookie
+				 // associated with the authToken.
+				 //
+				 // Clearing the current URI will have the same
+				 // effect.
+				 //
+				 mURI = null;
+				 			 
+			 }
+			 
 			 return (AuthToken = token);
 		 }
 
