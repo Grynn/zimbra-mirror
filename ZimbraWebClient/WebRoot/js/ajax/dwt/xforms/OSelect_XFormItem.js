@@ -97,7 +97,7 @@ OSelect1_XFormItem.prototype.updateElement = function (newValue) {
 			el.value = newValue;
 			//DBG.println(AjxDebug.DBG1, AjxBuffer.concat(this.getId(),".value = ",newValue));
 			if(this.getElement() && el.offsetWidth && this.getElement().style)
-				this.getElement().style.width = el.offsetWidth + 20;
+				this.getElement().style.width = el.offsetWidth + 20 + 'px';
 				
 		} else {
 			el.innerHTML = newValue;
@@ -191,8 +191,8 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	var w =DwtShell.getShell(window).getSize();
 	var wh = w.y;
 	var WINDOW_GUTTER = 8;
-	menu.style.left = parseInt(bounds.left);
-	menu.style.top = parseInt(bounds.top) + parseInt(bounds.height) - 1;
+	menu.style.left = parseInt(bounds.left) + 'px';
+	menu.style.top = parseInt(bounds.top) + parseInt(bounds.height) - 1 + 'px';
 	var choices = this.getNormalizedChoices();
 	if(choices && choices.values) {
 		menu.style.overflow="hidden";
@@ -218,19 +218,19 @@ OSelect1_XFormItem.prototype.showMenu = function() {
     if (this.getInheritedProperty("setMenuWidth") == true) {
         if (AjxEnv.isIE) {
             if(this.getInheritedProperty("editable")) {
-                menu.style.width = parseInt(bounds.width)+4;
-                menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 1;
+                menu.style.width = parseInt(bounds.width)+4 + 'px';
+                menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 1 + 'px';
             } else {
-                menu.style.width = parseInt(bounds.width)+2;
-                menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 1;
+                menu.style.width = parseInt(bounds.width)+2 + 'px';
+                menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 1 + 'px';
             }
         } else {
             if(this.getInheritedProperty("editable")) {
-                menu.style.width = parseInt(bounds.width)-5;
-                menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 6;
+                menu.style.width = parseInt(bounds.width)-5 + 'px';
+                menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 6 + 'px';
             } else {
-                menu.style.width = parseInt(bounds.width)-3;
-                menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 4;
+                menu.style.width = parseInt(bounds.width)-3 + 'px';
+                menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 4 + 'px';
             }
         }
     }
@@ -239,7 +239,7 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 		if((bounds.top - menuHeight) > WINDOW_GUTTER) {
 			//yes - it fits upwards
 			
-			menu.style.top = bounds.top - menuHeight;			
+			menu.style.top = bounds.top - menuHeight + 'px';
 			menu.getElementsByTagName("table")[0].className = this.getChoiceTableCssClass();				
 		} else {
 			/*
@@ -248,13 +248,13 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 			*/
 			if(bounds.top > ((wh - WINDOW_GUTTER*2)/2) ) {
 				//expand upwards
-				menu.style.height = parseInt(bounds.top) - WINDOW_GUTTER;												
-				menu.style.top = WINDOW_GUTTER;
+				menu.style.height = parseInt(bounds.top) - WINDOW_GUTTER + 'px';
+				menu.style.top = WINDOW_GUTTER + 'px';
 				this.menuDirection = OSelect1_XFormItem.MENU_DIR_UP;
 			} else {
 				//expand downwards
-				menu.style.top	= 	parseInt(menu.style.top)+2;				
-				menu.style.height = wh-WINDOW_GUTTER-parseInt(menu.style.top);								
+				menu.style.top	= 	parseInt(menu.style.top)+2 + 'px';
+				menu.style.height = wh-WINDOW_GUTTER-parseInt(menu.style.top) + 'px';
 				this.menuDirection = OSelect1_XFormItem.MENU_DIR_DOWN;
 			}
 
@@ -337,12 +337,12 @@ OSelect1_XFormItem.prototype.moveMenuY = function (y, shorten, lengthen) {
 	var menuTop = mBounds.top;
 	var newTop = parseInt(menuTop)+parseInt(y);
 	var newBotton = parseInt(newTop)+parseInt(menuHeight);
-	menu.style.top = newTop;
+	menu.style.top = newTop + 'px';
 	//shorten the menu
 	if(shorten) {
-		menu.style.height = parseInt(menu.style.height)-Math.abs(parseInt(y));
+		menu.style.height = parseInt(menu.style.height)-Math.abs(parseInt(y)) + 'px';
 	} else if(lengthen) {
-		menu.style.height = parseInt(menu.style.height)+Math.abs(parseInt(y));
+		menu.style.height = parseInt(menu.style.height)+Math.abs(parseInt(y)) + 'px';
 	}
 	
 }
@@ -360,12 +360,12 @@ OSelect1_XFormItem.prototype.showNote = function(noteText, noteClass) {
 		bounds = this.getBounds(this.getElement());
 	}
 	//note.style.width = menu.style.width;
-	note.style.left = bounds.left;
+	note.style.left = bounds.left + 'px';
 	if(this.menuDirection == OSelect1_XFormItem.MENU_DIR_UP) {
-		note.style.top = bounds.top + bounds.height;
+		note.style.top = bounds.top + bounds.height + 'px';
 		//this.moveMenuY((-1)*OSelect1_XFormItem.NOTE_HEIGHT,true,false);
 	} else {
-		note.style.top = bounds.top - OSelect1_XFormItem.NOTE_HEIGHT;
+		note.style.top = bounds.top - OSelect1_XFormItem.NOTE_HEIGHT + 'px';
 		//this.moveMenuY(OSelect1_XFormItem.NOTE_HEIGHT,true,false);
 	}
 	note.style.zIndex = 1000000;
@@ -704,8 +704,8 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 		var element = this.getElement("tempDiv");
 		if(!element) 
 			element = this.createElement("tempDiv", null, "div", "MENU CONTENTS");
-		element.style.left = -1000;
-		element.style.top = -1000;
+		element.style.left = '-1000px';
+		element.style.top = '-1000px';
 		element.className = this.getMenuCssClass();
 		element.innerHTML = this.getChoicesHTML();
 		this._width = element.offsetWidth+20;

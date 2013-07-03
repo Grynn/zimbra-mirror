@@ -422,8 +422,8 @@ function() {
 	var kbff = this._kbFocusField = document.createElement("textarea");
 	kbff.id = DwtKeyboardMgr.FOCUS_FIELD_ID;
 	kbff.tabIndex = 0;
-	kbff.style.position = Dwt.ABSOLUTE_STYLE;
-	kbff.style.top = kbff.style.left = Dwt.LOC_NOWHERE;
+	Dwt.setPosition(kbff, Dwt.ABSOLUTE_STYLE);
+	Dwt.setLocation(kbff, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 	kbff.onblur = DwtKeyboardMgr.__onBlurHdlr;
 	kbff.onfocus = DwtKeyboardMgr.__onFocusHdlr;
 	document.body.appendChild(kbff);

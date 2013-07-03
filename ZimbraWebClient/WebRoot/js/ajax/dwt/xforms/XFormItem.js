@@ -1042,7 +1042,7 @@ XFormItem.prototype.outputLabelCellHTML = function (html,  rowSpan, labelLocatio
 	if (labelLocation == _INLINE_) {
 		var style = this.getLabelCssStyle();
 		if (style == null) style = "";
-		style = "position:relative;left:10;top:5;text-align:left;background-color:#eeeeee;margin-left:5px;margin-right:5px;" + style;
+		style = "position:relative;left:10px;top:5px;text-align:left;background-color:#eeeeee;margin-left:5px;margin-right:5px;" + style;
 		html.append( "<div id=\"", this.getId(),"___label\"", 
 								this.getLabelCssString(null, style), ">",
 								label,
@@ -1645,6 +1645,9 @@ XFormItem.prototype.getCssString = function () {
 		if(style.length)
 			style += ";";
 			
+		if (!isNaN(Number(width)))
+			width += 'px';
+
 		style += "width:" + width;
 	}
 
@@ -1653,6 +1656,9 @@ XFormItem.prototype.getCssString = function () {
 		if(style.length)
 			style += ";";
 	
+		if (!isNaN(Number(height)))
+			height += 'px';
+
 		style += "height:" + height;
 	}
 

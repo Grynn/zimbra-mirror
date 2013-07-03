@@ -39,7 +39,7 @@ ZaTabView = function(params) {
 	this._drawn = false;	
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	this._containedObject = null;
-	this.setScrollStyle(Dwt.VISIBLE);
+	this.setScrollStyle(Dwt.SCROLL_Y);
 	this._currentSubTab = [];
 }
 

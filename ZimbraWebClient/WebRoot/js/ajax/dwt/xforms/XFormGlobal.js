@@ -92,11 +92,7 @@ XFG.showEl = function (id) {
 	var el = (typeof id == "string" ? XFG.getEl(id) : id);
 	if (el) {
 		if (el.tagName == "TD") {
-			if (AjxEnv.isIE) {
-				el.style.display = "block";
-			} else {
-				el.style.display = "table-cell";			
-			}
+			el.style.display = "table-cell";
 		} else {
 			el.style.display = "block";
 		}

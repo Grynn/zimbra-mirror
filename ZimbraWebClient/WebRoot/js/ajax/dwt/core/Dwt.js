@@ -89,12 +89,12 @@ Dwt.DISPLAY_NONE = "none";
 /**
  * Table row style.
  */
-Dwt.DISPLAY_TABLE_ROW = AjxEnv.isIE ? Dwt.DISPLAY_BLOCK : "table-row";
+Dwt.DISPLAY_TABLE_ROW = "table-row";
 
 /**
  * Table cell style.
  */
-Dwt.DISPLAY_TABLE_CELL = AjxEnv.isIE ? Dwt.DISPLAY_BLOCK : "table-cell";
+Dwt.DISPLAY_TABLE_CELL = "table-cell";
 
 // Scroll constants
 /**
@@ -531,7 +531,7 @@ function(htmlElement, point) {
 Dwt.setLocation =
 function(htmlElement, x, y) {
 	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
-	var position = htmlElement.style.position;
+	var position = DwtCssStyle.getProperty(htmlElement, 'position');
 	if (position != Dwt.ABSOLUTE_STYLE && position != Dwt.RELATIVE_STYLE && position != Dwt.FIXED_STYLE) {
 		DBG.println(AjxDebug.DBG1, "Cannot position static widget " + htmlElement.className);
 		throw new DwtException("Static widgets may not be positioned", DwtException.INVALID_OP, "Dwt.setLocation");
@@ -777,7 +777,7 @@ Dwt.__MSIE_OPACITY_RE = /alpha\(opacity=(\d+)\)/;
 Dwt.getOpacity =
 function(htmlElement) {
 	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
-	if (AjxEnv.isIE) {
+	if (AjxEnv.isIE && !AjxEnv.isIE9up) {
 		var filter = Dwt.getIEFilter(htmlElement, "alpha");
 		var m = Dwt.__MSIE_OPACITY_RE.exec(filter) || [ filter, "100" ];
 		return Number(m[1]);
@@ -788,7 +788,7 @@ function(htmlElement) {
 Dwt.setOpacity =
 function(htmlElement, opacity) {
 	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
-	if (AjxEnv.isIE) {
+	if (AjxEnv.isIE && !AjxEnv.isIE9up) {
         Dwt.alterIEFilter(htmlElement, "alpha", "alpha(opacity="+opacity+")");
 	} else {
 		htmlElement.style.opacity = opacity/100;
@@ -1305,6 +1305,33 @@ function(tagName) {
 	return document.getElementsByTagName(tagName);
 };
 
+Dwt.byClassName =
+function(className, ancestor) {
+	if (!ancestor) {
+        ancestor = document;
+	}
+
+    try {
+        return ancestor.getElementsByClassName(className);
+    } catch (e) {
+        /* fall back for IE 8 and earlier */
+        var pattern = new RegExp("\\b"+className+"\\b");
+
+        function byClass(element, accumulator)
+        {
+            if (element.className && element.className.match(pattern))
+                accumulator.push(element);
+
+            for (var i = 0; i < element.childNodes.length; i++)
+                byClass(element.childNodes[i], accumulator);
+
+            return accumulator;
+	    };
+
+	    return byClass(ancestor, []);
+    }
+};
+
 Dwt.show =
 function(it) {
 	var el = Dwt.byId(it);
@@ -1641,7 +1668,11 @@ function(startColor, endColor, direction) {
 
     var cssDirection;
     var gradient = {};
-    if (AjxEnv.isIE) {
+    if (AjxEnv.isIE10up) {
+        cssDirection = (direction == 'v') ? 'top' : 'left';
+        gradient.field = "background";
+        gradient.css   = "-ms-linear-gradient(" + cssDirection + "," + startColor + ", "  + endColor + ")";
+    } else if (AjxEnv.isIE) {
         cssDirection = (direction == 'v') ? 0 : 1;
         gradient.field = "filter";
         gradient.name  = "DXImageTransform.Microsoft.Gradient";

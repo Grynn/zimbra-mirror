@@ -1,158 +1,162 @@
 <!-- BEGIN SKIN -->
 <div id='skin_outer'>
-	<table id='skin_table_outer' class='skin_table' cellspacing=0>
+	<div id='skin_table_outer' class='skin_layout'>
 <!-- top row: logo, search box, user name, logoff link, help link, downloads link -->			
-		<tr id='skin_tr_top'>
-			<td id="skin_top_td">
-				<table id="skin_table" cellspacing=0>
-					<tr>
-                        <td id='skin_td_previous'>
+		<div class='skin_layout_row' id='skin_tr_top'>
+			<div class='skin_layout_cell skin_layout_filler' id="skin_top_td">
+				<div class='skin_layout'>
+					<div class='skin_layout_row skin_layout_filler'>
+                        <div class='skin_layout_cell' id='skin_td_previous'>
                             <div id='skin_container_previous' class='skin_container'>
                             </div>
-                        </td>
-                        <td id='skin_td_next'>
+                        </div>
+                        <div class='skin_layout_cell' id='skin_td_next'>
                             <div id='skin_container_next' class='skin_container'>
                             </div>
-                        </td>
-                        <td id='skin_td_pre_next_vertsep'>
+                        </div>
+                        <div class='skin_layout_cell' id='skin_td_pre_next_vertsep'>
                             <div id='skin_container_pre_next_vertsep' class='skin_container'>
-                                <div class='nextVertSep'/>
+                                <div class='nextVertSep'>
+                                </div>
                             </div>
-                        </td>
-						<td id='skin_td_logo'>
+                        </div>
+						<div class='skin_layout_cell' id='skin_td_logo'>
 							<div id='skin_container_logo' class='skin_container'>
 								<!-- app logo -->
 							</div>
-						</td>
-                        <td id='skin_td_toaster'>
+						</div>
+                        <div class='skin_layout_cell skin_layout_filler' id='skin_td_toaster'>
                             <div id='skin_container_toaster' class='skin_container'>
                             </div>
-                        </td>
-						<td id='skin_td_search'>
+                        </div>
+						<div class='skin_layout_cell' id='skin_td_search'>
 							<div id='skin_container_search' class='skin_container'>
 								<!-- search toolbar -->
 							</div>
-						</td>
-                        <td id='skin_td_search_vertsep'>
+						</div>
+                        <div class='skin_layout_cell' id='skin_td_search_vertsep'>
                             <div id='skin_container_search_vertsep' class='skin_container'>
-                                <div class='vertSep'/>
+                                <div class='vertSep'>
+                                </div>
                             </div>
-                        </td>
-                        <td id='skin_td_refresh'>
+                        </div>
+                        <div class='skin_layout_cell' id='skin_td_refresh'>
                             <div id='skin_container_refresh' class='skin_container'>
                             </div>
-                        </td>
-                        <td id='skin_td_refresh_vertsep'>
+                        </div>
+                        <div class='skin_layout_cell' id='skin_td_refresh_vertsep'>
                             <div id='skin_container_refresh_vertsep' class='skin_container'>
-                                <div class='vertSep'/>
+                                <div class='vertSep'>
+                                </div>
                             </div>
-                        </td>
-                        <td id="skin_td_username">
+                        </div>
+                        <div class='skin_layout_cell' id="skin_td_username">
                             <div id='skin_container_username' class='skin_container'>
                             </div>
-                        </td>
-                        <td id='skin_td_username_vertsep'>
+                        </div>
+                        <div class='skin_layout_cell' id='skin_td_username_vertsep'>
                             <div id='skin_container_username_vertsep' class='skin_container'>
-                                <div class='vertSep'/>
+                                <div class='vertSep'>
+                                </div>
                             </div>
-                        </td>
-                        <td id="skin_td_help">
+                        </div>
+                        <div class='skin_layout_cell' id="skin_td_help">
                             <div id='skin_container_help' class='skin_container'>
                             </div>
-                        </td>
-					</tr>
-				</table>
-			</td>
-		</tr>
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 <!-- 2rd row: tree, main app, tool panel -->
-		<tr id='skin_tr_bottom'>
-			<td id='skin_td_bottom' style="height:100%">
-				<table class='skin_table' cellspacing=0>
-					<tr>
-						<td id='skin_td_left_tree'>
+		<div class='skin_layout_row skin_layout_filler' id='skin_tr_bottom'>
+			<div class='skin_layout_cell skin_layout_filler' id='skin_td_bottom' style="height:100%">
+				<div class='skin_layout'>
+					<div class='skin_layout_row skin_layout_filler'>
+						<div class='skin_layout_cell' id='skin_td_left_tree'>
 							<!-- NOTE: tree and mini-cal need to be their own table so the mini-cal can be hidden -->
-							<table class='skin_table' cellspacing=0>
-								<tr>
-									<td id='skin_td_tree_top'>
+							<div class='skin_layout'>
+								<div class='skin_layout_row'>
+									<div class='skin_layout_cell skin_layout_filler' id='skin_td_tree_top'>
 										<div id='skin_container_tree_top' class='skin_container'>
 											<!-- Current App Display -->
 										</div>
-									</td>
-								</tr>
-								<tr>
-									<td id='skin_td_tree'>
+									</div>
+								</div>
+								<div class='skin_layout_row skin_layout_filler'>
+									<div class='skin_layout_cell skin_layout_filler' id='skin_td_tree'>
 										<div id='skin_container_tree' class='skin_container'>	
 											<!-- Tree -->
 										</div>
-									</td>
-								</tr>
-								<tr id='skin_tr_tree_footer' syle="display:table-row">
-									<td id='skin_td_tree_footer'>
+									</div>
+								</div>
+								<div class='skin_layout_row' id='skin_tr_tree_footer'>
+									<div class='skin_layout_cell skin_layout_filler' id='skin_td_tree_footer'>
 										<div id='skin_container_tree_footer' class='skin_container'>
 											<!-- status messages area. License message -->
 										</div>
-									</td>
-								</tr>
-							</table>
-						</td>	
+									</div>
+								</div>
+							</div>
+						</div>	
 
-						<td id='skin_td_middle_app'>
-							<table class='skin_table' cellspacing=0>
-								<tr id='skin_tr_app_tabs'>
-									<td id='skin_td_app_tabs'>
+						<div class='skin_layout_cell skin_layout_filler' id='skin_td_middle_app'>
+							<div class='skin_layout'>
+								<div class='skin_layout_row' id='skin_tr_app_tabs'>
+									<div class='skin_layout_cell skin_layout_filler' id='skin_td_app_tabs'>
 										<div id='skin_container_app_tabs' class='skin_container'>
 										 <!--  app tabs -->
 										</div>
-									</td>
-								</tr>
-								<tr id='skin_tr_main'>
-									<td id='skin_td_app_main' class='full_height'>
+									</div>
+								</div>
+								<div class='skin_layout_row skin_layout_filler' id='skin_tr_main'>
+									<div class='skin_layout_cell skin_layout_filler' id='skin_td_app_main'>
 										<div id='skin_container_app_main' class='skin_container full_size'>
 												<!-- main app area -->
 										</div>
-									</td>
-								</tr>
-								<tr id='skin_tr_main_footer' syle="display:table-row">
-									<td id='skin_td_main_footer'>
+									</div>
+								</div>
+								<div class='skin_layout_row' id='skin_tr_main_footer'>
+									<div class='skin_layout_cell skin_layout_filler' id='skin_td_main_footer'>
 										<div id='skin_container_main_footer' class='skin_container'>
 											<!-- TBD-->
 										</div>
-									</td>
-								</tr>
-							</table>
-						</td>
+									</div>
+								</div>
+							</div>
+						</div>
 
-                        <td id='skin_td_right_tool'>
-							<table class='skin_table' cellspacing=0>
-								<tr id='skin_tr_tool_header'>
-									<td id='skin_td_tool_header'>
+                        <div class='skin_layout_cell' id='skin_td_right_tool'>
+							<div class='skin_layout_row skin_layout_filler'>
+								<div class='skin_layout_row' id='skin_tr_tool_header'>
+									<div class='skin_layout_cell skin_layout_filler' id='skin_td_tool_header'>
 										<div id='skin_container_tool_header' class='skin_container'>
 										 <!--  app tabs -->
 										</div>
-									</td>
-								</tr>
-								<tr id='skin_tr_tool'>
-									<td id='skin_td_tool' class='full_height'>
+									</div>
+								</div>
+								<div class='skin_layout_row skin_layout_filler' id='skin_tr_tool'>
+									<div id='skin_td_tool' class='skin_layout_cell skin_layout_filler'>
 										<div id='skin_container_tool' class='skin_container full_size'>
 												<!-- main app area -->
 										</div>
-									</td>
-								</tr>
-								<tr id='skin_tr_tool_footer'>
-									<td id='skin_td_tool_footer'>
+									</div>
+								</div>
+								<div id='skin_tr_tool_footer' class='skin_layout_row'>
+									<div class='skin_layout_cell skin_layout_filler' id='skin_td_tool_footer'>
 										<div id='skin_container_tool_footer' class='skin_container'>
 											<!-- TBD-->
 										</div>
-									</td>
-								</tr>
-							</table>
-                        </td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-	</table>
+									</div>
+								</div>
+							</div>
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <!-- END SKIN -->
 

@@ -58,7 +58,7 @@ ZaSearchBuilderToolbarView = function(parent){
 	this._toolbarOrder.push(ZaOperation.SEARCH_BY_REMOVE_ALL);
 	this._toolbarOrder.push(ZaOperation.NONE);
 	this._toolbarOrder.push(ZaOperation.CLOSE);	
-	ZaToolBar.call(this, parent, this._toolbarOperations, this._toolbarOrder, null, AjxEnv.isIE ? null : "ZaSearchBuilderToolBar" );
+	ZaToolBar.call(this, parent, this._toolbarOperations, this._toolbarOrder, null, "ZaSearchBuilderToolBar" );
 	
 	
 	this._app = ZaApp.getInstance();

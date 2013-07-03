@@ -107,7 +107,7 @@ function() {
 		document.onmouseout = this._mouseOutHdlr;
 		document.onmousewheel = this._mouseWheelHdlr;
 	}
-	if (this._hardCapture && document.body && document.body.setCapture) {
+	if (this._hardCapture && !AjxEnv.isIE9up && document.body && document.body.setCapture) {
 		document.body.setCapture();
 	}
 	window._mouseEventCaptureObj = this;
@@ -136,7 +136,7 @@ function() {
 		document.onmouseout = this._savedMouseOutHdlr;
 		document.onmousewheel = this._savedMouseWheelHdlr;
 	}
-	if (this._hardCapture && document.body && document.body.releaseCapture) {
+	if (this._hardCapture && !AjxEnv.isIE9up && document.body && document.body.releaseCapture) {
 		document.body.releaseCapture();
 	}
 	window._mouseEventCaptureObj = null;

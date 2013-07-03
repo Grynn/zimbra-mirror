@@ -231,10 +231,6 @@ function() {
     var removeLinkId = this.id + "_remove";
     var removeLink = 'ZaSearchXFormView.removeBubble("' + this.id + '","'+ this.parentId +'");';
     var style = "display:inline-block;cursor:pointer;";
-    if (AjxEnv.isIE) {
-		// hack - IE won't display block elements inline via inline-block
-		style = style + "*display:inline;zoom:1;";
-	}
     var closeText = AjxImg.getImageHtml("BubbleDelete", style, "id='" + removeLinkId + "' onclick='" + removeLink + "'");
     var html = "<span id='"+this.id+"_displayName'>"+this.displayName + "</span>" + closeText;
 	el.innerHTML = html;

@@ -33,6 +33,7 @@ import javax.naming.NamingException;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.swing.ImageIcon;
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
@@ -1269,6 +1270,7 @@ public class SkinResources
 			define(macros, "MSIE_LOWER_THAN_9", isIE && !isIE9up);
 			define(macros, "MSIE_9", isIE9);
 			define(macros, "MSIE_9_OR_HIGHER", isIE9up);
+			define(macros, "MSIE_LOWER_THAN_10", isIE && !isIE10up);
 			define(macros, "MSIE_10", isIE10);
 			define(macros, "MSIE_10_OR_HIGHER", isIE10up);
 			define(macros, "NAVIGATOR", isNav);
@@ -1814,6 +1816,15 @@ public class SkinResources
 			}
 			throw new IOException("border("+type+"): type not understood: use 'transparent', 'solid', 'inset' or 'outset'");
 		}
+
+		private String getDataURI(String mimetype, String source)
+			throws IOException
+		{
+			byte[] data = source.getBytes("UTF-8");
+			String base64 = DatatypeConverter.printBase64Binary(data);
+
+			return String.format("data:%s;base64,%s", mimetype, base64);
+		}
 					
 		//
 		// replace occurances of @grad(to, from, type)@, @grad(to, from) with the CSS for the cross-browser linear gradient 
@@ -1833,26 +1844,37 @@ public class SkinResources
 
 			if (type.equals("linear-horizontal")){
 				endDirection = "right";
-				gradType = 1; // for IE 9 or lower vertical:0, horizontal: 1
+				gradType = 1; // for IE 8 or lower vertical:0, horizontal: 1
 				topLeft = "left"; // used for horizontal gradient only
 			} else if (!type.equals("linear-vertical")){
 				throw new IOException("grad():type not understood: use 'linear-vertical', 'linear-horizontal");
 			}
-			if (isBrowser("MSIE")){
-				if (isBrowser("MSIE_10_OR_HIGHER")){
-					result = String.format("background-image: -ms-linear-gradient(top %s, %s, %s);\n", topLeft, from, to);
-				//} else if (isBrowser("MSIE_8_OR_HIGHER")){ //IE 8 and IE 9
-					//result = String.format("-ms-filter: \"progid:DXImageTransform.Microsoft.gradient(startColorstr='%s',endColorstr='%s',GradientType=%d\");",from, to, gradType);
-				} else { // IE 7 or lower
-					result = String.format("filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='%s', EndColorStr='%s' , GradientType=%d);", from, to, gradType );
-				}
+
+			if (isBrowser("MSIE_9")) {
+				String svgsource = "<?xml version=\"1.0\" ?>" +
+					"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%%\" height=\"100%%\" viewBox=\"0 0 1 1\" preserveAspectRatio=\"none\">" +
+					"<linearGradient id=\"thegradient\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"%1$s\" y2=\"%2$s\">" +
+					"<stop offset=\"0%%\" stop-color=\"%3$s\" stop-opacity=\"1\"/>" +
+					"<stop offset=\"100%%\" stop-color=\"%4$s\" stop-opacity=\"1\"/>" +
+					"</linearGradient>" +
+					"<rect x=\"0\" y=\"0\" width=\"1\" height=\"1\" fill=\"url(#thegradient)\" />" +
+					"</svg>";
+
+				svgsource = String.format(svgsource,
+										  type.equals("linear-vertical") ? "0%" : "100%",
+										  type.equals("linear-horizontal") ? "0%" : "100%",
+										  from, to);
+
+				result = String.format("background: url(\"%s\");", getDataURI("image/svg+xml", svgsource));
+			} else if (isBrowser("MSIE_LOWER_THAN_9")) {
+				result = String.format("filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='%s', EndColorStr='%s' , GradientType=%d);", from, to, gradType);
 			} else if (isBrowser("FIREFOX")) {
 				result = String.format("background-image: -moz-linear-gradient(top %s, %s, %s);",topLeft, from, to);
 			} else if (isBrowser("WEBKIT")){
 				result = String.format("background-image: -webkit-gradient(linear, left top, %s bottom, to(%s), from(%s)); " +
                         "background-image : -webkit-linear-gradient(%s, %s, %s);",endDirection, from, to, (gradType == 1) ? "left":"top", from, to );
 			} else { // All other browsers
-				result = String.format("background-image: linear-gradient(top %s, %s, %s);",topLeft, from, to);
+				result = String.format("background-image: linear-gradient(to %s, %s, %s);", endDirection, from, to);
 			}
 
 			return result;
@@ -1968,14 +1990,13 @@ public class SkinResources
 			boolean isWebKitBased = isBrowser("WEBKIT");
 			boolean isSafari5up = isBrowser("SAFARI_5_OR_HIGHER");
 			boolean isChrome4up = isBrowser("CHROME_4_OR_HIGHER");
-			//removing IE9+ until rendering in standards mode is supported
-			//boolean isIE9up = isBrowser("MSIE_9_OR_HIGHER"); 
+			boolean isIE9up = isBrowser("MSIE_9_OR_HIGHER");
 			
 			// Pick out browsers that support rounding in some fashion
-			if (isFirefox1_5up || isWebKitBased) {
+			if (isFirefox1_5up || isWebKitBased || isIE9up) {
 				String propName;
 				
-				if (isFirefox4up || isSafari5up || isChrome4up) { 
+				if (isFirefox4up || isSafari5up || isChrome4up || isIE9up) {
 					// browsers that support the w3c syntax should use it
 					propName = "border-radius:";
 				} else { 
@@ -2013,7 +2034,7 @@ public class SkinResources
 			} catch (Exception e) {
 				throw new IOException("opacity(): pass opacity as integer percentage");
 			}
-			if (isBrowser("MSIE")) {
+			if (isBrowser("MSIE") && !isBrowser("MSIE_9_OR_HIGHER")) {
 				return "filter:alpha(opacity=" + ((int)(opacity * 100)) + ");";
 			} else {
 				return "opacity:"+opacity+";";

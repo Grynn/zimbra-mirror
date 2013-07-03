@@ -885,17 +885,8 @@ function(params) {
 	// create new input field
 	var ninput;
 	var type = this._type != DwtInputField.PASSWORD ? "text" : "password";
-	if (AjxEnv.isIE) {
-		try {
-			var ninput = document.createElement(["<INPUT type='",type,"'>"].join(""));
-		} catch(e) {
-			ninput = document.createElement("INPUT");
-			ninput.type = type;
-		}
-	} else {
-		ninput = document.createElement("INPUT");
-		ninput.type = type;
-	}
+	ninput = document.createElement("INPUT");
+	ninput.type = type;
 	this._inputField = ninput;
 
 	// set common values

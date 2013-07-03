@@ -30,20 +30,26 @@ BODY {
 	padding:0;
 }
 
+#skin_outer * {	@FixBoxModel@ }
+
 .DwtShell {
 	background:transparent url(@SkinImgDir@/marge-mosaic-bg.png) no-repeat;
 }
 
 /* classes for the skin around the various pieces of the app */
 
-.skin_container	{	position:relative; overflow:hidden;	}
+.skin_container	{	position:relative; overflow:hidden; @FullSize@	}
 .skin_table		{	@FullSize@ }	
 .full_height		{	height:100%; } 	
+
+.skin_layout_row { width: 100%; clear: both; }
+.skin_layout_cell { height: 100%; float: left; }
+.skin_layout { display: block; clear: both; width: 100%; height: 100% }
 
 #skin_outer {
 	@FullSize@
 	background-color:transparent;
-#IFDEF MSIE
+#IFDEF MSIE_LOWER_THAN_9
 	padding:0 5px 5px;
 #ENDIF
 }
@@ -62,14 +68,14 @@ BODY {
 	@SkinBorderLogo@
 	height:@AppBannerHeight@;
 	width:@AppBannerWidth@;
-#IFDEF MSIE
+#IFDEF MSIE_LOWER_THAN_9
 	height:100%;
 #ENDIF
 }
 
 .ImgAppBanner {
 	background-position:0;
-#IFDEF MSIE
+#IFDEF MSIE_LOWER_THAN_9
 	margin-top:8px;
 #ENDIF
 }
@@ -102,7 +108,7 @@ BODY {
 	height:@TopHeight@;
 	padding:8px 9px;
 	width:1px;
-#IFDEF MSIE
+#IFDEF MSIE_LOWER_THAN_9
 	margin:0 9px;
 #ENDIF
 }
@@ -311,7 +317,7 @@ BODY {
 	margin-left:-250px;
 	min-height:320px;
 	width:500px;
-#IFDEF MSIE
+#IFDEF MSIE_LOWER_THAN_9
 	height:330px;
 #ENDIF
 }
@@ -337,7 +343,7 @@ BODY {
 .SplashScreen .contentBox {	
 	min-height:265px;
 	width:500px;
-#IFDEF MSIE
+#IFDEF MSIE_LOWER_THAN_9
 	height:265px;
 #ENDIF
 	@LoginContentBox@ 	
@@ -360,7 +366,7 @@ BODY {
 	@ImgAltBanner@
 }
 
-.LoginScreen .ZLoginField {
+.LoginScreen .zLoginField {
 	@roundCorners(5px)@
 }
 
@@ -441,7 +447,7 @@ BODY {
 .ImgLoginBanner         {   @LoginBanner@ background-repeat:no-repeat;  }
 .ImgAboutBanner         {   @AboutBanner@ background-repeat:no-repeat;  }
 
-#IFDEF MSIE
+#IFDEF MSIE_LOWER_THAN_9
 #skin_container_logo A, #skin_container_logo A:hover, #skin_container_logo A:link {
 	background-color:transparent;
 }
@@ -480,7 +486,7 @@ BODY {
 .AboutScreen .Footer {
     position: absolute;
     bottom: 0px;
-#IFDEF MSIE
+#IFDEF MSIE_LOWER_THAN_9
 	width: 559px;
 #ENDIF
 }
@@ -500,7 +506,7 @@ BODY {
     color: #cbd9e4;
 }
 
-#IFDEF MSIE
+#IFDEF MSIE_LOWER_THAN_9
 .AboutScreen .version {
     margin-top: -17px;
 }
@@ -640,6 +646,7 @@ TD.gridGroupBodyLabel {
 .grid_xform_table {
 	border-spacing:0;
 	padding:0;
+    width: 100%;
 }
 
 .grid_table_cell_sheet {
@@ -910,7 +917,7 @@ TD.gridGroupBodyLabel {
 .SearchToolBar {
 	background-color:white;
 	@roundCorners(5px)@
-#IFNDEF MSIE
+#IFNDEF MSIE_LOWER_THAN_9
 	border:1px solid white;
 #ENDIF
 }
@@ -1052,8 +1059,8 @@ TD.gridGroupBodyLabel {
 /* Info Panels on Home Screen */
 .ZaHomeTabView .XFormCase { position:relative; }
 
-/* Hacks for MSIE's lack of support for child selectors */
-#IFDEF MSIE
+/* Hacks for lack of support for child selectors in MSIE 8 */
+#IFDEF MSIE_LOWER_THAN_9
 .ZaHomeWarningPanel { text-align:center; }
 
 .ZaHomeWarningPanel .grid_xform_table,
@@ -1068,7 +1075,7 @@ TD.gridGroupBodyLabel {
 	@roundCorners(0 0 5px 5px)@
 }
 
-#IFDEF MSIE
+#IFDEF MSIE_LOWER_THAN_9
 .ZaHomeWarningPanel .grid_xform_table .grid_xform_table {
 	background-color:transparent;
 	border-width:0;
@@ -1150,7 +1157,7 @@ TD.gridGroupBodyLabel {
 	border:1px solid black;
 }
 
-#IFDEF MSIE
+#IFDEF MSIE_LOWER_THAN_9
 .DwtDialog .WindowOuterContainer TABLE {
 	border-collapse:collapse;
 }

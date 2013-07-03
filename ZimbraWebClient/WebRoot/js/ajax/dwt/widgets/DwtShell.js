@@ -68,6 +68,8 @@ DwtShell = function(params) {
 
 	htmlElement.className = className;
 	htmlElement.style.width = htmlElement.style.height = "100%";
+	Dwt.setPosition(htmlElement, DwtControl.ABSOLUTE_STYLE);
+
 	if (htmlElement.style.overflow) {
 		htmlElement.style.overflow = null;
 	}
@@ -85,6 +87,9 @@ DwtShell = function(params) {
 		userShellContainer.getHtmlElement().appendChild(params.userShell);
 		userShellContainer.setSize("100%", "100%");
 		userShellContainer.zShow(true);
+		this._userShell = params.userShell;
+	} else {
+		this._userShell = null;
 	}
 	this.shell = this;
 
@@ -117,7 +122,7 @@ DwtShell = function(params) {
 	}
 
 	this._uiEvent = new DwtUiEvent(true);
-	this._currWinSize = Dwt.getWindowSize();
+	this.relayout();
 
 	// tooltip singleton used by all controls in shell
 	this._toolTip = new DwtToolTip(this);
@@ -463,6 +468,78 @@ function(htmlElement) {
 	return this._busyDialog;
 };
 
+/**
+ *
+ * Relayout user skin elements. Called whenever hiding or showing a
+ * part of the user skin, or when resizing the window.
+ *
+ * The layout works on elements of class "skin_layout_filler" -- which
+ * must also be of either class "skin_layout_row" or
+ * "skin_layout_cell". It finds the size of our parent, subtract the
+ * sizes all sibling rows or cells (excluding other fillers) and
+ * divide the remaining size between this filler and any sibling
+ * fillers.
+ */
+DwtShell.prototype.relayout =
+function() {
+    this._currWinSize = Dwt.getWindowSize();
+
+    if (this._userShell) {
+        var fillers = Dwt.byClassName('skin_layout_filler', this._userShell);
+
+        AjxUtil.foreach(fillers, function(elem) {
+            if (Dwt.hasClass(elem, 'skin_layout_row')) {
+                var row = elem;
+                var table = row.parentNode;
+                var height = table.clientHeight;
+                var nfillers = 0;
+
+                var insets = Dwt.getInsets(row);
+                height -= insets.top + insets.bottom;
+
+                AjxUtil.foreach(table.children, function(otherrow) {
+                    if (Dwt.hasClass(otherrow, 'skin_layout_filler')) {
+                        nfillers += 1;
+                    } else {
+                        var otherheight = otherrow.offsetHeight
+
+                        AjxUtil.foreach(otherrow.children, function(cell) {
+                            otherheight = Math.max(otherheight,
+                                                   cell.offsetHeight);
+                        });
+
+                        height -= otherheight;
+                    }
+                });
+
+                row.style.height = height / nfillers + 'px';
+
+            } else if (Dwt.hasClass(elem, 'skin_layout_cell')) {
+                var cell = elem;
+                var row = cell.parentNode;
+                var table = row.parentNode;
+                var width = table.clientWidth;
+                var nfillers = 0;
+
+                var insets = Dwt.getInsets(cell);
+                width -= insets.left + insets.right;
+
+                AjxUtil.foreach(row.children, function(othercell) {
+                    if (Dwt.hasClass(othercell, 'skin_layout_filler')) {
+                        nfillers += 1;
+                    } else {
+                        width -= othercell.offsetWidth;
+                    }
+                });
+
+                cell.style.width = width / nfillers + 'px';
+
+            } else if (window.console) {
+                console.warn('not fixing sizes for element!', elem);
+            }
+        });
+    }
+};
 
 // Listeners
 
@@ -527,12 +604,12 @@ function(ev) {
 	 	evt.reset();
 	 	evt.oldWidth = shell._currWinSize.x;
 	 	evt.oldHeight = shell._currWinSize.y;
-	 	shell._currWinSize = Dwt.getWindowSize();
+		shell.relayout();
 	 	evt.newWidth = shell._currWinSize.x;
 	 	evt.newHeight = shell._currWinSize.y;
 	 	shell.notifyListeners(DwtEvent.CONTROL, evt);
 	} else {
-		shell._currWinSize = Dwt.getWindowSize();
+		shell.relayout();
 	}
 };
 

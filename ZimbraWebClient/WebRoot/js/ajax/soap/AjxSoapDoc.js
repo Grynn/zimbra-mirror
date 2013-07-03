@@ -231,9 +231,9 @@ function() {
  */
 AjxSoapDoc.prototype.getHeader =
 function() {
-	// would love to use getElementsByTagNameNS, but IE does not support it
+	// fall back to getElementsByTagName in IE 8 and earlier
 	var d = this._xmlDoc.getDoc();
-	var nodeList = AjxEnv.isIE
+	var nodeList = !d.getElementsByTagNameNS
 		? (d.getElementsByTagName(d.firstChild.prefix + ":Header"))
 		: (d.getElementsByTagNameNS(this._soapURI, "Header"));
 
@@ -247,9 +247,9 @@ function() {
  */
 AjxSoapDoc.prototype.getBody =
 function() {
-	// would love to use getElementsByTagNameNS, but IE does not support it
+	// fall back to getElementsByTagName in IE 8 and earlier
 	var d = this._xmlDoc.getDoc();
-	var nodeList = AjxEnv.isIE
+	var nodeList = !d.getElementsByTagNameNS
 		? (d.getElementsByTagName(d.firstChild.prefix + ":Body"))
 		: (d.getElementsByTagNameNS(this._soapURI, "Body"));
 
@@ -315,7 +315,7 @@ function(node) {
  */
 AjxSoapDoc.prototype.getXml =
 function() {
-	return AjxEnv.isSafari || AjxEnv.isOpera
+	return AjxEnv.isSafari || AjxEnv.isOpera || AjxEnv.isIE9up
 		? (AjxXmlDoc.getXml(this._xmlDoc.getDoc()))
 		: AjxXmlDoc.replaceInvalidChars(this._xmlDoc.getDoc().xml);
 };

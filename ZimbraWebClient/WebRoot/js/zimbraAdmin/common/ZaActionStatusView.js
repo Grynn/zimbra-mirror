@@ -199,6 +199,9 @@ ZaToast = function(parent, id) {
     this._createHtml();
 
     this._funcs = {};
+
+    this.popdown();
+
     this._funcs["position"] = AjxCallback.simpleClosure(this.__position, this);
     this._funcs["show"] = AjxCallback.simpleClosure(this.__show, this);
     this._funcs["hide"] = AjxCallback.simpleClosure(this.__hide, this);
