@@ -216,7 +216,7 @@ PERL_LIBS 	:= \
 	Filesys::Df
 
 NET_SSLeay := \
-	Net-SSLeay-1.52
+	Net-SSLeay-1.55
 
 CRYPT_SSLeay := \
 	Crypt-SSLeay-0.64
