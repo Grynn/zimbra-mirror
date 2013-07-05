@@ -21,7 +21,6 @@ else
 endif
 
 SSL_FLAG	:= yes
-MSRC		:= mariadb
 
 
 MARIADB_VERSION ?= standard-$(MARIADB_VERSION_STRING)-pc-linux-gnu-i686-glibc23
@@ -37,7 +36,7 @@ MARIADB_TGZ_TARGET := \
 MARIADB_LIB_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/mariadb/mariadb-libs-$(MARIADB_VERSION).tgz
 
-files   := $(wildcard src/$(MSRC)-$(MARIADB_VERSION_STRING).tar.gz)
+files   := $(wildcard src/mariadb-$(MARIADB_VERSION_STRING).tar.gz)
 
 all: checksrc allclean build tar
 
@@ -45,14 +44,13 @@ checksrc:
 	$(if $(files), @echo "", exit 1)
 
 clean:
-	rm -rf $(MSRC)-$(MARIADB_VERSION_STRING)
+	rm -rf mariadb-$(MARIADB_VERSION_STRING)
 
 build:
-	echo $(OS_RELEASE) $(OS_PLATFORM)
 	mkdir -p $(ZIMBRA_HOME)
-	rm -rf $(MSRC)-$(MARIADB_VERSION_STRING)
-	tar xzf src/$(MSRC)-$(MARIADB_VERSION_STRING).tar.gz
-	(cd $(MSRC)-$(MARIADB_VERSION_STRING); \
+	rm -rf mariadb-$(MARIADB_VERSION_STRING)
+	tar xzf src/mariadb-$(MARIADB_VERSION_STRING).tar.gz
+	(cd mariadb-$(MARIADB_VERSION_STRING); \
 	$(PATCH) \
 	CFLAGS="-g -O3" CXXFLAGS="-g -O3 -felide-constructors -fno-exceptions -fno-rtti" \
 	$(LDFLAGS) \
