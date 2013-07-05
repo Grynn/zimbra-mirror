@@ -14,14 +14,9 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
 	include $(MARIADB_ROOT)/../beta_versions.def
-	PATCH   := patch -g0 -N -p1 < ../patches/ipv4-ipv6.patch;
 else
 	include $(MARIADB_ROOT)/../versions.def
-	PATCH   := patch -g0 -N -p1 < ../patches/ipv4-ipv6.patch;
 endif
-
-SSL_FLAG	:= yes
-
 
 MARIADB_VERSION ?= standard-$(MARIADB_VERSION_STRING)-pc-linux-gnu-i686-glibc23
 
@@ -55,7 +50,7 @@ build:
 	CFLAGS="-g -O3" CXXFLAGS="-g -O3 -felide-constructors -fno-exceptions -fno-rtti" \
 	$(LDFLAGS) \
 	CPPFLAGS="-I/opt/zimbra/openssl-$(OPENSSL_VERSION)/include" \
-	/usr/bin/cmake . -DCMAKE_SKIP_BUILD_RPATH=FALSE -DCMAKE_BUILD_WITH_INSTALL_RPATH=FALSE -DCMAKE_INSTALL_RPATH="/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib" -DCMAKE_PREFIX_PATH=/opt/zimbra/openssl-$(OPENSSL_VERSION) -DWITH_SSL=$(SSL_FLAG) -DCMAKE_INSTALL_PREFIX=/opt/zimbra/mariadb-$(MARIADB_VERSION) -DENABLED_PROFILING=on -DWITH_READLINE=TRUE; \
+	/usr/bin/cmake . -DCMAKE_SKIP_BUILD_RPATH=FALSE -DCMAKE_BUILD_WITH_INSTALL_RPATH=FALSE -DCMAKE_INSTALL_RPATH="/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib" -DCMAKE_PREFIX_PATH=/opt/zimbra/openssl-$(OPENSSL_VERSION) -DWITH_SSL=yes -DCMAKE_INSTALL_PREFIX=/opt/zimbra/mariadb-$(MARIADB_VERSION) -DENABLED_PROFILING=on -DWITH_READLINE=TRUE; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	$(MAKE) install)
 	(cd $(ZIMBRA_HOME); rm -f mariadb; ln -s mariadb-$(MARIADB_VERSION) mariadb)
