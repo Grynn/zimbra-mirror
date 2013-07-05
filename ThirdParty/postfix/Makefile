@@ -27,18 +27,14 @@ PCRE_DEF := -DHAS_PCRE
 PCRE_INCLUDE := -I/usr/include/pcre
 PCRE_LIB := -lpcre
 
-MYSQL_VERSION ?= standard-$(MYSQL_VERSION_STRING)-pc-linux-gnu-i686-glibc23
-ifdef MARIADB
-	MYSQL_INC := /opt/zimbra/mysql-$(MYSQL_VERSION)/include/mysql
-else
-	MYSQL_INC := /opt/zimbra/mysql-$(MYSQL_VERSION)/include
-endif
-MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
+MARIADB_VERSION ?= standard-$(MARIADB_VERSION_STRING)-pc-linux-gnu-i686-glibc23
+MARIADB_INC := /opt/zimbra/mariadb-$(MARIADB_VERSION)/include/mysql
+MARIADB_CLIENT_VERSION ?= standard-$(MARIADB_VERSION_STRING)-clientlibs
 
 SYSTEM_LIB := /usr/lib
 
-LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib:/opt/zimbra/openldap-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib:/opt/zimbra/bdb-$(BDB_VERSION)/lib
-MYSQL_LIB := /opt/zimbra/mysql-$(MYSQL_VERSION)/lib
+LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mariadb-$(MARIADB_VERSION)/lib:/opt/zimbra/openldap-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib:/opt/zimbra/bdb-$(BDB_VERSION)/lib
+MARIADB_LIB := /opt/zimbra/mariadb-$(MARIADB_VERSION)/lib
 
 
 INSTALL_PARMS := install_root=/../
@@ -79,13 +75,13 @@ build:
 	$(URANDOM) \
 	-DUSE_LDAP_SASL \
 	-I/opt/zimbra/openldap-$(LDAP_VERSION)/include \
-	-I$(MYSQL_INC) \
+	-I$(MARIADB_INC) \
 	-I/opt/zimbra/openssl-$(OPENSSL_VERSION)/include \
 	-I/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include/sasl -I/usr/include' \
 	AUXLIBS='$(EXTRALIBS) -L/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib \
 	$(DBLIB) -L/opt/zimbra/openldap-$(LDAP_VERSION)/lib $(PCRE_LIB) \
 	-lldap -llber \
-	-L$(MYSQL_LIB) \
+	-L$(MARIADB_LIB) \
 	-L/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib \
 	-lmysqlclient -lz -lm -L$(SYSTEM_LIB) -lsasl2 -lpthread -lssl -lcrypto'; \
 	LD_RUN_PATH=$(LD_RUN_PATH) $(MAKE) $(MAKEARGS);)

@@ -17,19 +17,15 @@ else
 	include $(DSPAM_ROOT)/../versions.def
 endif
 
-ifdef MARIADB
-	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
-else
-	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include
-endif
-MYSQL_LIB_DIR := $(ZIMBRA_HOME)/mysql/lib
+MARIADB_INCLUDE_DIR := $(ZIMBRA_HOME)/mariadb/include/mysql
+MARIADB_LIB_DIR := $(ZIMBRA_HOME)/mariadb/lib
 
 DSPAM_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/dspam/dspam-$(DSPAM_VERSION).tgz
 
-LDFLAGS	:= LDFLAGS="-L$(ZIMBRA_HOME)/mysql/lib -R$(ZIMBRA_HOME)/myqsl/lib"
+LDFLAGS	:= LDFLAGS="-L$(ZIMBRA_HOME)/mariadb/lib -R$(ZIMBRA_HOME)/myqsl/lib"
 ifeq ($(BUILD_PLATFORM), UBUNTU12_64)
-LDFLAGS	:= LDFLAGS="-L$(ZIMBRA_HOME)/mysql/lib -Wl,-rpath,$(ZIMBRA_HOME)/myqsl/lib"
+LDFLAGS	:= LDFLAGS="-L$(ZIMBRA_HOME)/mariadb/lib -Wl,-rpath,$(ZIMBRA_HOME)/myqsl/lib"
 endif
 
 files	:= $(wildcard src/dspam-$(DSPAM_VERSION).tar.gz)
@@ -48,13 +44,13 @@ build:
 	cd dspam-$(DSPAM_VERSION); \
 	CFLAGS="-g -O2" \
 	$(LDFLAGS) \
-	LD_LIBRARY_PATH=$(ZIMBRA_HOME)/openssl/lib:$(ZIMBRA_HOME)/mysql/lib \
+	LD_LIBRARY_PATH=$(ZIMBRA_HOME)/openssl/lib:$(ZIMBRA_HOME)/mariadb/lib \
 	./configure --prefix=$(ZIMBRA_HOME)/dspam-$(DSPAM_VERSION) \
 	--sysconfdir=$(ZIMBRA_HOME)/conf --with-logdir=$(ZIMBRA_HOME)/log \
 	--enable-daemon \
 	--enable-large-scale --with-storage-driver=hash_drv,mysql_drv \
-	--with-mysql-includes=$(MYSQL_INCLUDE_DIR) \
-	--with-mysql-libraries=$(MYSQL_LIB_DIR) \
+	--with-mysql-includes=$(MARIADB_INCLUDE_DIR) \
+	--with-mysql-libraries=$(MARIADB_LIB_DIR) \
 	--with-dspam-home-group=root \
 	--with-dspam-group=root \
 	--with-dspam-mode=0755 \
