@@ -258,10 +258,10 @@ DBD_PERL_LIBS 	:= \
 	DBD-mysql-4.022
 
 ZMQ_CONSTANTS	:= \
-	ZMQ-Constants-1.01
+	ZMQ-Constants-1.03
 
 ZMQ_LIB	:= \
-	ZMQ-LibZMQ3-1.01
+	ZMQ-LibZMQ3-1.13
 
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
