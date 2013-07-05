@@ -63,7 +63,7 @@ build:
 tar:
 	-mkdir -p $(shell dirname $(MARIADB_TGZ_TARGET))
 	(cd $(ZIMBRA_HOME); tar czvf $(MARIADB_LIB_TGZ_TARGET) mariadb-$(MARIADB_VERSION)/lib)
-	(cd $(ZIMBRA_HOME); tar czvf $(MARIADB_TGZ_TARGET) mariadb-$(MARIADB_VERSION)/bin mariadb-$(MARIADB_VERSION)/include mariadb-$(MARIADB_VERSION)/mariadb-test mariadb-$(MARIADB_VERSION)/scripts mariadb-$(MARIADB_VERSION)/share mariadb-$(MARIADB_VERSION)/sql-bench mariadb-$(MARIADB_VERSION)/support-files)
+	(cd $(ZIMBRA_HOME); tar czvf $(MARIADB_TGZ_TARGET) mariadb-$(MARIADB_VERSION)/bin mariadb-$(MARIADB_VERSION)/include mariadb-$(MARIADB_VERSION)/mysql-test mariadb-$(MARIADB_VERSION)/scripts mariadb-$(MARIADB_VERSION)/share mariadb-$(MARIADB_VERSION)/sql-bench mariadb-$(MARIADB_VERSION)/support-files)
 
 p4edit: $(MARIADB_TGZ_TARGET) 
 	p4 add $(MARIADB_TGZ_TARGET) $(MARIADB_LIB_TGZ_TARGET)
