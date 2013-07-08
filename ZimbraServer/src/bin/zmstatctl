@@ -155,7 +155,7 @@ if (defined($cmd)) {
         my $procs = getProcList();
         my $doNginx = $procs =~ /\bnginx\b/;
         my $doMysql = -x getZimbraHome() . "/mysql/bin/mysqld" ? 1 : 0;
-        my $doMtaQueue = -x getZimbraHome() . "/postfix/sbin/postqueue" ? 1 : 0;
+        my $doMtaQueue = (-x getZimbraHome() . "/postfix/sbin/postqueue" && $procs =~ /\bmta\b/) ? 1 : 0;
 	my $doLdap = -x getZimbraHome() . "/openldap/sbin/slapd" ? 1 : 0;
         my $outfile = getZmstatRoot() . "/zmstat.out";
         my $scriptDir = dirname($0);
