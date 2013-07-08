@@ -2118,16 +2118,14 @@ function(el, ctxt) {
  * @param {string}	html			HTML text
  * @param {array}	okTags			whitelist of allowed tags
  * @param {array}	attrsToRemove	list of attributes to remove from each element
- * @param {array}	badStyles		list of forbidden styles (eg "position:absolute")
  */
 AjxStringUtil.checkForCleanHtml =
-function(html, okTags, attrsToRemove, badStyles) {
+function(html, okTags, attrsToRemove) {
 
 	var htmlNode = AjxStringUtil._writeToTestIframeDoc(html);
 	var ctxt = {
 		tags:	AjxUtil.arrayAsHash(okTags),
-		attrs:	attrsToRemove || [],
-		styles:	badStyles
+		attrs:	attrsToRemove || []
 	}
 	AjxStringUtil._traverseCleanHtml(htmlNode, ctxt);
 	
@@ -2155,19 +2153,11 @@ function(el, ctxt) {
 	// see if tag is allowed
 	else if (ctxt.tags[nodeName]) {
 
-		// check for styles that force us to use iframe
-		if (ctxt.styles) {
-			var style = el.style && el.style.cssText;
-			if (style) {
-				style = style.toLowerCase();
-				for (var j = 0; j < ctxt.styles.length; j++) {
-					if (style.indexOf(ctxt.styles[j]) != -1) {
-						ctxt.fail = true;
-						break;
-					}
-				}
-			}
-		}
+        //checks for invalid styles and removes them.  Bug: 78875 - bad styles from user = email displays incorrectly
+        if (ctxt.styles) {
+            var style = el.style && el.style.cssText;
+            el.style.cssText = AjxStringUtil._checkIfValidStyle(style);
+        }
 
 		if (el.removeAttribute && el.attributes && el.attributes.length) {
 			// check for blacklisted attrs
@@ -2213,7 +2203,7 @@ function(el, ctxt) {
 	for (var i = 0, len = el.childNodes.length; i < len; i++) {
 		var childNode = el.childNodes[i];
 		AjxStringUtil._traverseCleanHtml(childNode, ctxt);
-		if (ctxt.fail) { return; }
+        ctxt.fail = null; //need to set to null or the fail = true will bubble up too far.
 	}
 	
 	// remove nodes marked for deletion
@@ -2223,6 +2213,26 @@ function(el, ctxt) {
 			el.removeChild(childNode);
 		}
 	}
+};
+
+AjxStringUtil._checkIfValidStyle =
+function(style) {
+
+    var validStyle = style;
+
+    //check for negative margins
+    validStyle = validStyle.replace(/margin[^;:]*:[^;]*-[^;]*;?/, "");
+
+    //check for negative padding
+    validStyle = validStyle.replace(/padding[^;:]*:[^;]*-[^;]*;?/, "");
+
+    //check for absolute positioning
+    validStyle = validStyle.replace(/position:[^;]*absolute[^;]*;?/, "");
+
+    //check for font-<anything>
+    validStyle = validStyle.replace(/font-[^;]*;?/, "");
+
+    return validStyle;
 };
 
 /**
