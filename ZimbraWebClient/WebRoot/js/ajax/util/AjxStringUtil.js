@@ -2154,7 +2154,7 @@ function(el, ctxt) {
 	else if (ctxt.tags[nodeName]) {
 
         //checks for invalid styles and removes them.  Bug: 78875 - bad styles from user = email displays incorrectly
-        if (ctxt.styles) {
+        if (el.style) {
             var style = el.style && el.style.cssText;
             el.style.cssText = AjxStringUtil._checkIfValidStyle(style);
         }
