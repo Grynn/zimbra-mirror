@@ -78,7 +78,6 @@ public class CreateMeetingWithDL extends CalendarWorkWeekTest {
         // Choose the contact and choose it
         dialogFindAttendees.zClickButton(Button.B_CHOOSE_CONTACT_FROM_PICKER);
         dialogFindAttendees.zClickButton(Button.B_OK);
-        apptForm.zToolbarPressButton(Button.B_SEND);
 		apptForm.zSubmit();
 		
         // Verify attendee1 of DL receives meeting invitation message
