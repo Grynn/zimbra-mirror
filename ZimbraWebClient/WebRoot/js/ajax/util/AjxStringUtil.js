@@ -1648,7 +1648,7 @@ function(html) {
 		idoc = AjxStringUtil._htmlContentIframeDoc = Dwt.getIframeDoc(iframe);
 		AjxStringUtil.__curIframeId = AjxEnv.isFirefox ? iframe.id : null;
 	}
-    html = html && html.replace(AjxStringUtil.IMG_SRC_CID_REGEX, '<img pnsrc="cid:');
+    html = html && html.replace(AjxStringUtil.IMG_SRC_CID_REGEX, '<img $1 pnsrc="cid:');
 	idoc.open();
 	idoc.write(html);
 	idoc.close();
