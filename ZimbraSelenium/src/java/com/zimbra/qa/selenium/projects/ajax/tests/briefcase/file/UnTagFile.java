@@ -31,9 +31,9 @@ public class UnTagFile extends FeatureBriefcaseTest {
 		// All tests start at the Briefcase page
 		super.startingPage = app.zPageBriefcase;
 
-		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
+		//if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
 		    super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox","TRUE");
-		}
+		//}
 			
 		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
 	}
@@ -140,6 +140,8 @@ public class UnTagFile extends FeatureBriefcaseTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on created file
+		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+		/*
 		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
     			"FOSS")){
 		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
@@ -147,7 +149,7 @@ public class UnTagFile extends FeatureBriefcaseTest {
 		}else{
 		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 		}
-
+		*/
 		// Tag document using Right Click context menu
 		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.O_TAG_FILE,
 				tagItem.getName(), fileItem);
@@ -176,6 +178,8 @@ public class UnTagFile extends FeatureBriefcaseTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on tagged file
+		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+		/*
 		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
     			"FOSS")){
 		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
@@ -183,7 +187,7 @@ public class UnTagFile extends FeatureBriefcaseTest {
 		}else{
 		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 		}
-
+		*/
 		// Click Remove Tag
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG,
 				Button.O_TAG_REMOVETAG, null);

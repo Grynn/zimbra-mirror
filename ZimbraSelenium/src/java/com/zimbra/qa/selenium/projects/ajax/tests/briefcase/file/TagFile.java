@@ -35,9 +35,9 @@ public class TagFile extends FeatureBriefcaseTest {
 		// All tests start at the Briefcase page
 		super.startingPage = app.zPageBriefcase;
 
-		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
+		//if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
 		    super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox","TRUE");
-		}
+		//}
 			    
 		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");
 	}
@@ -263,6 +263,8 @@ public class TagFile extends FeatureBriefcaseTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on uploaded file
+		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+		/*
 		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
     			"FOSS")){
 		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
@@ -270,6 +272,7 @@ public class TagFile extends FeatureBriefcaseTest {
 		}else{
 		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 		}
+		*/
 
 		// Click on header check box
 		// app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
