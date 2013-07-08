@@ -1123,9 +1123,11 @@ zmauth_check_activesync(ngx_http_request_t *r, void **extra) {
                 cred.data = ngx_palloc(pool, cred.len);
                 if (cred.data != NULL) {
                     if (ngx_decode_base64(&cred, &cred64) == NGX_OK) {
-                        ngx_log_debug1(NGX_LOG_DEBUG_HTTP,log,0,
-                                "ActiveSync: found auth basic credentials: %V",
-                                &cred);
+
+#if (NGX_DEBUG_HTTP_PASSWD)
+     ngx_log_debug1(NGX_LOG_DEBUG_HTTP,log,0,
+                    "ActiveSync: found auth basic credentials: %V", &cred);
+#endif
 
                         /* (RFC 2617)
 
