@@ -962,7 +962,7 @@ public class FormApptNew extends AbsForm {
 				// iframes. Also there is a a bug in iframe counting if single test
 				// logouts multiple time for e.g. run 2 Accept propose new time tests
 				if (this
-						.sIsElementPresent("css=textarea[class='DwtHtmlEditorTextArea']")) {
+						.sIsElementPresent("css=textarea[class='DwtHtmlEditorTextArea']") && frames == 1) {
 					locator = "css=textarea[class='DwtHtmlEditorTextArea']";
 					
 					this.sFocus(locator);
@@ -994,9 +994,11 @@ public class FormApptNew extends AbsForm {
 
 					try {
 
-						this.sSelectFrame("css=iframe[id$='_content_ifr']");
+						//this.sSelectFrame("css=iframe[id$='_content_ifr']");
 
-						locator = "css=body[id='tinymce']";
+						//locator = "css=body[id='tinymce']";
+
+						locator = "css=iframe[id$='_content_ifr']";
 
 						if (!this.sIsElementPresent(locator))
 							throw new HarnessException(
@@ -1012,7 +1014,9 @@ public class FormApptNew extends AbsForm {
 						 * right now.
 						 */
 						// this.sType(locator, value);
-						this.zKeyboard.zTypeCharacters(value);
+						//this.zKeyboard.zTypeCharacters(value);
+						
+						zTypeFormattedText(locator, value);
 
 					} finally {
 						// Make sure to go back to the original iframe
@@ -1044,7 +1048,8 @@ public class FormApptNew extends AbsForm {
 
 						this.sFocus(locator);
 						this.zClick(locator);
-						this.sType(locator, value);
+						//this.sType(locator, value);
+						this.zKeyboard.zTypeCharacters(value);
 
 					} finally {
 						// Make sure to go back to the original iframe
