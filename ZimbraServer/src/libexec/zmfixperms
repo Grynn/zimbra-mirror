@@ -687,6 +687,10 @@ if [ -L ${zimbra_home}/postfix ]; then
     mkdir -p ${zimbra_home}/conf/sa
     chown -f ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/sa
   fi
+  if [ -f ${zimbra_home}/bin/zmbackup ]; then
+    mkdir -p ${zimbra_home}/data/postfix-journal
+    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/postfix-journal
+  fi
 fi
 
 if [ -d ${zimbra_home}/data/postfix ]; then
