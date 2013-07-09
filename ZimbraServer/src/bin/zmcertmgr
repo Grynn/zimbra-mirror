@@ -39,7 +39,8 @@ zmsetvars -f \
   mailboxd_keystore_password \
   mailboxd_truststore_password \
   postfix_smtpd_tls_cert_file \
-  postfix_smtpd_tls_key_file
+  postfix_smtpd_tls_key_file \
+  ssl_default_digest
   
 export JAVA_HOME=${zimbra_java_home}
 
@@ -889,6 +890,7 @@ createConf() {
   echo -n "** Creating ${ssl_conf}..."
   cat ${zimbra_conf_directory}/zmssl.cnf.in | \
     sed -e "s/@@HOSTNAME@@/$zimbra_server_hostname/" \
+    -e "s/@@ssl_default_digest@@/$ssl_default_digest/" \
     -e "s/@@SUBJECT_ALT_NAMES@@/$ALTNAMES/"  > ${ssl_conf}
   chmod 640 ${ssl_conf}
   chown ${zimbra_uid}:${zimbra_gid} ${ssl_conf}
