@@ -65,6 +65,7 @@ components="\
   keyview \
   libtool \
   memcached \
+  mariadb \
   mysql \
   net-snmp \
   nginx \
