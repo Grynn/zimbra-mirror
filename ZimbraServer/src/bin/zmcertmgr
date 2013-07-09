@@ -44,6 +44,8 @@ zmsetvars -f \
   
 export JAVA_HOME=${zimbra_java_home}
 
+DIGEST=${ssl_default_digest}
+
 java_version=$(${zimbra_java_home}/bin/java -version 2>&1 | grep "java version" | sed -e 's/"//g' | awk '{print $NF}' | awk -F_ '{print $1}')
 if [ x"$java_version" = "x1.6.0" ]; then
   java_options="-XX:ErrorFile=${zimbra_home}/log"
@@ -272,6 +274,7 @@ createCAKey() {
   echo -n "** Creating CA private key ${zimbra_ca_key}..."
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
   ${openssl} req -batch -subj "${SUBJECT}" \
+    -${DIGEST} \
     -days ${validation_days} \
     -config ${zimbra_ca_ssl_conf} \
     -new -newkey rsa:${KEYSIZE} -nodes  \
@@ -473,6 +476,11 @@ createCA() {
   fi
   #echo "createCA: RSA keysize: $KEYSIZE"
   
+  if [ x"${1}" = "x-digest" ]; then
+    shift
+    DIGEST="${1}"
+    shift
+  fi
 
   if [ x"${1}" = "x-subject" ]; then
     shift
@@ -926,15 +934,9 @@ createServerCertReq() {
 
   echo -n "** Creating server cert request ${current_csr}..."
 
-  if [ x"$DIGEST" != "x" ]; then
-    ${openssl} req -new -${DIGEST} -nodes -out ${current_csr} -keyout ${current_key} \
+  ${openssl} req -new -${DIGEST} -nodes -out ${current_csr} -keyout ${current_key} \
       -newkey rsa:${KEYSIZE} -config ${zimbra_cert_ssl_conf} \
       -subj "${SUBJECT}" -batch > ${tmpfile} 2>&1
-  else
-    ${openssl} req -new -nodes -out ${current_csr} -keyout ${current_key} \
-      -newkey rsa:${KEYSIZE} -config ${zimbra_cert_ssl_conf} \
-      -subj "${SUBJECT}" -batch > ${tmpfile} 2>&1
-  fi
 
   if [ $? != 0 ]; then
     echo "failed."
@@ -1035,18 +1037,10 @@ createCert() {
   if [ x"${ALLSERVERS}" = "x-allserver" ]; then
     # merge these with cli specified. -bp
     subject_alt_names=`su - zimbra -c "${zimbra_home}/bin/zmprov -m -l gas | xargs "`
-    if [ x"$DIGEST" != "x" ]; then
-      createCSR self -new -keysize ${KEYSIZE} -digest ${DIGEST}
-    else
-      createCSR self -new -keysize ${KEYSIZE}
-    fi
+    createCSR self -new -keysize ${KEYSIZE} -digest ${DIGEST}
     shift
   elif [ ! -s "${server_csr}" -o x"${IS_NEW_CRT}" = "x-new" ]; then
-    if [ x"$DIGEST" != "x" ]; then
-      createCSR self ${IS_NEW_CRT} -keysize ${KEYSIZE} -digest ${DIGEST}
-    else
-      createCSR self ${IS_NEW_CRT} -keysize ${KEYSIZE}
-    fi
+    createCSR self ${IS_NEW_CRT} -keysize ${KEYSIZE} -digest ${DIGEST}
   fi
 
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
@@ -1406,7 +1400,7 @@ createCSR() {
   
   backupSSLDirs ${zimbra_ssl_directory}
   initSSLDirs
-  createCA -keysize ${KEYSIZE}
+  createCA -keysize ${KEYSIZE} -digest ${DIGEST}
   createServerCertReq $type
   
   if [ x"$type" = "xcomm" ]; then 
@@ -1608,7 +1602,7 @@ migrate () {
 usage () {
   echo "Usage: "
   echo "  $0 -help"
-  echo "  $0 createca [-new] [-keysize 1024] [-subject subject]"
+  echo "  $0 createca [-new] [-keysize 1024] [-digest digest] [-subject subject]"
   echo "  $0 deployca"
   echo "  $0 createcsr <self|comm> [-new] [-digest digest] [-keysize 1024] [-subject subject] [-subjectAltNames \"host1,host2\"]"
   echo "  $0 createcrt [-new] [-days validation days] [-digest digest] [-keysize 1024] [-subject subject] [-subjectAltNames \"host1,host2\"]"
