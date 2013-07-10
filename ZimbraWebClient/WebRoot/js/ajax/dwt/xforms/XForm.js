@@ -528,7 +528,7 @@ XForm.prototype.outputForm = function () {
 	var items = this.getItems();
 
 	
-	html.append('<div id="', this.__id,'"',
+	html.append('<div id="', this.__id, '"', 'style="height: 100%;"',
 				(this.cssClass != null && this.cssClass != '' ? ' class="' + this.cssClass + '"' : ""),
 				(this.cssStyle != null && this.cssStyle != '' ? ' style="' + this.cssStyle + ';"' : ""),
 				'>'
