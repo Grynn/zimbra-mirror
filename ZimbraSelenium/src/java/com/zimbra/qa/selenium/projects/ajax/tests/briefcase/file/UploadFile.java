@@ -42,9 +42,9 @@ public class UploadFile extends FeatureBriefcaseTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
+		//if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
 		    super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox","TRUE");
-		}			    
+		//}			    
 	}
 
 	@Test(description = "Upload file through RestUtil - verify through SOAP", groups = { "smoke" })
@@ -183,6 +183,8 @@ public class UploadFile extends FeatureBriefcaseTest {
 		SleepUtil.sleepSmall();
 		
 		// Click on created File
+		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+		/*
 		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
     			"FOSS")){
 		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
@@ -190,7 +192,7 @@ public class UploadFile extends FeatureBriefcaseTest {
 		}else{
 		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 		}
-		
+		*/
 		// Verify file is uploaded
 		String name = app.zPageBriefcase.getItemNameFromListView(fileName);
 		ZAssert.assertStringContains(name, fileName, "Verify file name through GUI");

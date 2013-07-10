@@ -44,9 +44,9 @@ public class MoveFile extends FeatureBriefcaseTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
+		//if(ZimbraSeleniumProperties.zimbraGetVersionString().contains("FOSS")){
 		    super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox","TRUE");
-		}
+		//}
 	
 		super.startingAccountPreferences.put("zimbraPrefBriefcaseReadingPaneLocation", "bottom");				
 			
@@ -107,6 +107,8 @@ public class MoveFile extends FeatureBriefcaseTest {
 
 		SleepUtil.sleepVerySmall();
 		
+		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+		/*
 		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
     			"FOSS")){
 		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
@@ -114,7 +116,7 @@ public class MoveFile extends FeatureBriefcaseTest {
 		}else{
 		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 		}
-		
+		*/
 		// Click on 'Move selected item' icon in toolbar
 		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.2.")){
 		    DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
@@ -217,6 +219,8 @@ public class MoveFile extends FeatureBriefcaseTest {
 
 		SleepUtil.sleepVerySmall();
 
+		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+		/*
 		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
     			"FOSS")){
 		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
@@ -224,7 +228,7 @@ public class MoveFile extends FeatureBriefcaseTest {
 		}else{
 		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 		}
-		
+		*/
 		// Click the Move keyboard shortcut
 		DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
 				.zKeyboardShortcut(shortcut);
@@ -306,6 +310,8 @@ public class MoveFile extends FeatureBriefcaseTest {
 
 		SleepUtil.sleepVerySmall();
 		
+		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
+		/*
 		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
     			"FOSS")){
 		    app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
@@ -313,7 +319,7 @@ public class MoveFile extends FeatureBriefcaseTest {
 		}else{
 		    app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 		}
-		
+		*/
 		// Move using Right Click Context Menu 
 		DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
 		.zListItem(Action.A_RIGHTCLICK, Button.O_MOVE, fileItem);
