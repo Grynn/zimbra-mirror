@@ -2128,17 +2128,20 @@ function(html, okTags, attrsToRemove) {
 		attrs:	attrsToRemove || []
 	}
 	AjxStringUtil._traverseCleanHtml(htmlNode, ctxt);
-	
-	var result = !ctxt.fail && "<html>" + htmlNode.innerHTML + "</html>";
+
+	var result = "<html>" + htmlNode.innerHTML + "</html>";
+
 	var width = Math.max(htmlNode.scrollWidth, htmlNode.lastChild.scrollWidth);
 
 	AjxStringUtil._removeTestIframeDoc();
-	return {html:result, width:width};
+	return {html:result, width:width, useIframe:ctxt.fail};
 };
 
 AjxStringUtil._traverseCleanHtml =
 function(el, ctxt) {
-		
+
+    var isCleanHtml = true;
+
 	var nodeName = el.nodeName.toLowerCase();
 	
 	// useless <style> that we used to add, remove it
@@ -2156,7 +2159,11 @@ function(el, ctxt) {
         //checks for invalid styles and removes them.  Bug: 78875 - bad styles from user = email displays incorrectly
         if (el.style) {
             var style = el.style && el.style.cssText;
-            el.style.cssText = AjxStringUtil._checkIfValidStyle(style);
+            style = style.toLowerCase();
+            if (!AjxStringUtil._checkStyle(style)){
+                isCleanHtml = false;
+            }
+            el.style.cssText = AjxStringUtil._fixStyle(style);
         }
 
 		if (el.removeAttribute && el.attributes && el.attributes.length) {
@@ -2184,8 +2191,7 @@ function(el, ctxt) {
 					// we have global CSS rules for TD that trump table properties, so bail
 					if (nodeName === "table" && (attrName === "cellpadding" || attrName === "cellspacing" ||
 							attrName === "border") && attrValue !== "0") {
-						ctxt.fail = true;
-						break;
+						isCleanHtml = false;
 					}
 				}
 			}
@@ -2194,16 +2200,13 @@ function(el, ctxt) {
 	
 	// disallowed tag - bail
 	else {
-		ctxt.fail = true;
+        isCleanHtml = false;
 	}
-
-	if (ctxt.fail) { return; }
 	
 	// process child nodes
 	for (var i = 0, len = el.childNodes.length; i < len; i++) {
 		var childNode = el.childNodes[i];
 		AjxStringUtil._traverseCleanHtml(childNode, ctxt);
-        ctxt.fail = null; //need to set to null or the fail = true will bubble up too far.
 	}
 	
 	// remove nodes marked for deletion
@@ -2213,26 +2216,39 @@ function(el, ctxt) {
 			el.removeChild(childNode);
 		}
 	}
+
+    if (!isCleanHtml){
+        ctxt.fail = true;
+    }
 };
 
-AjxStringUtil._checkIfValidStyle =
+
+AjxStringUtil._checkStyle =
+    function(style) {
+
+        //check for absolute positioning
+        if (style.match(/\bposition\s*:\s*absolute[^;]*;?/)){
+            return false;
+        }
+
+        //check for font-<anything>
+        if (style.match(/\bfont-[^;]*;?/)){
+            return false;
+        }
+
+        return true;
+};
+
+AjxStringUtil._fixStyle =
 function(style) {
 
-    var validStyle = style;
-
     //check for negative margins
-    validStyle = validStyle.replace(/margin[^;:]*:[^;]*-[^;]*;?/, "");
+    style = style.replace(/\bmargin-?(top|left|right|bottom)?\s*:[^;]*-\d+[^;]*;?/gi, "");
 
     //check for negative padding
-    validStyle = validStyle.replace(/padding[^;:]*:[^;]*-[^;]*;?/, "");
+    style = style.replace(/\bpadding-?(top|left|right|bottom)?\s*:[^;]*-\d+[^;]*;?/gi, "");
 
-    //check for absolute positioning
-    validStyle = validStyle.replace(/position:[^;]*absolute[^;]*;?/, "");
-
-    //check for font-<anything>
-    validStyle = validStyle.replace(/font-[^;]*;?/, "");
-
-    return validStyle;
+    return style;
 };
 
 /**
