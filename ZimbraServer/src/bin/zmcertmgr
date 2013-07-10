@@ -1056,6 +1056,7 @@ createCert() {
   ${openssl} ca -out ${server_crt} -notext \
     -config ${zimbra_ca_ssl_conf} \
     -days ${validation_days} \
+    -md ${DIGEST} \
     -in ${server_csr} -keyfile ${zimbra_ca_key} \
     -extensions v3_req -extfile ${zimbra_ca_ssl_conf} \
     -cert ${zimbra_ca_crt} -batch > ${tmpfile} 2>&1
