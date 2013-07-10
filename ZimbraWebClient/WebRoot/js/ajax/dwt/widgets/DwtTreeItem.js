@@ -125,6 +125,7 @@ DwtTreeItem._processedMouseDown = false;
 
 DwtTreeItem.prototype.dispose =
 function() {
+    DwtComposite.prototype.dispose.call(this);
 	this._itemDiv = null;
 	this._nodeCell = null;
 	this._checkBoxCell = null;
@@ -134,7 +135,6 @@ function() {
 	this._textCell = null;
 	this._childDiv = null;
 	this._initialized = false;
-	DwtComposite.prototype.dispose.call(this);
 };
 
 /**
