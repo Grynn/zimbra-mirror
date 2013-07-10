@@ -49,7 +49,7 @@ public class CheckInFile extends FeatureBriefcaseTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/putty.log";
+				+ "/data/public/other/testtextfile.txt";
 
 		FileItem file = new FileItem(filePath);
 
