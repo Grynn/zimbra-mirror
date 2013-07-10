@@ -20,6 +20,7 @@ public class DomainExternalRouteInfo extends LookupEntry {
     
     private boolean mUseExternalRoute;
     private boolean mUseExternalRouteIfAccountNotExist;
+    private boolean mExternalRouteIncludeOriginalAuthusername;
     
     private String mPop3Port;
     private String mPop3SSLPort;
@@ -33,6 +34,7 @@ public class DomainExternalRouteInfo extends LookupEntry {
     DomainExternalRouteInfo(String domainName,
                             String useExternalRoute,
                             String useExternalRouteIfAccountNotExist,
+                            String externalRouteIncludeOriginalAuthusername,
                             String pop3Port,
                             String pop3SSLPort,
                             String imapPort,
@@ -45,7 +47,8 @@ public class DomainExternalRouteInfo extends LookupEntry {
         
         mUseExternalRoute = LdapConstants.LDAP_TRUE.equals(useExternalRoute);
         mUseExternalRouteIfAccountNotExist = LdapConstants.LDAP_TRUE.equals(useExternalRouteIfAccountNotExist);
-        
+        mExternalRouteIncludeOriginalAuthusername = LdapConstants.LDAP_TRUE.equals(externalRouteIncludeOriginalAuthusername);
+
         mPop3Port        = pop3Port;
         mPop3SSLPort     = pop3SSLPort;
         mImapPort        = imapPort;
@@ -63,11 +66,15 @@ public class DomainExternalRouteInfo extends LookupEntry {
     boolean useExternalRoute() {
         return mUseExternalRoute;
     }
-    
+
     boolean useExternalRouteIfAccountNotExist() {
         return mUseExternalRouteIfAccountNotExist;
     }
-    
+
+    boolean externalRouteIncludeOriginalAuthusername() {
+        return mExternalRouteIncludeOriginalAuthusername;
+    }
+
     String getHostname(String proto) {
         if (NginxLookupExtension.NginxLookupHandler.POP3.equalsIgnoreCase(proto))
             return mPop3Hostname;
