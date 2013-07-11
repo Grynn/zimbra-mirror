@@ -97,22 +97,21 @@ public class ZimbraAPI
     };
 
     Dictionary<string, string> specialFoldersMap_fr = new Dictionary<string, string>()
-    {{"","0"},{"/MAPIRoot","1"},{"/MAPIRoot/Bo\u00eete de R\u00e9ception","2"},{"/MAPIRoot/Corbeille","3"},
-        {"/MAPIRoot/Spam","4"}, {"/MAPIRoot/Envoy\u00e9","5"},
-        {"/MAPIRoot/Brouillons","6"},
-        {"/MAPIRoot/libell\u00e9s","8"},
-        {"/MAPIRoot/Calendrier","10"}, {"/MAPIRoot/Wiki","12"},
-        {"/MAPIRoot/Personnes contact\u00e9es par mail","13"}, {"/MAPIRoot/Discussions","14"},
-        {"/MAPIRoot/T\u00e2ches","15"},
-        {"/MAPIRoot/Inbox","2"},{"/MAPIRoot/Deleted Items","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Sent Items","5"},
-        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Contacts","7"},
-        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Conversations","9"},
-        {"/MAPIRoot/Calendar","10"}, 
-        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Chats","14"},
-        {"/MAPIRoot/Tasks","15"},
-    
-     };
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Bo\u00eete de R\u00e9ception","2"}, {"/MAPIRoot/Bo\u00eete de r\u00e9ception","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Corbeille","3"}, {"/MAPIRoot/\u00c9l\u00e9ments supprim\u00e9s","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Spam","4"}, {"/MAPIRoot/Courrier ind\u00e9sirables","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Envoy\u00e9","5"}, {"/MAPIRoot/\u00e9l\u00e9ments envoy\u00e9s","5"}, {"/MAPIRoot/\u00c9l\u00e9ments envoy\u00e9s","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Brouillons","6"},
+        {"/MAPIRoot/Contacts","7"},
+        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/libell\u00e9s","8"},
+        {"/MAPIRoot/Conversations","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Calendrier","10"},
+        {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Personnes contact\u00e9es par mail","13"},
+        {"/MAPIRoot/Chats","14"}, {"/MAPIRoot/Discussions","14"},
+        {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/T\u00e2ches","15"}
+    };
 
     Dictionary<string, string> specialFoldersMap_ITA = new Dictionary<string, string>()
     {{"","0"},{"/MAPIRoot","1"},
