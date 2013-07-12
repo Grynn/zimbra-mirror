@@ -851,6 +851,18 @@ function(tmpObj) {
 		}	
 	}
 
+    if (ZaItem.hasWritePermission(ZaAccount.A_zimbraPrefMailForwardingAddress, tmpObj)) {
+        var forwardingEmail = tmpObj.attrs[ZaAccount.A_zimbraPrefMailForwardingAddress];
+        var keepLocalCopy = tmpObj.attrs[ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled];
+
+        if (keepLocalCopy == "TRUE") {
+            if (forwardingEmail == null || forwardingEmail === "") {
+                ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_missing_zimbraPrefMailForwardingAddress);
+                return false;
+            }
+        }
+    }
+
     if(ZaItem.hasWritePermission(ZaAccount.A_zimbraPasswordLockoutMaxFailures,tmpObj)&& tmpObj.attrs[ZaAccount.A_zimbraPasswordLockoutMaxFailures] && !AjxUtil.isInt(tmpObj.attrs[ZaAccount.A_zimbraPasswordLockoutMaxFailures])) {
 			//show error msg
 			ZaApp.getInstance().getCurrentController().popupErrorDialog( AjxMessageFormat.format(ZaMsg.ERROR_VALUE_NOT_INTEGER,ZaAccount.A_zimbraPasswordLockoutMaxFailures));
