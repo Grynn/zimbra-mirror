@@ -134,8 +134,8 @@ public class FormApptNew extends AbsForm {
 		public static final String ExpandZimletContextMenu = "css=div[id^='POPUP_'] td[id='EXPAND_title']";
 		public static final String AddToContactsZimletContextMenu = "css=div[id^='POPUP_'] td[id='CONTACT_title']";
 
-		public static final String SendUpdatesToAddedRemovedRadioButton = "css=div[class='DwtDialog'] div[id$='_content'] p table tr:nth-child(1) input";
-		public static final String SendUpdatesToAllRadioButton = "css=div[class='DwtDialog'] div[id$='_content'] p table tr:nth-child(2) input";
+		public static final String SendUpdatesToAddedRemovedRadioButton = "css=div[id='SEND_NOTIFY_DIALOG'] div[id='SEND_NOTIFY_DIALOG_content']>table tbody tr:nth-child(1) input";
+		public static final String SendUpdatesToAllRadioButton = "css=div[id='SEND_NOTIFY_DIALOG'] div[id='SEND_NOTIFY_DIALOG_content']>table tbody tr:nth-child(2) input";
 
 		public static final String Ok_changes = "css=td[id='CHNG_DLG_ORG_1_button2_title']";
 		public static final String Cancel_changes = "css=td[id='CHNG_DLG_ORG_1_button1_title']";
