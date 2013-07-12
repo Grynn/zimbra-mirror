@@ -1034,24 +1034,26 @@ public class FormApptNew extends AbsForm {
 
 					try {
 
-						this.sSelectFrame("css=iframe[id$='_content_ifr']"); // iframe
-																				// index
-																				// is
-																				// 0
-																				// based
+						if (this.sIsElementPresent("css=iframe[id$='_content_ifr']")) {
+							locator = "css=html body";
+							this.sSelectFrame("css=iframe[id$='_content_ifr']"); // iframe index is 0 based
+							this.sFocus(locator);
+							this.zClick(locator);
+							//this.sType(locator, value);
+							this.zKeyboard.zTypeCharacters(value);
 
-						locator = "css=html body";
-
-						if (!this.sIsElementPresent(locator))
-							throw new HarnessException(
-									"Unable to locate compose body");
-
-						this.sFocus(locator);
-						this.zClick(locator);
-						//this.sType(locator, value);
-						this.zKeyboard.zTypeCharacters(value);
+						} else if (this.sIsElementPresent("css=textarea[class='DwtHtmlEditorTextArea']")) {	
+							locator = "css=textarea[class='DwtHtmlEditorTextArea']";
+							this.sFocus(locator);
+							this.zClick(locator);
+							this.sType(locator, value);
+						
+						} else {
+							throw new HarnessException("Unable to locate compose body");
+						}
 
 					} finally {
+						
 						// Make sure to go back to the original iframe
 						this.sSelectFrame("relative=top");
 
