@@ -882,7 +882,7 @@ ZaSaveSearchDialog.prototype._checkExistSearch = function() {
         if(isExist) {
 		// If exist searchquries, call confirm dialog
 		ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
-                ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_REPLACE, DwtMessageDialog.INFO_STYLE);
+                ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_REPLACE, DwtMessageDialog.WARNING_STYLE);
                 ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this._continueDoSave, this);
                 ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this._cancelDoSave, this);
                 ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
