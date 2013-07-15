@@ -103,7 +103,7 @@ public class CreateAllDayMeeting extends CalendarWorkWeekTest {
 		String locationStatus = app.zGetActiveAccount().soapSelectValue("//mail:at[@a='"+ apptLocation +"']", "ptst");
 		ZAssert.assertEquals(locationStatus, "AC", "Verify that the location status shows as 'ACCEPTED'");
 		
-		ExecuteHarnessMain.ResultListener.captureMailboxLog();
+		//ExecuteHarnessMain.ResultListener.captureMailboxLog();
 	}
 
 }
