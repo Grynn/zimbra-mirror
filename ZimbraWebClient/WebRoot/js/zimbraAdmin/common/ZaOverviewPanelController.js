@@ -578,14 +578,34 @@ function() {
             }
 
             // Add Configuration / Global Settings
-            if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_CONFIG_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-                ti = new ZaTreeItemData({
-                                            parent:parentPath,
-                                            id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, ZaId.TREEITEM_GSET),
-                                            text: ZaMsg.OVP_global,
-                                            mappingId: ZaZimbraAdmin._GLOBAL_SETTINGS});
-                ti.addListener(ZaTreeEvent.ONDESTROY, new AjxListener(this, this.saveBeforeExit));
+            if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_CONFIG_VIEW] ||
+                ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+
+                ti = new ZaTreeItemData(
+                    {
+                        parent: parentPath,
+                        id: ZaId.getTreeItemId(
+                            ZaId.PANEL_APP,
+                            ZaId.PANEL_CONFIGURATION,
+                            null,
+                            ZaId.TREEITEM_GSET
+                        ),
+                        text: ZaMsg.OVP_global,
+                        forceNode: true,
+                        mappingId: ZaZimbraAdmin._GLOBAL_SETTINGS
+                    }
+                );
+
+                ti.addListener(
+                    ZaTreeEvent.ONDESTROY,
+                    new AjxListener(
+                        this,
+                        this.saveBeforeExit
+                    )
+                );
+
                 tree.addTreeItemData(ti);
+
                 ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._GLOBAL_SETTINGS] = ZaOverviewPanelController.globalSettingsTreeListener;
             }
 
