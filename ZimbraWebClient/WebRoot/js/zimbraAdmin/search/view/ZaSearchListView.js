@@ -139,8 +139,14 @@ function(account, now, isDragProxy) {
 					}						
 				break;	
 				case ZaItem.DOMAIN:
-					html[idx++] = AjxImg.getImageHtml("Domain");		
-				break;								
+                    var partialClassName = "Domain";
+                    var domainType = account.attrs[ZaDomain.A_domainType];
+                    if (domainType === "alias") {
+                        partialClassName += "Alias";
+                    }
+
+					html[idx++] = AjxImg.getImageHtml(partialClassName);
+                    break;
                                 case ZaItem.COS: 
                                         html[idx++] = AjxImg.getImageHtml("COS");
                                 break;	
