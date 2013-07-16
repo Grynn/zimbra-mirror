@@ -100,7 +100,7 @@ public class ZimbraAPI
     {{"","0"},{"/MAPIRoot","1"},
         {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Bo\u00eete de R\u00e9ception","2"}, {"/MAPIRoot/Bo\u00eete de r\u00e9ception","2"},
         {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Corbeille","3"}, {"/MAPIRoot/\u00c9l\u00e9ments supprim\u00e9s","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Spam","4"}, {"/MAPIRoot/Courrier ind\u00e9sirables","4"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Spam","4"}, {"/MAPIRoot/Courrier ind\u00e9sirable","4"}, {"/MAPIRoot/Courrier ind\u00e9sirables","4"},
         {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Envoy\u00e9","5"}, {"/MAPIRoot/\u00e9l\u00e9ments envoy\u00e9s","5"}, {"/MAPIRoot/\u00c9l\u00e9ments envoy\u00e9s","5"},
         {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Brouillons","6"},
         {"/MAPIRoot/Contacts","7"},
