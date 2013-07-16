@@ -66,6 +66,7 @@ public class ZimbraCalResLocationDisplayName extends CalendarWorkWeekTest {
 		
 			
 		}
+		SleepUtil.sleepLong();
 		
 		// Logout and login to pick up the changes
 		app.zPageLogin.zNavigateTo();
