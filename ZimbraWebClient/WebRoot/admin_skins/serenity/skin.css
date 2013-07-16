@@ -727,6 +727,12 @@ TD.gridGroupBodyLabel {
 	color:blue !important;
 }
 
+/* Container for the actual text of the alert */
+.DwtAlertContent {
+    font-weight: normal;
+    white-space: normal;
+}
+
 /* Inline Alerts */
 
 .xform_container .DwtTabTable {
