@@ -512,7 +512,16 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
     };
 
 	xFormObject.items = [
-		{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep], labelVisibility:labelVisibility},
+        {
+            type: _OUTPUT_,
+            colSpan: 2,
+            valign: _TOP_,
+            cssStyle: "white-space: normal",
+            ref: ZaModel.currentStep,
+            choices: this.stepChoices,
+            valueChangeEventSources: [ZaModel.currentStep],
+            labelVisibility: labelVisibility
+        },
 		{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},				
 		{type: _SWITCH_,width:650, valign:_TOP_,
@@ -932,17 +941,25 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							numCols:2,
                             colSpan:2,
 							items: [
-								{type:_DWT_ALERT_,content:ZaMsg.Domain_GALSearchTestSuccessful,
-									ref:null,
-									colSpan:"2",
+								{
+                                    type: _DWT_ALERT_,
+                                    content: ZaMsg.Domain_GALSearchTestSuccessful,
+									ref: null,
+									colSpan: "2",
 									iconVisible: false,
-									align:_CENTER_,				
 									style: DwtAlert.INFORMATION
 								},										
-								{type:_OUTPUT_, value:ZaMsg.Domain_GALSearchResult,  align:_CENTER_, colSpan:2, 
-									visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A_GALTestSearchResults]]
-									
-								},											
+								{
+                                    type: _OUTPUT_,
+                                    value: ZaMsg.Domain_GALSearchResult,
+                                    colSpan: 2,
+									visibilityChecks: [
+                                        [
+                                            XForm.checkInstanceValueNotEmty,
+                                            ZaDomain.A_GALTestSearchResults
+                                        ]
+                                    ]
+								},
 								{type:_SPACER_,  align:_CENTER_, valign:_TOP_, colSpan:"*"},	
 								{ref: ZaDomain.A_GALTestSearchResults, type:_DWT_LIST_, height:"140px", width:"260px",colSpan:2,
 			 				    	cssClass: "DLSource", forceUpdate: true, 
