@@ -72,7 +72,7 @@ public class SendFileAttachment extends FeatureBriefcaseTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
-		SleepUtil.sleepVerySmall();
+		SleepUtil.sleepSmall();
 
 		// Click on uploaded file
 		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
@@ -143,7 +143,7 @@ public class SendFileAttachment extends FeatureBriefcaseTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
-		SleepUtil.sleepVerySmall();
+		SleepUtil.sleepSmall();
 
 		// Click on uploaded file
 		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);

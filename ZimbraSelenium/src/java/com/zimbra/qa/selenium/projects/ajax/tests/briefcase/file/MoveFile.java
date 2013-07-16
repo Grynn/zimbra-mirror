@@ -105,7 +105,7 @@ public class MoveFile extends FeatureBriefcaseTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, true);
 
-		SleepUtil.sleepVerySmall();
+		SleepUtil.sleepSmall();
 		
 		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 		/*
@@ -217,7 +217,7 @@ public class MoveFile extends FeatureBriefcaseTest {
 		// app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[0],
 		// true);
 
-		SleepUtil.sleepVerySmall();
+		SleepUtil.sleepSmall();
 
 		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 		/*
@@ -308,7 +308,7 @@ public class MoveFile extends FeatureBriefcaseTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, true);
 
-		SleepUtil.sleepVerySmall();
+		SleepUtil.sleepSmall();
 		
 		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 		/*

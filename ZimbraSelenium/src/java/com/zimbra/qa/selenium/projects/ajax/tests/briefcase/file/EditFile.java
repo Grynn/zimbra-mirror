@@ -84,6 +84,8 @@ public class EditFile extends FeatureBriefcaseTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
+		SleepUtil.sleepSmall();
+		
 		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 		/*
 		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
@@ -202,6 +204,8 @@ public class EditFile extends FeatureBriefcaseTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
+		SleepUtil.sleepSmall();
+		
 		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, fileItem);
 		/*
 		if(ZimbraSeleniumProperties.zimbraGetVersionString().contains(
