@@ -1848,6 +1848,8 @@ ZaOverviewPanelController.prototype.getIconByType = function(type) {
         image = "AccountAlias";
     else if(type == ZaItem.SERVER)
         image = "Server";
+    else if(type == ZaItem.RIGHT)
+        image = "RightObject";
 
     return image;
 }
