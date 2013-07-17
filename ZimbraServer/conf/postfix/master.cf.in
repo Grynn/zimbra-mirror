@@ -165,11 +165,11 @@ smtp-amavis unix -      -       n       -       @@amavis_max_servers@@  smtp
 	user=zimbra argv=/opt/zimbra/libexec/postjournal
 
 [%%zimbraLocalBindAddress%%]:10028 inet n  -       n       -       -  smtpd
+%%uncomment SERVICE:opendkim%%	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10030
 	-o smtpd_authorized_xforward_hosts=127.0.0.0/8
 	-o smtpd_client_restrictions=
 	-o smtpd_proxy_filter=
 	-o smtpd_helo_restrictions=
-	-o smtpd_sender_restrictions=
 	-o smtpd_recipient_restrictions=permit_mynetworks,reject
 	-o smtpd_data_restrictions=
 	-o smtpd_reject_unlisted_sender=no
