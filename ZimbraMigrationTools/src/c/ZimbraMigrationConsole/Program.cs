@@ -280,6 +280,8 @@ class Program
                     builder += "\n";
                     builder += "IsSkipPrevMigratedItems= True|false .To skip previously migrated items \n";
                     builder += "\n";
+                    builder += "LangID= Language ID/locale of source account \n";
+                    builder += "\n";
                     builder += "For more information see the help file distributed with the exe. \n";
 
 
@@ -348,6 +350,8 @@ class Program
                 string MigrateDate = CommandLineArgs.I.argAsString("MigrateOnOrAfter");
 
                 string MaxMessageSize = CommandLineArgs.I.argAsString("MaxMessageSize");
+
+                long LangID = 0;
 
                 bool ServerMigration = false;
                 XmlConfig myXmlConfig = new XmlConfig();
@@ -524,6 +528,10 @@ class Program
                    /* if (Mail == false)
                         Mail = myXmlConfig.ConfigObj.ImportOptions.Mail;*/
 
+                    if (CommandLineArgs.I.arg("LangID") != null)
+                        LangID = CommandLineArgs.I.argAsLong("LangID");
+                    else
+                        LangID = myXmlConfig.ConfigObj.AdvancedImportOptions.LangID;
                     
                     if (CommandLineArgs.I.arg("MaxThreadCount") != null)
                           MaxThreads = CommandLineArgs.I.argAsInt("MaxThreadCount");
@@ -817,6 +825,9 @@ class Program
                  {
                      MaxErrors = myXmlConfig.ConfigObj.GeneralOptions.MaxErrorCount;
                  }*/
+
+                 importopts.LangID = LangID;
+
                  importopts.MaxErrorCnt =  MaxErrors;
                 
                 //importopts.VerboseOn = Verbose;
