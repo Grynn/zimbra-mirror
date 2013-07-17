@@ -501,7 +501,7 @@ function() {
                     if (Dwt.hasClass(otherrow, 'skin_layout_filler')) {
                         nfillers += 1;
                     } else {
-                        var otherheight = otherrow.offsetHeight
+                        var otherheight = otherrow.offsetHeight;
 
                         AjxUtil.foreach(otherrow.children, function(cell) {
                             otherheight = Math.max(otherheight,
@@ -512,7 +512,7 @@ function() {
                     }
                 });
 
-                row.style.height = height / nfillers + 'px';
+                row.style.height = Math.max(height / nfillers, 0) + 'px';
 
             } else if (Dwt.hasClass(elem, 'skin_layout_cell')) {
                 var cell = elem;
@@ -532,7 +532,7 @@ function() {
                     }
                 });
 
-                cell.style.width = width / nfillers + 'px';
+                cell.style.width = Math.max(width / nfillers, 0) + 'px';
 
             } else if (window.console) {
                 console.warn('not fixing sizes for element!', elem);
