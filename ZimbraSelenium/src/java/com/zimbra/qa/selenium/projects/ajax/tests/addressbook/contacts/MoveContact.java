@@ -35,7 +35,7 @@ public class MoveContact extends AjaxCommonTest  {
 		// All tests start at the Address page
 		super.startingPage = app.zPageAddressbook;
 
-		super.startingAccountPreferences = null;		
+		super.startingAccountPreferences.put("zimbraPrefShowSelectionCheckbox", "FALSE");		
 		
 	}
 
