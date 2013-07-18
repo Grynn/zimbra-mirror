@@ -1773,7 +1773,7 @@ ZAGroup_XFormItem.prototype.initializeItems = function () {
 ZAWizGroup_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZAWIZGROUP_", "zawizgroup", ZAWizGroup_XFormItem, Group_XFormItem);
 ZAWizGroup_XFormItem.prototype.numCols = 2;
-ZAWizGroup_XFormItem.prototype.colSizes = ["125px","425px"];
+ZAWizGroup_XFormItem.prototype.colSizes = ["125px","450px"];
 ZAWizGroup_XFormItem.prototype.cssStyle = "margin-top:20px;margin-bottom:0px;padding-bottom:0px;";
 
 ZARightGrouper_XFormItem = function() {}
