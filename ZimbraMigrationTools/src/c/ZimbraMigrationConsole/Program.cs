@@ -280,7 +280,7 @@ class Program
                     builder += "\n";
                     builder += "IsSkipPrevMigratedItems= True|false .To skip previously migrated items \n";
                     builder += "\n";
-                    builder += "LangID= Language ID/locale of source account \n";
+                    builder += "LangID= Language/Locale ID of source account e.g. for Spanish Language/Locale ID is 3082. For more information please refer migration documentation \n";
                     builder += "\n";
                     builder += "For more information see the help file distributed with the exe. \n";
 
