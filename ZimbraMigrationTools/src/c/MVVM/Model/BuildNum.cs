@@ -22,7 +22,7 @@ public class BuildNum
 
     public BuildNum()
     {
-        BUILD_NUM = "9.0.0.922";
+        BUILD_NUM = "9.0.0.923";
     }
 }
 }
