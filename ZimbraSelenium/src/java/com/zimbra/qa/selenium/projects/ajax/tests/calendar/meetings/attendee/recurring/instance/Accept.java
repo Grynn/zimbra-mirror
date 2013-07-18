@@ -19,6 +19,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.meetings.attendee.re
 import java.util.*;
 
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -32,6 +34,7 @@ public class Accept extends CalendarWorkWeekTest {
 		super.startingAccountPreferences = null;
 	}
 	
+	@Bugs(ids = "83240")
 	@Test(description = "Rt-click to appointment from the calendar app and Accept the meeting invite (Instance)", 
 			groups = { "smoke" })
 	public void AcceptMeeting_01() throws HarnessException {
