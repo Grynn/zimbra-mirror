@@ -84,7 +84,7 @@ trainAccountFolder() {
     fi
 
     ${zimbra_home}/dspam/bin/dspam --user zimbra --class=${MODE} --source=corpus --mode=teft \
-      --feature=chained,noise --stdout
+      --feature=noise --stdout
 
     ${zimbra_home}/dspam/bin/dspam_clean -p0 $USER
     timestampit  "Finished dspam $MODE training for $USER using folder $FOLDER"
