@@ -96,6 +96,23 @@ public class ZimbraAPI
         {"/MAPIRoot/Opgaver","15"}
     };
 
+    Dictionary<string, string> specialFoldersMap_ge = new Dictionary<string, string>()
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Posteingang","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Gel\u00f6schte Objekte","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Junk-E-Mail","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Gesendete Objekte","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Entw\u00fcrfe","6"},
+        {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Kontakte","7"},
+        {"/MAPIRoot/Tags","8"},
+        {"/MAPIRoot/Conversations","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Kalender","10"},
+        {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Emailed Kontakte","13"},
+        {"/MAPIRoot/Chats","14"},
+        {"/MAPIRoot/Tasks","15"},  {"/MAPIRoot/Aufgaben","15"},
+    };
+
     Dictionary<string, string> specialFoldersMap_fr = new Dictionary<string, string>()
     {{"","0"},{"/MAPIRoot","1"},
         {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Bo\u00eete de R\u00e9ception","2"}, {"/MAPIRoot/Bo\u00eete de r\u00e9ception","2"},
@@ -400,8 +417,8 @@ public class ZimbraAPI
                 {
                     {
                         string tempstr = folderPath;
-                        if (specialFoldersMap.ContainsKey(tempstr))
-                            return specialFoldersMap[tempstr];
+                        if (specialFoldersMap_ge.ContainsKey(tempstr))
+                            return specialFoldersMap_ge[tempstr];
                         else
                             return "";
                     }
