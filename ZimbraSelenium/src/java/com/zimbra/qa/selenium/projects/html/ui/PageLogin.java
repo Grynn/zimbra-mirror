@@ -30,10 +30,10 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 public class PageLogin extends AbsTab {
 
 	public static class Locators {
-		public static final String zBtnLogin = "css=input.zLoginButton";
-		public static final String zInputUsername = "css=input#username";
-		public static final String zInputPassword = "css=input#password";
-		public static final String zInputRemember = "css=input#remember";
+		public static final String zBtnLogin = "css=input[class*=LoginButton]";
+		public static final String zInputUsername = "css=input[id='username']";
+		public static final String zInputPassword = "css=input[id='password']";
+		public static final String zInputRemember = "css=input[id='remember']";
 
 	}
 
