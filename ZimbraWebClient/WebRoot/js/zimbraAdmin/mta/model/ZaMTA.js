@@ -611,7 +611,7 @@ ZaMTAQMsgItem.A_todomain = "todomain";
 ZaMTAQMsgItem.A_id = "id";
 ZaMTAQMsgItem.A_recipients = "to";
 ZaMTAQMsgItem.A_size = "size";
-ZaMTAQMsgItem.A_origin_ip = "addr";
+ZaMTAQMsgItem.A_origin_ip = "received";
 ZaMTAQMsgItem.A_error = "reason";
 
 ZaMTAQMsgItem.prototype = new ZaItem;
