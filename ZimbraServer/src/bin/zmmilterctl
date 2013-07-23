@@ -21,6 +21,7 @@ zmsetvars \
 
 libjars=${zimbra_home}/lib/jars
 configfile=${zimbra_home}/conf/localconfig.xml
+log4jfile=${zimbra_home}/conf/milter.log4j.properties
 pidfile=${zimbra_log_directory}/milter.pid
 pid=""
 java="${zimbra_home}/bin/zmjava"
@@ -39,7 +40,7 @@ else
   java_options=""
 fi
 
-runcmd="${java} ${java_options} -Dzimbra.home=\"${zimbra_home}\" -Dzimbra.config=\"${configfile}\" -cp \"$CP\" \
+runcmd="${java} ${java_options} -Dlog4j.configuration=file:${log4jfile} -Dzimbra.home=\"${zimbra_home}\" -Dzimbra.config=\"${configfile}\" -cp \"$CP\" \
    com.zimbra.cs.milter.MilterServer"
 
 getpid()
