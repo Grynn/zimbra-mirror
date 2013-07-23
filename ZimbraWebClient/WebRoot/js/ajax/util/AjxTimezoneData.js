@@ -234,10 +234,7 @@ AjxTimezoneData.TIMEZONE_RULES = [
 	  daylight: { offset: 660, mon: 10, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 10, 2 ], tzname: "EST" }
 	},
 	{ serverId: "Pacific/Guam", clientId: "Pacific/Guam", score: 100,  standard: { offset: 600, tzname: "ChST" } },
-	{ serverId: "Asia/Magadan", clientId: "Asia/Magadan", score: 100, 
-	  standard: { offset: 660, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "MAGT" },
-	  daylight: { offset: 720, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "MAGST" }
-	},
+	{ serverId: "Asia/Magadan", clientId: "Asia/Magadan", score: 100,  standard: { offset: 720, tzname: "MAGT" } },
 	{ serverId: "Asia/Kamchatka", clientId: "Asia/Kamchatka", score: 100, 
 	  standard: { offset: 720, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "PETT" },
 	  daylight: { offset: 780, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "PETST" }
