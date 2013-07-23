@@ -178,7 +178,7 @@ public class GetTask extends AjaxCommonTest {
 		// Create the message data to be sent
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String bodyText = "text" + ZimbraSeleniumProperties.getUniqueString();
-		String bodyHTML = "text<strong>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong>text";
+		String bodyHTML = "text<strong style=" + (char)34 + (char)34 + ">bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong>text";
 		String contentHTML = XmlStringUtil.escapeXml(
 				"<html>" +
 				"<head></head>" +
@@ -527,7 +527,7 @@ public class GetTask extends AjaxCommonTest {
 		
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		String bodyHTML = "text<strong>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong>text";
+		String bodyHTML = "text<strong style=" + (char)34 + (char)34 + ">bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong>text";
 		String contentHTML = XmlStringUtil.escapeXml(
 				"<html>" +
 				"<head></head>" +
