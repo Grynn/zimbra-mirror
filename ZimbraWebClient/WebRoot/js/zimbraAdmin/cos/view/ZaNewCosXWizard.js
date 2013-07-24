@@ -1554,13 +1554,33 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
     this._lastStep = this.stepChoices.length;
 
 	xFormObject.items = [
-		{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep]},
-	    {type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
-		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},
-		{type:_SWITCH_, width:635, align:_LEFT_, valign:_TOP_, items:cases}
-
-
-	];		
+        {
+            type: _OUTPUT_,
+            colSpan: 2,
+            valign: _TOP_,
+            ref: ZaModel.currentStep,
+            choices: this.stepChoices,
+            valueChangeEventSources: [ZaModel.currentStep],
+            cssStyle: "white-space: normal"
+        },
+        {
+            type: _SEPARATOR_,
+            align: _CENTER_,
+            valign: _TOP_
+        },
+        {
+            type: _SPACER_,
+            align: _CENTER_,
+            valign: _TOP_
+        },
+        {
+            type: _SWITCH_,
+            width: 635,
+            align: _LEFT_,
+            valign: _TOP_,
+            items: cases
+        }
+    ];
 };
 ZaXDialog.XFormModifiers["ZaNewCosXWizard"].push(ZaNewCosXWizard.myXFormModifier);
 
