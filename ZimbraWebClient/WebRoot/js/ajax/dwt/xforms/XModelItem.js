@@ -29,7 +29,7 @@ XModelItemFactory = function() {}
 XModelItemFactory.createItem = function (attributes, parentItem, xmodel) {
 	// assign a modelItem to the item
 	var type = attributes.type;
-	constructor = this.getItemTypeConstructor(type || _UNTYPED_);
+	var constructor = this.getItemTypeConstructor(type || _UNTYPED_);
 
 	var item = new constructor();
 	item._setAttributes(attributes);
