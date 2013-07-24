@@ -1529,16 +1529,21 @@ function(str, bold, fontSize) {
  *
  */
 AjxStringUtil.fixCrossDomainReference =
-function(url, restUrlAuthority) {
+function(url, restUrlAuthority, convertToRelativeURL) {
 	var urlParts = AjxStringUtil.parseURL(url);
 	if (urlParts.authority == window.location.host) {
 		return url;
 	}
 
 	if ((restUrlAuthority && url.indexOf(restUrlAuthority) >=0) || !restUrlAuthority) {
-		var oldRef = urlParts.protocol + "://" + urlParts.authority;
-		var newRef = window.location.protocol + "//" + window.location.host;
-		url = url.replace(oldRef, newRef);
+        if (convertToRelativeURL) {
+            url = urlParts.path;
+        }
+        else {
+            var oldRef = urlParts.protocol + "://" + urlParts.authority;
+            var newRef = window.location.protocol + "//" + window.location.host;
+            url = url.replace(oldRef, newRef);
+        }
 	}
 	return url;
 };
