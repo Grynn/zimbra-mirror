@@ -356,7 +356,7 @@ ZaZimletDeployXWizard.myXFormModifier = function(xFormObject) {
 		]
 	};
 	xFormObject.items = [
-			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices},
+			{type:_OUTPUT_, colSpan:2, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices, cssStyle: "white-space: normal"},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},
 			{type:_SWITCH_, width:450, align:_LEFT_, valign:_TOP_, items:[case1,case2]}
