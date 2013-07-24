@@ -1578,6 +1578,7 @@ ZaNewCosXWizard.myXFormModifier = function(xFormObject, entry) {
             width: 635,
             align: _LEFT_,
             valign: _TOP_,
+            cssStyle: "white-space: normal",
             items: cases
         }
     ];
