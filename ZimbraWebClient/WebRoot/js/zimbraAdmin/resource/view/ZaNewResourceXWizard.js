@@ -418,7 +418,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 	setupGroup.items.push({ref:ZaResource.A2_schedulePolicy, type:_OSELECT1_, msgName:ZaMsg.NAD_ResType,
 						visibilityChecks:[[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoAcceptDecline],[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoDeclineIfBusy]],
 						enableDisableChecks:[],
-						label:ZaMsg.NAD_SchedulePolicy, labelLocation:_LEFT_, width: "500px", 
+						label:ZaMsg.NAD_SchedulePolicy, labelLocation:_LEFT_,
 						choices:ZaResource.schedulePolicyChoices});	
 						
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxNumConflictsAllowed, type:_TEXTFIELD_,
@@ -601,11 +601,34 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
     cases.push(case3);
 
 	xFormObject.items = [
-			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep]},
-			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
-			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},
-			{type:_SWITCH_, width:720, align:_LEFT_, valign:_TOP_, items:cases}
-		];
+        {
+            type: _OUTPUT_,
+            colSpan: 2,
+            valign: _TOP_,
+            cssStyle: "white-space: normal",
+            ref: ZaModel.currentStep,
+            choices: this.stepChoices,
+            valueChangeEventSources: [ZaModel.currentStep]
+        },
+        {
+            type: _SEPARATOR_,
+            align: _CENTER_,
+            valign: _TOP_
+        },
+        {
+            type: _SPACER_,
+            align: _CENTER_,
+            valign: _TOP_
+        },
+        {
+            type: _SWITCH_,
+            width: 720,
+            align: _LEFT_,
+            valign: _TOP_,
+            cssStyle: "white-space: normal",
+            items: cases
+        }
+    ];
 };
 ZaXDialog.XFormModifiers["ZaNewResourceXWizard"].push(ZaNewResourceXWizard.myXFormModifier);
 ZaNewResourceXWizard.isAutoDisplayname = function () {
