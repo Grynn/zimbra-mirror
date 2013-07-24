@@ -197,7 +197,7 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	if(choices && choices.values) {
 		menu.style.overflow="auto";
         var visibleChoices = choices.values.length - choices.totalInvisibleChoices;
-        menu.style.height = (19*visibleChoices)+3;
+        menu.style.height = "auto";
     }
 
 	var value = this.getInstanceValue();
