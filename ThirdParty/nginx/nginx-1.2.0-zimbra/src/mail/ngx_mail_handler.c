@@ -1809,13 +1809,16 @@ void
 ngx_mail_session_internal_server_error(ngx_mail_session_t *s)
 {
     ngx_mail_core_srv_conf_t  *cscf;
+    ngx_connection_t          *c;
 
     cscf = ngx_mail_get_module_srv_conf(s, ngx_mail_core_module);
 
     s->out = cscf->protocol->internal_server_error;
-
+    c = s->connection->write->data;
     ngx_mail_send(s->connection->write);
-
+    if (c->destroyed) {
+        return;
+    }
     /* clean up */
     ngx_mail_cleanup_t * cln = s->cleanup;
     while (cln != NULL) {
@@ -1873,9 +1876,6 @@ ngx_mail_close_connection(ngx_connection_t *c)
     ngx_log_debug1(NGX_LOG_DEBUG_MAIL, c->log, 0,
                    "close mail connection: %d", c->fd);
 
-    if (c->destroyed) {
-        return;
-    }
 #if (NGX_MAIL_SSL)
 
     if (c->ssl) {
