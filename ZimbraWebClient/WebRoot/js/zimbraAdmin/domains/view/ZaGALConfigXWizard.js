@@ -524,7 +524,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
         },
 		{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},				
-		{type: _SWITCH_,width:650, valign:_TOP_,
+		{type: _SWITCH_,width:650, valign:_TOP_, cssStyle: "white-space: normal",
 			items: [
 				{type:_CASE_, caseKey:ZaGALConfigXWizard.GALMODE_STEP,numCols:2,colSizes:["220px","430px"],
 					items: [

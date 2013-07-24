@@ -724,7 +724,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
         },
 		{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},		
-		{type: _SWITCH_,width:"100%", valign:_TOP_,
+		{type: _SWITCH_,width:"100%", valign:_TOP_, cssStyle: "white-space: normal",
 			items: [
 				{type:_CASE_, caseKey:ZaNewDomainXWizard.GENERAL_STEP, colSizes:["200px","*"],numCols:2,
 					items: [{type:_ZAWIZ_TOP_GROUPER_, colSpan:"*", label:ZaMsg.TABT_GeneralPage,

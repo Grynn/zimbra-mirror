@@ -288,11 +288,19 @@ function(entry) {
 **/
 
 ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
-	xFormObject.items = [
-			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep]},
+    xFormObject.items = [
+        {
+            type: _OUTPUT_,
+            colSpan: 2,
+            valign: _TOP_,
+            cssStyle: "white-space: normal",
+            ref: ZaModel.currentStep,
+            choices: this.stepChoices,
+            valueChangeEventSources: [ZaModel.currentStep]
+        },
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},				
-			{type:_SWITCH_,width:650, valign:_TOP_,
+			{type:_SWITCH_,width:650, valign:_TOP_, cssStyle: "white-space: normal",
 				items:[
 					{type:_CASE_, numCols:2,colSizes:["220px","430px"],	caseKey:ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1,												
 						items:[
