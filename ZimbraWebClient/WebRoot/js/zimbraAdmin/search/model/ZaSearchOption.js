@@ -423,7 +423,7 @@ function (optionId, height){
 			enableDisableChecks:[],visibilityChecks:[]
 		 },
 		 
-		 {type: _OUTPUT_, value: ZaMsg.no_domain_found_msg, colSpan: "*",
+		 {type: _OUTPUT_, value: ZaMsg.no_domain_found_msg, colSpan: "*", cssStyle: "white-space: normal",
 	 		visibilityChecks:[[XForm.checkInstanceValueEmty,ZaSearchOption.A_domainList]] 
 		 },
 		 {type: _GROUP_, width: ZaSearchOptionView.WIDTH, colSpan: "*", height: height - 30 - 25 - 5, 
@@ -475,7 +475,7 @@ function (optionId, height){
                         visibilityChecks:[]
                     }
                 ]},
-                 {type: _OUTPUT_, value: ZaMsg.no_cos_found_msg, colSpan: "*",
+                 {type: _OUTPUT_, value: ZaMsg.no_cos_found_msg, colSpan: "*", cssStyle: "white-space: normal",
                         visibilityChecks:[[XForm.checkInstanceValueEmty,ZaSearchOption.A_cosList]]
                  },
                  {type: _GROUP_, width: ZaSearchOptionView.WIDTH, colSpan: "*", height: height - 30 - 25 - 5,
@@ -657,7 +657,7 @@ function (optionId, height){
 			enableDisableChecks:[],visibilityChecks:[]
 		 },
 
-		 {type: _OUTPUT_, value: ZaMsg.no_domain_found_msg, colSpan: "*",
+		 {type: _OUTPUT_, value: ZaMsg.no_domain_found_msg, colSpan: "*", cssStyle: "white-space: normal",
 	 		visibilityChecks:[[XForm.checkInstanceValueEmty,ZaSearchOption.A_domainList]]
 		 },
 		 {type: _GROUP_, width: ZaSearchOptionView.WIDTH, colSpan: "*", height: height - 30 - 25 - 5,
@@ -706,7 +706,7 @@ function (optionId, height){
                         visibilityChecks:[]
                     }
              ]},
-             {type: _OUTPUT_, value: ZaMsg.no_cos_found_msg, colSpan: "*",
+             {type: _OUTPUT_, value: ZaMsg.no_cos_found_msg, colSpan: "*", cssStyle: "white-space: normal",
                     visibilityChecks:[[XForm.checkInstanceValueEmty,ZaSearchOption.A_cosList]]
              },
              {type: _GROUP_, width: ZaSearchOptionView.WIDTH, colSpan: "*", height: height - 30 - 25 - 5,
