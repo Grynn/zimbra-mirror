@@ -1564,7 +1564,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                             labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             buttonImage: "Color", width: "50px"
                         },
-                        {type:_GROUP_,  colSpan: 2, cssStyle: "margin-top:10px;margin-left:200px;", items: [
+                        {type:_GROUP_,  colSpan: 2, cssStyle: "margin-top: 10px; margin-left: 200px; width: 200px;", items: [
                                 {type: _DWT_BUTTON_,  label: ZaMsg.bt_ResetAllSkinColor,
                                     onActivate: ZaDomainXFormView.resetAllColorThemes }
                            ]
