@@ -54,9 +54,15 @@ public class GetGroupContactsTag extends ZimbraSimpleTag {
             if (json) {
                 JSONArray jsonArray = new JSONArray();
                 Map<String, ZContact> members = group.getMembers();
+                String addr = null;
                 for (ZContact contact : members.values()) {
-                    Map<String, String> attrs = contact.getAttrs();
-                    String addr = attrs.get("email");
+                    if(!contact.isTypeI()) {
+                        Map<String, String> attrs = contact.getAttrs();
+                        addr = attrs.get("email");
+                    }
+                    else {
+                        addr = contact.getId();
+                    }
                     if (addr != null) {
                         jsonArray.put(addr);
                     }
