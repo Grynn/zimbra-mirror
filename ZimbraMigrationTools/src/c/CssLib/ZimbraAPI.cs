@@ -80,20 +80,20 @@ public class ZimbraAPI
     };
 
     Dictionary<string, string> specialFoldersMap_da = new Dictionary<string, string>()
-    {{"","0"},{"/MAPIRoot","1"},{"/MAPIRoot/Inbox","2"},{"/MAPIRoot/Deleted Items","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Sent Items","5"},
-        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Contacts","7"},
-        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Conversations","9"},
-        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Wiki","12"},
-        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Chats","14"},
-        {"/MAPIRoot/Tasks","15"},
-        {"/MAPIRoot/Indbakke","2"},{"/MAPIRoot/Papirkurv","3"},
-        {"/MAPIRoot/U\u00f8nsket","4"}, {"/MAPIRoot/Sendt","5"},
-        {"/MAPIRoot/Kladder","6"}, {"/MAPIRoot/Kontakter","7"},
-        {"/MAPIRoot/M\u00e6rkater","8"}, {"/MAPIRoot/Samtaler","9"},
-        {"/MAPIRoot/Kalender","10"},
-        {"/MAPIRoot/Kontakter, der er sendt mail til","13"},
-        {"/MAPIRoot/Opgaver","15"}
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Indbakke","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Papirkurv","3"}, {"/MAPIRoot/Slettet post","3"}, 
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/U\u00f8nsket e-mail","4"}, {"/MAPIRoot/U\u00f8nsket","4"}, 
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Sendt post","5"}, {"/MAPIRoot/Sendt","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Kladder","6"},
+        {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Kontakter","7"}, {"/MAPIRoot/Kontaktpersoner","7"},
+        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/M\u00e6rkater","8"},
+        {"/MAPIRoot/Conversations","9"}, {"/MAPIRoot/Samtaler","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Kalender","10"},
+        {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Kontakter, der er sendt mail til","13"},
+        {"/MAPIRoot/Chats","14"},
+        {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Opgaver","15"}
     };
 
     Dictionary<string, string> specialFoldersMap_ge = new Dictionary<string, string>()
