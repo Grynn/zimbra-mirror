@@ -212,6 +212,10 @@ function(oldMember, newMember, checkEnabled, skipNotify, focusItem, noFocus) {
 			this.__notifyListeners(newFocusMember);
 		}
 	}
+
+	if (newMember instanceof DwtTabGroup) {
+		newMember.newParent(this);
+	}
 		
 	return newMember ? this.__members.replaceObject(oldMember, newMember) : this.__members.remove(oldMember);
 };
