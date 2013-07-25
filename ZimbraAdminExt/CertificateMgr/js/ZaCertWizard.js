@@ -150,6 +150,7 @@ function() {
 			validation_days: validationDays,
 			comm_cert: this.uploadResults,
             subject: this._containedObject.attrs,
+            digest: this._containedObject.digest,
             keysize: this._containedObject.keysize,
             //allserver: (this._containedObject[ZaCert.A_target_server] == ZaCert.ALL_SERVERS) ? 1 : 0,
 			callback: callback 
@@ -379,8 +380,15 @@ function() {
 		try {
 			if ((!this._containedObject[ZaCert.A_csr_exists]) || (this._containedObject[ZaCert.A_force_new_csr] == 'TRUE')){
 				if (!this._containedObject[ZaCert.A_type_self]) {
-                    ZaCert.genCSR (ZaApp.getInstance(), this._containedObject.attrs, type, true,
-                            this._containedObject[ZaCert.A_target_server], this._containedObject[ZaCert.A_keysize]) ;
+                    ZaCert.genCSR (
+                        ZaApp.getInstance(),
+                        this._containedObject.attrs,
+                        type,
+                        true,
+                        this._containedObject[ZaCert.A_target_server],
+                        this._containedObject[ZaCert.A_keysize],
+                        this._containedObject[ZaCert.A_digest]
+                    );
                 } else {
                     if(window.console && window.console.log) console.log("Self-Signed certificate, skip the CSR generation.") ;                    
                 }
@@ -544,6 +552,9 @@ function(entry) {
 	this._containedObject = entry ;
 	
 	this._containedObject[ZaModel.currentStep] = entry[ZaModel.currentStep]||ZaCertWizard.STEP_SELECT_SERVER;
+    if (this._containedObject [ZaCert.A_digest] == null) {
+        this._containedObject [ZaCert.A_digest] = "sha1";
+    }
     if (this._containedObject [ZaCert.A_keysize] == null) {
         this._containedObject [ZaCert.A_keysize] = "2048" ;    
     }
@@ -751,133 +762,245 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 		align:_LEFT_, valign:_TOP_};
 		
 	var case_gen_csr_items = [
-		{type: _DWT_ALERT_, colSpan:2,
-                visibilityChecks:["instance[ZaCert.A_csr_exists] == true "],
-                containerCssStyle: "width:400px;",
-				style: DwtAlert.WARNING, iconVisible: false,
-				content: com_zimbra_cert_manager.CSR_EXISTS_WARNING 
-		 }, 
-		{type: _GROUP_ , colSpan:2, numCols: 2, colSizes:["150px","*"], width:"100%",
-			  items :[
-				{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["150px","*"], items: [
-						{ type:_SPACER_, height: 10},
-						{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
-							labelLocation:_LEFT_ ,
-                             bmolsnr: true,
-                            getDisplayValue : function () {
+        {
+            type: _DWT_ALERT_,
+            colSpan: 2,
+            visibilityChecks: ["instance[ZaCert.A_csr_exists] == true "],
+            containerCssStyle: "width:400px;",
+            style: DwtAlert.WARNING,
+            iconVisible: false,
+            content: com_zimbra_cert_manager.CSR_EXISTS_WARNING
+        },
+        {
+            type: _GROUP_,
+            colSpan: 2,
+            numCols: 2,
+            colSizes: ["150px", "*"],
+            width: "100%",
+            items: [
+                {
+                    type: _GROUP_,
+                    numCols: 2,
+                    colSpan: "*",
+                    colSizes: ["150px", "*"],
+                    items: [
+                        {
+                            type: _SPACER_,
+                            height: 10
+                        },
+                        {
+                            type: _OUTPUT_,
+                            ref: ZaCert.A_target_server,
+                            labelLocation: _LEFT_,
+                            bmolsnr: true,
+                            getDisplayValue: function () {
                                 for (var i=0; i <ZaCert.TARGET_SERVER_CHOICES.length; i++ ) {
-                                 if (ZaCert.TARGET_SERVER_CHOICES[i].value == this.getInstanceValue ()){
-                                     return ZaCert.TARGET_SERVER_CHOICES[i].label ;
-                                 }
+                                    if (ZaCert.TARGET_SERVER_CHOICES[i].value == this.getInstanceValue ()){
+                                        return ZaCert.TARGET_SERVER_CHOICES[i].label;
+                                    }
                                 }
                             },
-							label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES}
-					]
-				},
-				{ref: ZaCert.A_force_new_csr, type: _CHECKBOX_ , label: com_zimbra_cert_manager.FORCE_NEW_CSR , 
-					visibilityChecks:[" instance[ZaCert.A_csr_exists] == true "],
-                    enableDisableChecks:[" instance[ZaCert.A_csr_exists] == true "],
-                    enableDisableChangeEventSources:[ZaCert.A_csr_exists],
+                            label: com_zimbra_cert_manager.CERT_target_server,
+                            choices: ZaCert.TARGET_SERVER_CHOICES
+                        }
+                    ]
+                },
+                {
+                    ref: ZaCert.A_force_new_csr,
+                    type: _CHECKBOX_,
+                    label: com_zimbra_cert_manager.FORCE_NEW_CSR,
+                    visibilityChecks: [" instance[ZaCert.A_csr_exists] == true "],
+                    enableDisableChecks: [" instance[ZaCert.A_csr_exists] == true "],
+                    enableDisableChangeEventSources: [ZaCert.A_csr_exists],
                     onChange: function (value, event, form) {
-						this.setInstanceValue (value) ;
-						form.parent._containedObject.modifySubjectAltNames();
-						form.refresh();
-					},
-					trueValue:"TRUE", falseValue:"FALSE", msgName:com_zimbra_cert_manager.FORCE_NEW_CSR },
+                        this.setInstanceValue (value);
+                        form.parent._containedObject.modifySubjectAltNames();
+                        form.refresh();
+                    },
+                    trueValue: "TRUE",
+                    falseValue: "FALSE",
+                    msgName: com_zimbra_cert_manager.FORCE_NEW_CSR
+                },
+                {
+                    ref: ZaCert.A_digest,
+                    type: _OSELECT1_,
+                    label: com_zimbra_cert_manager.CERT_digest,
+                    labelLocation: _LEFT_,
+                    choices: ZaCert.DIGEST_CHOICES,
+                    visibilityChecks: [],
+                    enableDisableChecks: [ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources: [
+                        ZaCert.A_csr_exists,
+                        ZaCert.A_force_new_csr
+                    ]
+                },
+                {
+                    ref: ZaCert.A_keysize,
+                    type: _OSELECT1_,
+                    label: com_zimbra_cert_manager.CERT_keysize,
+                    labelLocation: _LEFT_,
+                    choices: ZaCert.KEY_SIZE_CHOICES,
+                    visibilityChecks: [],
+                    enableDisableChecks: [ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources: [
+                        ZaCert.A_csr_exists,
+                        ZaCert.A_force_new_csr
+                    ]
+                },
+                {
+                    ref: ZaCert.A_commonName,
+                    type: _TEXTFIELD_,
+                    width: 150,
+                    visibilityChecks: [],
+                    bmolsnr: true,
+                    enableDisableChecks: [ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources: [
+                        ZaCert.A_csr_exists,
+                        ZaCert.A_force_new_csr
+                    ],
+                    label: com_zimbra_cert_manager.CERT_INFO_CN
+                },
+                {
+                    ref: ZaCert.A_use_wildcard_server_name,
+                    type: _WIZ_CHECKBOX_,
+                    visibilityChecks: [],
+                    enableDisableChecks: [ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources: [
+                        ZaCert.A_csr_exists,
+                        ZaCert.A_force_new_csr
+                    ],
+                    label: com_zimbra_cert_manager.Use_Wildcard_Server_Name,
+                    onChange: function (value, event, form) {
+                        if (window.console && window.console.log) {
+                            console.log("use wildcard: " + value);
+                        }
+                        this.setInstanceValue (value);
+                        if (value) {
+                            if(window.console && window.console.log) {
+                                console.log("Set the wildcard server name");
+                            }
+                            var wildCardSN = ZaCert.getWildCardServerName(this.getInstanceValue(ZaCert.A_commonName));
+                            this.setInstanceValue( wildCardSN,	ZaCert.A_commonName );
+                        }
+                    }
+                },
+                {
+                    ref: ZaCert.A_countryName,
+                    type: _TEXTFIELD_,
+                    width: 150,
+                    visibilityChecks: [],
+                    enableDisableChecks: [ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources: [
+                        ZaCert.A_csr_exists,
+                        ZaCert.A_force_new_csr
+                    ],
+                    label: com_zimbra_cert_manager.CERT_INFO_C
+                },
+                {
+                    ref: ZaCert.A_state,
+                    type: _TEXTFIELD_,
+                    width: 150,
+                    visibilityChecks: [],
+                    enableDisableChecks: [ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources: [
+                        ZaCert.A_csr_exists,
+                        ZaCert.A_force_new_csr
+                    ],
+                    label: com_zimbra_cert_manager.CERT_INFO_ST
+                },
+                {
+                    ref: ZaCert.A_city,
+                    type: _TEXTFIELD_,
+                    width: 150,
+                    visibilityChecks: [],
+                    enableDisableChecks: [ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources: [
+                        ZaCert.A_csr_exists,
+                        ZaCert.A_force_new_csr
+                    ],
+                    label: com_zimbra_cert_manager.CERT_INFO_L
+                },
+                {
+                    ref: ZaCert.A_organization,
+                    type: _TEXTFIELD_,
+                    width: 150,
+                    visibilityChecks: [],
+                    enableDisableChecks: [ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources: [
+                        ZaCert.A_csr_exists,
+                        ZaCert.A_force_new_csr
+                    ],
+                    label: com_zimbra_cert_manager.CERT_INFO_O
+                },
+                {
+                    ref: ZaCert.A_organizationUnit,
+                    type: _TEXTFIELD_,
+                    width: 150,
+                    visibilityChecks: [],
+                    enableDisableChecks: [ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources: [
+                        ZaCert.A_csr_exists,
+                        ZaCert.A_force_new_csr
+                    ],
+                    label: com_zimbra_cert_manager.CERT_INFO_OU
+                },
+                {
+                    ref: ZaCert.A_subject_alt,
+                    visibilityChecks: [],
+                    enableDisableChecks: [ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources: [
+                        ZaCert.A_csr_exists,
+                        ZaCert.A_force_new_csr
+                    ],
+                    type: _REPEAT_,
+                    label: com_zimbra_cert_manager.CERT_INFO_SubjectAltName,
+                    labelLocation: _LEFT_,
+                    labelCssStyle: "vertical-align: top; padding-top: 3px;",
+                    addButtonLabel: com_zimbra_cert_manager.NAD_Add,
+                    align: _LEFT_,
+                    repeatInstance: "",
+                    showAddButton: true,
+                    showRemoveButton: true,
+                    removeButtonCSSStyle: "margin-left:10px;",
+                    addButtonCSSStyle: "margin-left:10px;",
+                    alwaysShowAddButton: true,
+                    removeButtonLabel: com_zimbra_cert_manager.NAD_Remove,
+                    items: [
+                        {
+                            ref: ".",
+                            type: _TEXTFIELD_,
+                            visibilityChecks: [],
+                            enableDisableChecks: [ZaCertWizard.isCSRFieldsEnabled],
+                            enableDisableChangeEventSources: [
+                                ZaCert.A_csr_exists,
+                                ZaCert.A_force_new_csr
+                            ],
+                            onChange: function (value, event, form) {
+                                this.setInstanceValue(value);
+                            },
+                            width: "150px"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            type: _SPACER_,
+            height: 10
+        },
+        {
+            type: _GROUP_,
+            colSpan: "*",
+            items: [
+                {
+                    type: _OUTPUT_,
+                    value: com_zimbra_cert_manager.CERT_SubjectAlt_Note
+                }
+            ]
+        }
+    ];
 
-                  {ref: ZaCert.A_keysize,type:_OSELECT1_,
-					label:com_zimbra_cert_manager.CERT_keysize, 
-					labelLocation:_LEFT_,
-					choices:ZaCert.KEY_SIZE_CHOICES,
-                    visibilityChecks:[],
-                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
-				    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr] },
-				{ ref: ZaCert.A_commonName, type:_TEXTFIELD_, width: 150,
-					visibilityChecks:[],  bmolsnr:true,
-                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
-				    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
-                    label: com_zimbra_cert_manager.CERT_INFO_CN},
-				{ ref: ZaCert.A_use_wildcard_server_name, type:_WIZ_CHECKBOX_,
-						visibilityChecks:[],
-                        enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
-				        enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
-                        label: com_zimbra_cert_manager.Use_Wildcard_Server_Name,
-						onChange: function (value, event, form) {
-							if(window.console && window.console.log) console.log("use wildcard: " + value) ;
-							this.setInstanceValue (value) ;
-							if (value) {
-								if(window.console && window.console.log) console.log("Set the wildcard server name") ;
-                                var wildCardSN = ZaCert.getWildCardServerName(this.getInstanceValue(ZaCert.A_commonName)) ;
-								this.setInstanceValue( wildCardSN,	ZaCert.A_commonName ) ;
-							}
- 						}
-				},	
-				{ ref: ZaCert.A_countryName, type:_TEXTFIELD_, width: 150, 
-                    visibilityChecks:[],
-                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
-                    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
-                    label: com_zimbra_cert_manager.CERT_INFO_C},
-				{ ref: ZaCert.A_state, type:_TEXTFIELD_, width: 150, 
-                    visibilityChecks:[],
-                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
-                    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
-					label: com_zimbra_cert_manager.CERT_INFO_ST},
-				{ ref: ZaCert.A_city, type:_TEXTFIELD_, width: 150, 
-                    visibilityChecks:[],
-                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
-                    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
-					label: com_zimbra_cert_manager.CERT_INFO_L},
-				{ ref: ZaCert.A_organization, type:_TEXTFIELD_, width: 150,
-                    visibilityChecks:[],
-                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
-                    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
-					label: com_zimbra_cert_manager.CERT_INFO_O},
-				{ ref: ZaCert.A_organizationUnit, type:_TEXTFIELD_, width: 150,
-                    visibilityChecks:[],
-                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
-                    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
-					label: com_zimbra_cert_manager.CERT_INFO_OU},
-				 { ref: ZaCert.A_subject_alt,
-                     visibilityChecks:[],
-                     enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
-                     enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
-					type:_REPEAT_,
-					label:com_zimbra_cert_manager.CERT_INFO_SubjectAltName,
-					labelLocation:_LEFT_, 
-					labelCssStyle:"vertical-align: top; padding-top: 3px;",
-					addButtonLabel:com_zimbra_cert_manager.NAD_Add, 
-					align:_LEFT_,
-					repeatInstance:"", 
-					showAddButton:true, 
-					showRemoveButton:true,
-                    removeButtonCSSStyle:"margin-left:10px;",
-                    addButtonCSSStyle:"margin-left:10px;",
-                    //showAddOnNextRow:true,
-					alwaysShowAddButton:true,
-					removeButtonLabel:com_zimbra_cert_manager.NAD_Remove,								
-					items: [
-						{ref:".", type:_TEXTFIELD_, 
-                        visibilityChecks:[],
-                        enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
-                        enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
-                        onChange:function (value, event, form) {
-							this.setInstanceValue(value);
-						},
-						width:"150px"}
-					]//,
-					//onRemove:ZaCertWizard.onRepeatRemove
-				}			
-			]
-		},
-		
-		{ type:_SPACER_ , height: 10 },
-		{ type: _GROUP_, colSpan: "*", items: [
-		 		{type: _OUTPUT_, value: com_zimbra_cert_manager.CERT_SubjectAlt_Note }
-		 	]
-		 }	
-	];	
-	
-	case_gen_csr.items = case_gen_csr_items;
+    case_gen_csr.items = case_gen_csr_items;
 	cases.push(case_gen_csr);
 
 	var case_upload_cert={type:_CASE_, numCols:1, colSizes:["450px"],

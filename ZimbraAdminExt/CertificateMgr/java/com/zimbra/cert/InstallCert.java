@@ -106,6 +106,16 @@ public class InstallCert extends AdminDocumentHandler {
         String subjectAltNames = GenerateCSR.getSubjectAltNames(request) ;
 
         if (certType.equals("self")) {
+            Element digestEl = request.getElement(CertMgrConstants.E_DIGEST);
+            String digest = null;
+
+            if (digestEl != null && digestEl.getText() != null) {
+                digest = digestEl.getText();
+            } else {
+                digest = "sha1";
+            }
+            cmd += " -digest " + digest + " ";
+
             Element keysizeEl = request.getElement (CertMgrConstants.E_KEYSIZE) ;
             String keysize = null ;
 

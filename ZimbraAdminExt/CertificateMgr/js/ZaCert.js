@@ -25,6 +25,7 @@ ZaCert.A_type_self = "self" ;
 ZaCert.A_type_comm = "comm" ;
 ZaCert.A_type_csr = "csr" ; //generate the csr only
 ZaCert.A_csr_exists = "csr_exists" ;
+ZaCert.A_digest = "digest";
 ZaCert.A_keysize = "keysize" ;
 ZaCert.A_force_new_csr = "force_new_csr" ; //only matters when the csr exists
 ZaCert.A_target_server = "target_server" ;
@@ -40,6 +41,53 @@ ZaCert.TARGET_SERVER_CHOICES =  [
 		{label: "test2.zimbra.com", value: "test2.zimbra.com" },
 		{label: "admindev2.zimbra.com", value: "admindev2.zimbra.com" }*/
 	];
+
+ZaCert.DIGEST_CHOICES = [
+    {
+        label: "md4",
+        value: "md4"
+    },
+    {
+        label: "md5",
+        value: "md5"
+    },
+    {
+        label: "mdc2",
+        value: "mdc2"
+    },
+    {
+        label: "ripemd160",
+        value: "ripemd160"
+    },
+    {
+        label: "sha",
+        value: "sha"
+    },
+    {
+        label: "sha1",
+        value: "sha1"
+    },
+    {
+        label: "sha224",
+        value: "sha224"
+    },
+    {
+        label: "sha256",
+        value: "sha256"
+    },
+    {
+        label: "sha384",
+        value: "sha384"
+    },
+    {
+        label: "sha512",
+        value: "sha512"
+    },
+    {
+        label: "whirlpool",
+        value: "whirlpool"
+    }
+];
 
 ZaCert.KEY_SIZE_CHOICES = [ {label: "1024", value: "1024"},
                             {label: "2048", value: "2048"}] ;
@@ -59,6 +107,7 @@ ZaCert.prototype.init = function (getCSRResp) {
 	this [ZaCert.A_type_self]  = true ;
 	this [ZaCert.A_type_comm] = false ;
 	this [ZaCert.A_type_csr] = false ;
+    this [ZaCert.A_digest] = "sha1";
     this [ZaCert.A_keysize] = "2048" ;
 	this.initCSR(getCSRResp) ;
 	this [ZaCert.A_validation_days] = ZaCert.DEFAULT_VALIDATION_DAYS ;
@@ -506,10 +555,11 @@ ZaCert.getCSR = function (app, serverId, type) {
 	}
 }
 
-ZaCert.genCSR = function (app, subject_attrs,  type, newCSR, serverId, keysize) {
+ZaCert.genCSR = function (app, subject_attrs,  type, newCSR, serverId, keysize, digest) {
 	if(window.console && window.console.log) console.log("Generating certificates") ;
 	var soapDoc = AjxSoapDoc.create("GenCSRRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", type);
+    soapDoc.getMethod().setAttribute("digest", digest);
 	soapDoc.getMethod().setAttribute("keysize", keysize) ;
     if (newCSR) {
 		soapDoc.getMethod().setAttribute("new", "1");
@@ -556,6 +606,7 @@ ZaCert.installCert = function (app, params, serverId) {
 	var validation_days = params.validation_days ;
 	var callback = params.callback ;
     var subject = params.subject ;
+    var digest = params.digest;
     var keysize = params.keysize ;
     //var allserver = 0 || params.allserver ;
 	//if(window.console && window.console.log) console.log("allserver = " + allserver) ;
@@ -577,6 +628,7 @@ ZaCert.installCert = function (app, params, serverId) {
 	
 	if (type == ZaCert.A_type_self || type == ZaCert.A_type_comm) {
 		soapDoc.set(ZaCert.A_validation_days, validation_days);
+        soapDoc.set(ZaCert.A_digest, digest);
 
 		//soapDoc.set(ZaCert.A_allserver, allserver) ;
 		if (type == ZaCert.A_type_comm) {
@@ -672,6 +724,11 @@ ZaCert.myXModel = {
 		{id: ZaCert.A_subject_alt, type: _LIST_, ref:"attrs/" + ZaCert.A_subject_alt, listItem:{type:_STRING_}},
 		{id: ZaCert.A_target_server, type:_STRING_ , ref: ZaCert.A_target_server },
 		{id: ZaCert.A_countryName, type: _STRING_, ref: "attrs/" + ZaCert.A_countryName, length: 2, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\'\*]*$/ },
+        {
+            id: ZaCert.A_digest,
+            type: _STRING_,
+            ref: ZaCert.A_digest
+        },
         {id: ZaCert.A_keysize, type: _STRING_, ref: ZaCert.A_keysize},
 		{id: ZaCert.A_commonName, type: _STRING_, ref: "attrs/" + ZaCert.A_commonName },
 		{id: ZaCert.A_state, type: _STRING_, ref: "attrs/" + ZaCert.A_state, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\'\*]*$/ },
