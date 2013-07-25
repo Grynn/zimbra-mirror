@@ -56,8 +56,23 @@ DwtAlert.WARNING = 1;
  */
 DwtAlert.CRITICAL = 2;
 
-DwtAlert._ICONS = [ AjxImg.getClassForImage("Information_32"), AjxImg.getClassForImage("Warning_32"), AjxImg.getClassForImage("Critical_32") ];
-DwtAlert._CLASSES = [ "DwtAlertInfo", "DwtAlertWarn", "DwtAlertCrit" ];
+/**
+ * Defines the "success" style
+ */
+DwtAlert.SUCCESS = 3;
+
+DwtAlert._ICONS = [
+    AjxImg.getClassForImage("Information_32"),
+    AjxImg.getClassForImage("Warning_32"),
+    AjxImg.getClassForImage("Critical_32"),
+    AjxImg.getClassForImage("Success")
+];
+DwtAlert._CLASSES = [
+    "DwtAlertInfo",
+    "DwtAlertWarn",
+    "DwtAlertCrit",
+    "DwtAlertWarn"    // Reuse for Success
+];
 
 DwtAlert._RE_ICONS = new RegExp(DwtAlert._ICONS.join("|"));
 DwtAlert._RE_CLASSES = new RegExp(DwtAlert._CLASSES.join("|"));
@@ -75,7 +90,7 @@ DwtAlert.prototype.TEMPLATE = "dwt.Widgets#DwtAlert";
 /**
  * Sets the style.
  * 
- * @param	{DwtAlert.INFORMATION|DwtAlert.WARNING|DwtAlert.CRITICAL}	style		the style
+ * @param	{DwtAlert.INFORMATION|DwtAlert.WARNING|DwtAlert.CRITICAL|DwtAlert.SUCCESS}	style		the style
  */
 DwtAlert.prototype.setStyle = function(style) {
 	this._alertStyle = style || DwtAlert.INFORMATION;
@@ -88,7 +103,7 @@ DwtAlert.prototype.setStyle = function(style) {
 /**
  * Gets the style.
  * 
- * @return	{DwtAlert.INFORMATION|DwtAlert.WARNING|DwtAlert.CRITICAL}		the style
+ * @return	{DwtAlert.INFORMATION|DwtAlert.WARNING|DwtAlert.CRITICAL|DwtAlert.SUCCESS}		the style
  */
 DwtAlert.prototype.getStyle = function() {
 	return this._alertStyle;
