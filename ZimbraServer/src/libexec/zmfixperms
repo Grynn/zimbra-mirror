@@ -243,6 +243,11 @@ if [ -d ${zimbra_home} ]; then
       chmod 640 ${zimbra_home}/conf/localconfig.xml
     fi
 
+    if [ -f ${zimbra_home}/conf/attrs/zimbra-attrs.xml ]; then
+      chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/attrs/zimbra-attrs.xml
+      chmod 444 ${zimbra_home}/conf/attrs/zimbra-attrs.xml
+    fi
+
     if [ -d ${zimbra_home}/conf/spamassassin ]; then
       printMsg "Fixing permissions on ${zimbra_home}/conf/spamassassin"
       chmod 755 ${zimbra_home}/conf/spamassassin
