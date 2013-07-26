@@ -20,10 +20,6 @@ use strict;
 
 #@debug_sender_acl = qw( );
 
-@disclaimer_options_bysender_maps = (
-  { '.' => 'global-default' },
-);
-
 $enable_ldap = 1;
 $default_ldap = {
 	hostname      => [ split (' ','@@ldap_url@@') ],

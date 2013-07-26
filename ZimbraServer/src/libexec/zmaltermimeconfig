@@ -77,27 +77,11 @@ $mesg = $ldap->search(
                   filter => $ldapquery,
                   attrs => [
                       'zimbraDomainMandatoryMailSignatureEnabled',
-                      'zimbraDomainMandatoryMailSignatureText',
-                      'zimbraDomainMandatoryMailSignatureHTML'
                   ]
               );
 my $enabled = $mesg->entry(0)->get_value('zimbraDomainMandatoryMailSignatureEnabled');
-print "Getting global config zimbraDomainMandatoryMailSignatureEnabled=$enabled\n";
 
 if (lc($enabled) eq "true") {
-  my $text = $mesg->entry(0)->get_value('zimbraDomainMandatoryMailSignatureText');
-  my $html = $mesg->entry(0)->get_value('zimbraDomainMandatoryMailSignatureHTML');
-  writeFile("$c{zimbra_home}/data/altermime/global-default.txt", "$text");
-  writeFile("$c{zimbra_home}/data/altermime/global-default.html", "$html");
-  if ( -f "$c{zimbra_home}/data/altermime/global-default.txt") {
-    open(FILE, "$c{zimbra_home}/data/altermime/global-default.txt");
-    my $buf;
-    while (read(FILE, $buf, 60*57)) {
-      my $b64 = MIME::Base64::encode_base64($buf);
-      writeFile("$c{zimbra_home}/data/altermime/global-default.b64", "$b64");
-    }
-    close(FILE);
-  }
   $ldapquery = "(&(objectClass=zimbraDomain)(amavisDisclaimerOptions=*))";
   $mesg = $ldap->search(
                   base => '',
@@ -110,12 +94,15 @@ if (lc($enabled) eq "true") {
   );
   my $total = $mesg->count();
   my $domain;
+  my $text;
+  my $html;
   if ($total > 0) {
     my $loop=0;
     while($loop < $total) {
       $text = $mesg->entry($loop)->get_value('zimbraDomainMandatoryMailSignatureText');
       $html = $mesg->entry($loop)->get_value('zimbraDomainMandatoryMailSignatureHTML');
       $domain = $mesg->entry($loop)->get_value('amavisDisclaimerOptions');
+      print "Generating disclaimers for domain $domain.\n";
       writeFile("$c{zimbra_home}/data/altermime/$domain.txt", "$text");
       writeFile("$c{zimbra_home}/data/altermime/$domain.html", "$html");
       if ( -f "$c{zimbra_home}/data/altermime/$domain.txt") {
@@ -170,6 +157,7 @@ sub enableDomain() {
       $dn,
       add => { amavisDisclaimerOptions => "$enable", },
     );
+	print "Enabled disclaimers for domain: $enable\n";
   } else {
     print "Warning: Domain $enable does not exist.  Disclaimer not enabled\n";
   }
@@ -190,6 +178,7 @@ sub disableDomain() {
       $dn,
       delete => ['amavisDisclaimerOptions'],
     );
+	print "Disabled disclaimers for domain: $disable\n";
   } else {
     print "Warning: Domain $disable does not have disclaimers enabled\n";
   }
