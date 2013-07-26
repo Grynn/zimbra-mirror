@@ -734,7 +734,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                       showAddButton:true,
                                       showRemoveButton:true,
                                       showAddOnNextRow:true,
-                                      items: [
+                                        addButtonLabel: ZaMsg.NAD_Add,
+                                        removeButtonLabel:ZaMsg.NAD_Remove,
+                                        items: [
                                         {ref:".", type:_TEXTFIELD_, label:null, visibilityChecks:[], enableDisableChecks:[] }
                                       ]
                                     }
@@ -797,6 +799,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                   showAddButton: true,
                                   showRemoveButton: true,
                                   showAddOnNextRow: true,
+                                  addButtonLabel: ZaMsg.NAD_Add,
+                                  removeButtonLabel:ZaMsg.NAD_Remove,
                                   items: [
                                       {
                                           ref: ".",
@@ -815,6 +819,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                   showAddButton: true,
                                   showRemoveButton: true,
                                   showAddOnNextRow: true,
+                                  addButtonLabel: ZaMsg.NAD_Add,
+                                  removeButtonLabel:ZaMsg.NAD_Remove,
                                   items: [
                                       {
                                           ref: ".",
@@ -833,6 +839,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                   showAddButton: true,
                                   showRemoveButton: true,
                                   showAddOnNextRow: true,
+                                  addButtonLabel: ZaMsg.NAD_Add,
+                                  removeButtonLabel:ZaMsg.NAD_Remove,
                                   items: [
                                       {
                                           ref: ".",
@@ -851,6 +859,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                   showAddButton: true,
                                   showRemoveButton: true,
                                   showAddOnNextRow: true,
+                                  addButtonLabel: ZaMsg.NAD_Add,
+                                  removeButtonLabel:ZaMsg.NAD_Remove,
                                   items: [
                                       {
                                           ref: ".",
