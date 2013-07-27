@@ -1173,8 +1173,8 @@ DwtListView.prototype.setListDivHeight =
 function (listViewHeight) {
 	if (this._listDiv && this._listColDiv) {
 		var headerHeight = Dwt.getSize (this._listColDiv).y ;
-		//the 10px allows for the diff between container and list for all browsers and eliminates vertical unnecessary scrolls
-		var listDivHeight = listViewHeight - headerHeight - 10; 
+		//the 25px allows for the diff between container and list for all browsers and eliminates vertical unnecessary scrolls
+		var listDivHeight = listViewHeight - headerHeight - 25;
 		Dwt.setSize(this._listDiv, Dwt.DEFAULT, listDivHeight);
 	}
 };
