@@ -88,8 +88,8 @@ if (lc($enabled) eq "true") {
                   filter => $ldapquery,
                   attrs => [
                       'amavisDisclaimerOptions',
-                      'zimbraDomainMandatoryMailSignatureText',
-                      'zimbraDomainMandatoryMailSignatureHTML'
+                      'zimbraAmavisDomainDisclaimerText',
+                      'zimbraAmavisDomainDisclaimerHTML'
                   ],
   );
   my $total = $mesg->count();
@@ -99,8 +99,8 @@ if (lc($enabled) eq "true") {
   if ($total > 0) {
     my $loop=0;
     while($loop < $total) {
-      $text = $mesg->entry($loop)->get_value('zimbraDomainMandatoryMailSignatureText');
-      $html = $mesg->entry($loop)->get_value('zimbraDomainMandatoryMailSignatureHTML');
+      $text = $mesg->entry($loop)->get_value('zimbraAmavisDomainDisclaimerText');
+      $html = $mesg->entry($loop)->get_value('zimbraAmavisDomainDisclaimerHTML');
       $domain = $mesg->entry($loop)->get_value('amavisDisclaimerOptions');
       print "Generating disclaimers for domain $domain.\n";
       writeFile("$c{zimbra_home}/data/altermime/$domain.txt", "$text");
