@@ -67,11 +67,8 @@ public class GenerateCSR extends AdminDocumentHandler {
         String cmd = ZimbraCertMgrExt.CREATE_CSR_CMD  ;
         String newCSR = request.getAttribute(CertMgrConstants.A_new);
         String type = request.getAttribute(AdminConstants.A_TYPE);
-        String digest = request.getAttribute(CertMgrConstants.E_DIGEST);
-        if (digest == null) {
-            digest = "sha1";
-        }
-        String keysize = request.getAttribute (CertMgrConstants.E_KEYSIZE) ; 
+        String digest = request.getAttribute(CertMgrConstants.E_DIGEST, "sha1");
+        String keysize = request.getAttribute (CertMgrConstants.E_KEYSIZE) ;
         if (keysize == null || (!(keysize.equalsIgnoreCase("1024") || keysize.equalsIgnoreCase("2048")))) {
             keysize = "2048";
         }
