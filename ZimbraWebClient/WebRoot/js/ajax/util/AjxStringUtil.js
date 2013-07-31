@@ -1883,6 +1883,8 @@ AjxStringUtil.SCRIPT_REGEX = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/
  * 
  * @return	{string}	original content if quoted content was found, otherwise NULL
  * @private
+ *
+ * TODO: Would this all be easier if we flattened the HTML tree to make it serial?
  */
 AjxStringUtil._getOriginalHtmlContent =
 function(text) {
@@ -2022,11 +2024,11 @@ function(el, ctxt) {
 			type = AjxStringUtil.ORIG_SEP_STRONG;
 			ctxt.sepNode = el;	// mark for removal
 		}
-		else if (el.outerHTML.toLowerCase().indexOf("border-top") !== -1) {
+		else if (el.style.borderTop) {
 			var styleObj = DwtCssStyle.getComputedStyleObject(el);
-			if (styleObj && styleObj.borderTopWidth && parseInt(styleObj.borderTopWidth) > 0) {
-				type = AjxStringUtil.ORIG_LINE;
-				ctxt.lineNode = el;
+			if (styleObj && styleObj.borderTopWidth && parseInt(styleObj.borderTopWidth) === 1 && styleObj.borderTopColor === "rgb(181, 196, 223)") {
+				type = AjxStringUtil.ORIG_SEP_STRONG;
+				ctxt.sepNode = el;	// mark for removal
 			}
 		}
 
