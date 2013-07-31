@@ -207,7 +207,7 @@ $forward_method = 'smtp:[%%zimbraLocalBindAddress%%]:10025';  # set to undef wit
 
 %%uncomment VAR:zimbraAmavisQuarantineAccount%%$final_virus_destiny      = D_DISCARD;
 $final_banned_destiny     = D_BOUNCE;
-$final_spam_destiny       = D_DISCARD;  #!!!  D_DISCARD / D_REJECT
+$final_spam_destiny       = %%zimbraAmavisFinalSpamDestiny%%;  #!!!  D_DISCARD / D_REJECT
 # $final_bad_header_destiny = D_PASS;
 # $bad_header_quarantine_method = undef;
 
