@@ -2026,7 +2026,7 @@ function(el, ctxt) {
 		}
 		else if (el.style.borderTop) {
 			var styleObj = DwtCssStyle.getComputedStyleObject(el);
-			if (styleObj && styleObj.borderTopWidth && parseInt(styleObj.borderTopWidth) === 1 && styleObj.borderTopColor === "rgb(181, 196, 223)") {
+			if (styleObj && styleObj.borderTopWidth && parseInt(styleObj.borderTopWidth) === 1 && styleObj.borderTopColor) {
 				type = AjxStringUtil.ORIG_SEP_STRONG;
 				ctxt.sepNode = el;	// mark for removal
 			}
