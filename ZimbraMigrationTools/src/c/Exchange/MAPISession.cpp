@@ -18,6 +18,7 @@
 #include "Exchange.h"
 #include "MAPISession.h"
 #include "MAPIStore.h"
+#include "edk/edkmapi.h"
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Exception class
@@ -131,6 +132,25 @@ HRESULT MAPISession::OpenDefaultStore(MAPIStore &Store)
 		ERR_STORE_ERR, __LINE__, __FILE__);
     Store.Initialize(m_Session, pDefaultMDB);
     return S_OK;
+}
+
+HRESULT MAPISession::OpenPublicStore(MAPIStore &Store)
+{
+	Zimbra::Util::AutoCriticalSection autocriticalsection(cs);
+    HRESULT hr = S_OK;
+
+    if (m_Session == NULL)
+        throw MAPISessionException(hr, L"OpenPublicStore(): m_mapiSession is NULL.", 
+		ERR_STORE_ERR, __LINE__, __FILE__);
+
+	LPMDB pMdb = NULL;
+	hr = HrOpenExchangePublicStore(m_Session, &pMdb);
+	if (FAILED(hr))
+        throw MAPISessionException(hr, L"OpenPublicStore(): HrOpenExchangePublicStore Failed.", 
+		ERR_STORE_ERR, __LINE__,  __FILE__);
+    Store.Initialize(m_Session, pMdb);
+
+	return S_OK;
 }
 
 HRESULT MAPISession::OpenOtherStore(LPMDB OpenedStore, LPWSTR pServerDn, LPWSTR pUserDn,

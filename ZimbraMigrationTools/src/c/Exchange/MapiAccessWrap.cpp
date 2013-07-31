@@ -819,7 +819,7 @@ STDMETHODIMP CMapiAccessWrap::GetData(BSTR UserId, VARIANT ItemId, FolderType ty
             else if (ft == 4)
             {
                 TaskItemData taskData;
-				dlog.err("Mapiaccess->getItem  TaskItemData ");
+				dlog.trace("Mapiaccess->getItem  TaskItemData ");
                 ret = maapi->GetItem(ItemID, taskData);
                 if((ret != NULL))
                 {

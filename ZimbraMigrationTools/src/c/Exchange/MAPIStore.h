@@ -44,7 +44,7 @@ public:
     ~MAPIStore();
     void Initialize(LPMAPISESSION mapisession, LPMDB pMdb);
     HRESULT CompareEntryIDs(SBinary *pBin1, SBinary *pBin2, ULONG &lpulResult);
-    HRESULT GetRootFolder(MAPIFolder &rootFolder);
+    HRESULT GetRootFolder(MAPIFolder &rootFolder, BOOL bPublicFolder=false);
 
     LPMDB GetInternalMAPIStore() { return m_Store; }
     SBinaryArray GetSpecialFolderIds() { return m_specialFolderIds; }

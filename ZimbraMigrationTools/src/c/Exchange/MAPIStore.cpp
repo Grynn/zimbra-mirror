@@ -17,6 +17,7 @@
 #include "common.h"
 #include "Exchange.h"
 #include "MAPIStore.h"
+#include "edk/edkmapi.h"
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Exception class
@@ -82,22 +83,47 @@ HRESULT MAPIStore::CompareEntryIDs(SBinary *pBin1, SBinary *pBin2, ULONG &lpulRe
     return hr;
 }
 
-HRESULT MAPIStore::GetRootFolder(MAPIFolder &rootFolder)
+HRESULT MAPIStore::GetRootFolder(MAPIFolder &rootFolder, BOOL bPublicFolder)
 {
     Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store);
     HRESULT hr = S_OK;
     SBinary bin;
     ULONG objtype = 0;
+	bin.cb = 0;
+	bin.lpb = NULL;
     LPMAPIFOLDER pFolder = NULL;
 
-    if (FAILED(hr = Zimbra::MAPI::Util::HrMAPIFindIPMSubtree(m_Store, bin)))
-        throw MAPIStoreException(hr, L"GetRootFolder(): HrMAPIFindIPMSubtree Failed.", 
-		ERR_ROOT_FOLDER, __LINE__, __FILE__);
-    if (FAILED(hr = m_Store->OpenEntry(bin.cb, (LPENTRYID)bin.lpb, NULL, MAPI_BEST_ACCESS,
-            &objtype, (LPUNKNOWN *)&pFolder)))
-        throw MAPIStoreException(hr, L"GetRootFolder(): OpenEntry Failed.", 
-		ERR_ROOT_FOLDER, __LINE__, __FILE__);
+	if(bPublicFolder)
+	{
+		// open the MAPI Public Folder tree
+            hr = HrOpenExchangePublicFolders(m_Store, &pFolder);
+            if (FAILED(hr))
+            {
+                throw MAPIStoreException(hr, L"GetRootFolder(): HrOpenExchangePublicFolders Failed.Check Profile Privileges.", 
+					ERR_ROOT_FOLDER, __LINE__, __FILE__);
+            }
 
+            LPSPropValue lpProp = NULL;
+            HRESULT hr = HrGetOneProp(pFolder, PR_ENTRYID, &lpProp);
+            if (FAILED(hr))
+            {
+                throw MAPIStoreException(hr, L"GetRootFolder(): HrOpenExchangePublicFolders Failed.Check Profile Privileges.", 
+					ERR_ROOT_FOLDER, __LINE__, __FILE__);
+            }
+            bin.cb = lpProp->Value.bin.cb;
+            MAPIAllocateBuffer(lpProp->Value.bin.cb, (LPVOID *)&(bin.lpb));
+            memcpy(bin.lpb, lpProp->Value.bin.lpb, lpProp->Value.bin.cb);
+	}
+	else
+	{
+		if (FAILED(hr = Zimbra::MAPI::Util::HrMAPIFindIPMSubtree(m_Store, bin)))
+			throw MAPIStoreException(hr, L"GetRootFolder(): HrMAPIFindIPMSubtree Failed.", 
+			ERR_ROOT_FOLDER, __LINE__, __FILE__);
+		if (FAILED(hr = m_Store->OpenEntry(bin.cb, (LPENTRYID)bin.lpb, NULL, MAPI_BEST_ACCESS,
+				&objtype, (LPUNKNOWN *)&pFolder)))
+			throw MAPIStoreException(hr, L"GetRootFolder(): OpenEntry Failed.", 
+			ERR_ROOT_FOLDER, __LINE__, __FILE__);
+	}
     // Init root folder object
     rootFolder.Initialize(pFolder, _TEXT("/"), &bin);
     return hr;

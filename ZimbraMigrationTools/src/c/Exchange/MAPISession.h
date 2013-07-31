@@ -58,6 +58,7 @@ public:
     HRESULT OpenDefaultStore(MAPIStore &Store);
     HRESULT OpenOtherStore(LPMDB OpenedStore, LPWSTR pServerDn, LPWSTR pUserDn,
         MAPIStore &OtherStore);
+	HRESULT OpenPublicStore(MAPIStore &Store);
     HRESULT OpenAddressBook(LPADRBOOK *ppAddrBook);
     HRESULT OpenEntry(ULONG cbEntryID, LPENTRYID lpEntryID, LPCIID lpInterface, ULONG ulFlags,
         ULONG FAR *lpulObjType, LPUNKNOWN FAR *lppUnk);
