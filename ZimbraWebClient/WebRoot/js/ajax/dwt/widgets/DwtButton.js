@@ -379,9 +379,12 @@ function (hoverImageInfo) {
 DwtButton.prototype.setMenu =
 function(params) {
 	
-	params = Dwt.getParams(arguments, DwtButton.setMenuParams, (arguments.length == 1 && !arguments[0].menu));
-	
-	this._menu = params.menu;
+	params = Dwt.getParams(arguments, DwtButton.setMenuParams, (arguments.length == 1 && arguments[0] && !arguments[0].menu));
+
+    if (params){
+	    this._menu = params.menu;
+    }
+
 	if (this._menu) {
 		// if menu is a callback, wait until it's created to set menu-related properties
 		if (this._menu.isDwtMenu) {

@@ -1236,7 +1236,7 @@ function(args, paramNames, force) {
 	
 	// Check for arg-list style of passing params. There will almost always
 	// be more than one arg, and the first one is the parent DwtControl.
-	if (args.length > 1 || args[0]._eventMgr || force) {
+	if (args.length > 1 || (args[0] && args[0]._eventMgr) || force) {
 		var params = {};
 		for (var i = 0; i < args.length; i++) {
 			params[paramNames[i]] = args[i];
