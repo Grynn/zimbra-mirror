@@ -1440,6 +1440,9 @@ public class CSMigrationWrapper
         
         foreach (dynamic folder in folders)
         {
+            Log.info("Folder Name : ", folder.Name);
+            Log.info("Folder Path : ", folder.FolderPath);
+            Log.info("Folder ID : ", folder.Id);
             string path = "";
 
             if (options.IsMaintainenceMode)
