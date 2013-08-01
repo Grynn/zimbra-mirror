@@ -169,7 +169,7 @@ public class GetTask extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Verify Multipart/alternative (text and html) task that can be display the body in preview pane",
-			groups = { "smoke" })
+			groups = { "smoke123" })
 			public void GetTask_03() throws HarnessException {
 
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);

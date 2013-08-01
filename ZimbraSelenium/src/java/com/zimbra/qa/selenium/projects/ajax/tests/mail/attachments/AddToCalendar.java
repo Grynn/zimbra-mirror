@@ -148,7 +148,7 @@ public class AddToCalendar extends PrefGroupMailByMessageTest {
 			app.zPageMail.zSelectWindow("_blank");
 			SleepUtil.sleepLong();
 			
-			app.zPageCalendar.zWaitForElementAppear("id=MSG-1_2_calendar");
+			app.zPageCalendar.zWaitForElementAppear("id=zv__MSG__MSG-1_attLinks_2_calendar");
 			
 			DialogAddToCalendar dialog = (DialogAddToCalendar)app.zPageMail.zToolbarPressButton(Button.B_ADD_TO_CALENDAR);
 			dialog.zChooseCalendarFolder(folder.getId());
@@ -218,7 +218,7 @@ public class AddToCalendar extends PrefGroupMailByMessageTest {
 			app.zPageMail.zSelectWindow("_blank");
 			SleepUtil.sleepLong();
 			
-			app.zPageCalendar.zWaitForElementAppear("id=MSG-1_2_calendar");
+			app.zPageCalendar.zWaitForElementAppear("id=zv__MSG__MSG-1_attLinks_2_calendar");
 			
 			DialogAddToCalendar dialog = (DialogAddToCalendar)app.zPageMail.zToolbarPressButton(Button.B_ADD_TO_CALENDAR);
 			dialog.zClickButton(Button.B_NEW);
