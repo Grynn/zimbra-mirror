@@ -1934,7 +1934,7 @@ public class ZAttrProvisioning {
      *
      * @since ZCS 9.0.0
      */
-    @ZAttr(id=1457)
+    @ZAttr(id=1459)
     public static final String A_zimbraAmavisDomainDisclaimerHTML = "zimbraAmavisDomainDisclaimerHTML";
 
     /**
@@ -1942,7 +1942,7 @@ public class ZAttrProvisioning {
      *
      * @since ZCS 9.0.0
      */
-    @ZAttr(id=1456)
+    @ZAttr(id=1458)
     public static final String A_zimbraAmavisDomainDisclaimerText = "zimbraAmavisDomainDisclaimerText";
 
     /**
@@ -1950,7 +1950,7 @@ public class ZAttrProvisioning {
      *
      * @since ZCS 9.0.0
      */
-    @ZAttr(id=1458)
+    @ZAttr(id=1460)
     public static final String A_zimbraAmavisFinalSpamDestiny = "zimbraAmavisFinalSpamDestiny";
 
     /**
@@ -1960,6 +1960,22 @@ public class ZAttrProvisioning {
      */
     @ZAttr(id=1100)
     public static final String A_zimbraAmavisQuarantineAccount = "zimbraAmavisQuarantineAccount";
+
+    /**
+     * delay between each batch for zmspamextract
+     *
+     * @since ZCS 8.0.5
+     */
+    @ZAttr(id=1457)
+    public static final String A_zimbraAntispamExtractionBatchDelay = "zimbraAntispamExtractionBatchDelay";
+
+    /**
+     * batch size for zmspamextract
+     *
+     * @since ZCS 8.0.5
+     */
+    @ZAttr(id=1456)
+    public static final String A_zimbraAntispamExtractionBatchSize = "zimbraAntispamExtractionBatchSize";
 
     /**
      * Mailboxes in which the current account in archived. Multi-value attr
