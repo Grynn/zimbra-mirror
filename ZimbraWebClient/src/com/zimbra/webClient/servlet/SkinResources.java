@@ -694,7 +694,7 @@ public class SkinResources
               .append("skin=").append(skinStr)
 			  .append("&locale=" + localeStr);
 
-			sb.append("\n").append(appContextPath).append("/css/msgview.css");
+			sb.append("\n").append(appContextPath).append("/css/msgview.css?v=").append(cacheBusterVersion);
 			sb.append("\n\n#resources\n");
 			//create the resources url
 			sb.append("\n").append(appContextPath).append("/res/I18nMsg,AjxMsg,ZMsg,ZmMsg,AjxKeys,ZmKeys,ZdMsg,AjxTemplateMsg.js?v=")
