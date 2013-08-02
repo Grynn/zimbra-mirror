@@ -63,3 +63,5 @@ extern class CExchangeModule _AtlModule;
 
 /* Flags for MAPIINIT_0 structure ulFlags value passed to MAPIInitialize()  */
 #define MAPI_NO_COINIT			0x00000008
+
+#define NO_EXCH_PUB_FOLDER

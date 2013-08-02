@@ -277,8 +277,9 @@ wstring GetCNName(LPWSTR pstrUserDN)
 
 LPCWSTR MAPIAccessAPI::OpenPublicStore()
 {
-	LPWSTR lpwstrStatus = NULL;
 	LPWSTR lpwstrRetVal=NULL;
+#ifndef NO_EXCH_PUB_FOLDER 
+	LPWSTR lpwstrStatus = NULL;
 	HRESULT hr = S_OK;
 	try
 	{
@@ -313,12 +314,15 @@ LPCWSTR MAPIAccessAPI::OpenPublicStore()
     }
 	if(lpwstrStatus)
 		Zimbra::Util::FreeString(lpwstrStatus);
+#endif
     return lpwstrRetVal;
 }
 
 HRESULT MAPIAccessAPI::EnumeratePublicFolders(std::vector<std::string> &pubFldrList)
 {
     HRESULT hr = S_OK;
+	UNREFERENCED_PARAMETER(pubFldrList);
+#ifndef NO_EXCH_PUB_FOLDER
     LPMAPIFOLDER pRoot = NULL;
     LPMAPITABLE pTable = NULL;
     LPSRowSet pRowSet = NULL;
@@ -385,14 +389,16 @@ HRESULT MAPIAccessAPI::EnumeratePublicFolders(std::vector<std::string> &pubFldrL
     }
     pRoot->Release();
     pTable->Release();
+#endif
     return hr;
 }
 
 
 LPCWSTR MAPIAccessAPI::InitializePublicFolders()
 {
-	LPWSTR lpwstrStatus = NULL;
 	LPWSTR lpwstrRetVal=NULL;
+#ifndef NO_EXCH_PUB_FOLDER
+	LPWSTR lpwstrStatus = NULL;
     HRESULT hr = S_OK;
 
 	try
@@ -416,6 +422,7 @@ LPCWSTR MAPIAccessAPI::InitializePublicFolders()
     }
 	if(lpwstrStatus)
 		Zimbra::Util::FreeString(lpwstrStatus);
+#endif
 	return lpwstrRetVal;
 }
 

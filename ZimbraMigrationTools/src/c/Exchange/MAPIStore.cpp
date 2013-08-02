@@ -95,6 +95,7 @@ HRESULT MAPIStore::GetRootFolder(MAPIFolder &rootFolder, BOOL bPublicFolder)
 
 	if(bPublicFolder)
 	{
+#ifndef NO_EXCH_PUB_FOLDER
 		// open the MAPI Public Folder tree
             hr = HrOpenExchangePublicFolders(m_Store, &pFolder);
             if (FAILED(hr))
@@ -113,6 +114,7 @@ HRESULT MAPIStore::GetRootFolder(MAPIFolder &rootFolder, BOOL bPublicFolder)
             bin.cb = lpProp->Value.bin.cb;
             MAPIAllocateBuffer(lpProp->Value.bin.cb, (LPVOID *)&(bin.lpb));
             memcpy(bin.lpb, lpProp->Value.bin.lpb, lpProp->Value.bin.cb);
+#endif
 	}
 	else
 	{

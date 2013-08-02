@@ -138,7 +138,8 @@ HRESULT MAPISession::OpenPublicStore(MAPIStore &Store)
 {
 	Zimbra::Util::AutoCriticalSection autocriticalsection(cs);
     HRESULT hr = S_OK;
-
+	UNREFERENCED_PARAMETER(Store);
+#ifndef NO_EXCH_PUB_FOLDER
     if (m_Session == NULL)
         throw MAPISessionException(hr, L"OpenPublicStore(): m_mapiSession is NULL.", 
 		ERR_STORE_ERR, __LINE__, __FILE__);
@@ -149,8 +150,8 @@ HRESULT MAPISession::OpenPublicStore(MAPIStore &Store)
         throw MAPISessionException(hr, L"OpenPublicStore(): HrOpenExchangePublicStore Failed.", 
 		ERR_STORE_ERR, __LINE__,  __FILE__);
     Store.Initialize(m_Session, pMdb);
-
-	return S_OK;
+#endif
+	return hr;
 }
 
 HRESULT MAPISession::OpenOtherStore(LPMDB OpenedStore, LPWSTR pServerDn, LPWSTR pUserDn,
