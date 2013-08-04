@@ -156,7 +156,7 @@ public class TagFile extends FeatureBriefcaseTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testexcelfile.xls";
+				+ "/data/public/other/testtextfile.txt";
 
 		FileItem fileItem = new FileItem(filePath);
 
@@ -234,7 +234,7 @@ public class TagFile extends FeatureBriefcaseTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testwordfile.doc";
+				+ "/data/public/other/testtextfile.txt";
 
 		FileItem fileItem = new FileItem(filePath);
 

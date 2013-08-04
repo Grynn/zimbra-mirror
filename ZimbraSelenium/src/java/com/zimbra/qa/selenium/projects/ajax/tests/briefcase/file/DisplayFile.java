@@ -44,7 +44,7 @@ public class DisplayFile extends FeatureBriefcaseTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testwordfile.doc";
+				+ "/data/public/other/testtextfile.txt";
 
 		FileItem file = new FileItem(filePath);
 
