@@ -20,6 +20,7 @@ import java.io.File;
 
 import org.testng.annotations.*;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.PrefGroupMailByMessageTest;
@@ -42,7 +43,7 @@ public class Bug31535 extends PrefGroupMailByMessageTest {
 
 
 	}
-
+	@Bugs(ids="83527")
 	@Test(	description = "Verify bug 34401",
 			groups = { "functional" })
 	public void Bug_34401() throws HarnessException {
