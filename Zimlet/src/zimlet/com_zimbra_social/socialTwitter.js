@@ -33,13 +33,13 @@ function com_zimbra_socialTwitter(zimlet, preferences) {
 		//ignore
 	}
 }
-com_zimbra_socialTwitter.FRIENDS_TIMELINE_URL = "https://api.twitter.com/1/statuses/friends_timeline.json";
-com_zimbra_socialTwitter.MENTIONS_URL = "https://api.twitter.com/1/statuses/mentions.json";
-com_zimbra_socialTwitter.DM_URL = "https://api.twitter.com/1/direct_messages.json";
-com_zimbra_socialTwitter.DM_URL_POST = "https://api.twitter.com/1/direct_messages/new.json";
-com_zimbra_socialTwitter.UPDATE_URL = "http://api.twitter.com/1/statuses/update.json";
-com_zimbra_socialTwitter.PROFILE_BASE_URL = "https://twitter.com/statuses/user_timeline/";
-com_zimbra_socialTwitter.DELETE_POST_BASE_URL = "https://api.twitter.com/1/statuses/destroy/";
+com_zimbra_socialTwitter.FRIENDS_TIMELINE_URL = "https://api.twitter.com/1.1/statuses/home_timeline.json";
+com_zimbra_socialTwitter.MENTIONS_URL = "https://api.twitter.com/1.1/statuses/mentions_timeline.json";
+com_zimbra_socialTwitter.DM_URL = "https://api.twitter.com/1.1/direct_messages.json";
+com_zimbra_socialTwitter.DM_URL_POST = "https://api.twitter.com/1.1/direct_messages/new.json";
+com_zimbra_socialTwitter.UPDATE_URL = "https://api.twitter.com/1.1/statuses/update.json";
+com_zimbra_socialTwitter.PROFILE_BASE_URL = "https://api.twitter.com/1.1/statuses/user_timeline.json";
+com_zimbra_socialTwitter.DELETE_POST_BASE_URL = "https://api.twitter.com/1.1/statuses/destroy/";
 com_zimbra_socialTwitter.SEARCH_BASE_URL = "http://search.twitter.com/search.json";
 com_zimbra_socialTwitter.FRIENDSHIP_BASE_URL = "https://twitter.com/friendships/show.json";
 
@@ -150,13 +150,13 @@ function(params) {
 	} else if (type == "MENTIONS") {
 		url = com_zimbra_socialTwitter.MENTIONS_URL;
 	} else if (type == "SENT_MSGS") {
-		useSimpleHttpGet = true;
-		url = [com_zimbra_socialTwitter.PROFILE_BASE_URL, params.account.screen_name, ".json"].join("");
+		url = com_zimbra_socialTwitter.PROFILE_BASE_URL;
+		components.screen_name = params.account.screen_name;
 	} else if (type == "PROFILE_MSGS") {
-		useSimpleHttpGet = true;
-		url = [com_zimbra_socialTwitter.PROFILE_BASE_URL, params.screen_name, ".json"].join("");
+		url = com_zimbra_socialTwitter.PROFILE_BASE_URL;
+		components.screen_name = params.screen_name;
 	}
-	if(useSimpleHttpGet) {
+	if (useSimpleHttpGet) {
 		this.zimlet.socialOAuth.makeSimpleHTTPGet({url: url, components: components, callback: callback});
 	} else {
 		this.zimlet.socialOAuth.makeHTTPGet({url: url, components: components, callback: callback});
@@ -606,9 +606,9 @@ function(tableId, additionalParams) {
 com_zimbra_socialTwitter.prototype.performOAuth =
 function() {
 	var oauthResultCallback = new AjxCallback(this, this._handleOAuthResult);
-	var params = {requestTokenUrl: "https://twitter.com/oauth/request_token",
-		authorizeBaseUrl: "https://twitter.com/oauth/authorize?oauth_token=",
-		accessTokenUrl: "https://twitter.com/oauth/access_token"};
+	var params = {requestTokenUrl: "https://api.twitter.com/oauth/request_token",
+		authorizeBaseUrl: "https://api.twitter.com/oauth/authorize?oauth_token=",
+		accessTokenUrl: "https://api.twitter.com/oauth/access_token"};
 
 	this.zimlet.socialOAuth.setAppName("Twitter");
 	this.zimlet.socialOAuth.oauthResultCallback = oauthResultCallback;
