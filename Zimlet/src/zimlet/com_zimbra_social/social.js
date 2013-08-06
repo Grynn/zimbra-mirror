@@ -3257,7 +3257,7 @@ SocialZimlet.prototype.loadAllAccountsFromDB = function() {
 		if (accntStr.indexOf("__type=twitter") > 0) {
 			this.twitter.manageTwitterAccounts(accntStr);
 		} else if (accntStr.indexOf("__type=facebook") > 0) {
-			this.facebook.manageFacebookAccounts(accntStr);
+			this.facebook.updateFacebookAccount(accntStr);
 		}
 	}
 };

@@ -13,27 +13,132 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/*global FB */
+/*global window */
+/*global document */
+/*global alert */
+/*global testAPI */
+
+
 //Author: Raja Rao DV (rrao@zimbra.com)
 
 function com_zimbra_socialFacebook(zimlet) {
 	this.zimlet = zimlet;
-	this.OAUTH2_SERVER = this.zimlet.getConfig("OAUTH2_SERVER");
 	this.waitingForApproval = false;
 	this.itemsLimit = 50;
-	this._extendedPerms = "read_stream,publish_stream,offline_access,friends_activities,user_activities,friends_likes,user_likes";
-	this.isZD = false;
-	this._tableIdAndFBProfilesCache = new Array();
-	this.apiKey = this.zimlet.getConfig("social_facebook_api_key");
-	try{
-		var version = appCtxt.getActiveAccount().settings.getInfoResponse.version;
-		if(version.toLowerCase().indexOf("desktop") > 0) {
-			this.isZD = true;
-			this.apiKey = this.zimlet.getConfig("social_facebook_api_key_zd");
-		}
-	}catch(e) {
-		//ignore
-	}
+	this._extendedPerms = "read_stream,publish_stream,friends_activities,user_activities,friends_likes,user_likes";
+	this._tableIdAndFBProfilesCache = [];
+	this.appId = this.zimlet.getConfig("social_facebook_app_id");
+	this.appSecret = this.zimlet.getConfig("social_facebook_app_secret");
+	this._initFacebook();
 }
+
+com_zimbra_socialFacebook.prototype._initFacebook = function() {
+	var div = document.createElement("DIV");
+	div.id = "fb-root";
+
+	var that = this; //for closure
+
+	window.fbAsyncInit = function () {
+		FB.init({
+			appId: that.appId, // App ID
+			//channelUrl: '//WWW.YOUR_DOMAIN.COM/channel.html', //Channel File - we don't use social plugins so not helpful, I believe. and it would complicate the setup on every installation
+			status: true, // check login status
+			cookie: true, // enable cookies to allow the server to access the session
+			xfbml: true  // parse XFBML
+		});
+
+		// Additional init code here
+
+	};
+
+// Load the SDK asynchronously
+	(function (d) {
+		var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+		if (d.getElementById(id)) {
+			return;
+		}
+		js = d.createElement('script');
+		js.id = id;
+		js.async = true;
+		js.src = "//connect.facebook.net/en_US/all.js";
+		ref.parentNode.insertBefore(js, ref);
+	}(document));
+
+};
+
+com_zimbra_socialFacebook.prototype._loadFacebookAccount = function() {
+	var that = this;
+	FB.api('/me', function (response) {
+		that._loadFacebookAccountHandleResponse(response);
+	});
+};
+
+com_zimbra_socialFacebook.prototype._loadFacebookAccountHandleResponse = function(response) {
+	if (response.error) {
+		//This sometimes happens after a change in authentication. Try second time and it works. This is facebook.
+		var dlg = appCtxt.getMsgDialog();
+		dlg.setMessage(this.zimlet.getMessage("fbTemporaryError"), DwtMessageDialog.WARNING_STYLE);
+		dlg.popup();
+		return;
+	}
+	var account = {};
+	account.name = response.name;
+	account.id = response.id;
+
+	this.zimlet.preferences.hideAddFBInfoDlg();
+	var msgDialog = appCtxt.getMsgDialog();
+	var msg = this.zimlet.getMessage("accountAddedSuccessfully");
+	msgDialog.setMessage(msg, DwtMessageDialog.INFO_STYLE);
+	msgDialog.popup();
+
+	account.at = FB.getAuthResponse().accessToken;
+	this.updateFacebookAccountFromObj(account);
+	var authStr = this.zimlet.getMessage("accountsUpdated");
+	this.zimlet.preferences._updateAccountsTable({message: authStr, color: "green"});
+	this.zimlet.preferences._setAccountPrefDlgAuthMessage(authStr, "green");
+	this._extendAccessToken(account);
+};
+
+/**
+ * extending the access token from the short term (1-2 hours) to long term (60 days)
+ * @param account
+ * @private
+ */
+com_zimbra_socialFacebook.prototype._extendAccessToken = function(account) {
+	var url = "https://graph.facebook.com/oauth/access_token";
+
+	var params = [
+		["client_id", this.appId],
+		["client_secret", this.appSecret],
+		["grant_type", "fb_exchange_token"],
+		["fb_exchange_token", account.at]
+	];
+	var urlParams = this._getFBParams(params);
+
+	this._doPOST(url, urlParams, this._extendAccessTokenHandleResponse.bind(this, account));
+};
+
+com_zimbra_socialFacebook.prototype._extendAccessTokenHandleResponse = function(account, response) {
+	if (!response.success) {
+		return;
+	}
+
+	var accessToken = null;
+	var pairs = response.text.split("&");
+	for (var i = 0; i < pairs.length; i++) {
+		var pair = pairs[i].split("=");
+		if (pair[0] === "access_token") {
+			accessToken = pair[1];
+			break;
+		}
+	}
+	if (!accessToken) {
+		return;
+	}
+
+	account.at = accessToken;
+};
 
 com_zimbra_socialFacebook.prototype._addFBComment = function(params) {
 	var url = "https://api.facebook.com/restserver.php";
@@ -107,21 +212,6 @@ function (params, response) {
 	}
 };
 
-com_zimbra_socialFacebook.prototype._getExtendedPermissionInfo =
-function (params) {
-	var url = "https://api.facebook.com/restserver.php";
-	var account = params.account;
-	var paramsArray = [
-		["method", "Users.hasAppPermission"],
-		["access_token", account.at],
-		["ext_perm", params.permission],
-		["uid", account.uid],
-		["call_id", (new Date()).getTime()]
-	];
-	var urlParams = this._getFBParams(paramsArray, account.secret);
-	this._doPOST(url, urlParams, new AjxCallback(this, this._getExtendedPermissionCallback, params));
-};
-
 com_zimbra_socialFacebook.prototype._getExtendedPermissionCallback =
 function (params, response) {
 	var permission = params.permission;
@@ -159,7 +249,7 @@ function (tableId, account) {
 		["method", "Stream.get"],
 		["access_token", account.at],
 		["limit", this.itemsLimit],
-		["filter_key", "nf,pp"]
+		["filter_key", "nf"] //there was also ",pp" here - but that caused an error. No idea what it was supposed to do.
 	];
 
 	var sinceOrUntilParams = this._getSinceOrUntilParams(tableId);
@@ -350,174 +440,33 @@ function (args) {
 	return obj.signature;
 };
 
-com_zimbra_socialFacebook.prototype.fbCreateToken =
-function () {
-	var url = "https://api.facebook.com/restserver.php";
-	var paramsArray = [
-		["method", "Auth.createToken"]
-	];
-	var signature = this._getSignatureFromJSP(paramsArray);
-	setTimeout(AjxCallback.simpleClosure(this._doFbCreateToken, this, url, paramsArray, signature), 500);//delay calling by .5 secs(otherwise, sometimes breaks in ff)
-};
-
-com_zimbra_socialFacebook.prototype._doFbCreateToken =
-function (url, paramsArray, signature) {
-	var params = this._getFBParams(paramsArray, null, signature);
-	this._doPOST(url, params, new AjxCallback(this, this._fbCreateTokenCallback));
-	this.zimlet.preferences.showAddFBInfoDlg();
-};
-
-com_zimbra_socialFacebook.prototype._fbCreateTokenCallback =
-function (response) {
-	var text = response.text;
-	this.fb_auth_token = eval("(" + text + ")");
-	this.loginToFB(this.fb_auth_token);
-};
 
 com_zimbra_socialFacebook.prototype.loginToFB =
-function (authToken) {
-	var url = "https://www.facebook.com/login.php?";
-	var params = new Array();
-	params["api_key"] = AjxStringUtil.urlComponentEncode(this.apiKey);
-	params["fbconnect"] = AjxStringUtil.urlComponentEncode("true");
-	params["v"] = AjxStringUtil.urlComponentEncode("1.0");
-	params["connect_display"] = AjxStringUtil.urlComponentEncode("popup");
-	params["next"] = AjxStringUtil.urlComponentEncode("http://www.facebook.com/connect/login_success.html");
-	params["cancel_url"] = AjxStringUtil.urlComponentEncode("http://www.facebook.com/connect/login_failure.html");
-	if (authToken) {
-		params["auth_token"] = AjxStringUtil.urlComponentEncode(this.fb_auth_token);
-	}
-	if (!authToken) {
-		params["req_perms"] = AjxStringUtil.urlComponentEncode(this._extendedPerms);
-	}
-	var tmp = [];
-	for (var name in params) {
-		tmp.push(name + "=" + params[name]);
-	}
-	var p = tmp.join("&");
-	url = url + p;
-	this.zimlet.openCenteredWindow(url);
-};
-
-com_zimbra_socialFacebook.prototype._getSessionId =
 function () {
-	var url = "https://api.facebook.com/restserver.php";
-	var paramsArray = [
-		["method", "auth.getSession"],
-		["auth_token", this.fb_auth_token]
-	];
-	var signature = this._getSignatureFromJSP(paramsArray);
-	setTimeout(AjxCallback.simpleClosure(this._doGetSessionId, this, url, paramsArray, signature), 500);//delay calling by .5 secs(otherwise, sometimes breaks in ff)
 
-
-};
-com_zimbra_socialFacebook.prototype._doGetSessionId =
-function (url, paramsArray, signature) {
-	var params = this._getFBParams(paramsArray, null, signature);
-	this._doPOST(url, params, new AjxCallback(this, this._sessionIdCallback));
-};
- com_zimbra_socialFacebook.prototype.showFBWindow =
-		 function() {
-			this._facebookState = (new Date()).getTime();
-			this._facebookWindow = this.zimlet.openCenteredWindow(this.OAUTH2_SERVER + "?state=" + this._facebookState);
-			 if(this._facebookWindow) {
-				this._showFBOAuth2MsgDlg();
-			}
-		 };
-
-com_zimbra_socialFacebook.prototype._showFBOAuth2MsgDlg = function() {
-	if (!this._fbOauthAuth2Dlg) {
-		this._fbOauthAuth2Dlg = new DwtMessageDialog({parent:this.zimlet.getShell(), buttons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
-		this._fbOauthAuth2Dlg.setMessage(this.zimlet.getMessage("authorizeFacebookMsg"));
-		this._fbOauthAuth2Dlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._fbOAuth2OKBtnListener));
-	}
-	this._fbOauthAuth2Dlg.popup();
+	var that = this;
+	FB.getLoginStatus(function (response) {
+		if (response.status === 'connected') {
+			that._loadFacebookAccount();
+		}
+		else {
+			//user is either logged in but not authorized, or not logged in. Anyway do the same - try to log in and authorize the user.
+			that._doLoginToFB();
+		}
+	});
 };
 
- com_zimbra_socialFacebook.prototype._fbOAuth2OKBtnListener =
-		 function() {
-			 	this._fbOauthAuth2Dlg.popdown();
-				var callback = new AjxCallback(this, this._getFbAccessTokenHandler);
-				var entireUrl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(this.OAUTH2_SERVER + "?get=fbAccessTokenResponse&state="+ this._facebookState);
-				AjxRpc.invoke(null, entireUrl, null, callback, true);
-		 };
-
-
-  com_zimbra_socialFacebook.prototype._getFbAccessTokenHandler =
-		 function(response) {
-			 var text =  response.text;
-			 if(text.indexOf("access_token") == -1) {
-				 appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("couldNotLoadFacebookAccount"), ZmStatusView.LEVEL_WARNING);
-				 return;
-			 }
-
-			 var regEx = new RegExp( "\\n|access_token=|\\t|\\r|\"", "g");
-			 text = text.replace(regEx, "");
-			 if(text != "") {
-				var callback = new AjxCallback(this, this._handleFBAccountInfo, text);
-				var entireUrl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode("https://graph.facebook.com/me?access_token="+text);
-				AjxRpc.invoke(null, entireUrl, null, callback, true);
-			 }
-		 };
-
-com_zimbra_socialFacebook.prototype._handleFBAccountInfo =
-function (accessToken, response) {
-	var text = response.text;
-	if (response.success) {
-		var jsonObj = JSON.parse(text);
-		var fbStr = ["id=", jsonObj.id, "&at=",accessToken,"&name=",jsonObj.name].join("");
-		this.manageFacebookAccounts(fbStr);
-		var authStr = this.zimlet.getMessage("accountsUpdated");
-		this.zimlet.preferences._updateAccountsTable({message:authStr, color:"green"});
-		this.zimlet.preferences._setAccountPrefDlgAuthMessage(authStr, "green");
-	}
+com_zimbra_socialFacebook.prototype._doLoginToFB = function() {
+	var that = this;
+	FB.login(function(response) {
+		if (!response.authResponse) {
+			//the user did not login (canceled or didn't authorize)
+			return;
+		}
+		that._loadFacebookAccount();
+	}, {scope: this._extendedPerms});
 };
 
-com_zimbra_socialFacebook.prototype._sessionIdCallback =
-function (response) {
-	var text = response.text;
-	if (text.indexOf("session_key") >= 0 && text.indexOf("secret") >= 0) {
-		var fbStr = this._convertFB_JsonStrToUrlEncodedStr(text);
-		this.manageFacebookAccounts(fbStr);
-		var authStr = this.zimlet.getMessage("fbSignInLine3");
-		this.zimlet.preferences._setAccountPrefDlgAuthMessage(authStr, "blue");
-		this.zimlet.preferences._updateAccountsTable({message:authStr, color:"blue"});
-		this.zimlet.preferences._updateAllFBPermissions({message:authStr, color:"blue",askForPermissions:false});
-	}
-	this.zimlet.preferences._getFbInfoDialog.popdown();
-};
-
-com_zimbra_socialFacebook.prototype.askForPermissions =
-function (fromAuthorizeBtn) {
-	var params = new Array();
-	if (!fromAuthorizeBtn) {
-		var url = "https://www.facebook.com/connect/prompt_permissions.php?";
-		params["api_key"] = AjxStringUtil.urlComponentEncode(this.apiKey);
-		params["fbconnect"] = AjxStringUtil.urlComponentEncode("true");
-		params["v"] = AjxStringUtil.urlComponentEncode("1.0");
-		params["display"] = AjxStringUtil.urlComponentEncode("popup");
-		params["extern"] = AjxStringUtil.urlComponentEncode("1");
-		params["next"] = AjxStringUtil.urlComponentEncode("http://www.facebook.com/connect/login_success.html");
-		params["cancel_url"] = AjxStringUtil.urlComponentEncode("http://www.facebook.com/connect/login_failure.html");
-
-		params["ext_perm"] = AjxStringUtil.urlComponentEncode(this._extendedPerms);
-	} else {
-		var url = "https://www.facebook.com/login.php?";
-		params["api_key"] = AjxStringUtil.urlComponentEncode(this.apiKey);
-		params["fbconnect"] = AjxStringUtil.urlComponentEncode("true");
-		params["v"] = AjxStringUtil.urlComponentEncode("1.0");
-		params["connect_display"] = AjxStringUtil.urlComponentEncode("popup");
-		params["cancel_url"] = AjxStringUtil.urlComponentEncode("http://www.facebook.com/connect/login_failure.html");
-		params["req_perms"] = AjxStringUtil.urlComponentEncode(this._extendedPerms);
-	}
-	var tmp = [];
-	for (var name in params) {
-		tmp.push(name + "=" + params[name]);
-	}
-	var p = tmp.join("&");
-	url = url + p;
-	this.zimlet.openCenteredWindow(url);
-};
 
 com_zimbra_socialFacebook.prototype._convertFB_JsonStrToUrlEncodedStr = function(text) {
 	var jsonObj = eval("(" + text + ")");
@@ -526,13 +475,13 @@ com_zimbra_socialFacebook.prototype._convertFB_JsonStrToUrlEncodedStr = function
 
 com_zimbra_socialFacebook.prototype._doPOST =
 function (url, params, callback) {
-	var hdrs = new Array();
+	var hdrs = [];
 	hdrs["Content-type"] = "application/x-www-form-urlencoded";
 	hdrs["Content-length"] = params.length;
 	hdrs["Connection"] = "close";
 	var entireurl = ZmZimletBase.PROXY + url;
 	AjxRpc.invoke(params, entireurl, hdrs, callback, false);
-}
+};
 
 com_zimbra_socialFacebook.prototype._getFBParams =
 function(otherParamsArray, secret, signatureFromJSP) {
@@ -547,13 +496,19 @@ function(otherParamsArray, secret, signatureFromJSP) {
 	return arry.join("&");
 };
 
-com_zimbra_socialFacebook.prototype.manageFacebookAccounts = function(text) {
+
+com_zimbra_socialFacebook.prototype.updateFacebookAccount = function(text) {
 	var nv = text.split("&");
 	var tObj = {};
 	for (var i = 0; i < nv.length; i++) {
 		var tmp = nv[i].split("=");
 		tObj[tmp[0]] = tmp[1];
 	}
+	this.updateFacebookAccountFromObj(tObj);
+};
+
+
+com_zimbra_socialFacebook.prototype.updateFacebookAccountFromObj = function(tObj) {
 	if (tObj["__type"] == undefined) {
 		tObj["__type"] = "facebook";
 	}
@@ -567,9 +522,12 @@ com_zimbra_socialFacebook.prototype.manageFacebookAccounts = function(text) {
 		tObj["__s"] = "1";
 	}
 	//to normalize names with fb
-	tObj.raw = text;
 	tObj.type = tObj["__type"];
-	this.zimlet.allAccounts[tObj.name + tObj.id] = tObj;
+	this.zimlet.allAccounts[this._accountIndex(tObj)] = tObj;
+};
+
+com_zimbra_socialFacebook.prototype._accountIndex = function(account) {
+	return account.type + account.id;
 };
 
 com_zimbra_socialFacebook.prototype._updateFacebookStream =

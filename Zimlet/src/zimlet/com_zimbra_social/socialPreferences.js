@@ -123,9 +123,8 @@ function(email, pwd, server) {
 
 com_zimbra_socialPreferences.prototype._addFacebookBtnListener =
 function() {
-	this.reloginToFB = true;
-	//this.showAddFBInfoDlg();
-	this.zimlet.facebook.showFBWindow();
+	this.showAddFBInfoDlg();
+	//this.zimlet.facebook.showFBWindow();
 };
 
 com_zimbra_socialPreferences.prototype._deleteAccountBtnListener =
@@ -215,7 +214,11 @@ function() {
 
 com_zimbra_socialPreferences.prototype._updateAccountsTable =
 function(additionalMsgParams) {
-	document.getElementById("social_pref_accntsTable").innerHTML = this._getPrefAccountsTableHTML();
+	var table = document.getElementById("social_pref_accntsTable");
+	if (!table) {
+		return;
+	}
+	table.innerHTML = this._getPrefAccountsTableHTML();
 	for (var i = 0; i < this._authorizeDivIdAndAccountMap.length; i++) {
 		var map = this._authorizeDivIdAndAccountMap[i];
 		var authBtn = new DwtButton({parent:this.zimlet.getShell()});
@@ -228,33 +231,25 @@ function(additionalMsgParams) {
 	} else {
 		this._setAccountPrefDlgAuthMessage(this.zimlet.getMessage("accountsUpdated"), "green");
 	}
-	if (additionalMsgParams != undefined
-			&& additionalMsgParams.askForPermissions != undefined
-			&& additionalMsgParams.askForPermissions == true
-			&& this._fbNeedPermCount != 0) {
-		this.showAddFBInfoDlg({permName:"", permCount: this._fbNeedPermCount});
-		this.zimlet.facebook.askForPermissions();
-	}
 };
 
 com_zimbra_socialPreferences.prototype._setAccountPrefDlgAuthMessage =
 function (message, color) {
-	document.getElementById("social_prefDlg_currentStateMessage").innerHTML = "<lable style='color:" + color + "'>" + message + "</label>";
+	var msg = document.getElementById("social_prefDlg_currentStateMessage");
+	if (!msg) {
+		return;
+	}
+	msg.innerHTML = "<label style='color:" + color + "'>" + message + "</label>";
 	document.getElementById("social_prefDlg_currentStateMessage").style.display = "block";
 };
 
 com_zimbra_socialPreferences.prototype._updateAllFBPermissions =
 function(additionalMsgParams) {
-	for (var id in this.zimlet.allAccounts) {
-		var account = this.zimlet.allAccounts[id];
-		if (account.type == "facebook") {
-			var callback0 = new AjxCallback(this, this._updateAccountsTable, additionalMsgParams);
-			var callback1 = new AjxCallback(this.zimlet.facebook, this.zimlet.facebook._getExtendedPermissionInfo, {account:account, permission:"read_stream", callback:callback0});
-			var callback2 = new AjxCallback(this.zimlet.facebook, this.zimlet.facebook._getExtendedPermissionInfo, {account:account, permission:"publish_stream", callback:callback1});
-			this.zimlet.facebook._getExtendedPermissionInfo({account:account, permission:"offline_access", callback:callback2});
-		}
-	}
+	//this didn't do anything logical. I have no idea what it was trying to do and how it was trying to actually get the answer to whether it has perms and what it is supposed to do with
+	//that answer. Also additionalMsgParams is never passed.
+	// I don't even understand how _getExtendedPermissionInfo (which I deleted) was not running into an infinate loop of requests, as it was passing itself with same params as callback.
 };
+
  /*
 com_zimbra_socialPreferences.prototype._authorizeBtnListener =
 function(params) {
@@ -271,8 +266,8 @@ function(params) {
 */
 com_zimbra_socialPreferences.prototype._getPrefAccountsTableHTML =
 function() {
-	this._authorizeDivIdAndAccountMap = new Array();
-	var html = new Array();
+	this._authorizeDivIdAndAccountMap = [];
+	var html = [];
 	var i = 0;
 	var noAccountsFound = true;
 	this._fbNeedPermCount = 0;
@@ -354,12 +349,16 @@ function() {
 
 };
 
+com_zimbra_socialPreferences.prototype.hideAddFBInfoDlg = function(obj) {
+	if (!this._getFbInfoDialog) {
+		return;
+	}
+	this._getFbInfoDialog.popdown();
+};
+
+
 com_zimbra_socialPreferences.prototype.showAddFBInfoDlg = function(obj) {
 	//if zimlet dialog already exists...
-	var permStr = "";
-	if (obj) {
-		permStr = this.zimlet.getMessage("pressAllowAccessThenOKToGrandFacebookPerm");
-	}
 	if (this._getFbInfoDialog) {
 		this._getFbInfoDialog.popup();
 		return;
@@ -381,47 +380,26 @@ com_zimbra_socialPreferences.prototype.showAddFBInfoDlg = function(obj) {
 	this.goButton.setText(this.zimlet.getMessage("goToFacebook"));
 	this.goButton.setImage("social_facebookIcon");
 	this.goButton.addSelectionListener(new AjxListener(this.zimlet.facebook, this.zimlet.facebook.loginToFB, null));
-	document.getElementById("social_goToFacebookPage").appendChild(this.goButton.getHtmlElement());
 
-	this.loadFbPermBtn = new DwtButton({parent:this.zimlet.getShell()});
-	this.loadFbPermBtn.setText(this.zimlet.getMessage("loadPermissions"));
-	this.loadFbPermBtn.setImage("social_facebookIcon");
-	this.loadFbPermBtn.addSelectionListener(new AjxListener(this, this._getFbInfoOKBtnListener, null));
-	document.getElementById("social_loadFBAccountPermissions").appendChild(this.loadFbPermBtn.getHtmlElement());
+	document.getElementById("social_goToFacebookPage").appendChild(this.goButton.getHtmlElement());
 
 	this._getFbInfoDialog.popup();
 };
 
 com_zimbra_socialPreferences.prototype._getFbInfoOKBtnListener = function() {
-	if (this.reloginToFB) {
-		this.reloginToFB = false;
-		this.needSessionId = true;
-		this.zimlet.facebook.fbCreateToken();
-	} else if (this.needSessionId) {
-		this.reloginToFB = false;
-		this.needSessionId = false;
-		this.zimlet.facebook._getSessionId();
-	} else {
-		this._refreshTableBtnListener();
-		this._getFbInfoDialog.popdown();
-	}
+	this._refreshTableBtnListener();
+	this._getFbInfoDialog.popdown();
 };
 
 com_zimbra_socialPreferences.prototype._createFbInfoView =
 function() {
-	var html = new Array();
+	var html = [];
 	var i = 0;
 	html[i++] = "<DIV>";
 	html[i++] =  AjxMessageFormat.format(this.zimlet.getMessage("logoutfirst"), "Facebook")+"<br/><br/>";
-	html[i++] = "<b><u><i><label style='color:white;font-size:14px'>"+this.zimlet.getMessage("pleaseCompleteBothParts")+"</label></i></u></b><br/>";
-	html[i++] = "<B>"+this.zimlet.getMessage("fbSignInPart1")+"</B><br/>";
 	html[i++] = this.zimlet.getMessage("fbSignInLine1") + " <div id='social_goToFacebookPage'> </div>";
-	html[i++] = this.zimlet.getMessage("fbSignInLine2") + " <br/><br/>";
+	html[i++] = "<br/><br/>";
 
-	html[i++] = "<br/> <B>"+this.zimlet.getMessage("fbSignInPart2")+"</B><br/>";
-	html[i++] = this.zimlet.getMessage("fbSignInLine3") + "<div id='social_loadFBAccountPermissions'></div>";
-	html[i++] = this.zimlet.getMessage("fbSignInLine4")+ " <br/>";
-	html[i++] = this.zimlet.getMessage("fbSignInLine5")+ " <br/>";
 	html[i++] = "</DIV>";
 	return html.join("");
 };
