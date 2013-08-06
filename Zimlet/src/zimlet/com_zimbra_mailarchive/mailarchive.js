@@ -81,17 +81,39 @@ function(postCallback) {
 	dialog.popup(params);
 };
 
+/**
+ * Return true if this folder is suitable to be an "archive" folder.
+ * See mailarchive zimlet for usage
+ */
+ZmArchiveZimlet.prototype._canFolderArchive =
+function(folder) {
+	var id = Number(folder.nId);
+	return id !== ZmFolder.ID_ROOT
+			&& id !== ZmFolder.ID_DRAFTS
+			&& !folder.isInTrash()
+			&& !folder.isInSpam()
+			&& !folder.isOutbound();
+};
+
+
 ZmArchiveZimlet.prototype._handleChooseFolder = 
 function(postCallback, organizer) {
+	if (!this._canFolderArchive(organizer)) {
+		var dlg = appCtxt.getMsgDialog();
+		dlg.reset();
+		dlg.setMessage(this.getMessage("archiveInvalidFolder"), DwtMessageDialog.WARNING_STYLE);
+		dlg.popup();
+		return;
+	}
+
 	var dialog = appCtxt.getChooseFolderDialog();
 	dialog.popdown();
-	
-	if (organizer) {
-		this._archiveFolder = organizer;
-		this._archiveFolderId = organizer.id;
-		var keyVal = this._getMetaKeyVal();
-		this.metaData.set("archiveZimlet", keyVal, null, this._saveAccPrefsHandler.bind(this), null, true);
-	}
+
+	this._archiveFolder = organizer;
+	this._archiveFolderId = organizer.id;
+	var keyVal = this._getMetaKeyVal();
+	this.metaData.set("archiveZimlet", keyVal, null, this._saveAccPrefsHandler.bind(this), null, true);
+
 	if (postCallback) {
 		postCallback.run(organizer, this, true);
 	}
