@@ -32,7 +32,7 @@ public class PageLogin extends AbsTab {
 		// TODO: Should this just extend a single class for all (Ajax, HTML, Mobile) login pages?
 		
 		// Buttons
-		public static final String zBtnLogin = "css=input.zLoginButton";
+		public static final String zBtnLogin = "css=input.ZLoginButton";
 		
 		// Text Input
 		public static final String zInputUsername = "css=input#username";
