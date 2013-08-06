@@ -17,8 +17,8 @@
 <zimletConfig name="com_zimbra_social" version="3.6">
     <global>
         <property name="allowedDomains">zimbraoauth2support.cloudfoundry.com,twitter.com,*.twitter.com,*.facebook.com,*.tweetmeme.com,api.tr.im,*.digg.com,api.bit.ly,*.socialcast.com</property>
-        <property name="social_facebook_app_id">569464556450983</property>
-        <property name="social_facebook_app_secret">675bb6f2568628704d631360e23f22be</property>
+        <property name="social_facebook_app_id">YOUR_FACEBOOK_APP_ID</property>
+        <property name="social_facebook_app_secret">YOUR_FACEBOOK_APP_SECRET</property>
         <!--
         <property name="hasSensitiveData">true</property>
           Set hasSensitiveData to true to disable this Zimlet when Zimbra Web Client is used in http mode.
