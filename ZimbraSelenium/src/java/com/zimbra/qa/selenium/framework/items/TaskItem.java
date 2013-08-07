@@ -75,7 +75,14 @@ public class TaskItem implements IItem {
 		return (gSubject);
 	}
 	
+	public void setPriority(String p) {
+		gPriority=p;
+	}
+	public String getPriority() {
+		return (gPriority);
+	}
 	
+
 	public String gettaskBody() {
 
 		return gtaskBody;
@@ -135,6 +142,7 @@ public class TaskItem implements IItem {
 			//Set task id
 			task.setId(m.getAttribute("calItemId", null));
 			task.setHtmlTaskBody(m.getAttribute("descHtml", null));
+			task.setPriority(m.getAttribute("priority", null));
 			// TODO: parse the <m/> element
 
 			return (task);

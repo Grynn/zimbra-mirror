@@ -218,25 +218,32 @@ public class FormTaskNew extends AbsForm {
 		
 		if ( pulldown == Button.B_PRIORITY ) {
 			
+			logger.info(ZimbraDOM.showIDs());
+
+			String divID = ZimbraDOM.getID(
+					ZimbraDOM.APP.APP_TASKS,
+					ZimbraDOM.COMPONENT_NAME.OP_VIEW_TASKEDIT,
+					ZimbraDOM.COMPONENT_TYPE.WIDGET_VIEW);	
+
 			if ( option == Button.O_PRIORITY_HIGH ) {
 				
-				// TODO
-				pulldownLocator = "css=[id^='zv__COMPOSE'][id$='___priority_left_icon']";
-				optionLocator = "TODO";
+				// I18N: https://bugzilla.zimbra.com/show_bug.cgi?id=83574
+				pulldownLocator = "css=div#"+ divID +" td[id$='_priority'] div.ImgSelectPullDownArrow";
+				optionLocator = "css=td[id$='_title']:contains('High')";
 				page = this;
 
 			} else if ( option == Button.O_PRIORITY_NORMAL ) {
 				
-				// TODO
-				pulldownLocator = "css=[id^='zv__COMPOSE'][id$='___priority_left_icon']";
-				optionLocator = "TODO";
+				// I18N: https://bugzilla.zimbra.com/show_bug.cgi?id=83574
+				pulldownLocator = "css=div#"+ divID +" td[id$='_priority'] div.ImgSelectPullDownArrow";
+				optionLocator = "css=td[id$='_title']:contains('Normal')";
 				page = this;
 
 			} else if ( option == Button.O_PRIORITY_LOW ) {
 				
-				// TODO
-				pulldownLocator = "css=[id^='zv__COMPOSE'][id$='___priority_left_icon']";
-				optionLocator = "TODO";
+				// I18N: https://bugzilla.zimbra.com/show_bug.cgi?id=83574
+				pulldownLocator = "css=div#"+ divID +" td[id$='_priority'] div.ImgSelectPullDownArrow";
+				optionLocator = "css=td[id$='_title']:contains('Low')";
 				page = this;
 
 			} else {

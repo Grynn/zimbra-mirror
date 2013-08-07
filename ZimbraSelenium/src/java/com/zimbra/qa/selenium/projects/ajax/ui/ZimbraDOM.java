@@ -207,6 +207,7 @@ public class ZimbraDOM {
 		public static final String OP_MARK_AS_COMPLETED = "ZmId.OP_MARK_AS_COMPLETED";
 		public static final String OP_CLOSE = "ZmId.OP_CLOSE";
 		public static final String OP_COMPOSE_OPTIONS = "ZmId.OP_COMPOSE_OPTIONS";
+		public static final String OP_VIEW_TASKEDIT = "ZmId.VIEW_TASKEDIT";
 		
 		public static final String OP_MOVE_MENU = "ZmId.OP_MOVE_MENU";
 		public static final String OP_TAG_MENU = "ZmId.OP_TAG_MENU";

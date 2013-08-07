@@ -947,12 +947,10 @@ public class PageTasks extends AbsTab{
 
 		// What's the priority?
 		item.gPriority = "normal";
-		if ( this.sIsElementPresent(css + " td[id$='__pr'] div[class*='ImgPriorityHigh_list']") )  {
+		if ( this.sIsElementPresent(css + " td[id$='__pr'] div.ImgPriorityHigh_list") )  {
 			item.gPriority = "high";
-		} else if ( this.sIsElementPresent(css + "td[id$='__pr'] div[class*='ImgPriorityLow_list']") )  {
-
-		} else {
-			item.gPriority = "normal";
+		} else if ( this.sIsElementPresent(css + " td[id$='__pr'] div.ImgPriorityLow_list") )  {
+			item.gPriority = "low";
 		}
 
 		// Is there an attachment?
@@ -962,13 +960,19 @@ public class PageTasks extends AbsTab{
 		item.gSubject = this.sGetText(css + " td[id$='__su']").trim();
 
 		// Get the status
-		item.gStatus = this.sGetText(css + " td[id$='__st']").trim();
+		if ( this.sIsElementPresent(css + " td[id$='__st']") ) {
+			item.gStatus = this.sGetText(css + " td[id$='__st']").trim();
+		}
 
 		// Get the % complete
-		item.gPercentComplete = this.sGetText(css + " td[id$='__pc']").trim();
-
+		if ( this.sIsElementPresent(css + " td[id$='__pc']") ) {
+			item.gPercentComplete = this.sGetText(css + " td[id$='__pc']").trim();
+		}
+		
 		// Get the due date
-		item.gDueDate = this.sGetText(css + " td[id$='__dt']").trim();
+		if ( this.sIsElementPresent(css + " td[id$='__dt']") ) {
+			item.gDueDate = this.sGetText(css + " td[id$='__dt']").trim();
+		}
 
 		return (item);
 	}

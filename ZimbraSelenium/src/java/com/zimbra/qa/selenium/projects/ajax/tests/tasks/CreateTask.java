@@ -16,28 +16,19 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 
-import java.util.HashMap;
-import org.testng.annotations.Test;
+import java.util.*;
 
-import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.items.FileItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.MailItem;
-import com.zimbra.qa.selenium.framework.items.TaskItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.ui.Shortcut;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
-import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field;
+import org.testng.annotations.*;
+
+import com.zimbra.common.soap.*;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.core.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.tasks.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.PageTasks.Locators;
 
 public class CreateTask extends AjaxCommonTest {
@@ -306,4 +297,54 @@ public class CreateTask extends AjaxCommonTest {
 		ZAssert.assertEquals(m.getAttribute("filename", null), fileName, "Verify file name through SOAP");
 				
 	}
+
+	@DataProvider(name = "DataProvidePriorities")
+	public Object[][] DataProvidePriorities() {
+	  return new Object[][] {
+			  new Object[] { Button.O_PRIORITY_HIGH, "1" },
+			  new Object[] { Button.O_PRIORITY_NORMAL, "5" },
+			  new Object[] { Button.O_PRIORITY_LOW, "9" }
+	  };
+	}
+
+	@Test(	description = "Create a task with different priorities high/normal/low",
+			groups = { "functional" },
+			dataProvider = "DataProvidePriorities")
+	public void CreateTask_10(Button option, String verify) throws HarnessException {
+		
+		// option: Button.B_PRIORITY_HIGH/NORMAL/LOW
+		// verify: the f field in the GetMsgResponse
+		
+
+		//-- DATA
+		
+		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "taskbody"+ ZimbraSeleniumProperties.getUniqueString();
+
+		
+		
+		//-- GUI
+		
+		// Click NEW button
+		FormTaskNew form = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
+
+		// Fill out the resulting form
+		form.zFillField(Field.Subject, subject);
+		form.zFillField(Field.Body, body);
+
+		// Change the priority
+		form.zToolbarPressPulldown(Button.B_PRIORITY, option);
+		
+		form.zSubmit();
+
+
+		
+		//-- VERIFICATION
+		
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertStringContains(task.gPriority, verify, "Verify the correct priority was sent");
+
+	}
+
+
 }
