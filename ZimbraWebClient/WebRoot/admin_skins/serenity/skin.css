@@ -407,15 +407,9 @@ BODY {
 }
 
 .LoginScreen #ZLoginErrorPanel {
-    position: relative;
-    left: 10%;
-    width: 80%;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 5px;
-    border: 1px solid #7c7c94;
-    background-color: #ffff09;
-    border-radius: 10px;
+	@InlineErrorPanel@
+	margin:1em auto;
+	width:80%;
 }
 
 /* accounts for default font size being enlarged to 12px */
