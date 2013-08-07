@@ -395,7 +395,7 @@ public class PageMail extends AbsTab {
 			
 		} else if ( button == Button.B_RFC822_ATTACHMENT_LINK ) {
 
-			locator = "css=a[id='TV-main_MSG_2_main']";
+			locator = "css=a[id^='zv__TV__TV-main_MSG']";
 					
 			page = new SeparateWindow(this.MyApplication);
 			((SeparateWindow)page).zInitializeWindowNames();
