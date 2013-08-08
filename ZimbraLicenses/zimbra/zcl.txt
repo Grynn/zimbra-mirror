@@ -6,4 +6,4 @@ THIS AGREEMENT. IF YOU DO NOT AGREE TO ALL OF THE TERMS OF THIS
 AGREEMENT, THEN DO NOT DOWNLOAD, INSTALL OR USE THE PRODUCT.
 
 License Terms for the Zimbra Collaboration Suite:
-  http://www.zimbra.com/license/zimbra_public_eula_2.1.html
+  http://www.zimbra.com/license/zimbra_public_eula_2.4.html
