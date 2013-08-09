@@ -58,8 +58,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <%
     Random RAND = new Random();
-    String consumerKey = "Xz2BKOKObTzpLrMXxJo2ww";
-    String consumerSecret = "bh4GXLP2pcu7u05ROylHXT7yCfZJfXhmDYSzvRUxI"; 
+    String consumerKey = "b1gijCj5UYKs5E5c3Nm5JA"; //The Twitter app consumer key
+    String consumerSecret = "bHR8q9JTPItSusFH8IrlUL1rsdQ1z6HQc86TVcet6o"; //The Twitter app consumer secret.
     String consumerKeyZD = "tE6IZlL1JJzHaRpIVDfljA";
     String  consumerSecretZD= "oyriZ32PAMNk3F6lGOeEE0GGyDSPHg1EjTMSWOKuIPw"; 
     long timeStamp = System.currentTimeMillis() / 1000;
