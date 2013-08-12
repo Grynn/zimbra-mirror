@@ -248,6 +248,22 @@ public class ZimbraAPI
         {"/MAPIRoot/E-postkontakter","13"}, {"/MAPIRoot/Chattar","14"},
         {"/MAPIRoot/Uppgifter","15"}};
 
+    Dictionary<string, string> specialFoldersMap_SLV = new Dictionary<string, string>()  //Slovanian locale support
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Prejeto","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Izbrisano","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Junk E-mail","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Poslano","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Odposlji","6"},
+        {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Stiki","7"},
+        {"/MAPIRoot/Tags","8"},
+        {"/MAPIRoot/Conversations","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Koledar","10"},
+        {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/po e-po\u015dti stiki","13"},
+        {"/MAPIRoot/Chats","14"},
+        {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Opravila","15"}};
+
 
    /* Dictionary<string, string> specialFoldersMap_tr = new Dictionary<string, string>()
     {{"","0"},{"/MAPIRoot","1"},{"/MAPIRoot/Gelen Kutusu","2"},{"/MAPIRoot/\u00c7\u00f6p Kutusu","3"},
@@ -463,6 +479,7 @@ public class ZimbraAPI
 
 
                 }
+
             case 1040:
                 {
                     {
@@ -473,6 +490,18 @@ public class ZimbraAPI
                             return "";
                     }
 
+
+                }
+
+            case 1060:
+                {
+                    {
+                        string tempstr = folderPath;
+                        if (specialFoldersMap_SLV.ContainsKey(tempstr))
+                            return specialFoldersMap_SLV[tempstr];
+                        else
+                            return "";
+                    }
 
                 }
 
