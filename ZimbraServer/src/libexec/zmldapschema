@@ -103,6 +103,15 @@ installOpenDKIMSchema() {
     ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{6\}opendkim.ldif
 }
 
+installPGPSchema() {
+  echo "Installing PGP schema..."
+  cp -f ${zimbra_home}/openldap/etc/openldap/schema/pgp-keyserver.ldif ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{7\}pgp-keyserver.ldif
+  chown ${zimbra_user}:${zimbra_user} ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{7\}pgp-keyserver.ldif
+  chmod 600 ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{7\}pgp-keyserver.ldif
+  sed -i.orig -e '/^dn: cn=pgp-keyserver,/ s/dn: cn=pgp-keyserver,cn=schema,cn=config/dn: cn={7}pgp-keyserver/' -e '/^cn: pgp-keyserver/ s/cn: pgp-keyserver/cn: {7}pgp-keyserver/' \
+    ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{7\}pgp-keyserver.ldif
+}
+
 cleanup() {
   rm -f ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/*.orig
 }
@@ -116,4 +125,5 @@ installZimbraSchema
 installAmavisSchema
 installDynlistSchema
 installOpenDKIMSchema
+installPGPSchema
 cleanup
