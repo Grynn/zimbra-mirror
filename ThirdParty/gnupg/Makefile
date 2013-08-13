@@ -121,7 +121,7 @@ tar:
 	(cd $(ZIMBRA_HOME); tar czf $(GPGERROR_TGZ_TARGET) libgpg-error-$(GPGERROR_VERSION))
 	(cd $(ZIMBRA_HOME); tar czf $(GCRYPT_TGZ_TARGET) libgcrypt-$(GCRYPT_VERSION))
 	(cd $(ZIMBRA_HOME); tar czf $(KSBA_TGZ_TARGET) libksba-$(KSBA_VERSION))
-	(cd $(ZIMBRA_HOME); tar czf $(ASSUAN_TGZ_TARGET) gnupg-$(ASSUAN_VERSION))
+	(cd $(ZIMBRA_HOME); tar czf $(ASSUAN_TGZ_TARGET) libassuan-$(ASSUAN_VERSION))
 
 p4edit: $(GPG_TGZ_TARGET)
 	p4 add $(GPG_TGZ_TARGET)
