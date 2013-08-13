@@ -82,10 +82,6 @@ ZaCert.DIGEST_CHOICES = [
     {
         label: "sha512",
         value: "sha512"
-    },
-    {
-        label: "whirlpool",
-        value: "whirlpool"
     }
 ];
 
