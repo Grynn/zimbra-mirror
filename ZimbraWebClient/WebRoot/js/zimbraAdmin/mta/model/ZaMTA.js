@@ -67,7 +67,7 @@ ZaMTA.A_HoldQ = "hold";
 **/
 ZaMTA.A_rdomain = "todomain";
 ZaMTA.A_sdomain = "fromdomain";
-ZaMTA.A_origip = "addr";
+ZaMTA.A_origip = "received";
 ZaMTA.A_raddress = "to";
 ZaMTA.A_saddress = "from";
 ZaMTA.A_error = "reason";
