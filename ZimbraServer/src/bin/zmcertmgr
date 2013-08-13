@@ -112,8 +112,7 @@ checkDigest() {
        x"$DIGEST" != "xmdc2" -a x"$DIGEST" != "xripemd160" -a \
        x"$DIGEST" != "xsha" -a x"$DIGEST" != "xsha1" -a \
        x"$DIGEST" != "xsha224" -a x"$DIGEST" != "xsha256" -a \
-       x"$DIGEST" != "xsha384" -a x"$DIGEST" != "xsha512" -a \
-       x"$DIGEST" != "xwhirlpool" ]; then
+       x"$DIGEST" != "xsha384" -a x"$DIGEST" != "xsha512" ]; then
          echo "WARNING: Unknown digest method: $DIGEST"
          echo "Defaulting digest method to sha1"
          DIGEST="sha1"
@@ -1638,7 +1637,7 @@ usage () {
   echo "-  addcacert appends an otherwise untrusted ssl certificate to the cacerts file."
   echo "     This is primarily for allowance of untrusted ssl certificates in external data sources."
   echo "   Default digest mode is sha1.  Other digest mechansims are:"
-  echo "     md4, md5, mdc2, ripemd160, sha, sha224, sha256, sha384, sha512, whirlpool"
+  echo "     md4, md5, mdc2, ripemd160, sha, sha224, sha256, sha384, sha512"
   echo ""
   
   exit 1;
