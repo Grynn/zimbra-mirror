@@ -32,6 +32,10 @@ LD_LIBRARY_PATH	:=	LD_LIBRARY_PATH=$(ZIMBRA_HOME)/libgpg-error-$(GPGERROR_VERSIO
 LD_RUN_PATH	:=	LD_RUN_PATH=$(ZIMBRA_HOME)/libgpg-error-$(GPGERROR_VERSION)/lib:$(ZIMBRA_HOME)/libgcrypt-$(GCRYPT_VERSION)/lib:$(ZIMBRA_HOME)/libksba-$(KSBA_VERSION)/lib:$(ZIMBRA_HOME)/libassuan-$(ASSUAN_VERSION)/lib
 
 GPG_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/gnupg/gnupg-$(GPG_VERSION).tgz
+GPGERROR_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/gnupg/libgpg-error-$(GPGERROR_VERSION).tgz
+GCRYPT_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/gnupg/libgcrypt-$(GCRYPT_VERSION).tgz
+KSBA_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/gnupg/libksba-$(KSBA_VERSION).tgz
+ASSUAN_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/gnupg/libassuan-$(ASSUAN_VERSION).tgz
 
 gnupgsrc	:= $(wildcard src/gnupg-$(GPG_VERSION).tar.bz2)
 gpgerrorsrc	:= $(wildcard src/libgpg-error-$(GPGERROR_VERSION).tar.bz2)
@@ -114,6 +118,10 @@ build:
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/gnupg
 	(cd $(ZIMBRA_HOME); tar czf $(GPG_TGZ_TARGET) gnupg-$(GPG_VERSION))
+	(cd $(ZIMBRA_HOME); tar czf $(GPGERROR_TGZ_TARGET) libgpg-error-$(GPGERROR_VERSION))
+	(cd $(ZIMBRA_HOME); tar czf $(GCRYPT_TGZ_TARGET) libgcrypt-$(GCRYPT_VERSION))
+	(cd $(ZIMBRA_HOME); tar czf $(KSBA_TGZ_TARGET) libksba-$(KSBA_VERSION))
+	(cd $(ZIMBRA_HOME); tar czf $(ASSUAN_TGZ_TARGET) gnupg-$(ASSUAN_VERSION))
 
 p4edit: $(GPG_TGZ_TARGET)
 	p4 add $(GPG_TGZ_TARGET)
