@@ -98,6 +98,8 @@ ZaDistributionList.A_zimbraPrefReplyToEnabled = "zimbraPrefReplyToEnabled";
 ZaDistributionList.A_zimbraDistributionListSubscriptionPolicy = "zimbraDistributionListSubscriptionPolicy";
 ZaDistributionList.A_zimbraDistributionListUnsubscriptionPolicy = "zimbraDistributionListUnsubscriptionPolicy";
 
+ZaDistributionList.A_zimbraDistributionListSendShareMessageToNewMembers = "zimbraDistributionListSendShareMessageToNewMembers";
+
 ZaDistributionList.A2_zimbraDLSubscriptionPolicyAccept = "ACCEPT";
 ZaDistributionList.A2_zimbraDLSubscriptionPolicyReject = "REJECT";
 ZaDistributionList.A2_zimbraDLSubscriptionPolicyApproval = "APPROVAL";
@@ -1362,6 +1364,12 @@ ZaDistributionList.myXModel = {
 		{id:ZaDistributionList.A_mailStatus, ref:"attrs/"+ZaDistributionList.A_mailStatus, type:_STRING_},
 		{id:ZaDistributionList.A_zimbraDistributionListSubscriptionPolicy, ref:"attrs/"+ZaDistributionList.A_zimbraDistributionListSubscriptionPolicy, type:_STRING_},
 		{id:ZaDistributionList.A_zimbraDistributionListUnsubscriptionPolicy, ref:"attrs/"+ZaDistributionList.A_zimbraDistributionListUnsubscriptionPolicy, type:_STRING_},
+        {
+            id: ZaDistributionList.A_zimbraDistributionListSendShareMessageToNewMembers,
+            ref: "attrs/" + ZaDistributionList.A_zimbraDistributionListSendShareMessageToNewMembers,
+            type: _ENUM_,
+            choices: ZaModel.BOOLEAN_CHOICES
+        },
 		{id:ZaDistributionList.A2_membersSelected, type:_LIST_},
 		{id:ZaDistributionList.A2_nonmembersSelected, type:_LIST_},
 		{id:ZaDistributionList.A2_memberPoolSelected, type:_LIST_},

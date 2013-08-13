@@ -1857,6 +1857,20 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 									}]
 						}
 						,
+                        {
+                            ref: ZaDistributionList.A_zimbraDistributionListSendShareMessageToNewMembers,
+                            type: _CHECKBOX_,
+                            trueValue: "TRUE",
+                            falseValue: "FALSE",
+                            align: _LEFT_,
+                            nowrap: false,
+                            labelWrap: true,
+                            label: ZaMsg.DL_zimbraDistributionListSendShareMessageToNewMembers,
+                            msgName: ZaMsg.DL_zimbraDistributionListSendShareMessageToNewMembers,
+                            labelLocation: _LEFT_,
+                            labelCssClass: "xform_label",
+                            cssStyle: "padding-left: 0px"
+                        },
 						{
 							ref:ZaAccount.A_notes,
 							type:_TEXTAREA_,
