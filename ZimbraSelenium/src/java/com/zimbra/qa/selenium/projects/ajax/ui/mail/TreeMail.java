@@ -22,11 +22,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.IItem;
-import com.zimbra.qa.selenium.framework.items.SavedSearchFolderItem;
-import com.zimbra.qa.selenium.framework.items.TagItem;
-import com.zimbra.qa.selenium.framework.items.ZimletItem;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTree;
@@ -653,6 +649,11 @@ public class TreeMail extends AbsTree {
 
 		// Default behavior.  Click the locator
 		zClickAt(locator,"");
+		
+		if ( folder instanceof FolderMountpointItem ) {
+			// Mountpoints seem to take longer to render.  Pause a bit.
+			SleepUtil.sleepSmall();
+		}
 
 		// If there is a busy overlay, wait for that to finish
 		this.zWaitForBusyOverlay();
