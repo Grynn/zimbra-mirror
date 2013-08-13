@@ -822,7 +822,7 @@ function(itemId, item, ev) {
 		case "SEARCHBUILDER":	this._browseListener();		break;
 		case "NEWEMAIL":		this._composeListener(ev);	break;
 		case "NEWIM":			this._newImListener(ev);	break;
-		case "NEWCONTACT":		this._contactListener(true);	break;
+		case "NEWCONTACT":		this._contactListener();	break;
 		case "ADDTOFILTER":		this._filterListener();		break;
 		case "GOTOURL":			this._goToUrlListener();	break;
 	}
@@ -846,9 +846,9 @@ function(obj) {
 };
 
 EmailTooltipZimlet.prototype._contactListener =
-function(isDirty) {
+function() {
 	this.popdown();
-	var loadCallback = new AjxCallback(this, this._handleLoadContact, [isDirty]);
+	var loadCallback = new AjxCallback(this, this._handleLoadContact);
 	AjxDispatcher.require(["ContactsCore", "Contacts"], false, loadCallback, null, true);
 };
 
@@ -863,7 +863,7 @@ function(create) {
 	var contact;
 	var addr = this._actionObject;
 	if (this._actionObject) {
-		if (this._actionObject.toString() == "ZmContact") {
+		if (this._actionObject.isZmContact) {
 			contact = this._actionObject;
 		} else if (AjxUtil.isString(this._actionObject)) {
 			addr = this._getAddress(this._actionObject);
@@ -875,7 +875,9 @@ function(create) {
 			contact = AjxDispatcher.run("GetContacts").getContactByEmail(this._actionObject.address);
 		}
 	}
+	this._isNewContact = false;
 	if (contact == null && create) {
+		this._isNewContact = true;
 		contact = new ZmContact(null);
 		contact.initFromEmail(addr);
 	}
@@ -883,8 +885,10 @@ function(create) {
 };
 
 EmailTooltipZimlet.prototype._handleLoadContact =
-function(isDirty) {
+function() {
 	var contact = this._getActionedContact(true);
+
+	var isDirty = this._isNewContact;
 
 	if (window.parentAppCtxt) {
 		var capp = window.parentAppCtxt.getApp(ZmApp.CONTACTS);
