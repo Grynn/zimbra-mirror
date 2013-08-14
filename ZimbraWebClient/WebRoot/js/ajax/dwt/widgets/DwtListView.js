@@ -378,14 +378,14 @@ function(htmlArr, idx, headerCol, i, numCols, id, defaultColumnSort) {
 	// ALWAYS add "sash" separators
 	if (i < (numCols - 1)) {
 		htmlArr[idx++] = "<td width=6>";
-		htmlArr[idx++] = "<table align=right width=6 height=100% id='";
+		htmlArr[idx++] = "<table align=right width=4 height=100% id='";
 		htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_SASH, this._view, field);
 		htmlArr[idx++] = "'><tr>";
 		htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: ";
 		htmlArr[idx++] = (DwtListView.HEADERITEM_HEIGHT - 2);
 		htmlArr[idx++] = "px; background-color: #8A8A8A;margin-left:2px'></div></td><td class='DwtListView-Sash'><div style='width: 1px; height: ";
 		htmlArr[idx++] = (DwtListView.HEADERITEM_HEIGHT - 2);
-		htmlArr[idx++] = "px; background-color: #FFFFFF;margin-right:2px'></div></td></tr></table>";
+		htmlArr[idx++] = "px;'></div></td></tr></table>";
 		htmlArr[idx++] = "</td>";
 	}
 
@@ -1833,7 +1833,7 @@ function(mouseEv, div) {
 	if (type == DwtListView.TYPE_HEADER_ITEM){
 		var hdr = this.getItemFromElement(div);
 		if (hdr && this.sortingEnabled && hdr._sortable && !this._headerClone) {
-			div.className = "DwtListView-Column DwtListView-ColumnHover";
+			div.className += " DwtListView-ColumnHover";
 		}
 	} else if (type == DwtListView.TYPE_HEADER_SASH) {
 		div.style.cursor = AjxEnv.isIE ? "col-resize" : "e-resize";
