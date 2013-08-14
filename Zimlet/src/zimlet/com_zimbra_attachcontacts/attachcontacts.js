@@ -78,20 +78,12 @@ function() {
     this._addedToMainWindow = true;
 };
 
-AttachContactsZimlet.prototype.onShowView =
-function(viewId)  {
-	var viewType = appCtxt.getViewTypeFromId(viewId);
-	if (viewType == ZmId.VIEW_CONTACT_SIMPLE) {
-		this._addContactActionMenuItem();
-	}
-};
-
 AttachContactsZimlet.prototype._okListener =
 function() {
 	this.AttachContactsView.uploadFiles();
 	this.AttachContactsView.setClosed(true);
     this.AttachContactsView.attachDialog.popdown();
-}
+};
 
 /**
  * Called by Framework when an email is about to be sent
@@ -146,14 +138,19 @@ AttachContactsZimlet.prototype._initContactsReminderToolbar = function(toolbar, 
 /**
  * Reset the toolbar
  *
- * @param	{ZmButtonToolBar}	toolbar			the toolbar
+ * @param	{ZmActionMenu}	 	parent			the action menu (or something else we don't care about)
  * @param	{int}			    num		        number of items selected
  */
 AttachContactsZimlet.prototype.resetToolbarOperations =
 function(parent, num){
-  if (parent.getOp(AttachContactsZimlet.SEND_CONTACTS)){
-      parent.enable(AttachContactsZimlet.SEND_CONTACTS, num > 0 && this._isOkayToAttach());
-  }
+	if (!parent.isZmActionMenu) {
+		return;
+	}
+	this._addContactActionMenuItem(parent);
+	if (!parent.getOp(AttachContactsZimlet.SEND_CONTACTS)){
+		return;
+	}
+	parent.enable(AttachContactsZimlet.SEND_CONTACTS, num > 0 && this._isOkayToAttach());
 };
 
 
@@ -219,28 +216,31 @@ function(controller, menu) {
  */
 AttachContactsZimlet.prototype.onActionMenuInitialized =
 function(controller, menu) {
-	this.addMenuButton(new AjxCallback(this, this._getContactFromController, [controller]), menu, ZmOperation.CONTACT);
+	this.addMenuButton(this._getContact.bind(this), menu, ZmOperation.CONTACT);
 };
 
 AttachContactsZimlet.prototype._addContactActionMenuItem =
-function() {
-	var controller = appCtxt.getApp(ZmApp.CONTACTS).getContactListController();
-	this.addMenuButton(new AjxCallback(this, this._getContactFromController, [controller]), controller.getActionMenu(), ZmOperation.CONTACT);
+function(actionMenu) {
+	this.addMenuButton(this._getContact.bind(this), actionMenu, ZmOperation.CONTACT);
 };
 
-AttachContactsZimlet.prototype._getContactFromController =
-function(controller) {
-	if (controller) {
-		if (controller instanceof ZmContactListController) {
-			var view = controller.getListView();
-			if (view) {
-				var selection = view.getSelection();
-				if (selection && selection.length>1)
-					return selection;
+AttachContactsZimlet.prototype._getContact =
+function() {
+	var controller = appCtxt.getApp(ZmApp.CONTACTS).getContactListController();
+	if (!controller) {
+		return;
+	}
+
+	if (controller instanceof ZmContactListController) {
+		var view = controller.getListView();
+		if (view) {
+			var selection = view.getSelection();
+			if (selection && selection.length > 1) {
+				return selection;
 			}
 		}
-		return (controller && controller._actionEv && controller._actionEv.contact) || null;
 	}
+	return (controller && controller._actionEv && controller._actionEv.contact) || null;
 };
 
 /**
@@ -316,18 +316,20 @@ AttachContactsZimlet.prototype.setEmailActionMenu = function() {
 
 /**
  * Will override EmailTooltipZimlet.prototype.getActionMenu in com_zimbra_email
+ * NOTE - took me a while to understand - this is a different case than the contact right click... it's for email right click. We should have
+ * probably combined both somehow, but why not keep it complex.
  */
 AttachContactsZimlet._getEmailActionMenu = function(attachContactsZimlet) {
 	var args = Array.prototype.slice.call(arguments, 1); // Cut off our own argument
 	var menu = this.getActionMenu.func.apply(this, args); // Call overridden function
 	var contactCallback = new AjxCallback(this, this._getActionedContact, [false]); // Callback to method in com_zimbra_email
 	var contact = contactCallback.run();
-	if (contact && !contact.isGal && contact.id) {
-		attachContactsZimlet.addMenuButton(contactCallback, menu, "NEWCONTACT");
-	} else {
-		if (menu.getOp(AttachContactsZimlet.SEND_CONTACTS))
-			menu.enable(AttachContactsZimlet.SEND_CONTACTS, false);
+	attachContactsZimlet.addMenuButton(contactCallback, menu, "NEWCONTACT");
+	if (!menu.getOp(AttachContactsZimlet.SEND_CONTACTS)) {
+		return menu;
 	}
+	var enable = contact && !contact.isGal && contact.id;
+	menu.enable(AttachContactsZimlet.SEND_CONTACTS, enable);
 	return menu;
 };
 
