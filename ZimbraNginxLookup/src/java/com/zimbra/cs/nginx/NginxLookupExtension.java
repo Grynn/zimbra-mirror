@@ -1014,15 +1014,19 @@ public class NginxLookupExtension implements ZimbraExtension {
                     ZimbraLog.nginxlookup.debug("fetching external route for user " + authUserWithRealDomainName);
 
                     // get whether you need to include domain name
-                    externalRouteIncludeOriginalAuthusername = domain.externalRouteIncludeOriginalAuthusername();
+                    if (domain == null && !domainNotFound) {
+                        domain = getDomainExternalRouteInfo(zlc, config, authUserWithRealDomainName);
+                    }
+                    externalRouteIncludeOriginalAuthusername = domain == null ?
+                        prov.getDefaultDomain().isReverseProxyExternalRouteIncludeOriginalAuthusername() :
+                        domain.externalRouteIncludeOriginalAuthusername();
+
                     // get external host/port on account
                     mailhost = getExternalHostnameOnAccount(req.proto, extraAttrsVals);
                     port = getExternalPortOnAccount(req.proto, extraAttrsVals);
 
                     if (mailhost == null || port == null) {
                         // not set or not set completely on account, try domain
-                        if (domain == null && !domainNotFound)
-                            domain = getDomainExternalRouteInfo(zlc, config, authUserWithRealDomainName);
 
                         if (domain == null) {
                             ZimbraLog.nginxlookup.warn("cannot find domain for external route info, fallback to use internal route, user=" + authUserWithRealDomainName );
