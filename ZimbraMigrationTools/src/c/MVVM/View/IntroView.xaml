@@ -18,7 +18,7 @@
         <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="15,20,30,0" Name="serverIntroTitle" Text="Welcome" TextWrapping="Wrap" FontWeight="Bold" VerticalAlignment="Top" />
         <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="15,5,0,0" MaxWidth="450" Name="textBlock1Msg" FontSize="12" Text="{Binding Path=WelcomeMsg}" TextWrapping="Wrap" VerticalAlignment="Top" />
         <TextBlock Grid.Row="2" Grid.Column="0" Margin="15,12,0,0" Name="textBlockLicense" FontSize="12" FontFamily="Arial" VerticalAlignment="Top" HorizontalAlignment="Left" >
-            <Hyperlink Command="{Binding GetIntroLicenseCommand}">VMware Zimbra License
+            <Hyperlink Command="{Binding GetIntroLicenseCommand}">Zimbra License
                 <Hyperlink.Style>
                     <Style TargetType="Hyperlink"
                         BasedOn="{StaticResource {x:Type Hyperlink}}">
