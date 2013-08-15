@@ -282,6 +282,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 
             attrs.add(Provisioning.A_zimbraReverseProxyUseExternalRoute);
             attrs.add(Provisioning.A_zimbraReverseProxyUseExternalRouteIfAccountNotExist);
+            attrs.add(Provisioning.A_zimbraReverseProxyExternalRouteIncludeOriginalAuthusername);
             attrs.add(Provisioning.A_zimbraExternalPop3Port);
             attrs.add(Provisioning.A_zimbraExternalPop3SSLPort);
             attrs.add(Provisioning.A_zimbraExternalImapPort);
