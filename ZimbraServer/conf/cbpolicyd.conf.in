@@ -48,11 +48,11 @@ background=yes
 # Medium mailserver: 4, 4, 12, 25, 1000
 # Large mailserver: 8, 8, 16, 64, 1000
 #
-min_servers=@@cbpolicyd_min_servers@@
-min_spare_servers=@@cbpolicyd_min_spare_servers@@
-max_spare_servers=@@cbpolicyd_max_spare_servers@@
-max_servers=@@cbpolicyd_max_servers@@
-max_requests=@@cbpolicyd_max_requests@@
+min_servers=%%zimbraCBPolicydMinServers%%
+min_spare_servers=%%zimbraCBPolicydMinSpareServers%%
+max_spare_servers=%%zimbraCBPolicydMaxSpareServers%%
+max_servers=%%zimbraCBPolicydMaxServers%%
+max_requests=%%zimbraCBPolicydMaxRequests%%
 
 # Log level:
 # 0 - Errors only
@@ -115,9 +115,9 @@ port=@@cbpolicyd_bind_port@@
 
 # Timeout in communication with clients
 # Idle timeout in postfix defaults to 1015s (active connection)
-timeout_idle=@@cbpolicyd_timeout_idle@@
+timeout_idle=%%zimbraCBPolicydTimeoutIdle%%
 # Busy sockets in postfix defaults to 100s
-timeout_busy=@@cbpolicyd_timeout_busy@@
+timeout_busy=%%zimbraCBPolicydTimeoutBusy%%
 
 # cidr_allow/cidr_deny
 # Comma, whitespace or semi-colon separated. Contains a CIDR block to 
@@ -139,51 +139,44 @@ DSN=DBI:SQLite:dbname=@@cbpolicyd_db_file@@
 # What do we do when we have a database connection problem
 # tempfail	- Return temporary failure
 # pass		- Return success
-bypass_mode=@@cbpolicyd_bypass_mode@@
+bypass_mode=%%zimbraCBPolicydBypassMode%%
 
 # How many seconds before we retry a DB connection
-bypass_timeout=@@cbpolicyd_bypass_timeout@@
+bypass_timeout=%%zimbraCBPolicydBypassTimeout%%
 
 # Table prefix to use, be sure to generate the schema with the table 
 # prefix aswell!
 #table_prefix=
 
-
 # Access Control module
 [AccessControl]
-enable=@@cbpolicyd_module_accesscontrol@@
-
+enable=%%binary VAR:zimbraCBPolicydAccessControlEnabled%%
 
 # Accounting module
 [Accounting]
-enable=@@cbpolicyd_module_accounting@@
-
+enable=%%binary VAR:zimbraCBPolicydAccountingEnabled%%
 
 # Amavis module
 [Amavis]
-enable=@@cbpolicyd_module_amavis@@ # Disabled by default
-
+enable=%%binary VAR:zimbraCBPolicydAmavisEnabled%% # Disabled by default
 
 # CheckHelo module
 [CheckHelo]
-enable=@@cbpolicyd_module_checkhelo@@
+enable=%%binary VAR:zimbraCBPolicydCheckHeloEnabled%%
 
 
 # CheckSPF module
 [CheckSPF]
-enable=@@cbpolicyd_module_checkspf@@
-
+enable=%%binary VAR:zimbraCBPolicydCheckSPFEnabled%%
 
 # Greylisting module
 [Greylisting]
-enable=@@cbpolicyd_module_greylisting@@
-training_mode=@@cbpolicyd_module_greylisting_training@@
-defer_message=@@cbpolicyd_module_greylisting_defer_msg@@
-blacklist_message=@@cbpolicyd_module_greylisting_blacklist_msg@@
+enable=%%binary VAR:zimbraCBPolicydGreylistingEnabled%%
+training_mode=%%binary VAR:zimbraCBPolicydGreylistingTrainingEnabled%%
+defer_message=%%zimbraCBPolicydGreylistingDeferMsg%%
+blacklist_message=%%zimbraCBPolicydGreylistingBlacklistMsg%%
 
 
 # Quotas module
 [Quotas]
-enable=@@cbpolicyd_module_quotas@@
-
-
+enable=%%binary VAR:zimbraCBPolicydQuotasEnabled%%
