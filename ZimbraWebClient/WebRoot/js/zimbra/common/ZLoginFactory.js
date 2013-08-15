@@ -163,7 +163,6 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 	var html = [
 		"<div ", (params.showAbout ? " " : "class='center'"), ">",
 			"<div class='contentBox'>",
-				"<div class='ImgAltBanner'></div>",
 				"<h1><a href='" + params.companyURL + "' id='bannerLink' target='_new'>",
 					"<span class='ImgLoginBanner'></span>",
 				"</a></h1>",

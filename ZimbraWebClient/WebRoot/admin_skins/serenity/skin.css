@@ -15,56 +15,51 @@
 
 
 HTML {
-	margin:0;
-	padding:0;
+	margin:0px;
+	padding:0px;
 	height:auto;
 	min-height:900px;
-	padding:0;
 }
 
 BODY {
 	@FontFamily-default@
-	@grad(#57A3D5,#1D3A62)@
+	@grad(#57A3D5,#1D3A62)@ 	/* TODO: Derive colors from skin.properties values */
 	color:@TxtC@;
-	margin:0;
-	padding:0;
+	margin:0px;
+	padding:0px;
 }
 
-#skin_outer * {	@FixBoxModel@ }
-
-.DwtShell {
-	background:transparent url(@SkinImgDir@/marge-mosaic-bg.png) no-repeat;
-}
+#skin_outer *				{	@FixBoxModel@	}
 
 /* classes for the skin around the various pieces of the app */
 
-.skin_container	{	position:relative; overflow:hidden; @FullSize@	}
-.skin_table		{	@FullSize@ }	
-.full_height		{	height:100%; } 	
+.skin_container				{	position:relative; overflow:hidden; @FullSize@	}
+.skin_table					{	@FullSize@		}
+.full_height				{	height:100%;	}
 
-.skin_layout_row { width: 100%; clear: both; }
-.skin_layout_cell { height: 100%; float: left; }
-.skin_layout { display: block; clear: both; width: 100%; height: 100% }
+.skin_layout_row			{	width:100%; clear:both;		}
+.skin_layout_cell			{	height:100%; float:left;	}
+.skin_layout				{	display:block; clear:both; width:100%; height:100%	}
 
 #skin_outer {
 	@FullSize@
 	background-color:transparent;
 #IFDEF MSIE_LOWER_THAN_9
-	padding:0 5px 5px;
+	padding:0px 5px 5px;
 #ENDIF
 }
 
-#skin_top_td		{	height:30px;	}
-#skin_outer *		{	@FixBoxModel@	}
-#skin_table_outer	{	padding:0 5px 5px;	}
+#skin_top_td				{	height:30px;	}
+#skin_outer *				{	@FixBoxModel@	}
+#skin_table_outer			{	padding:0px 5px 5px;	}
 
 /* top row: logo, search box, quota */
-#skin_tr_top		{}
-#skin_td_logo		{}
+#skin_tr_top				{}
+#skin_td_logo				{}
 /** Logo displayed in the app **/
-#skin_td_logo		{}
+#skin_td_logo				{}
 
-#skin_container_logo {	
+#skin_container_logo {
 	@SkinBorderLogo@
 	height:@AppBannerHeight@;
 	width:@AppBannerWidth@;
@@ -74,7 +69,7 @@ BODY {
 }
 
 .ImgAppBanner {
-	background-position:0;
+	background-position:0px;
 #IFDEF MSIE_LOWER_THAN_9
 	margin-top:8px;
 #ENDIF
@@ -91,7 +86,7 @@ BODY {
 
 #skin_td_search { 
 	vertical-align:top;
-	padding:0;
+	padding:0px;
 }
 
 #skin_container_search	{
@@ -109,7 +104,7 @@ BODY {
 	padding:8px 9px;
 	width:1px;
 #IFDEF MSIE_LOWER_THAN_9
-	margin:0 9px;
+	margin:0px 9px;
 #ENDIF
 }
 
@@ -137,8 +132,8 @@ BODY {
 }
 
 .skin_container_username_div {
-    text-overflow: ellipsis;
-    width: 82px;
+	text-overflow:ellipsis;
+	width:82px;
 }
 
 /* Josh: Selectors with asterisks aren't a good idea because there's limit   */
@@ -166,7 +161,7 @@ BODY {
 }
 
 #skin_td_bottom {
-	border:5px solid rgb(150, 197, 217);
+	border:5px solid rgb(150, 197, 217); 	/* TODO: Derive colors from skin.properties values */
 	background-color:rgb(150, 197, 217);
 	@borderRadius@:5px;
 }
@@ -186,7 +181,7 @@ BODY {
 
 #skin_td_tree {
 	height:100%;
-	padding:0;
+	padding:0px;
 }
 
 #skin_container_tree {
@@ -194,7 +189,7 @@ BODY {
 }
 
 #skin_td_current_app, #skin_td_tree_container {
-	padding:0 0 0 6px;
+	padding:0px 0px 0px 6px;
 }
 
 #skin_tr_tree_footer {
@@ -228,7 +223,7 @@ BODY {
 }
 
 #skin_td_app_main {
-	padding:0;
+	padding:0px;
 }
 
 #skin_container_app_main {
@@ -264,7 +259,7 @@ BODY {
 }
 
 #skin_td_tool {
-	padding:0;
+	padding:0px;
 }
 
 #skin_container_tool {
@@ -297,7 +292,11 @@ BODY {
 
 
 /** LoginPanel and Splash screen **/
-#skin_container_splash_screen {	@SkinOuter@ @FullWindow@ z-index:90000000;	}
+#skin_container_splash_screen {
+	@SkinOuter@
+	@FullWindow@
+	z-index:90000000;
+}
 
 .LoginScreen,
 .SplashScreen {
@@ -305,9 +304,9 @@ BODY {
 	@FontSize-normal@
 	font-family:@FontFamily-default@;
 	height:100%;
-	left:0;
+	left:0px;
 	position:absolute;
-	top:0;
+	top:0px;
 	width:100%;
 }
 
@@ -340,19 +339,19 @@ BODY {
 }
 
 .LoginScreen .contentBox,
-.SplashScreen .contentBox {	
+.SplashScreen .contentBox {
 	min-height:265px;
 	width:500px;
 #IFDEF MSIE_LOWER_THAN_9
 	height:265px;
 #ENDIF
-	@LoginContentBox@ 	
+	@LoginContentBox@
 }
 
 .LoginScreen H1,
-.SplashScreen H1 	{	@LoginH1@ 		}
+.SplashScreen H1 			{	@LoginH1@ 		}
 
-#ZLoginAppName 		{	@LoginAppName@ 	}
+#ZLoginAppName 				{	@LoginAppName@ 	}
 
 .LoginScreen .ImgLoginBanner,
 .SplashScreen .ImgLoginBanner {
@@ -361,17 +360,12 @@ BODY {
 	background-position:left bottom;
 }
 
-.LoginScreen .ImgAltBanner,
-.SplashScreen .ImgAltBanner {
-	@ImgAltBanner@
-}
-
 .LoginScreen .zLoginField {
 	@roundCorners(5px)@
 }
 
 .form .ZLoginButton {
-	@LoginButton@ 
+	@LoginButton@
 	/*@grad(#FFF,#DFE2E2)@
 	background-color:#DFE2E2;*/
 	float:right;
@@ -386,7 +380,7 @@ BODY {
 
 .LoginScreen .Footer,
 .SplashScreen .Footer {
-	bottom:0;
+	bottom:0px;
 	position:absolute;
 	text-align:center;
 	width:100%;
@@ -432,7 +426,7 @@ BODY {
 }
 
 .SplashScreen .switch{
-	margin:100px 100px 0;
+	margin:100px 100px 0px;
 }
 
 .SplashScreen .switch A {
@@ -449,12 +443,14 @@ BODY {
 }
 
 /** Logo Images **/
-.ImgAppBanner           {   @AppBanner@ background-repeat:no-repeat;    }
-.ImgLoginBanner         {   @LoginBanner@ background-repeat:no-repeat;  }
-.ImgAboutBanner         {   @AboutBanner@ background-repeat:no-repeat;  }
+.ImgAppBanner				{	@AppBanner@ background-repeat:no-repeat;		}
+.ImgLoginBanner				{	@LoginBanner@ background-repeat:no-repeat;		}
+.ImgAboutBanner				{	@AboutBanner@ background-repeat:no-repeat;		}
 
 #IFDEF MSIE_LOWER_THAN_9
-#skin_container_logo A, #skin_container_logo A:hover, #skin_container_logo A:link {
+#skin_container_logo A,
+#skin_container_logo A:hover,
+#skin_container_logo A:link {
 	background-color:transparent;
 }
 #ENDIF
@@ -465,19 +461,20 @@ BODY {
 
 
 .AboutScreen {
-    background:transparent url(@SkinImgDir@/about-bg.png) no-repeat;
-    @roundCorners(5)@
+	background-color:@LoginContentC2@;
+	@LoginContentGrad@
+	@roundCorners(5px)@
 }
 
 .AboutScreen .ImgAboutBanner {
-    background-repeat: no-repeat;
-    cursor: pointer;
-    display: block;
+	background-repeat:no-repeat;
+	cursor:pointer;
+	display:block;
 }
 
 .AboutScreen .WindowInnerContainer {
-    background: transparent;
-	@roundCorners(0)@
+	background:transparent;
+	@roundCorners(0px)@
 }
 
 .AboutScreen H1 {
@@ -490,10 +487,10 @@ BODY {
 }
 
 .AboutScreen .Footer {
-    position: absolute;
-    bottom: 0px;
+	position:absolute;
+	bottom:0px;
 #IFDEF MSIE_LOWER_THAN_9
-	width: 559px;
+	width:559px;
 #ENDIF
 }
  /*
@@ -503,34 +500,33 @@ BODY {
 */
 .AboutScreen .copyright,
 .AboutScreen .version {
-	margin:0 0 20px 20px;
-    font-size: 10px;
-    color: #cbd9e4;
+	margin:0px 0px 20px 20px;
+	font-size:10px;
+	color:#CBD9E4;		/* TODO: Derive colors from skin.properties values */
 }
 
-.AboutScreen .copyright a {
-    color: #cbd9e4;
+.AboutScreen .copyright A {
+	color:#CBD9E4;
 }
 
 #IFDEF MSIE_LOWER_THAN_9
 .AboutScreen .version {
-    margin-top: -17px;
+	margin-top:-17px;
 }
 #ENDIF
 
 .ZaAboutDialog {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-	background:transparent;
-    margin: 5px 8px 10px;
-    height: 249px;
-    width: 563px;
+	position:absolute;
+	left:0px;
+	top:0px;
+	margin:5px 8px 10px;
+	height:249px;
+	width:563px;
 }
 
 .ZaAboutDialogTitle {
-    height: 30px;
-    cursor: move;
+	height:30px;
+	cursor:move;
 }
 
 /* ??? */
@@ -573,10 +569,10 @@ BODY {
 
 .vertSep {
 	@VertSeparator@;
-	border-width:0;
+	border-width:0px;
 	height:100%;
-	margin:0;
-	padding:0;
+	margin:0px;
+	padding:0px;
 }
 
 
@@ -639,19 +635,19 @@ TD.gridGroupBodyLabel {
 .grid_table {
 	border-top:1px solid #E4E4E4;
 	border-spacing:0;
-	padding:0;
+	padding:0px;
 }
 .grid_table TD {
 	border-right:1px solid #E4E4E4;
 	border-bottom:1px solid #E4E4E4;
 }
 .grid_table TD TD {
-	border:0;
+	border:0px;
 }
 .grid_composite_table,
 .grid_xform_table {
 	border-spacing:0;
-	padding:0;
+	padding:0px;
 }
 
 .grid_table_cell_sheet {
@@ -662,7 +658,7 @@ TD.gridGroupBodyLabel {
 
 /* Help */
 .ZaHelpDropdown {
-	padding:0 15px;
+	padding:0px 15px;
 }
 
 .ZaHelpDropdownFirstItem, .ZaHelpDropdownItem, .ZaHelpDropdownLastItem {
@@ -673,41 +669,41 @@ TD.gridGroupBodyLabel {
 }
 
 .ZaHelpDropdownFirstItem {
-	border-width:0 1px 0 0;
-	padding:6px 6px 0;
+	border-width:0px 1px 0px 0px;
+	padding:6px 6px 0px;
 }
 
 .ZaHelpDropdownItem {
-	border-width:0 1px 0 0;
-	padding:0 6px;
+	border-width:0px 1px 0px 0px;
+	padding:0px 6px;
 }
 
 .ZaHelpDropdownLastItem {
-	border-width:0 1px 1px 0;
-	padding:0 6px 6px;
-	@roundCorners(0 0 3px 3px)@
+	border-width:0px 1px 1px 0px;
+	padding:0px 6px 6px;
+	@roundCorners(0px 0px 3px 3px)@
 }
 
 .ZaHelpDropdownSearch {
 	background-color:#DDD;
 	border-color:#848484;
 	border-style:solid;
-	border-width:0 1px 1px 0;
+	border-width:0px 1px 1px 0px;
 	padding:4px 8px;
-	@roundCorners(3px 3px 0 0)@
+	@roundCorners(3px 3px 0px 0px)@
 }
 
 #ZaHelpSearchInput {
 	border:white;
 	font-size:12px;
 	margin-left:3px;
-	padding:0;
+	padding:0px;
 	width:116px;
 }
 
 .ZaHelpSearchIcon {
 	float:right;
-	margin:2px 4px 0 0;
+	margin:2px 4px 0px 0px;
 	cursor:pointer;
 }
 
@@ -722,8 +718,8 @@ TD.gridGroupBodyLabel {
 
 /* Container for the actual text of the alert */
 .DwtAlertContent {
-    font-weight: normal;
-    white-space: normal;
+	font-weight:normal;
+	white-space:normal;
 }
 
 /* Inline Alerts */
@@ -761,7 +757,7 @@ TD.gridGroupBodyLabel {
 
 .ZaCtrAppTreeHeader .DwtLinkButtonTable {
 	cursor:pointer;
-	margin:3px 5px 0;
+	margin:3px 5px 0px;
 }
 /*
 .ZaCtrAppTreeHeader .DwtLinkButtonTable {
@@ -782,20 +778,20 @@ TD.gridGroupBodyLabel {
 	border:1px solid;
 	background-color:white;
 	height:12px;
-	@roundCorners(0 5px 5px 0)@
+	@roundCorners(0px 5px 5px 0px)@
 }
  */
 
 .ZWidgetTitle {
-    cursor: default;
+	cursor:default;
 }
 
 .ZaCurrentAppBar .ZWidgetTitle SPAN {
-	margin:0 3px;
+	margin:0px 3px;
 }
 
 .ZaCurrentAppBar>TABLE{
-	margin:0 5px;
+	margin:0px 5px;
 }
 
 .AdminTreeItem,
@@ -825,7 +821,7 @@ TD.gridGroupBodyLabel {
 .rootOverviewHeader-selected-focused,
 .rootOverviewHeader-actioned {
 	background-color:#2B5480;
-	padding:2px 0 3px 5px;
+	padding:2px 0px 3px 5px;
 }
 
 .homeRootOverviewHeader, 
@@ -833,18 +829,18 @@ TD.gridGroupBodyLabel {
 .homeRootOverviewHeader-selected-focused,
 .homeRootOverviewHeader-actioned {
 	background-color:#C1DFFE;
-	padding:2px 0 3px 5px;
+	padding:2px 0px 3px 5px;
 }
 
 .overviewHeader,
 .overviewHeader-actioned { 
-	margin-top:20px; 	
+	margin-top:20px;
 }
 
 .AdminTreeItem-Count {
 	background-color:#708090;
 	color:white;
-	padding:0 3px;
+	padding:0px 3px;
 	text-align:right;
 	width:20px;
 	@roundCorners(4px)@
@@ -872,9 +868,9 @@ TD.gridGroupBodyLabel {
 }
 
 .ZTreeItemTextCell {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
 
 /* -- Task panel -- */
@@ -939,22 +935,22 @@ TD.gridGroupBodyLabel {
 
 .SearchTBSearchField .oselect, .oselect_check {
 	background-color:white;
-	border-width:0;
+	border-width:0px;
 }
 
 .SearchTBSearchField .dynselect_display {
-	border-width:0;
+	border-width:0px;
 }
 
 .SearchTBSearchField .ZButtonBorder  {
 	background-color:white;
-	border-width:0;
+	border-width:0px;
 }
 
 .SearchTBSearchField .zwidget,
 .SearchTBSearchField .zwidget * {
 	background-color:white;
-	border-width:0;
+	border-width:0px;
 }
 
 /* -- Dialogs -- */
@@ -963,7 +959,7 @@ TD.gridGroupBodyLabel {
 .AdminOutputTabClick {
 	min-height:18px;
 	padding:3px 15px 2px;
-    @ActiveCursor@
+	@ActiveCursor@
 }
 
 .AdminOutputTab {
@@ -983,7 +979,7 @@ TD.gridGroupBodyLabel {
 
 .step_container {
 	background-color:#EFEFEF;
-	border:0;
+	border:0px;
 	color:#333;
 	padding:10px 5px 10px 6px;
 }
@@ -994,15 +990,15 @@ TD.gridGroupBodyLabel {
 	background-color:#EAEAEA;
 	border:1px solid #A3A3A3;
 	overflow:hidden;
-	padding:0;
+	padding:0px;
 	@cssShadow@:2px 2px 10px #666;
 	@roundCorners(5px)@
 }
 
 .WindowInnerContainer {
 	background-color:#DADADA;
-	border:0;
-	padding:0;
+	border:0px;
+	padding:0px;
 }
 
 .DwtDialogHeader {
@@ -1048,7 +1044,7 @@ TD.gridGroupBodyLabel {
 	background-color:#C7E9FF;
 	border:1px solid #949494;
 	color:black;
-    @roundCorners(3px)@
+	@roundCorners(3px)@
 }
 
 .horizSep {
@@ -1080,24 +1076,24 @@ TD.gridGroupBodyLabel {
 	background-color:#FFC;
 	border:1px solid;
 	border-color:transparent #EFE69B #EFE69B;
-	margin:0 auto;
+	margin:0px auto;
 	padding:8px 12px;
 	width:98%;
-	@roundCorners(0 0 5px 5px)@
+	@roundCorners(0px 0px 5px 5px)@
 }
 
 #IFDEF MSIE_LOWER_THAN_9
 .ZaHomeWarningPanel .grid_xform_table .grid_xform_table {
 	background-color:transparent;
-	border-width:0;
-	margin:0;
-	padding:0;
+	border-width:0px;
+	margin:0px;
+	padding:0px;
 	width:inherit;
 }
 #ENDIF
 
 .ZaHomeWarningItem {
-	padding:1px 0 2px;
+	padding:1px 0px 2px;
 }
 
 .ZaLinkedItem {
@@ -1117,7 +1113,7 @@ TD.gridGroupBodyLabel {
 }
 
 .ZaHomePanelPage {
-    vertical-align: top;
+	vertical-align:top;
 }
 
 .ZaHomeTabView .xform_label {
@@ -1186,33 +1182,33 @@ TD.gridGroupBodyLabel {
 }
 
 .ZaHelpViewGroupBorder {
-    border: none;
-    border-right: solid 2px black !important;
-    padding-right: 10px;
+	border:none;
+	border-right:solid 2px black !important;
+	padding-right:10px;
 }
 
 .ZaHelpViewGroupNoneBorder {
-    border: none;
-    padding-left: 20px;
-    padding-right: 20px;
+	border:none;
+	padding-left:20px;
+	padding-right:20px;
 }
 
 .ZaHelpViewGroupLabel {
-    display: none;
+	display:none;
 }
 
 .ZaHelpAskCommunityContainer {
-    padding:12px;
+	padding:12px;
 }
 
 .ZaHelpAskCommunityPanel{
-    background-color:#F3F7FB;
-    border:1px solid #E7ECF2;
-    @roundCorners(10px)@
+	background-color:#F3F7FB;
+	border:1px solid #E7ECF2;
+	@roundCorners(10px)@
 }
 
 .ZaHelpAskCommunityContent {
-    padding:12px;
+	padding:12px;
 }
 
 
