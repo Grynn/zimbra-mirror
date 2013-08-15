@@ -733,8 +733,13 @@ public class SkinResources
 			sb.append("\n\n#style sheets\n");
 			//create the url of the css files
 			sb.append("\n").append(appContextPath).append("/css/").append(filenames).append(".css?v=").append(cacheBusterVersion)
-              .append("&").append(debug)
-              .append("skin=").append(skinStr)
+              .append("&");
+            if ("".equals(debug)){
+                sb.append("debug=&");
+            } else {
+                sb.append(debug);
+            }
+            sb.append("skin=").append(skinStr)
 			  .append("&locale=" + localeStr);
 
 			sb.append("\n").append(appContextPath).append("/css/msgview.css?v=").append(cacheBusterVersion);
@@ -805,6 +810,7 @@ public class SkinResources
 				sb.append("\n").append(appContextPath).append("/js/Startup1_1_all.js.zgz?v=").append(cacheBusterVersion);
 				sb.append("\n").append(appContextPath).append("/js/Startup1_2_all.js.zgz?v=").append(cacheBusterVersion);
 				sb.append("\n").append(appContextPath).append("/js/MailCore_all.js.zgz?v=").append(cacheBusterVersion);
+                sb.append("\n").append(appContextPath).append("/js/Mail_all.js.zgz?v=").append(cacheBusterVersion);
 				sb.append("\n").append(appContextPath).append("/js/Startup2_all.js.zgz?v=").append(cacheBusterVersion);
 				sb.append("\n").append(appContextPath).append("/js/CalendarCore_all.js.zgz?v=").append(cacheBusterVersion);
 				sb.append("\n").append(appContextPath).append("/js/Calendar_all.js.zgz?v=").append(cacheBusterVersion);
