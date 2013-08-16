@@ -275,112 +275,362 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 }
 ZaTabView.XFormModifiers["ZaHelpView"].push(ZaHelpView.myXFormModifier);
 
-ZaHelpView.getAdminXFormItems =
-function() {
-    return [{type:_SWITCH_, align:_LEFT_, valign:_TOP_,
-        items:[{type:_ZATABCASE_,id:"help_view_tab",  numCols:1, width:"100%", caseKey:1,
-            paddingStyle:"padding-left:15px;", width:"98%", cellpadding:2,
-            visibilityChecks:[function() { return true; }],
+ZaHelpView.getAdminXFormItems = function() {
+
+    var descCSSStyle = "";
+
+    var bulletImgItem = {
+        type: _OUTPUT_,
+        cssStyle: "font-size: 8px; margin-left: 20px;",
+        label: null,
+        value: "<li></li>"
+    };
+
+    return [
+        {
+            type: _SWITCH_,
+            align: _LEFT_,
+            valign: _TOP_,
             items: [
-                {type:_SPACER_, height:"10"},
-                {type:_OUTPUT_, label:null, value:ZabMsg.HELP_CENTER_TITLE, colSpan:"*", cssStyle:"font-size:12pt;	font-weight: bold;"},
-                {type: _GROUP_, width: "100%", numCols: 2, colSizes: ["70%","30%"],
+                {
+                    type: _ZATABCASE_,
+                    id: "help_view_tab",
+                    numCols: 1,
+                    width: "100%",
+                    caseKey: 1,
+                    paddingStyle: "padding-left: 15px;",
+                    width: "98%",
+                    cellpadding: 2,
+                    visibilityChecks: [
+                        function() {
+                            return true;
+                        }
+                    ],
                     items: [
-                        {type:_SPACER_, height:"10"},
-                        {type:_ZALEFT_GROUPER_, numCols:1, width: "100%",labelCssClass:"ZaHelpViewGroupLabel",borderCssClass:"ZaHelpViewGroupBorder",
+                        {
+                            type: _SPACER_,
+                            height: "10"
+                        },
+                        {
+                            type: _OUTPUT_,
+                            label: null,
+                            value: ZaMsg.title_help_center,
+                            colSpan: "*",
+                            cssStyle: "font-size: 12pt; font-weight: bold;"
+                        },
+                        {
+                            type: _GROUP_,
+                            width: "100%",
+                            numCols: 2,
+                            colSizes: ["70%", "30%"],
                             items: [
-                                {type: _GROUP_, id:"helpDocsGroup", numCols:1, width: "100%",
+                                {
+                                    type: _SPACER_,
+                                    height: "10"
+                                },
+                                {
+                                    type: _ZALEFT_GROUPER_,
+                                    numCols: 1,
+                                    width: "100%",
+                                    labelCssClass: "ZaHelpViewGroupLabel",
+                                    borderCssClass: "ZaHelpViewGroupBorder",
                                     items: [
-                                        {type:_ANCHOR_, cssStyle:"font-size:14px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_PAGE_2, href:(location.pathname + ZaUtil.HELP_URL + ZaHelpView.mainHelpPage + "?locid="+AjxEnv.DEFAULT_LOCALE)},
                                         {
-                                            type: _OUTPUT_,
-                                            cssStyle: "font-size:12px;",
-                                            label: null,
-                                            value: AjxMessageFormat.format(
-                                                ZabMsg.onlineHelpDetail,
-                                                [
-                                                    ZaHelpView.RELEASE_NOTES_URL
-                                                ]
-                                            ),
-                                            cssStyle: "padding-top:5px;padding-right:10px;padding-left:10px;"
-                                        },
-                                        {type:_SPACER_, height:"20"},
-                                        {type: _GROUP_, id:"helpDocsGroup_Admin", numCols:1, width: "100%",
-                                            items:[
-                                                {type:_ANCHOR_, cssStyle:"font-size:14px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_adminGuide, href:(location.pathname + "adminhelp/pdf/admin.pdf?locid="+AjxEnv.DEFAULT_LOCALE)},
+                                            type: _GROUP_,
+                                            id: "helpDocsGroup",
+                                            numCols: 1,
+                                            width: "100%",
+                                            items: [
+                                                ZaHelpView._getAnchorItem(
+                                                    ZaMsg.subtitle_help_center_1,
+                                                    ZaUtil.HELP_URL + ZaHelpView.mainHelpPage,
+                                                    14
+                                                ),
+                                                ZaHelpView._getDescItem(
+                                                    ZaMsg.desc_help_center_1
+                                                ),
                                                 {
-                                                    type: _OUTPUT_,
-                                                    cssStyle: "font-size:12px;",
-                                                    label: null,
-                                                    value: AjxMessageFormat.format(
-                                                        ZabMsg.HELP_adminGuideDetail,
-                                                        [
-                                                            ZaHelpView.RELEASE_NOTES_URL
-                                                        ]
-                                                    ),
-                                                    cssStyle: "padding-top:5px;padding-right:10px;padding-left:10px;"
+                                                    type: _SPACER_,
+                                                    height: "5"
+                                                },
+                                                {
+                                                    type: _GROUP_,
+                                                    width: "100%",
+                                                    numCols: 2,
+                                                    colSizes: ["20", "*"],
+                                                    items: [
+                                                        bulletImgItem,
+                                                        {
+                                                            type: _ANCHOR_,
+                                                            cssStyle: "font-size: 13px;",
+                                                            showInNewWindow: true,
+                                                            labelLocation: _NONE_,
+                                                            label: ZaMsg.sub_desc_help_center_1,
+                                                            href: ZaHelpView.RELEASE_NOTES_URL
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    type: _SPACER_,
+                                                    height: "20"
+                                                },
+                                                ZaHelpView._getAnchorItem(
+                                                    ZaMsg.subtitle_help_center_2,
+                                                    "adminhelp/pdf/admin.pdf",
+                                                    14
+                                                ),
+                                                ZaHelpView._getDescItem(
+                                                    ZaMsg.desc_help_center_2
+                                                ),
+                                                {
+                                                    type: _SPACER_,
+                                                    height: "5"
+                                                },
+                                                {
+                                                    type: _GROUP_,
+                                                    width: "100%",
+                                                    numCols: 2,
+                                                    colSizes: ["20", "*"],
+                                                    items: [
+                                                        bulletImgItem,
+                                                        ZaHelpView._getAnchorItem(
+                                                            ZaMsg.sub_desc_help_center_2,
+                                                            "adminhelp/pdf/ZCS%20Connector%20for%20Outlook.pdf",
+                                                            13
+                                                        )
+                                                    ]
+                                                },
+                                                {
+                                                    type: _SPACER_,
+                                                    height: "20"
+                                                },
+                                                ZaHelpView._getAnchorItem(
+                                                    ZaMsg.subtitle_help_center_3,
+                                                    "help/admin/pdf/zimbra_user_guide.pdf",
+                                                    14
+                                                ),
+                                                ZaHelpView._getDescItem(
+                                                    ZaMsg.desc_help_center_3
+                                                ),
+                                                {
+                                                    type: _SPACER_,
+                                                    height: "5"
+                                                },
+                                                {
+                                                    type: _GROUP_,
+                                                    width: "100%",
+                                                    numCols: 2,
+                                                    colSizes: ["20", "*"],
+                                                    items: [
+                                                        bulletImgItem,
+                                                        ZaHelpView._getAnchorItem(
+                                                            ZaMsg.sub_desc_help_center_3,
+                                                            "adminhelp/pdf/User%20Instructions%20Connector%20for%20Outlook.pdf",
+                                                            13
+                                                        )
+                                                    ]
                                                 }
                                             ]
                                         },
-                                        {type:_SPACER_, height:"20"},
-                                        {type: _GROUP_, id:"helpDocsGroup_User", numCols:1, width: "100%",
-                                            items:[
-                                                {type:_ANCHOR_, cssStyle:"font-size:14px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_usersGuide, href:(location.pathname + "help/admin/pdf/zimbra_user_guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
-                                                {type:_OUTPUT_, cssStyle:"font-size:12px;",
-                                                    label:null, value:ZabMsg.HELP_usersGuideDetail,
-                                                    cssStyle:"padding-top:5px;padding-right:10px;padding-left:10px;"}
+                                        {
+                                            type: _SPACER_,
+                                            height:"20"
+                                        },
+                                        {
+                                            type: _GROUP_,
+                                            colSpan: "*",
+                                            id: "helpAskCommunity",
+                                            containerCssClass: "ZaHelpAskCommunityContainer",
+                                            cssClass: "ZaHelpAskCommunityPanel",
+                                            numCols: 1,
+                                            items: [
+                                                {
+                                                    type: _GROUP_,
+                                                    colSpan: "*",
+                                                    numCols: 1,
+                                                    width: "100%",
+                                                    containerCssClass: "ZaHelpAskCommunityContent",
+                                                    items: [
+                                                        {
+                                                            type: _OUTPUT_,
+                                                            label: null,
+                                                            value: ZaMsg.title_ask_community,
+                                                            colSpan: "*",
+                                                            cssStyle: "font-size: 12px; font-weight: bold;"
+                                                        },
+                                                        ZaHelpView._getDescItem(ZaMsg.desc_ask_community_1),
+                                                        {
+                                                            type: _SPACER_,
+                                                            height: "10"
+                                                        },
+                                                        ZaHelpView._getDescItem(ZaMsg.desc_ask_community_2)
+                                                    ]
+                                                }
                                             ]
                                         }
-                                    ]},
-                                {type:_SPACER_, height:"20"},
-                                {type:_GROUP_, colSpan: "*", id:"helpAskCommunity", containerCssClass:"ZaHelpAskCommunityContainer", cssClass:"ZaHelpAskCommunityPanel", numCols:1, items:[
-                                    {type:_GROUP_, colSpan: "*", numCols: 1,  width:"100%",
-                                        containerCssClass:"ZaHelpAskCommunityContent", items:[
-                                        {type:_OUTPUT_, label:null, value:ZabMsg.HELP_askCommunity, colSpan:"*", cssStyle:"font-size:12px;	font-weight: bold;"},
-                                        {type:_OUTPUT_, cssStyle:"font-size:12px;",
-                                            label:null, value:ZabMsg.HELP_askCommunityItem1,
-                                            cssStyle:"padding-top:5px;padding-right:10px;padding-left:10px;"},
-                                        {type:_SPACER_, height:"10"},
-                                        {type:_OUTPUT_, cssStyle:"font-size:12px;",
-                                            label:null, value:ZabMsg.HELP_askCommunityItem2,
-                                            cssStyle:"padding-top:5px;padding-right:10px;padding-left:10px;"}
-                                    ]}
-                                ]}
-                            ]
-                        },
-                        {type:_ZARIGHT_GROUPER_, numCols:1, width: "100%",labelCssClass:"ZaHelpViewGroupLabel",borderCssClass:"ZaHelpViewGroupNoneBorder", containerCssStyle:"vertical-align:top",
-                            items: [
-                                {type:_OUTPUT_, label:null, value:ZabMsg.HELP_topMigrationQuestions, colSpan:"*", cssStyle:"font-size:14px;	font-weight: bold;"},
-                                {type:_SPACER_, height:"20"},
-                                {type: _GROUP_, width: "100%", numCols: 2, colSizes: ["20","*"],items: [
-                                    {type:_OUTPUT_, cssStyle:"font-size:8px;",
-                                        label:null, value:"<li></li>"},
-                                    {type:_ANCHOR_, cssStyle:"font-size:13px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_MIG_Q1, href:(location.pathname + "adminhelp/pdf/MigrationWizard.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
-                                ]},
-                                {type:_SPACER_, height:"20"},
-                                {type: _GROUP_, width: "100%", numCols: 2, colSizes: ["20","*"],items: [
-                                    {type:_OUTPUT_, cssStyle:"font-size:8px;",
-                                        label:null, value:"<li></li>"},
-                                    {type:_ANCHOR_, cssStyle:"font-size:13px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_MIG_Q2, href:(location.pathname + "adminhelp/pdf/Import_Wizard_Outlook.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
-                                ]},
-                                {type:_SPACER_, height:"20"},
-                                {type: _GROUP_, width: "100%", numCols: 2, colSizes: ["20","*"],items: [
-                                    {type:_OUTPUT_, cssStyle:"font-size:8px;",
-                                        label:null, value:"<li></li>"},
-                                    {type:_ANCHOR_, cssStyle:"font-size:13px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_MIG_Q3, href:(location.pathname + "adminhelp/pdf/MigrationWizard_Domino.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
-                                ]},
-                                {type:_SPACER_, height:"20"},
-                                {type: _GROUP_, width: "100%", numCols: 2, colSizes: ["20","*"],items: [
-                                    {type:_OUTPUT_, cssStyle:"font-size:8px;",
-                                        label:null, value:"<li></li>"},
-                                    {type:_ANCHOR_, cssStyle:"font-size:13px;", showInNewWindow:true, labelLocation:_NONE_, label:ZabMsg.HELP_MIG_Q4, href:(location.pathname + "help/admin/pdf/Zimbra%20iCalendar%20Migration%20Guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
-                                ]}
+                                    ]
+                                },
+                                {
+                                    type: _ZARIGHT_GROUPER_,
+                                    numCols: 1,
+                                    width: "100%",
+                                    labelCssClass: "ZaHelpViewGroupLabel",
+                                    borderCssClass: "ZaHelpViewGroupNoneBorder",
+                                    containerCssStyle: "vertical-align:top",
+                                    items: [
+                                        {
+                                            type: _OUTPUT_,
+                                            label: null,
+                                            value: ZaMsg.title_top_migration_questions,
+                                            colSpan: "*",
+                                            cssStyle: "font-size: 14px; font-weight: bold;"
+                                        },
+                                        {
+                                            type: _SPACER_,
+                                            height: "20"
+                                        },
+                                        {
+                                            type: _GROUP_,
+                                            width: "100%",
+                                            numCols: 2,
+                                            colSizes: ["20", "*"],
+                                            items: [
+                                                bulletImgItem,
+                                                ZaHelpView._getAnchorItem(
+                                                    ZaMsg.ques_top_migration_questions_1,
+                                                    "adminhelp/pdf/Migration_Exch_Admin.pdf",
+                                                    13
+                                                )
+                                            ]
+                                        },
+                                        {
+                                            type: _SPACER_,
+                                            height: "20"
+                                        },
+                                        {
+                                            type: _GROUP_,
+                                            width: "100%",
+                                            numCols: 2,
+                                            colSizes: ["20", "*"],
+                                            items: [
+                                                bulletImgItem,
+                                                ZaHelpView._getAnchorItem(
+                                                    ZaMsg.ques_top_migration_questions_2,
+                                                    "adminhelp/pdf/Migration_Exch_User.pdf",
+                                                    13
+                                                )
+                                            ]
+                                        },
+                                        {
+                                            type: _SPACER_,
+                                            height: "20"
+                                        },
+                                        {
+                                            type: _GROUP_,
+                                            width: "100%",
+                                            numCols: 2,
+                                            colSizes: ["20", "*"],
+                                            items: [
+                                                bulletImgItem,
+                                                ZaHelpView._getAnchorItem(
+                                                    ZaMsg.ques_top_migration_questions_3,
+                                                    "adminhelp/pdf/MigrationWizard_Domino.pdf",
+                                                    13
+                                                )
+                                            ]
+                                        },
+                                        {
+                                            type: _SPACER_,
+                                            height: "20"
+                                        },
+                                        {
+                                            type: _GROUP_,
+                                            width: "100%",
+                                            numCols: 2,
+                                            colSizes: ["20", "*"],
+                                            items: [
+                                                bulletImgItem,
+                                                ZaHelpView._getAnchorItem(
+                                                    ZaMsg.ques_top_migration_questions_4,
+                                                    "adminhelp/pdf/Zimbra%20iCalendar%20Migration%20Guide.pdf",
+                                                    13
+                                                )
+                                            ]
+                                        }
+                                    ]
+                                }
                             ]
                         }
                     ]
-                }]
-        }]
-    }];
+                }
+            ]
+        }
+    ];
 }
 
+/**
+ *
+ * @param label REQUIRED
+ * @param fileName REQUIRED
+ * @param fontSize OPTIONAL, default is 12
+ * @returns {{type: *, showInNewWindow: boolean, labelLocation: *, label: *, href: *, cssStyle: string}}
+ * @private
+ */
+ZaHelpView._getAnchorItem = function (label, fileName, fontSize) {
+    if (!label || ! fileName) {
+        return;
+    }
 
+    if (!fontSize) {
+        fontSize = 12;
+    }
+
+    var anchorItem = {
+        type: _ANCHOR_,
+        showInNewWindow: true,
+        labelLocation: _NONE_,
+        label: label,
+        href: ZaHelpView._getGuideURL(fileName),
+        cssStyle: "font-size: " + fontSize + "px;"
+    }
+
+    return anchorItem;
+}
+
+/**
+ *
+ * @param descMsg
+ * @returns {{type: *, cssStyle: string, label: null, value: *}}
+ * @private
+ */
+ZaHelpView._getDescItem = function (descMsg) {
+    if (!descMsg) {
+        return;
+    }
+
+    var descItem = {
+        type: _OUTPUT_,
+        cssStyle: "font-size: 12px; padding-top: 5px; padding-right: 10px; padding-left: 10px;",
+        label: null,
+        value: descMsg
+    }
+
+    return descItem;
+}
+
+/**
+ *
+ * @param filename
+ * @returns {*}
+ * @private
+ */
+ZaHelpView._getGuideURL = function (filename) {
+    var hrefURL = [];
+
+    hrefURL.push(location.pathname);
+    hrefURL.push(filename);
+    hrefURL.push("?locid=");
+    hrefURL.push(AjxEnv.DEFAULT_LOCALE);
+
+    return hrefURL.join("");
+}
