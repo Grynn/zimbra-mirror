@@ -376,6 +376,12 @@ function(enable) {
 
 };
 
+DwtTreeItem.prototype.isSelectionEnabled =
+function() {
+	return this._selectionEnabled;
+};
+
+
 DwtTreeItem.prototype.enableAction =
 function(enable) {
 	this._actionEnabled = enable;
@@ -887,6 +893,7 @@ function(selected, noFocus) {
 			}
 			return true;
 		} else {
+			this.blur();
 			this._setTreeElementStyles("Blank_16", false);
 			this._itemDiv.className = this._origClassName;;
 			return false;

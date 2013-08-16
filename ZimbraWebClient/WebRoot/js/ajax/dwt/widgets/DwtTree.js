@@ -493,8 +493,8 @@ function(item, ev, skipNotify) {
 	}
 
 	if (setSelection && !this._selectedItems.contains(item)) {
-		this._selectedItems.add(item);
 		if (item._setSelected(true)) {
+			this._selectedItems.add(item);
 			this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_SELECTED, ev, this._selEv);
 		}
 	}
