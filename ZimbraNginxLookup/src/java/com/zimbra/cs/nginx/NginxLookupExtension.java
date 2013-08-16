@@ -594,11 +594,14 @@ public class NginxLookupExtension implements ZimbraExtension {
                             config,
                             filter,
                             Provisioning.A_zimbraReverseProxyDomainNameSearchBase);
-
+                    String extRouteIncludeOrigAuthname = (String) domainAttrs.get(Provisioning.A_zimbraReverseProxyExternalRouteIncludeOriginalAuthusername);
+                    if (extRouteIncludeOrigAuthname == null) {
+                        extRouteIncludeOrigAuthname = config.getAttr(Provisioning.A_zimbraReverseProxyExternalRouteIncludeOriginalAuthusername, null);
+                    }
                     domainExternalRouteInfo = new DomainExternalRouteInfo(domainName,
                             (String)domainAttrs.get(Provisioning.A_zimbraReverseProxyUseExternalRoute),
                             (String)domainAttrs.get(Provisioning.A_zimbraReverseProxyUseExternalRouteIfAccountNotExist),
-                            (String)domainAttrs.get(Provisioning.A_zimbraReverseProxyExternalRouteIncludeOriginalAuthusername),
+                            extRouteIncludeOrigAuthname,
                             (String)domainAttrs.get(Provisioning.A_zimbraExternalPop3Port),
                             (String)domainAttrs.get(Provisioning.A_zimbraExternalPop3SSLPort),
                             (String)domainAttrs.get(Provisioning.A_zimbraExternalImapPort),
