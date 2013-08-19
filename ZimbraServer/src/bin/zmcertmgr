@@ -1636,7 +1636,7 @@ usage () {
   echo "-  migrate moves certs/keys from ZCS installs prior to version 5.0.x"
   echo "-  addcacert appends an otherwise untrusted ssl certificate to the cacerts file."
   echo "     This is primarily for allowance of untrusted ssl certificates in external data sources."
-  echo "   Default digest mode is sha1.  Other digest mechansims are:"
+  echo "-  Default digest mode is sha1.  Other digest mechansims are:"
   echo "     md4, md5, mdc2, ripemd160, sha, sha224, sha256, sha384, sha512"
   echo ""
   
