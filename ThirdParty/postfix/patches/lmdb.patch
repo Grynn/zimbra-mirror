@@ -4,7 +4,7 @@
  		case "$CCARGS" in
  		 *-DNO_DB*) ;;
  		 *-DHAS_DB*) ;;
-+		 *-DHAS_LMDB) ;;
++		 *-DHAS_LMDB*) ;;
  		 *) if [ -f /usr/include/db.h ]
  		    then
  			: we are all set
@@ -12,7 +12,7 @@
  		case "$CCARGS" in
  		 *-DNO_DB*) ;;
  		 *-DHAS_DB*) ;;
-+		 *-DHAS_LMDB) ;;
++		 *-DHAS_LMDB*) ;;
  		 *) if [ -f /usr/include/db.h ]
  		    then
  			: we are all set
