@@ -21,7 +21,6 @@ DBINC := -I/opt/zimbra/bdb-$(BDB_VERSION)/include
 DBLIB := -L/opt/zimbra/bdb-$(BDB_VERSION)/lib -ldb
 POSTFIX_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix/postfix-$(POSTFIX_VERSION).tgz
-BDB_PATCH	:= patch -g0 -p1 < ../patches/postfix-zimbra-bdb.patch;
 
 PCRE_DEF := -DHAS_PCRE
 PCRE_INCLUDE := -I/usr/include/pcre
@@ -50,7 +49,6 @@ build:
 	tar xzf src/postfix-$(POSTFIX_RELEASE).tar.gz
 	(mv postfix-$(POSTFIX_RELEASE) postfix-$(POSTFIX_VERSION); \
 	cd postfix-$(POSTFIX_VERSION); \
-	$(BDB_PATCH) \
 	$(PATCH) \
 	patch -g0 -p1 < ../patches/postfix-main-cf-zimbra.patch; \
 	patch -g0 -p1 < ../patches/stop-warning.patch; \
