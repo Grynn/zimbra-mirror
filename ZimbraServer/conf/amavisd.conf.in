@@ -52,7 +52,7 @@ $lock_file = "$MYHOME/var/amavisd.lock";  # -L
 $pid_file  = "/opt/zimbra/log/amavisd.pid";   # -P
 #NOTE: create directories $MYHOME/tmp, $MYHOME/var, $MYHOME/db manually
 
-$log_level = 1;              # verbosity 0..5, -d
+$log_level = %%zimbraAmavisLogLevel%%;              # verbosity 0..5, -d
 $log_recip_templ = undef;    # disable by-recipient level-0 log entries
 $do_syslog = 1;              # log via syslogd (preferred)
 $syslog_facility = 'local0';   # Syslog facility as a string
