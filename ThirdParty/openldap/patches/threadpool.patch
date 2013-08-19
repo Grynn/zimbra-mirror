@@ -928,19 +928,17 @@ index 87e9594..23a0624 100644
  
  	ldap_pvt_thread_mutex_unlock(&pool->ltp_mutex);
  	return(0);
-diff --git a/servers/slapd/bconfig.c b/servers/slapd/bconfig.c
-index c6f45bc..8c823f2 100644
---- a/servers/slapd/bconfig.c
-+++ b/servers/slapd/bconfig.c
-@@ -198,6 +198,7 @@ enum {
+--- openldap-2.4.36.2z/servers/slapd/bconfig.c.orig	2013-08-16 11:12:59.000000000 -0700
++++ openldap-2.4.36.2z/servers/slapd/bconfig.c	2013-08-19 15:24:50.780122373 -0700
+@@ -194,6 +194,7 @@
+ 	CFG_ACL_ADD,
+ 	CFG_SYNC_SUBENTRY,
  	CFG_LTHREADS,
- 	CFG_IX_HASH64,
- 	CFG_DISABLED,
 +	CFG_THREADQS,
  
  	CFG_LAST
  };
-@@ -683,6 +684,14 @@ static ConfigTable config_back_cf_table[] = {
+@@ -655,6 +656,14 @@
  #endif
  		"( OLcfgGlAt:66 NAME 'olcThreads' "
  			"SYNTAX OMsInteger SINGLE-VALUE )", NULL, NULL },
@@ -955,17 +953,16 @@ index c6f45bc..8c823f2 100644
  	{ "timelimit", "limit", 2, 0, 0, ARG_MAY_DB|ARG_MAGIC,
  		&config_timelimit, "( OLcfgGlAt:67 NAME 'olcTimeLimit' "
  			"SYNTAX OMsDirectoryString )", NULL, NULL },
-@@ -835,7 +844,8 @@ static ConfigOCs cf_ocs[] = {
+@@ -807,7 +816,7 @@
  		 "olcDisallows $ olcGentleHUP $ olcIdleTimeout $ "
  		 "olcIndexSubstrIfMaxLen $ olcIndexSubstrIfMinLen $ "
- 		 "olcIndexSubstrAnyLen $ olcIndexSubstrAnyStep $ olcIndexHash64 $ "
--		 "olcIndexIntLen $ olcLocalSSF $ olcLogFile $ olcLogLevel $ "
-+		 "olcIndexIntLen $ "
+ 		 "olcIndexSubstrAnyLen $ olcIndexSubstrAnyStep $ olcIndexIntLen $ "
+-		 "olcLocalSSF $ olcLogFile $ olcLogLevel $ "
 +		 "olcListenerThreads $ olcLocalSSF $ olcLogFile $ olcLogLevel $ "
  		 "olcPasswordCryptSaltFormat $ olcPasswordHash $ olcPidFile $ "
  		 "olcPluginLogFile $ olcReadOnly $ olcReferral $ "
  		 "olcReplogFile $ olcRequires $ olcRestrict $ olcReverseLookup $ "
-@@ -845,7 +855,8 @@ static ConfigOCs cf_ocs[] = {
+@@ -816,7 +825,8 @@
  		 "olcSecurity $ olcServerID $ olcSizeLimit $ "
  		 "olcSockbufMaxIncoming $ olcSockbufMaxIncomingAuth $ "
  		 "olcTCPBuffer $ "
@@ -975,7 +972,7 @@ index c6f45bc..8c823f2 100644
  		 "olcTLSCACertificatePath $ olcTLSCertificateFile $ "
  		 "olcTLSCertificateKeyFile $ olcTLSCipherSuite $ olcTLSCRLCheck $ "
  		 "olcTLSRandFile $ olcTLSVerifyClient $ olcTLSDHParamFile $ "
-@@ -947,6 +958,9 @@ config_generic(ConfigArgs *c) {
+@@ -917,6 +927,9 @@
  		case CFG_THREADS:
  			c->value_int = connection_pool_max;
  			break;
@@ -985,7 +982,7 @@ index c6f45bc..8c823f2 100644
  		case CFG_TTHREADS:
  			c->value_int = slap_tool_thread_max;
  			break;
-@@ -1314,6 +1328,7 @@ config_generic(ConfigArgs *c) {
+@@ -1223,6 +1236,7 @@
  		/* single-valued attrs, no-ops */
  		case CFG_CONCUR:
  		case CFG_THREADS:
@@ -993,7 +990,7 @@ index c6f45bc..8c823f2 100644
  		case CFG_TTHREADS:
  		case CFG_LTHREADS:
  		case CFG_RO:
-@@ -1693,6 +1708,18 @@ config_generic(ConfigArgs *c) {
+@@ -1554,6 +1568,18 @@
  			connection_pool_max = c->value_int;	/* save for reference */
  			break;
  
