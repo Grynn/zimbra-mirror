@@ -17,8 +17,6 @@ else
 	include $(POSTFIX_ROOT)/../versions.def
 endif
 
-DBINC := -I/opt/zimbra/bdb-$(BDB_VERSION)/include
-DBLIB := -L/opt/zimbra/bdb-$(BDB_VERSION)/lib -ldb
 POSTFIX_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix/postfix-$(POSTFIX_VERSION).tgz
 
@@ -32,7 +30,7 @@ MARIADB_CLIENT_VERSION ?= standard-$(MARIADB_VERSION_STRING)-clientlibs
 
 SYSTEM_LIB := /usr/lib
 
-LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mariadb-$(MARIADB_VERSION)/lib:/opt/zimbra/openldap-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib:/opt/zimbra/bdb-$(BDB_VERSION)/lib
+LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mariadb-$(MARIADB_VERSION)/lib:/opt/zimbra/openldap-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib:/opt/zimbra/openldap-$(LDAP_VERSION)/lib
 MARIADB_LIB := /opt/zimbra/mariadb-$(MARIADB_VERSION)/lib
 
 
@@ -69,7 +67,8 @@ build:
 	-DDEF_DATA_DIR=\"/opt/zimbra/data/postfix/data\" \
 	-DUSE_SASL_AUTH \
 	-DUSE_CYRUS_SASL \
-	-DHAS_LDAP -DHAS_MYSQL -DUSE_TLS $(DBINC) $(PCRE_DEF) $(PCRE_INCLUDE) $(FD_SIZE) \
+	-DHAS_LMDB \
+	-DHAS_LDAP -DHAS_MYSQL -DUSE_TLS $(PCRE_DEF) $(PCRE_INCLUDE) $(FD_SIZE) \
 	$(URANDOM) \
 	-DUSE_LDAP_SASL \
 	-I/opt/zimbra/openldap-$(LDAP_VERSION)/include \
@@ -77,8 +76,8 @@ build:
 	-I/opt/zimbra/openssl-$(OPENSSL_VERSION)/include \
 	-I/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include/sasl -I/usr/include' \
 	AUXLIBS='$(EXTRALIBS) -L/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib \
-	$(DBLIB) -L/opt/zimbra/openldap-$(LDAP_VERSION)/lib $(PCRE_LIB) \
-	-lldap -llber \
+	-L/opt/zimbra/openldap-$(LDAP_VERSION)/lib $(PCRE_LIB) \
+	-lldap -llber -llmdb\
 	-L$(MARIADB_LIB) \
 	-L/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib \
 	-lmysqlclient -lz -lm -L$(SYSTEM_LIB) -lsasl2 -lpthread -lssl -lcrypto'; \
