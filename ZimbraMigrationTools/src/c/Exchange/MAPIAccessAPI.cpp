@@ -278,7 +278,6 @@ wstring GetCNName(LPWSTR pstrUserDN)
 LPCWSTR MAPIAccessAPI::OpenPublicStore()
 {
 	LPWSTR lpwstrRetVal=NULL;
-#ifndef NO_EXCH_PUB_FOLDER 
 	LPWSTR lpwstrStatus = NULL;
 	HRESULT hr = S_OK;
 	try
@@ -314,39 +313,23 @@ LPCWSTR MAPIAccessAPI::OpenPublicStore()
     }
 	if(lpwstrStatus)
 		Zimbra::Util::FreeString(lpwstrStatus);
-#endif
     return lpwstrRetVal;
 }
 
 HRESULT MAPIAccessAPI::EnumeratePublicFolders(std::vector<std::string> &pubFldrList)
 {
     HRESULT hr = S_OK;
-	UNREFERENCED_PARAMETER(pubFldrList);
-#ifndef NO_EXCH_PUB_FOLDER
-    LPMAPIFOLDER pRoot = NULL;
     LPMAPITABLE pTable = NULL;
     LPSRowSet pRowSet = NULL;
     ULONG ulRows = 0;
-	
-	//open public store
-	LPCWSTR lpwstr=OpenPublicStore();
-	if(lpwstr !=NULL)
-		return E_FAIL;
 
-    // open the MAPI Public Folder tree
-    hr = HrOpenExchangePublicFolders(m_publicStore->GetInternalMAPIStore(), &pRoot);
+	hr=m_publicStore->GetPublicFolderTable(&pTable);
     if (FAILED(hr))
         return E_FAIL;
-    hr = pRoot->GetHierarchyTable(MAPI_UNICODE, &pTable);
-    if (FAILED(hr))
-    {
-        pRoot->Release();
-        return E_FAIL;
-    }
+
     hr = pTable->GetRowCount(0, &ulRows);
     if (FAILED(hr))
     {
-        pRoot->Release();
         pTable->Release();
         return E_FAIL;
     }
@@ -387,9 +370,8 @@ HRESULT MAPIAccessAPI::EnumeratePublicFolders(std::vector<std::string> &pubFldrL
                 pubFldrList.push_back(strPubFldr);
         }
     }
-    pRoot->Release();
+    
     pTable->Release();
-#endif
     return hr;
 }
 
@@ -397,12 +379,12 @@ HRESULT MAPIAccessAPI::EnumeratePublicFolders(std::vector<std::string> &pubFldrL
 LPCWSTR MAPIAccessAPI::InitializePublicFolders()
 {
 	LPWSTR lpwstrRetVal=NULL;
-#ifndef NO_EXCH_PUB_FOLDER
 	LPWSTR lpwstrStatus = NULL;
     HRESULT hr = S_OK;
 
 	try
 	{
+		lpwstrStatus=(LPWSTR)OpenPublicStore();
 		// Get root folder from user store
 		m_rootFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession, *m_publicStore);
 		if (FAILED(hr = m_publicStore->GetRootFolder(*m_rootFolder)))
@@ -422,10 +404,8 @@ LPCWSTR MAPIAccessAPI::InitializePublicFolders()
     }
 	if(lpwstrStatus)
 		Zimbra::Util::FreeString(lpwstrStatus);
-#endif
 	return lpwstrRetVal;
 }
-
 
 
 // Open MAPI sessiona and Open Stores

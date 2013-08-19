@@ -274,6 +274,7 @@ BOOL CreatePSTProfile(LPSTR lpstrProfileName, LPSTR lpstrPSTFQPathName, bool bNo
 BOOL DeleteAlikeProfiles(LPCSTR lpstrProfileName);
 bool SetOLProfileRegistryEntries(LPCWSTR strProfileName);
 bool DumpContentsToFile(LPTSTR pBody, string strFilePath,bool isAscii);
+bool CheckStringProp(_In_opt_ LPSPropValue lpProp, ULONG ulPropType);
 }                                               // end Util
 }                                               // end MAPI
 }                                               // end Zimbra

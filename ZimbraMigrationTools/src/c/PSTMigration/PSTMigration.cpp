@@ -414,6 +414,7 @@ void MigratePublicFolder()
 
 	Zimbra::MAPI::MAPIAccessAPI *maapi = NULL;
 	maapi = new Zimbra::MAPI::MAPIAccessAPI(L"", L"");
+	maapi->InitializePublicFolders();
     
 	std::vector<std::string> pubFldrList;
 	
@@ -424,11 +425,10 @@ void MigratePublicFolder()
 	printf("Enumerated Public folders:\n");
 	for (pfenumItr = pubFldrList.begin(); pfenumItr != pubFldrList.end(); pfenumItr++)
     {
-		printf("- %S \n", (*pfenumItr));
+		printf("- %s \n", (*pfenumItr).c_str());
 	}
-
-	//
-	maapi->InitializePublicFolders();
+	
+	// Get data from public folders	
 	vector<Folder_Data> vfolderlist;
 	maapi->GetRootFolderHierarchy(vfolderlist);
     //
@@ -470,10 +470,7 @@ void MigratePublicFolder()
                     msgdata.IsFlagged, msgdata.IsForwared, msgdata.IsFromMe, msgdata.IsUnread,
                     msgdata.IsUnsent, msgdata.RepliedTo, msgdata.Urlname.c_str());
 
-                //printf("MIME FILE PATH: %S\n\n\n\n", msgdata.MimeFile.c_str());
-				printf("MIME Buffer: %S\n\n\n\n",msgdata.wstrmimeBuffer.c_str());
-                // Delete the mime file
-                // DeleteFile(msgdata.MimeFile.c_str());
+                //printf("MIME Buffer: %S\n\n\n\n",msgdata.wstrmimeBuffer.c_str());
             }
             else if ((*idItr).lItemType == ZT_CONTACTS)
             {

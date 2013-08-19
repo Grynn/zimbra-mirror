@@ -3308,3 +3308,42 @@ HRESULT Zimbra::MAPI::Util::GetSMTPFromAD(Zimbra::MAPI::MAPISession &session, RE
         return S_OK;
     }
 }
+
+bool Zimbra::MAPI::Util::CheckStringProp(_In_opt_ LPSPropValue lpProp, ULONG ulPropType)
+{
+	if (PT_STRING8 != ulPropType && PT_UNICODE != ulPropType)
+	{
+		return false;
+	}
+	if (!lpProp)
+	{
+		return false;
+	}
+
+	if (PT_ERROR == PROP_TYPE(lpProp->ulPropTag))
+	{
+		return false;
+	}
+
+	if (ulPropType != PROP_TYPE(lpProp->ulPropTag))
+	{
+		return false;
+	}
+
+	if (NULL == lpProp->Value.LPSZ)
+	{
+		return false;
+	}
+
+	if (PT_STRING8 == ulPropType && NULL == lpProp->Value.lpszA[0])
+	{
+		return false;
+	}
+
+	if (PT_UNICODE == ulPropType && NULL == lpProp->Value.lpszW[0])
+	{
+		return false;
+	}
+
+	return true;
+} // CheckStringProp
