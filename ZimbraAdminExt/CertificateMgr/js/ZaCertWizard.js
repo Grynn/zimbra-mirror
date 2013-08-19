@@ -584,10 +584,10 @@ function (){
 	html[idx++] = "<colgroup><col width=100/><col width='*' /><col width=50 /></colgroup>";
 	
 	html[idx++] = "<tbody><tr><td>" + com_zimbra_cert_manager.CERT_upload_comm_cert + "</td>";
-	html[idx++] = "<td><input type=file  name='certFile' size='40'></input></td><td></td></tr>";
+	html[idx++] = "<td><input type=file  name='certFile' size='40' /></td><td></td></tr>";
 
 	html[idx++] = "<tr><td>" + com_zimbra_cert_manager.CERT_upload_root_CA + "</td>";
-	html[idx++] = "<td><input type=file  name='rootCA' size='40'></input></td><td></td></tr>";
+	html[idx++] = "<td><input type=file  name='rootCA' size='40' /></td><td></td></tr>";
 
 //	html[idx++] = "<tr>" + ZaCertWizard.getIntermediaCAUploadInput() + "</tr>";
 
@@ -617,7 +617,7 @@ ZaCertWizard.getIntermediaCAUploadInput = function () {
 	
 	html[idx++] = "<tbody><tr>" ;
 	html[idx++] = "<td>" + com_zimbra_cert_manager.CERT_upload_intermediate_ca + "</td>";
-	html[idx++] = "<td><input type=file  name='intermediateCA' size='40'></input></td>"; 
+	html[idx++] = "<td><input type=file  name='intermediateCA' size='40' /></td>";
 	html[idx++] = "<td><span style='padding-left:5px; color: blue; text-decoration: underline; cursor: default;' " +
 					" onmouseout='this.style.cursor=\"default\"' " +
 					" onmouseover='this.style.cursor=\"pointer\"'" +
@@ -827,7 +827,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
                     label: com_zimbra_cert_manager.CERT_digest,
                     labelLocation: _LEFT_,
                     choices: ZaCert.DIGEST_CHOICES,
-                    visibilityChecks: [],
+                    visibilityChecks: [ZaCertWizard.isCSRFieldsEnabled],
                     enableDisableChecks: [ZaCertWizard.isCSRFieldsEnabled],
                     enableDisableChangeEventSources: [
                         ZaCert.A_csr_exists,
@@ -840,7 +840,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
                     label: com_zimbra_cert_manager.CERT_keysize,
                     labelLocation: _LEFT_,
                     choices: ZaCert.KEY_SIZE_CHOICES,
-                    visibilityChecks: [],
+                    visibilityChecks: [ZaCertWizard.isCSRFieldsEnabled],
                     enableDisableChecks: [ZaCertWizard.isCSRFieldsEnabled],
                     enableDisableChangeEventSources: [
                         ZaCert.A_csr_exists,
