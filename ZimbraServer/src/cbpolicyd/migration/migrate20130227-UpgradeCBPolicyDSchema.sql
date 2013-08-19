@@ -47,6 +47,8 @@ CREATE TABLE session_tracking(
 
     UNIQUE (Instance)
 );
+CREATE INDEX session_tracking_idx1 ON session_tracking (QueueID,ClientAddress,Sender);
+CREATE INDEX session_tracking_idx2 ON session_tracking (UnixTimestamp);
 INSERT INTO session_tracking(Instance, QueueID, UnixTimestamp, ClientAddress,
 ClientName, ClientReverseName, Protocol, EncryptionProtocol, EncryptionCipher,
 EncryptionKeySize, SASLMethod, SASLSender, SASLUsername, Helo, Sender, Size,
