@@ -56,22 +56,22 @@ class GlobalConfig(config.Config):
 			q = re.sub(r'reject_rbl_client\s+\S+\s+','',self["zimbraMtaRestriction"])
 			p = re.findall(r'reject_rbl_client\s+(\S+)',self["zimbraMtaRestriction"])
 			self["zimbraMtaRestriction"] = q
-			self["zimbraMtaRestrictionRBLs"] = ' '.join(p)
+			self["zimbraMtaRestrictionRBLs"] = ', '.join(p)
 			# Remove all the reject_rhsbl_client lines from MTA restriction and put the values in RBLs
 			q = re.sub(r'reject_rhsbl_client\s+\S+\s+','',self["zimbraMtaRestriction"])
 			p = re.findall(r'reject_rhsbl_client\s+(\S+)',self["zimbraMtaRestriction"])
 			self["zimbraMtaRestriction"] = q
-			self["zimbraMtaRestrictionRHSBLCs"] = ' '.join(p)
+			self["zimbraMtaRestrictionRHSBLCs"] = ', '.join(p)
 			# Remove all the reject_rhsbl_sender lines from MTA restriction and put the values in RBLs
 			q = re.sub(r'reject_rhsbl_sender\s+\S+\s+','',self["zimbraMtaRestriction"])
 			p = re.findall(r'reject_rhsbl_sender\s+(\S+)',self["zimbraMtaRestriction"])
 			self["zimbraMtaRestriction"] = q
-			self["zimbraMtaRestrictionRHSBLSs"] = ' '.join(p)
+			self["zimbraMtaRestrictionRHSBLSs"] = ', '.join(p)
 			# Remove all the reject_rhsbl_reverse_client lines from MTA restriction and put the values in RBLs
 			q = re.sub(r'reject_rhsbl_reverse_client\s+\S+\s+','',self["zimbraMtaRestriction"])
 			p = re.findall(r'reject_rhsbl_reverse_client\s+(\S+)',self["zimbraMtaRestriction"])
 			self["zimbraMtaRestriction"] = q
-			self["zimbraMtaRestrictionRHSBLRCs"] = ' '.join(p)
+			self["zimbraMtaRestrictionRHSBLRCs"] = ', '.join(p)
 
 		if self["zimbraIPMode"] is not None:
 			self["zimbraIPv4BindAddress"] = "127.0.0.1"
