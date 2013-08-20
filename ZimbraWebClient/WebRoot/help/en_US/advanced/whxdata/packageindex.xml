@@ -1,18 +1,16 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * ***** BEGIN LICENSE BLOCK *****
- * 
  * Zimbra Collaboration Suite Web Client
- * Copyright (C) 2010, 2011, 2012 VMware, Inc.
+ * Copyright (C) 2010, 2011, 2012, 2013 Zimbra Software, LLC.
  * 
  * The contents of this file are subject to the Zimbra Public License
- * Version 1.3 ("License"); you may not use this file except in
+ * Version 1.4 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
  * 
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
  * ***** END LICENSE BLOCK *****
 -->
 <cki><ck fm="!" to="-"/><ck fm="/" to="account"/><ck fm="accounts,acces" to="and"/><ck fm="angl" to="automatical"/><ck fm="availability" to="calendar"/><ck fm="calendar." to="clientnamelong"/><ck fm="clientnameshort" to="day"/><ck fm="day’" to="drop"/><ck fm="dropdown" to="feature"/><ck fm="february" to="from"/><ck fm="from:john" to="image"/><ck fm="imap" to="is"/><ck fm="is:remot" to="mandatory"/><ck fm="manual" to="mov"/><ck fm="move" to="of"/><ck fm="off" to="over"/><ck fm="overdu" to="project"/><ck fm="propertie" to="rul"/><ck fm="rule" to="separat"/><ck fm="serie" to="subject"/><ck fm="subject:new" to="the"/><ck fm="their" to="to"/><ck fm="today" to="voic"/><ck fm="volum" to="you"/><ck fm="your" to="™"/></cki>
