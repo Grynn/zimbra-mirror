@@ -394,14 +394,66 @@ function(params) {
 }
 
 
-ZaSearchListController.initPopupMenuMethod =
-function () {
-    this._popupOperations[ZaOperation.EDIT]=new ZaOperation(ZaOperation.EDIT,ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Edit", "EditDis", new AjxListener(this, ZaSearchListController.prototype._editButtonListener));
-	this._popupOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaSearchListController.prototype._deleteButtonListener));
-	this._popupOperations[ZaOperation.CHNG_PWD]=new ZaOperation(ZaOperation.CHNG_PWD,ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener));
-	this._popupOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, ZaAccountListController.prototype._expireSessionListener));
-	this._popupOperations[ZaOperation.MOVE_ALIAS]=new ZaOperation(ZaOperation.MOVE_ALIAS,ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener));
+ZaSearchListController.initPopupMenuMethod = function () {
+    this._popupOperations[ZaOperation.EDIT] = new ZaOperation(
+        ZaOperation.EDIT,
+        ZaMsg.TBB_Edit,
+        ZaMsg.ACTBB_Edit_tt,
+        "Edit",
+        "EditDis",
+        new AjxListener(
+            this,
+            ZaSearchListController.prototype._editButtonListener
+        )
+    );
 
+    this._popupOperations[ZaOperation.DELETE] = new ZaOperation(
+        ZaOperation.DELETE,
+        ZaMsg.TBB_Delete,
+        ZaMsg.ACTBB_Delete_tt,
+        "Delete",
+        "DeleteDis",
+        new AjxListener(
+            this,
+            ZaSearchListController.prototype._deleteButtonListener
+        )
+    );
+
+    this._popupOperations[ZaOperation.CHNG_PWD] = new ZaOperation(
+        ZaOperation.CHNG_PWD,
+        ZaMsg.ACTBB_ChngPwd,
+        ZaMsg.ACTBB_ChngPwd_tt,
+        "Padlock",
+        "PadlockDis",
+        new AjxListener(
+            this,
+            ZaAccountListController.prototype._chngPwdListener
+        )
+    );
+
+    this._popupOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(
+        ZaOperation.EXPIRE_SESSION,
+        ZaMsg.ACTBB_ExpireSessions,
+        ZaMsg.ACTBB_ExpireSessions_tt,
+        "ExpireSession",
+        "ExpireSessionDis",
+        new AjxListener(
+            this,
+            ZaAccountListController.prototype._expireSessionListener
+        )
+    );
+
+    this._popupOperations[ZaOperation.MOVE_ALIAS] = new ZaOperation(
+        ZaOperation.MOVE_ALIAS,
+        ZaMsg.ACTBB_MoveAlias,
+        ZaMsg.ACTBB_MoveAlias_tt,
+        "MoveAlias",
+        "MoveAlias",
+        new AjxListener(
+            this,
+            ZaAccountListController.prototype._moveAliasListener
+        )
+    );
 
 }
 ZaController.initPopupMenuMethods["ZaSearchListController"].push(ZaSearchListController.initPopupMenuMethod);
@@ -584,200 +636,246 @@ ZaSearchListController.prototype._editItem = function (item) {
 };
 
 
-ZaSearchListController.changeActionsStateMethod = 
-function () {
-	var cnt = this._contentView.getSelectionCount();
-	if(cnt == 1) {
-		var item = this._contentView.getSelection()[0];
-		if(item) {
-			if(item.type != ZaItem.ALIAS) {
-				if(this._popupOperations[ZaOperation.MOVE_ALIAS]) {
-                                        this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
-                                }					
-			}
+ZaSearchListController.changeActionsStateMethod = function () {
+
+    var cnt = this._contentView.getSelectionCount();
+    if (cnt == 1) {
+        var item = this._contentView.getSelection()[0];
+        if (item) {
+            if (item.type != ZaItem.ALIAS) {
+                if (this._popupOperations[ZaOperation.MOVE_ALIAS]) {
+                    this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
+                }
+            }
+
             if (item.type == ZaItem.ALIAS || item.type == ZaItem.DL) {
                 if(this._popupOperations[ZaOperation.CHNG_PWD]) {
                     this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
-                }	
+                }
             }
 
-            if (((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.DL))
-                || (item.type == ZaItem.DL)) {
-                                                
-            	if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {
+            if ((
+                    (item.type == ZaItem.ALIAS) &&
+                    (item.attrs[ZaAlias.A_targetType] == ZaItem.DL)
+                ) ||
+                (item.type == ZaItem.DL)) {
+
+                if (this._popupOperations[ZaOperation.EXPIRE_SESSION]) {
                     this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
                 }
 
             } else if (item.type == ZaItem.DL) {
+
                 if(this._popupOperations[ZaOperation.MOVE_ALIAS])	{
                     this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
                 }
-            } else if (item.type == ZaItem.ACCOUNT) {
-				var enable = false;
-				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
-					enable = true;
-				} else if (AjxUtil.isEmpty(item.rights)) {
-					//console.log("loading effective rights for a list item");
-					item.loadEffectiveRights("id", item.id, false);
-					//console.log("loaded rights for a list item");
-				}
-				if(!enable) {
-					if(!ZaItem.hasRight(ZaAccount.DELETE_ACCOUNT_RIGHT,item)) {
-						 if(this._popupOperations[ZaOperation.DELETE])
-						 	this._popupOperations[ZaOperation.DELETE].enabled = false;
-						 
-					}	
-					if(!ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT, item)) {
-						 if(this._popupOperations[ZaOperation.CHNG_PWD])
-						 	this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
-						 
-					}		
-					if(!ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,item)) {    
-					   	if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {	
-							this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
-						}						
-					}
-				}
-			} else if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT))  {
-				if(!item.targetObj)
-					item.targetObj = item.getAliasTargetObj() ;
-					
-				var enable = false;
-				if (ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
-					enable = true;
-				} else if (AjxUtil.isEmpty(item.targetObj.rights)) {
-					item.targetObj.loadEffectiveRights("id", item.id, false);
-				}
-				if(!enable) {
-					if(!ZaItem.hasRight(ZaAccount.DELETE_ACCOUNT_RIGHT,item.targetObj)) {
-						 if(this._popupOperations[ZaOperation.DELETE])
-						 	this._popupOperations[ZaOperation.DELETE].enabled = false;
-						 
-					}
-					if(!ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT,item.targetObj)) {
-						 if(this._popupOperations[ZaOperation.CHNG_PWD])
-						 	this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
-						 
-					}			
-					if(!ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,item.targetObj)) {    
-					   	if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {	
-							this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
-						}						
-					}
-				}
-			} else if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.RESOURCE))  {
-				if(!item.targetObj)
-					item.targetObj = item.getAliasTargetObj() ;
-					
-				var enable = false;
-				if (ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
-					enable = true;
-				} else if (AjxUtil.isEmpty(item.targetObj.rights)) {
-					item.targetObj.loadEffectiveRights("id", item.id, false);
-				}
-				if(!enable) {
-					if(!enable) {
-						if(!ZaItem.hasRight(ZaResource.DELETE_CALRES_RIGHT,item.targetObj)) {
-							 if(this._popupOperations[ZaOperation.DELETE])
-							 	this._popupOperations[ZaOperation.DELETE].enabled = false;
-							 
-						}	
-						if(!ZaItem.hasRight(ZaResource.SET_CALRES_PASSWORD_RIGHT, item.targetObj)) {
-							 if(this._popupOperations[ZaOperation.CHNG_PWD])
-							 	this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
-							 
-						}		
-					}
-				}
-			} else if(item.type == ZaItem.RESOURCE) {
-				var enable = false;
-				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
-					enable = true;
-				} else if (AjxUtil.isEmpty(item.rights)) {
-					item.loadEffectiveRights("id", item.id, false);
-				}
-				if(!enable) {
-					if(!ZaItem.hasRight(ZaResource.DELETE_CALRES_RIGHT,item)) {
-						 if(this._popupOperations[ZaOperation.DELETE])
-						 	this._popupOperations[ZaOperation.DELETE].enabled = false;
-						 
-					}	
-					if(!ZaItem.hasRight(ZaResource.SET_CALRES_PASSWORD_RIGHT, item)) {
-						 if(this._popupOperations[ZaOperation.CHNG_PWD])
-						 	this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
-						 
-					}		
-				}				
-			}	else if ( item.type == ZaItem.DOMAIN || item.type == ZaItem.COS ){
-				
-					if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {	
-						this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
-					}		
-					if(this._popupOperations[ZaOperation.CHNG_PWD]) {
-						this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
-					}
-					
-      }
-        } else {
-			
-			if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {	
-				this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
-			}
-			if(this._popupOperations[ZaOperation.EDIT]) {	
-				this._popupOperations[ZaOperation.EDIT].enabled = false;
-			}	
-			if(this._popupOperations[ZaOperation.CHNG_PWD]) {
-				this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
-			}
-			if(this._popupOperations[ZaOperation.MOVE_ALIAS]) {
-				this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
-			}	
-			if(this._popupOperations[ZaOperation.DELETE]) {	
-				this._popupOperations[ZaOperation.DELETE].enabled = false;
-			}				
-		}		
-	} else if (cnt > 1){
-				
-		if(this._popupOperations[ZaOperation.EDIT]) {	
-			this._popupOperations[ZaOperation.EDIT].enabled = false;
-		}		
-		if(this._popupOperations[ZaOperation.CHNG_PWD]) {
-			this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
-		}
-		if(this._popupOperations[ZaOperation.MOVE_ALIAS]) {
-			this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;		
-		}
-		if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {	
-			this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
-		}			
-	} else {
 
-		if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {	
-			this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
-		}					
-		if(this._popupOperations[ZaOperation.EDIT]) {	
-			this._popupOperations[ZaOperation.EDIT].enabled = false;
-		}	
-		if(this._popupOperations[ZaOperation.DELETE]) {
-			this._popupOperations[ZaOperation.DELETE].enabled = false;
-		}		
-		if(this._popupOperations[ZaOperation.CHNG_PWD]) {
-			this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
-		}
-		if(this._popupOperations[ZaOperation.MOVE_ALIAS])	{
-			this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
-		}	
-	}
-    for(var i=0;i<cnt;i++) {
-    	var itemObj = this._contentView.getSelection()[i];
-        if(itemObj && itemObj.type==ZaItem.ACCOUNT){
-        	if (itemObj.attrs[ZaAccount.A_zimbraIsSystemAccount] == "TRUE") {
-        		if(this._popupOperations[ZaOperation.DELETE]) {
-        			this._popupOperations[ZaOperation.DELETE].enabled = false;
-        		}
+            } else if (item.type == ZaItem.ACCOUNT) {
+
+                var enable = false;
+
+                if (ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+                    enable = true;
+                } else if (AjxUtil.isEmpty(item.rights)) {
+                    item.loadEffectiveRights("id", item.id, false);
+                }
+
+                if (!enable) {
+                    if (!ZaItem.hasRight(ZaAccount.DELETE_ACCOUNT_RIGHT, item)) {
+                        if (this._popupOperations[ZaOperation.DELETE]) {
+                            this._popupOperations[ZaOperation.DELETE].enabled = false;
+                        }
+                    }
+
+                    if (!ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT, item)) {
+                        if (this._popupOperations[ZaOperation.CHNG_PWD]) {
+                            this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+                        }
+                    }
+
+                    if (!ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue, item)) {
+                        if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {
+                            this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+                        }
+                    }
+                }
+
+            } else if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT))  {
+
+                if (!item.targetObj) {
+                    item.targetObj = item.getAliasTargetObj() ;
+                }
+
+                var enable = false;
+
+                if (ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+                    enable = true;
+                } else if (AjxUtil.isEmpty(item.targetObj.rights)) {
+                    item.targetObj.loadEffectiveRights("id", item.id, false);
+                }
+
+                if (!enable) {
+                    if (!ZaItem.hasRight(ZaAccount.DELETE_ACCOUNT_RIGHT,item.targetObj)) {
+                        if (this._popupOperations[ZaOperation.DELETE]) {
+                            this._popupOperations[ZaOperation.DELETE].enabled = false;
+                        }
+                    }
+
+                    if (!ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT,item.targetObj)) {
+                        if(this._popupOperations[ZaOperation.CHNG_PWD]) {
+                            this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+                        }
+                    }
+
+                    if (!ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,item.targetObj)) {
+                        if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {
+                            this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+                        }
+                    }
+                }
+
+            } else if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.RESOURCE)) {
+
+                if (!item.targetObj) {
+                    item.targetObj = item.getAliasTargetObj() ;
+                }
+
+                var enable = false;
+
+                if (ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+                    enable = true;
+                } else if (AjxUtil.isEmpty(item.targetObj.rights)) {
+                    item.targetObj.loadEffectiveRights("id", item.id, false);
+                }
+
+                if (!enable) {
+                    if (!ZaItem.hasRight(ZaResource.DELETE_CALRES_RIGHT,item.targetObj)) {
+                        if(this._popupOperations[ZaOperation.DELETE]) {
+                            this._popupOperations[ZaOperation.DELETE].enabled = false;
+                        }
+                    }
+
+                    if (!ZaItem.hasRight(ZaResource.SET_CALRES_PASSWORD_RIGHT, item.targetObj)) {
+                        if(this._popupOperations[ZaOperation.CHNG_PWD]) {
+                            this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+                        }
+                    }
+                }
+
+            } else if (item.type == ZaItem.RESOURCE) {
+
+                var enable = false;
+
+                if (ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+                    enable = true;
+                } else if (AjxUtil.isEmpty(item.rights)) {
+                    item.loadEffectiveRights("id", item.id, false);
+                }
+
+                if (!enable) {
+                    if (!ZaItem.hasRight(ZaResource.DELETE_CALRES_RIGHT,item)) {
+                        if (this._popupOperations[ZaOperation.DELETE]) {
+                            this._popupOperations[ZaOperation.DELETE].enabled = false;
+                        }
+                    }
+
+                    if (!ZaItem.hasRight(ZaResource.SET_CALRES_PASSWORD_RIGHT, item)) {
+                        if (this._popupOperations[ZaOperation.CHNG_PWD]) {
+                            this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+                        }
+                    }
+                }
+
+            } else if ( item.type == ZaItem.DOMAIN || item.type == ZaItem.COS ) {
+
+                if (this._popupOperations[ZaOperation.DELETE]) {
+                    this._popupOperations[ZaOperation.DELETE].enabled = false;
+                }
+
+                if (this._popupOperations[ZaOperation.EXPIRE_SESSION]) {
+                    this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+                }
+
+                if (this._popupOperations[ZaOperation.CHNG_PWD]) {
+                    this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+                }
             }
-		}
-	}
+
+        } else {
+
+            if (this._popupOperations[ZaOperation.EXPIRE_SESSION]) {
+                this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+            }
+
+            if (this._popupOperations[ZaOperation.EDIT]) {
+                this._popupOperations[ZaOperation.EDIT].enabled = false;
+            }
+
+            if (this._popupOperations[ZaOperation.CHNG_PWD]) {
+                this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+            }
+
+            if (this._popupOperations[ZaOperation.MOVE_ALIAS]) {
+                this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
+            }
+
+            if (this._popupOperations[ZaOperation.DELETE]) {
+                this._popupOperations[ZaOperation.DELETE].enabled = false;
+            }
+        }
+
+    } else if (cnt > 1) {
+
+        if (this._popupOperations[ZaOperation.EDIT]) {
+            this._popupOperations[ZaOperation.EDIT].enabled = false;
+        }
+
+        if (this._popupOperations[ZaOperation.CHNG_PWD]) {
+            this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+        }
+
+        if (this._popupOperations[ZaOperation.MOVE_ALIAS]) {
+            this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
+        }
+
+        if (this._popupOperations[ZaOperation.EXPIRE_SESSION]) {
+            this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+        }
+
+    } else {
+
+        if (this._popupOperations[ZaOperation.EXPIRE_SESSION]) {
+            this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+        }
+
+        if (this._popupOperations[ZaOperation.EDIT]) {
+            this._popupOperations[ZaOperation.EDIT].enabled = false;
+        }
+
+        if (this._popupOperations[ZaOperation.DELETE]) {
+            this._popupOperations[ZaOperation.DELETE].enabled = false;
+        }
+
+        if (this._popupOperations[ZaOperation.CHNG_PWD]) {
+            this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+        }
+
+        if (this._popupOperations[ZaOperation.MOVE_ALIAS])	{
+            this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
+        }
+
+    }
+
+    for (var i = 0; i < cnt; i++) {
+        var itemObj = this._contentView.getSelection()[i];
+        if (itemObj && itemObj.type==ZaItem.ACCOUNT) {
+            if (itemObj.attrs[ZaAccount.A_zimbraIsSystemAccount] == "TRUE") {
+                if (this._popupOperations[ZaOperation.DELETE]) {
+                    this._popupOperations[ZaOperation.DELETE].enabled = false;
+                }
+            }
+        }
+    }
 }
 ZaController.changeActionsStateMethods["ZaSearchListController"].push(ZaSearchListController.changeActionsStateMethod);
 
