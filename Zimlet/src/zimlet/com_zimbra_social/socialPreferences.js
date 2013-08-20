@@ -17,7 +17,6 @@ function com_zimbra_socialPreferences(zimlet) {
 	this.zimlet = zimlet;
 	this.shell = this.zimlet.getShell();
 	this._fbNeedPermCount = 0;
-	this.social_pref_tweetmemePopularIsOn = this.zimlet.getUserProperty("social_pref_tweetmemePopularIsOn") == "true";
 	this.social_pref_trendsPopularIsOn = this.zimlet.getUserProperty("social_pref_trendsPopularIsOn") == "true";
 	this.social_pref_diggPopularIsOn = this.zimlet.getUserProperty("social_pref_diggPopularIsOn") == "true";
 	this.social_pref_SocialMailUpdateOn = this.zimlet.getUserProperty("social_pref_SocialMailUpdateOn") == "true";
@@ -425,11 +424,6 @@ com_zimbra_socialPreferences.prototype._okPrefBtnListener =
 function() {
 	var save = false;
 	var currentVal;
-	currentVal = document.getElementById("social_pref_tweetmemePopularIsOn").checked;
-	if (this.social_pref_tweetmemePopularIsOn != currentVal) {
-		this.zimlet.setUserProperty("social_pref_tweetmemePopularIsOn", currentVal);
-		save = true;
-	}
 	currentVal = document.getElementById("social_pref_trendsPopularIsOn").checked;
 	if (this.social_pref_trendsPopularIsOn != currentVal) {
 		this.zimlet.setUserProperty("social_pref_trendsPopularIsOn", currentVal);
@@ -509,9 +503,6 @@ function() {
 };
 
 com_zimbra_socialPreferences.prototype._setPrefCheckboxes = function() {
-	if (this.social_pref_tweetmemePopularIsOn) {
-		document.getElementById("social_pref_tweetmemePopularIsOn").checked = true;
-	}
 	if (this.social_pref_trendsPopularIsOn) {
 		document.getElementById("social_pref_trendsPopularIsOn").checked = true;
 	}
@@ -558,7 +549,6 @@ function() {
 	html[i++] = "<label style='font-weight:bold'>"+this.zimlet.getMessage("socialAppPreferences")+"</label>";
 	html[i++] = "<BR/>";
 	html[i++] = "<table>";
-	html[i++] = "<tr><td><input type='checkbox' id='social_pref_tweetmemePopularIsOn' /></td><td width=100%>"+this.zimlet.getMessage("showTweetmemeByDefault")+"</td></tr>";
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_trendsPopularIsOn' /></td><td width=100%>"+this.zimlet.getMessage("showTopTwitterTrendsByDefault")+"</td></tr>";
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_diggPopularIsOn' /></td><td width=100%> "+this.zimlet.getMessage("showDiggsPopularByDefault")+"</td></tr>";
 

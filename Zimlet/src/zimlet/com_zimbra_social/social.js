@@ -157,7 +157,6 @@ SocialZimlet.prototype.initializeVariables =
 			this.twitter = new com_zimbra_socialTwitter(this, this.preferences);
 			this.socialcast = new com_zimbra_socialcast(this);
 			this.facebook = new com_zimbra_socialFacebook(this);
-			this.tweetmeme = new com_zimbra_socialTweetMeme(this);
 			this.digg = new com_zimbra_socialDigg(this);
 			this.miniDlg = new com_zimbra_socialMiniDlg(this);
 			this.socialOAuth = new SocialOAuth(this);
@@ -592,7 +591,6 @@ SocialZimlet.prototype._twitterSearchBtnListener =
 SocialZimlet.prototype._loadInformation =
 		function() {
 			this.twitter.getTwitterTrends();
-			this.tweetmeme.loadTweetMemeCategories();
 			this.digg.getDiggCategories();
 		};
 
@@ -824,10 +822,6 @@ SocialZimlet.prototype._showCard =
 				hdrCellColor = "white";
 				prettyName = headerName;
 				iconName = "social_facebookIcon";
-			} else if (type == "TWEETMEME") {
-				iconName = "social_tweetMemeIcon";
-				hdrClass = "social_tweetMemeRetweetBg";
-				hdrCellColor = "white";
 			} else if (type == "DIGG") {
 				iconName = "social_diggIcon";
 				hdrClass = "social_diggHdrBg";
@@ -1126,8 +1120,6 @@ SocialZimlet.prototype._doRefreshFeeds =
 				this.twitter.twitterSearch({query:headerName, tableId:tableId, type:type});
 			} else if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
 				this.twitter.getTwitterFeeds({tableId: tableId, account: this.tableIdAndAccountMap[tableId], type:type});
-			} else if (type == "TWEETMEME") {
-				this.tweetmeme.tweetMemeSearch({headerName:headerName, tableId:tableId});
 			} else if (type == "DIGG") {
 				this.digg.diggSearch({headerName:headerName, tableId:tableId});
 			} else if (type == "FACEBOOK") {
@@ -1385,20 +1377,6 @@ SocialZimlet.prototype._createTreeView =
 			//-----------------------
 
 			//-----------------------
-			if (this.tTweetMemeFolders) {
-				var expandIconId = "social_expandIcon_" + Dwt.getNextId();
-				this.expandIconAndFolderTreeMap[expandIconId] = new Array();
-				html[i++] = this._getTreeHeaderHTML("TweetMeme", expandIconId);	//header
-				html[i++] = "<div class='DwtTreeItemLevel1ChildDiv' style='display: block;'>";
-				for (var j = 0; j < this.tTweetMemeFolders.length; j++) {
-					var folder = this.tTweetMemeFolders[j];
-					html[i++] = this._getFolderHTML(folder, expandIconId);
-				}
-				html[i++] = "</div>";
-			}
-			//-----------------------
-
-			//-----------------------
 			var expandIconId = "social_expandIcon_" + Dwt.getNextId();
 			if (this.prefFolder == undefined) {
 				this.prefFolders = new Array();
@@ -1621,9 +1599,6 @@ SocialZimlet.prototype._handleTreeClick =
 				this.twitter.twitterSearch({query:label, tableId:tableId, type:"TREND"});
 				timer = setInterval(AjxCallback.simpleClosure(this.twitter.twitterSearch, this.twitter, sParams), 400000);
 				this.tableIdAndTimerMap[tableId] = timer;
-			} else if (elId.indexOf("socialTreeItem__TWEETMEME") == 0) {
-				tableId = this._showCard({headerName:label, type:"TWEETMEME", autoScroll:true});
-				this.tweetmeme.tweetMemeSearch({headerName:label, tableId:tableId});
 			} else if (elId.indexOf("socialTreeItem__DIGG") == 0) {
 				tableId = this._showCard({headerName:label, type:"DIGG", autoScroll:true});
 				this.digg.diggSearch({headerName:label, tableId:tableId});
@@ -1950,19 +1925,6 @@ SocialZimlet.prototype.createCardView =
 					imageAnchor = imageAnchor + "<img height='48' width='48' src='" + obj.profile_image_url + "' />";
 					imageAnchor = imageAnchor + "</a></div>";
 					imageAnchor = imageAnchor + "</td>";
-				} else if (type == "TWEETMEME") {
-					screen_name = "tweetmeme";
-					created_at = obj.created_at;
-					text = " " + obj.title + " " + obj.url;
-					source = "tweetmeme";
-					tweetcount = obj.url_count;
-					imageAnchor = "<TD> ";
-					imageAnchor = imageAnchor + "<a  href='" + obj.url + "' target='_blank' style='color:gray'>";
-					imageAnchor = imageAnchor + "<table><tr>";
-					imageAnchor = imageAnchor + "<td class='social_tweetMemeBg' width=48px height=48px align='center'  valign='middle'>";
-					imageAnchor = imageAnchor + tweetcount + "</td></tr><tr><td class='social_tweetMemeRetweetBg'>" + this.getMessage("retweets") + "</td></tr></table>";
-					imageAnchor = imageAnchor + "</a>";
-					imageAnchor = imageAnchor + "</td>";
 				} else if (type == "DIGG") {
 					diggCount = obj.diggs;
 					text = [" ", obj.title, " ", obj.link].join("");
@@ -2104,7 +2066,7 @@ SocialZimlet.prototype.createCardView =
 				}
 				html[i++] = "<TD class='social_feedText' width=90%>";
 
-				if (type != "TWEETMEME" && type != "FACEBOOK" && type != "SOCIALCAST") {
+				if (type !== "FACEBOOK" && type !== "SOCIALCAST") {
 					html[i++] = [" <a href='javascript:void(0)' style='color:darkblue;font-size:12px;font-weight:bold' id='", this._getAccountLinkId(screen_name, tableId),
 						"'>", screen_name, ":</a> "].join("");
 				} else if (type == "SOCIALCAST") {
@@ -2155,7 +2117,7 @@ SocialZimlet.prototype.createCardView =
 				html[i++] = "<TD colspan=" + columnSpan + " style='color:gray'>";
 				html[i++] = "<table width=100%>";
 				html[i++] = "<TR>";
-				if (type == "TWEETMEME" || type == "DIGG") {
+				if (type == "DIGG") {
 					html[i++] = "<TD  style='color:gray;font-size:11px;text-align:left'>";
 				} else {
 					html[i++] = "<TD style='color:gray;font-size:11px;text-align:left'>";
@@ -2181,7 +2143,7 @@ SocialZimlet.prototype.createCardView =
 					html[i++] = "<a href='javascript:void(0)' title='" + this.getMessage("retweetThisItem") + "' style='color:gray;font-size:11px' id='" + this._gettwitterRetweetLinkId("RT @" + screen_name + text) + "'>" + linkName + "</a>&nbsp;&nbsp;";
 				}
 
-				if (type != "TWEETMEME" && type != "FACEBOOK" && type != "SOCIALCAST" && type != "SOCIALCAST" && type != "DIGG" && type != "DIRECT_MSGS") {
+				if (type !== "FACEBOOK" && type !== "SOCIALCAST" && type != "DIGG" && type != "DIRECT_MSGS") {
 					html[i++] = "<a href='javascript:void(0)' title='" + this.getMessage("replyToThisPerson") + "' style='color:gray;font-size:11px' id='" + this._gettwitterReplyLinkId("@" + screen_name) + "'>" + this.getMessage("reply") + "</a>";
 				}
 				if (type == "FACEBOOK") {
@@ -3278,12 +3240,6 @@ SocialZimlet.prototype._updateAllWidgetItems =
 					this.tTrendsFolders.push({name:name, icon:"social_trendIcon", account:"", type:"TREND"});
 				}
 			}
-			if (params.updateTweetMemeTree) {
-				this.tTweetMemeFolders = new Array();
-				for (var i = 0; i < this.tweetmeme.allTweetMemeCats.length; i++) {
-					this.tTweetMemeFolders.push({name:this.tweetmeme.allTweetMemeCats[i].name, icon:"social_tweetMemeIcon", account:"", type:"TWEETMEME"});
-				}
-			}
 			if (params.updateDiggTree) {
 				this.tDiggFolders = new Array();
 				for (var i = 0; i < this.digg.allDiggCats.length; i++) {
@@ -3305,7 +3261,7 @@ SocialZimlet.prototype._updateAllWidgetItems =
 				this.systemFolders.push({name:this.getMessage("addRemoveAccounts"), icon:"Group", account:"", type:"MANAGE_ACCOUNTS"});
 				//this.systemFolders.push({name:"Zimlet Preferences", icon:"Preferences", account:"", type:"PREFERENCES"});
 			}
-			if (params.updateSearchTree || params.updateSystemTree || params.updateTrendsTree || params.updateTweetMemeTree || params.updateDiggTree) {
+			if (params.updateSearchTree || params.updateSystemTree || params.updateTrendsTree || params.updateDiggTree) {
 				this._createTreeView();
 			}
 			if (params.updateAccntCheckboxes) {
