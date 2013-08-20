@@ -853,6 +853,9 @@ ZaOverviewPanelController.homeTreeListener = function (ev) {
 	} else {
 		ZaApp.getInstance().getHomeViewController().show();
 	}
+
+    this._modifySearchMenuButton();
+
 }
 
 ZaOverviewPanelController.cosTreeListener = function (ev) {
@@ -1579,28 +1582,38 @@ ZaOverviewPanelController.prototype.refreshRelatedTreeByEdit = function(newItem)
    }
 
 
-ZaOverviewPanelController.prototype._modifySearchMenuButton = 
-function (itemType) {
-	if (itemType) {
-		var searchListController = ZaApp.getInstance().getSearchListController(); 
-		if(!searchListController || !searchListController._searchField) {
-			return;
-		}
-		switch (itemType) {
-			case ZaItem.ACCOUNT:
-				searchListController._searchField.accFilterSelected(); break ;
-			case ZaItem.ALIAS:
-				searchListController._searchField.aliasFilterSelected(); break ;
-			case ZaItem.DL:
-				searchListController._searchField.dlFilterSelected(); break ;
-			case ZaItem.RESOURCE:
-				searchListController._searchField.resFilterSelected(); break ;
-			case ZaItem.DOMAIN:
-				searchListController._searchField.domainFilterSelected(); break ;
+ZaOverviewPanelController.prototype._modifySearchMenuButton = function (itemType) {
+
+    var searchListController = ZaApp.getInstance().getSearchListController();
+    if (!searchListController || !searchListController._searchField) {
+        return;
+    }
+
+    if (itemType) {
+        switch (itemType) {
+            case ZaItem.ACCOUNT:
+                searchListController._searchField.accFilterSelected();
+                break;
+            case ZaItem.ALIAS:
+                searchListController._searchField.aliasFilterSelected();
+                break;
+            case ZaItem.DL:
+                searchListController._searchField.dlFilterSelected();
+                break;
+            case ZaItem.RESOURCE:
+                searchListController._searchField.resFilterSelected();
+                break;
+            case ZaItem.DOMAIN:
+                searchListController._searchField.domainFilterSelected();
+                break;
             case ZaItem.COS:
-                searchListController._searchField.cosFilterSelected(); break ;
-		}
-	}
+                searchListController._searchField.cosFilterSelected();
+                break;
+        }
+    } else {
+        searchListController._searchField.allFilterSelected();
+    }
+
 }
 
 ZaOverviewPanelController.prototype.addAccountItem =
