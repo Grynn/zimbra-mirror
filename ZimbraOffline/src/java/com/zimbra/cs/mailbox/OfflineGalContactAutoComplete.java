@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2011, 2013 Zimbra Software, LLC.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.4 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -15,8 +15,6 @@
 package com.zimbra.cs.mailbox;
 
 import com.zimbra.cs.account.Account;
-import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
-import com.zimbra.cs.mailbox.ContactAutoComplete.ContactEntry;
 import com.zimbra.soap.ZimbraSoapContext;
 
 public class OfflineGalContactAutoComplete extends ContactAutoComplete {
@@ -34,8 +32,8 @@ public class OfflineGalContactAutoComplete extends ContactAutoComplete {
     protected void addEntry(ContactEntry entry, AutoCompleteResult result) {
         if (entry.isGroup() && result.entries.contains(entry)) {
             //duplicate non-group added; addEntry rejects duplicates so we need to manually set the flag
-            //this occurs because GAL search in ZD uses mailbox search; there can be multiple entries for one addr 
-            //for example VMware GAL has server-team@zimbra.com as type=account and Zimbra GAL has server-team@zimbra.com as type=group
+            //this occurs because GAL search in ZD uses mailbox search; there can be multiple entries for one addr
+            //for example corporate GAL has server-team@zimbra.com as type=account and Zimbra GAL has server-team@zimbra.com as type=group
             for (ContactEntry exist : result.entries) {
                 if (entry.getKey().equals(exist.getKey()) && !exist.isGroup()) {
                     exist.setIsGalGroup(true);
