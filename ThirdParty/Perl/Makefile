@@ -59,11 +59,11 @@ SASL_INCLUDE	:= $(ZIMBRA_HOME)/cyrus-sasl/include
 
 # Order is important here
 PRE_PERL_LIBS	:= \
-	Test::Requires \
 	Try::Tiny \
 	Test::Fatal \
 	Test::Simple \
 	ExtUtils::MakeMaker \
+	Test::Requires \
 	CPAN::Meta::YAML \
 	JSON::PP \
 	Parse::CPAN::Meta \
