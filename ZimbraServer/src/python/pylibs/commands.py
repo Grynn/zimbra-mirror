@@ -38,7 +38,7 @@ exe = {
 	'STATS'         : "bin/zmstatctl",
 	'ARCHIVING'     : "bin/zmamavisdctl",
 	'MEMCACHED'     : "bin/zmmemcachedctl",
-	'MTA'           : "bin/postfix",
+	'MTA'           : "bin/zmmtactl",
 	'ANTISPAM'      : "bin/zmamavisdctl",
 	'AMAVIS'        : "bin/zmamavisdctl",
 	'ANTIVIRUS'     : "bin/zmclamdctl",
