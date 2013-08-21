@@ -181,9 +181,8 @@ function(str) {
 	}
 
 	// What remains is the name
-	parts = str.match(AjxEmailAddress.phrasePat);
-	if (parts) {
-		name = AjxStringUtil.trim(parts[0]);
+	if (str) {
+		name = AjxStringUtil.trim(str);
 
 		// Trim off leading and trailing quotes, but leave escaped quotes and unescape them
 		name = name.replace(/\\"/g,"&quot;");
