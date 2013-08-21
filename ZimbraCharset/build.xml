@@ -20,10 +20,10 @@
           basedir="build/classes" includes="**/*.class **/java.nio.charset.spi.CharsetProvider">
         <manifest>
             <attribute name="Main-Class" value="com.zimbra.buildinfo.Version" />
-            <attribute name="Implementation-Vendor" value="VMware, Inc."/>
+            <attribute name="Implementation-Vendor" value="Zimbra Sofware, LLC"/>
             <attribute name="Implementation-Title" value="Zimbra Charset"/>
             <attribute name="Implementation-Version" value="${zimbra.buildinfo.version}"/>
-            <attribute name="Specification-Vendor" value="VMware, Inc."/>
+            <attribute name="Specification-Vendor" value="Zimbra Software, LLC"/>
             <attribute name="Specification-Title" value="Zimbra Collaboration Suite"/>
             <attribute name="Specification-version" value="${zimbra.buildinfo.majorversion}.${zimbra.buildinfo.minorversion}.${zimbra.buildinfo.microversion}"/>
 	      </manifest>
