@@ -414,6 +414,7 @@ public class Button {
 	public static final Button B_VIEW_ENTIRE_MESSAGE = new Button("B_VIEW_ENTIRE_MESSAGE");
 	public static final Button B_HIGHLIGHT_OBJECTS = new Button("B_HIGHLIGHT_OBJECTS");
 	public static final Button B_ADD_TO_CALENDAR = new Button("B_ADD_TO_CALENDAR");
+	public static final Button B_BRIEFCASE = new Button("B_BRIEFCASE");
 	
 	public static final Button B_QUICK_REPLY_REPLY = new Button("B_QUICK_REPLY_REPLY");
 	public static final Button B_QUICK_REPLY_REPLY_ALL = new Button("B_QUICK_REPLY_REPLY_ALL");

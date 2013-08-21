@@ -278,6 +278,13 @@ public class PageMail extends AbsTab {
 						
 			// FALL THROUGH
 			
+		} else if ( button == Button.B_BRIEFCASE ) {
+
+			locator = "css=a[id$='2_briefcase']";
+			page = new DialogAddToBriefcase(MyApplication, this);
+						
+			// FALL THROUGH
+			
 		} else if ( button == Button.B_LAUNCH_IN_SEPARATE_WINDOW ) {
 			
 			boolean isCLV = this.zIsVisiblePerPosition("css=div#ztb__CLV-main", 0, 0);

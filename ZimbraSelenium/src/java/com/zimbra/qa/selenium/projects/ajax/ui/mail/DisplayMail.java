@@ -641,6 +641,23 @@ public class DisplayMail extends AbsDisplay {
 			
 			return (page);
 
+		} else if ( button == Button.B_BRIEFCASE ) {
+			
+		    locator = attachment.getLocator() + "a[id$='_briefcase']";
+			page = new DialogAddToBriefcase(				
+					MyApplication, 
+					((AppAjaxClient) MyApplication).zPageMail);
+
+			this.sClick(locator);
+			
+			this.zWaitForBusyOverlay();
+
+			if ( page != null ) {
+				page.zWaitForActive();
+			}
+			
+			return (page);
+			
 		} else if ( button == Button.B_ADD_TO_MY_FILES ) {
 			
 			locator = "implement me!";
