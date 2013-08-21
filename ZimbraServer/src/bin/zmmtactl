@@ -30,7 +30,7 @@ fi
 if [ -f "${zimbra_home}/conf/mta_milter_options" ]; then
   source ${zimbra_home}/conf/mta_milter_options
 fi
-zimbraMilterServerEnabled=${zimbraMilterServerEnabled:=FALSE}
+zimbraMilterServerEnabled=`${zimbra_home}/bin/zmprov -l gs ${zimbra_server_hostname} zimbraMilterServerEnabled | grep zimbraMilterServerEnabled: | awk '{print $2}'`;
 
 if [ x"$zimbraMilterServerEnabled" = "xTRUE" ]; then
   SCRIPTS="postfix zmsaslauthdctl zmmilterctl"
