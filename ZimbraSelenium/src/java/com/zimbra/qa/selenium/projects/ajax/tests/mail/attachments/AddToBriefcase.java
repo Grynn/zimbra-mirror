@@ -113,7 +113,7 @@ public class AddToBriefcase extends PrefGroupMailByMessageTest {
 		ZAssert.assertEquals(name, filename, "Verify saved to Briefcase mail attachment name through SOAP");
 	}
 	
-	@Test(description = "Add JPG attachment to Briefcase when viewing email in a separate window",
+	@Test(description = "Add txt attachment to Briefcase when viewing email in a separate window",
 			groups = { "functional" })
 			
 	public void AddToBriefcase_02() throws HarnessException {
