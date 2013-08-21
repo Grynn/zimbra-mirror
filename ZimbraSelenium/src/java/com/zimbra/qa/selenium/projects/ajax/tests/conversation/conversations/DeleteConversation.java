@@ -537,9 +537,11 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 		//-- DATA
 		
 		
+		
 		final String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
 		final String content1 = "content1"+ ZimbraSeleniumProperties.getUniqueString();
 		final String content2 = "content2"+ ZimbraSeleniumProperties.getUniqueString();
+		final FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 		final FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 		String folderid;
 		
@@ -555,6 +557,7 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 						"</mp>" +
 					"</m>" +
 				"</SendMsgRequest>");
+		MailItem message = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "in:sent subject:("+ subject +")");
 
 
 		
@@ -563,10 +566,13 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
+		// Select the item (this should refresh)
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		
 		// Send another message to the conversation
 		ZimbraAccount.AccountA().soapSend(
 				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
-					"<m>" +
+					"<m origid='"+ message.getId() +"' rt='r'>" +
 						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 						"<su>RE: "+ subject +"</su>" +
 						"<mp ct='text/plain'>" +
@@ -575,10 +581,7 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 					"</m>" +
 				"</SendMsgRequest>");
 
-		// Select the item (this should refresh)
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
-		
-		// Click delete
+		// Click delete (no refresh)
 		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
 		
 
@@ -599,7 +602,7 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 			+		"<query>content:("+ content2 +") is:anywhere</query>"
 			+	"</SearchRequest>");
 		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
-		ZAssert.assertEquals(folderid, trash.getId(), "Verify the second message is in the trash");
+		ZAssert.assertEquals(folderid, inbox.getId(), "Verify the second message is in the trash");
 
 
 	}
@@ -631,6 +634,7 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 						"</mp>" +
 					"</m>" +
 				"</SendMsgRequest>");
+		MailItem message = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "in:sent subject:("+ subject +")");
 
 
 		
@@ -642,7 +646,7 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 		// Send another message to the conversation
 		ZimbraAccount.AccountA().soapSend(
 				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
-					"<m>" +
+					"<m origid='"+ message.getId() +"' rt='r'>" +
 						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 						"<su>RE: "+ subject +"</su>" +
 						"<mp ct='text/plain'>" +
@@ -689,11 +693,13 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 		final String content1 = "content1"+ ZimbraSeleniumProperties.getUniqueString();
 		final String content2 = "content2"+ ZimbraSeleniumProperties.getUniqueString();
 		final String content3 = "content3"+ ZimbraSeleniumProperties.getUniqueString();
+		final FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 		final FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 		String folderid;
 		
 		
 		
+		// Send a message to the test account and AccountB
 		ZimbraAccount.AccountA().soapSend(
 				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
 					"<m>" +
@@ -704,10 +710,12 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 						"</mp>" +
 					"</m>" +
 				"</SendMsgRequest>");
+		MailItem message = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "in:sent subject:("+ subject +")");
 
+		// AccountA replies to the message.
 		ZimbraAccount.AccountA().soapSend(
 				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
-					"<m>" +
+					"<m origid='"+ message.getId() +"' rt='r'>" +
 						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 						"<su>RE: "+ subject +"</su>" +
 						"<mp ct='text/plain'>" +
@@ -723,10 +731,13 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
+		// Select the item (this should refresh)
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		
 		// Send another message to the conversation
 		ZimbraAccount.AccountA().soapSend(
 				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
-					"<m>" +
+					"<m origid='"+ message.getId() +"' rt='r'>" +
 						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 						"<su>RE: "+ subject +"</su>" +
 						"<mp ct='text/plain'>" +
@@ -735,9 +746,6 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 					"</m>" +
 				"</SendMsgRequest>");
 
-		// Select the item (this should refresh)
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
-		
 		// Click delete
 		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
 		
@@ -766,7 +774,7 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 			+		"<query>content:("+ content3 +") is:anywhere</query>"
 			+	"</SearchRequest>");
 		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
-		ZAssert.assertEquals(folderid, trash.getId(), "Verify the third message is in the trash");
+		ZAssert.assertEquals(folderid, inbox.getId(), "Verify the third message is in the trash");
 
 
 	}
@@ -778,17 +786,15 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 		
 		//-- DATA
 		
-		
+		// Create the conversation
 		final String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
 		final String content1 = "content1"+ ZimbraSeleniumProperties.getUniqueString();
 		final String content2 = "content2"+ ZimbraSeleniumProperties.getUniqueString();
 		final String content3 = "content3"+ ZimbraSeleniumProperties.getUniqueString();
 		final FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 		final FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
-		String folderid;
-		
-		
-		
+	
+		// Send a message to the test account and AccountB
 		ZimbraAccount.AccountA().soapSend(
 				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
 					"<m>" +
@@ -799,17 +805,22 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 						"</mp>" +
 					"</m>" +
 				"</SendMsgRequest>");
+		MailItem message = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "in:sent subject:("+ subject +")");
 
+		// AccountA replies to the message.
 		ZimbraAccount.AccountA().soapSend(
 				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
-					"<m>" +
-						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-						"<su>"+ subject +"</su>" +
+					"<m origid='"+ message.getId() +"' rt='r'>" +
+					"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>RE: "+ subject +"</su>" +
 						"<mp ct='text/plain'>" +
 							"<content>"+ content2 +"</content>" +
 						"</mp>" +
 					"</m>" +
 				"</SendMsgRequest>");
+		
+
+
 
 
 		
@@ -819,10 +830,11 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
 		// Send another message to the conversation
+		// AccountA replies to the message.
 		ZimbraAccount.AccountA().soapSend(
 				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
-					"<m>" +
-						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+					"<m origid='"+ message.getId() +"' rt='r'>" +
+					"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 						"<su>RE: "+ subject +"</su>" +
 						"<mp ct='text/plain'>" +
 							"<content>"+ content3 +"</content>" +
@@ -837,13 +849,12 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 
 		//-- Verification
 		
-		// If conversation is not refreshed, then only the old message should be deleted
-		
+		// If conversation is not refreshed, then only the old messages should be deleted
 		app.zGetActiveAccount().soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
 			+		"<query>content:("+ content1 +") is:anywhere</query>"
 			+	"</SearchRequest>");
-		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
+		String folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
 		ZAssert.assertEquals(folderid, trash.getId(), "Verify the first message is in the trash");
 
 		app.zGetActiveAccount().soapSend(
@@ -853,6 +864,7 @@ public class DeleteConversation extends PrefGroupMailByConversationTest {
 		folderid = app.zGetActiveAccount().soapSelectValue("//mail:m", "l");
 		ZAssert.assertEquals(folderid, trash.getId(), "Verify the second message is in the trash");
 
+		// The newest (un-refreshed) message should remain ni inbox
 		app.zGetActiveAccount().soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
 			+		"<query>content:("+ content3 +") is:anywhere</query>"
