@@ -653,7 +653,7 @@ transport_maps = ldap:/opt/zimbra/conf/ldap-transport.cf
 mydestination = localhost.localdomain localhost
 
 # Disable NIS which is in the default
-alias_maps = hash:/etc/aliases
+alias_maps = lmdb:/etc/aliases
 
 # for security...
 allow_mail_to_commands =
