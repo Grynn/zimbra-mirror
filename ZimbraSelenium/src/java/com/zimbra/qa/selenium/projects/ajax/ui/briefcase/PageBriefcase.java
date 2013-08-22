@@ -1414,7 +1414,7 @@ public class PageBriefcase extends AbsTab {
 		} else {
 			String image = this.sGetAttribute(lockIconLocator + "@class");
 
-			if (image.equals("ImgPadLock"))
+			if (image.equalsIgnoreCase("ImgPadLock"))
 				present = true;
 		}
 
