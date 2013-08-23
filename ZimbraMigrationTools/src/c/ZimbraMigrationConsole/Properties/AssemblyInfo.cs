@@ -6,10 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ZimbraMigrationConsole")][assembly: AssemblyDescription(
-"")][assembly: AssemblyConfiguration("")][assembly: AssemblyCompany(
-"Microsoft")][assembly: AssemblyProduct(
+"")][assembly: AssemblyConfiguration("")][assembly: AssemblyCompany("Zimbra Software, LLC.")]
+[assembly: AssemblyProduct(
 "ZimbraMigrationConsole")][assembly: AssemblyCopyright(
-"Copyright © Microsoft 2011")][assembly: AssemblyTrademark("")][assembly: AssemblyCulture(
+"Copyright © 2006-2013 Zimbra Software, LLC.")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture(
 "")]
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
