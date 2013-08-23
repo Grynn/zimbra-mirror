@@ -14,4 +14,6 @@ reject_unlisted_recipient
 %%explode reject_rhsbl_reverse_client VAR:zimbraMtaRestrictionRHSBLRCs%%
 %%explode reject_rhsbl_sender VAR:zimbraMtaRestrictionRHSBLSs%%
 %%contains VAR:zimbraMtaRestriction check_policy_service unix:private/policy%%
+%%contains VAR:zimbraMtaRestriction check_recipient_access ldap:/opt/zimbra/conf/ldap-splitdomain.cf%%
+%%contains VAR:zimbraMtaRestriction reject%%
 permit
