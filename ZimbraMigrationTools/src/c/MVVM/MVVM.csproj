@@ -278,9 +278,6 @@
     <Resource Include="View\Images\banner_left.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="View\Images\VMware_logo.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="View\Images\Zimbra_Logo.png" />
   </ItemGroup>
   <ItemGroup>
