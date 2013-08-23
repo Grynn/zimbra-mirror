@@ -734,9 +734,7 @@ public class SkinResources
 			//create the url of the css files
 			sb.append("\n").append(appContextPath).append("/css/").append(filenames).append(".css?v=").append(cacheBusterVersion)
               .append("&");
-            if ("".equals(debug)){
-                sb.append("debug=&");
-            } else {
+            if (debugStr != null && (debugStr.equals(Boolean.TRUE.toString()) || debugStr.equals("1"))) {
                 sb.append(debug);
             }
             sb.append("skin=").append(skinStr)
@@ -744,11 +742,18 @@ public class SkinResources
 
 			sb.append("\n").append(appContextPath).append("/css/msgview.css?v=").append(cacheBusterVersion);
 			sb.append("\n\n#resources\n");
+            sb.append("\n")
+              .append(appContextPath);
 			//create the resources url
-			sb.append("\n").append(appContextPath).append("/res/I18nMsg,AjxMsg,ZMsg,ZmMsg,AjxKeys,ZmKeys,ZdMsg,AjxTemplateMsg.js?v=")
-                    .append(cacheBusterVersion)
-                    .append('&')
-                    .append(debug);
+            if (debugStr != null && (debugStr.equals(Boolean.TRUE.toString()) || debugStr.equals("1"))) {
+                sb.append("/res/I18nMsg,AjxMsg,ZMsg,ZmMsg,AjxKeys,ZmKeys,ZdMsg,AjxTemplateMsg.js?v=");
+            }
+            else {
+                sb.append("/res/I18nMsg,AjxMsg,ZMsg,ZmMsg,AjxKeys,ZmKeys,ZdMsg,AjxTemplateMsg.js.zgz?v=");
+            }
+            sb.append(cacheBusterVersion)
+              .append('&')
+              .append(debug);
 			if (localeStr != null && !"".equals(localeStr)) {
 				sb.append("language=").append(requestedLocale.getLanguage());
                 String country = requestedLocale.getCountry();
