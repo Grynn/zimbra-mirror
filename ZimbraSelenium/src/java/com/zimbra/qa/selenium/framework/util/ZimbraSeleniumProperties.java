@@ -237,7 +237,7 @@ public class ZimbraSeleniumProperties {
 	 * App type
 	 */
 	public enum AppType {
-		AJAX, HTML, MOBILE, DESKTOP, ADMIN, APPLIANCE, OCTOPUS
+		AJAX, HTML, MOBILE, TOUCH, DESKTOP, ADMIN, APPLIANCE, OCTOPUS
 	}
 	
 	private static AppType appType = AppType.AJAX;

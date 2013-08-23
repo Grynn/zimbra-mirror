@@ -291,6 +291,12 @@ public class ZimbraURI {
 			path ="/m/";
 			
 		}
+		
+		if ( ZimbraSeleniumProperties.getAppType() == AppType.TOUCH ) {
+
+			path ="/t/";
+			
+		}
 
 		if ( ZimbraSeleniumProperties.getAppType() == AppType.ADMIN ) {
 		
