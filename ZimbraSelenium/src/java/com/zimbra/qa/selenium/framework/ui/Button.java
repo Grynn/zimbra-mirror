@@ -190,6 +190,7 @@ public class Button {
 	public static final Button B_CC = new Button("B_CC");
 	public static final Button B_BCC = new Button("B_BCC");
 	public static final Button B_SHOWBCC = new Button("B_SHOWBCC");
+	public static final Button B_SHOWCC = new Button("B_SHOWCC");
 	public static final Button B_REMOVE = new Button("B_REMOVE");
 	public static final Button B_REMOVE_ALL = new Button("B_REMOVE_ALL");
 	public static final Button B_SHOW_NAMES_FROM = new Button("B_SHOW_NAMES_FROM");
