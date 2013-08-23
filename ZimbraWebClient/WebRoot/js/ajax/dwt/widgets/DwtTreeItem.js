@@ -39,6 +39,7 @@
  * @param {boolean}      params.singleClickAction		if <code>true</code>, an action is performed in single click
  * @param {AjxCallback}      params.dndScrollCallback	the callback triggered when scrolling of a drop area for an object being dragged
  * @param {string}      params.dndScrollId			the id
+ * @param {boolean}    params.arrowDisabled
  *        
  * @extends		DwtComposite		
  */
@@ -83,7 +84,7 @@ DwtTreeItem = function(params) {
 	this._forceNotifyAction = Boolean(params.forceNotifyAction);
 	this._dndScrollCallback = params.dndScrollCallback;
 	this._dndScrollId = params.dndScrollId;
-    this._contextEnabled = (!(!(parent._optButton)) || parent._contextEnabled) && this._selectionEnabled;
+	this._arrowDisabled = params.arrowDisabled;
 
 	if (params.singleClickAction) {
 		this._singleClickAction = true;
@@ -372,7 +373,6 @@ function(enable) {
 	this._selectedClassName = enable
 		? this._origClassName + "-" + DwtCssStyle.SELECTED
 		: this._origClassName;
-    this._contextEnabled = !(!(this.parent._optButton)) && this._selectionEnabled;
 
 };
 
@@ -548,7 +548,7 @@ function(index, realizeDeferred, forceNode) {
 	this._textCell = document.getElementById(data.id + "_textCell");
 	this._extraCell = document.getElementById(data.id + "_extraCell");
 
-    if (!this._contextEnabled){
+    if (this._arrowDisabled){
         var tableNode = document.getElementById(data.id + "_table");
         tableNode.style.tableLayout = "auto";
     }
@@ -865,7 +865,7 @@ function(item) {
 
 DwtTreeItem.prototype._setTreeElementStyles =
 function(img, focused) {
-   if (!this._contextEnabled || this._draghovering) {
+   if (this._arrowDisabled || this._draghovering) {
         return;
    }
    var selected = focused ? "-focused" : "";

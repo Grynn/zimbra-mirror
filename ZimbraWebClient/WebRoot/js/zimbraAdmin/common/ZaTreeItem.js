@@ -73,7 +73,7 @@ function(index, realizeDeferred, forceNode) {
         }
     }
 
-    if (!this._contextEnabled){
+    if (this._arrowDisabled){
         var tableNode = document.getElementById(this._htmlElId + "_table");
         tableNode.style.tableLayout = "fixed";
         tableNode.style.width = "100%";

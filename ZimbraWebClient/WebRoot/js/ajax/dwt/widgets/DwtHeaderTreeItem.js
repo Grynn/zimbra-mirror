@@ -42,6 +42,7 @@ DwtHeaderTreeItem = function(params) {
 	this._optButton = params.optButton;
 	this._noNodeCell = params.noNodeCell;
 	DwtTreeItem.call(this, params);
+	this._arrowDisabled = true; //override what DwTreeItem constructor sets.
 };
 
 DwtHeaderTreeItem.prototype = new DwtTreeItem;
