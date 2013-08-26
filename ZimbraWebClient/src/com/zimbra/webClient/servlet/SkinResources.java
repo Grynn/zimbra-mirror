@@ -2050,41 +2050,40 @@ public class SkinResources
 		// replace occurances of @roundCorners(size[ size[ size[ size]]])@ with CSS to round corners, specific to the platform
 		//
 		private String outputRoundCorners(Stack<String> stack, String[] params) throws IOException {
-			boolean isFirefox1_5up = isBrowser("FIREFOX_1_5_OR_HIGHER");
+			boolean isFirefox = isBrowser("FIREFOX");
 			boolean isFirefox4up = isBrowser("FIREFOX_4_OR_HIGHER");
-			boolean isWebKitBased = isBrowser("WEBKIT");
+			boolean isSafari = isBrowser("SAFARI");
 			boolean isSafari5up = isBrowser("SAFARI_5_OR_HIGHER");
+			boolean isChrome = isBrowser("CHROME");
 			boolean isChrome4up = isBrowser("CHROME_4_OR_HIGHER");
-			boolean isIE9up = isBrowser("MSIE_9_OR_HIGHER");
 
-			// Pick out browsers that support rounding in some fashion
-			if (isFirefox1_5up || isWebKitBased || isIE9up) {
-				String propName;
+			String propName;
 
-				if (isFirefox4up || isSafari5up || isChrome4up || isIE9up) {
-					// browsers that support the w3c syntax should use it
-					propName = "border-radius:";
-				} else {
-					// otherwise use the browser-proprietary syntax where available
-					if (isWebKitBased) {
-						propName = "-webkit-border-radius:";
-					} else {
-						propName = "-moz-border-radius:";
-					}
-				}
-				String size = (params.length > 0 ? params[0] : null);
-                if (size == null || size.equals("") )
-                    return propName + "3px;";  // Default value
-                String[] tokens = size.split(" ");
-                StringBuffer outStr = new StringBuffer(propName);
-                for(int i=0; i<tokens.length; i++){
-                    String propertyString = (tokens[i].matches("^[a-zA-Z]+")) ? getProperty(stack, tokens[i]) : tokens[i];
-                    propertyString = (propertyString != null) ? propertyString : tokens[i];
-                    outStr.append(propertyString).append((i == tokens.length-1) ? ";": " ");
-                }
-                return outStr.toString();
+			// Pick out browsers that require prefixes for rounding --
+			// all other browsers either support the W3C syntax or
+			// safely disregard it.
+			//
+			// https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius
+			if (isFirefox && !isFirefox4up) {
+				propName = "-moz-border-radius:";
+			} else if ((isChrome && !isChrome4up) || (isSafari && !isSafari5up)) {
+				propName = "-webkit-border-radius:";
+			} else {
+				propName = "border-radius:";
 			}
-			return "";
+
+			String size = (params.length > 0 ? params[0] : null);
+			if (size == null || size.equals("") )
+				return propName + "3px;";  // Default value
+			String[] tokens = size.split(" ");
+			StringBuffer outStr = new StringBuffer(propName);
+			for(int i=0; i<tokens.length; i++){
+				String propertyString = (tokens[i].matches("^[a-zA-Z]+")) ? getProperty(stack, tokens[i]) : tokens[i];
+				propertyString = (propertyString != null) ? propertyString : tokens[i];
+				outStr.append(propertyString).append((i == tokens.length-1) ? ";": " ");
+			}
+
+			return outStr.toString();
 		}
 
 		//
