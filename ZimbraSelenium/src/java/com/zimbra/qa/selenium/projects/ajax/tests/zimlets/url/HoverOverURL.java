@@ -192,9 +192,9 @@ public class HoverOverURL extends AjaxCommonTest {
 		// Hover over each URL, verify no 'blocked'
 		for (String link : "Link1,Link2,Link3".split(",") ) {
 		
-			// Link1: http://www.vmware.com/foo/javascript/foo
-			// Link2: http://www.vmware.com/foo/Javascript/foo
-			// Link3: http://www.vmware.com/foo/JAVASCRIPT/foo
+			// Link1: http://www.zimbra.com/foo/javascript/foo
+			// Link2: http://www.zimbra.com/foo/Javascript/foo
+			// Link3: http://www.zimbra.com/foo/JAVASCRIPT/foo
 
 			
 			// Hover over the URL

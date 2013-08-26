@@ -1,8 +1,8 @@
 Date: Mon, 1 Jul 2013 00:42:35 -0700 (PDT)
-From: uwm01@zqa-062.eng.vmware.com
-To: uwm02 <uwm02@zqa-062.eng.vmware.com>
-Message-ID: <1216464744.48.11372664555113.JavaMail.zimbra@zqa-062.eng.vmware.com>
-In-Reply-To: <258809959.34.11372664526352.JavaMail.zimbra@zqa-062.eng.vmware.com>
+From: uwm01@zqa-062.eng.zimbra.com
+To: uwm02 <uwm02@zqa-062.eng.zimbra.com>
+Message-ID: <1216464744.48.11372664555113.JavaMail.zimbra@zqa-062.eng.zimbra.com>
+In-Reply-To: <258809959.34.11372664526352.JavaMail.zimbra@zqa-062.eng.zimbra.com>
 Subject: new window invite ics attachment
 MIME-Version: 1.0
 Content-Type: multipart/mixed; 

@@ -1,9 +1,9 @@
 Return-Path: salmeida@zimbra.com
-Received: from edge01-zcs.vmware.com (LHLO edge01-zcs.vmware.com)
- (10.113.208.51) by mbs01-zcs.vmware.com with LMTP; Wed, 3 Apr 2013 23:01:49
+Received: from edge01-zcs.zimbra.com (LHLO edge01-zcs.zimbra.com)
+ (10.113.208.51) by mbs01-zcs.zimbra.com with LMTP; Wed, 3 Apr 2013 23:01:49
  -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-	by edge01-zcs.vmware.com (Postfix) with ESMTP id 445186C73;
+	by edge01-zcs.zimbra.com (Postfix) with ESMTP id 445186C73;
 	Wed,  3 Apr 2013 23:01:49 -0700 (PDT)
 X-Spam-Flag: NO
 X-Spam-Score: -1.661
@@ -17,18 +17,18 @@ X-Spam-Status: No, score=-1.661 tagged_above=-10 required=3
 	T_SHORTENED_URL_HREF=0.01, T_THREAD_INDEX_BAD=0.01,
 	T_UNKNOWN_ORIGIN=0.01, T_URL_SHORTENER=0.01, URIBL_BLOCKED=0.001]
 	autolearn=no
-Received: from edge01-zcs.vmware.com ([127.0.0.1])
-	by localhost (edge01-zcs.vmware.com [127.0.0.1]) (amavisd-new, port 10032)
+Received: from edge01-zcs.zimbra.com ([127.0.0.1])
+	by localhost (edge01-zcs.zimbra.com [127.0.0.1]) (amavisd-new, port 10032)
 	with ESMTP id jfLBTtt2VGlM; Wed,  3 Apr 2013 23:01:34 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-	by edge01-zcs.vmware.com (Postfix) with ESMTP id A8CA86C5B;
+	by edge01-zcs.zimbra.com (Postfix) with ESMTP id A8CA86C5B;
 	Wed,  3 Apr 2013 23:01:34 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at edge01-zcs.vmware.com
-Received: from edge01-zcs.vmware.com ([127.0.0.1])
-	by localhost (edge01-zcs.vmware.com [127.0.0.1]) (amavisd-new, port 10026)
+X-Virus-Scanned: amavisd-new at edge01-zcs.zimbra.com
+Received: from edge01-zcs.zimbra.com ([127.0.0.1])
+	by localhost (edge01-zcs.zimbra.com [127.0.0.1]) (amavisd-new, port 10026)
 	with ESMTP id PlV1tb4PRObX; Wed,  3 Apr 2013 23:01:33 -0700 (PDT)
-Received: from mbs01-zcs.vmware.com (mbs01-zcs.vmware.com [10.113.162.14])
-	by edge01-zcs.vmware.com (Postfix) with ESMTP id 9A1106C60;
+Received: from mbs01-zcs.zimbra.com (mbs01-zcs.zimbra.com [10.113.162.14])
+	by edge01-zcs.zimbra.com (Postfix) with ESMTP id 9A1106C60;
 	Wed,  3 Apr 2013 23:01:33 -0700 (PDT)
 Date: Wed, 3 Apr 2013 23:01:32 -0700 (PDT)
 From: Sandesh Almeida <salmeida@zimbra.com>

@@ -1,9 +1,9 @@
 Date: Sun, 30 Jun 2013 23:49:08 -0700 (PDT)
-From: uwm01@zqa-062.eng.vmware.com
-To: uwm02 <uwm02@zqa-062.eng.vmware.com>
-Message-ID: <1706954645.51.1372661348979.JavaMail.zimbra@zqa-062.eng.vmware.com>
-In-Reply-To: <1957871804.38.1372661314031.JavaMail.zimbra@zqa-062.eng.vmware.com>
-References: <1957871804.38.1372661314031.JavaMail.zimbra@zqa-062.eng.vmware.com>
+From: uwm01@zqa-062.eng.zimbra.com
+To: uwm02 <uwm02@zqa-062.eng.zimbra.com>
+Message-ID: <1706954645.51.1372661348979.JavaMail.zimbra@zqa-062.eng.zimbra.com>
+In-Reply-To: <1957871804.38.1372661314031.JavaMail.zimbra@zqa-062.eng.zimbra.com>
+References: <1957871804.38.1372661314031.JavaMail.zimbra@zqa-062.eng.zimbra.com>
 Subject: rfc822 attachment invite
 MIME-Version: 1.0
 Content-Type: multipart/mixed; 
@@ -35,10 +35,10 @@ Content-Type: message/rfc822
 Content-Disposition: attachment
 
 Date: Sun, 30 Jun 2013 23:48:34 -0700 (PDT)
-From: uwm01@zqa-062.eng.vmware.com
-To: uwm02 <uwm02@zqa-062.eng.vmware.com>
-Message-ID: <1957871804.38.1372661314031.JavaMail.zimbra@zqa-062.eng.vmware.com>
-In-Reply-To: <1585015001.29.1372661294341.JavaMail.zimbra@zqa-062.eng.vmware.com>
+From: uwm01@zqa-062.eng.zimbra.com
+To: uwm02 <uwm02@zqa-062.eng.zimbra.com>
+Message-ID: <1957871804.38.1372661314031.JavaMail.zimbra@zqa-062.eng.zimbra.com>
+In-Reply-To: <1585015001.29.1372661294341.JavaMail.zimbra@zqa-062.eng.zimbra.com>
 Subject: add to calendar using rfc822 attachment
 MIME-Version: 1.0
 Content-Type: multipart/mixed; 

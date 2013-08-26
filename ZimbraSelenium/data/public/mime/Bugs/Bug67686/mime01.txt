@@ -1,5 +1,5 @@
-From: Foo Bar <foo@zqa-062.eng.vmware.com>
-To: foo@zqa-062.eng.vmware.com,bar@zqa-062.eng.vmware.com,fee@zqa-062.eng.vmware.com
+From: Foo Bar <foo@zqa-062.eng.zimbra.com>
+To: foo@zqa-062.eng.zimbra.com,bar@zqa-062.eng.zimbra.com,fee@zqa-062.eng.zimbra.com
 Subject: Re: subject13690880312762 Account moves - good news!
 Importance: Normal
 MIME-Version: 1.0
@@ -22,10 +22,10 @@ Sent from my Verizon Wireless Phone
 
 
 ----- Reply message -----
-From: "Foo Bar" <foo@zqa-062.eng.vmware.com>
+From: "Foo Bar" <foo@zqa-062.eng.zimbra.com>
 Date: Fri, Dec 9, 2011 17:51
 Subject: Account moves - good news!
-To: "Foo Bar" <foo@zqa-062.eng.vmware.com>, "Fee Bar" <bar@zqa-062.eng.vmware.com>
+To: "Foo Bar" <foo@zqa-062.eng.zimbra.com>, "Fee Bar" <bar@zqa-062.eng.zimbra.com>
 
 I just moved another account to each mail host and I am NOT seeing the issue with the folder list.  
 It is also worth noting that I did not purge the originals (Justin had suggested this could be a memcache issue)

@@ -60,8 +60,8 @@ UID:2297d493-99aa-40ce-8707-8fe1f60f0def
 SUMMARY:Bug81565B
 LOCATION:Location
 ATTENDEE;CN=vmwen2;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:mail
- to:vmwen2@zqa-062.eng.vmware.com
-ORGANIZER:mailto:vmwen1@zqa-062.eng.vmware.com
+ to:vmwen2@zqa-062.eng.zimbra.com
+ORGANIZER:mailto:vmwen1@zqa-062.eng.zimbra.com
 DTSTART;TZID="America/Los_Angeles":20160508T170000
 DTEND;TZID="America/Los_Angeles":20160508T180000
 STATUS:CONFIRMED
@@ -72,9 +72,9 @@ LAST-MODIFIED:20130508T204718Z
 DTSTAMP:20130508T204718Z
 SEQUENCE:0
 DESCRIPTION:The following is a new meeting request:\n\nSubject: Bug81565B \n
- Organizer: vmwen1@zqa-062.eng.vmware.com \n\nLocation: Location \nTime: Sund
+ Organizer: vmwen1@zqa-062.eng.zimbra.com \n\nLocation: Location \nTime: Sund
  ay\, May 8\, 2016\, 5:00:00 PM - 6:00:00 PM GMT -08:00 US/Canada Pacific\n \
- nInvitees: vmwen2@zqa-062.eng.vmware.com \n\n\n*~*~*~*~*~*~*~*~*~*\n\nConten
+ nInvitees: vmwen2@zqa-062.eng.zimbra.com \n\n\n*~*~*~*~*~*~*~*~*~*\n\nConten
  t
 BEGIN:VALARM
 ACTION:DISPLAY

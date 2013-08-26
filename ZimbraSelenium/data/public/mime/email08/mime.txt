@@ -1,8 +1,8 @@
 Date: Thu, 21 Feb 2013 13:25:27 +0400 (GMT+04:00)
-From: 4@zqa-061.eng.vmware.com
-To: uwm01 <uwm01@zqa-061.eng.vmware.com>
-Message-ID: <833740842.90.1361438727782.JavaMail.root@zqa-061.eng.vmware.com>
-In-Reply-To: <1665548816.83.1361438704884.JavaMail.root@zqa-061.eng.vmware.com>
+From: 4@zqa-061.eng.zimbra.com
+To: uwm01 <uwm01@zqa-061.eng.zimbra.com>
+Message-ID: <833740842.90.1361438727782.JavaMail.root@zqa-061.eng.zimbra.com>
+In-Reply-To: <1665548816.83.1361438704884.JavaMail.root@zqa-061.eng.zimbra.com>
 Subject: Import ics using add to calendar
 MIME-Version: 1.0
 Content-Type: multipart/mixed; 

@@ -98,7 +98,7 @@ public class Repository {
    /**
     * This method gets the type of JdbcDriver
     * and connects to the racetrack
-    * @throws com.vmware.qalib.HarnessException
+    * @throws com.zimbra.qalib.HarnessException
     */
    public void
    connectingToRacetrack(String DbHostURL) throws HarnessException
@@ -112,7 +112,7 @@ public class Repository {
 
    /**
     * This method begins the testSet recording to racetrack
-    * @throws com.vmware.qalib.HarnessException
+    * @throws com.zimbra.qalib.HarnessException
     */
    public void beginTestSet(String buildNumber,
                             String username,
@@ -177,7 +177,7 @@ public class Repository {
 
    /**
    * Connect to the DB
-   * @throws com.vmware.qalib.HarnessException
+   * @throws com.zimbra.qalib.HarnessException
    */
    public boolean connect() throws HarnessException
    {
@@ -201,7 +201,7 @@ public class Repository {
 
    /**
     * Load the JDBC driver
-    * @throws com.vmware.qalib.HarnessException
+    * @throws com.zimbra.qalib.HarnessException
     */
 
    @Parameters({"DbDriver"})

@@ -14,7 +14,7 @@ Server Version: 8.0.0_BETA3_4922.NETWORK.20120328132153
 Machine zqa-382
 Client Machine zqa-381
 Pattern projects.octopus.tests
-Log file is at http://server.com/testlogs/UBUNTU10_64/OCTOPUS-D3/20120328131550_OCTOPUS/SelNG-projects-octopus-tests/133296757736852/zqa-382.eng.vmware.com/
+Log file is at http://server.com/testlogs/UBUNTU10_64/OCTOPUS-D3/20120328131550_OCTOPUS/SelNG-projects-octopus-tests/133296757736852/zqa-382.eng.zimbra.com/
 
 =======File: soapresult.txt
 Response

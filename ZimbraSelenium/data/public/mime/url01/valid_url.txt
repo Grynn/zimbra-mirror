@@ -8,6 +8,6 @@ Content-Transfer-Encoding: 7bit
 text  text
 
 
-text http://www.vmware.com general
-text https://www.vmware.com general
+text http://www.zimbra.com general
+text https://www.zimbra.com general
 

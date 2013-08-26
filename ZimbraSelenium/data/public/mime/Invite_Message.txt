@@ -1,10 +1,10 @@
-Return-Path: admin@zqa-062.eng.vmware.com
-Received: from zqa-062.eng.vmware.com (LHLO zqa-062.eng.vmware.com)
- (10.137.244.62) by zqa-062.eng.vmware.com with LMTP; Mon, 8 Apr 2013
+Return-Path: admin@zqa-062.eng.zimbra.com
+Received: from zqa-062.eng.zimbra.com (LHLO zqa-062.eng.zimbra.com)
+ (10.137.244.62) by zqa-062.eng.zimbra.com with LMTP; Mon, 8 Apr 2013
  01:24:04 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-	by zqa-062.eng.vmware.com (Postfix) with ESMTP id 7AE291A446B
-	for <girish1@zqa-062.eng.vmware.com>; Mon,  8 Apr 2013 01:24:04 -0700 (PDT)
+	by zqa-062.eng.zimbra.com (Postfix) with ESMTP id 7AE291A446B
+	for <girish1@zqa-062.eng.zimbra.com>; Mon,  8 Apr 2013 01:24:04 -0700 (PDT)
 X-Spam-Flag: NO
 X-Spam-Score: -3.056
 X-Spam-Level:
@@ -13,25 +13,25 @@ X-Spam-Status: No, score=-3.056 tagged_above=-10 required=6.6
 	RP_MATCHES_RCVD=-1, T_HELO_NO_DOMAIN=0.01, T_KHOP_NO_FULL_NAME=0.01,
 	T_LONG_HEADER_LINE_80=0.01, T_THREAD_INDEX_BAD=0.01,
 	T_UNKNOWN_ORIGIN=0.01, URIBL_BLOCKED=0.001] autolearn=no
-Received: from zqa-062.eng.vmware.com ([127.0.0.1])
-	by localhost (zqa-062.eng.vmware.com [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id 9OMs9h-PX1TQ for <girish1@zqa-062.eng.vmware.com>;
+Received: from zqa-062.eng.zimbra.com ([127.0.0.1])
+	by localhost (zqa-062.eng.zimbra.com [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id 9OMs9h-PX1TQ for <girish1@zqa-062.eng.zimbra.com>;
 	Mon,  8 Apr 2013 01:24:02 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-	by zqa-062.eng.vmware.com (Postfix) with ESMTP id EEB031A446D
-	for <girish1@zqa-062.eng.vmware.com>; Mon,  8 Apr 2013 01:24:01 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at zqa-062.eng.vmware.com
-Received: from zqa-062.eng.vmware.com ([127.0.0.1])
-	by localhost (zqa-062.eng.vmware.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id HmLVbzvcPWa0 for <girish1@zqa-062.eng.vmware.com>;
+	by zqa-062.eng.zimbra.com (Postfix) with ESMTP id EEB031A446D
+	for <girish1@zqa-062.eng.zimbra.com>; Mon,  8 Apr 2013 01:24:01 -0700 (PDT)
+X-Virus-Scanned: amavisd-new at zqa-062.eng.zimbra.com
+Received: from zqa-062.eng.zimbra.com ([127.0.0.1])
+	by localhost (zqa-062.eng.zimbra.com [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id HmLVbzvcPWa0 for <girish1@zqa-062.eng.zimbra.com>;
 	Mon,  8 Apr 2013 01:24:01 -0700 (PDT)
-Received: from zqa-062.eng.vmware.com (zqa-062.eng.vmware.com [10.137.244.62])
-	by zqa-062.eng.vmware.com (Postfix) with ESMTP id C87091A446B
-	for <girish1@zqa-062.eng.vmware.com>; Mon,  8 Apr 2013 01:24:01 -0700 (PDT)
+Received: from zqa-062.eng.zimbra.com (zqa-062.eng.zimbra.com [10.137.244.62])
+	by zqa-062.eng.zimbra.com (Postfix) with ESMTP id C87091A446B
+	for <girish1@zqa-062.eng.zimbra.com>; Mon,  8 Apr 2013 01:24:01 -0700 (PDT)
 Date: Mon, 8 Apr 2013 01:24:01 -0700 (PDT)
-From: admin@zqa-062.eng.vmware.com
-To: girish1 <girish1@zqa-062.eng.vmware.com>
-Message-ID: <158081883.13.1365409441378.JavaMail.zimbra@zqa-062.eng.vmware.com>
+From: admin@zqa-062.eng.zimbra.com
+To: girish1 <girish1@zqa-062.eng.zimbra.com>
+Message-ID: <158081883.13.1365409441378.JavaMail.zimbra@zqa-062.eng.zimbra.com>
 Subject: Test Edit Reply
 MIME-Version: 1.0
 Content-Type: multipart/alternative; 
@@ -48,11 +48,11 @@ Content-Transfer-Encoding: 7bit
 The following is a new meeting request:
 
 Subject: Test Edit Reply 
-Organizer: admin@zqa-062.eng.vmware.com 
+Organizer: admin@zqa-062.eng.zimbra.com 
 
 Time: Monday, April 8, 2013, 2:00:00 PM - 3:00:00 PM GMT +05:30 Chennai, Kolkata, Mumbai, New Delhi
  
-Invitees: girish1@zqa-062.eng.vmware.com 
+Invitees: girish1@zqa-062.eng.zimbra.com 
 
 
 *~*~*~*~*~*~*~*~*~*
@@ -79,8 +79,8 @@ BEGIN:VEVENT
 UID:bcf9c4bd-ae72-4947-a7be-712a3d9c9dca
 SUMMARY:Test Edit Reply
 ATTENDEE;CN=girish1;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:mai
- lto:girish1@zqa-062.eng.vmware.com
-ORGANIZER:mailto:admin@zqa-062.eng.vmware.com
+ lto:girish1@zqa-062.eng.zimbra.com
+ORGANIZER:mailto:admin@zqa-062.eng.zimbra.com
 DTSTART;TZID="Asia/Kolkata":20130408T140000
 DTEND;TZID="Asia/Kolkata":20130408T150000
 STATUS:CONFIRMED
@@ -91,9 +91,9 @@ LAST-MODIFIED:20130408T082401Z
 DTSTAMP:20130408T082401Z
 SEQUENCE:0
 DESCRIPTION:The following is a new meeting request:\n\nSubject: Test Edit Re
- ply \nOrganizer: admin@zqa-062.eng.vmware.com \n\nTime: Monday\, April 8\, 2
+ ply \nOrganizer: admin@zqa-062.eng.zimbra.com \n\nTime: Monday\, April 8\, 2
  013\, 2:00:00 PM - 3:00:00 PM GMT +05:30 Chennai\, Kolkata\, Mumbai\, New De
- lhi\n \nInvitees: girish1@zqa-062.eng.vmware.com \n\n\n*~*~*~*~*~*~*~*~*~*\n
+ lhi\n \nInvitees: girish1@zqa-062.eng.zimbra.com \n\n\n*~*~*~*~*~*~*~*~*~*\n
  \nTest Edit Reply
 BEGIN:VALARM
 ACTION:DISPLAY

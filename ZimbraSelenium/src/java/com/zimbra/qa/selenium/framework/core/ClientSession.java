@@ -140,7 +140,7 @@ public class ClientSession {
 			} else if (ZimbraSeleniumProperties.getStringProperty("browser").contains("firefox")){
 				FirefoxProfile profile = new FirefoxProfile();
 				//Proxy proxy = new Proxy();
-				//proxy.setHttpProxy("proxy.vmware.com:3128");
+				//proxy.setHttpProxy("proxy.zimbra.com:3128");
 				//profile.setProxyPreferences(proxy);
 				//profile.addExtension(....);
 				profile.setEnableNativeEvents(false);

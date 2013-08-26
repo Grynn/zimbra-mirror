@@ -1,6 +1,6 @@
 Date: Mon, 3 Jun 2013 11:44:33 -0700 (PDT)
-From: vmwde1@zqa-062.eng.vmware.com
-To: vmwen2@zqa-062.eng.vmware.com
+From: vmwde1@zqa-062.eng.zimbra.com
+To: vmwen2@zqa-062.eng.zimbra.com
 Subject: Re: ReadMore13674340693103
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -15,8 +15,8 @@ itors have included the Airbus A300, A310, and A330-200, while a successor,=
 
 
 ----- Urspr=C3=BCngliche Mail -----
-Von: vmwen2@zqa-062.eng.vmware.com
-An: vmwde1@zqa-062.eng.vmware.com
+Von: vmwen2@zqa-062.eng.zimbra.com
+An: vmwde1@zqa-062.eng.zimbra.com
 Gesendet: Montag, 3. Juni 2013 11:44:18
 Betreff: Re: read more
 
@@ -32,8 +32,8 @@ he most frequently used airliner for transatlantic flights between North Am=
 erica and Europe.
 
 ----- Original Message -----
-From: vmwde1@zqa-062.eng.vmware.com
-To: vmwen2@zqa-062.eng.vmware.com
+From: vmwde1@zqa-062.eng.zimbra.com
+To: vmwen2@zqa-062.eng.zimbra.com
 Sent: Monday, June 3, 2013 11:44:01 AM
 Subject: Re: read more
 
@@ -49,8 +49,8 @@ include the General Electric CF6, Pratt & Whitney JT9D and PW4000, and Roll=
 s-Royce RB211 turbofans.
 
 ----- Urspr=C3=BCngliche Mail -----
-Von: vmwen2@zqa-062.eng.vmware.com
-An: "vmwde1" <vmwde1@zqa-062.eng.vmware.com>
+Von: vmwen2@zqa-062.eng.zimbra.com
+An: "vmwde1" <vmwde1@zqa-062.eng.zimbra.com>
 Gesendet: Montag, 3. Juni 2013 11:43:11
 Betreff: read more
 

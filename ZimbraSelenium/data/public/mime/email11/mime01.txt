@@ -1,6 +1,6 @@
 Date: Mon, 3 Jun 2013 11:43:11 -0700 (PDT)
-From: vmwen2@zqa-062.eng.vmware.com
-To: vmwde1 <vmwde1@zqa-062.eng.vmware.com>
+From: vmwen2@zqa-062.eng.zimbra.com
+To: vmwde1 <vmwde1@zqa-062.eng.zimbra.com>
 Subject: ReadMore13674340693103
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8

@@ -1,6 +1,6 @@
 Date: Wed, 22 May 2013 10:52:33 -0700 (PDT)
-From: vmwen2@zqa-062.eng.vmware.com
-To: vmwen1 <vmwen1@zqa-062.eng.vmware.com>
+From: vmwen2@zqa-062.eng.zimbra.com
+To: vmwen1 <vmwen1@zqa-062.eng.zimbra.com>
 Subject: bug82303
 MIME-Version: 1.0
 Content-Type: multipart/alternative; 
@@ -21,9 +21,9 @@ Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: 7bit
 
 <html><body><div>Foobar</div><div>
-<a data-mce-href="http://www.vmware.com/foo/javascript/foo" href="http://www.vmware.com/foo/javascript/foo">Link1</a><br/>
-<a data-mce-href="http://www.vmware.com/foo/Javascript/foo" href="http://www.vmware.com/foo/Javascript/foo">Link2</a><br/>
-<a data-mce-href="http://www.vmware.com/foo/JAVASCRIPT/foo" href="http://www.vmware.com/foo/JAVASCRIPT/foo">Link3</a><br/>
+<a data-mce-href="http://www.zimbra.com/foo/javascript/foo" href="http://www.zimbra.com/foo/javascript/foo">Link1</a><br/>
+<a data-mce-href="http://www.zimbra.com/foo/Javascript/foo" href="http://www.zimbra.com/foo/Javascript/foo">Link2</a><br/>
+<a data-mce-href="http://www.zimbra.com/foo/JAVASCRIPT/foo" href="http://www.zimbra.com/foo/JAVASCRIPT/foo">Link3</a><br/>
 </div><div>Foobar</div></body></html>
 ------=_Part_13_172204351.1369245153356--
 

@@ -98,7 +98,7 @@ public class GetMessage extends AjaxCommonTest {
 		// Verify that the phone zimlet has been applied
 		//
 		// <span style="height:18;width:18;padding:9px 18px 9px 0; 
-		//			background:url(https://zqa-062.eng.vmware.com/service/zimlet/com_zimbra_ymemoticons/img/1.gif) 
+		//			background:url(https://zqa-062.eng.zimbra.com/service/zimlet/com_zimbra_ymemoticons/img/1.gif) 
 		//			no-repeat 0 50%;" title=":( - sad">
 		//		<span style="visibility:hidden">a</span>
 		//	</span>
