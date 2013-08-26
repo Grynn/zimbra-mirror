@@ -1116,6 +1116,7 @@ public class SkinResources
 		double geckoDate = 0;
 		double mozVersion = -1;
 		double webKitVersion = -1;
+		double tridentVersion = -1;
 		boolean isMac = false;
 		boolean isWindows = false;
 		boolean isLinux = false;
@@ -1143,6 +1144,7 @@ public class SkinResources
 		boolean isIE9up = false;
 		boolean isIE10 = false;
 		boolean isIE10up = false;
+		boolean isModernIE = false;
 		boolean isFirefox = false;
 		boolean isFirefox1up = false;
 		boolean isFirefox1_5up = false;
@@ -1156,6 +1158,7 @@ public class SkinResources
 		boolean isSafari5up = false;
 		boolean isChrome = false;
 		boolean isChrome4up = false;
+		boolean isTrident = false;
 		boolean isGeckoBased = false;
 		boolean isGecko1_8up = false;
 		boolean isGecko2up = false;
@@ -1210,6 +1213,9 @@ public class SkinResources
 					if (agtArr.hasMoreTokens()) {
 						browserVersion = parseVersion(agtArr.nextToken());
 					}
+				} else if ((index = token.indexOf("trident/")) != -1) {
+					isTrident = true;
+					tridentVersion = parseFloat(token.substring(index + 8));
 				} else if ((index = token.indexOf("gecko/")) != -1) {
 					isGeckoBased = true;
 					geckoDate = parseFloat(token.substring(index + 6));
@@ -1263,6 +1269,10 @@ public class SkinResources
 			isIE9up = (isIE && (browserVersion >= 9.0));
 			isIE10 = (isIE && (browserVersion == 10.0));
 			isIE10up = (isIE && (browserVersion >= 10.0));
+
+			isModernIE = (!isIE && isTrident &&
+			              mozVersion == browserVersion &&
+			              mozVersion > 0);
 
 			// Note: Opera and WebTV spoof Navigator. We do strict client detection.
 			isNav = (beginsWithMozilla && !isSpoofer && !isCompatible && !isOpera && !isWebTv && !isHotJava && !isSafari && !isChrome);
@@ -1327,6 +1337,7 @@ public class SkinResources
 			define(macros, "MSIE_LOWER_THAN_10", isIE && !isIE10up);
 			define(macros, "MSIE_10", isIE10);
 			define(macros, "MSIE_10_OR_HIGHER", isIE10up);
+			define(macros, "MODERN_IE", isModernIE);
 			define(macros, "NAVIGATOR", isNav);
 			define(macros, "NAVIGATOR_4", isNav4);
 			define(macros, "NAVIGATOR_6", isNav6);

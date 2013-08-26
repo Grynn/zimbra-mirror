@@ -41,6 +41,8 @@ AjxEnv.geckoDate;
 AjxEnv.mozVersion;
 /** WebKit version. */
 AjxEnv.webKitVersion;
+/** Trident version. */
+AjxEnv.tridentVersion;
 /** Macintosh. */
 AjxEnv.isMac;
 /** Windows. */
@@ -92,7 +94,17 @@ AjxEnv.isIE7up;
 AjxEnv.isIE8;
 /** Internet Explorer version 8 (or higher). */
 AjxEnv.isIE8up;
+/** Internet Explorer version 9. */
+AjxEnv.isIE9;
+/** Internet Explorer version 9 (or higher). */
+AjxEnv.isIE9up;
+/** Internet Explorer version 10. */
+AjxEnv.isIE10;
+/** Internet Explorer version 10 (or higher). */
+AjxEnv.isIE10up;
 
+/** Internet Explorer version 11 (or higher). */
+AjxEnv.isModernIE;
 
 AjxEnv.isNormalResolution;
 AjxEnv.ieScaleFactor;
@@ -141,6 +153,8 @@ AjxEnv.isChrome10up;
 AjxEnv.isGeckoBased;
 /** WebKit-based. */
 AjxEnv.isWebKitBased;
+/** Trident, i.e. the MSIE rendering engine */
+AjxEnv.isTrident;
 /** Opera. */
 AjxEnv.isOpera;
 
@@ -215,6 +229,7 @@ function() {
 	AjxEnv.isIE9   = false;
 	AjxEnv.isIE9up = false;
 	AjxEnv.isIE10  = false;
+	AjxEnv.isModernIE  = false;
 	AjxEnv.isNormalResolution = false;
 	AjxEnv.ieScaleFactor = 1;
 	AjxEnv.isFirefox = false;
@@ -242,6 +257,7 @@ function() {
 	AjxEnv.isChrome19up = false;
 	AjxEnv.isGeckoBased = false;
 	AjxEnv.isWebKitBased = false;
+	AjxEnv.isTrident = false;
 	AjxEnv.isOpera = false;
 	AjxEnv.useTransparentPNGs = false;
 	AjxEnv.isDesktop = false;
@@ -267,6 +283,7 @@ function() {
 	var isHotJava = false;
 	var beginsWithMozilla = false;
 	var isCompatible = false;
+	var isTrident = false;
 
 	if (agtArr != null) {
 		var browserVersion;
@@ -300,6 +317,9 @@ function() {
 			} else if ((index = token.indexOf('msie')) != -1) {
 				AjxEnv.isIE = true;
 				browserVersion = parseFloat(agtArr[i+1]);
+			} else if ((index = token.indexOf('trident/')) != -1) {
+				AjxEnv.isTrident = true;
+				AjxEnv.tridentVersion = parseFloat(token.substr(index + 8));
 			} else if ((index = token.indexOf('gecko/')) != -1) {
 				AjxEnv.isGeckoBased = true;
 				AjxEnv.geckoDate = parseFloat(token.substr(index + 6));
@@ -370,6 +390,7 @@ function() {
 		AjxEnv.isIE9			= (AjxEnv.isIE && browserVersion >= 9.0 && browserVersion < 10.0);
 		AjxEnv.isIE9up			= (AjxEnv.isIE && browserVersion >= 9.0);
 		AjxEnv.isIE10			= (AjxEnv.isIE && browserVersion >= 10.0 && browserVersion < 11.0);
+		AjxEnv.isModernIE	   = (!AjxEnv.isIE && AjxEnv.mozVersion >= 11.0 && AjxEnv.tridentVersion >= 7.0);
 		AjxEnv.isMozilla		= ((AjxEnv.isNav && AjxEnv.mozVersion && AjxEnv.isGeckoBased && (AjxEnv.geckoDate != 0)));
 		AjxEnv.isMozilla1_4up	= (AjxEnv.isMozilla && (AjxEnv.mozVersion >= 1.4));
 		AjxEnv.isFirefox 		= ((AjxEnv.isMozilla && AjxEnv.isFirefox));
@@ -407,6 +428,7 @@ function() {
 		else if (AjxEnv.isNav6)				{	AjxEnv.browser = "NAV6";	}
 		else if (AjxEnv.isNav4)				{	AjxEnv.browser = "NAV4";	}
 		else if (AjxEnv.isIE)				{	AjxEnv.browser = "IE" + browserVersion; }
+		else if (AjxEnv.isModernIE)			{	AjxEnv.browser = "IE" + browserVersion; }
 		else if (AjxEnv.isDesktop)			{	AjxEnv.browser = "ZD" + browserVersion; }
 
 		AjxEnv.platform = "[unknown]";
