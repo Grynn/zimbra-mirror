@@ -290,7 +290,7 @@ function() {
 		if (!AjxXmlDoc._msxmlVers) {
 			throw new AjxException("MSXML not installed", AjxException.INTERNAL_ERROR, "AjxXmlDoc._init");
 		}
-	} else if (AjxEnv.isNav || AjxEnv.isOpera || AjxEnv.isSafari) {
+	} else if (!Document.prototype.loadXML) {
 		// add loadXML to Document's API
 		Document.prototype.loadXML = function(str) {
 			var domParser = new DOMParser();
