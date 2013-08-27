@@ -1,7 +1,7 @@
 
 # Copyright (C) Igor Sysoev
 # Copyright (C) Nginx, Inc.
-# Portions Copyright (c) VMware, Inc. [1998 – 2011]. All Rights Reserved.
+# Portions Copyright (c) Zimbra Software, LLC. [1998 – 2011]. All Rights Reserved.
 
 if [ $EVENT_SELECT = NO -a $EVENT_FOUND = NO ]; then
     EVENT_SELECT=YES

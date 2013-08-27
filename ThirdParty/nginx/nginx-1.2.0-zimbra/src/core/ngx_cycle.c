@@ -5,7 +5,7 @@
  */
 
 /*
- * Portions Copyright (c) VMware, Inc. [1998 – 2011]. All Rights Reserved.
+ * Portions Copyright (c) Zimbra Software, LLC. [1998 – 2011]. All Rights Reserved.
  */
 
 #include <ngx_config.h>
