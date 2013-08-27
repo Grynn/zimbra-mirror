@@ -548,10 +548,6 @@ function(index, realizeDeferred, forceNode) {
 	this._textCell = document.getElementById(data.id + "_textCell");
 	this._extraCell = document.getElementById(data.id + "_extraCell");
 
-    if (this._arrowDisabled){
-        var tableNode = document.getElementById(data.id + "_table");
-        tableNode.style.tableLayout = "auto";
-    }
 	// If we have deferred children, then make sure we set up accordingly
 	if (this._nodeCell) {
 		this._nodeCell.style.width = this._nodeCell.style.height = DwtTreeItem._NODECELL_DIM;
