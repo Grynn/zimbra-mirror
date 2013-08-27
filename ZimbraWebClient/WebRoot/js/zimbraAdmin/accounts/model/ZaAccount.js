@@ -1901,7 +1901,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefMailItemsPerPage, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailItemsPerPage, choices:[10,25,50,100]},
         {
             id: ZaAccount.A_zimbraPrefMailPollingInterval,
-            type: _COS_ENUM_,
+            type: _COS_ENUM_POLLING_,
             ref: "attrs/" + ZaAccount.A_zimbraPrefMailPollingInterval,
             choices: ZaModel.MAIL_POLLING_INTERVAL_CHOICES
         },

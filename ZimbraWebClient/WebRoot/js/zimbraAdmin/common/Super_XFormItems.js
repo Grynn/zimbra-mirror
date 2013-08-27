@@ -116,6 +116,26 @@ Cos_Enum_XModelItem.prototype.validateType = function (value) {
 	throw this.getModel().getErrorMessage("didNotMatchChoice", value);
 }
 
+Cos_Enum_Polling_XModelItem = function () {}
+XModelItemFactory.createItemType("_COS_ENUM_POLLING_", "cos_enum_polling", Cos_Enum_Polling_XModelItem, Cos_Enum_XModelItem);
+
+Cos_Enum_Polling_XModelItem.prototype.getValue = function (instance, current, ref) {
+
+    var value = this.getLocalValue(instance);
+    if (value == null) {
+        value = this.getSuperValue(instance);
+    }
+
+    var POLLING_REGEX = /^([0-9])+([dhms]|ms)$/;
+
+    // IF the units are not part of the value, then default is seconds
+    if (!POLLING_REGEX.test(value)) {
+        value += "s";
+    }
+
+    return value;
+}
+
 Cos_List_XModelItem = function (){}
 XModelItemFactory.createItemType("_COS_LIST_", "list_enum", Cos_List_XModelItem, Cos_String_XModelItem);
 Cos_List_XModelItem.prototype.outputType = _LIST_;
