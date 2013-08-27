@@ -144,7 +144,7 @@ public class HoverOverFolder extends PrefGroupMailByMessageTest {
 		 * The computed size depends on the server.  So, just use not "0 B" (and hope
 		 * that some implementation won't use 0.2 MB)
 		 *  
-		 * Ex: http://zqa-004.eng.vmware.com/testlogs/UBUNTU10_64/main/20121202000101_NETWORK/SelNG-projects-ajax-tests/1354441149664/zqa-382.eng.vmware.com/AJAX/firefox_12.0/en_US/debug/projects/ajax/tests/mail/folders/HoverOverFolder/TooltipFolder_02ss51.png
+		 * Ex: http://server/testlogs/UBUNTU10_64/main/20121202000101_NETWORK/SelNG-projects-ajax-tests/1354441149664/server/AJAX/firefox_12.0/en_US/debug/projects/ajax/tests/mail/folders/HoverOverFolder/TooltipFolder_02ss51.png
 		 * 
 		 */
 		// Verify "201 B" message size

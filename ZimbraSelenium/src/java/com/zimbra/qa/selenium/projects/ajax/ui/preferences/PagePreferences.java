@@ -653,7 +653,7 @@ public class PagePreferences extends AbsTab {
 
 			<!-- Shared By Me -->
 			<tr id="DWT435">
-				<td width="180">admin@zqa-069.eng.vmware.com</td>
+				<td width="180">admin@server</td>
 				<td id="DWT434_it" width="auto">Inbox</td>
 				<td width="60">Mail Folder</td>
 				<td id="DWT434_ro" width="50">Viewer</td>

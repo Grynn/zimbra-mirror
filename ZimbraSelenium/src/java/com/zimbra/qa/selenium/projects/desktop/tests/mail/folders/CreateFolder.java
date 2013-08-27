@@ -162,7 +162,7 @@ public class CreateFolder extends AjaxCommonTest {
 	   Shortcut shortcut = Shortcut.S_NEWFOLDER;
 
 	   // get feeds about latest builds for QA
-	   String rssUrl="http://zqa-099.eng.vmware.com:8080/rssLatest";
+	   String rssUrl="http://server:8080/rssLatest";
 
 	   // Set the new folder name
 	   _folderName = "folderRSS" + ZimbraSeleniumProperties.getUniqueString();

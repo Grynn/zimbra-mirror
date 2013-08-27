@@ -107,7 +107,7 @@ public class GetDomain extends AdminCommonTest {
 				+ "<name>"+domainAliasName+"</name>"
 				+ "<a n='zimbraDomainType'>alias</a>"
 				+ "<a n='zimbraDomainAliasTargetId'>"+targetDomainID+"</a>"
-				+ "<a n='description'>"+"domain alias of zqa-062.eng.vmware.com"+"</a>"
+				+ "<a n='description'>"+"domain alias"+"</a>"
 				+ "<a n='zimbraMailCatchAllAddress'>@"+domainAliasName+"</a>" 
 				+ "<a  n='zimbraMailCatchAllForwardingAddress'>@"+targetDomain+"</a>"
 				+ "</CreateDomainRequest>");
@@ -210,7 +210,7 @@ public class GetDomain extends AdminCommonTest {
 				+ "<name>"+domainAliasName+"</name>"
 				+ "<a n='zimbraDomainType'>alias</a>"
 				+ "<a n='zimbraDomainAliasTargetId'>"+targetDomainID+"</a>"
-				+ "<a n='description'>"+"domain alias of zqa-062.eng.vmware.com"+"</a>"
+				+ "<a n='description'>"+"domain alias"+"</a>"
 				+ "<a n='zimbraMailCatchAllAddress'>@"+domainAliasName+"</a>" 
 				+ "<a  n='zimbraMailCatchAllForwardingAddress'>@"+targetDomain+"</a>"
 				+ "</CreateDomainRequest>");

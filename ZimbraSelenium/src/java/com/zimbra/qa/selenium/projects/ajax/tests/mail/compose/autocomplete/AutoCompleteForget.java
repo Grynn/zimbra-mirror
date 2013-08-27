@@ -138,7 +138,7 @@ public class AutoCompleteForget extends PrefGroupMailByMessageTest {
 	public void AutoCompleteForget_02() throws HarnessException {
 		
 		// Create two contacts
-		String emailaddress = "admin@zqa-061.eng.vmware.com";
+		String emailaddress = "admin@" + ZimbraSeleniumProperties.getStringProperty("server.host");
 		String firstname = "Michael" + ZimbraSeleniumProperties.getUniqueString();
 		String lastname = "Williams" + ZimbraSeleniumProperties.getUniqueString();
 		

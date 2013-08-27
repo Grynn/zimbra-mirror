@@ -62,7 +62,7 @@ public class ZimbraExternalAccount extends ZimbraAccount {
 	
 	/**
 	 * Based on the external invitation message, extract the login URL
-	 * example, https://zqa-062.eng.vmware.com/service/extuserprov/?p=0_46059ce585e90f5d2d5...12e636f6d3b
+	 * example, https://server/service/extuserprov/?p=0_46059ce585e90f5d2d5...12e636f6d3b
 	 * @param GetMsgResponse
 	 */
 	public void setRegistrationURL(Element GetMsgResponse) throws HarnessException {
@@ -89,7 +89,7 @@ public class ZimbraExternalAccount extends ZimbraAccount {
 
 	/**
 	 * Based on the external invitation message, extract the login URL
-	 * example, https://zqa-062.eng.vmware.com/?virtualacctdomain=zqa-062.eng.vmware.com
+	 * example, https://server/?virtualacctdomain=server
 	 * @param GetMsgResponse
 	 * @throws HarnessException 
 	 */

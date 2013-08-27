@@ -617,7 +617,7 @@ public class FormMailNew extends AbsForm {
 			// For some reason, the client expects a bit of a delay here.
 			// A cancel compose will not register unless this delay is here
 			// projects.ajax.tests.mail.compose.CancelComposeHtml.CancelComposeHtml_01
-			// http://zqa-004.eng.vmware.com/testlogs/UBUNTU10_64/HELIX/20110621210101_FOSS/SelNG-projects-ajax-tests/130872172760061/zqa-442.eng.vmware.com/AJAX/firefox_3.6.12/en_US/debug/projects/ajax/tests/mail/compose/CancelComposeHtml/CancelComposeHtml_01.txt
+			// http://server/testlogs/UBUNTU10_64/HELIX/20110621210101_FOSS/SelNG-projects-ajax-tests/130872172760061/server/AJAX/firefox_3.6.12/en_US/debug/projects/ajax/tests/mail/compose/CancelComposeHtml/CancelComposeHtml_01.txt
 			//
 			SleepUtil.sleepLong();
 

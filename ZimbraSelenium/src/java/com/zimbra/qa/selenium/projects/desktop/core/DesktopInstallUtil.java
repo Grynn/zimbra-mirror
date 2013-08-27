@@ -59,7 +59,7 @@ public class DesktopInstallUtil {
    private static String _desktopRegistryPath = null;
    private static final String _zimbraDesktopDisplayName = "Zimbra Desktop";
    private static ZDProcess zdProcess = null;
-   //private static final String _buildUrl = "http://zre-matrix.eng.vmware.com/links/WINDOWS/HELIX/20110114070101_ZDESKTOP/ZimbraBuild/i386/";
+   //private static final String _buildUrl = "http://buildserver/links/WINDOWS/HELIX/20110114070101_ZDESKTOP/ZimbraBuild/i386/";
 
    /**
     * Reads Windows registry value based on the specified location and key

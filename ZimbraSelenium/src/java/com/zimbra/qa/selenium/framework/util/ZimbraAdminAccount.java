@@ -215,7 +215,7 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 	 */
 	public static synchronized ZimbraAdminAccount GlobalAdmin() {
 		if ( _GlobalAdmin == null ) {
-			String name = ZimbraSeleniumProperties.getStringProperty("adminName", "admin@zqa-062.eng.vmware.com");
+			String name = ZimbraSeleniumProperties.getStringProperty("adminName");
 			_GlobalAdmin = new ZimbraAdminAccount(name);
 			_GlobalAdmin.authenticate();
 		}

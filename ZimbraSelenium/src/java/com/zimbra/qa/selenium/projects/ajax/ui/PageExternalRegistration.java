@@ -23,7 +23,7 @@ import com.zimbra.qa.selenium.framework.util.performance.PerfMetrics;
 
 /**
  * This class extends the Login Page, but tracks the external registration URL.  
- * example, https://zqa-062.eng.vmware.com/service/extuserprov/?p=0_46059ce585e90f5d2d5...12e636f6d3b
+ * example, https://server/service/extuserprov/?p=0_46059ce585e90f5d2d5...12e636f6d3b
  * @author Matt Rhoades
  *
  */
@@ -32,7 +32,7 @@ public class PageExternalRegistration extends PageLogin {
 
 	/**
 	 * The URL to register at.
-	 * example, https://zqa-062.eng.vmware.com/service/extuserprov/?p=0_46059ce585e90f5d2d5...12e636f6d3b
+	 * example, https://server/service/extuserprov/?p=0_46059ce585e90f5d2d5...12e636f6d3b
 	 */
 	protected ZimbraURI MyUrl = null;
 	

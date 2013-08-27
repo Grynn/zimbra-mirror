@@ -235,7 +235,7 @@ public class DistributionListItem extends ContactItem implements IItem {
 		 *             <a n="mail">dlist9873588964@testdomain.com</a>
 		 *             <a n="zimbraMailStatus">enabled</a>
 		 *             <a n="cn">dlist9873588964@testdomain.com</a>
-		 *             <a n="zimbraMailHost">zqa-062.eng.vmware.com</a>
+		 *             <a n="zimbraMailHost">server</a>
 		 *             <a n="zimbraId">bdd639dd-81db-44ba-b7ee-06beb9e8b762</a>
 		 *             <a n="zimbraCreateTimestamp">20121011201749Z</a>
 		 *             <a n="objectClass">zimbraDistributionList</a>

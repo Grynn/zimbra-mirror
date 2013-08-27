@@ -28,7 +28,7 @@ public class TooltipImage extends Tooltip {
 	 * 
 	 *  <div class="DwtToolTip" style="position: absolute; z-index: 775; left: -10000px; top: -10000px;">
 	 * 	 <div id="tooltipContents" class="DwtToolTipBody">
-	 *    <img id="DWT81" width="110" style="visibility: visible;" src="https://zqa-062.eng.vmware.com/service/home/~/?auth=co&loc=en_US&id=259&part=2">
+	 *    <img id="DWT81" width="110" style="visibility: visible;" src="https://server/service/home/~/?auth=co&loc=en_US&id=259&part=2">
 	 *   </div>
 	 *  </div>
 	 *  

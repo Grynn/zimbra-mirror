@@ -32,11 +32,11 @@ import org.apache.commons.httpclient.params.*;
  * Use this singleton in either of the following two approaches:
  *
  * 1. Recommended way of using this Singleton: always call getInstance()
- * with no arguments. The default racetrackUrl is "racetrack.eng.vmware.com".
+ * with no arguments. The default racetrackUrl is "racetrackurl".
  * If you want to set reacetrack URL to something other than the default,
  * set it thru your system properties. For example:
  *
- *   java -DRACETRACK_URL=yourserver.eng.vmware.com com.your.app
+ *   java -DRACETRACK_URL=yourserver com.your.app
  *
  * 2. (Deparecated, keeping it here for compatibility with some exising code)
  * If you already know your testCaseId, and can identify where you make your
@@ -54,7 +54,7 @@ public class RacetrackWebservice implements IRacetrack {
    /**
     * Base URL of the Racetrack server.
     */
-   private String racetrackUrl = "http://racetrack.eng.vmware.com";
+   private String racetrackUrl = ZimbraSeleniumProperties.getStringProperty("racetrack.dbUrl");
    private static final String RACETRACK_URL_SYS_PROPERTY = "RACETRACK_URL";
 
    /**
@@ -147,7 +147,7 @@ public static synchronized RacetrackWebservice
 
    /**
     * Create a TestSet in racetrack. Refer to
-    * https://wiki.eng.vmware.com/RacetrackWebServices
+    * https://server/RacetrackWebServices
     * for more details about the input arguments
     *
     * @param buildId
@@ -203,13 +203,13 @@ public static synchronized RacetrackWebservice
 
    /**
     * Update a TestSet in racetrack. Refer to
-    * https://wiki.eng.vmware.com/RacetrackWebServices
+    * https://server/RacetrackWebServices
     * for more details about the input arguments
     *
     * @TODO: consider using a hash as input arg, so users
     * of this method only have to specify the params they
     * are changing. See ticket 373374 for more details
-    * http://bugzilla.eng.vmware.com/show_bug.cgi?id=373374
+    * http://bugzilla/show_bug.cgi?id=373374
     *
     * @param id ID of this test set to update
     * @param updatedValues hashtable of <key, value> pairs
@@ -259,7 +259,7 @@ public static synchronized RacetrackWebservice
    /**
     * Adds a name-value pair of data to a test set. Refer to the wiki
     * for more info:
-    * https://wiki.eng.vmware.com/RacetrackWebServices#TestSetData
+    * https://server/RacetrackWebServices#TestSetData
     *
     * @param testSetId
     * @param name
@@ -311,7 +311,7 @@ public static synchronized RacetrackWebservice
    /**
     * Starts a test case in a specific test set
     * Refer to the following wiki for more details:
-    * https://wiki.eng.vmware.com/RacetrackWebServices#TestCaseBegin
+    * https://server/RacetrackWebServices#TestCaseBegin
     *
     * @param testSetId
     * @param name
@@ -353,7 +353,7 @@ public static synchronized RacetrackWebservice
     * Updates a test case
     *
     * Refer to the following wiki for more details:
-    * https://wiki.eng.vmware.com/RacetrackWebServices#TestCaseBegin
+    * https://server/RacetrackWebServices#TestCaseBegin
     *
     * Only the id is required, all other parameters will be updated if they are not null.
     *

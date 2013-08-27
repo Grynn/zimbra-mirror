@@ -45,7 +45,7 @@ public class MoveFeed extends PrefGroupMailByMessageTest {
 		ZAssert.assertNotNull(inbox, "Verify the inbox is available");
 		
 		String feedname = "feed" + ZimbraSeleniumProperties.getUniqueString();
-		// feed.rss=http://zqa-tms.eng.vmware.com/files/Service/RSS/Basic/basic.xml
+		// feed.rss=http://server/files/Service/RSS/Basic/basic.xml
 		URL feedurl = new URL(ZimbraSeleniumProperties.getStringProperty("feed.rss"));
 
 		app.zGetActiveAccount().soapSend(

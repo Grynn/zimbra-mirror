@@ -47,7 +47,7 @@ public class RenameFeed extends PrefGroupMailByMessageTest {
 				
 		// Create a subfolder in Inbox
 		String feedname = "feed" + ZimbraSeleniumProperties.getUniqueString();
-		// feed.rss=http://zqa-tms.eng.vmware.com/files/Service/RSS/Basic/basic.xml
+		// feed.rss=http://server/files/Service/RSS/Basic/basic.xml
 		URL feedurl = new URL(ZimbraSeleniumProperties.getStringProperty("feed.rss"));
 
 		app.zGetActiveAccount().soapSend(

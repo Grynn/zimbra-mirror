@@ -44,7 +44,7 @@ public class GetFeed extends PrefGroupMailByMessageTest {
 
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		
-		// feed.rss=http://zqa-tms.eng.vmware.com/files/Service/RSS/Basic/basic.xml
+		// feed.rss=http://server/files/Service/RSS/Basic/basic.xml
 		String feed = ZimbraSeleniumProperties.getStringProperty("feed.rss");
 
 		app.zGetActiveAccount().soapSend(
@@ -85,7 +85,7 @@ public class GetFeed extends PrefGroupMailByMessageTest {
 
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
-		// feed.rss=http://zqa-tms.eng.vmware.com/files/Service/RSS/Basic/basic.xml
+		// feed.rss=http://server/files/Service/RSS/Basic/basic.xml
 		String url = ZimbraSeleniumProperties.getStringProperty("feed.rss");
 
 		app.zGetActiveAccount().soapSend(
