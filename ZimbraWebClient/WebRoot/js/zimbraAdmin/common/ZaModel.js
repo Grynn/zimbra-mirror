@@ -370,6 +370,65 @@ ZaModel.getLongTimeChoices = function () {
     ];
 }
 
+/**
+ * The length of one year is used to indicate manual choice
+ * @returns {Array}
+ */
+ZaModel.getMailPollingIntervalChoices = function () {
+    return [
+        {
+            value: "500ms",
+            label: ZaMsg.LBL_asNewMailArrives
+        },
+        {
+            value: "120s",
+            label: "2 " + ZaMsg.LBL_minute
+        },
+        {
+            value: "180s",
+            label: "3 " + ZaMsg.LBL_minute
+        },
+        {
+            value: "240s",
+            label: "4 " + ZaMsg.LBL_minute
+        },
+        {
+            value: "300s",
+            label: "5 " + ZaMsg.LBL_minute
+        },
+        {
+            value: "360s",
+            label: "6 " + ZaMsg.LBL_minute
+        },
+        {
+            value: "420s",
+            label: "7 " + ZaMsg.LBL_minute
+        },
+        {
+            value: "480s",
+            label: "8 " + ZaMsg.LBL_minute
+        },
+        {
+            value: "540s",
+            label: "9 " + ZaMsg.LBL_minute
+        },
+        {
+            value: "600s",
+            label: "10 " + ZaMsg.LBL_minute
+        },
+        {
+            value: "900s",
+            label: "15 " + ZaMsg.LBL_minute
+        },
+        {
+            value: "31536000s",
+            label: ZaMsg.LBL_manual
+        }
+    ];
+}
+
+ZaModel.MAIL_POLLING_INTERVAL_CHOICES = ZaModel.getMailPollingIntervalChoices;
+
 ZaModel.prototype.toString = function() {
     return "ZaModel";
 }
