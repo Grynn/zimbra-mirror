@@ -213,6 +213,20 @@ public class ZimbraAccount {
 		_AccountZMC = null;
 	}
 	private static ZimbraAccount _AccountZMC = null;
+	
+	public static synchronized ZimbraAccount AccountZTC() {
+		if ( _AccountZTC == null ) {
+			_AccountZTC = new ZimbraAccount();
+			_AccountZTC.provision();
+			_AccountZTC.authenticate();
+		}
+		return (_AccountZTC);
+	}
+	public static synchronized void ResetAccountZTC() {
+		logger.warn("AccountZTC is being reset");
+		_AccountZTC = null;
+	}
+	private static ZimbraAccount _AccountZTC = null;
 
 	/**
 	 * Get a general use account for interacting with the test account
@@ -266,7 +280,8 @@ public class ZimbraAccount {
 		ZimbraAccount._AccountHTML = null;
 		ZimbraAccount._AccountZDC = null;
 		ZimbraAccount._AccountZMC = null;
-		ZimbraAccount._AccountZWC = null;		
+		ZimbraAccount._AccountZWC = null;
+		ZimbraAccount._AccountZTC = null;
 	}
 	
 	// Set the default account settings
