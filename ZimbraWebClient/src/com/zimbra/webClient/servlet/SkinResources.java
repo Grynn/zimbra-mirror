@@ -701,10 +701,9 @@ public class SkinResources
             sb.append("\n#HTML files\n\n");
             sb.append("\n");
             sb.append(appContextPath).append("/");
-            if (!"".equals(debug)){
-               sb.append("?dev=1");
+            if (debugStr != null && (debugStr.equals(Boolean.TRUE.toString()) || debugStr.equals("1"))) {
+                sb.append("?dev=1");
             }
-			sb.append("\n/img/zimbra.gif\n"); //TODO remove this hardcoded image.
 			sb.append("\n#images\n\n");
 			sb.append("/img/zimbra.gif\n"); //TODO remove this hardcoded image.
 			sb.append("/img/zimbra.png\n"); //TODO remove this hardcoded image.
