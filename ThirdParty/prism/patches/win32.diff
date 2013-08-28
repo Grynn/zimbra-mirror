@@ -31,7 +31,7 @@ Only in drop/prism-090211.win32/chrome/webrunner/branding: icon128.png
 diff -r drop/prism-090211.win32/chrome/webrunner/content/about.js patches/chrome/webrunner/content/about.js
 39a40,43
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 56c60
@@ -62,7 +62,7 @@ diff -r drop/prism-090211.win32/chrome/webrunner/content/about.xul patches/chrom
 > 
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 50,51c56,59
@@ -132,7 +132,7 @@ diff -r drop/prism-090211.win32/chrome/webrunner/content/webrunner.js patches/ch
 > */
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 471a517,522
@@ -230,7 +230,7 @@ diff -r drop/prism-090211.win32/chrome/webrunner/content/webrunner.xul patches/c
 > # ***** END LICENSE BLOCK *****
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 22c66
@@ -415,7 +415,7 @@ diff -r drop/prism-090211.win32/defaults/preferences/preferences.js patches/defa
 > */
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 > pref("toolkit.defaultChromeURI", "chrome://webrunner/content/webrunner.xul");  // - main xul window
@@ -671,7 +671,7 @@ diff -r drop/prism-090211.win32/xulrunner/components/nsUpdateService.js patches/
 4a5,9
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 2820c2825

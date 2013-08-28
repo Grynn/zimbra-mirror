@@ -124,7 +124,7 @@ diff -r drop/Prism.app/Contents/Frameworks/XUL.framework/components/nsUpdateServ
 4a5,9
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 2780c2785
@@ -251,7 +251,7 @@ Only in drop/Prism.app/Contents/Resources/chrome/webrunner/branding: icon128.png
 diff -r drop/Prism.app/Contents/Resources/chrome/webrunner/content/about.js patches/Prism.app/Contents/Resources/chrome/webrunner/content/about.js
 39a40,44
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 > 
@@ -282,7 +282,7 @@ diff -r drop/Prism.app/Contents/Resources/chrome/webrunner/content/about.xul pat
 40a41,45
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 50,51c55,58
@@ -352,7 +352,7 @@ diff -r drop/Prism.app/Contents/Resources/chrome/webrunner/content/webrunner.js 
 > */
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 483a529,534
@@ -448,7 +448,7 @@ diff -r drop/Prism.app/Contents/Resources/chrome/webrunner/content/webrunner.xul
 > # ***** END LICENSE BLOCK *****
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 22c65
@@ -528,7 +528,7 @@ diff -r drop/Prism.app/Contents/Resources/defaults/preferences/preferences.js pa
 > */
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 10c52

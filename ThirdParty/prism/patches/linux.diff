@@ -93,7 +93,7 @@ diff -r drop/prism-090211.linux/chrome/webrunner/content/about.js patches/chrome
 > */
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 41c59
 <   version.value = bundle.GetStringFromName("brandFullName") + " " + appInfo.version;
@@ -160,7 +160,7 @@ diff -r drop/prism-090211.linux/chrome/webrunner/content/about.xul patches/chrom
 > # ***** END LICENSE BLOCK *****
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 2a45
 > -->
@@ -191,7 +191,7 @@ Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: applicatio
 Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: applicationManager.xul
 diff -r drop/prism-090211.linux/chrome/webrunner/content/preferences/applications.js patches/chrome/webrunner/content/preferences/applications.js
 1a2,5
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 > /*
@@ -308,7 +308,7 @@ diff -r drop/prism-090211.linux/chrome/webrunner/content/webrunner.js patches/ch
 > */
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 495a515,520
@@ -432,7 +432,7 @@ diff -r drop/prism-090211.linux/chrome/webrunner/content/webrunner.xul patches/c
 > # ***** END LICENSE BLOCK *****
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 27a47
 > -->
@@ -508,7 +508,7 @@ diff -r drop/prism-090211.linux/defaults/preferences/preferences.js patches/defa
 > */
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 > 
@@ -768,7 +768,7 @@ diff -r drop/prism-090211.linux/xulrunner/components/nsUpdateService.js patches/
 4a5,9
 > 
 > /*
-> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> * Portions Copyright (c) Zimbra Software, LLC. [1998 - 2011]. All Rights Reserved.
 > */
 > 
 2767c2772
