@@ -92,8 +92,7 @@ public class MobileCommonTest {
 		logger.info("commonTestBeforeSuite: start");
 
       //Racetrack
-      String DbHostURL = ZimbraSeleniumProperties.getStringProperty("racetrack.dbUrl",
-            "racetrack.eng.vmware.com");
+      String DbHostURL = ZimbraSeleniumProperties.getStringProperty("racetrack.dbUrl");
       String buildNumber = ZimbraSeleniumProperties.getStringProperty("racetrack.buildNumber",
             "000000");
       String userName = ZimbraSeleniumProperties.getStringProperty("racetrack.username",

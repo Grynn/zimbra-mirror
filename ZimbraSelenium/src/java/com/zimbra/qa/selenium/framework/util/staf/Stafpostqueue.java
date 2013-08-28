@@ -97,21 +97,21 @@ public class Stafpostqueue extends StafServicePROCESS {
 		/* Example "output":
 
     	-Queue ID- --Size-- ----Arrival Time---- -Sender/Recipient-------
-    	A391E167584     1164 Thu Jun 30 11:23:15  zimbra@zqa-429.eng.vmware.com
-    	(delivery temporarily suspended: connect to zqa-429.eng.vmware.com[10.137.245.174]:7025: Connection refused)
-    	                                         admin@zqa-429.eng.vmware.com
+    	A391E167584     1164 Thu Jun 30 11:23:15  zimbra@server
+    	(delivery temporarily suspended: connect to server[10.137.245.174]:7025: Connection refused)
+    	                                         admin@server
 
     	03E3A16757E     2012 Thu Jun 30 11:25:52  enus130945819697629@testdomain.com
-    	(delivery temporarily suspended: connect to zqa-429.eng.vmware.com[10.137.245.174]:7025: Connection refused)
+    	(delivery temporarily suspended: connect to server[10.137.245.174]:7025: Connection refused)
     	                                         enus130945833860146@testdomain.com
 
-    	48E6016757B     1164 Thu Jun 30 11:21:46  zimbra@zqa-429.eng.vmware.com
-    	  (connect to zqa-429.eng.vmware.com[10.137.245.174]:7025: Connection refused)
-    	                                         admin@zqa-429.eng.vmware.com
+    	48E6016757B     1164 Thu Jun 30 11:21:46  zimbra@server
+    	  (connect to server[10.137.245.174]:7025: Connection refused)
+    	                                         admin@server
 
-    	9A588167581     1164 Thu Jun 30 11:23:15  zimbra@zqa-429.eng.vmware.com
-    	(delivery temporarily suspended: connect to zqa-429.eng.vmware.com[10.137.245.174]:7025: Connection refused)
-    	                                         admin@zqa-429.eng.vmware.com
+    	9A588167581     1164 Thu Jun 30 11:23:15  zimbra@server
+    	(delivery temporarily suspended: connect to server[10.137.245.174]:7025: Connection refused)
+    	                                         admin@server
 
 
     	-- 17 Kbytes in 4 Requests.
@@ -125,7 +125,7 @@ public class Stafpostqueue extends StafServicePROCESS {
     	
     	// Keep a table of strings to entries, i.e.
     	// key = 48E6016757B
-    	// value = 48E6016757B     1164 Thu Jun 30 11:21:46  enus1231@zqa-429.eng.vmware.com\n(connect to ... 
+    	// value = 48E6016757B     1164 Thu Jun 30 11:21:46  enus1231@server\n(connect to ... 
     	//
     	Hashtable<String, String> idTable = new Hashtable<String, String>();
 
