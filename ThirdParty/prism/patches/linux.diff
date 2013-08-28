@@ -25,7 +25,7 @@ diff -r drop/prism-090211.linux/chrome/webrunner/branding/brand.properties patch
 ---
 > brandShortName=Zimbra Desktop
 > brandFullName=Zimbra Desktop
-> vendorShortName=VMware
+> vendorShortName=Zimbra
 Only in drop/prism-090211.linux/chrome/webrunner/branding: icon128.png
 Only in patches/chrome/webrunner/content: .DS_Store
 diff -r drop/prism-090211.linux/chrome/webrunner/content/about.js patches/chrome/webrunner/content/about.js
