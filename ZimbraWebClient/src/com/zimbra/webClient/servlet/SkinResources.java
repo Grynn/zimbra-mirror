@@ -732,12 +732,10 @@ public class SkinResources
             }
 			sb.append("\n\n#style sheets\n");
 			//create the url of the css files
-			sb.append("\n").append(appContextPath).append("/css/").append(filenames).append(".css?v=").append(cacheBusterVersion)
-              .append("&");
-            if (debugStr != null && (debugStr.equals(Boolean.TRUE.toString()) || debugStr.equals("1"))) {
-                sb.append(debug);
-            }
-            sb.append("skin=").append(skinStr)
+            sb.append("\n").append(appContextPath).append("/css/").append(filenames).append(".css?v=").append(cacheBusterVersion)
+              .append("&")
+              .append(debug)
+              .append("skin=").append(skinStr)
 			  .append("&locale=" + localeStr);
 
 			sb.append("\n").append(appContextPath).append("/css/msgview.css?v=").append(cacheBusterVersion);
@@ -764,20 +762,20 @@ public class SkinResources
             sb.append("skin=").append(skinStr);
 
 			sb.append("\n").append(appContextPath).append("/js/skin.js?");
-			sb.append(debug).append(locale).append("skin=").append(skinStr);
-			if (client != null && !"".equals(client)) {
-				sb.append("&client=").append(client);
-			}
+            if (client != null && !"".equals(client)) {
+                sb.append("client=").append(client).append("&");
+            }
+            sb.append("skin=").append(skinStr)
+              .append("&locale=" + localeStr)
+              .append("&")
+              .append(debug);
 
-			String compressStr = req.getParameter(P_COMPRESS);
-			if (compressStr != null && !"".equals(compressStr)) {
-				sb.append("&compress=").append(compressStr);
-			}
+            String templatesStr = req.getParameter(P_TEMPLATES);
+            if (templatesStr != null && !"".equals(templatesStr)) {
+                sb.append("templates=").append(templatesStr);
+            }
+            sb.append("&v=").append(cacheBusterVersion);
 
-			String templatesStr = req.getParameter(P_TEMPLATES);
-			if (templatesStr != null && !"".equals(templatesStr)) {
-				sb.append("&templates=").append(templatesStr);
-			}
 			sb.append("\n\n#javascript files\n");
 
 			if (debugStr != null && (debugStr.equals(Boolean.TRUE.toString()) || debugStr.equals("1"))) {
