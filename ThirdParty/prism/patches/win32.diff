@@ -41,7 +41,7 @@ diff -r drop/prism-090211.win32/chrome/webrunner/content/about.js patches/chrome
 59c63
 <   userAgent.value = navigator.userAgent;
 ---
->   userAgent.value = "Portions Copyright (c) 2008-2011 VMware Inc. \nAll rights reserved.";
+>   userAgent.value = "Portions Copyright (c) 2008-2011 Zimbra Software, LLC. \nAll rights reserved.";
 72a77,90
 > 
 > function checkForUpdates()

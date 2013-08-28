@@ -262,7 +262,7 @@ diff -r drop/Prism.app/Contents/Resources/chrome/webrunner/content/about.js patc
 59c64
 <   userAgent.value = navigator.userAgent;
 ---
->   userAgent.value = "Portions Copyright (c) 2008-2011 VMware Inc. \nAll rights reserved.";
+>   userAgent.value = "Portions Copyright (c) 2008-2011 Zimbra Software, LLC. \nAll rights reserved.";
 72a78,91
 > 
 > function checkForUpdates()
