@@ -558,7 +558,11 @@ function(msg, msgView) {
 
 	this._msgId = msg.id;
 	this._viewId = appCtxt.getCurrentViewId();
-	var view = appCtxt.getCurrentView().getItemView();
+	var view = appCtxt.getCurrentView();
+	if (view.getItemView) {
+		//view is a instance of list view so get the item view
+		view = view.getItemView();
+	}
 	var widgetId = this._isConv ? (view._msgViews && view._msgViews[this._msgId] && view._msgViews[this._msgId]._msgBodyDivId) : view._msgBodyDivId;
 	var el = document.getElementById(widgetId);
 	
