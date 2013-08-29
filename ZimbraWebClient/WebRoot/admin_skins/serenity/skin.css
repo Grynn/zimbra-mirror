@@ -48,7 +48,7 @@ BODY {
 #ENDIF
 }
 
-#skin_top_td				{	height:30px;	}
+#skin_top_td				{	height:@TopHeight@;	}
 #skin_outer *				{	@FixBoxModel@	}
 #skin_table_outer			{	padding:0px 5px 5px;	}
 
