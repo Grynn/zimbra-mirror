@@ -23,7 +23,6 @@ HTML {
 
 BODY {
 	@FontFamily-default@
-	@grad(#57A3D5,#1D3A62)@ 	/* TODO: Derive colors from skin.properties values */
 	color:@TxtC@;
 	margin:0px;
 	padding:0px;
@@ -43,7 +42,7 @@ BODY {
 
 #skin_outer {
 	@FullSize@
-	background-color:transparent;
+	@grad(#57A3D5,#1D3A62)@ 	/* TODO: Derive colors from skin.properties values */
 #IFDEF MSIE_LOWER_THAN_9
 	padding:0px 5px 5px;
 #ENDIF
