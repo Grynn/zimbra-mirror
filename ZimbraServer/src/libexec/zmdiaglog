@@ -26,7 +26,7 @@ use File::Copy qw/cp/;
 use Zimbra::Mon::Zmstat;
 
 use vars qw(
-    $VERSION $PID_FILE $DEFAULT_DEST $JMAP $JAVA $DEFAULT_TIMEOUT
+    $VERSION $PID_FILE $DEFAULT_DEST $JMAP $JAVA $JINFO $DEFAULT_TIMEOUT
     $HAVE_GCORE $HAVE_PSTACK $HAVE_LSOF $HAVE_DMESG $LOG_FILE $ZMSTAT_CONF
     $ZMDUMPENV $ZMLOCALCONFIG $ZMPROV $ZMHOSTNAME $SU $HAVE_NETSTAT $HAVE_MYSQL
 );
@@ -51,6 +51,7 @@ $DEFAULT_TIMEOUT = 120;
 $PID_FILE = '/opt/zimbra/log/zmmailboxd_java.pid';
 $JMAP = '/opt/zimbra/java/bin/jmap';
 $JAVA = '/opt/zimbra/java/bin/java';
+$JINFO = '/opt/zimbra/java/bin/jinfo';
 $Getopt::Std::STANDARD_HELP_VERSION = 1;
 $VERSION = 0.1;
 $HAVE_GCORE = has_cmd('gcore');
@@ -125,6 +126,16 @@ sub save_jvm_core($$) {
     } elsif (!$HAVE_GCORE) {
         logmsg "'gcore' (gdb) is not installed, will not collect JVM coredump\n";
     }
+}
+
+sub save_jinfo($) {
+    my ($pid) = @_;
+    my $jinfo_cmd;
+    my $out_file = "jinfo.out";
+
+    $jinfo_cmd = "$SU '$JINFO $pid'";
+    logmsg "Saving Java configuration info for process $pid to $out_file\n";
+    qx($jinfo_cmd > $out_file 2>&1);
 }
 
 sub has_cmd($) {
@@ -292,6 +303,8 @@ sub run() {
     my $JAVA_VERSION = get_java_version();
     logmsg "Java version: $JAVA_VERSION\n";
     
+    save_jinfo($mailboxd_pid);
+
     for (my $i = 1; $i <= 10; $i++) {
         logmsg "Collecting thread stats/stacks: $i of 10\n";
         my $TS = strftime("%H-%M-%S", localtime());
@@ -355,7 +368,7 @@ sub run() {
     } else {
       logmsg "'netstat' is not installed, skipping check.\n";
     }
-    
+
     my $dumped = save_heap_info($JAVA_VERSION, $destination,
         $mailboxd_pid, $timeout) if ($options{'a'});
 
