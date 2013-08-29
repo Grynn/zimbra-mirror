@@ -650,6 +650,10 @@ TD.gridGroupBodyLabel {
 	padding:0px;
 }
 
+.grid_xform_table {
+    width: 100%;
+}
+
 .grid_table_cell_sheet {
 	padding:2px;
 	overflow:auto;
