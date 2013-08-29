@@ -655,6 +655,8 @@ mydestination = localhost.localdomain localhost
 # Disable NIS which is in the default
 alias_maps = lmdb:/etc/aliases
 
+alias_database = lmdb:/etc/aliases
+
 # for security...
 allow_mail_to_commands =
 allow_mail_to_files =
