@@ -25,6 +25,7 @@ ZaTreeItem = function(params) {
 
     params.expandNodeImage = params.expandNodeImage || "Blank_16";
     params.collapseNodeImage= params.collapseNodeImage || "AdminCollapse";
+    params.arrowDisabled = true;
     params = Dwt.getParams(arguments, ZaTreeItem.PARAMS);
     this._parentInTree = params.parent;
     this._countParam = params.count;
