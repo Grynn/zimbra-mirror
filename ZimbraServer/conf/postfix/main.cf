@@ -657,6 +657,8 @@ alias_maps = lmdb:/etc/aliases
 
 alias_database = lmdb:/etc/aliases
 
+default_database_type = lmdb
+
 # for security...
 allow_mail_to_commands =
 allow_mail_to_files =
