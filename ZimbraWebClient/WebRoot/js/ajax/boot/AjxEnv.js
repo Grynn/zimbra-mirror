@@ -458,7 +458,7 @@ function() {
 
     //HTML5
     AjxEnv.supportsHTML5File = !!( window.FileReader/*Firefox*/ || AjxEnv.isChrome || AjxEnv.isSafari4up || AjxEnv.isIE10up );
-    AjxEnv.supportsPlaceholder 	= !(AjxEnv.isFirefox && !AjxEnv.isFirefox4up) || !(AjxEnv.isIE && !AjxEnv.isIE10up);
+    AjxEnv.supportsPlaceholder 	= 'placeholder' in document.createElement('INPUT');
 };
 
 // code provided by webkit authors to determine if nightly browser

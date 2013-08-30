@@ -49,8 +49,6 @@
  *
  * @extends		DwtComposite
  * 
- * TODO: Use HTML5 feature of placeholder text for inputs (not supported by IE):
- * http://www.whatwg.org/specs/web-apps/current-work/multipage/common-input-element-attributes.html#the-placeholder-attribute
  */
 DwtInputField = function(params) {
 
@@ -375,7 +373,9 @@ DwtInputField.prototype.setHint =
 function(hint) {
 	var oldHint = this._hint;
 	this._hint = hint;
-	if (this._hintIsVisible) {
+	if (AjxEnv.supportsPlaceholder) {
+		this.getInputElement().placeholder = hint;
+	} else if (this._hintIsVisible) {
 		this.getInputElement().value = hint;
 		if (!hint) {
 			this._hintIsVisible = false;
@@ -749,16 +749,18 @@ function(ev) {
 
 DwtInputField.prototype._hideHint = 
 function(value) {
-	var element = this.getInputElement();
-	element.value = value;
-	element.title = this._hint || "";
-	this._hintIsVisible = false;
-	this._updateClassName();
+	if (!AjxEnv.supportsPlaceholder) {
+		var element = this.getInputElement();
+		element.value = value;
+		element.title = this._hint || "";
+		this._hintIsVisible = false;
+		this._updateClassName();
+	}
 };
 
 DwtInputField.prototype._showHint = 
 function() {
-	if (this._hint) {
+	if (!AjxEnv.supportsPlaceholder && this._hint) {
 		var element = this.getInputElement();
 		if (!element.value) {
 			this._hintIsVisible = true;
@@ -905,6 +907,10 @@ function(params) {
     if (params && params.inputId) {
         ninput.id = params.inputId;
     }
+
+	if (AjxEnv.supportsPlaceholder && this._hint) {
+		ninput.placeholder = this._hint;
+	}
 
 	// add event handlers
 	ninput.onkeyup = DwtInputField._keyUpHdlr;
