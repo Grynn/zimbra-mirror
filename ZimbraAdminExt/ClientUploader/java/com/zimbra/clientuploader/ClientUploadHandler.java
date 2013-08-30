@@ -14,7 +14,6 @@
  */
 package com.zimbra.clientuploader;
 
-import com.zimbra.common.account.Key;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Account;
@@ -26,6 +25,7 @@ import com.zimbra.cs.extension.ExtensionHttpHandler;
 
 import com.zimbra.cs.servlet.ZimbraServlet;
 
+import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -100,7 +100,7 @@ public class ClientUploadHandler extends ExtensionHttpHandler {
         if (authToken.isDomainAdmin() || authToken.isDelegatedAdmin()) {
             try {
                 RightCommand.EffectiveRights rights = Provisioning.getInstance().getEffectiveRights(TARGET_TYPE, null, null,
-                        Key.GranteeBy.id, authToken.getAccountId(),
+                        GranteeBy.id, authToken.getAccountId(),
                         false, false);
                 List<String> preRights = rights.presetRights();
                 for (String r : preRights) {
