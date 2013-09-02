@@ -1668,17 +1668,27 @@ function(startColor, endColor, direction) {
 
     var cssDirection;
     var gradient = {};
-    if (AjxEnv.isIE10up) {
-        cssDirection = (direction == 'v') ? 'top' : 'left';
-        gradient.field = "background";
-        gradient.css   = "-ms-linear-gradient(" + cssDirection + "," + startColor + ", "  + endColor + ")";
-    } else if (AjxEnv.isIE) {
+    if (AjxEnv.isIE && !AjxEnv.isIE9up) {
         cssDirection = (direction == 'v') ? 0 : 1;
         gradient.field = "filter";
         gradient.name  = "DXImageTransform.Microsoft.Gradient";
         gradient.css   = "progid:" + gradient.name + "(" +
                          "GradientType=" + cssDirection + ",startColorstr=" + startColor +
                          ",endColorstr=" + endColor + "); zoom:1;";
+    } else if (AjxEnv.isIE9) {
+        var params = {
+            x1: "0%",
+            x2: direction == 'v' ? "0%" : "100%",
+            y1: "0%",
+            y2: direction == 'v' ? "100%" : "0%",
+            startColor: startColor,
+            endColor: endColor
+        };
+        var svgsrc =
+            AjxTemplate.expand('dwt.Widgets#SVGGradient', params);
+        gradient.field = "background";
+        gradient.css   = ('url(data:image/svg+xml,' +
+                          escape(svgsrc.replace(/\s+/g, ' ')) + ')');
     } else if (AjxEnv.isFirefox3_6up) {
         cssDirection = (direction == 'v') ? 'top' : 'left';
         gradient.field = "background";
@@ -1694,6 +1704,10 @@ function(startColor, endColor, direction) {
         gradient.field = "background";
         gradient.css   = "-webkit-gradient(linear, " + startPt + ", " + endPt +
                          ", color-stop(0%, " + startColor + "), color-stop(100%, " + endColor + "))";
+    } else {
+        cssDirection = (direction == 'v') ? 'to bottom' : 'to right';
+        gradient.field = "background";
+        gradient.css   = "linear-gradient(" + cssDirection + "," + startColor + ", "  + endColor + ")";
     }
     return gradient;
 }
@@ -1701,7 +1715,7 @@ function(startColor, endColor, direction) {
 Dwt.setLinearGradient =
 function(htmlElement, startColor, endColor, direction) {
     var gradient = Dwt.createLinearGradientInfo(startColor, endColor, direction);
-    if (AjxEnv.isIE) {
+    if (gradient.field == 'filter') {
         Dwt.alterIEFilter(htmlElement, gradient.name, gradient.css);
     } else {
         htmlElement.style[gradient.field] = gradient.css;
