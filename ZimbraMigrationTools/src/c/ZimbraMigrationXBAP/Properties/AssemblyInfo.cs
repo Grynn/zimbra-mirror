@@ -8,9 +8,9 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ZimbraMigrationXBAP")][assembly: AssemblyDescription(
-"")][assembly: AssemblyConfiguration("")][assembly: AssemblyCompany("Zimbra Software, LLC.")]
+"")][assembly: AssemblyConfiguration("")][assembly: AssemblyCompany("Telligent Systems, Inc.")]
 [assembly: AssemblyProduct("ZimbraMigrationXBAP")]
-[assembly: AssemblyCopyright("Copyright © 2006-2013 Zimbra Software, LLC.")]
+[assembly: AssemblyCopyright("Copyright © 2006-2013 Telligent Systems, Inc. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 // Setting ComVisible to false makes the types in this assembly not visible

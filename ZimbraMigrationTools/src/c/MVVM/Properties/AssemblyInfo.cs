@@ -8,10 +8,10 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MVVM")][assembly: AssemblyDescription(
-"")][assembly: AssemblyConfiguration("")][assembly: AssemblyCompany("Zimbra Software, LLC.")]
+"")][assembly: AssemblyConfiguration("")][assembly: AssemblyCompany("Telligent Systems, Inc.")]
 [assembly: AssemblyProduct("MVVM")]
 [assembly: AssemblyCopyright(
-"Copyright © 2006-2013 Zimbra Software, LLC.")]
+"Copyright © 2006-2013 Telligent Systems, Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 // Setting ComVisible to false makes the types in this assembly not visible

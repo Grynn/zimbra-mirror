@@ -6,10 +6,10 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ZimbraMigrationConsole")][assembly: AssemblyDescription(
-"")][assembly: AssemblyConfiguration("")][assembly: AssemblyCompany("Zimbra Software, LLC.")]
+"")][assembly: AssemblyConfiguration("")][assembly: AssemblyCompany("Telligent Systems, Inc.")]
 [assembly: AssemblyProduct(
 "ZimbraMigrationConsole")][assembly: AssemblyCopyright(
-"Copyright © 2006-2013 Zimbra Software, LLC.")]
+"Copyright © 2006-2013 Telligent Systems, Inc. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture(
 "")]
