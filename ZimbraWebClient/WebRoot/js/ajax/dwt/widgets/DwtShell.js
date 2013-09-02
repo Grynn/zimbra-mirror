@@ -491,21 +491,28 @@ function() {
             if (Dwt.hasClass(elem, 'skin_layout_row')) {
                 var row = elem;
                 var table = row.parentNode;
-                var height = table.clientHeight;
+                var height = Dwt.getSize(table).y;
                 var nfillers = 0;
 
-                var insets = Dwt.getInsets(row);
+                var insets = Dwt.getInsets(table);
                 height -= insets.top + insets.bottom;
+                var margins = Dwt.getMargins(row);
+                height -= margins.top + margins.bottom;
 
                 AjxUtil.foreach(table.children, function(otherrow) {
+                    var margins = Dwt.getMargins(otherrow);
+                    height -= margins.top + margins.bottom;
+
                     if (Dwt.hasClass(otherrow, 'skin_layout_filler')) {
                         nfillers += 1;
                     } else {
-                        var otherheight = otherrow.offsetHeight;
+                        var otherheight = Dwt.getSize(otherrow).y;
 
                         AjxUtil.foreach(otherrow.children, function(cell) {
-                            otherheight = Math.max(otherheight,
-                                                   cell.offsetHeight);
+                            var margins = Dwt.getMargins(cell);
+                            var height = Dwt.getSize(cell).y +
+                                margins.top + margins.bottom;
+                            otherheight = Math.max(otherheight, height);
                         });
 
                         height -= otherheight;
@@ -518,17 +525,22 @@ function() {
                 var cell = elem;
                 var row = cell.parentNode;
                 var table = row.parentNode;
-                var width = table.clientWidth;
+                var width = Dwt.getSize(table).x;
                 var nfillers = 0;
 
-                var insets = Dwt.getInsets(cell);
+                var insets = Dwt.getInsets(table);
                 width -= insets.left + insets.right;
+                var margins = Dwt.getMargins(row);
+                width -= margins.left + margins.left;
 
                 AjxUtil.foreach(row.children, function(othercell) {
+                    var margins = Dwt.getMargins(othercell);
+                    width -= margins.left + margins.left;
+
                     if (Dwt.hasClass(othercell, 'skin_layout_filler')) {
                         nfillers += 1;
                     } else {
-                        width -= othercell.offsetWidth;
+                        width -= Dwt.getSize(othercell).x;
                     }
                 });
 

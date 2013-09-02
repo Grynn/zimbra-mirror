@@ -913,6 +913,22 @@ Dwt.insetBounds = function(bounds, insets) {
 	return bounds;
 };
 
+Dwt.getMargins = function(htmlElement) {
+	// return an object with the margins for each side of the element, eg:
+	//		{ left: 3, top:0, right:3, bottom:0 }
+	// NOTE: assumes values from computedStyle are returned in pixels!!!
+
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
+	var style = DwtCssStyle.getComputedStyleObject(htmlElement);
+
+	return {
+		left 	: parseInt(style.marginLeft) 	|| 0,
+		top  	: parseInt(style.marginTop) 	|| 0,
+		right 	: parseInt(style.marginRight) 	|| 0,
+		bottom	: parseInt(style.marginBottom)	|| 0
+	};
+};
+
 Dwt.setStatus =
 function(text) {
 	window.status = text;
