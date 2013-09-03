@@ -431,9 +431,16 @@ LifetimeNumber_XFormItem.prototype.validateType = function(value) {
 }
 
 ZaGlobalConfig.myXModel = {
-	items:[
-	  	// ...other...
-		{ id:ZaGlobalConfig.A_zimbraGalMaxResults, ref:"attrs/" + ZaGlobalConfig.A_zimbraGalMaxResults , type:_NUMBER_, minInclusive: 0 },
+    items: [
+        // ...other...
+        {
+            id: ZaGlobalConfig.A_zimbraGalMaxResults,
+            ref: "attrs/" + ZaGlobalConfig.A_zimbraGalMaxResults,
+            type: _NUMBER_,
+            minInclusive: 0,
+            maxInclusive: 2147483647,
+            defaultValue: 100
+        },
 		{ id:ZaGlobalConfig.A_zimbraDefaultDomainName, ref:"attrs/" + ZaGlobalConfig.A_zimbraDefaultDomainName, type:_STRING_, maxLength: 256},
 		{ id:ZaGlobalConfig.A_zimbraScheduledTaskNumThreads, ref:"attrs/" + ZaGlobalConfig.A_zimbraScheduledTaskNumThreads , type:_NUMBER_, minInclusive: 1 },
 		{ id:ZaGlobalConfig.A_zimbraMailPurgeSleepInterval, type:_MLIFETIME_, ref:"attrs/"+ZaGlobalConfig.A_zimbraMailPurgeSleepInterval},
