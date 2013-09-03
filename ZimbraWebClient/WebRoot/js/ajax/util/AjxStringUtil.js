@@ -2129,6 +2129,9 @@ function(el, ctxt) {
 AjxStringUtil.checkForCleanHtml =
 function(html, okTags, attrsToRemove) {
 
+    //Bug: 83708 - strip hashed anchor links from email msg
+    html = html.replace(new RegExp("href\s*=\s*['\"]\s*#.*['\"]", "g"), '');
+
 	var htmlNode = AjxStringUtil._writeToTestIframeDoc(html);
 	var ctxt = {
 		tags:	AjxUtil.arrayAsHash(okTags),
