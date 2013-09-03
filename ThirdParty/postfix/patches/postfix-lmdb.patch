@@ -1,0 +1,77 @@
+--- postfix-2.11-20130818.2z/include/sys_defs.h.orig	2013-09-02 20:56:27.344131594 -0700
++++ postfix-2.11-20130818.2z/include/sys_defs.h	2013-09-02 20:57:49.447138939 -0700
+@@ -46,15 +46,15 @@
+ #define HAS_FSYNC
+ #define HAS_DB
+ #define HAS_SA_LEN
+-#define DEF_DB_TYPE	"hash"
++#define DEF_DB_TYPE	"lmdb"
+ #if (defined(__NetBSD_Version__) && __NetBSD_Version__ >= 104250000)
+-#define ALIAS_DB_MAP   "hash:/etc/mail/aliases"	/* sendmail 8.10 */
++#define ALIAS_DB_MAP   "lmdb:/etc/mail/aliases"	/* sendmail 8.10 */
+ #endif
+ #if (defined(OpenBSD) && OpenBSD >= 200006)
+-#define ALIAS_DB_MAP   "hash:/etc/mail/aliases"	/* OpenBSD 2.7 */
++#define ALIAS_DB_MAP   "lmdb:/etc/mail/aliases"	/* OpenBSD 2.7 */
+ #endif
+ #ifndef ALIAS_DB_MAP
+-#define ALIAS_DB_MAP	"hash:/etc/aliases"
++#define ALIAS_DB_MAP	"lmdb:/etc/aliases"
+ #endif
+ #define GETTIMEOFDAY(t)	gettimeofday(t,(struct timezone *) 0)
+ #define ROOT_PATH	"/bin:/usr/bin:/sbin:/usr/sbin"
+@@ -227,8 +227,8 @@
+ #define HAS_FSYNC
+ #define HAS_DB
+ #define HAS_SA_LEN
+-#define DEF_DB_TYPE	"hash"
+-#define ALIAS_DB_MAP	"hash:/etc/aliases"
++#define DEF_DB_TYPE	"lmdb"
++#define ALIAS_DB_MAP	"lmdb:/etc/aliases"
+ #define GETTIMEOFDAY(t) gettimeofday(t,(struct timezone *) 0)
+ #define ROOT_PATH	"/bin:/usr/bin:/sbin:/usr/sbin"
+ #define USE_STATFS
+@@ -287,8 +287,8 @@
+ #define HAS_FSYNC
+ /* might be set by makedef */
+ #ifdef HAS_DB
+-#define DEF_DB_TYPE	"hash"
+-#define ALIAS_DB_MAP	"hash:/etc/aliases"
++#define DEF_DB_TYPE	"lmdb"
++#define ALIAS_DB_MAP	"lmdb:/etc/aliases"
+ #else
+ #define HAS_DBM
+ #define	DEF_DB_TYPE	"dbm"
+@@ -766,8 +766,8 @@
+ #define DEF_MAILBOX_LOCK "fcntl, dotlock"	/* RedHat >= 4.x */
+ #define HAS_FSYNC
+ #define HAS_DB
+-#define DEF_DB_TYPE	"hash"
+-#define ALIAS_DB_MAP	"hash:/etc/aliases"
++#define DEF_DB_TYPE	"lmdb"
++#define ALIAS_DB_MAP	"lmdb:/etc/aliases"
+ #ifndef NO_NIS
+ #define HAS_NIS
+ #endif
+@@ -843,8 +843,8 @@
+ #define DEF_MAILBOX_LOCK "dotlock"	/* verified RedHat 3.03 */
+ #define HAS_FSYNC
+ #define HAS_DB
+-#define DEF_DB_TYPE	"hash"
+-#define ALIAS_DB_MAP	"hash:/etc/aliases"
++#define DEF_DB_TYPE	"lmdb"
++#define ALIAS_DB_MAP	"lmdb:/etc/aliases"
+ #ifndef NO_NIS
+ #define HAS_NIS
+ #endif
+@@ -877,8 +877,8 @@
+ #define DEF_MAILBOX_LOCK "fcntl, dotlock"	/* RedHat >= 4.x */
+ #define HAS_FSYNC
+ #define HAS_DB
+-#define DEF_DB_TYPE	"hash"
+-#define ALIAS_DB_MAP	"hash:/etc/aliases"
++#define DEF_DB_TYPE	"lmdb"
++#define ALIAS_DB_MAP	"lmdb:/etc/aliases"
+ #ifndef NO_NIS
+ #define HAS_NIS
+ #endif
