@@ -152,3 +152,12 @@
     notifempty
     compress
 }
+
+/opt/zimbra/log/spamtrain.log {
+    daily
+    missingok
+    copytruncate
+    rotate 7
+    notifempty
+    compress
+}
