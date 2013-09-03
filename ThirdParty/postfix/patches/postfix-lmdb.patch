@@ -1,5 +1,5 @@
---- postfix-2.11-20130818.2z/include/sys_defs.h.orig	2013-09-02 20:56:27.344131594 -0700
-+++ postfix-2.11-20130818.2z/include/sys_defs.h	2013-09-02 20:57:49.447138939 -0700
+--- postfix-2.11-20130818.2z/src/util/sys_defs.h.orig	2013-09-02 20:56:27.344131594 -0700
++++ postfix-2.11-20130818.2z/src/util/sys_defs.h	2013-09-02 20:57:49.447138939 -0700
 @@ -46,15 +46,15 @@
  #define HAS_FSYNC
  #define HAS_DB
