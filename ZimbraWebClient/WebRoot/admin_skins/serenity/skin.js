@@ -48,6 +48,7 @@ ZaSkin.hints = {
 	treeFooter:	 	{ containers: "skin_tr_tree_footer" },
     rightTask:      { containers: ["skin_td_right_tool"],
                       minWidth:parseInt("@ToolMinWidth@"),
+                      maxWidth:parseInt("@ToolMaxWidth@"),
                       width:parseInt("@ToolStartWidth@")
                     },
 

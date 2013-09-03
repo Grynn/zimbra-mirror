@@ -100,7 +100,7 @@ ZaTaskController.prototype.setExpanded = function(isExpanded) {
     // TODO  remove this to view manager
     var width;
     if (isExpanded) {
-        width = ZaSkin.hints.rightTask.width || 220;
+        width = ZaSkin.hints.rightTask.maxWidth || 220;
     } else {
         width = ZaSkin.hints.rightTask.minWidth || 20;
     }

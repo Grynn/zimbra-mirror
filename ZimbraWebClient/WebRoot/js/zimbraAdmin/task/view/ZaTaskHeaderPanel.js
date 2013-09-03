@@ -22,7 +22,7 @@
 
 ZaTaskHeaderPanel = function(parent) {
     DwtComposite.call(this, parent, "TaskHeaderPanel", Dwt.ABSOLUTE_STYLE);
-    this._expanded =true;
+    this._expanded = false;
     this.getHtmlElement().innerHTML = this.getImgHtml();
     this.getHtmlElement().onclick = AjxCallback.simpleClosure(ZaTaskHeaderPanel.__handleClick, this);
 }

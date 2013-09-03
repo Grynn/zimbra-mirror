@@ -53,7 +53,7 @@ function(by, val) {
 ZaItem.loadMethods["ZaTask"].push(ZaTask.loadMethod);
 
 ZaTask.initMethod = function () {
-	this[ZaTask.A2_isExpanded] = true;
+	this[ZaTask.A2_isExpanded] = false;
     this[ZaTask.A2_isWIPExpanded] = true;
     this[ZaTask.A2_isRTExpanded] = true;
     this[ZaTask.A2_isServerExpaned] = true;
