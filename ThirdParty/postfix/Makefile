@@ -49,6 +49,7 @@ build:
 	cd postfix-$(POSTFIX_VERSION); \
 	$(PATCH) \
 	patch -g0 -p1 < ../patches/postfix-main-cf-zimbra.patch; \
+	patch -g0 -p1 < ../patches/postfix-lmdb.patch; \
 	patch -g0 -p1 < ../patches/stop-warning.patch; \
 	$(MAKE) $(MAKEARGS)  makefiles \
 	OPT="-O2" \
