@@ -33,9 +33,11 @@ fi
 zimbraMilterServerEnabled=${zimbraMilterServerEnabled:=FALSE}
 
 if [ x"$zimbraMilterServerEnabled" = "xTRUE" ]; then
-  SCRIPTS="zmmilterctl postfix zmsaslauthdctl"
+  START_SCRIPTS="zmmilterctl zmsaslauthdctl postfix"
+  STOP_SCRIPTS="postfix zmsaslauthdctl zmmilterctl "
 else 
-  SCRIPTS="postfix zmsaslauthdctl"
+  START_SCRIPTS="zmsaslauthdctl postfix"
+  STOP_SCRIPTS="postfix zmsaslauthdctl"
 fi
 
 rewriteconfig() {
@@ -57,10 +59,10 @@ rewriteconfig() {
 case "$1" in 
 	start)
 		if [ x$2 = "x" ]; then
-      rewriteconfig
+			rewriteconfig
 		fi
 		STATUS=0
-		for i in $SCRIPTS; do
+		for i in $START_SCRIPTS; do
 			/opt/zimbra/bin/$i start norewrite
 			R=$?
 			if [ $R -ne "0" ]; then
@@ -71,20 +73,20 @@ case "$1" in
 		exit $STATUS
 	;;
 	stop)
-		for i in $SCRIPTS; do
+		for i in $STOP_SCRIPTS; do
 			/opt/zimbra/bin/$i stop
 		done
 	;;
 	reload|restart)
 		if [ x$2 = "x" ]; then
-      rewriteconfig
+			rewriteconfig
 		fi
 		for i in $SCRIPTS; do
-      if [ "x$i" = "xpostfix" ]; then
-        /opt/zimbra/bin/$i reload
-      else 
-			  /opt/zimbra/bin/$i $1
-      fi
+			if [ "x$i" = "xpostfix" ]; then
+				/opt/zimbra/bin/$i reload
+			else 
+				/opt/zimbra/bin/$i $1
+			fi
 		done
 	;;
 	status)
