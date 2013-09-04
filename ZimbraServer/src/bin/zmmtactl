@@ -91,7 +91,7 @@ case "$1" in
 	;;
 	status)
 		STATUS=0
-		for i in $SCRIPTS; do
+		for i in $START_SCRIPTS; do
 			/opt/zimbra/bin/$i status > /dev/null 2>&1
 			R=$?
 			if [ $R -ne "0" ]; then
