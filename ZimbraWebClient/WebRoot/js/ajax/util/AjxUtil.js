@@ -907,4 +907,52 @@ AjxUtil.getClassAttr = function (classes){
 		return ["class='" , classes.join(" "), "'"].join("");
 	}
 	return "";
-}
+};
+
+/**
+ * converts datauri string to blob object used for uploading the image
+ * @param {dataURI} - datauri string  data:image/png;base64,iVBORw0
+ *
+ */
+AjxUtil.dataURItoBlob =
+function (dataURI) {
+
+    if (!(dataURI && typeof window.atob === "function" && typeof window.Blob === "function")) {
+        return;
+    }
+
+    var dataURIArray = dataURI.split(",");
+    if (dataURIArray.length === 2) {
+        if (dataURIArray[0].indexOf('base64') === -1) {
+            return;
+        }
+        // convert base64 to raw binary data held in a string
+        // doesn't handle URLEncoded DataURIs
+        try{
+            var byteString = window.atob(dataURIArray[1]);
+        }
+        catch(e){
+            return;
+        }
+        if (!byteString) {
+            return;
+        }
+        // separate out the mime component
+        var mimeString = dataURIArray[0].split(':');
+        if (!mimeString[1]) {
+            return;
+        }
+        mimeString = mimeString[1].split(';')[0];
+        if (mimeString) {
+            // write the bytes of the string to an ArrayBuffer
+            var byteStringLength = byteString.length,
+                ab = new ArrayBuffer(byteStringLength),
+                ia = new Uint8Array(ab);
+            for (var i = 0; i < byteStringLength; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([ab], {"type" : mimeString});
+        }
+    }
+
+};
