@@ -250,7 +250,7 @@ public class ZimbraAPI
     {{"","0"},{"/MAPIRoot","1"},
         {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Prejeto","2"},
         {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Izbrisano","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Ne\u017eelena e\u002dpo\u015dta","4"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Ne\u017eelena e\u002dpo\u0161ta","4"},
         {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Poslano","5"},
         {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Odpo\u015dlji","6"}, {"/MAPIRoot/Osnutki","6"},
         {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Stiki","7"},
