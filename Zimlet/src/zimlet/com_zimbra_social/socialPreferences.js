@@ -348,6 +348,10 @@ function() {
 
 };
 
+com_zimbra_socialPreferences.prototype.getAddFBInfoDlg = function() {
+	return this._getFbInfoDialog;
+};
+
 com_zimbra_socialPreferences.prototype.hideAddFBInfoDlg = function(obj) {
 	if (!this._getFbInfoDialog) {
 		return;

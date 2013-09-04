@@ -86,11 +86,14 @@ com_zimbra_socialFacebook.prototype._loadFacebookAccountHandleResponse = functio
 	account.name = response.name;
 	account.id = response.id;
 
-	this.zimlet.preferences.hideAddFBInfoDlg();
-	var msgDialog = appCtxt.getMsgDialog();
-	var msg = this.zimlet.getMessage("accountAddedSuccessfully");
-	msgDialog.setMessage(msg, DwtMessageDialog.INFO_STYLE);
-	msgDialog.popup();
+	var addFBdlg = this.zimlet.preferences.getAddFBInfoDlg();
+	if (addFBdlg && addFBdlg.isPoppedUp()) { //might not be popped up if this comes from the error case in _getStreamCallback
+		this.zimlet.preferences.hideAddFBInfoDlg();
+		var msgDialog = appCtxt.getMsgDialog();
+		var msg = this.zimlet.getMessage("accountAddedSuccessfully");
+		msgDialog.setMessage(msg, DwtMessageDialog.INFO_STYLE);
+		msgDialog.popup();
+	}
 
 	account.at = FB.getAuthResponse().accessToken;
 	this.updateFacebookAccountFromObj(account);
@@ -397,11 +400,11 @@ function (tableId, response) {
 	}
 	if(posts) {
 		this.zimlet.createCardView({tableId:tableId, items:posts, type:"FACEBOOK"});
-	} else if(jsonObj.error){
+	}
+	else if (jsonObj.error || jsonObj.error_code){
+		this.loginToFB(true); //try to refresh the access token if app is authorized (or not logged in to facebook). Then the user can click "retry" and it might work.
+		jsonObj.error = jsonObj.error || jsonObj.error_code;
 		this.zimlet.createCardView({tableId:tableId, items:jsonObj, type:"FACEBOOK"});
-	}else if(jsonObj.error_code && jsonObj.error_code != ""){
-		jsonObj.error = jsonObj.error_code;
-		this.zimlet.createCardView({tableId:tableId, items:jsonObj,  type:"FACEBOOK"});
 	}
 };
 
@@ -442,14 +445,14 @@ function (args) {
 
 
 com_zimbra_socialFacebook.prototype.loginToFB =
-function () {
+function (abortIfNotAuthorized) {
 
 	var that = this;
 	FB.getLoginStatus(function (response) {
 		if (response.status === 'connected') {
 			that._loadFacebookAccount();
 		}
-		else {
+		else if (!abortIfNotAuthorized || response.status !== 'not_authorized') {
 			//user is either logged in but not authorized, or not logged in. Anyway do the same - try to log in and authorize the user.
 			that._doLoginToFB();
 		}
