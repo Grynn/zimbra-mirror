@@ -668,6 +668,7 @@ if [ -L ${zimbra_home}/postfix ]; then
     fi
 
     chown -fR ${root_user}:${postfix_owner} ${zimbra_home}/postfix/conf
+
     chmod 775 ${zimbra_home}/postfix/conf
 
     chmod -fR 644 ${zimbra_home}/postfix/conf/* 2> /dev/null
@@ -679,6 +680,18 @@ if [ -L ${zimbra_home}/postfix ]; then
     fi
     if [ -f ${zimbra_home}/postfix/conf/master.cf.in ]; then
       chown -f ${zimbra_user}:${zimbra_group} ${zimbra_home}/postfix/conf/master.cf.in
+    fi
+    if [ -f ${zimbra_home}/postfix/conf/master.cf ]; then
+      chown -f ${zimbra_user}:${zimbra_group} ${zimbra_home}/postfix/conf/master.cf
+    fi
+    if [ -f ${zimbra_home}/postfix/conf/main.cf ]; then
+      chown -f ${zimbra_user}:${zimbra_group} ${zimbra_home}/postfix/conf/main.cf
+    fi
+    if [ -f ${zimbra_home}/postfix/conf/tag_as_foreign.re ]; then
+      chown -f ${zimbra_user}:${zimbra_group} ${zimbra_home}/postfix/conf/tag_as_foreign.re
+    fi
+    if [ -f ${zimbra_home}/postfix/conf/tag_as_originating.re ]; then
+      chown -f ${zimbra_user}:${zimbra_group} ${zimbra_home}/postfix/conf/tag_as_originating.re
     fi
   fi
 
