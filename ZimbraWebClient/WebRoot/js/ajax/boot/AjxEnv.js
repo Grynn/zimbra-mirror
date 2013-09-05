@@ -53,10 +53,12 @@ AjxEnv.isWindows64;
 AjxEnv.isLinux;
 /** Netscape Navigator compatible. */
 AjxEnv.isNav;
-/** Internet Explorer. */
-AjxEnv.isIE;
 /** Netscape Navigator version 4. */
 AjxEnv.isNav4;
+/** "legacy" Internet Explorer -- i.e. version 10 and earlier */
+AjxEnv.isIE;
+/** "modern" Internet Explorer -- i.e. version 11 onwards. */
+AjxEnv.isModernIE;
 
 
 AjxEnv.trueNs;
@@ -100,11 +102,6 @@ AjxEnv.isIE9;
 AjxEnv.isIE9up;
 /** Internet Explorer version 10. */
 AjxEnv.isIE10;
-/** Internet Explorer version 10 (or higher). */
-AjxEnv.isIE10up;
-
-/** Internet Explorer version 11 (or higher). */
-AjxEnv.isModernIE;
 
 AjxEnv.isNormalResolution;
 AjxEnv.ieScaleFactor;
@@ -457,7 +454,7 @@ function() {
 	}
 
     //HTML5
-    AjxEnv.supportsHTML5File = !!( window.FileReader/*Firefox*/ || AjxEnv.isChrome || AjxEnv.isSafari4up || AjxEnv.isIE10up );
+    AjxEnv.supportsHTML5File = !!( window.FileReader || AjxEnv.isChrome || AjxEnv.isSafari4up );
     AjxEnv.supportsPlaceholder 	= 'placeholder' in document.createElement('INPUT');
 };
 
