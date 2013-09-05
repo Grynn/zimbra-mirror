@@ -39,7 +39,7 @@ DNS Hostname             Zimbra Hostname
 ---------------------    ---------------------
 .
     format STDOUT =
-@<<<<<<<<<<<<<<<<<<<<    @<<<<<<<<<<<<<<<<<<<<   
+@*    @*   
 $host,                   $zmhost
 .
     foreach $host (keys %$ref) {
