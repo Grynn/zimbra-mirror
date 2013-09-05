@@ -1269,22 +1269,26 @@ viewdeployedcrt() {
     service_der=/opt/zimbra/mailboxd/etc/mailboxd.der
     service_crt=/opt/zimbra/mailboxd/etc/mailboxd.pem
     echo "::service mailboxd::"
-    tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "${ERROR_PREFIX} Failed to create tmpfile" && exit 1)
-    ${zimbra_java_home}/bin/keytool -export -file ${service_der} -alias ${mailboxd_server} \
-      -keystore ${mailboxd_keystore} -storepass ${mailboxd_keystore_password} > ${tmpfile} 2>&1
-    if [ $? != 0 ]; then
-      echo "${ERROR_PREFIX} failed to export ${service_crt} from keystore."
-      echo
-      cat $tmpfile
-      echo
+    if [ -f "${service_crt}" ]; then
+      tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "${ERROR_PREFIX} Failed to create tmpfile" && exit 1)
+      ${zimbra_java_home}/bin/keytool -export -file ${service_der} -alias ${mailboxd_server} \
+        -keystore ${mailboxd_keystore} -storepass ${mailboxd_keystore_password} > ${tmpfile} 2>&1
+      if [ $? != 0 ]; then
+        echo "${ERROR_PREFIX} failed to export ${service_crt} from keystore."
+        echo
+        cat $tmpfile
+        echo
+      fi
+      rm -f $tmpfile 2>/dev/null
+    else
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
     fi
-    rm -f $tmpfile 2>/dev/null
     if [ -f "${service_der}" ]; then
       ${openssl} x509  -inform DER -outform PEM -in ${service_der} -out ${service_crt}
       ${openssl} x509  -in ${service_crt} -dates -subject -issuer -noout
       getsubjectaltnames $service_crt crt
     else 
-      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+      echo "${ERROR_PREFIX} ${service_der} does not exist"
     fi
   fi
 
