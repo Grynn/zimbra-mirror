@@ -30,6 +30,11 @@ if (! -e $IOSTAT) {
     }
 }
 
+system($IOSTAT);
+if ($? != 0) {
+    die "iostat is non-functional";
+}
+
 my $isMac = isMac();
 
 my ($CONSOLE, $LOGFH, $LOGFILE, $HEADING, $ROTATE_DEFER, $ROTATE_NOW);
