@@ -81,7 +81,7 @@ case "$1" in
 		if [ x$2 = "x" ]; then
 			rewriteconfig
 		fi
-		for i in $SCRIPTS; do
+		for i in $START_SCRIPTS; do
 			if [ "x$i" = "xpostfix" ]; then
 				/opt/zimbra/bin/$i reload
 			else 
