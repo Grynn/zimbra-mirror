@@ -40,7 +40,8 @@
  * @param {AjxCallback}      params.dndScrollCallback	the callback triggered when scrolling of a drop area for an object being dragged
  * @param {string}      params.dndScrollId			the id
  * @param {boolean}    params.arrowDisabled
- *        
+ * @param {boolean}     params.dynamicWidth		if <code>true</code>, the table should be width auto instead of the default fixed
+ *
  * @extends		DwtComposite		
  */
 DwtTreeItem = function(params) {
@@ -65,6 +66,8 @@ DwtTreeItem = function(params) {
 	this._dragOverClassName = [this._origClassName, DwtCssStyle.DRAG_OVER].join("-");
     this._treeItemTextClass = "DwtTreeItem-Text";
     this._treeItemExtraImgClass = "DwtTreeItem-ExtraImg";
+
+	this._dynamicWidth = params.dynamicWidth;
 
 	params.deferred = (params.deferred !== false);
 	params.className = null;
@@ -547,6 +550,12 @@ function(index, realizeDeferred, forceNode) {
 	this._imageCell = document.getElementById(data.id + "_imageCell");
 	this._textCell = document.getElementById(data.id + "_textCell");
 	this._extraCell = document.getElementById(data.id + "_extraCell");
+
+	if (this._dynamicWidth){
+		var tableNode = document.getElementById(data.id + "_table");
+		tableNode.style.tableLayout = "auto";
+	}
+
 
 	// If we have deferred children, then make sure we set up accordingly
 	if (this._nodeCell) {
