@@ -1,5 +1,5 @@
 diff --git a/servers/slapd/connection.c b/servers/slapd/connection.c
-index bc2b8a4..379dc55 100644
+index bc2b8a4..8b90079 100644
 --- a/servers/slapd/connection.c
 +++ b/servers/slapd/connection.c
 @@ -154,9 +154,7 @@ int connections_destroy(void)
@@ -86,7 +86,15 @@ index bc2b8a4..379dc55 100644
  	rc = ldap_pvt_thread_pool_submit( &connection_pool,
  		connection_read_thread, (void *)(long)s );
  
-@@ -1941,9 +1913,6 @@ int connection_write(ber_socket_t s)
+@@ -1915,6 +1887,7 @@ int connection_write(ber_socket_t s)
+ {
+ 	Connection *c;
+ 	Operation *op;
++	int wantwrite;
+ 
+ 	assert( connections != NULL );
+ 
+@@ -1941,14 +1914,13 @@ int connection_write(ber_socket_t s)
  	Debug( LDAP_DEBUG_TRACE,
  		"connection_write(%d): waking output for id=%lu\n",
  		s, c->c_connid, 0 );
@@ -94,10 +102,20 @@ index bc2b8a4..379dc55 100644
 -	ldap_pvt_thread_cond_signal( &c->c_write2_cv );
 -	ldap_pvt_thread_mutex_unlock( &c->c_write2_mutex );
  
- 	if ( ber_sockbuf_ctrl( c->c_sb, LBER_SB_OPT_NEEDS_READ, NULL ) ) {
- 		slapd_set_read( s, 1 );
+-	if ( ber_sockbuf_ctrl( c->c_sb, LBER_SB_OPT_NEEDS_READ, NULL ) ) {
+-		slapd_set_read( s, 1 );
++	wantwrite = ber_sockbuf_ctrl( c->c_sb, LBER_SB_OPT_NEEDS_WRITE, NULL );
++	if ( ber_sockbuf_ctrl( c->c_sb, LBER_SB_OPT_NEEDS_READ, NULL )) {
++		/* don't wakeup twice */
++		slapd_set_read( s, !wantwrite );
+ 	}
+-	if ( ber_sockbuf_ctrl( c->c_sb, LBER_SB_OPT_NEEDS_WRITE, NULL ) ) {
++	if ( wantwrite ) {
+ 		slapd_set_write( s, 1 );
+ 	}
+ 
 diff --git a/servers/slapd/daemon.c b/servers/slapd/daemon.c
-index 31e4fcf..6ca1538 100644
+index 31e4fcf..299ac62 100644
 --- a/servers/slapd/daemon.c
 +++ b/servers/slapd/daemon.c
 @@ -41,6 +41,10 @@
@@ -206,26 +224,23 @@ index 31e4fcf..6ca1538 100644
  
  		ldap_pvt_thread_mutex_unlock( &slap_daemon[tid].sd_mutex );
  
-@@ -3083,3 +3061,57 @@ slap_wake_listener()
+@@ -3083,3 +3061,35 @@ slap_wake_listener()
  {
  	WAKE_LISTENER(0,1);
  }
 +
 +/* return 0 on timeout, 1 on writer ready
 + * -1 on general error
-+ * -2 shutdown signal received
 + */
 +int
 +slapd_wait_writer( ber_socket_t sd )
 +{
 +#ifdef HAVE_WINSOCK
-+	fd_set readfds, writefds;
++	fd_set writefds;
 +	struct timeval tv, *tvp;
 +	int i;
 +
-+	FD_ZERO( &readfds );
 +	FD_ZERO( &writefds );
-+	FD_SET( slapd_ws_sockets[wake_sds[0][0]], &readfds );
 +	FD_SET( slapd_ws_sockets[sd], &writefds );
 +	if ( global_writetimeout ) {
 +		tv.tv_sec = global_writetimeout;
@@ -234,34 +249,15 @@ index 31e4fcf..6ca1538 100644
 +	} else {
 +		tv = NULL;
 +	}
-+	i = select( 0, &readfds, &writefds, NULL, tvp );
-+	if ( i > 0 ) {
-+		if ( readfds.fd_count )
-+			return -2;
-+		if ( writefds.fd_count )
-+			return 1;
-+	} else if ( i == 0 )
-+		return 0;
-+	return -1;
++	return select( 0, NULL, &writefds, NULL, tvp );
 +#else
-+	struct pollfd fds[2];
++	struct pollfd fds;
 +	int timeout = global_writetimeout ? global_writetimeout * 1000 : -1;
-+	int i;
 +
-+	fds[0].fd = wake_sds[0][0];
-+	fds[0].events = POLLIN;
-+	fds[1].fd = sd;
-+	fds[1].events = POLLOUT;
++	fds.fd = sd;
++	fds.events = POLLOUT;
 +
-+	i = poll( fds, 2, timeout );
-+	if ( i > 0 ) {
-+		if ( fds[0].revents )
-+			return -2;
-+		if ( fds[1].revents )
-+			return 1;
-+	} else if ( i == 0 )
-+		return 0;
-+	return -1;
++	return poll( &fds, 1, timeout );
 +#endif
 +}
 diff --git a/servers/slapd/proto-slap.h b/servers/slapd/proto-slap.h
@@ -280,10 +276,18 @@ index 31c73da..ccf3384 100644
  LDAP_SLAPD_V (volatile sig_atomic_t) slapd_abrupt_shutdown;
  LDAP_SLAPD_V (volatile sig_atomic_t) slapd_shutdown;
 diff --git a/servers/slapd/result.c b/servers/slapd/result.c
-index 49d7429..7f621b7 100644
+index 49d7429..5858496 100644
 --- a/servers/slapd/result.c
 +++ b/servers/slapd/result.c
-@@ -300,7 +300,9 @@ static long send_ldap_ber(
+@@ -286,6 +286,7 @@ static long send_ldap_ber(
+ 	Connection *conn = op->o_conn;
+ 	ber_len_t bytes;
+ 	long ret = 0;
++	char *close_reason;
+ 
+ 	ber_get_option( ber, LBER_OPT_BER_BYTES_TO_WRITE, &bytes );
+ 
+@@ -300,7 +301,9 @@ static long send_ldap_ber(
  	conn->c_writers++;
  
  	while ( conn->c_writers > 0 && conn->c_writing ) {
@@ -293,15 +297,21 @@ index 49d7429..7f621b7 100644
  	}
  
  	/* connection was closed under us */
-@@ -337,6 +339,7 @@ static long send_ldap_ber(
+@@ -337,28 +340,36 @@ static long send_ldap_ber(
  		    err, sock_errstr(err), 0 );
  
  		if ( err != EWOULDBLOCK && err != EAGAIN ) {
++			close_reason = "connection lost on write";
 +fail:
  			conn->c_writers--;
  			conn->c_writing = 0;
  			ldap_pvt_thread_mutex_unlock( &conn->c_write1_mutex );
-@@ -348,17 +351,20 @@ static long send_ldap_ber(
+ 			ldap_pvt_thread_mutex_lock( &conn->c_mutex );
+-			connection_closing( conn, "connection lost on write" );
+-
++			connection_closing( conn, close_reason );
+ 			ldap_pvt_thread_mutex_unlock( &conn->c_mutex );
+ 			return -1;
  		}
  
  		/* wait for socket to be write-ready */
@@ -319,10 +329,14 @@ index 49d7429..7f621b7 100644
  		ldap_pvt_thread_mutex_lock( &conn->c_write1_mutex );
 +		/* 0 is timeout, so we close it.
 +		 * -1 is an error, close it.
-+		 * -2 is shutdown, close it.
 +		 */
-+		if ( err <= 0 )
++		if ( err <= 0 ) {
++			if ( err == 0 )
++				close_reason = "writetimeout";
++			else
++				close_reason = "connection lost on writewait";
 +			goto fail;
++		}
 +
  		if ( conn->c_writers < 0 ) {
  			ret = 0;
