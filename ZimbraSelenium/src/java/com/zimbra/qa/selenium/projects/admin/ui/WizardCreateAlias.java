@@ -17,6 +17,8 @@
  */
 package com.zimbra.qa.selenium.projects.admin.ui;
 
+import java.awt.event.KeyEvent;
+
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.AbsWizard;
@@ -67,9 +69,11 @@ public class WizardCreateAlias extends AbsWizard {
 			
 		} 
 		sType(Locators.zdlg_ALIAS_DOMAIN_NAME,"");
-		zType(Locators.zdlg_ALIAS_DOMAIN_NAME,"");
-		this.zKeyboard.zTypeCharacters(domain);
+		sType(Locators.zdlg_ALIAS_DOMAIN_NAME,domain);
+		
 		//System.out.println(domain);
+		this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+		
 		
 		
 		sType(Locators.zdlg_TARGET_ACCOUNT_NAME, targetAccount);

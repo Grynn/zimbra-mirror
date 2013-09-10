@@ -17,6 +17,8 @@
  */
 package com.zimbra.qa.selenium.projects.admin.ui;
 
+import java.awt.event.KeyEvent;
+
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.AbsWizard;
@@ -109,7 +111,8 @@ public class WizardCreateAdminAccount extends AbsWizard {
 				this.clearField(Locators.zdlg_DOMAIN_NAME);	
 			}
 			zType(Locators.zdlg_DOMAIN_NAME,"");
-			this.zKeyboard.zTypeCharacters(domain);
+			zType(Locators.zdlg_DOMAIN_NAME,domain);
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 			clickNext(AbsWizard.Locators.ADMIN_DIALOG);
 			clickFinish(AbsWizard.Locators.ADMIN_DIALOG);
 		}else {
@@ -119,7 +122,8 @@ public class WizardCreateAdminAccount extends AbsWizard {
 				this.clearField(Locators.zdlg_DL_DOMAIN_NAME);
 			}
 			zType(Locators.zdlg_DL_DOMAIN_NAME,"");
-			this.zKeyboard.zTypeCharacters(domain);
+			zType(Locators.zdlg_DL_DOMAIN_NAME,domain);
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 			clickFinish(AbsWizard.Locators.ADMIN_DIALOG);
 		}
 		return (account);

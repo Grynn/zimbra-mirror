@@ -191,8 +191,8 @@ public class PageManageAliases extends AbsTab {
 		if ( button == Button.B_NEW ) {
 
 			// New button
-			//			locator = Locators.zb__ACLV__NEW_MENU_title;
-			locator ="";
+						locator = Locators.NEW_MENU;
+			//locator ="";
 			// Create the page
 			page = new WizardCreateAlias(this);
 			// FALL THROUGH

@@ -17,6 +17,8 @@
  */
 package com.zimbra.qa.selenium.projects.admin.ui;
 
+import java.awt.event.KeyEvent;
+
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.AbsWizard;
@@ -60,7 +62,8 @@ public class WizardCreateResource extends AbsWizard {
 
 		String CN = resource.getLocalName();
 		String domain = resource.getDomainName();
-
+		
+		
 		sType(Locators.zdlg_RESOURCE_NAME, CN);
 		sType(Locators.zdlg_RESOURCE_LOCAL_NAME, CN);
 
@@ -73,7 +76,9 @@ public class WizardCreateResource extends AbsWizard {
 			this.clearField(Locators.zdlg_RESOURCE_DOMAIN_NAME);	
 		}
 		zType(Locators.zdlg_RESOURCE_DOMAIN_NAME,"");
-		this.zKeyboard.zTypeCharacters(domain);
+		zType(Locators.zdlg_RESOURCE_DOMAIN_NAME,domain);
+		
+		this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 
 		
 		if(resourceType!="") {
