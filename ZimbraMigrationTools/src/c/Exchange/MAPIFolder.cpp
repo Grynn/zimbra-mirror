@@ -167,12 +167,19 @@ void MAPIFolder::Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary 
             ERR_MAPI_FOLDER, __LINE__, __FILE__);
     }
 	
-	//get folders content tabel
-	if (FAILED(hr = m_folder->GetContentsTable(fMapiUnicode, &m_pContentsTable)))
+	try{
+		//get folders content tabel
+		if (FAILED(hr = m_folder->GetContentsTable(fMapiUnicode, &m_pContentsTable)))
+		{
+			throw MAPIFolderException(hr, L"Initialize(): GetContentsTable Failed.",
+				ERR_MAPI_FOLDER, __LINE__, __FILE__);
+		}    
+	}
+	catch(...)
 	{
 		throw MAPIFolderException(hr, L"Initialize(): GetContentsTable Failed.",
             ERR_MAPI_FOLDER, __LINE__, __FILE__);
-	}    
+	}
 
 	ULONG ulItemMask =ZCM_ALL;
 	//disable restriction for only mails on IPF.Note folders.
