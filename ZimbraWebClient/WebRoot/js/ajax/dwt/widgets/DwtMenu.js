@@ -133,10 +133,8 @@ DwtMenu = function(params) {
 	this.__currentItem = null;
 	this.__preventMenuFocus = false;
 
-	// Default menu tab group. Note that we disable application handling of
-	// keyboard shortcuts, since we don't want the view underneath reacting to
-	// keystrokes in the menu.
-	this._tabGroup = new DwtTabGroup(this.toString(), true);
+	// Default menu tab group.
+	this._tabGroup = new DwtTabGroup(this.toString());
 	this._tabGroup.addMember(this);
 	this._created = true;
 

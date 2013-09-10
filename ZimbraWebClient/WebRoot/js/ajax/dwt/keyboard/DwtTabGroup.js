@@ -26,17 +26,14 @@
  * tab group. The root tab group tracks where focus is.
  * 
  * @param {string}	name					the name of this tab group
- * @param {boolean}	blockDefaultHandling	if <code>true</code>, do not fall back to default key
- * 											handler for this tab group
- * 
+ *
  * @author Ross Dargahi
  */
-DwtTabGroup = function(name, blockDefaultHandling) {
+DwtTabGroup = function(name) {
 
 	this.__members = new AjxVector();
 	this.__parent = null;
 	this.__name = name;
-	this.__blockApplicationHandling = blockDefaultHandling;
 	this.__currFocusMember = null;
 	this.__evtMgr = new AjxEventMgr();
 };
@@ -385,16 +382,6 @@ function(checkEnabled, skipNotify) {
 	this.__currFocusMember = focusMember;
 	
 	return this.__currFocusMember;
-};
-
-DwtTabGroup.prototype.blockDefaultHandling =
-function(block) {
-	this.__blockDefaultHandling = blockDefaultHandling;
-};
-
-DwtTabGroup.prototype.isDefaultHandlingBlocked =
-function(block) {
-	return this.__blockDefaultHandling;
 };
 
 /**

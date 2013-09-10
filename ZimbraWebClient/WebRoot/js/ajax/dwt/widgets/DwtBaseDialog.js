@@ -67,10 +67,8 @@ DwtBaseDialog = function(params) {
 		this._loc.x = this._loc.y = Dwt.LOC_NOWHERE;
 	}
 	
-	// Default dialog tab group. Note that we disable application handling of
-	// keyboard shortcuts, since we don't want the view underneath reacting to
-	// keystrokes in the dialog.
-	this._tabGroup = new DwtTabGroup(this.toString(), true);
+	// Default dialog tab group.
+	this._tabGroup = new DwtTabGroup(this.toString());
 
     this._dragHandleId = params.dragHandleId || this._htmlElId + "_handle";
 	this._createHtml();
