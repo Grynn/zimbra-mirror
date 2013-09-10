@@ -263,6 +263,7 @@ function() {
     //HTML5
     AjxEnv.supportsHTML5File = false;
 	AjxEnv.supportsPlaceholder = false;
+    AjxEnv.supportsCSS3RemUnits = false;
 
 	// screen resolution - ADD MORE RESOLUTION CHECKS AS NEEDED HERE:
 	AjxEnv.is800x600orLower = screen && (screen.width <= 800 && screen.height <= 600);
@@ -456,6 +457,15 @@ function() {
     //HTML5
     AjxEnv.supportsHTML5File = !!( window.FileReader || AjxEnv.isChrome || AjxEnv.isSafari4up );
     AjxEnv.supportsPlaceholder 	= 'placeholder' in document.createElement('INPUT');
+
+    try {
+        // IE8 doesn't support REM units
+        var div = document.createElement('div');
+        div.style.fontSize = '1rem';
+        AjxEnv.supportsCSS3RemUnits = (div.style.fontSize == '1rem');
+    } catch (e) {
+        AjxEnv.supportsCSS3RemUnits = false;
+    }
 };
 
 // code provided by webkit authors to determine if nightly browser
