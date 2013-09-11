@@ -818,8 +818,7 @@ function(ev) {
 
 	// If the currently focused control didn't handle the event, hand it to the default key
 	// event handler
-	if ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && kbMgr.__currDefaultHandler &&
-		!(kbMgr.__currTabGroup && kbMgr.__currTabGroup.isDefaultHandlingBlocked())) {
+	if (handled === DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED && kbMgr.__currDefaultHandler) {
 		handled = kbMgr.__dispatchKeyEvent(kbMgr.__currDefaultHandler, kev);
 	}
 
