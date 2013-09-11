@@ -20,6 +20,11 @@ shopt -s nullglob
 root_user=root
 zimbra_home=/opt/zimbra
 
+if [ x`whoami` != xroot ]; then
+  echo Error: must be run as root user
+  exit 1
+fi
+
 PLAT=`/bin/sh ${zimbra_home}/libexec/get_plat_tag.sh`
 if [ "X$PLAT" = "XMACOSX" -o "X$PLAT" = "XMACOSXx86" ]; then
   root_group=wheel
