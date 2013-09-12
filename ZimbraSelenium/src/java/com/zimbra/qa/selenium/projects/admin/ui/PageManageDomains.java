@@ -153,7 +153,7 @@ public class PageManageDomains extends AbsTab {
 			String locator;
 
 			// Email Address
-			locator = accountLocator + " td[id^='domain_data_name']";
+			locator = accountLocator +  " table tr td:nth-child(2)" ;
 
 
 			if(this.sIsElementPresent(locator)) 
