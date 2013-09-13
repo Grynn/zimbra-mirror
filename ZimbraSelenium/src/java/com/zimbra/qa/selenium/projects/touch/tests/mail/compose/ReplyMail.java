@@ -17,7 +17,6 @@ package com.zimbra.qa.selenium.projects.touch.tests.mail.compose;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
-import com.zimbra.qa.selenium.framework.items.RecipientItem.RecipientType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.touch.core.TouchCommonTest;
@@ -36,20 +35,14 @@ public class ReplyMail extends TouchCommonTest {
 	public void ReplyMail_01() throws HarnessException {
 
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
+		
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "text <strong>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong> text";
-		
-		MailItem mail = new MailItem();
-		mail.dToRecipients.add(new RecipientItem(app.zGetActiveAccount(), RecipientType.To));
-		mail.dCcRecipients.add(new RecipientItem(ZimbraAccount.AccountB().EmailAddress, RecipientType.To));
-		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		mail.dBodyText = body;
-		
 		String modifiedContent = " modified body" + ZimbraSeleniumProperties.getUniqueString();
-		
-		String contentHTML = XmlStringUtil.escapeXml(
+		String htmlBody = XmlStringUtil.escapeXml(
 				"<html>" +
 					"<head></head>" +
-					"<body>"+ mail.dBodyText +"</body>" +
+					"<body>"+ body +"</body>" +
 				"</html>");
 
 		// Send a message to the account
@@ -58,26 +51,23 @@ public class ReplyMail extends TouchCommonTest {
 					"<m>" +
 						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 						"<e t='c' a='"+ ZimbraAccount.AccountB().EmailAddress +"'/>" +
-						"<su>"+ mail.dSubject +"</su>" +
+						"<su>"+ subject +"</su>" +
 						"<mp ct='multipart/alternative'>" +
 						"<mp ct='text/plain'>" +
-							"<content>"+ mail.dBodyText +"</content>" +
+							"<content>"+ body +"</content>" +
 						"</mp>" +
 						"<mp ct='text/html'>" +
-							"<content>"+ contentHTML +"</content>" +
+							"<content>"+ htmlBody +"</content>" +
 						"</mp>" +
 					"</mp>" +
 					"</m>" +
 				"</SendMsgRequest>");
 		
-		// Get the mail item for the new message
-		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ mail.dSubject +")");
-		
 		app.zPageMail.zToolbarPressButton(Button.B_FOLDER_TREE);
 		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inbox);
 		
 		// Select the mail
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
 		// Reply to mail
 		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_REPLY);
@@ -87,7 +77,7 @@ public class ReplyMail extends TouchCommonTest {
 		// Verify received mail
 		ZimbraAccount.AccountA().soapSend(
 				"<SearchRequest types='message' xmlns='urn:zimbraMail'>"
-						+ "<query>subject:(" + mail.dSubject + ")</query>"
+						+ "<query>subject:(" + subject + ")</query>"
 						+ "</SearchRequest>");
 		String toid = ZimbraAccount.AccountA().soapSelectValue("//mail:m", "id");
 		
@@ -104,7 +94,7 @@ public class ReplyMail extends TouchCommonTest {
 		ZAssert.assertEquals(tofrom, app.zGetActiveAccount().EmailAddress, "Verify the from field is correct");
 		ZAssert.assertEquals(toto, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");
 		ZAssert.assertNull(tocc, "Verify cc value is null");
-		ZAssert.assertEquals(tosubject, "Re: " + mail.dSubject, "Verify the subject field is correct");
+		ZAssert.assertEquals(tosubject, "Re: " + subject, "Verify the subject field is correct");
 		ZAssert.assertStringContains(tobody, body, "Verify the body content");
 		ZAssert.assertStringContains(tobody, modifiedContent, "Verify the modified content");
 		ZAssert.assertStringContains(tobody, "----- Original Message -----", "Verify the body content");

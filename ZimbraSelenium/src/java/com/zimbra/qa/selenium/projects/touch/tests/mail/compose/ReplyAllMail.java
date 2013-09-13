@@ -17,7 +17,6 @@ package com.zimbra.qa.selenium.projects.touch.tests.mail.compose;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
-import com.zimbra.qa.selenium.framework.items.RecipientItem.RecipientType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.touch.core.TouchCommonTest;
@@ -36,20 +35,14 @@ public class ReplyAllMail extends TouchCommonTest {
 	public void ReplyAllMail_01() throws HarnessException {
 
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
+		
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "text <strong>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong> text";
-		
-		MailItem mail = new MailItem();
-		mail.dToRecipients.add(new RecipientItem(app.zGetActiveAccount(), RecipientType.To));
-		mail.dCcRecipients.add(new RecipientItem(ZimbraAccount.AccountB().EmailAddress, RecipientType.To));
-		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		mail.dBodyText = body;
-		
 		String modifiedContent = " modified body" + ZimbraSeleniumProperties.getUniqueString();
-		
-		String contentHTML = XmlStringUtil.escapeXml(
+		String htmlBody = XmlStringUtil.escapeXml(
 				"<html>" +
 					"<head></head>" +
-					"<body>"+ mail.dBodyText +"</body>" +
+					"<body>"+ body +"</body>" +
 				"</html>");
 
 		// Send a message to the account
@@ -59,26 +52,23 @@ public class ReplyAllMail extends TouchCommonTest {
 						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 						"<e t='c' a='"+ ZimbraAccount.AccountB().EmailAddress +"'/>" +
 						"<e t='c' a='"+ ZimbraAccount.AccountC().EmailAddress +"'/>" +
-						"<su>"+ mail.dSubject +"</su>" +
+						"<su>"+ subject +"</su>" +
 						"<mp ct='multipart/alternative'>" +
 						"<mp ct='text/plain'>" +
-							"<content>"+ mail.dBodyText +"</content>" +
+							"<content>"+ body +"</content>" +
 						"</mp>" +
 						"<mp ct='text/html'>" +
-							"<content>"+ contentHTML +"</content>" +
+							"<content>"+ htmlBody +"</content>" +
 						"</mp>" +
 					"</mp>" +
 					"</m>" +
 				"</SendMsgRequest>");
 		
-		// Get the mail item for the new message
-		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ mail.dSubject +")");
-		
 		app.zPageMail.zToolbarPressButton(Button.B_FOLDER_TREE);
 		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inbox);
 		
 		// Select the mail
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
 		// Reply to mail
 		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_REPLYALL);
@@ -88,7 +78,7 @@ public class ReplyAllMail extends TouchCommonTest {
 		// To user verification
 		ZimbraAccount.AccountA().soapSend(
 				"<SearchRequest types='message' xmlns='urn:zimbraMail'>"
-						+ "<query>subject:(" + mail.dSubject + ")</query>"
+						+ "<query>subject:(" + subject + ")</query>"
 						+ "</SearchRequest>");
 		String toid = ZimbraAccount.AccountA().soapSelectValue("//mail:m", "id");
 		
@@ -107,7 +97,7 @@ public class ReplyAllMail extends TouchCommonTest {
 		ZAssert.assertEquals(toto, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");
 		ZAssert.assertEquals(tocc1, ZimbraAccount.AccountB().EmailAddress, "Verify the cc user1 field is correct");
 		ZAssert.assertEquals(tocc2, ZimbraAccount.AccountC().EmailAddress, "Verify the cc user2 field is correct");
-		ZAssert.assertEquals(tosubject, "Re: " + mail.dSubject, "Verify the subject field is correct");
+		ZAssert.assertEquals(tosubject, "Re: " + subject, "Verify the subject field is correct");
 		ZAssert.assertStringContains(tobody, body, "Verify the body content");
 		ZAssert.assertStringContains(tobody.trim(), modifiedContent.trim(), "Verify the modified content");
 		ZAssert.assertStringContains(tobody, "----- Original Message -----", "Verify the body content");
@@ -115,7 +105,7 @@ public class ReplyAllMail extends TouchCommonTest {
 		// Cc user1 verification
 		ZimbraAccount.AccountB().soapSend(
 				"<SearchRequest types='message' xmlns='urn:zimbraMail'>"
-						+ "<query>subject:(" + mail.dSubject + ")</query>"
+						+ "<query>subject:(" + subject + ")</query>"
 						+ "</SearchRequest>");
 		toid = ZimbraAccount.AccountB().soapSelectValue("//mail:m", "id");
 		
@@ -134,7 +124,7 @@ public class ReplyAllMail extends TouchCommonTest {
 		ZAssert.assertEquals(toto, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");
 		ZAssert.assertEquals(tocc1, ZimbraAccount.AccountB().EmailAddress, "Verify the cc user1 field is correct");
 		ZAssert.assertEquals(tocc2, ZimbraAccount.AccountC().EmailAddress, "Verify the cc user2 field is correct");
-		ZAssert.assertEquals(tosubject, "Re: " + mail.dSubject, "Verify the subject field is correct");
+		ZAssert.assertEquals(tosubject, "Re: " + subject, "Verify the subject field is correct");
 		ZAssert.assertStringContains(tobody, body, "Verify the body content");
 		ZAssert.assertStringContains(tobody.trim(), modifiedContent.trim(), "Verify the modified content");
 		ZAssert.assertStringContains(tobody, "----- Original Message -----", "Verify the body content");
@@ -142,7 +132,7 @@ public class ReplyAllMail extends TouchCommonTest {
 		// Cc user2 verification
 		ZimbraAccount.AccountC().soapSend(
 				"<SearchRequest types='message' xmlns='urn:zimbraMail'>"
-						+ "<query>subject:(" + mail.dSubject + ")</query>"
+						+ "<query>subject:(" + subject + ")</query>"
 						+ "</SearchRequest>");
 		toid = ZimbraAccount.AccountC().soapSelectValue("//mail:m", "id");
 		
@@ -161,7 +151,7 @@ public class ReplyAllMail extends TouchCommonTest {
 		ZAssert.assertEquals(toto, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");
 		ZAssert.assertEquals(tocc1, ZimbraAccount.AccountB().EmailAddress, "Verify the cc user1 field is correct");
 		ZAssert.assertEquals(tocc2, ZimbraAccount.AccountC().EmailAddress, "Verify the cc user2 field is correct");
-		ZAssert.assertEquals(tosubject, "Re: " + mail.dSubject, "Verify the subject field is correct");
+		ZAssert.assertEquals(tosubject, "Re: " + subject, "Verify the subject field is correct");
 		ZAssert.assertStringContains(tobody, body, "Verify the body content");
 		ZAssert.assertStringContains(tobody.trim(), modifiedContent.trim(), "Verify the modified content");
 		ZAssert.assertStringContains(tobody, "----- Original Message -----", "Verify the body content");
