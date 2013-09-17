@@ -63,7 +63,7 @@ DwtOutsideMouseEventMgr = function() {
 DwtOutsideMouseEventMgr.prototype.isDwtOutsideMouseEventMgr = true;
 DwtOutsideMouseEventMgr.prototype.toString = function() { return "DwtOutsideMouseEventMgr"; };
 
-DwtOutsideMouseEventMgr.EVENTS = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEWHEEL];
+DwtOutsideMouseEventMgr.EVENTS = [DwtEvent.ONMOUSEDOWN];
 DwtOutsideMouseEventMgr.EVENTS_HASH = AjxUtil.arrayAsHash(DwtOutsideMouseEventMgr.EVENTS);
 
 /**
@@ -89,8 +89,7 @@ function(params) {
 		var mecParams = {
 			id:				this.id,
 			hardCapture:	false,
-			mouseDownHdlr:	DwtOutsideMouseEventMgr._mouseEventHdlr,
-			mouseWheelHdlr:	DwtOutsideMouseEventMgr._mouseEventHdlr
+			mouseDownHdlr:	DwtOutsideMouseEventMgr._mouseEventHdlr
 		}
 		this._menuCapObj = new DwtMouseEventCapture(mecParams);
 	}
