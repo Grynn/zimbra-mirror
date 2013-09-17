@@ -312,6 +312,8 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
     lpszPwd, wstring &wstruserdn, wstring &wstrlegacyname)
 {
     wstruserdn = L"";
+    LPWSTR dnEmpty = L"No";
+    LPWSTR ldnEmpty = L"No";
 
     // Get IDirectorySearch Object
     CComPtr<IDirectorySearch> pDirSearch;
@@ -382,13 +384,19 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
             // distinguishedName
             hr = pDirSearch->GetColumn(hSearch, pAttributes[0], &dnCol);
             if (FAILED(hr))
+            {
+                dnEmpty = L"Yes";
                 break;
+            }
             wstruserdn = dnCol.pADsValues->CaseIgnoreString;
 
             // legacyExchangeDN
             hr = pDirSearch->GetColumn(hSearch, pAttributes[1], &dnCol);
             if (FAILED(hr))
+            {
+                ldnEmpty =  L"Yes";
                 break;
+            }
             wstrlegacyname = dnCol.pADsValues->CaseIgnoreString;
 
             pDirSearch->CloseSearchHandle(hSearch);
@@ -413,7 +421,12 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
     pDirSearch->CloseSearchHandle(hSearch);
     if (wstruserdn.empty() || wstrlegacyname.empty())
     {
-        throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): S_ADS_NOMORE_ROWS",
+		 wstring errorMessage = L"Util::GetUserDNAndLegacyName(): S_ADS_NOMORE_ROWS";
+			errorMessage += L" Error Cause :: DN Empty? : ";
+			errorMessage += dnEmpty;
+			errorMessage += L"  LegacyDN Empty? :";
+			errorMessage += ldnEmpty;
+		throw MapiUtilsException(hr, errorMessage.c_str(),
             ERR_AD_NOROWS, __LINE__, __FILE__);
     }
     return S_OK;
