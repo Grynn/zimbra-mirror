@@ -176,10 +176,10 @@ function(ev) {
 	if(rowEl.className == "ImgCheckboxunChecked" || rowEl.className == "ImgCheckboxChecked") {
 		 rowWasClicked = false;
 	}
-	while (rowEl && (rowEl.id.indexOf("attachContactsZimlet_row_") == -1)) {
+	while (!Dwt.hasClass(rowEl, 'AttachContactRow') && rowEl.id != this._folderListId) {
 		rowEl = rowEl.parentNode;
 	}
-	if(!rowEl) {
+	if(rowEl.id == this._folderListId) {
 		return;
 	}
 	this._resetRowSelection(rowWasClicked);
