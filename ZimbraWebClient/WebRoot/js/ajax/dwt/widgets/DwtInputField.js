@@ -371,17 +371,21 @@ function() {
  */
 DwtInputField.prototype.setHint =
 function(hint) {
-	var oldHint = this._hint;
 	this._hint = hint;
+	var inputElement = this.getInputElement();
 	if (AjxEnv.supportsPlaceholder) {
-		this.getInputElement().placeholder = hint;
-	} else if (this._hintIsVisible) {
-		this.getInputElement().value = hint;
+		inputElement.placeholder = hint || "";
+		return;
+	}
+
+	if (this._hintIsVisible) {
+		inputElement.value = hint;
 		if (!hint) {
 			this._hintIsVisible = false;
 			this._updateClassName();
 		}
-	} else if (this._inputField.value == '') {
+	}
+	else if (inputElement.value === '') {
 		this._showHint();
 	}
 };
