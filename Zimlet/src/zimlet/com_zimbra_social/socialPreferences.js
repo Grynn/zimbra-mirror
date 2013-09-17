@@ -18,7 +18,6 @@ function com_zimbra_socialPreferences(zimlet) {
 	this.shell = this.zimlet.getShell();
 	this._fbNeedPermCount = 0;
 	this.social_pref_trendsPopularIsOn = this.zimlet.getUserProperty("social_pref_trendsPopularIsOn") == "true";
-	this.social_pref_diggPopularIsOn = this.zimlet.getUserProperty("social_pref_diggPopularIsOn") == "true";
 	this.social_pref_SocialMailUpdateOn = this.zimlet.getUserProperty("social_pref_SocialMailUpdateOn") == "true";
 	this.social_pref_dontShowWelcomeScreenOn = this.zimlet.getUserProperty("social_pref_dontShowWelcomeScreenOn") == "true";
 	this.social_pref_showTweetAlertsOn = this.zimlet.getUserProperty("social_pref_showTweetAlertsOn") == "true";
@@ -433,11 +432,6 @@ function() {
 		this.zimlet.setUserProperty("social_pref_trendsPopularIsOn", currentVal);
 		save = true;
 	}
-	currentVal = document.getElementById("social_pref_diggPopularIsOn").checked;
-	if (this.social_pref_diggPopularIsOn != currentVal) {
-		this.zimlet.setUserProperty("social_pref_diggPopularIsOn", currentVal);
-		save = true;
-	}
 	currentVal = document.getElementById("social_pref_socializeBtnOn").checked;
 	if (this.social_pref_socializeBtnOn != currentVal) {
 		this.zimlet.setUserProperty("social_pref_socializeBtnOn", currentVal);
@@ -510,9 +504,6 @@ com_zimbra_socialPreferences.prototype._setPrefCheckboxes = function() {
 	if (this.social_pref_trendsPopularIsOn) {
 		document.getElementById("social_pref_trendsPopularIsOn").checked = true;
 	}
-	if (this.social_pref_diggPopularIsOn) {
-		document.getElementById("social_pref_diggPopularIsOn").checked = true;
-	}
 	if (this.social_pref_socializeBtnOn) {
 		document.getElementById("social_pref_socializeBtnOn").checked = true;
 	}
@@ -554,7 +545,6 @@ function() {
 	html[i++] = "<BR/>";
 	html[i++] = "<table>";
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_trendsPopularIsOn' /></td><td width=100%>"+this.zimlet.getMessage("showTopTwitterTrendsByDefault")+"</td></tr>";
-	html[i++] = "<tr><td><input type='checkbox' id='social_pref_diggPopularIsOn' /></td><td width=100%> "+this.zimlet.getMessage("showDiggsPopularByDefault")+"</td></tr>";
 
 	html[i++] = "</table>";
 	html[i++] = "<table>";
@@ -719,11 +709,9 @@ function() {
 	html[i++] = "</ul><b>"+this.zimlet.getMessage("thingsToDo")+"</b>";
 	html[i++] = "<ul>";
 	html[i++] = "<li>"+this.zimlet.getMessage("thingsToDo1")+"</li>";
-	html[i++] = "<li>"+this.zimlet.getMessage("thingsToDo2")+"</li>";
 	html[i++] = "<li>"+this.zimlet.getMessage("thingsToDo3")+"</li>";
 	html[i++] = "<li>"+this.zimlet.getMessage("thingsToDo4")+"</li>";
 
-	html[i++] = "<li>"+this.zimlet.getMessage("thingsToDo5")+"</li>";
 	html[i++] = "</ul>";
 	html[i++] = this.zimlet.getMessage("takeA")+" <label id='SocialZimlet_takeATourLnk' style=\"color:blue;text-decoration: underline;font-weight:bold\"><a href='http://wiki.zimbra.com/index.php?title=Social' target=\"_blank\">"+
 		this.zimlet.getMessage("quickTour")+"</a></label> "+this.zimlet.getMessage("forExtraHelp");
