@@ -631,7 +631,7 @@ function(templateId, data) {
 
     el.className = "ZSelectAutoSizingContainer";
     el.setAttribute("style", "");
-    if (AjxEnv.isIE) {
+    if (AjxEnv.isIE && !AjxEnv.isIE9up) {
         el.style.overflow = "hidden";
     }
 };
