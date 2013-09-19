@@ -438,17 +438,25 @@ function(result) {
 };
 
 ZmArchiveZimlet.prototype.onSendMsgSuccess = function(controller, msg) {
+
 	var id = msg.id || (msg._origMsg && msg._origMsg.id);
-	var cid = msg.cid || (msg._origMsg && msg._origMsg.cid);
-	if (this._msgMap[id]) {
-		var m = appCtxt.getById(id);
-		var conv = cid ? appCtxt.getById(cid) : null;
-		var obj = conv ? conv : m;
-		if (obj && obj.list && obj.list.moveItems) {
-			obj.list.moveItems({items:obj, folder:this._archiveFolder});
-		}
-		delete this._msgMap[id];
+	if (!this._msgMap[id]) {
+		//note to self - _msgMap is weird - I don't think it could really have multiple items (so not sure need for a map rather than one item),
+		// but keep it this way. Basically it's a way to check that the message sent also had the "send+archive" button clicked for.
+		//I believe usually it's pretty immediate so it would only be one message there.
+		return;
 	}
+	delete this._msgMap[id];
+
+	var item = appCtxt.getById(id);
+	var listController = appCtxt.getCurrentApp().getMailListController();
+	if (listController.getCurrentViewType() === ZmId.VIEW_CONVLIST) {
+		var cid = msg.cid || (msg._origMsg && msg._origMsg.cid);
+		var conv = cid && appCtxt.getById(cid);
+		item = conv || item;
+	}
+	listController._doMove([item], this._archiveFolder);
+
 };
 
 ZmArchiveZimlet.prototype._getMetaKeyVal = 
