@@ -26,7 +26,7 @@ import com.zimbra.qa.selenium.projects.touch.ui.mail.FormMailNew.Field;
 public class ForwardTextMail extends TouchCommonTest {
 
 	public ForwardTextMail() {
-		logger.info("New "+ ForwardMail.class.getCanonicalName());
+		logger.info("New "+ ForwardTextMail.class.getCanonicalName());
 	}
 	
 	@Test( description = "Forward a text mail and verify subject, from and to fields",

@@ -26,7 +26,7 @@ import com.zimbra.qa.selenium.projects.touch.ui.mail.FormMailNew.Field;
 public class ForwardHtmlMail extends TouchCommonTest {
 
 	public ForwardHtmlMail() {
-		logger.info("New "+ ForwardMail.class.getCanonicalName());
+		logger.info("New "+ ForwardHtmlMail.class.getCanonicalName());
 	}
 	
 	@Test( description = "Forward a html mail and verify body content",

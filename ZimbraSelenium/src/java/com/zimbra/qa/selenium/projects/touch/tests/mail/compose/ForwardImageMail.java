@@ -28,7 +28,7 @@ import com.zimbra.qa.selenium.projects.touch.ui.mail.FormMailNew.Field;
 public class ForwardImageMail extends TouchCommonTest {
 
 	public ForwardImageMail() {
-		logger.info("New "+ ForwardMail.class.getCanonicalName());
+		logger.info("New "+ ForwardImageMail.class.getCanonicalName());
 	}
 	
 	@Bugs( ids = "81331")
