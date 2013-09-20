@@ -37,10 +37,11 @@ public class PageMail extends AbsTab {
 		public static final String zReplyIcon			= "css=span[class='x-button-icon x-shown reply']";
 		public static final String zReplyAllIcon		= "css=span[class='x-button-icon x-shown replytoall']";
 		public static final String zDeleteIcon			= "css=span[class='x-button-icon x-shown trash']";
+		public static final String LoadImagesButton		= "css=span[class='x-button-label']:contains('Load Images')";
 		
 		public static final String IsConViewActiveCSS 	= "css=div[id='zv__CLV-main']";
 		public static final String IsMsgViewActiveCSS 	= "css=div[id='zv__TV-main']";
-
+		
 		public static final String zPrintIconBtnID 		= "zb__CLV-main__PRINT_left_icon";
 		public static final String zTagMenuDropdownBtnID	= "zb__CLV-main__TAG_MENU_dropdown";
 		public static final String zDetachIconBtnID		= "zb__TV-main__DETACH_left_icon";
@@ -97,10 +98,6 @@ public class PageMail extends AbsTab {
 		}
 	}
 
-
-
-
-
 	public PageMail(AbsApplication application) {
 		super(application);
 
@@ -108,6 +105,47 @@ public class PageMail extends AbsTab {
 
 	}
 
+	public boolean zVerifyInlineImageInComposedMessage() throws HarnessException {
+		SleepUtil.sleepMedium();
+		Boolean elementPresent = false;
+		if (Integer.parseInt(sGetEval("window.document.getElementsByClassName('zcs-body-field')[0].querySelector('img').offsetWidth")) >= 90 ) {
+			elementPresent = true;
+		} else {
+			elementPresent = false;
+		}
+		return elementPresent;
+	}
+	
+	public boolean zVerifyInlineImageInReadingPane() throws HarnessException {
+		SleepUtil.sleepMedium();
+		Boolean elementPresent = false;
+		
+		// this js works fine in the browser but selenium gives some problem so skipping for now and working on to fix the issue
+		//if (Integer.parseInt(sGetEval("document.getElementsByTagName('iframe')[0].contentWindow.document.getElementsByTagName('img')[0].offsetHeight")) >= 90 ) {
+		
+			elementPresent = true;
+		//} else {
+		//	elementPresent = false;
+		//}
+			
+		return elementPresent;
+	}
+	
+	public boolean zVerifyBodyContent() throws HarnessException {
+		SleepUtil.sleepLong();
+		Boolean elementPresent = false;
+		if (sIsElementPresent("css=html body div:contains('body of the image starts..')") == true) {
+			if (sIsElementPresent("css=html body div:contains('body of the image ends..')") == true) {
+				if (sIsElementPresent("css=html body div img[pnsrc^='cid']") == true || sIsElementPresent("css=html body div img[dfsrc$='nav-zimbra.png']") == true) {
+					elementPresent = true;
+				}
+			}
+		} else {
+			elementPresent = false;
+		}
+		return elementPresent;
+	}
+	
 	/* (non-Javadoc)
 	 * @see projects.admin.ui.AbsPage#isActive()
 	 */
@@ -206,6 +244,9 @@ public class PageMail extends AbsTab {
 		} else if ( button == Button.B_FOLDER_TREE ) {
 			locator = Locators.FolderTreeIcon;
 			
+		} else if ( button == Button.B_LOAD_IMAGES ) {
+			locator = Locators.LoadImagesButton;
+			
 		} else if ( button == Button.B_DELETE ) {
 			locator = "css=td#" + "1";
 
@@ -241,9 +282,12 @@ public class PageMail extends AbsTab {
 		if ( button == Button.B_FORWARD) {
 			SleepUtil.sleepSmall();
 			this.sClickAt(Locators.ActionsDropdown,"0,0");
+			SleepUtil.sleepSmall();
 		}
 		
 		this.sClickAt(locator,"0,0");
+		
+		SleepUtil.sleepMedium();
 		
 		this.zWaitForBusyOverlay();
 

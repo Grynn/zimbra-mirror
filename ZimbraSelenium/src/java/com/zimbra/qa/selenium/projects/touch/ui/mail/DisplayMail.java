@@ -23,6 +23,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.touch.ui.calendar.FormApptNew;
+import com.zimbra.qa.selenium.projects.touch.ui.mail.FormMailNew.Locators;
 
 /**
  * The <code>DisplayMail<code> object defines a read-only view of a message
@@ -118,7 +119,7 @@ public class DisplayMail extends AbsDisplay {
 	 * 
 	 * @param application
 	 */
-	protected DisplayMail(AbsApplication application) {
+	public DisplayMail(AbsApplication application) {
 		super(application);
 		
 		logger.info("new " + DisplayMail.class.getCanonicalName());
@@ -952,6 +953,8 @@ public class DisplayMail extends AbsDisplay {
 	 * @throws HarnessException
 	 */
 	public String zGetMailProperty(Field field) throws HarnessException {
+		
+		SleepUtil.sleepLong(); //reading pane takes more time in the browser
 		logger.info("DisplayMail.zGetDisplayedValue(" + field + ")");
 
 		String locator = null;
@@ -962,31 +965,11 @@ public class DisplayMail extends AbsDisplay {
 			throw new HarnessException("implement me!");
 			
 		} else if ( field == Field.Body ) {
-
-			/*
-			 * To get the body contents, need to switch iframes
-			 */
-			try {
-				
-				this.sSelectFrame("//iframe[contains(@id, '_body__iframe')]");
-				
-				String bodyLocator = "css=body";
-				
-				// Make sure the body is present
-				if ( !this.sIsElementPresent(bodyLocator) )
-					throw new HarnessException("Unable to find the message body!");
-				
-				// Get the body value
-				// String body = this.sGetText(bodyLocator).trim();
-				String html = this.zGetHtml(bodyLocator);
-				
-				logger.info("DisplayMail.zGetBody(" + bodyLocator + ") = " + html);
-				return(html);
-
-			} finally {
-				// Make sure to go back to the original iframe
-				this.sSelectFrame("relative=top");
-			}
+					
+			System.out.println(this.sIsElementPresent("css=html body div:contains('body of the inline image starts..')"));
+			
+			logger.info("DisplayMail.zGetBody(" + "css=div[class$='zcs-fully-editable']" + ") = " + locator);
+			return(locator);
 
 		} else if ( field == Field.Cc ) {
 			

@@ -1,0 +1,30 @@
+Date: Thu, 19 Sep 2013 05:00:11 -0700 (PDT)
+From: uwm01@zqa-062.eng.vmware.com
+To: uwm02 <uwm02@zqa-062.eng.vmware.com>
+In-Reply-To: <53960523.127.1379592010687.JavaMail.zimbra@zqa-062.eng.vmware.com>
+Subject: external image testing
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_130_1091948629.1379592011968"
+X-Originating-IP: [10.112.205.36]
+X-Mailer: Zimbra 8.5.0_BETA1_2153 (ZimbraWebClient - FF12 (Win)/8.5.0_BETA1_2153)
+Thread-Topic: external image testing
+Thread-Index: m7GJfZpJGiUkELLN2YFSUv8YbIE+fg==
+
+------=_Part_130_1091948629.1379592011968
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+body of the image starts.. 
+
+
+
+body of the image ends.. 
+
+
+------=_Part_130_1091948629.1379592011968
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+<html><body><div>body of the image starts..</div><div><br></div><div><span class="Object" id="OBJ_PREFIX_DWT213_com_zimbra_url"><a href="http://www.zimbra.com" target="_blank" data-mce-href="http://www.zimbra.com"><img src="http://www.zimbra.com/products/zimbra_desktop/nav-zimbra.png" data-mce-src="http://www.zimbra.com/products/zimbra_desktop/nav-zimbra.png" border="0"></a></span><br data-mce-bogus="1"></div><div><br></div><div><div>body of the image ends..</div><br></div></body></html>
+------=_Part_130_1091948629.1379592011968--

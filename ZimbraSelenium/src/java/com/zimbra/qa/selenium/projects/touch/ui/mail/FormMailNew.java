@@ -49,9 +49,9 @@ public class FormMailNew extends AbsForm {
 	 */
 	public static class Locators {
 		
-		public static final String zSendButton			= "css=span[class='x-button-label']:contains('Send')";
-		public static final String zCancelButton		= "css=span[class='x-button-label']:contains('Cancel')";
-		public static final String zSaveDraftButton		= "css=span[class='x-button-label']:contains('Save Draft')";
+		public static final String zSendButton			= "css=div[class=x-body'] span[class='x-button-label']:contains('Send')";
+		public static final String zCancelButton		= "css=div[class=x-body'] span[class='x-button-label']:contains('Cancel')";
+		public static final String zSaveDraftButton		= "css=div[class=x-body'] span[class='x-button-label']:contains('Save Draft')";
 				
 		public static final String zToField				= "css=div[class='x-container x-layout-box-item x-sized'] div[class^='x-innerhtml'] input";
 		public static final String zCcField				= "css=div[id='ext-contactfield-2'] div[class^='x-innerhtml'] input";
