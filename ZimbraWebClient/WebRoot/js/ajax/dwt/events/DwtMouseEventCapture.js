@@ -49,7 +49,7 @@ DwtMouseEventCapture = function(params) {
 	this._hardCapture = (params.hardCapture !== false)
 
 	this._supportsCapture = (document.body && document.body.setCapture &&
-	                         !AjxEnv.isIE9up && !AjxEnv.isModernIE);
+	                         AjxEnv.isIE && !AjxEnv.isIE9up);
 }
 
 DwtMouseEventCapture.PARAMS = ["targetObj", "id", "mouseOverHdlr", "mouseDownHdlr", "mouseMoveHdlr",
@@ -111,7 +111,7 @@ function() {
 		document.onmousewheel = this._mouseWheelHdlr;
 	}
 	if (this._hardCapture && this._supportsCapture) {
-		document.body.setCapture();
+		document.body.setCapture(true);
 	}
 	window._mouseEventCaptureObj = this;
 	DwtMouseEventCapture._capturing = true;
