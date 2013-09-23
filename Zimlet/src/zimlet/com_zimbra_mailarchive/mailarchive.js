@@ -437,6 +437,21 @@ function(result) {
 	
 };
 
+/**
+ * the user clicked the regular "send" button - remove the id from the _msgMap so it does not archive.
+ * The id might be there in the case the user clicked "send+archive" and the spell checker caught it (or any other error)
+ * and then the user just clicks "send" (not "send+archive"). It's kind of a corner case I think. But we need to deal with it.
+ * @param controller
+ * @param msg
+ */
+ZmArchiveZimlet.prototype.onSendButtonClicked = function(controller, msg) {
+	if (!msg) {
+		return;
+	}
+	var id = msg.id || (msg._origMsg && msg._origMsg.id);
+	delete this._msgMap[id];
+};
+
 ZmArchiveZimlet.prototype.onSendMsgSuccess = function(controller, msg) {
 
 	var id = msg.id || (msg._origMsg && msg._origMsg.id);
