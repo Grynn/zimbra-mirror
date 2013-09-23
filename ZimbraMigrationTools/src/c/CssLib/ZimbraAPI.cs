@@ -147,56 +147,52 @@ public class ZimbraAPI
         {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Impegni","15"}, {"/MAPIRoot/Attivit\u00e1","15"},
     };
 
-   
-    Dictionary<string, string> specialFoldersMap_Ma = new Dictionary<string, string>()
-    {{"","0"},{"/MAPIRoot","1"},{"/MAPIRoot/Inbox","2"},{"/MAPIRoot/Deleted Items","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Sent Items","5"},
-        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Contacts","7"},
-        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Conversations","9"},
-        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Wiki","12"},
-        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Chats","14"},
-        {"/MAPIRoot/Tasks","15"},
-        {"/MAPIRoot/Peti Masuk","2"},{"/MAPIRoot/Sampah","3"},
-        {"/MAPIRoot/Sarap","4"}, {"/MAPIRoot/Dihantar","5"},
-        {"/MAPIRoot/Draf","6"}, {"/MAPIRoot/Kenalan","7"},
-        {"/MAPIRoot/Tag","8"}, {"/MAPIRoot/Perbualan","9"},
-        {"/MAPIRoot/Kalendar","10"}, 
-        {"/MAPIRoot/Kenalan Dihantar E-mel","13"}, {"/MAPIRoot/Sembang","14"},
-        {"/MAPIRoot/Tugas","15"}};
+    Dictionary<string, string> specialFoldersMap_ma = new Dictionary<string, string>()  //Malay locale support
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Peti Masuk","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Item Dihapuskan","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/E-Mel Sarap","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Skickat","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Draf","6"},
+        {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Orang Hubungan","7"},
+        {"/MAPIRoot/Tags","8"},
+        {"/MAPIRoot/Conversations","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Kalender","10"},
+        {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Chats","14"},
+        {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Tugas","15"}};
 
+    Dictionary<string, string> specialFoldersMap_du_nl = new Dictionary<string, string>()  //Dutch(Netherlands)locale support
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Postvak IN","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Verwijderde items","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Ongewenste e-mail","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Verzonden items","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Concepten","6"},
+        {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Contactpersonen","7"},
+        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Labels","8"},
+        {"/MAPIRoot/Conversations","9"}, {"/MAPIRoot/Conversaties","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Agenda","10"},
+        {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Voorgestelde contactpersonen","13"},
+        {"/MAPIRoot/Chats","14"},
+        {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Taken","15"}};
 
-    Dictionary<string, string> specialFoldersMap_nl = new Dictionary<string, string>()
-    {{"","0"},{"/MAPIRoot","1"},{"/MAPIRoot/Inbox","2"},{"/MAPIRoot/Deleted Items","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Sent Items","5"},
-        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Contacts","7"},
-        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Conversations","9"},
-        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Wiki","12"},
-        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Chats","14"},
-        {"/MAPIRoot/Tasks","15"},
-        {"/MAPIRoot/Postvak IN","2"},{"/MAPIRoot/Prullenbak","3"},
-        {"/MAPIRoot/Junk","4"}, {"/MAPIRoot/Verzonden","5"},
-        {"/MAPIRoot/Concepten","6"}, {"/MAPIRoot/Contacten","7"},
-        {"/MAPIRoot/Labels","8"}, {"/MAPIRoot/Conversaties","9"},
-        {"/MAPIRoot/Agenda","10"}, 
-        {"/MAPIRoot/Gemailde contacten","13"},
-        {"/MAPIRoot/Taken","15"}
-
-    };
-   Dictionary<string, string> specialFoldersMap_pl = new Dictionary<string, string>()
-    {{"","0"},{"/MAPIRoot","1"},{"/MAPIRoot/Skrzynka odbiorcza","2"},{"/MAPIRoot/Kosz","3"},
-        {"/MAPIRoot/Spam","4"}, {"/MAPIRoot/Wys\u0142ano","5"},
-        {"/MAPIRoot/Kopie robocze","6"}, {"/MAPIRoot/Kontakty","7"},
-        {"/MAPIRoot/Znaczniki","8"}, {"/MAPIRoot/Konwersacje","9"},
-        {"/MAPIRoot/Kalendarz","10"}, {"/MAPIRoot/Wiki","12"},
-        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Czaty","14"},
-        {"/MAPIRoot/Zadania","15"},
-        {"/MAPIRoot/Inbox","2"},{"/MAPIRoot/Deleted Items","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Sent Items","5"},
-        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Contacts","7"},
-        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Conversations","9"},
-        {"/MAPIRoot/Calendar","10"}, 
-        {"/MAPIRoot/Kontakty, do kt\u00f3rych wys\u0142ano wiadomo\u015b\u0107 e-mail","13"}, {"/MAPIRoot/Chats","14"},
-        {"/MAPIRoot/Tasks","15"}};
+   Dictionary<string, string> specialFoldersMap_pl = new Dictionary<string, string>()  //Polish locale support
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Skrzynka odbiorcza","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Elementy usuni\u0119te","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Wiadomo\u015bci-\u015bmieci","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Elementy wys\u0142ane","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Kopie robocze","6"},
+        {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Kontakty","7"},
+        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Znaczniki","8"},
+        {"/MAPIRoot/Conversations","9"}, {"/MAPIRoot/Konwersacje","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Kalendarz","10"},
+        {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Sugerowane kontakty","13"},
+        {"/MAPIRoot/Chats","14"},
+        {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Zadania","15"}};
 
    Dictionary<string, string> specialFoldersMap_ptb = new Dictionary<string, string>()  //Portuguese (Brazil)
     {{"","0"},{"/MAPIRoot","1"},
@@ -214,37 +210,35 @@ public class ZimbraAPI
         {"/MAPIRoot/Chats","14"}, {"/MAPIRoot/Bate-papos","14"},
         {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Tarefas","15"}};
 
-    Dictionary<string, string> specialFoldersMap_ro = new Dictionary<string, string>()
-    {{"","0"},{"/MAPIRoot","1"},{"/MAPIRoot/Inbox","2"},{"/MAPIRoot/Deleted Items","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Sent Items","5"},
-        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Contacts","7"},
-        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Conversations","9"},
-        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Wiki","12"},
-        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Chats","14"},
-        {"/MAPIRoot/Tasks","15"},{"/MAPIRoot/Co\u015f de gunoi","3"},
-        {"/MAPIRoot/Mesaje spam","4"}, {"/MAPIRoot/Trimise","5"},
-        {"/MAPIRoot/Ciorne","6"}, {"/MAPIRoot/Contacte","7"},
-        {"/MAPIRoot/Etichete","8"}, {"/MAPIRoot/Conversa\u0163ii","9"},
-        {"/MAPIRoot/Contacte destinatare","13"}, {"/MAPIRoot/Discu\u0163ii","14"},
-        {"/MAPIRoot/ Activit\u0103\u0163i","15"}};
+    Dictionary<string, string> specialFoldersMap_ro = new Dictionary<string, string>()  //Romanian locale support
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Inbox","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Elemente \u0219terse","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Po\u0219t\u0103 electronic\u0103 nedorit\u0103","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Elemente trimise","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Schi\u021be","6"},
+        {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Persoane de contact","7"},
+        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Etichete","8"},
+        {"/MAPIRoot/Conversations","9"}, {"/MAPIRoot/Conversa\u0163ii","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Calendar","10"},
+        {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Chats","14"},
+        {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Activit\u0103\u021bi","15"}};
 
-
-
-    Dictionary<string, string> specialFoldersMap_sv = new Dictionary<string, string>()
-    {{"","0"},{"/MAPIRoot","1"},{"/MAPIRoot/Inbox","2"},{"/MAPIRoot/Deleted Items","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Sent Items","5"},
-        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Contacts","7"},
-        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Conversations","9"},
-        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Wiki","12"},
-        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Chats","14"},
-        {"/MAPIRoot/Tasks","15"},
-        {"/MAPIRoot/Inkorgen","2"},{"/MAPIRoot/Papperskorg","3"},
-        {"/MAPIRoot/Skr\u00e4p","4"}, {"/MAPIRoot/Skickat","5"},
-        {"/MAPIRoot/Utkast","6"}, {"/MAPIRoot/Kontakter","7"},
-        {"/MAPIRoot/Etiketter","8"}, {"/MAPIRoot/Konversationer","9"},
-        {"/MAPIRoot/Kalender","10"}, 
-        {"/MAPIRoot/E-postkontakter","13"}, {"/MAPIRoot/Chattar","14"},
-        {"/MAPIRoot/Uppgifter","15"}};
+    Dictionary<string, string> specialFoldersMap_sw = new Dictionary<string, string>()  //Swedish locale support
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Inkorgen","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Borttaget","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Skr\u00e4ppost","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Skickat","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Utkast","6"},
+        {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Kontakter","7"},
+        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Etiketter","8"},
+        {"/MAPIRoot/Conversations","9"}, {"/MAPIRoot/Konversationer","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Kalender","10"},
+        {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Chats","14"},
+        {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Uppgifter","15"}};
 
     Dictionary<string, string> specialFoldersMap_SLV = new Dictionary<string, string>()  //Slovanian locale support
     {{"","0"},{"/MAPIRoot","1"},
@@ -507,8 +501,8 @@ public class ZimbraAPI
                 {
                     {
                         string tempstr = folderPath;
-                        if (specialFoldersMap_Ma.ContainsKey(tempstr))
-                            return specialFoldersMap_Ma[tempstr];
+                        if (specialFoldersMap_ma.ContainsKey(tempstr))
+                            return specialFoldersMap_ma[tempstr];
                         else
                             return "";
                     }
@@ -520,8 +514,8 @@ public class ZimbraAPI
                 {
                     {
                         string tempstr = folderPath;
-                        if (specialFoldersMap_nl.ContainsKey(tempstr))
-                            return specialFoldersMap_nl[tempstr];
+                        if (specialFoldersMap_du_nl.ContainsKey(tempstr))
+                            return specialFoldersMap_du_nl[tempstr];
                         else
                             return "";
                     }
@@ -572,8 +566,8 @@ public class ZimbraAPI
                 {
                     {
                         string tempstr = folderPath;
-                        if (specialFoldersMap_sv.ContainsKey(tempstr))
-                            return specialFoldersMap_sv[tempstr];
+                        if (specialFoldersMap_sw.ContainsKey(tempstr))
+                            return specialFoldersMap_sw[tempstr];
                         else
                             return "";
                     }
