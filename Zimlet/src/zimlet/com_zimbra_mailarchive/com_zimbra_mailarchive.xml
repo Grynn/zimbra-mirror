@@ -21,6 +21,6 @@
     <includeCSS>mailarchive.css</includeCSS>
     <handlerObject>ZmArchiveZimlet</handlerObject>
     <zimletPanelItem label="${msg.label}" icon="archiveZimletIcon">
-        <toolTipText>${msg.archivePanelToolTip}</toolTipText>
+        <toolTipText>${msg.description}</toolTipText>
     </zimletPanelItem>
 </zimlet>

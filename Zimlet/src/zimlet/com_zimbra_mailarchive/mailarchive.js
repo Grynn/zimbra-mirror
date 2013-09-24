@@ -142,7 +142,7 @@ function(app, toolbar, controller, viewId) {
 		}
 		var buttonArgs = {
 			text	: this.getMessage("label"),
-			tooltip: this.getMessage("description"),
+			tooltip: this.getMessage("archiveButtonToolTip"),
 			index: buttonIndex,
 			image: "archiveZimletIcon",
 			showImageInToolbar: false,
@@ -184,9 +184,14 @@ function(app, toolbar, controller, viewId) {
 		else if (msg.folderId == this._archiveFolderId || msg.folderId == ZmFolder.ID_SENT || msg.folderId == ZmFolder.ID_TRASH	|| msg.folderId == ZmFolder.ID_SPAM) { 
 			visible = false; 
 		}
+
+		var listController = appCtxt.getCurrentApp().getMailListController();
+		var isConvListView = listController.getCurrentViewType() === ZmId.VIEW_CONVLIST;
+		var tooltip = this.getMessage("sendAndArchiveToolTip" + (isConvListView ? "Conv" : ""));
+
 		var buttonArgs = {
 			text: this.getMessage("sendAndArchiveButton"),
-			tooltip: this.getMessage("sendAndArchiveTooltip"),
+			tooltip: tooltip,
 			index: 0,
 			image: "archiveZimletIcon",
 			showImageInToolbar: false,
@@ -204,6 +209,7 @@ function(app, toolbar, controller, viewId) {
 			}
 			button.setEnabled(true);
 			button.setVisible(visible);
+			button.setToolTipContent(tooltip);
 		}
 	}
 };
