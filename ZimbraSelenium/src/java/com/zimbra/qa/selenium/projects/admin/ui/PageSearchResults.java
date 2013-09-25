@@ -34,7 +34,9 @@ public class PageSearchResults extends AbsTab {
 		public static final String SEARCH_INPUT_TEXT_BOX="_XForm_query_display";
 		public static final String SEARCH_BUTTON="css=td.xform_container div.ImgSearch";
 		public static final String DELETE_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete']";
+		public static final String DELETE_BUTTON_DISABLED="css=div[id='zm__zb_currentApp__MENU_POP'] div[class='ImgDelete ZDisabledImage']";
 		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON="css=div[id='zm__SCHLV__MENU_POP'] div[class='ImgDelete']";
+		public static final String RIGHT_CLICK_MENU_DELETE_BUTTON_DISABLED="css=div[id='zm__SCHLV__MENU_POP'] div[class='ImgDelete ZDisabledImage']";
 		public static final String RIGHT_CLICK_MENU_EDIT_BUTTON="css=div[id='zm__SCHLV__MENU_POP'] div[class='ImgEdit']";
 		public static final String EDIT_BUTTON="css=div[id='zm__zb_currentApp__MENU_POP']  div[class='ImgEdit']";
 		public static final String GEAR_ICON="css=div.ImgConfigure";
@@ -207,6 +209,11 @@ public class PageSearchResults extends AbsTab {
 			// Make sure the button exists
 			if ( !this.sIsElementPresent(locator) )
 				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
+
+			// FALL THROUGH
+		}else if(button == Button.B_DELETE) {
+				locator = Locators.DELETE_BUTTON;
+				page = new DialogForDeleteOperation(this.MyApplication,null);
 
 			// FALL THROUGH
 		}else{
@@ -384,5 +391,15 @@ public class PageSearchResults extends AbsTab {
 		return (items);
 	}
 
+	public boolean zVerifyDisabled(String  buttonID)throws HarnessException{
+		if(buttonID=="DeleteContext"){
+			boolean test= this.sIsElementPresent(Locators.DELETE_BUTTON_DISABLED);
+			return test;
+		}else if(buttonID=="DeleteTreeMenu"){
+			return this.sIsElementPresent(Locators.RIGHT_CLICK_MENU_DELETE_BUTTON_DISABLED);
+		}else{
+			return false;
+		}
 
+	}
 }
