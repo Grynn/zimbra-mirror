@@ -60,7 +60,7 @@ max_requests=%%zimbraCBPolicydMaxRequests%%
 # 2 - Notices, warnings, errors
 # 3 - Info, notices, warnings, errors
 # 4 - Debugging 
-log_level=@@cbpolicyd_log_level@@
+log_level=%%zimbraCBPolicydLogLevel%%
 
 # File to log to instead of stdout
 log_file=@@cbpolicyd_log_file@@
@@ -111,7 +111,7 @@ host=localhost
 # Port to run on, in the case of a unix socket it would be the path
 # eg. 10031
 # eg. /var/run/cbpolicyd/policyd.sock
-port=@@cbpolicyd_bind_port@@
+port=%%zimbraCBPolicydBindPort%%
 
 # Timeout in communication with clients
 # Idle timeout in postfix defaults to 1015s (active connection)
