@@ -1180,7 +1180,7 @@ checkCertExpiration() {
   fi
 
   if [ $VIEW = "all" -o $VIEW = "mta" ]; then
-    service_crt=/opt/zimbra/conf/smtpd.crt
+    loadLdapKey service_crt "zimbraMtaSmtpdTlsCertFile" server
     #echo "::service mta::"
     if [ -f "${service_crt}" ]; then
       ${openssl} x509  -in ${service_crt} -noout -checkend ${exp_thres_secs}
@@ -1265,7 +1265,7 @@ viewdeployedcrt() {
   fi
 
   if [ $VIEW = "all" -o $VIEW = "mta" ]; then
-    service_crt=/opt/zimbra/conf/smtpd.crt
+    loadLdapKey service_crt "zimbraMtaSmtpdTlsCertFile" server
     echo "::service mta::"
     if [ -f "${service_crt}" ]; then
       ${openssl} x509  -in ${service_crt} -dates -subject -issuer -noout

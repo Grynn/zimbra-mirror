@@ -37,9 +37,7 @@ zmsetvars -f \
   mailboxd_server \
   mailboxd_keystore \
   mailboxd_keystore_password \
-  mailboxd_truststore_password \
-  postfix_smtpd_tls_cert_file \
-  postfix_smtpd_tls_key_file
+  mailboxd_truststore_password
   
 export JAVA_HOME=${zimbra_java_home}
 
