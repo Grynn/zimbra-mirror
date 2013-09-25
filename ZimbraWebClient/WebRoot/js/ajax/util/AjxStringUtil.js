@@ -1494,7 +1494,7 @@ function(str, bold, fontSize) {
 	}
 
 	if (AjxUtil.isString(fontSize)) {
-		fontSize = fontSize.replace(/px$/,"");
+		fontSize = DwtCssStyle.asPixelCount(fontSize);
 	}
 	var sz = "" + (fontSize || 0); // 0 means "default";
 	
