@@ -53,14 +53,14 @@ sub alterVolumeId($) {
   my ($group) = @_;
   my $sql;
   $sql = <<_EOF_;
-ALTER TABLE $group.mail_item DROP INDEX i_volume_id;
-ALTER TABLE $group.mail_item DROP FOREIGN KEY fk_mail_item_volume_id;
-ALTER TABLE $group.mail_item DROP KEY fk_mail_item_volume_id;
-ALTER TABLE $group.mail_item_dumpster DROP INDEX i_volume_id;
-ALTER TABLE $group.mail_item_dumpster DROP FOREIGN KEY fk_mail_item_dumpster_volume_id;
-ALTER TABLE $group.mail_item_dumpster DROP KEY fk_mail_item_dumpster_volume_id;
-ALTER TABLE $group.mail_item CHANGE volume_id locator VARCHAR(1024);
-ALTER TABLE $group.mail_item_dumpster CHANGE volume_id locator VARCHAR(1024);
+ALTER TABLE $group.mail_item DROP INDEX i_volume_id,
+                             DROP FOREIGN KEY fk_mail_item_volume_id,
+                             DROP KEY fk_mail_item_volume_id,
+                             CHANGE volume_id locator VARCHAR(1024);
+ALTER TABLE $group.mail_item_dumpster DROP INDEX i_volume_id,
+                                      DROP FOREIGN KEY fk_mail_item_dumpster_volume_id,
+                                      DROP KEY fk_mail_item_dumpster_volume_id,
+                                      CHANGE volume_id locator VARCHAR(1024);
 ALTER TABLE $group.revision CHANGE volume_id locator VARCHAR(1024);
 ALTER TABLE $group.revision_dumpster CHANGE volume_id locator VARCHAR(1024);
 _EOF_
