@@ -567,7 +567,7 @@ BODY {
 }
 
 .vertSep {
-	@VertSeparator@;
+	@VertSeparator@
 	border-width:0px;
 	height:100%;
 	margin:0px;
@@ -1058,7 +1058,7 @@ TD.gridGroupBodyLabel {
 
 .VeilOverlay {
 	background-color:black;
-	@opacity(35)@;
+	@opacity(35)@
 }
 
 .ZaToolBar {
@@ -1181,7 +1181,7 @@ TD.gridGroupBodyLabel {
 	margin-bottom:2px;
 	margin-left:3px;
 	padding:1px 3px;
-	@roundCorners(4px)@;
+	@roundCorners(4px)@
 }
 
 .ZaHelpViewGroupBorder {
