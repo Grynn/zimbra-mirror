@@ -30,17 +30,22 @@ exit(0);
 
 sub doIt() {
   foreach my $group (Migrate::getMailboxGroups()) {
-    my $volumeIdInt = (Migrate::runSql("show columns from $group.mail_item where Field = 'volume_id' and Type like '%int%';"))[0];
+    my $volumeIdInt = (Migrate::runSql("show columns from $group.mail_item where Field = 'volume_id';"))[0];
     if (length $volumeIdInt == 0) {
-      #existing install using external store; volume_id was manually altered
-      Migrate::logSql("$group.mail_item.volume_id is not currently an int; this installation probably altered it for older StoreManager implementation");
-      fixVolumeId($group);	
+      Migrate::logSql("$group.mail_item.volume_id doesn't exist, assuming $group is already done, skipping...");
     } else {
-      #standard migration
-      Migrate::logSql("Adding blob locator columns in $group");
-      alterVolumeId($group);	
+      $volumeIdInt = (Migrate::runSql("show columns from $group.mail_item where Field = 'volume_id' and Type like '%int%';"))[0];
+      if (length $volumeIdInt == 0) {
+        #existing install using external store; volume_id was manually altered
+        Migrate::logSql("$group.mail_item.volume_id is not currently an int; this installation probably altered it for older StoreManager implementation");
+        fixVolumeId($group);	
+      } else {
+        #standard migration
+        Migrate::logSql("Adding blob locator columns in $group");
+        alterVolumeId($group);
+      }
     }
-  } 
+  }
 }
 
 sub alterVolumeId($) {
