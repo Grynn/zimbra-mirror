@@ -531,6 +531,16 @@ function() {
 };
 
 /**
+ * Checks the validity of the input field value; returns the error message, if any.
+ */
+DwtInputField.prototype.getValidationError =
+function() {
+	this.validate();
+
+	return this._validationError;
+};
+
+/**
  * Validates the current input in the field. This method should be called
  * if the validation style has been set to DwtInputField.MANUAL_VALIDATION
  * and it is time for the field to be validated
@@ -798,7 +808,7 @@ DwtInputField.prototype._validateInput =
 function(value) {
 	var isValid = true;
 	var retVal;
-	var errorStr;
+	this._validationError = null;
 
 	if (!this.getEnabled()) {
 		retVal = this.getValue();
@@ -809,21 +819,21 @@ function(value) {
 					? this._validator.call(this._validatorObj, value, this)
 					: this._validator(value);
 			} else if (!this._validator.test(value)) {
-				errorStr = this._errorString;
+				this._validationError = this._errorString;
 			}
 		} catch(ex) {
 			if (typeof ex == "string")
-				errorStr = ex;
+				this._validationError = ex;
 			else
 				throw ex;
 		}
 	}
 	
-	if (errorStr) {
+	if (this._validationError) {
 		this._hasError = true;
 		if (this._errorIconTd)
 			this._errorIconTd.innerHTML = DwtInputField._ERROR_ICON_HTML;
-		this.setToolTipContent(errorStr);
+		this.setToolTipContent(this._validationError);
 		isValid = false;
 		retVal = null;
 	} else {
