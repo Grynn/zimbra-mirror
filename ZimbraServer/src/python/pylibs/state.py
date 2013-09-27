@@ -966,8 +966,10 @@ class State:
 		# Howewver, before we do that action, we need to do variable substitution in the line
 		# and then evaluate the action
 		line = line.rstrip()
-		if(line.startswith("%%") and line.endswith("%%") and line.count('%') is 4):
-			line = line.strip("%%")
+
+		if(line.startswith("%%") and line.endswith("%%") and line.count('%') > 4):
+			line = re.sub('^%%','',line)
+			line = re.sub('%%$','',line)
 			line = re.sub(r"%%([^%]+)%%", self.xformConfigVariable, line)
 			line = line + "%%"
 			line = "%%" + line
