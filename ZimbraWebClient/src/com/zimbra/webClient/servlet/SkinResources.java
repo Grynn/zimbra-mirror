@@ -1347,6 +1347,7 @@ public class SkinResources
 			define(macros, "SAFARI_2_OR_HIGHER", isSafari2up);
 			define(macros, "SAFARI_3", isSafari3);
 			define(macros, "SAFARI_5_OR_HIGHER", isSafari5up);
+			define(macros, "TRIDENT", isTrident);
 			define(macros, "WEBKIT", isWebKitBased);
 			define(macros, "WEBTV", isWebTv);
 		}
