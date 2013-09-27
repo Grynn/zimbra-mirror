@@ -125,5 +125,95 @@ class ServerConfig(config.Config):
 		elif self["zimbraMtaSmtpdMilters"] is None and milter is not None:
 			self["zimbraMtaSmtpdMilters"] = milter
 
+		if self["zimbraMtaAliasMaps"] is not None:
+			v = self["zimbraMtaAliasMaps"]
+			v = str(v)
+			self["zimbraMtaAliasMaps"] = ', '.join(v.split())
+
+		if self["zimbraMtaHeaderChecks"] is not None:
+			v = self["zimbraMtaHeaderChecks"]
+			v = str(v)
+			self["zimbraMtaHeaderChecks"] = ', '.join(v.split())
+
+		if self["zimbraMtaImportEnvironment"] is not None:
+			v = self["zimbraMtaImportEnvironment"]
+			v = str(v)
+			self["zimbraMtaImportEnvironment"] = ', '.join(v.split())
+
+		if self["zimbraMtaLmtpConnectionCacheDestinations"] is not None:
+			v = self["zimbraMtaLmtpConnectionCacheDestinations"]
+			v = str(v)
+			self["zimbraMtaLmtpConnectionCacheDestinations"] = ', '.join(v.split())
+
+		if self["zimbraMtaLmtpHostLookup"] is not None:
+			v = self["zimbraMtaLmtpHostLookup"]
+			v = str(v)
+			self["zimbraMtaLmtpHostLookup"] = ', '.join(v.split())
+
+		if self["zimbraMtaSmtpSaslMechanismFilter"] is not None:
+			v = self["zimbraMtaSmtpSaslMechanismFilter"]
+			v = str(v)
+			self["zimbraMtaSmtpSaslMechanismFilter"] = ', '.join(v.split())
+
+		if self["zimbraMtaSmtpSaslPasswordMaps"] is not None:
+			v = self["zimbraMtaSmtpSaslPasswordMaps"]
+			v = str(v)
+			self["zimbraMtaSmtpSaslPasswordMaps"] = ', '.join(v.split())
+
+		if self["zimbraMtaNotifyClasses"] is not None:
+			v = self["zimbraMtaNotifyClasses"]
+			v = str(v)
+			self["zimbraMtaNotifyClasses"] = ', '.join(v.split())
+
+		if self["zimbraMtaPropagateUnmatchedExtensions"] is not None:
+			v = self["zimbraMtaPropagateUnmatchedExtensions"]
+			v = str(v)
+			self["zimbraMtaPropagateUnmatchedExtensions"] = ', '.join(v.split())
+
+		if self["zimbraMtaSenderCanonicalMaps"] is not None:
+			v = self["zimbraMtaSenderCanonicalMaps"]
+			v = str(v)
+			self["zimbraMtaSenderCanonicalMaps"] = ', '.join(v.split())
+
+		if self["zimbraMtaSmtpdSaslSecurityOptions"] is not None:
+			v = self["zimbraMtaSmtpdSaslSecurityOptions"]
+			v = str(v)
+			self["zimbraMtaSmtpdSaslSecurityOptions"] = ', '.join(v.split())
+
+		if self["zimbraMtaSmtpSaslSecurityOptions"] is not None:
+			v = self["zimbraMtaSmtpSaslSecurityOptions"]
+			v = str(v)
+			self["zimbraMtaSmtpSaslSecurityOptions"] = ', '.join(v.split())
+
+		if self["zimbraMtaSmtpdSaslTlsSecurityOptions"] is not None:
+			v = self["zimbraMtaSmtpdSaslTlsSecurityOptions"]
+			v = str(v)
+			self["zimbraMtaSmtpdSaslTlsSecurityOptions"] = ', '.join(v.split())
+
+		if self["zimbraMtaTransportMaps"] is not None:
+			v = self["zimbraMtaTransportMaps"]
+			v = str(v)
+			self["zimbraMtaTransportMaps"] = ', '.join(v.split())
+
+		if self["zimbraMtaVirtualAliasDomains"] is not None:
+			v = self["zimbraMtaVirtualAliasDomains"]
+			v = str(v)
+			self["zimbraMtaVirtualAliasDomains"] = ', '.join(v.split())
+
+		if self["zimbraMtaVirtualAliasMaps"] is not None:
+			v = self["zimbraMtaVirtualAliasMaps"]
+			v = str(v)
+			self["zimbraMtaVirtualAliasMaps"] = ', '.join(v.split())
+
+		if self["zimbraMtaVirtualMailboxDomains"] is not None:
+			v = self["zimbraMtaVirtualMailboxDomains"]
+			v = str(v)
+			self["zimbraMtaVirtualMailboxDomains"] = ', '.join(v.split())
+
+		if self["zimbraMtaVirtualMailboxMaps"] is not None:
+			v = self["zimbraMtaVirtualMailboxMaps"]
+			v = str(v)
+			self["zimbraMtaVirtualMailboxMaps"] = ', '.join(v.split())
+
 		dt = time.clock()-t1
 		Log.logMsg(5,"Serverconfig loaded in %.2f seconds" % dt)
