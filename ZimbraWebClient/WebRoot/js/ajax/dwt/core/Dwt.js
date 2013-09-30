@@ -1269,6 +1269,8 @@ function(args, paramNames, force) {
 // PRIVATE METHODS
 //////////////////////////////////////////////////////////////////////////////////
 
+Dwt.__REM_RE = /^(-?[0-9]+(?:\.[0-9]*)?)rem$/;
+
 /**
  * @private
  */
@@ -1283,6 +1285,9 @@ function(val, check) {
 	}
 	if (typeof(val) == "number") {
 		val = val + "px";
+	}
+	if (!AjxEnv.supportsCSS3RemUnits && Dwt.__REM_RE.test(val)) {
+		val = DwtCssStyle.asPixelCount(val) + "px";
 	}
 	return val;
 };
