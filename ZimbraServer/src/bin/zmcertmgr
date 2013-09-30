@@ -229,27 +229,6 @@ saveConfigKey() {
   fi
 }
 
-loadLdapKey() {
-  local key=$2
-  local location=$3
-
-  if [ $location = "global" ]; then
-    local zmprov_opts="gacf"
-  elif [ $location = "server" ]; then
-    local server=$4
-    if [ x"${server}" = "x" ]; then
-      server=${zimbra_server_hostname}
-    fi
-    local zmprov_opts="gs ${server}"
-  else
-    echo "Unknown config section $location"
-    return
-  fi
-  echo -n "** Retrieving $location config key $key..."
-  result=`su - zimbra -c "/opt/zimbra/bin/zmprov -m -l -- ${zmprov_opts} ${key} | sed -e 's/^${key}: //' -e '/^#.*/d' 2>/dev/null"`
-  eval "$1=$result"
-}
-
 loadConfigKey() {
   local key=$1
   local file=$2
@@ -748,13 +727,11 @@ deployCert() {
 
   if [ x"$DEPLOY" = "xall" -o x"$DEPLOY" = "xmta" ]; then
     echo -n "** Installing mta certificate and key..."
-    loadLdapKey postfix_smtpd_tls_cert_file "zimbraMtaSmtpdTlsCertFile" server
-    loadLdapKey postfix_smtpd_tls_key_file "zimbraMtaSmtpdTlsKeyFile" server
-    cp -f ${current_crt} ${postfix_smtpd_tls_cert_file}
-    cp -f ${current_key} ${postfix_smtpd_tls_key_file}
-    chown ${zimbra_uid}:${zimbra_gid} ${postfix_smtpd_tls_cert_file}
-    chown ${zimbra_uid}:${zimbra_gid} ${postfix_smtpd_tls_key_file}
-    chmod 640 ${postfix_smtpd_tls_cert_file} ${postfix_smtpd_tls_key_file}
+    cp -f ${current_crt} ${zimbra_conf_directory}/smtpd.crt
+    cp -f ${current_key} ${zimbra_conf_directory}/smtpd.key
+    chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/smtpd.crt
+    chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/smtpd.key
+    chmod 640 ${zimbra_conf_directory}/smtpd.crt ${zimbra_conf_directory}/smtpd.key
 
     echo "done."
   fi
@@ -1180,7 +1157,7 @@ checkCertExpiration() {
   fi
 
   if [ $VIEW = "all" -o $VIEW = "mta" ]; then
-    loadLdapKey service_crt "zimbraMtaSmtpdTlsCertFile" server
+    service_crt=/opt/zimbra/conf/smtpd.crt
     #echo "::service mta::"
     if [ -f "${service_crt}" ]; then
       ${openssl} x509  -in ${service_crt} -noout -checkend ${exp_thres_secs}
@@ -1265,7 +1242,7 @@ viewdeployedcrt() {
   fi
 
   if [ $VIEW = "all" -o $VIEW = "mta" ]; then
-    loadLdapKey service_crt "zimbraMtaSmtpdTlsCertFile" server
+    service_crt=/opt/zimbra/conf/smtpd.crt
     echo "::service mta::"
     if [ -f "${service_crt}" ]; then
       ${openssl} x509  -in ${service_crt} -dates -subject -issuer -noout
