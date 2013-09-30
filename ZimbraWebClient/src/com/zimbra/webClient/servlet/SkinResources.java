@@ -1698,10 +1698,6 @@ public class SkinResources
 					} else if (operation.equals("image") || operation.equals("img")) {
 						result = outputImage(stack, params);
 
-					// "cssShadow"
-					} else if (operation.equals("cssshadow")) {
-						result = outputCssShadow(stack, params);
-
 					// "cssText" or "cssTextProp[ertie]s"
 					} else if (operation.indexOf("csstext") == 0) {
 						result = outputCssTextProperties(stack, params);
@@ -2030,18 +2026,6 @@ public class SkinResources
 									//				"font-size-adjust", "font-stretch",
 											};
 			return outputCssProperties(stack, newParams);
-		}
-
-		//
-		// replace occurances of @cssShadow(size, color)@ with CSS to show a shadow, specific to the platform
-		//
-		private String outputCssShadow(Stack<String> stack, String[] params) throws IOException {
-			if (isBrowser("SAFARI_3")) {
-				String size = (params.length > 1 ? params[0] : "5px");
-				String color = (params.length > 1 ? colorToColorString(this.getColor(stack, params[1])) : "#666666");
-				return "-webkit-box-shadow:" + size + " " + color + ";";
-			}
-			return "";
 		}
 
 		//
