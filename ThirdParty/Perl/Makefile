@@ -243,10 +243,10 @@ SWATCH := \
 	swatch-3.2.3
 
 TERM_READKEY := \
-	TermReadKey-2.30.02.tar.gz
+	TermReadKey-2.30.02
 	
 INNOTOP := \
-	innotop-1.9.1.tar.gz
+	innotop-1.9.1
 
 LDAPAPI := \
 	Net-LDAPapi-3.0.3
