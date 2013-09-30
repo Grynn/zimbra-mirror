@@ -11,7 +11,7 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
-PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-963.patch
+PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-98.patch
 CONFIG_OPT	:=
 CPPFLAGS 	:=
 LDFLAGS		:=

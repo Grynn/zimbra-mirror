@@ -1,0 +1,36 @@
+--- clamav-0.98/configure.orig	2013-09-30 15:30:02.052019828 -0700
++++ clamav-0.98/configure	2013-09-30 15:34:23.605019865 -0700
+@@ -14042,7 +14042,7 @@
+   conftest.$ac_objext conftest.beam conftest.$ac_ext
+ fi
+ 
+-
++if test "$gcc_check" = "yes"; then
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gcc bug PR28045" >&5
+ $as_echo_n "checking for gcc bug PR28045... " >&6; }
+ if test "$cross_compiling" = yes; then :
+@@ -14179,7 +14179,7 @@
+ rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+   conftest.$ac_objext conftest.beam conftest.$ac_ext
+ fi
+-
++fi
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ld --version-script" >&5
+ $as_echo_n "checking for ld --version-script... " >&6; }
+@@ -16833,6 +16833,7 @@
+ 	esac
+     fi
+ 
++if test "$gcc_check" = "yes"; then
+     if test "$HAVE_LIBBZ2" = "yes"; then
+ 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CVE-2010-0405" >&5
+ $as_echo_n "checking for CVE-2010-0405... " >&6; }
+@@ -16925,6 +16926,7 @@
+ rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+   conftest.$ac_objext conftest.beam conftest.$ac_ext
+ fi
++fi
+ 
+ LIBS="$save_LIBS"
+ 
