@@ -273,8 +273,17 @@ function(ev) {
 };
 
 DwtComboBox.prototype._handleKeyDown = function(ev) {
+	var keycode = DwtKeyEvent.getCharCode(ev);
+
 	this.__ovalue = this.getText();
-	return true;
+
+	// bug 81471: Prevent enter key presses from propagating, as they may
+	// bubble up to ZmZimbraMail which pops down the active menu. This is
+	// inconvenient if the menu in question contains this combo box.
+	if (keycode == 13 || keycode == 3)
+		return false;
+	else
+		return true;
 };
 
 DwtComboBox.prototype._handleKeyUp = function(ev) {
