@@ -348,22 +348,24 @@ public class TreeCalendar extends AbsTree {
 				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='NEW_CALENDAR'] td[id$='_title']";
 				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
 			
-				/**
-				 * TODO: add other options:
-				 * 
-				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='ADD_EXTERNAL_CALENDAR'] td[id$='_title']";
-				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='CHECK_ALL'] td[id$='_title']";
-				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='CLEAR_ALL'] td[id$='_title']";
-				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='FREE_BUSY_LINK'] td[id$='_title']";
-
-				 */
-
+			} else if ( option == Button.B_TREE_FIND_SHARES ) {
+				
+				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='FIND_SHARES'] td[id$='_title']";
+				page = new DialogShareFind(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
+				
 			} else if ( option == Button.B_TREE_NEW_EXTERNAL_CALENDAR ) {
 				
 				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='ADD_EXTERNAL_CALENDAR'] td[id$='_title']";
 				page = new DialogAddExternalCalendar(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
 				
-				// FALL THROUGH
+				/**
+				 * TODO: add other options:
+				 * 
+				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='CHECK_ALL'] td[id$='_title']";
+				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='CLEAR_ALL'] td[id$='_title']";
+				optionLocator = "css=div[id='ZmActionMenu_calendar_CALENDAR'] div[id='FREE_BUSY_LINK'] td[id$='_title']";
+
+				 */
 				
 			} else {
 				throw new HarnessException("Pulldown/Option "+ pulldown +"/"+ option +" not implemented");

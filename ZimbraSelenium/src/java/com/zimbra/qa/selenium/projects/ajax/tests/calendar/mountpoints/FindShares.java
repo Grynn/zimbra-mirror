@@ -36,7 +36,7 @@ public class FindShares extends CalendarWorkWeekTest {
 		
 	}
 	
-	@Bugs(ids = "82125")
+	@Bugs(ids = "82125,84339")
 	@Test( description = "Search for a share using 'Find Shares' and add it",
 			groups = { "functional" })
 			
@@ -71,7 +71,7 @@ public class FindShares extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Click Find Shares
-		DialogShareFind dialog = (DialogShareFind)app.zTreeMail.zPressButton(Button.B_TREE_FIND_SHARES);
+		DialogShareFind dialog = (DialogShareFind)app.zTreeCalendar.zPressPulldown(Button.B_TREE_FOLDERS_OPTIONS, Button.B_TREE_FIND_SHARES);
 		
 		// Find shares from the user
 		dialog.zSetFindEmail(Owner.EmailAddress);

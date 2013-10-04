@@ -735,6 +735,11 @@ public class TreeMail extends AbsTree {
 				optionLocator = "css=div[id='ZmActionMenu_mail_FOLDER'] div[id='NEW_FOLDER'] td[id$='_title']";
 				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
 			
+			} else if ( option == Button.B_TREE_FIND_SHARES ) {
+					
+				optionLocator = "css=div[id='ZmActionMenu_mail_FOLDER'] div[id='FIND_SHARES'] td[id$='_title']";
+				page = new DialogShareFind(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
+				
 			} else {
 				throw new HarnessException("Pulldown/Option "+ pulldown +"/"+ option +" not implemented");
 			}

@@ -29,6 +29,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
 
 
@@ -160,7 +161,7 @@ public class DialogShareFind extends AbsDialog {
 		String rowLocator = top + ">div";
 		int count = this.sGetCssCount(rowLocator);
 		for (int i = 1; i <= count; i++ ) {
-			String itemLocator = rowLocator + ":nth-of-type("+ i +")";
+			String itemLocator = rowLocator + ":nth-child("+ i +")";
 			
 			String foldername = this.sGetText(itemLocator + " td[id$='_textCell']");
 			items.add(foldername);
@@ -290,10 +291,12 @@ public class DialogShareFind extends AbsDialog {
 			throw new HarnessException("Locator "+ locator +" not present");
 		}
 		
-		this.zClick(locator);
+		this.sClickAt(locator, "");
 		
 		zWaitForBusyOverlay();
-
+		
+		SleepUtil.sleepLong();
+		
 		return (page);
 	}
 
