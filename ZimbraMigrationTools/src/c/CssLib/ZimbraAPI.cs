@@ -212,7 +212,7 @@ public class ZimbraAPI
 
     Dictionary<string, string> specialFoldersMap_ro = new Dictionary<string, string>()  //Romanian locale support
     {{"","0"},{"/MAPIRoot","1"},
-        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Inbox","2"},
+        {"/MAPIRoot/Inbox","2"},
         {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Elemente \u0219terse","3"},
         {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Po\u0219t\u0103 electronic\u0103 nedorit\u0103","4"},
         {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Elemente trimise","5"},
@@ -220,7 +220,7 @@ public class ZimbraAPI
         {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Persoane de contact","7"},
         {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Etichete","8"},
         {"/MAPIRoot/Conversations","9"}, {"/MAPIRoot/Conversa\u0163ii","9"},
-        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Calendar","10"},
+        {"/MAPIRoot/Calendar","10"},
         {"/MAPIRoot/Wiki","12"},
         {"/MAPIRoot/Chats","14"},
         {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Activit\u0103\u021bi","15"}};
