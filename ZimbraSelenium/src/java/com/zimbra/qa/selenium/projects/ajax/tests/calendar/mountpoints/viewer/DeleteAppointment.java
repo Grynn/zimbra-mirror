@@ -179,6 +179,9 @@ public class DeleteAppointment extends CalendarWorkWeekTest {
 		DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
 		ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is not created");
 		ZAssert.assertFalse(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is not appear");
+		
+		// Mark ON/OFF to mounted calendar folder and select the appointment
+		app.zTreeCalendar.zMarkOnOffCalendarFolder("Calendar");
 
 	}
 
