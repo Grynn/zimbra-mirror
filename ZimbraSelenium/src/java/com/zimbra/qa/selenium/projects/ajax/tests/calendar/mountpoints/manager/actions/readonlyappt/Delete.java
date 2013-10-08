@@ -79,8 +79,8 @@ public class Delete extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Mark ON to mounted calendar folder and select the appointment
-		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
-		app.zTreeCalendar.zSelectMountedFolder(mountPointName);
+		app.zTreeCalendar.zMarkOnOffCalendarFolder("Calendar");
+		app.zTreeCalendar.zMarkOnOffMountedFolder(mountPointName);
 		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, apptSubject);
 		
 		DialogConfirmationDeclineAppointment declineAppt = (DialogConfirmationDeclineAppointment) new DialogConfirmationDeclineAppointment(app, app.zPageCalendar);
@@ -170,8 +170,8 @@ public class Delete extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Mark ON to mounted calendar folder and select the appointment
-		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
-		app.zTreeCalendar.zSelectMountedFolder(mountPointName);
+		app.zTreeCalendar.zMarkOnOffCalendarFolder("Calendar");
+		app.zTreeCalendar.zMarkOnOffMountedFolder(mountPointName);
 		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, apptSubject);
 		
 		DialogConfirmationDeclineAppointment declineAppt = (DialogConfirmationDeclineAppointment) new DialogConfirmationDeclineAppointment(app, app.zPageCalendar);
@@ -316,8 +316,8 @@ public class Delete extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Mark ON to mounted calendar folder and select the appointment
-		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
-		app.zTreeCalendar.zSelectMountedFolder(mountPointName);
+		app.zTreeCalendar.zMarkOnOffCalendarFolder("Calendar");
+		app.zTreeCalendar.zMarkOnOffMountedFolder(mountPointName);
 		app.zPageCalendar.zListItem(Action.A_LEFTCLICK, Button.B_DELETE, apptSubject);
 		
 		DialogConfirmationDeclineAppointment deleteAppt = (DialogConfirmationDeclineAppointment) new DialogConfirmationDeclineAppointment(app, app.zPageCalendar);

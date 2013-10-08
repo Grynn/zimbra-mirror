@@ -88,8 +88,8 @@ public class VerifyDisabledUI extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Mark ON to mounted calendar folder and select the appointment
-		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar"); //need to localize it
-		app.zTreeCalendar.zSelectMountedFolder(mountpointname);
+		app.zTreeCalendar.zMarkOnOffCalendarFolder("Calendar"); //need to localize it
+		app.zTreeCalendar.zMarkOnOffMountedFolder(mountpointname);
 		
 		// Verify Save, Tag, Accepted, Edit, Forward, Delete, Propose New Time & Delete menus are disabled
 		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_OPEN_MENU, apptSubject);

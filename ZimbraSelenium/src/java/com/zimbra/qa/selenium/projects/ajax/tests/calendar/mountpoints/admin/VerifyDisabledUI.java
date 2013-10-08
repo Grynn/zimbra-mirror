@@ -89,8 +89,8 @@ public class VerifyDisabledUI extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Mark ON to mounted calendar folder and select the appointment
-		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
-		app.zTreeCalendar.zSelectMountedFolder(mountpointname);
+		app.zTreeCalendar.zMarkOnOffCalendarFolder("Calendar");
+		app.zTreeCalendar.zMarkOnOffMountedFolder(mountpointname);
 		
 		// Verify Reply menu is enabled
 		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, apptSubject);

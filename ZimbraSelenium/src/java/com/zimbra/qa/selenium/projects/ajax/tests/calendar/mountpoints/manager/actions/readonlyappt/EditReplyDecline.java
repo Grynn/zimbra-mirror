@@ -84,8 +84,8 @@ public class EditReplyDecline extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Mark ON to mounted calendar folder and select the appointment
-		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
-		app.zTreeCalendar.zSelectMountedFolder(mountPointName);
+		app.zTreeCalendar.zMarkOnOffCalendarFolder("Calendar");
+		app.zTreeCalendar.zMarkOnOffMountedFolder(mountPointName);
 		
 		FormMailNew mailComposeForm = (FormMailNew)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_EDIT_REPLY_DECLINE_SUB_MENU, apptSubject);
         mailComposeForm.zFillField(Field.Body, modifiedBody + " ");		

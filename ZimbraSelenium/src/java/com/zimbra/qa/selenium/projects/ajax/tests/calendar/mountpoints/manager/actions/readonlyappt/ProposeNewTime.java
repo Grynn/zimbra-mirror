@@ -88,8 +88,8 @@ public class ProposeNewTime extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Mark ON to mounted calendar folder and select the appointment
-		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
-		app.zTreeCalendar.zSelectMountedFolder(mountPointName);
+		app.zTreeCalendar.zMarkOnOffCalendarFolder("Calendar");
+		app.zTreeCalendar.zMarkOnOffMountedFolder(mountPointName);
 		
 		FormApptNew apptForm = (FormApptNew)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_PROPOSE_NEW_TIME_MENU, apptSubject);
 		apptForm.zVerifyDisabledControlInProposeNewTimeUI();

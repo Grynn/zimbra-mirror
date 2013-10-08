@@ -87,8 +87,8 @@ public class ShowOriginal extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Mark ON to mounted calendar folder and select the appointment
-		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
-		app.zTreeCalendar.zSelectMountedFolder(mountpointname);
+		app.zTreeCalendar.zMarkOnOffCalendarFolder("Calendar");
+		app.zTreeCalendar.zMarkOnOffMountedFolder(mountpointname);
 		
 		// Appointment show original
 		SeparateWindow window = (SeparateWindow)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK,Button.O_SHOW_ORIGINAL_MENU, apptSubject);

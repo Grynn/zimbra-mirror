@@ -571,7 +571,7 @@ public class TreeCalendar extends AbsTree {
 		throw new HarnessException("Must use FolderItem or SavedSearchFolderItem or ZimletItem as argument, but was "+ folder.getClass());
 	}
 	
-	public void zSelectMountedFolder(String folderName) throws HarnessException {
+	public void zMarkOnOffMountedFolder(String folderName) throws HarnessException {
 		
 		tracer.trace("Click on folder "+ folderName);
 		
@@ -582,7 +582,7 @@ public class TreeCalendar extends AbsTree {
 		SleepUtil.sleepLong(); //Let calendar UI refresh
 	}
 	
-	public void zDeSelectCalendarFolder(String folderName) throws HarnessException {
+	public void zMarkOnOffCalendarFolder(String folderName) throws HarnessException {
 		
 		tracer.trace("Click on folder "+ folderName);
 		

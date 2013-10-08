@@ -81,8 +81,8 @@ public class Accept extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Mark ON to mounted calendar folder and select the appointment
-		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
-		app.zTreeCalendar.zSelectMountedFolder(mountPointName);
+		app.zTreeCalendar.zMarkOnOffCalendarFolder("Calendar");
+		app.zTreeCalendar.zMarkOnOffMountedFolder(mountPointName);
 		app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_ACCEPT_MENU, apptSubject);
 		
 		
@@ -166,6 +166,9 @@ public class Accept extends CalendarWorkWeekTest {
 		
 		ZAssert.assertEquals(ZimbraAccount.AccountA().soapSelectValue("//mail:e[@t='f']", "a"), ZimbraAccount.AccountA().EmailAddress, "Verify From address in accept invitation message");
 		ZAssert.assertEquals(ZimbraAccount.AccountA().soapSelectValue("//mail:e[@t='s']", "a"), app.zGetActiveAccount().EmailAddress, "Verify Sender address in accept invitation message");
+		
+		// Mark ON/OFF to mounted calendar folder and select the appointment
+		app.zTreeCalendar.zMarkOnOffCalendarFolder("Calendar");
 		
 	}
 }

@@ -88,8 +88,8 @@ public class CreateACopy extends CalendarWorkWeekTest {
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 		
 		// Mark ON to mounted calendar folder and select the appointment
-		app.zTreeCalendar.zDeSelectCalendarFolder("Calendar");
-		app.zTreeCalendar.zSelectMountedFolder(mountpointname);
+		app.zTreeCalendar.zMarkOnOffCalendarFolder("Calendar");
+		app.zTreeCalendar.zMarkOnOffMountedFolder(mountpointname);
 		
 		// Copy appointment
 		DialogInformational dlgInfo = (DialogInformational)app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, Button.O_CREATE_A_COPY_MENU, apptSubject);
