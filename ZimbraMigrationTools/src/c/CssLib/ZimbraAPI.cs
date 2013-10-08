@@ -272,6 +272,22 @@ public class ZimbraAPI
         {"/MAPIRoot/Chats","14"},
         {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/\u00dalohy","15"}};
 
+    Dictionary<string, string> specialFoldersMap_rus = new Dictionary<string, string>()  //Russian locale support
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/\u0412\u0445\u043e\u0414\u044f \u0429\u0438\u0435","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/\u0423\u0434\u0430\u043b\u0435\u043d\u043d\u042b\u0435","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/\u0421\u043f\u0430\u043c","4"}, {"/MAPIRoot/\u041a\u043e\u0440\u0437\u0438\u043d\u0430","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/\u041e\u0442\u043b\u0440\u0430\u0432\u043b\u0435\u043d\u043d\u044b\u0435","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/\u0427\u0435\u0440\u043d\u043e\u0432\u0438\u043a\u0438","6"},
+        {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u044b","7"},
+        {"/MAPIRoot/Tags","8"},
+        {"/MAPIRoot/Conversations","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/\u041a\u0430\u043b\u0435\u043d\u0434\u0430\u0440\u044c","10"}, {"/MAPIRoot/\u0415\u0436\u0435\u0434\u043d\u0435\u0432\u043d\u0438\u043a","10"},
+        {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Emailed Contacts","13"},
+        {"/MAPIRoot/Chats","14"},
+        {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/\u0417\u0430\u0434\u0430\u0447\u0438","15"}};
+
    /* Dictionary<string, string> specialFoldersMap_tr = new Dictionary<string, string>()
     {{"","0"},{"/MAPIRoot","1"},{"/MAPIRoot/Gelen Kutusu","2"},{"/MAPIRoot/\u00c7\u00f6p Kutusu","3"},
         {"/MAPIRoot/\u0130stenmeyen Posta","4"}, {"/MAPIRoot/G\u00f6nderilenler","5"},
@@ -604,6 +620,16 @@ public class ZimbraAPI
                     }
                 }
 
+            case 1049:
+                {
+                    {
+                        string tempstr = folderPath;
+                        if (specialFoldersMap_rus.ContainsKey(tempstr))
+                            return specialFoldersMap_rus[tempstr];
+                        else
+                            return "";
+                    }
+                }
            /* case 1055:
                 {
                     {
