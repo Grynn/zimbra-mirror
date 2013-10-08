@@ -256,6 +256,21 @@ public class ZimbraAPI
         {"/MAPIRoot/Chats","14"},
         {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Opravila","15"}};
 
+    Dictionary<string, string> specialFoldersMap_slvc = new Dictionary<string, string>()  //Slovac locale support
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Dorucen\u00e1 po\u009ata","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Odstr\u00e1nen\u00e9 polo\u009eky","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Nevy\u009eiadan\u00e1 po\u009ata","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Odoslan\u00e1 po\u009ata","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Koncepty","6"},
+        {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Kontakty","7"},
+        {"/MAPIRoot/Tags","8"},
+        {"/MAPIRoot/Conversations","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Kalend\u00e1r","10"},
+        {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Emailed Contacts","13"},
+        {"/MAPIRoot/Chats","14"},
+        {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/\u00dalohy","15"}};
 
    /* Dictionary<string, string> specialFoldersMap_tr = new Dictionary<string, string>()
     {{"","0"},{"/MAPIRoot","1"},{"/MAPIRoot/Gelen Kutusu","2"},{"/MAPIRoot/\u00c7\u00f6p Kutusu","3"},
@@ -407,6 +422,9 @@ public class ZimbraAPI
             if (sFolderPath == sSpecialFolder)
                 return i.ToString();
         }*/
+
+        // Lang ID code link: http://technet.microsoft.com/en-us/library/aa997435(v=exchg.141).aspx
+
         switch(Langid)
         {
             case 1033:
@@ -573,6 +591,17 @@ public class ZimbraAPI
                     }
 
 
+                }
+
+            case 1051:
+                {
+                    {
+                        string tempstr = folderPath;
+                        if (specialFoldersMap_slvc.ContainsKey(tempstr))
+                            return specialFoldersMap_slvc[tempstr];
+                        else
+                            return "";
+                    }
                 }
 
            /* case 1055:
