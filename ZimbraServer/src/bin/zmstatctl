@@ -15,8 +15,8 @@
 # 
 
 use strict;
-use File::Basename;
 use lib "/opt/zimbra/zimbramon/lib";
+use File::Basename;
 use Zimbra::Mon::Zmstat;
 use POSIX qw(setsid);
 
@@ -50,7 +50,7 @@ sub getProcList() {
 		map {s/service //} @services;
 	} else {
 		if ($server) {
-			eval { @services = qx(zmprov -l gs $server | grep -i zimbraServiceEnabled | sed -e 's/^zimbraServiceEnabled: //'); };
+			eval { @services = qx(zmprov -l gs $server zimbraServiceEnabled | grep -i zimbraServiceEnabled | sed -e 's/^zimbraServiceEnabled: //'); };
 		}
 	}
     if (scalar(@services) < 1) {
@@ -161,40 +161,96 @@ if (defined($cmd)) {
         my $scriptDir = dirname($0);
         my $parentDir = dirname($scriptDir);
         my $toolpath = "$parentDir/libexec";
-        foreach my $tool (@TOOL_ALL) {
-            my $cmd = "$toolpath/$tool";
-            print "Invoking: $cmd\n";
-            system("$cmd >> $outfile 2>&1 &");
-        }
-        if ($doMysql) {
-            my $cmd = "$toolpath/$TOOL_MYSQL";
-            print "Invoking: $cmd\n";
-            system("$cmd >> $outfile 2>&1 &");
-            
-            if (!$isMac) {
-                # if "convertd" is not in proc list (not an enabled service), don't try starting zmstat-convertd
-                if ($procs =~ /convertd/) {
-                    # doMysql implies that convertd is also on the system
-                    $cmd = "$toolpath/$TOOL_CONVERTD";
-                    print "Invoking: $cmd\n";
-                    system("$cmd >> $outfile 2>&1 &");
+        my @pids = getPidFiles();
+        if (scalar(@pids) == 0 ) {
+          foreach my $tool (@TOOL_ALL) {
+              my $cmd = "$toolpath/$tool";
+              print "Invoking: $cmd\n";
+              system("$cmd >> $outfile 2>&1 &");
+          }
+          if ($doMysql) {
+              my $cmd = "$toolpath/$TOOL_MYSQL";
+              print "Invoking: $cmd\n";
+              system("$cmd >> $outfile 2>&1 &");
+          }
+          if (!$isMac) {
+              # if "convertd" is not in proc list (not an enabled service), don't try starting zmstat-convertd
+              if ($procs =~ /convertd/) {
+                  # doMysql implies that convertd is also on the system
+                  $cmd = "$toolpath/$TOOL_CONVERTD";
+                  print "Invoking: $cmd\n";
+                  system("$cmd >> $outfile 2>&1 &");
+              }
+          }
+          if ($doMtaQueue) {
+              my $cmd = "$toolpath/$TOOL_MTAQUEUE";
+              print "Invoking: $cmd\n";
+              system("$cmd >> $outfile 2>&1 &");
+          }
+          if ($doNginx) {
+              my $cmd = "$toolpath/$TOOL_NGINX";
+              print "Invoking: $cmd\n";
+              system("$cmd >> $outfile 2>&1 &");
+          }
+          if ($doLdap) {
+              my $cmd = "$toolpath/$TOOL_LDAP";
+              print "Invoking: $cmd\n";
+              system("$cmd >> $outfile 2>&1 &");
+          }
+        } else {
+          my %procs;
+          foreach my $pidFile (@pids) {
+            my $pid = readPidFile($pidFile);
+            my $proc = $pidFile;
+            $proc =~ s/\.pid//;
+            $proc =~ s/.*pid\///;
+            if (kill(0, $pid)) {
+              print "$proc alrady running, skipping.\n";
+              if ($proc eq "zmstat-mysql" || $proc eq "zmstat-convertd" || $proc eq "zmstat-mtaqueue" ||
+                  $proc eq "zmstat-nginx" || $proc eq "zmstat-ldap") {
+                $procs{$proc}=1;
+              } else {
+                if ($proc eq "zmstat-io-x") {
+                  $proc = "zmstat-io -x";
                 }
+                @TOOL_ALL = grep !/^($proc)$/, @TOOL_ALL;
+              }
             }
-        }
-        if ($doMtaQueue) {
-            my $cmd = "$toolpath/$TOOL_MTAQUEUE";
-            print "Invoking: $cmd\n";
-            system("$cmd >> $outfile 2>&1 &");
-        }
-        if ($doNginx) {
-            my $cmd = "$toolpath/$TOOL_NGINX";
-            print "Invoking: $cmd\n";
-            system("$cmd >> $outfile 2>&1 &");
-        }
-        if ($doLdap) {
-            my $cmd = "$toolpath/$TOOL_LDAP";
-            print "Invoking: $cmd\n";
-            system("$cmd >> $outfile 2>&1 &");
+          }
+          foreach my $tool (@TOOL_ALL) {
+              my $cmd = "$toolpath/$tool";
+              print "Invoking: $cmd\n";
+              system("$cmd >> $outfile 2>&1 &");
+          }
+          if ($doMysql && !$procs{"zmstat-mysql"}) {
+              my $cmd = "$toolpath/$TOOL_MYSQL";
+              print "Invoking: $cmd\n";
+              system("$cmd >> $outfile 2>&1 &");
+           }              
+           if (!$isMac) {
+              # if "convertd" is not in proc list (not an enabled service), don't try starting zmstat-convertd
+              if ($procs =~ /convertd/ && !$procs{"zmstat-convertd"}) {
+                # doMysql implies that convertd is also on the system
+                $cmd = "$toolpath/$TOOL_CONVERTD";
+                print "Invoking: $cmd\n";
+                system("$cmd >> $outfile 2>&1 &");
+              }
+          }
+          if ($doMtaQueue && !$procs{"zmstat-mtaqueue"}) {
+              my $cmd = "$toolpath/$TOOL_MTAQUEUE";
+              print "Invoking: $cmd\n";
+              system("$cmd >> $outfile 2>&1 &");
+          }
+          if ($doNginx && !$procs{"zmstat-nginx"}) {
+              my $cmd = "$toolpath/$TOOL_NGINX";
+              print "Invoking: $cmd\n";
+              system("$cmd >> $outfile 2>&1 &");
+          }
+          if ($doLdap && !$procs{"zmstat-ldap"}) {
+              my $cmd = "$toolpath/$TOOL_LDAP";
+              print "Invoking: $cmd\n";
+              system("$cmd >> $outfile 2>&1 &");
+          }
         }
     } elsif ($cmd eq 'status') {
         my @pids = getPidFiles();
