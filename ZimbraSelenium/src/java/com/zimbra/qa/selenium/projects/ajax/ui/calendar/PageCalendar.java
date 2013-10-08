@@ -597,7 +597,7 @@ public class PageCalendar extends AbsTab {
 		} else if ( action == Action.A_DOUBLECLICK) {
 			
 			this.sDoubleClick(locator);
-			this.zWaitForBusyOverlay();
+			SleepUtil.sleepLong();
 			
 			page = new FormApptNew(this.MyApplication);
 			if ( page.zIsActive() ) {
