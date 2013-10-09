@@ -196,7 +196,7 @@ public class ZimbraAPI
 
    Dictionary<string, string> specialFoldersMap_ptb = new Dictionary<string, string>()  //Portuguese (Brazil)
     {{"","0"},{"/MAPIRoot","1"},
-        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/A Receber","2"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/A Receber","2"}, {"/MAPIRoot/Caixa de entrada","2"},
         {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Itens Eliminados","3"},
         {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Correio Electr\u00f3nico N\u00e3o Solicitado","4"},
         {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Itens Enviados","5"},
