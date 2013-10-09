@@ -205,7 +205,7 @@ if (defined($cmd)) {
             $proc =~ s/\.pid//;
             $proc =~ s/.*pid\///;
             if (kill(0, $pid)) {
-              print "$proc alrady running, skipping.\n";
+              print "$proc already running, skipping.\n";
               if ($proc eq "zmstat-mysql" || $proc eq "zmstat-convertd" || $proc eq "zmstat-mtaqueue" ||
                   $proc eq "zmstat-nginx" || $proc eq "zmstat-ldap") {
                 $procs{$proc}=1;
