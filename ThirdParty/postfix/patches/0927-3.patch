@@ -1,0 +1,101 @@
+--- src/util/dict_lmdb.c	2013/10/03 18:13:18	1.2
++++ src/util/dict_lmdb.c	2013/10/03 18:54:23
+@@ -536,7 +536,7 @@
+      * Acquire a shared lock.
+      */
+     if ((dict->flags & DICT_FLAG_LOCK)
+-	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_SHARED) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_SHARED) < 0)
+ 	msg_fatal("%s: lock dictionary: %m", dict->name);
+ 
+     /*
+@@ -581,7 +581,7 @@
+      * Release the shared lock.
+      */
+     if ((dict->flags & DICT_FLAG_LOCK)
+-	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_NONE) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_NONE) < 0)
+ 	msg_fatal("%s: unlock dictionary: %m", dict->name);
+ 
+     return (result);
+@@ -645,7 +645,7 @@
+      * Acquire an exclusive lock.
+      */
+     if ((dict->flags & DICT_FLAG_LOCK)
+-	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_EXCLUSIVE) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_EXCLUSIVE) < 0)
+ 	msg_fatal("%s: lock dictionary: %m", dict->name);
+ 
+     /*
+@@ -674,7 +674,7 @@
+      * Release the exclusive lock.
+      */
+     if ((dict->flags & DICT_FLAG_LOCK)
+-	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_NONE) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_NONE) < 0)
+ 	msg_fatal("%s: unlock dictionary: %m", dict->name);
+ 
+     return (status);
+@@ -712,7 +712,7 @@
+      * Acquire an exclusive lock.
+      */
+     if ((dict->flags & DICT_FLAG_LOCK)
+-	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_EXCLUSIVE) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_EXCLUSIVE) < 0)
+ 	msg_fatal("%s: lock dictionary: %m", dict->name);
+ 
+     /*
+@@ -759,7 +759,7 @@
+      * Release the exclusive lock.
+      */
+     if ((dict->flags & DICT_FLAG_LOCK)
+-	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_NONE) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_NONE) < 0)
+ 	msg_fatal("%s: unlock dictionary: %m", dict->name);
+ 
+     return (status);
+@@ -799,7 +799,7 @@
+      * Acquire a shared lock.
+      */
+     if ((dict->flags & DICT_FLAG_LOCK)
+-	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_SHARED) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_SHARED) < 0)
+ 	msg_fatal("%s: lock dictionary: %m", dict->name);
+ 
+     /*
+@@ -843,7 +843,7 @@
+      * Release the shared lock.
+      */
+     if ((dict->flags & DICT_FLAG_LOCK)
+-	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_NONE) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_NONE) < 0)
+ 	msg_fatal("%s: unlock dictionary: %m", dict->name);
+ 
+     return (status);
+@@ -884,9 +884,9 @@
+ 
+     mdb_path = concatenate(path, "." DICT_TYPE_LMDB, (char *) 0);
+ 
+-    env_flags = MDB_NOSUBDIR;
++    env_flags = MDB_NOSUBDIR|MDB_NOLOCK;
+     if (open_flags == O_RDONLY)
+-	env_flags |= MDB_RDONLY|MDB_NORDLOCK;
++	env_flags |= MDB_RDONLY;
+ 
+     if ((status = mdb_env_create(&env)))
+ 	msg_fatal("env_create %s: %s", mdb_path, mdb_strerror(status));
+@@ -964,11 +964,11 @@
+     if (dict_flags & DICT_FLAG_BULK_UPDATE) {
+     	/* We just need to acquire exclusive access momentarily. This establishes
+ 	 * that no readers are accessing old txn snapshots, so we are free to reuse
+-	 * all eligible old pages. Release the lock right after acquiring it.
++	 * all eligible old pages. Downgrade the lock right after acquiring it.
+ 	 */
+-    	if (myflock(dict_lmdb->dict.lock_fd, INTERNAL_LOCK, MYFLOCK_OP_EXCLUSIVE) < 0)
++    	if (myflock(dict_lmdb->dict.lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_EXCLUSIVE) < 0)
+ 	    msg_fatal("%s: lock dictionary: %m", dict_lmdb->dict.name);
+-    	if (myflock(dict_lmdb->dict.lock_fd, INTERNAL_LOCK, MYFLOCK_OP_NONE) < 0)
++    	if (myflock(dict_lmdb->dict.lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_SHARED) < 0)
+ 	    msg_fatal("%s: unlock dictionary: %m", dict_lmdb->dict.name);
+ 	dict_jmp_alloc(&dict_lmdb->dict);	/* build into dict_alloc() */
+     }

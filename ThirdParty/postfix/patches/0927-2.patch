@@ -1,0 +1,10 @@
+--- src/util/dict_lmdb.h	2013/10/01 21:28:14	1.1
++++ src/util/dict_lmdb.h	2013/10/01 21:28:22
+@@ -27,7 +27,6 @@
+   * XXX Should be part of the DICT interface.
+   */
+ extern size_t dict_lmdb_map_size;
+-extern unsigned int dict_lmdb_max_readers;
+ 
+ /* LICENSE
+ /* .ad
