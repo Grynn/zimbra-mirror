@@ -486,7 +486,7 @@ tarball:
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
 	@echo -n "Creating $(PERL_BIN_TGZ_DEST)..."; \
 	(cd $(DEST_BIN_DIR); \
-	tar cfz $(PERL_BIN_TGZ_DEST) sa-compile sa-learn sa-update spamassassin spamc spamd); \
+	tar cfz $(PERL_BIN_TGZ_DEST) sa-compile sa-learn sa-update spamassassin spamc spamd innotop); \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)/*
 
