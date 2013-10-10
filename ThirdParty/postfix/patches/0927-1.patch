@@ -1,5 +1,5 @@
---- src/global/mkmap_lmdb.c	2013/10/01 21:03:36	1.1
-+++ src/global/mkmap_lmdb.c	2013/10/01 21:04:00
+--- postfix-2.11/src/global/mkmap_lmdb.c	2013/10/01 21:03:36	1.1
++++ postfix-2.11/src/global/mkmap_lmdb.c	2013/10/01 21:04:00
 @@ -98,18 +98,6 @@
      dict_lmdb_map_size = var_lmdb_map_size;
  
@@ -19,8 +19,8 @@
       * Fill in the generic members.
       */
      mkmap->open = dict_lmdb_open;
---- src/util/dict_lmdb.c	2013/10/01 21:00:27	1.1
-+++ src/util/dict_lmdb.c	2013/10/01 20:59:38
+--- postfix-2.11/src/util/dict_lmdb.c	2013/10/01 21:00:27	1.1
++++ postfix-2.11/src/util/dict_lmdb.c	2013/10/01 20:59:38
 @@ -134,13 +134,7 @@
  #define DICT_LMDB_BULK_RETRY_LIMIT \
  	(2 * sizeof(size_t) * CHAR_BIT)	/* Retries per bulk-mode transaction */

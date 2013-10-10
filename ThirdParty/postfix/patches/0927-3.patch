@@ -1,5 +1,5 @@
---- src/util/dict_lmdb.c	2013/10/03 18:13:18	1.2
-+++ src/util/dict_lmdb.c	2013/10/03 18:54:23
+--- postfix-2.11/src/util/dict_lmdb.c	2013/10/03 18:13:18	1.2
++++ postfix-2.11/src/util/dict_lmdb.c	2013/10/03 18:54:23
 @@ -536,7 +536,7 @@
       * Acquire a shared lock.
       */
