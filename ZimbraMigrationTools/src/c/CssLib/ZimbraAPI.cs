@@ -274,10 +274,10 @@ public class ZimbraAPI
 
     Dictionary<string, string> specialFoldersMap_rus = new Dictionary<string, string>()  //Russian locale support
     {{"","0"},{"/MAPIRoot","1"},
-        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/\u0412\u0445\u043e\u0414\u044f \u0429\u0438\u0435","2"},
-        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/\u0423\u0434\u0430\u043b\u0435\u043d\u043d\u042b\u0435","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/\u0421\u043f\u0430\u043c","4"}, {"/MAPIRoot/\u041a\u043e\u0440\u0437\u0438\u043d\u0430","4"},
-        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/\u041e\u0442\u043b\u0440\u0430\u0432\u043b\u0435\u043d\u043d\u044b\u0435","5"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/\u0412\u0445\u043e\u0434\u044f\u0449\u0438\u0435","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/\u0423\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0435","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/\u041d\u0435\u0436\u0435\u043b\u0430\u0442\u0435\u043b\u044c\u043d\u0430\u044f \u043f\u043e\u0447\u0442\u0430","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/\u041e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u043d\u044b\u0435","5"},
         {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/\u0427\u0435\u0440\u043d\u043e\u0432\u0438\u043a\u0438","6"},
         {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u044b","7"},
         {"/MAPIRoot/Tags","8"},
