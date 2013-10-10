@@ -57,7 +57,7 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/libidn-1.24.jar" sourcepath="/ZimbraCommon/jars-src/libidn-1.24-src.zip"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/log4j-1.2.16.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/apache-log4j-extras-1.0.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/mariadb-java-client-1.1.2.jar" sourcepath="/ThirdParty/connector-j/mariadb-java-client-1.1.2/src"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/mariadb-java-client-1.1.5.jar" sourcepath="/ThirdParty/connector-j/mariadb-java-client-1.1.5/src"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/nekohtml-1.9.13.1z.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api-3.0.jar">
 		<attributes>
