@@ -22,7 +22,7 @@ use File::Path;
 
 my $DEBUG = 0;
 #global constants
-my $version = "1.40";
+my $version = "1.41";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -338,6 +338,7 @@ sub processfile
   my $IsfrstevStandalone=0; my $frstevdelpos=0; my $uidchangectr=0;
   my $OrganizerFound=0; my @resourcearr=(); my $prevneworganizer;
   my $neworganizer= "ORGANIZER;";
+  my $Isclass_normal=0;
   &log_message("processing file...");
   while (<CFHANDLE>)
   {
@@ -345,6 +346,7 @@ sub processfile
     if ($_=~/^BEGIN:VEVENT/)          #start of VEVENT
     {
       $OrganizerFound=0;
+      $Isclass_normal=0;
       $prevneworganizer = $neworganizer;
       $neworganizer= "ORGANIZER;";
       #print TZHeader before first VEVENT
@@ -440,6 +442,16 @@ sub processfile
         $IsFirstRecId=0;#reset
         $wasrulecreated=0;
       }
+    }
+    elsif ($_=~/^X-ORACLE-CLASS:NORMAL/)           #if X class NORMAL
+    {
+      $Isclass_normal =1;
+    }
+    elsif ($_=~/^CLASS:PRIVATE/)                   #Mark it as PUBLIC
+    {
+      print_outfile("CLASS:PUBLIC");
+      $fdelete=1;
+      $write_pos = tell OTHANDLE;
     }
     elsif ($_=~/^DTSTART[:;]/)           #store DTSTART
     {
