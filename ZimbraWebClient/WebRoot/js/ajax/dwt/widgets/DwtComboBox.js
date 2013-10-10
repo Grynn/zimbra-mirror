@@ -216,6 +216,10 @@ DwtComboBox.prototype.focus = function() {
     this.input.focus();
 };
 
+DwtComboBox.prototype.popdown = function() {
+	if (this._menu)
+		this._menu.popdown();
+};
 
 //
 // Protected methods
@@ -277,13 +281,7 @@ DwtComboBox.prototype._handleKeyDown = function(ev) {
 
 	this.__ovalue = this.getText();
 
-	// bug 81471: Prevent enter key presses from propagating, as they may
-	// bubble up to ZmZimbraMail which pops down the active menu. This is
-	// inconvenient if the menu in question contains this combo box.
-	if (keycode == 13 || keycode == 3)
-		return false;
-	else
-		return true;
+	return true;
 };
 
 DwtComboBox.prototype._handleKeyUp = function(ev) {
