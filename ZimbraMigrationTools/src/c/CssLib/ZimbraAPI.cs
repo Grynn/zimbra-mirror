@@ -258,10 +258,10 @@ public class ZimbraAPI
 
     Dictionary<string, string> specialFoldersMap_slvc = new Dictionary<string, string>()  //Slovac locale support
     {{"","0"},{"/MAPIRoot","1"},
-        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Dorucen\u00e1 po\u009ata","2"},
-        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Odstr\u00e1nen\u00e9 polo\u009eky","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Nevy\u009eiadan\u00e1 po\u009ata","4"},
-        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Odoslan\u00e1 po\u009ata","5"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Doru\u010den\u00e1 po\u0161ta","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Odstr\u00e1nen\u00e9 polo\u017eky","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Nevy\u017eiadan\u00e1 po\u0161ta","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Odoslan\u00e1 po\u0161ta","5"},
         {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/Koncepty","6"},
         {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Kontakty","7"},
         {"/MAPIRoot/Tags","8"},
