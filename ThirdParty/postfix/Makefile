@@ -49,7 +49,6 @@ build:
 	cd postfix-$(POSTFIX_VERSION); \
 	$(PATCH) \
 	patch -g0 -p1 < ../patches/postfix-main-cf-zimbra.patch; \
-	patch -g0 -p1 < ../patches/postfix-lmdb.patch; \
 	patch -g0 -p1 < ../patches/stop-warning.patch; \
 	patch -g0 -p1 < ../patches/0927-1.patch; \
 	patch -g0 -p1 < ../patches/0927-2.patch; \
@@ -67,6 +66,7 @@ build:
 	-DDEF_MANPAGE_DIR=\"/opt/zimbra/postfix-$(POSTFIX_VERSION)/man\" \
 	-DDEF_HTML_DIR=\"no\" \
 	-DDEF_README_DIR=\"no\" \
+	-DDEF_DB_TYPE=\"lmdb\" \
 	-DDEF_SENDMAIL_PATH=\"/opt/zimbra/postfix-$(POSTFIX_VERSION)/sbin/sendmail\" \
 	-DDEF_DATA_DIR=\"/opt/zimbra/data/postfix/data\" \
 	-DUSE_SASL_AUTH \
