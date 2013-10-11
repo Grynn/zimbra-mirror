@@ -71,6 +71,7 @@ PRE_PERL_LIBS	:= \
 	ExtUtils::Manifest \
 	JSON::PP::Compat5006 \
 	File::Copy::Recursive \
+	parent \
 	version \
 	CPAN::Meta \
 	ExtUtils::MakeMaker \
@@ -84,27 +85,37 @@ PRE_PERL_LIBS	:= \
 	MRO::Compat \
 	Task::Weaken \
 	Eval::Closure \
-	Dist::CheckConflicts \
-	Package::Stash \
 	Module::Runtime \
+	Dist::CheckConflicts \
 	Module::Implementation \
+	Package::Stash \
 	Class::Load \
 	Perl::OSType \
 	Module::Metadata \
 	ExtUtils::CBuilder \
 	ExtUtils::ParseXS \
 	Test::Harness \
+	Pod::Simple \
+	Pod::Man \
 	Module::Build \
 	Class::Load::XS \
 	Sub::Name \
 	Carp \
 	Sub::Exporter::Progressive \
+	Devel::GlobalDestruction::XS \
 	Devel::GlobalDestruction \
-	Moose \
 	Test::Tester \
 	Test::NoWarnings \
+	Test::Deep \
+	CPAN::Meta::Check \
+	Test::CheckDeps \
+	Moose \
 	Array::Compare \
 	Test::Pod \
+	File::Path \
+	File::Temp \
+	File::Spec \
+	File::Slurp \
 	Tree::DAG_Node \
 	Sub::Uplevel \
 	Test::Exception \
@@ -159,12 +170,18 @@ PERL_LIBS 	:= \
 	IPC::Cmd \
 	Date::Parse \
 	Pod::Escapes \
-	Pod::Simple \
+	Class::Data::Inheritable \
+	Devel::StackTrace \
+	Exception::Class \
+	Data::Dumper \
+	Text::Diff \
+	Test::Differences \
+	Test::Most \
+	autodie \
 	Convert::BinHex \
-	Test::Deep \
-	File::Temp \
 	MIME::Tools \
 	Class::Inspector \
+	IO::SessionData \
 	SOAP::Lite \
 	Net::Telnet \
 	Config::IniFiles \
