@@ -61,8 +61,8 @@ external-locking
 slow_query_log = 1
 slow_query_log_file = ${zimbra_log_directory}/myslow.log
 
-long-query-time  = 1
-log-queries-not-using-indexes
+long_query_time  = 1
+log_queries_not_using_indexes
 
 thread_cache_size = 110
 max_connections   = 110
