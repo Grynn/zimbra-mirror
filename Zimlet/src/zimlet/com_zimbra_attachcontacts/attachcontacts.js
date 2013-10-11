@@ -64,12 +64,17 @@ function() {
 
 	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
 	attachDialog.setTitle(ZmMsg.attachContact);
+	attachDialog.setButtonEnabled(DwtDialog.OK_BUTTON, false);
     this.removePrevAttDialogContent(attachDialog._getContentDiv().firstChild);
 
     if (!this.AttachContactsView || !this.AttachContactsView.attachDialog){
 	    this.AttachContactsView = new AttachContactsTabView(this._attachDialog, this);
 
+	    var selectionListener = this._selectionListener.bind(this);
+	    this.AttachContactsView.addListener(DwtEvent.SELECTION,
+	                                        selectionListener);
     }
+
     this.AttachContactsView.reparentHtmlElement(attachDialog._getContentDiv().childNodes[0], 0);
     this.AttachContactsView.attachDialog = attachDialog;
 	attachDialog.setOkListener(new AjxCallback(this, this._okListener));
@@ -84,6 +89,12 @@ function() {
 	this.AttachContactsView.setClosed(true);
     this.AttachContactsView.attachDialog.popdown();
 };
+
+AttachContactsZimlet.prototype._selectionListener =
+function() {
+	var hasselection = this.AttachContactsView.getSelectionCount() > 0;
+	this._attachDialog.setButtonEnabled(DwtDialog.OK_BUTTON, hasselection);
+}
 
 /**
  * Called by Framework when an email is about to be sent

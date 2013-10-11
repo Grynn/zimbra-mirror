@@ -164,6 +164,7 @@ function() {
 
 };
 
+
 AttachContactsTabView.prototype._handleItemSelect =
 function(ev) {
 	if (AjxEnv.isIE) {
@@ -205,6 +206,8 @@ function(ev) {
 			this._selectedItemIds[itemId] = true;
 		}
 	}
+
+    this._selectionChanged();
 };
 
 AttachContactsTabView.prototype._resetRowSelection =
@@ -396,7 +399,24 @@ function(items) {
 	
 	Dwt.setInnerHtml(Dwt.byId(this._folderListId), html.join(""));
 
+	this._selectionChanged();
 };
+
+/**
+ * Notify listeners that the selected items changed.
+*/
+AttachContactsTabView.prototype._selectionChanged =
+function() {
+    if (this.isListenerRegistered(DwtEvent.SELECTION)) {
+        var selEv = new DwtSelectionEvent(true);
+        selEv.button = DwtMouseEvent.LEFT;
+        selEv.target = this;
+        selEv.item = null;
+        selEv.detail = DwtListView.ITEM_SELECTED;
+        selEv.ersatz = true;
+        this.notifyListeners(DwtEvent.SELECTION, selEv);
+    }
+}
 
 AttachContactsTabView.prototype._getFirstWorkingAttr =
 function(item, desiredAttrs) {
@@ -443,6 +463,19 @@ function() {
 	}
 	return selectedIds;
 };
+
+/**
+ * Get the amount of selected items.
+*/
+AttachContactsTabView.prototype.getSelectionCount =
+function() {
+	var n = 0;
+	for (var id in this._selectedItemIds) {
+		n += this._selectedItemIds[id];
+	}
+	return n;
+}
+
 
 /**
  * Inserts contacts
