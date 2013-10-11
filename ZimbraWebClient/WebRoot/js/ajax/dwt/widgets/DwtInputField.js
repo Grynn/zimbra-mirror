@@ -265,6 +265,31 @@ DwtInputField.prototype.setInputType = function(type) {
 }
 
 /**
+ * Applies a regular expression to the contents of this input field, retaining
+ * selection and carent location if supported by the browser.
+ *
+ * @param	{RegExp}	regex		the regular expression to search for
+ * @param	{String}	replacement	the replacement string
+ */
+DwtInputField.prototype.applySubstitution = function(regex, replacement) {
+	if (!this._inputField.setRangeText) {
+		// IE8 doesn't support setRangeText() - so we replace the value
+		// directly. This moves the caret, if any, to the end of the text.
+		this.setValue(this.getValue().replace(regex, replacement));
+	} else {
+		var match;
+
+		while ((match = regex.exec(this.getValue()))) {
+			this._inputField.setRangeText(replacement, match.index,
+		    	                          match.index + match[0].length);
+
+			if (!regex.global)
+				return;
+		}
+	}
+};
+
+/**
 * Sets the validator function. This function is executed during validation.
 *
 * @param {Object}	obj 		if present, the validator function is executed within
