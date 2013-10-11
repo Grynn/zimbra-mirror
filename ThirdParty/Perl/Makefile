@@ -60,19 +60,18 @@ SASL_INCLUDE	:= $(ZIMBRA_HOME)/cyrus-sasl/include
 # Order is important here
 PRE_PERL_LIBS	:= \
 	Try::Tiny \
-	Test::Fatal \
 	Test::Simple \
+	Test::Fatal \
 	ExtUtils::MakeMaker \
-	Test::Requires \
+	T/TO/TOKUHIROM/Test-Requires-0.06.tar.gz \
 	CPAN::Meta::YAML \
 	JSON::PP \
 	Parse::CPAN::Meta \
-	Version::Requirements \
+	CPAN::Meta::Requirements \
 	ExtUtils::Manifest \
 	JSON::PP::Compat5006 \
 	File::Copy::Recursive \
 	version \
-	CPAN::Meta::Requirements \
 	CPAN::Meta \
 	ExtUtils::MakeMaker \
 	Params::Util \
@@ -213,7 +212,8 @@ PERL_LIBS 	:= \
 	Geography::Countries \
 	IP::Country \
 	DBD::SQLite \
-	Filesys::Df
+	Filesys::Df \
+	LMDB_File
 
 NET_SSLeay := \
 	Net-SSLeay-1.55
