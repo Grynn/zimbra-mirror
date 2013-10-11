@@ -222,7 +222,7 @@ CRYPT_SSLeay := \
 	Crypt-SSLeay-0.64
 
 CRYPT_RANDOM := \
-	Crypt-OpenSSL-Random-0.04
+	Crypt-OpenSSL-Random-0.06
 
 CRYPT_RSA := \
 	Crypt-OpenSSL-RSA-0.27
@@ -234,7 +234,7 @@ BDB_PERL_LIBS := \
 	BerkeleyDB-0.51
 
 MAIL_SPF := \
-	Mail-SPF-v2.8.0
+	Mail-SPF-v2.9.0
 
 SA_PERL_LIBS := \
 	Mail-SpamAssassin-$(SA_VERSION)
@@ -261,7 +261,7 @@ PERL_LDAP := \
 	perl-ldap-0.53
 
 DBD_PERL_LIBS 	:= \
-	DBD-mysql-4.022
+	DBD-mysql-4.024
 
 ZMQ_CONSTANTS	:= \
 	ZMQ-Constants-1.03
