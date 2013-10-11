@@ -162,7 +162,7 @@ sub updateSyslogNG {
   } else {
     my $remoteIp=inet_ntoa(scalar(gethostbyname($LOGHOST)));
     print TMPFH "destination zimbra_mail { udp(\"$remoteIp\" port(514) ); file(\"/var/log/zimbra.log\" owner(\"zimbra\")); }; # zimbra\n";
-    print TMPFH "destination zimbra_local1 { udp(\"$remoteIp\" port(514) ); file(\"/var/log/zimbra.log\" owner(\"zimbra\")); }; # zimbra\n";
+    print TMPFH "destination zimbra_local1 { udp(\"$remoteIp\" port(514) ); file(\"/var/log/zimbra-stats.log\" owner(\"zimbra\")); }; # zimbra\n";
     print TMPFH "destination zimbra_local0 { udp(\"$remoteIp\" port(514) ); file(\"/var/log/zimbra.log\" owner(\"zimbra\")); }; # zimbra\n";
     print TMPFH "destination zimbra_auth { udp(\"$remoteIp\" port(514) ); file(\"/var/log/zimbra.log\" owner(\"zimbra\")); }; # zimbra\n";
   }
