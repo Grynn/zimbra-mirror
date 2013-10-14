@@ -476,6 +476,11 @@ fi
 
 if [ -L ${zimbra_home}/jetty ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/jetty"
+
+  if [ ! -d "${zimbra_home}/data/libreoffice" ]; then
+    mkdir -p ${zimbra_home}/data/libreoffice
+    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/tmp/libreoffice
+  fi
   chown  ${root_user}:${root_group} /opt/zimbra/jetty-* 2> /dev/null
   if [ -f ${zimbra_home}/jetty/etc/keystore ]; then
     chmod 444 ${zimbra_home}/jetty/etc/keystore
