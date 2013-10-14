@@ -135,7 +135,7 @@ public class ZMimePartBean {
     public String getContentType() { return mMimePart.getContentType(); }
 
     /** @return MIME Content-Disposition */
-    public String getContentDispostion() { return mMimePart.getContentDispostion(); }
+    public String getContentDisposition() { return mMimePart.getContentDisposition(); }
 
     /** @return filename attribute from the Content-Disposition param list */
     public String getFileName() { return mMimePart.getFileName(); }

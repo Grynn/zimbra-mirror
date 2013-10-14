@@ -144,7 +144,7 @@ public class ZMessageBean {
         if (
                 rfc822 ||
                 part.getContentLocation() != null ||
-                "attachment".equalsIgnoreCase(part.getContentDispostion()) ||
+                "attachment".equalsIgnoreCase(part.getContentDisposition()) ||
                 part.getContentId() != null ||
                 part.getFileName()!= null) {
             if (!ZMimePartBean.isIgnoredPArt(part))
