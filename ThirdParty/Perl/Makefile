@@ -174,6 +174,7 @@ PERL_LIBS 	:= \
 	Devel::StackTrace \
 	Exception::Class \
 	Data::Dumper \
+	Algorithm::Diff \
 	Text::Diff \
 	Test::Differences \
 	Test::Most \
