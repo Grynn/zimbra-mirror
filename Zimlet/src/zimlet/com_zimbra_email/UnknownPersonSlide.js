@@ -132,8 +132,6 @@ function(img) {
 	if (this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN) != -1) {
 		img.onclick =  AjxCallback.simpleClosure(this._handleProfileImageClick, this); 
 		img.style.cursor = "pointer";
-		img.style.maxHeight = UnknownPersonSlide.HEIGHT + "px";
-		img.style.maxWidth = UnknownPersonSlide.WIDTH + "px";
 	}
 	if (AjxEnv.isIE) {
 		img.height = UnknownPersonSlide.HEIGHT;
@@ -280,7 +278,7 @@ function(response, contact) {
     attrs["fullName"] =  this.emailZimlet.fullName || attrs["fullName"] || contact && contact._fileAs;
     this._presentity = attrs["email"] = this.emailZimlet.emailAddress || attrs["email"];        // email is the presence identity
 
-	var imgUrl = contact && contact.getImageUrl(UnknownPersonSlide.WIDTH);
+	var imgUrl = contact && contact.getImageUrl(UnknownPersonSlide.WIDTH, UnknownPersonSlide.HEIGHT);
 
 	this._setProfileImage(imgUrl);
 	this._setContactDetails(attrs);
