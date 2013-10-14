@@ -119,10 +119,11 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-continuation-9.0.6.v20130930.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-servlet-9.0.6.v20130930.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-servlets-9.0.6.v20130930.jar"/>
-        <classpathentry kind="lib" path="/ZimbraCommon/jars/curator-client-2.0.1-incubating.jar"/>
-        <classpathentry kind="lib" path="/ZimbraCommon/jars/curator-framework-2.0.1-incubating.jar"/>
-        <classpathentry kind="lib" path="/ZimbraCommon/jars/curator-recipes-2.0.1-incubating.jar"/>
-        <classpathentry kind="lib" path="/ZimbraCommon/jars/curator-x-discovery-2.0.1-incubating.jar"/>
-        <classpathentry kind="lib" path="/ZimbraCommon/jars/zookeeper-3.4.5.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/curator-client-2.0.1-incubating.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/curator-framework-2.0.1-incubating.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/curator-recipes-2.0.1-incubating.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/curator-x-discovery-2.0.1-incubating.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/zookeeper-3.4.5.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars-test/easymock-3.0/easymock-3.0.jar" sourcepath="/ZimbraCommon/jars-test/easymock-3.0/easymock-3.0-sources.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
