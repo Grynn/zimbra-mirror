@@ -391,7 +391,8 @@ function(object, context, span, spanId) {
     }
 
 	this._hoverOver =  false;
-	this.tooltip._poppedUp = false;//makes the tooltip sticky
+	this.tooltip.setSticky(true);
+	return;
 	setTimeout(AjxCallback.simpleClosure(this.popDownIfMouseNotOnSlide, this), 700);
 	//override to ignore hoverout. 
 };
@@ -406,7 +407,7 @@ function() {
 		return;
 	} else if(this.tooltip) {
         //console.log("Popping down tooltip");
-		this.tooltip._poppedUp = true;//makes the tooltip non-sticky
+		this.tooltip.setSticky(false);
 		this.tooltip.popdown();
 	}
 };
@@ -416,7 +417,7 @@ function() {
 	this._hoverOver =  false;
 	
 	if(this.tooltip) {
-		this.tooltip._poppedUp = true;
+		this.tooltip.setSticky(false);
 		this.tooltip.popdown();
 	}
 };
