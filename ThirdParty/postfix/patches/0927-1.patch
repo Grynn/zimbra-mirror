@@ -183,7 +183,7 @@
      dict_lmdb->dict.sequence = dict_lmdb_sequence;
      dict_lmdb->dict.close = dict_lmdb_close;
 -    dict_lmdb->dict.lock = dict_lmdb_lock;
-     if ((dict_lmdb->dict.stat_fd = open(mdb_path, O_RDWR)) < 0)
+     if ((dict_lmdb->dict.stat_fd = open(mdb_path, O_RDONLY)) < 0)
  	msg_fatal("dict_lmdb_open: %s: %m", mdb_path);
      if (fstat(dict_lmdb->dict.stat_fd, &st) < 0)
  	msg_fatal("dict_lmdb_open: fstat: %m");
