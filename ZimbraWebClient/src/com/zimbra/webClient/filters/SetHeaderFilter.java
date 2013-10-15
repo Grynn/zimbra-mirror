@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
  * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Zimbra Software, LLC.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.4 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -29,13 +29,11 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.zimbra.common.util.Log;
 import com.zimbra.common.util.ZimbraLog;
@@ -296,7 +294,6 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
         boolean supportCompression;
         supportCompression = this.supportsGzip(req, resp);
         setRequestAttributes(req, supportCompression);
-        secureCookieIfNecessary(req);
         if (!supportCompression) {
             if (debug > 0) {
                 System.out.println("doFilter gets called wo compression");
@@ -341,52 +338,6 @@ public final class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter
         }
         req.setAttribute("mode", mode);
         req.setAttribute("prodMode", isProdMode);
-    }
-
-    private void secureCookieIfNecessary(HttpServletRequest req) {
-
-        HttpSession httpSession = req.getSession(false);
-        if (httpSession != null) {
-            return;
-        }
-
-        boolean secureCookie = req.getScheme().equals("https");
-
-        /*
-         * This is a https req, and we don't have a session yet.
-         * This is probably the first req of the session, which means user
-         * browsed to https://, which means we should stay in https for all
-         * mail modes.  We need to secure the JSESSIONID cookie.
-         *
-         * We do this by SessionManager.setSecureCookies(true), jetty
-         * will set secure on the session cookie.  This has to be done
-         * here because it has to be done *before* the session is created.
-         * After the session is created, jetty would create the return
-         * the JSESSIONID cookie in the response for the request for that
-         * the session is created; and it will be too late to call
-         * setSecureCookies because jetty has already baked the session cookie.
-         */
-        ServletContext servletContext = config.getServletContext();
-        if (servletContext instanceof org.eclipse.jetty.servlet.ServletContextHandler.Context) {
-        	org.eclipse.jetty.servlet.ServletContextHandler.Context sContext =
-        	    (org.eclipse.jetty.servlet.ServletContextHandler.Context)servletContext;
-
-            // get the WebAppContext
-            org.eclipse.jetty.server.handler.ContextHandler contextHandler = sContext.getContextHandler();
-            if (contextHandler instanceof org.eclipse.jetty.servlet.ServletContextHandler) {
-            	org.eclipse.jetty.servlet.ServletContextHandler context =
-            	    (org.eclipse.jetty.servlet.ServletContextHandler)contextHandler;
-
-                // get SessionManager
-                org.eclipse.jetty.server.SessionManager sessionManager = context.getSessionHandler().getSessionManager();
-                if (sessionManager instanceof org.eclipse.jetty.server.session.AbstractSessionManager) {
-                    org.eclipse.jetty.server.session.AbstractSessionManager asm =
-                        (org.eclipse.jetty.server.session.AbstractSessionManager)sessionManager;
-                    asm.getSessionCookieConfig().setSecure(secureCookie);
-                    asm.setHttpOnly(true);
-                }
-            }
-        }
     }
 
     /**
