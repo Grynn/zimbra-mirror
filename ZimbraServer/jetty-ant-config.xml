@@ -253,6 +253,38 @@
 		</Call>
 	</New>
 	
+	<Call id="httpsConnector" name="addConnector">
+		<Arg>
+			<New id="ssl" class="org.eclipse.jetty.server.ServerConnector">
+				<Arg name="server">
+					<Ref refid="Server" />
+				</Arg>
+				<Arg name="factories">
+					<Array type="org.eclipse.jetty.server.ConnectionFactory">
+						<Item>
+							<New class="org.eclipse.jetty.server.SslConnectionFactory">
+								<Arg name="next">http/1.1</Arg>
+								<Arg name="sslContextFactory">
+									<Ref refid="zimbraSslContextFactory" />
+								</Arg>
+							</New>
+						</Item>
+						<Item>
+							<New class="org.eclipse.jetty.server.HttpConnectionFactory">
+								<Arg name="config">
+									<Ref refid="sslHttpConfig" />
+								</Arg>
+							</New>
+						</Item>
+					</Array>
+				</Arg>
+				<Set name="port">7443</Set>
+				<Set name="idleTimeout">60000</Set>
+			</New>
+		</Arg>
+	</Call>
+	
+	
 	<Call id="adminHttpsConnector" name="addConnector">
 		<Arg>
 			<New id="admin" class="org.eclipse.jetty.server.ServerConnector">
@@ -283,6 +315,22 @@
 			</New>
 		</Arg>
 	</Call>
+	
+	<Ref id="RequestLog">
+		<Set name="requestLog">
+			<New id="RequestLogImpl" class="org.eclipse.jetty.server.NCSARequestLog">
+				<Arg><SystemProperty name="jetty.home" default="/opt/zimbra" />/log/access_log.yyyy_mm_dd</Arg>
+				<Set name="logDateFormat">dd/MMM/yyyy:HH:mm:ss Z</Set>
+				<Set name="retainDays">30</Set>
+				<Set name="append">true</Set>
+				<Set name="extended">true</Set>
+				<Set name="filenameDateFormat">yyyy-MM-dd</Set>
+				<Set name="preferProxiedForAddress">true</Set>
+				<Set name="logLatency">true</Set>
+			</New>
+		</Set>
+	</Ref>
+	
 
     <Set name="stopAtShutdown">true</Set>
 </Configure>
