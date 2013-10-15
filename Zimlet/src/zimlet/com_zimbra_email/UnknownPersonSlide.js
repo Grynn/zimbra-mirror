@@ -133,9 +133,6 @@ function(img) {
 		img.onclick =  AjxCallback.simpleClosure(this._handleProfileImageClick, this); 
 		img.style.cursor = "pointer";
 	}
-	if (AjxEnv.isIE) {
-		img.height = UnknownPersonSlide.HEIGHT;
-	}
 };
 
 UnknownPersonSlide.prototype._handleProfileImageClick =
@@ -147,9 +144,7 @@ UnknownPersonSlide.prototype._handleAllClicks =
 function(ev) {
 	var isRightClick;
 	this.emailZimlet.popdown();
-	if (AjxEnv.isIE) {
-		ev = window.event;
-	}
+	ev = DwtUiEvent.getEvent(ev);
 	if (ev.which){
 		isRightClick = (ev.which == 3);
 	} else if (ev.button) {
@@ -334,7 +329,7 @@ UnknownPersonSlide.prototype._getTooltipBGHtml =
 function(email) {
 	var width = ";";
 	var left = ";";
-	if (AjxEnv.isIE) {
+	if (AjxEnv.isIE8) {
 		var width = "width:100%;";
 		var left = "left:3%;";
 	}
