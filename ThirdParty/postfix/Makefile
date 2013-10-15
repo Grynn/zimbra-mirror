@@ -53,6 +53,7 @@ build:
 	patch -g0 -p1 < ../patches/0927-1.patch; \
 	patch -g0 -p1 < ../patches/0927-2.patch; \
 	patch -g0 -p1 < ../patches/0927-3.patch; \
+	patch -g0 -p1 < ../patches/0927-4.patch; \
 	$(MAKE) $(MAKEARGS)  makefiles \
 	OPT="-O2" \
 	DEBUG="-g" \
