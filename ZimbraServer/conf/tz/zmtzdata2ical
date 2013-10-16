@@ -2,8 +2,8 @@
 
 # Example:
 #
-# 1. Unzip tzdata20xxx.tar.gz to tzdata subdir.
-# 2. Run: zmtzdata2ical -o timezones.ics -y 2011 -e extra-data -t tzdata windows-names
+# 1. untar tzdata20xxx.tar.gz to tzdata subdir.
+# 2. Run: zmtzdata2ical -o timezones.ics -e extra-data -t tzdata windows-names
 # 3. Install generated timezones.ics under /opt/zimbra/conf.
 # 4. Restart mailboxd.
 

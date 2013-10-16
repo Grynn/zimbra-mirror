@@ -1,0 +1,1766 @@
+ID: Dateline Standard Time
+   Display Name: (UTC-12:00) International Date Line West
+   Standard Name:                  Dateline Standard Time
+   Daylight Name:                  Dateline Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                     -12 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: UTC-11
+   Display Name: (UTC-11:00) Coordinated Universal Time-11
+   Standard Name:                                  UTC-11
+   Daylight Name:                                  UTC-11   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                     -11 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Hawaiian Standard Time
+   Display Name:                       (UTC-10:00) Hawaii
+   Standard Name:                  Hawaiian Standard Time
+   Daylight Name:                  Hawaiian Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                     -10 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Alaskan Standard Time
+   Display Name:                       (UTC-09:00) Alaska
+   Standard Name:                   Alaskan Standard Time
+   Daylight Name:                   Alaskan Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -9 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of April
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2007 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 2 of March
+      Ends at 02:00 on Sunday of week 1 of November
+ID: Pacific Standard Time (Mexico)
+   Display Name:              (UTC-08:00) Baja California
+   Standard Name:          Pacific Standard Time (Mexico)
+   Daylight Name:          Pacific Daylight Time (Mexico)   ***Has Daylight Saving Time***
+   Offset from UTC:                      -8 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of April
+      Ends at 02:00 on Sunday of week 5 of October
+ID: Pacific Standard Time
+   Display Name:   (UTC-08:00) Pacific Time (US & Canada)
+   Standard Name:                   Pacific Standard Time
+   Daylight Name:                   Pacific Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -8 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of April
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2007 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 2 of March
+      Ends at 02:00 on Sunday of week 1 of November
+ID: US Mountain Standard Time
+   Display Name:                      (UTC-07:00) Arizona
+   Standard Name:               US Mountain Standard Time
+   Daylight Name:               US Mountain Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      -7 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Mountain Standard Time (Mexico)
+   Display Name:  (UTC-07:00) Chihuahua, La Paz, Mazatlan
+   Standard Name:         Mountain Standard Time (Mexico)
+   Daylight Name:         Mountain Daylight Time (Mexico)   ***Has Daylight Saving Time***
+   Offset from UTC:                      -7 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of April
+      Ends at 02:00 on Sunday of week 5 of October
+ID: Mountain Standard Time
+   Display Name:  (UTC-07:00) Mountain Time (US & Canada)
+   Standard Name:                  Mountain Standard Time
+   Daylight Name:                  Mountain Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -7 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of April
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2007 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 2 of March
+      Ends at 02:00 on Sunday of week 1 of November
+ID: Central America Standard Time
+   Display Name:              (UTC-06:00) Central America
+   Standard Name:           Central America Standard Time
+   Daylight Name:           Central America Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      -6 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Central Standard Time
+   Display Name:   (UTC-06:00) Central Time (US & Canada)
+   Standard Name:                   Central Standard Time
+   Daylight Name:                   Central Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -6 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of April
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2007 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 2 of March
+      Ends at 02:00 on Sunday of week 1 of November
+ID: Central Standard Time (Mexico)
+   Display Name: (UTC-06:00) Guadalajara, Mexico City, Monterrey
+   Standard Name:          Central Standard Time (Mexico)
+   Daylight Name:          Central Daylight Time (Mexico)   ***Has Daylight Saving Time***
+   Offset from UTC:                      -6 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of April
+      Ends at 02:00 on Sunday of week 5 of October
+ID: Canada Central Standard Time
+   Display Name:                 (UTC-06:00) Saskatchewan
+   Standard Name:            Canada Central Standard Time
+   Daylight Name:            Canada Central Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      -6 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: SA Pacific Standard Time
+   Display Name:          (UTC-05:00) Bogota, Lima, Quito
+   Standard Name:                SA Pacific Standard Time
+   Daylight Name:                SA Pacific Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      -5 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Eastern Standard Time
+   Display Name:   (UTC-05:00) Eastern Time (US & Canada)
+   Standard Name:                   Eastern Standard Time
+   Daylight Name:                   Eastern Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -5 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of April
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2007 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 2 of March
+      Ends at 02:00 on Sunday of week 1 of November
+ID: US Eastern Standard Time
+   Display Name:               (UTC-05:00) Indiana (East)
+   Standard Name:                US Eastern Standard Time
+   Daylight Name:                US Eastern Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -5 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/2006 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of April
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2007 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 2 of March
+      Ends at 02:00 on Sunday of week 1 of November
+ID: Venezuela Standard Time
+   Display Name:                      (UTC-04:30) Caracas
+   Standard Name:                 Venezuela Standard Time
+   Daylight Name:                 Venezuela Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                    -4 hours, -30 minutes
+   Number of adjustment rules:                          0
+ID: Paraguay Standard Time
+   Display Name:                     (UTC-04:00) Asuncion
+   Standard Name:                  Paraguay Standard Time
+   Daylight Name:                  Paraguay Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -4 hours, 0 minutes
+   Number of adjustment rules:                         14
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 2 of March
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 1 of March
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of October
+      Ends at 23:59 on Saturday of week 2 of April
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of October
+      Ends at 23:59 on Saturday of week 2 of April
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of October
+      Ends at 23:59 on Saturday of week 1 of April
+      From 01/01/2013 00:00:00 to 31/12/2013 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of October
+      Ends at 23:59 on Saturday of week 4 of March
+      From 01/01/2014 00:00:00 to 31/12/2014 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of October
+      Ends at 23:59 on Saturday of week 2 of April
+      From 01/01/2015 00:00:00 to 31/12/2015 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of October
+      Ends at 23:59 on Saturday of week 2 of April
+      From 01/01/2016 00:00:00 to 31/12/2016 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of October
+      Ends at 23:59 on Saturday of week 2 of April
+      From 01/01/2017 00:00:00 to 31/12/2017 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of September
+      Ends at 23:59 on Saturday of week 2 of April
+      From 01/01/2018 00:00:00 to 31/12/2018 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of October
+      Ends at 23:59 on Saturday of week 1 of April
+      From 01/01/2019 00:00:00 to 31/12/2019 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of October
+      Ends at 23:59 on Saturday of week 2 of April
+      From 01/01/2020 00:00:00 to 31/12/2020 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of October
+      Ends at 23:59 on Saturday of week 2 of April
+      From 01/01/2021 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of October
+      Ends at 23:59 on Saturday of week 2 of April
+ID: Atlantic Standard Time
+   Display Name:       (UTC-04:00) Atlantic Time (Canada)
+   Standard Name:                  Atlantic Standard Time
+   Daylight Name:                  Atlantic Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -4 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of April
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2007 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 2 of March
+      Ends at 02:00 on Sunday of week 1 of November
+ID: Central Brazilian Standard Time
+   Display Name:                       (UTC-04:00) Cuiaba
+   Standard Name:         Central Brazilian Standard Time
+   Daylight Name:         Central Brazilian Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -4 hours, 0 minutes
+   Number of adjustment rules:                         35
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Sunday of week 1 of November
+      Ends at 02:00 on Sunday of week 2 of February
+      From 01/01/2007 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Sunday of week 2 of October
+      Ends at 00:00 on Sunday of week 5 of February
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 00:00 on Sunday of week 3 of February
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 2 of February
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 4 of February
+      From 01/01/2013 00:00:00 to 31/12/2013 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2014 00:00:00 to 31/12/2014 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2015 00:00:00 to 31/12/2015 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2016 00:00:00 to 31/12/2016 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2017 00:00:00 to 31/12/2017 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 2 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2018 00:00:00 to 31/12/2018 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2019 00:00:00 to 31/12/2019 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2020 00:00:00 to 31/12/2020 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2021 00:00:00 to 31/12/2021 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2022 00:00:00 to 31/12/2022 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2023 00:00:00 to 31/12/2023 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 2 of October
+      Ends at 23:59 on Saturday of week 4 of February
+      From 01/01/2024 00:00:00 to 31/12/2024 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2025 00:00:00 to 31/12/2025 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2026 00:00:00 to 31/12/2026 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2027 00:00:00 to 31/12/2027 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2028 00:00:00 to 31/12/2028 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 2 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2029 00:00:00 to 31/12/2029 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2030 00:00:00 to 31/12/2030 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2031 00:00:00 to 31/12/2031 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2032 00:00:00 to 31/12/2032 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 2 of February
+      From 01/01/2033 00:00:00 to 31/12/2033 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2034 00:00:00 to 31/12/2034 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 2 of October
+      Ends at 23:59 on Saturday of week 4 of February
+      From 01/01/2035 00:00:00 to 31/12/2035 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2036 00:00:00 to 31/12/2036 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2037 00:00:00 to 31/12/2037 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2038 00:00:00 to 31/12/2038 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2039 00:00:00 to 31/12/2039 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 4 of February
+      From 01/01/2040 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+ID: SA Western Standard Time
+   Display Name: (UTC-04:00) Georgetown, La Paz, Manaus, San Juan
+   Standard Name:                SA Western Standard Time
+   Daylight Name:                SA Western Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      -4 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Pacific SA Standard Time
+   Display Name:                     (UTC-04:00) Santiago
+   Standard Name:                Pacific SA Standard Time
+   Daylight Name:                Pacific SA Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -4 hours, 0 minutes
+   Number of adjustment rules:                          8
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 2 of October
+      Ends at 23:59 on Saturday of week 2 of March
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 2 of October
+      Ends at 23:59 on Saturday of week 5 of March
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 2 of October
+      Ends at 23:59 on Saturday of week 2 of March
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 2 of October
+      Ends at 23:59 on Saturday of week 1 of April
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of August
+      Ends at 23:59 on Saturday of week 1 of May
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of September
+      Ends at 23:59 on Saturday of week 5 of April
+      From 01/01/2013 00:00:00 to 31/12/2013 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of September
+      Ends at 23:59 on Saturday of week 5 of April
+      From 01/01/2014 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 2 of October
+      Ends at 23:59 on Saturday of week 2 of March
+ID: Newfoundland Standard Time
+   Display Name:                 (UTC-03:30) Newfoundland
+   Standard Name:              Newfoundland Standard Time
+   Daylight Name:              Newfoundland Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                    -3 hours, -30 minutes
+   Number of adjustment rules:                          7
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 00:01 on Sunday of week 1 of April
+      Ends at 00:01 on Sunday of week 5 of October
+      From 01/01/2007 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 00:01 on Sunday of week 2 of March
+      Ends at 00:01 on Sunday of week 1 of November
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 00:01 on Sunday of week 2 of March
+      Ends at 00:01 on Sunday of week 1 of November
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 00:01 on Sunday of week 2 of March
+      Ends at 00:01 on Sunday of week 1 of November
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 00:01 on Sunday of week 2 of March
+      Ends at 00:01 on Sunday of week 1 of November
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 00:01 on Sunday of week 2 of March
+      Ends at 02:00 on Sunday of week 1 of November
+      From 01/01/2012 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 2 of March
+      Ends at 02:00 on Sunday of week 1 of November
+ID: E. South America Standard Time
+   Display Name:                     (UTC-03:00) Brasilia
+   Standard Name:          E. South America Standard Time
+   Daylight Name:          E. South America Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -3 hours, 0 minutes
+   Number of adjustment rules:                         35
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Sunday of week 1 of November
+      Ends at 02:00 on Sunday of week 2 of February
+      From 01/01/2007 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Sunday of week 2 of October
+      Ends at 00:00 on Sunday of week 5 of February
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 00:00 on Sunday of week 3 of February
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 2 of February
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 4 of February
+      From 01/01/2013 00:00:00 to 31/12/2013 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2014 00:00:00 to 31/12/2014 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2015 00:00:00 to 31/12/2015 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2016 00:00:00 to 31/12/2016 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2017 00:00:00 to 31/12/2017 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 2 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2018 00:00:00 to 31/12/2018 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2019 00:00:00 to 31/12/2019 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2020 00:00:00 to 31/12/2020 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2021 00:00:00 to 31/12/2021 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2022 00:00:00 to 31/12/2022 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2023 00:00:00 to 31/12/2023 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 2 of October
+      Ends at 23:59 on Saturday of week 4 of February
+      From 01/01/2024 00:00:00 to 31/12/2024 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2025 00:00:00 to 31/12/2025 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2026 00:00:00 to 31/12/2026 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2027 00:00:00 to 31/12/2027 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2028 00:00:00 to 31/12/2028 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 2 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2029 00:00:00 to 31/12/2029 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2030 00:00:00 to 31/12/2030 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2031 00:00:00 to 31/12/2031 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2032 00:00:00 to 31/12/2032 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 2 of February
+      From 01/01/2033 00:00:00 to 31/12/2033 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2034 00:00:00 to 31/12/2034 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 2 of October
+      Ends at 23:59 on Saturday of week 4 of February
+      From 01/01/2035 00:00:00 to 31/12/2035 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2036 00:00:00 to 31/12/2036 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2037 00:00:00 to 31/12/2037 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2038 00:00:00 to 31/12/2038 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+      From 01/01/2039 00:00:00 to 31/12/2039 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 4 of February
+      From 01/01/2040 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 23:59 on Saturday of week 3 of February
+ID: Argentina Standard Time
+   Display Name:                 (UTC-03:00) Buenos Aires
+   Standard Name:                 Argentina Standard Time
+   Daylight Name:                 Argentina Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -3 hours, 0 minutes
+   Number of adjustment rules:                          3
+   Adjustment Rules:
+      From 01/01/2007 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Sunday of week 5 of December
+      Ends at 00:00 on Monday of week 1 of January
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 00:00 on Sunday of week 3 of March
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Thursday of week 1 of January
+      Ends at 23:59 on Saturday of week 2 of March
+ID: SA Eastern Standard Time
+   Display Name:           (UTC-03:00) Cayenne, Fortaleza
+   Standard Name:                SA Eastern Standard Time
+   Daylight Name:                SA Eastern Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      -3 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Greenland Standard Time
+   Display Name:                    (UTC-03:00) Greenland
+   Standard Name:                 Greenland Standard Time
+   Daylight Name:                 Greenland Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -3 hours, 0 minutes
+   Number of adjustment rules:                         14
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of April
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 22:00 on Saturday of week 5 of March
+      Ends at 23:00 on Saturday of week 4 of October
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 22:00 on Saturday of week 5 of March
+      Ends at 23:00 on Saturday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 22:00 on Saturday of week 5 of March
+      Ends at 23:00 on Saturday of week 5 of October
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 22:00 on Saturday of week 4 of March
+      Ends at 23:00 on Saturday of week 5 of October
+      From 01/01/2013 00:00:00 to 31/12/2013 00:00:00
+      Delta: 01:00:00
+      Begins at 22:00 on Saturday of week 5 of March
+      Ends at 23:00 on Saturday of week 5 of October
+      From 01/01/2014 00:00:00 to 31/12/2014 00:00:00
+      Delta: 01:00:00
+      Begins at 22:00 on Saturday of week 5 of March
+      Ends at 23:00 on Saturday of week 5 of October
+      From 01/01/2015 00:00:00 to 31/12/2015 00:00:00
+      Delta: 01:00:00
+      Begins at 22:00 on Saturday of week 5 of March
+      Ends at 23:00 on Saturday of week 4 of October
+      From 01/01/2016 00:00:00 to 31/12/2016 00:00:00
+      Delta: 01:00:00
+      Begins at 22:00 on Saturday of week 5 of March
+      Ends at 23:00 on Saturday of week 5 of October
+      From 01/01/2017 00:00:00 to 31/12/2017 00:00:00
+      Delta: 01:00:00
+      Begins at 22:00 on Saturday of week 5 of March
+      Ends at 23:00 on Saturday of week 5 of October
+      From 01/01/2018 00:00:00 to 31/12/2018 00:00:00
+      Delta: 01:00:00
+      Begins at 22:00 on Saturday of week 4 of March
+      Ends at 23:00 on Saturday of week 5 of October
+      From 01/01/2019 00:00:00 to 31/12/2019 00:00:00
+      Delta: 01:00:00
+      Begins at 22:00 on Saturday of week 5 of March
+      Ends at 23:00 on Saturday of week 5 of October
+      From 01/01/2020 00:00:00 to 31/12/2020 00:00:00
+      Delta: 01:00:00
+      Begins at 22:00 on Saturday of week 5 of March
+      Ends at 23:00 on Saturday of week 4 of October
+      From 01/01/2021 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 22:00 on Saturday of week 5 of March
+      Ends at 23:00 on Saturday of week 5 of October
+ID: Montevideo Standard Time
+   Display Name:                   (UTC-03:00) Montevideo
+   Standard Name:                Montevideo Standard Time
+   Daylight Name:                Montevideo Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -3 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 2 of September
+      Ends at 02:00 on Sunday of week 2 of March
+      From 01/01/2007 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of October
+      Ends at 02:00 on Sunday of week 2 of March
+ID: Bahia Standard Time
+   Display Name:                     (UTC-03:00) Salvador
+   Standard Name:                     Bahia Standard Time
+   Daylight Name:                     Bahia Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -3 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of October
+      Ends at 00:00 on Saturday of week 1 of January
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Sunday of week 1 of January
+      Ends at 23:59 on Saturday of week 4 of February
+ID: UTC-02
+   Display Name: (UTC-02:00) Coordinated Universal Time-02
+   Standard Name:                                  UTC-02
+   Daylight Name:                                  UTC-02   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      -2 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Mid-Atlantic Standard Time
+   Display Name:                 (UTC-02:00) Mid-Atlantic
+   Standard Name:              Mid-Atlantic Standard Time
+   Daylight Name:              Mid-Atlantic Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -2 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 02:00 on Sunday of week 5 of September
+ID: Azores Standard Time
+   Display Name:                       (UTC-01:00) Azores
+   Standard Name:                    Azores Standard Time
+   Daylight Name:                    Azores Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      -1 hours, 0 minutes
+   Number of adjustment rules:                          3
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 01:00 on Sunday of week 5 of October
+      From 01/01/2013 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Sunday of week 5 of March
+      Ends at 01:00 on Sunday of week 5 of October
+ID: Cape Verde Standard Time
+   Display Name:               (UTC-01:00) Cape Verde Is.
+   Standard Name:                Cape Verde Standard Time
+   Daylight Name:                Cape Verde Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      -1 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Morocco Standard Time
+   Display Name:                         (UTC) Casablanca
+   Standard Name:                   Morocco Standard Time
+   Daylight Name:                   Morocco Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       0 hours, 0 minutes
+   Number of adjustment rules:                          7
+   Adjustment Rules:
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of May
+      Ends at 23:59 on Sunday of week 5 of August
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Sunday of week 5 of May
+      Ends at 23:59 on Thursday of week 3 of August
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of May
+      Ends at 23:59 on Saturday of week 1 of August
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 1 of April
+      Ends at 23:59 on Saturday of week 5 of July
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of April
+      Ends at 03:00 on Sunday of week 5 of September
+      From 01/01/2013 00:00:00 to 31/12/2013 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of April
+      Ends at 03:00 on Sunday of week 5 of September
+      From 01/01/2014 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of April
+      Ends at 03:00 on Sunday of week 5 of September
+ID: UTC
+   Display Name:         (UTC) Coordinated Universal Time
+   Standard Name:              Coordinated Universal Time
+   Daylight Name:              Coordinated Universal Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       0 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: GMT Standard Time
+   Display Name:  (UTC) Dublin, Edinburgh, Lisbon, London
+   Standard Name:                       GMT Standard Time
+   Daylight Name:                       GMT Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       0 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 01:00 on Sunday of week 5 of March
+      Ends at 02:00 on Sunday of week 5 of October
+ID: Greenwich Standard Time
+   Display Name:                (UTC) Monrovia, Reykjavik
+   Standard Name:                 Greenwich Standard Time
+   Daylight Name:                 Greenwich Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       0 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: W. Europe Standard Time
+   Display Name: (UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna
+   Standard Name:                 W. Europe Standard Time
+   Daylight Name:                 W. Europe Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       1 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+ID: Central Europe Standard Time
+   Display Name: (UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague
+   Standard Name:            Central Europe Standard Time
+   Daylight Name:            Central Europe Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       1 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+ID: Romance Standard Time
+   Display Name: (UTC+01:00) Brussels, Copenhagen, Madrid, Paris
+   Standard Name:                   Romance Standard Time
+   Daylight Name:                   Romance Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       1 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+ID: Central European Standard Time
+   Display Name: (UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb
+   Standard Name:          Central European Standard Time
+   Daylight Name:          Central European Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       1 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+ID: Libya Standard Time
+   Display Name:                      (UTC+01:00) Tripoli
+   Standard Name:                     Libya Standard Time
+   Daylight Name:                     Libya Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       1 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Sunday of week 1 of January
+      Ends at 02:00 on Saturday of week 2 of November
+      From 01/01/2013 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 01:00 on Friday of week 5 of March
+      Ends at 02:00 on Friday of week 5 of October
+ID: W. Central Africa Standard Time
+   Display Name:          (UTC+01:00) West Central Africa
+   Standard Name:         W. Central Africa Standard Time
+   Daylight Name:         W. Central Africa Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       1 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Namibia Standard Time
+   Display Name:                     (UTC+01:00) Windhoek
+   Standard Name:                   Namibia Standard Time
+   Daylight Name:                   Namibia Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       1 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2010 00:00:00
+      Delta: -01:00:00
+      Begins at 02:00 on Sunday of week 1 of April
+      Ends at 02:00 on Sunday of week 1 of September
+      From 01/01/2011 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of September
+      Ends at 02:00 on Sunday of week 1 of April
+ID: GTB Standard Time
+   Display Name:            (UTC+02:00) Athens, Bucharest
+   Standard Name:                       GTB Standard Time
+   Daylight Name:                       GTB Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       2 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 03:00 on Sunday of week 5 of March
+      Ends at 04:00 on Sunday of week 5 of October
+ID: Middle East Standard Time
+   Display Name:                       (UTC+02:00) Beirut
+   Standard Name:               Middle East Standard Time
+   Daylight Name:               Middle East Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       2 hours, 0 minutes
+   Number of adjustment rules:                         13
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Sunday of week 5 of March
+      Ends at 00:00 on Sunday of week 5 of October
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of March
+      Ends at 23:59 on Saturday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of March
+      Ends at 23:59 on Saturday of week 5 of October
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 4 of March
+      Ends at 23:59 on Saturday of week 5 of October
+      From 01/01/2013 00:00:00 to 31/12/2013 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of March
+      Ends at 23:59 on Saturday of week 5 of October
+      From 01/01/2014 00:00:00 to 31/12/2014 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of March
+      Ends at 23:59 on Saturday of week 5 of October
+      From 01/01/2015 00:00:00 to 31/12/2015 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of March
+      Ends at 23:59 on Saturday of week 4 of October
+      From 01/01/2016 00:00:00 to 31/12/2016 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of March
+      Ends at 23:59 on Saturday of week 5 of October
+      From 01/01/2017 00:00:00 to 31/12/2017 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of March
+      Ends at 23:59 on Saturday of week 5 of October
+      From 01/01/2018 00:00:00 to 31/12/2018 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 4 of March
+      Ends at 23:59 on Saturday of week 5 of October
+      From 01/01/2019 00:00:00 to 31/12/2019 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of March
+      Ends at 23:59 on Saturday of week 5 of October
+      From 01/01/2020 00:00:00 to 31/12/2020 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of March
+      Ends at 23:59 on Saturday of week 4 of October
+      From 01/01/2021 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of March
+      Ends at 23:59 on Saturday of week 5 of October
+ID: Egypt Standard Time
+   Display Name:                        (UTC+02:00) Cairo
+   Standard Name:                     Egypt Standard Time
+   Daylight Name:                     Egypt Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       2 hours, 0 minutes
+   Number of adjustment rules:                          6
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2005 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Friday of week 5 of April
+      Ends at 23:59 on Thursday of week 5 of September
+      From 01/01/2006 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Friday of week 5 of April
+      Ends at 23:59 on Thursday of week 3 of September
+      From 01/01/2007 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 5 of April
+      Ends at 23:59 on Thursday of week 1 of September
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 5 of April
+      Ends at 23:59 on Thursday of week 5 of August
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 4 of April
+      Ends at 23:59 on Thursday of week 3 of August
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 5 of April
+      Ends at 23:59 on Thursday of week 5 of September
+ID: Syria Standard Time
+   Display Name:                     (UTC+02:00) Damascus
+   Standard Name:                     Syria Standard Time
+   Daylight Name:                     Syria Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       2 hours, 0 minutes
+   Number of adjustment rules:                         12
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Friday of week 5 of March
+      Ends at 23:59 on Wednesday of week 3 of September
+      From 01/01/2007 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 5 of March
+      Ends at 23:59 on Thursday of week 1 of November
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 1 of April
+      Ends at 23:59 on Friday of week 5 of October
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 5 of March
+      Ends at 23:59 on Thursday of week 5 of October
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 1 of April
+      Ends at 23:59 on Thursday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 5 of March
+      Ends at 23:59 on Thursday of week 5 of October
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 1 of April
+      Ends at 23:59 on Thursday of week 5 of October
+      From 01/01/2013 00:00:00 to 31/12/2013 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 1 of April
+      Ends at 23:59 on Thursday of week 5 of October
+      From 01/01/2014 00:00:00 to 31/12/2014 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 1 of April
+      Ends at 23:59 on Thursday of week 5 of October
+      From 01/01/2015 00:00:00 to 31/12/2015 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 1 of April
+      Ends at 23:59 on Thursday of week 5 of October
+      From 01/01/2016 00:00:00 to 31/12/2016 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 5 of March
+      Ends at 23:59 on Thursday of week 5 of October
+      From 01/01/2017 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 1 of April
+      Ends at 23:59 on Thursday of week 5 of October
+ID: E. Europe Standard Time
+   Display Name:                    (UTC+02:00) E. Europe
+   Standard Name:                 E. Europe Standard Time
+   Daylight Name:                 E. Europe Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       2 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+ID: South Africa Standard Time
+   Display Name:             (UTC+02:00) Harare, Pretoria
+   Standard Name:              South Africa Standard Time
+   Daylight Name:              South Africa Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       2 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: FLE Standard Time
+   Display Name: (UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius
+   Standard Name:                       FLE Standard Time
+   Daylight Name:                       FLE Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       2 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 03:00 on Sunday of week 5 of March
+      Ends at 04:00 on Sunday of week 5 of October
+ID: Turkey Standard Time
+   Display Name:                     (UTC+02:00) Istanbul
+   Standard Name:                    Turkey Standard Time
+   Daylight Name:                    Turkey Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       2 hours, 0 minutes
+   Number of adjustment rules:                          3
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 03:00 on Sunday of week 5 of March
+      Ends at 04:00 on Sunday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 03:00 on Monday of week 5 of March
+      Ends at 04:00 on Sunday of week 5 of October
+      From 01/01/2012 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 03:00 on Sunday of week 5 of March
+      Ends at 04:00 on Sunday of week 5 of October
+ID: Israel Standard Time
+   Display Name:                    (UTC+02:00) Jerusalem
+   Standard Name:                 Jerusalem Standard Time
+   Daylight Name:                 Jerusalem Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       2 hours, 0 minutes
+   Number of adjustment rules:                         19
+   Adjustment Rules:
+      From 01/01/2005 00:00:00 to 31/12/2005 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 1 of April
+      Ends at 02:00 on Sunday of week 2 of October
+      From 01/01/2006 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 1 of October
+      From 01/01/2007 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 3 of September
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 1 of October
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 5 of September
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 2 of September
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 1 of April
+      Ends at 02:00 on Sunday of week 1 of October
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 4 of September
+      From 01/01/2013 00:00:00 to 31/12/2013 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2014 00:00:00 to 31/12/2014 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2015 00:00:00 to 31/12/2015 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2016 00:00:00 to 31/12/2016 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2017 00:00:00 to 31/12/2017 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 4 of March
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2018 00:00:00 to 31/12/2018 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 4 of March
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2019 00:00:00 to 31/12/2019 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2020 00:00:00 to 31/12/2020 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2021 00:00:00 to 31/12/2021 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2022 00:00:00 to 31/12/2022 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 5 of March
+      Ends at 02:00 on Sunday of week 5 of October
+      From 01/01/2023 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Friday of week 4 of March
+      Ends at 02:00 on Sunday of week 5 of October
+ID: Jordan Standard Time
+   Display Name:                        (UTC+03:00) Amman
+   Standard Name:                    Jordan Standard Time
+   Daylight Name:                    Jordan Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       3 hours, 0 minutes
+   Number of adjustment rules:                          7
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Thursday of week 5 of March
+      Ends at 01:00 on Friday of week 5 of September
+      From 01/01/2007 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 5 of March
+      Ends at 01:00 on Friday of week 5 of October
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 5 of March
+      Ends at 01:00 on Friday of week 5 of October
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 5 of March
+      Ends at 01:00 on Friday of week 5 of October
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 5 of March
+      Ends at 01:00 on Friday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 5 of March
+      Ends at 01:00 on Friday of week 5 of October
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 5 of March
+      Ends at 00:00 on Sunday of week 1 of January
+ID: Arabic Standard Time
+   Display Name:                      (UTC+03:00) Baghdad
+   Standard Name:                    Arabic Standard Time
+   Daylight Name:                    Arabic Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       3 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 03:00 on Sunday of week 1 of April
+      Ends at 04:00 on Sunday of week 1 of October
+      From 01/01/2007 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 03:00 on Sunday of week 1 of April
+      Ends at 04:00 on Monday of week 1 of October
+ID: Kaliningrad Standard Time
+   Display Name:           (UTC+03:00) Kaliningrad, Minsk
+   Standard Name:               Kaliningrad Standard Time
+   Daylight Name:               Kaliningrad Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       3 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 00:00 on Saturday of week 1 of January
+ID: Arab Standard Time
+   Display Name:               (UTC+03:00) Kuwait, Riyadh
+   Standard Name:                      Arab Standard Time
+   Daylight Name:                      Arab Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       3 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: E. Africa Standard Time
+   Display Name:                      (UTC+03:00) Nairobi
+   Standard Name:                 E. Africa Standard Time
+   Daylight Name:                 E. Africa Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       3 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Iran Standard Time
+   Display Name:                       (UTC+03:30) Tehran
+   Standard Name:                      Iran Standard Time
+   Daylight Name:                      Iran Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      3 hours, 30 minutes
+   Number of adjustment rules:                          3
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2005 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of March
+      Ends at 02:00 on Tuesday of week 4 of September
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Thursday of week 3 of March
+      Ends at 23:59 on Saturday of week 3 of September
+      From 01/01/2009 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 3 of March
+      Ends at 23:59 on Monday of week 3 of September
+ID: Arabian Standard Time
+   Display Name:            (UTC+04:00) Abu Dhabi, Muscat
+   Standard Name:                   Arabian Standard Time
+   Daylight Name:                   Arabian Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       4 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Azerbaijan Standard Time
+   Display Name:                         (UTC+04:00) Baku
+   Standard Name:                Azerbaijan Standard Time
+   Daylight Name:                Azerbaijan Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       4 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 04:00 on Sunday of week 5 of March
+      Ends at 05:00 on Sunday of week 5 of October
+ID: Russian Standard Time
+   Display Name: (UTC+04:00) Moscow, St. Petersburg, Volgograd
+   Standard Name:                   Russian Standard Time
+   Daylight Name:                   Russian Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       4 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 00:00 on Saturday of week 1 of January
+ID: Mauritius Standard Time
+   Display Name:                   (UTC+04:00) Port Louis
+   Standard Name:                 Mauritius Standard Time
+   Daylight Name:                 Mauritius Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       4 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of October
+      Ends at 00:00 on Tuesday of week 1 of January
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Thursday of week 1 of January
+      Ends at 02:00 on Sunday of week 5 of March
+ID: Georgian Standard Time
+   Display Name:                      (UTC+04:00) Tbilisi
+   Standard Name:                  Georgian Standard Time
+   Daylight Name:                  Georgian Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       4 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Caucasus Standard Time
+   Display Name:                      (UTC+04:00) Yerevan
+   Standard Name:                  Caucasus Standard Time
+   Daylight Name:                  Caucasus Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       4 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+ID: Afghanistan Standard Time
+   Display Name:                        (UTC+04:30) Kabul
+   Standard Name:               Afghanistan Standard Time
+   Daylight Name:               Afghanistan Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      4 hours, 30 minutes
+   Number of adjustment rules:                          0
+ID: West Asia Standard Time
+   Display Name:           (UTC+05:00) Ashgabat, Tashkent
+   Standard Name:                 West Asia Standard Time
+   Daylight Name:                 West Asia Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       5 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Pakistan Standard Time
+   Display Name:           (UTC+05:00) Islamabad, Karachi
+   Standard Name:                  Pakistan Standard Time
+   Daylight Name:                  Pakistan Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       5 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of May
+      Ends at 23:59 on Friday of week 5 of October
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Tuesday of week 2 of April
+      Ends at 23:59 on Saturday of week 5 of October
+ID: India Standard Time
+   Display Name: (UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi
+   Standard Name:                     India Standard Time
+   Daylight Name:                     India Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      5 hours, 30 minutes
+   Number of adjustment rules:                          0
+ID: Sri Lanka Standard Time
+   Display Name:          (UTC+05:30) Sri Jayawardenepura
+   Standard Name:                 Sri Lanka Standard Time
+   Daylight Name:                 Sri Lanka Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      5 hours, 30 minutes
+   Number of adjustment rules:                          0
+ID: Nepal Standard Time
+   Display Name:                    (UTC+05:45) Kathmandu
+   Standard Name:                     Nepal Standard Time
+   Daylight Name:                     Nepal Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      5 hours, 45 minutes
+   Number of adjustment rules:                          0
+ID: Central Asia Standard Time
+   Display Name:                       (UTC+06:00) Astana
+   Standard Name:              Central Asia Standard Time
+   Daylight Name:              Central Asia Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       6 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Bangladesh Standard Time
+   Display Name:                        (UTC+06:00) Dhaka
+   Standard Name:                Bangladesh Standard Time
+   Daylight Name:                Bangladesh Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       6 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 23:00 on Friday of week 3 of June
+      Ends at 23:59 on Thursday of week 5 of December
+ID: Ekaterinburg Standard Time
+   Display Name:                 (UTC+06:00) Ekaterinburg
+   Standard Name:              Ekaterinburg Standard Time
+   Daylight Name:              Ekaterinburg Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       6 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 00:00 on Saturday of week 1 of January
+ID: Myanmar Standard Time
+   Display Name:             (UTC+06:30) Yangon (Rangoon)
+   Standard Name:                   Myanmar Standard Time
+   Daylight Name:                   Myanmar Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      6 hours, 30 minutes
+   Number of adjustment rules:                          0
+ID: SE Asia Standard Time
+   Display Name:      (UTC+07:00) Bangkok, Hanoi, Jakarta
+   Standard Name:                   SE Asia Standard Time
+   Daylight Name:                   SE Asia Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       7 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: N. Central Asia Standard Time
+   Display Name:                  (UTC+07:00) Novosibirsk
+   Standard Name:           N. Central Asia Standard Time
+   Daylight Name:           N. Central Asia Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       7 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 00:00 on Saturday of week 1 of January
+ID: China Standard Time
+   Display Name: (UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi
+   Standard Name:                     China Standard Time
+   Daylight Name:                     China Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       8 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: North Asia Standard Time
+   Display Name:                  (UTC+08:00) Krasnoyarsk
+   Standard Name:                North Asia Standard Time
+   Daylight Name:                North Asia Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       8 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 00:00 on Saturday of week 1 of January
+ID: Singapore Standard Time
+   Display Name:      (UTC+08:00) Kuala Lumpur, Singapore
+   Standard Name:           Malay Peninsula Standard Time
+   Daylight Name:           Malay Peninsula Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       8 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: W. Australia Standard Time
+   Display Name:                        (UTC+08:00) Perth
+   Standard Name:              W. Australia Standard Time
+   Daylight Name:              W. Australia Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       8 hours, 0 minutes
+   Number of adjustment rules:                          4
+   Adjustment Rules:
+      From 01/01/2006 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of December
+      Ends at 00:00 on Sunday of week 1 of January
+      From 01/01/2007 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of October
+      Ends at 03:00 on Sunday of week 5 of March
+      From 01/01/2008 00:00:00 to 31/12/2008 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of October
+      Ends at 03:00 on Sunday of week 5 of March
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Thursday of week 1 of January
+      Ends at 03:00 on Sunday of week 5 of March
+ID: Taipei Standard Time
+   Display Name:                       (UTC+08:00) Taipei
+   Standard Name:                    Taipei Standard Time
+   Daylight Name:                    Taipei Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       8 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Ulaanbaatar Standard Time
+   Display Name:                  (UTC+08:00) Ulaanbaatar
+   Standard Name:               Ulaanbaatar Standard Time
+   Daylight Name:               Ulaanbaatar Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       8 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: North Asia East Standard Time
+   Display Name:                      (UTC+09:00) Irkutsk
+   Standard Name:           North Asia East Standard Time
+   Daylight Name:           North Asia East Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                       9 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 00:00 on Saturday of week 1 of January
+ID: Tokyo Standard Time
+   Display Name:        (UTC+09:00) Osaka, Sapporo, Tokyo
+   Standard Name:                     Tokyo Standard Time
+   Daylight Name:                     Tokyo Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       9 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Korea Standard Time
+   Display Name:                        (UTC+09:00) Seoul
+   Standard Name:                     Korea Standard Time
+   Daylight Name:                     Korea Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                       9 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Cen. Australia Standard Time
+   Display Name:                     (UTC+09:30) Adelaide
+   Standard Name:            Cen. Australia Standard Time
+   Daylight Name:            Cen. Australia Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      9 hours, 30 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of October
+      Ends at 03:00 on Sunday of week 5 of March
+      From 01/01/2008 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of October
+      Ends at 03:00 on Sunday of week 1 of April
+ID: AUS Central Standard Time
+   Display Name:                       (UTC+09:30) Darwin
+   Standard Name:               AUS Central Standard Time
+   Daylight Name:               AUS Central Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      9 hours, 30 minutes
+   Number of adjustment rules:                          0
+ID: E. Australia Standard Time
+   Display Name:                     (UTC+10:00) Brisbane
+   Standard Name:              E. Australia Standard Time
+   Daylight Name:              E. Australia Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      10 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: AUS Eastern Standard Time
+   Display Name:  (UTC+10:00) Canberra, Melbourne, Sydney
+   Standard Name:               AUS Eastern Standard Time
+   Daylight Name:               AUS Eastern Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      10 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of October
+      Ends at 03:00 on Sunday of week 5 of March
+      From 01/01/2008 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of October
+      Ends at 03:00 on Sunday of week 1 of April
+ID: West Pacific Standard Time
+   Display Name:           (UTC+10:00) Guam, Port Moresby
+   Standard Name:              West Pacific Standard Time
+   Daylight Name:              West Pacific Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      10 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Tasmania Standard Time
+   Display Name:                       (UTC+10:00) Hobart
+   Standard Name:                  Tasmania Standard Time
+   Daylight Name:                  Tasmania Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      10 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of October
+      Ends at 03:00 on Sunday of week 5 of March
+      From 01/01/2008 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of October
+      Ends at 03:00 on Sunday of week 1 of April
+ID: Yakutsk Standard Time
+   Display Name:                      (UTC+10:00) Yakutsk
+   Standard Name:                   Yakutsk Standard Time
+   Daylight Name:                   Yakutsk Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      10 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 00:00 on Saturday of week 1 of January
+ID: Central Pacific Standard Time
+   Display Name:   (UTC+11:00) Solomon Is., New Caledonia
+   Standard Name:           Central Pacific Standard Time
+   Daylight Name:           Central Pacific Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      11 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Vladivostok Standard Time
+   Display Name:                  (UTC+11:00) Vladivostok
+   Standard Name:               Vladivostok Standard Time
+   Daylight Name:               Vladivostok Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      11 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 00:00 on Saturday of week 1 of January
+ID: New Zealand Standard Time
+   Display Name:         (UTC+12:00) Auckland, Wellington
+   Standard Name:               New Zealand Standard Time
+   Daylight Name:               New Zealand Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      12 hours, 0 minutes
+   Number of adjustment rules:                          3
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2006 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 1 of October
+      Ends at 03:00 on Sunday of week 3 of March
+      From 01/01/2007 00:00:00 to 31/12/2007 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of September
+      Ends at 03:00 on Sunday of week 3 of March
+      From 01/01/2008 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of September
+      Ends at 03:00 on Sunday of week 1 of April
+ID: UTC+12
+   Display Name: (UTC+12:00) Coordinated Universal Time+12
+   Standard Name:                                  UTC+12
+   Daylight Name:                                  UTC+12   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      12 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Fiji Standard Time
+   Display Name:                         (UTC+12:00) Fiji
+   Standard Name:                      Fiji Standard Time
+   Daylight Name:                      Fiji Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      12 hours, 0 minutes
+   Number of adjustment rules:                          6
+   Adjustment Rules:
+      From 01/01/2009 00:00:00 to 31/12/2009 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of November
+      Ends at 00:00 on Thursday of week 1 of January
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 4 of October
+      Ends at 03:00 on Sunday of week 5 of March
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 4 of October
+      Ends at 03:00 on Sunday of week 1 of March
+      From 01/01/2012 00:00:00 to 31/12/2012 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 3 of October
+      Ends at 03:00 on Sunday of week 4 of January
+      From 01/01/2013 00:00:00 to 31/12/2013 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 4 of October
+      Ends at 03:00 on Sunday of week 3 of January
+      From 01/01/2014 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 4 of October
+      Ends at 03:00 on Sunday of week 4 of January
+ID: Magadan Standard Time
+   Display Name:                      (UTC+12:00) Magadan
+   Standard Name:                   Magadan Standard Time
+   Daylight Name:                   Magadan Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      12 hours, 0 minutes
+   Number of adjustment rules:                          2
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 00:00 on Saturday of week 1 of January
+ID: Kamchatka Standard Time
+   Display Name: (UTC+12:00) Petropavlovsk-Kamchatsky - Old
+   Standard Name:                 Kamchatka Standard Time
+   Daylight Name:                 Kamchatka Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      12 hours, 0 minutes
+   Number of adjustment rules:                          1
+   Adjustment Rules:
+      From 01/01/0001 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 02:00 on Sunday of week 5 of March
+      Ends at 03:00 on Sunday of week 5 of October
+ID: Tonga Standard Time
+   Display Name:                   (UTC+13:00) Nuku'alofa
+   Standard Name:                     Tonga Standard Time
+   Daylight Name:                     Tonga Daylight Time   ***Does Not Have Daylight Saving Time***
+   Offset from UTC:                      13 hours, 0 minutes
+   Number of adjustment rules:                          0
+ID: Samoa Standard Time
+   Display Name:                        (UTC+13:00) Samoa
+   Standard Name:                     Samoa Standard Time
+   Daylight Name:                     Samoa Daylight Time   ***Has Daylight Saving Time***
+   Offset from UTC:                      13 hours, 0 minutes
+   Number of adjustment rules:                          3
+   Adjustment Rules:
+      From 01/01/2010 00:00:00 to 31/12/2010 00:00:00
+      Delta: 01:00:00
+      Begins at 23:59 on Saturday of week 5 of September
+      Ends at 00:00 on Friday of week 1 of January
+      From 01/01/2011 00:00:00 to 31/12/2011 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Sunday of week 5 of September
+      Ends at 01:00 on Sunday of week 1 of April
+      From 01/01/2012 00:00:00 to 31/12/9999 00:00:00
+      Delta: 01:00:00
+      Begins at 00:00 on Sunday of week 5 of September
+      Ends at 01:00 on Sunday of week 1 of April

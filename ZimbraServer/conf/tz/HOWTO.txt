@@ -28,32 +28,40 @@ Running the Converter
 
 To generate timezones.ics, follow these steps.
 
-1. Download the latest Olson tzdata files.  As of October 2011, it is
-tzdata2011l.tar.gz.  Unzip/untar into a directory called tzdata.
+1. Download the archive of the latest Olson tzdata files.
+   As of October 2013, these were obtainable from:
+       http://www.iana.org/time-zones
+   The latest version at that date was tzdata2013g.tar.gz
 
-2. Update windows-names file based on the latest time zone names used in
-Windows operating system(s). (more on this later)
+2. Untar the tzdata archive into a directory called tzdata.
 
-3. Update extra-data file accordingly after updating windows-names.
-(more on this later)
+3. Update windows-names file based on the latest time zone names used in
+   Windows operating system(s). (more on this later)
 
-4. Run the generator.  For the -y option, use the current year.
-$ zmtzdata2ical -o timezones.ics -y 2011 -e extra-data -t tzdata windows-names
+4. Update extra-data file accordingly after updating windows-names.
+   (more on this later)
 
-5. Review the generated timezones.ics and make any fixes as necessary.  There
-may be errors in the generated file because of bugs in the generator utility
-or the data files themselves.  Look at the diff from the previous version of
-timezones.ics and compare the changes against the published time zone policy
-changes.
+5. Run the generator.
 
-6. Check in the timezones.ics file under ZimbraServer/conf, and windows-names
-and extra-data files under ZimbraServer/conf/tz.
+   $ zmtzdata2ical -o timezones.ics -e extra-data -t tzdata windows-names
 
+   For information on other options, use "zmtzdata2ical --help"
+
+6. Review the generated timezones.ics and make any fixes as necessary.  There
+   may be errors in the generated file because of bugs in the generator utility
+   or the data files themselves.  Look at the diff from the previous version of
+   timezones.ics and compare the changes against the published time zone policy
+   changes.
+
+7. Check in the timezones.ics file under ZimbraServer/conf, and windows-names
+   and extra-data files under ZimbraServer/conf/tz.
 
 The windows-names File
 ----------------------
 
-This file maps Windows time zone names to Olson equivalents.  Microsoft
+See tools/updateWindowsNames.py for how updates were gathered in October 2013.
+
+"windows-names" maps Windows time zone names to Olson equivalents.  Microsoft
 publishes updates to Windows time zones via Microsoft Update, the automatic
 software update mechanism for Microsoft products.  Run Microsoft Update to
 get the latest time zones before updating the windows-name file.  The Windows
@@ -73,11 +81,18 @@ Link  <olson TZ name>  <windows TZ name>
 
 The Link command maps the Windows name to Olson name.
 
-TODO: Do we really need to keep maintaining this mapping?  We have the ability
-to match time zones by rule.  Isn't that good enough, combined with installing
-time zone patches on Windows client machines by each user?  How about other
-Windows-like devices like Blackberrys?
+Here are some thoughts on why is it important to maintain these mappings:
 
+a.  The authorities responsible for a timezone (usually governments) can and
+    frequently do change the rules for their timezone.
+b.  At any one time, there are often several timezones that share the same
+    simplified (or even full) rules.
+c.  Just because the rules for 2 timezones happen to be the same at one point
+    in time does not mean they always will.
+d.  If we discard region/other information and use timezones based solely
+    on rules, we cannot differentiate between calendar items which should be
+    updated when rules for a region change and those which should not be
+    updated because the region they are homed in has not changed their rules.
 
 The extra-data File
 -------------------
