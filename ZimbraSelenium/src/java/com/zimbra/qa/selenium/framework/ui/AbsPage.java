@@ -276,6 +276,20 @@ public abstract class AbsPage extends AbsSeleniumObject {
 
 		}
 		
+		public void zSelectAll() throws HarnessException {
+			logger.info("zTypeKeyEvent(CTRL A)");
+			
+			RobotKeyboard keyboard = new RobotKeyboard();
+			
+			keyboard.robot.keyPress(KeyEvent.VK_CONTROL);
+			keyboard.robot.keyPress(KeyEvent.VK_A);
+			keyboard.robot.keyRelease(KeyEvent.VK_CONTROL);
+			keyboard.robot.keyRelease(KeyEvent.VK_A);
+			
+			SleepUtil.sleepSmall();
+
+		}
+		
 		/**
 		 * Using Robot, type a series of characters
 		 * @param chars

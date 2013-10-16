@@ -1076,9 +1076,6 @@ public class FormApptNew extends AbsForm {
 			throw new HarnessException("locator was null for field " + field);
 		}
 
-		// Default behavior, enter value into locator field
-		//
-
 		// Make sure the button exists
 		if (!this.sIsElementPresent(locator))
 			throw new HarnessException("Field is not present field=" + field
@@ -1093,7 +1090,14 @@ public class FormApptNew extends AbsForm {
 				this.clearField(locator);
 				this.sClickAt(locator, "");
 			}
-			this.sType(locator, value);
+			
+			if (field == Field.StartDate || field == Field.EndDate
+					|| field == Field.StartTime || field == Field.EndTime) {
+				this.zKeyboard.zSelectAll();
+				this.sTypeDateTime(locator, value);
+			} else {
+				this.sType(locator, value);
+			}
 			SleepUtil.sleepSmall();
 
 			if (field == Field.Attendees || field == Field.Optional
