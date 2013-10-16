@@ -174,6 +174,13 @@ public class PageCalendar extends AbsTab {
 		public static final String ImgPrivateAppt = "css= div[class='ImgReadOnly']";
 		
 		public static final String LocationFirstSearchResult = "css= div[class='DwtChooserListView'] div[class='DwtListView-Rows'] div";
+		
+		public static final String DayViewOnFBLink = "css=td[class='TbTop'] td[id='caltb'] a[id='CAL_DAY']";
+		public static final String WorkWeekViewOnFBLink = "css=td[class='TbTop'] td[id='caltb'] a[id='CAL_WORK']";
+		public static final String WeekViewOnFBLink = "css=td[class='TbTop'] td[id='caltb'] a[id='CAL_WEEK']";
+		public static final String MonthViewOnFBLink = "css=td[class='TbTop'] td[id='caltb'] a[id='CAL_MONTH']";
+		public static final String TodayViewOnFBLink = "css=td[class='TbTop'] td[id='caltb'] a[id='CAL_TODAY']";
+
 
 	}
 
@@ -597,7 +604,7 @@ public class PageCalendar extends AbsTab {
 		} else if ( action == Action.A_DOUBLECLICK) {
 			
 			this.sDoubleClick(locator);
-			SleepUtil.sleepLong();
+			this.zWaitForBusyOverlay();
 			
 			page = new FormApptNew(this.MyApplication);
 			if ( page.zIsActive() ) {
