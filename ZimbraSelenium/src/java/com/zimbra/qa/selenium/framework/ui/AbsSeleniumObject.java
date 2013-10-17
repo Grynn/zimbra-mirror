@@ -2341,6 +2341,28 @@ public abstract class AbsSeleniumObject {
 			throw new HarnessException(e);
 		}
 	}
+	
+	public void sTypeDateTime(String locator, String text, WebElement... elements) throws HarnessException {
+		try {
+			if (ZimbraSeleniumProperties.isWebDriver()){
+			    logger.info("...WebDriver...action.sendKeys()");
+			    
+			    WebElement we = null;
+			    if(elements != null && elements.length > 0){
+				we = elements[0];
+			    } else {
+				we = getElement(locator);
+			    }
+			    we.sendKeys(text);
+			} else {
+			    ClientSessionFactory.session().selenium().type(locator, text);
+			}
+			logger.info("type(" + locator + ", " + text + ")");
+		} catch (SeleniumException e) {
+			throw new HarnessException(e);
+		}
+	}
+
 
 	/**
 	 * DefaultSelenium.typeKeys()
