@@ -53,7 +53,13 @@ To generate timezones.ics, follow these steps.
    timezones.ics and compare the changes against the published time zone policy
    changes.
 
-7. Check in the timezones.ics file under ZimbraServer/conf, and windows-names
+7. Convert the timezones.ics from using \r\n line endings to \n line endings.
+   (Although \r\n endings are technically more correct for .ics files, some
+    tools, such as zmsetup.pl require \n line endings)
+
+   $ perl -i.org -pe 's/\r\n/\n/' timezones.ics
+
+8. Check in the timezones.ics file under ZimbraServer/conf, and windows-names
    and extra-data files under ZimbraServer/conf/tz.
 
 The windows-names File
