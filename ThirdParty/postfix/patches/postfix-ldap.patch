@@ -1,0 +1,191 @@
+diff --git a/proto/ldap_table b/proto/ldap_table
+index 666aa28..2c17c87 100644
+--- a/proto/ldap_table
++++ b/proto/ldap_table
+@@ -164,6 +164,14 @@
+ #	When the input key is an address of the form user@domain, \fB%d\fR
+ #	is replaced by the (RFC 2253) quoted domain part of the address.
+ #	Otherwise, the search is suppressed and returns no results.
++# .IP "\fB\fB%,\fR\fR"
++#	When the input key is an address of the form user@domain, \fB%,\fR
++#	is replaced by the sequence of comma separated domain component RDNs
++#	of the domain part of the address.  Otherwise, the search is
++#	suppressed and returns no results.
++# .IP
++# 	For example, with a lookup key of user@mail.example.com, the
++#	replacement string is "dc=mail, dc=example, dc=com".
+ # .IP "\fB\fB%[SUD]\fR\fR"
+ #	For the \fBsearch_base\fR parameter, the upper-case equivalents
+ #	of the above expansions behave identically to their lower-case
+diff --git a/src/global/db_common.c b/src/global/db_common.c
+index 6b3edbd..8bbba7e 100644
+--- a/src/global/db_common.c
++++ b/src/global/db_common.c
+@@ -144,6 +144,7 @@
+   * Utility library.
+   */
+ #include <mymalloc.h>
++#include <stringops.h>
+ #include <vstring.h>
+ #include <msg.h>
+ #include <dict.h>
+@@ -202,6 +203,15 @@ int     db_common_parse(DICT *dict, void **ctxPtr, const char *format, int query
+ 		    : DB_COMMON_VALUE_USER;
+ 		dynamic = 1;
+ 		break;
++	    case ',':
++		if (query & DB_COMMON_LDAP_BASE) {
++		    ctx->flags |= DB_COMMON_KEY_DOMAIN | DB_COMMON_KEY_PARTIAL;
++		    dynamic = 1;
++		    break;
++		}
++		msg_fatal("db_common_parse: %s: Invalid %s template: %s",
++		       ctx->dict->name, query ? "query" : "result", format);
++		break;
+ 	    case 'd':
+ 		ctx->flags |=
+ 		    query ? DB_COMMON_KEY_DOMAIN | DB_COMMON_KEY_PARTIAL
+@@ -310,6 +320,8 @@ int     db_common_expand(void *ctxArg, const char *format, const char *value,
+     ARGV   *parts = 0;
+     int     i;
+     const char *cp;
++    char   *save;
++    char   *tmp;
+ 
+     /* Skip NULL values, silently. */
+     if (value == 0)
+@@ -407,6 +419,21 @@ int     db_common_expand(void *ctxArg, const char *format, const char *value,
+ 		VSTRING_ADDCH(result, '%');
+ 		break;
+ 
++	    case ',':
++		if (!(ctx->flags & DB_COMMON_KEY_DOMAIN))
++		    msg_panic("%s: %s: %s: bad query template context",
++			      myname, ctx->dict->name, format);
++		if (!vdomain)
++		    msg_panic("%s: %s: %s: expanding domain-less key",
++			      myname, ctx->dict->name, format);
++		save = tmp = mystrdup(vdomain);
++		for (i = 0; (domain = mystrtok(&tmp, ".")) != 0; i = 1) {
++		    vstring_strcat(result, i ? ", dc=" : "dc=");
++		    QUOTE_VAL(ctx->dict, quote_func, domain, result);
++		}
++		myfree(save);
++		break;
++
+ 	    case 's':
+ 		QUOTE_VAL(ctx->dict, quote_func, value, result);
+ 		break;
+diff --git a/src/global/db_common.h b/src/global/db_common.h
+index 26ebf97..9a4afae 100644
+--- a/src/global/db_common.h
++++ b/src/global/db_common.h
+@@ -18,6 +18,10 @@
+ #include "dict.h"
+ #include "string_list.h"
+ 
++#define DB_COMMON_RESULT	0	/* Must be false */
++#define DB_COMMON_QUERY 	1
++#define DB_COMMON_LDAP_BASE	2
++
+ typedef void (*db_quote_callback_t)(DICT *, const char *, VSTRING *);
+ 
+ extern int db_common_parse(DICT *, void **, const char *, int);
+diff --git a/src/global/dict_ldap.c b/src/global/dict_ldap.c
+index 6ce6915..aa9bd84 100644
+--- a/src/global/dict_ldap.c
++++ b/src/global/dict_ldap.c
+@@ -1453,8 +1453,9 @@ static const char *dict_ldap_lookup(DICT *dict, const char *name)
+      * On to the search.
+      */
+     if (msg_verbose)
+-	msg_info("%s: %s: Searching with filter %s", myname,
+-		 dict_ldap->parser->name, vstring_str(query));
++	msg_info("%s: %s: Searching with base %s filter %s", myname,
++		 dict_ldap->parser->name,
++		 vstring_str(base), vstring_str(query));
+ 
+     rc = search_st(dict_ldap->ld, vstring_str(base), dict_ldap->scope,
+ 		   vstring_str(query), dict_ldap->result_attributes->argv,
+@@ -1794,12 +1795,14 @@ DICT   *dict_ldap_open(const char *ldapsource, int open_flags, int dict_flags)
+     dict_ldap->ctx = 0;
+     dict_ldap->dynamic_base =
+ 	db_common_parse(&dict_ldap->dict, &dict_ldap->ctx,
+-			dict_ldap->search_base, 1);
+-    if (!db_common_parse(0, &dict_ldap->ctx, dict_ldap->query, 1)) {
++			dict_ldap->search_base, DB_COMMON_LDAP_BASE);
++    if (!db_common_parse(0, &dict_ldap->ctx, dict_ldap->query,
++			 DB_COMMON_QUERY)) {
+ 	msg_warn("%s: %s: Fixed query_filter %s is probably useless",
+ 		 myname, ldapsource, dict_ldap->query);
+     }
+-    (void) db_common_parse(0, &dict_ldap->ctx, dict_ldap->result_format, 0);
++    (void) db_common_parse(0, &dict_ldap->ctx, dict_ldap->result_format,
++			   DB_COMMON_RESULT);
+     db_common_parse_domain(dict_ldap->parser, dict_ldap->ctx);
+ 
+     /*
+diff --git a/src/global/dict_memcache.c b/src/global/dict_memcache.c
+index e3ce925..c1b1f5a 100644
+--- a/src/global/dict_memcache.c
++++ b/src/global/dict_memcache.c
+@@ -584,7 +584,7 @@ DICT   *dict_memcache_open(const char *name, int open_flags, int dict_flags)
+      */
+     dict_mc->dbc_ctxt = 0;
+     db_common_parse(&dict_mc->dict, &dict_mc->dbc_ctxt,
+-		    dict_mc->key_format, 1);
++		    dict_mc->key_format, DB_COMMON_QUERY);
+     db_common_parse_domain(dict_mc->parser, dict_mc->dbc_ctxt);
+     if (db_common_dict_partial(dict_mc->dbc_ctxt))
+ 	/* Breaks recipient delimiters */
+diff --git a/src/global/dict_mysql.c b/src/global/dict_mysql.c
+index a3e231a..ff8aa1b 100644
+--- a/src/global/dict_mysql.c
++++ b/src/global/dict_mysql.c
+@@ -615,8 +615,9 @@ static void mysql_parse_config(DICT_MYSQL *dict_mysql, const char *mysqlcf)
+      */
+     dict_mysql->ctx = 0;
+     (void) db_common_parse(&dict_mysql->dict, &dict_mysql->ctx,
+-			   dict_mysql->query, 1);
+-    (void) db_common_parse(0, &dict_mysql->ctx, dict_mysql->result_format, 0);
++			   dict_mysql->query, DB_COMMON_QUERY);
++    (void) db_common_parse(0, &dict_mysql->ctx, dict_mysql->result_format,
++			   DB_COMMON_RESULT);
+     db_common_parse_domain(p, dict_mysql->ctx);
+ 
+     /*
+diff --git a/src/global/dict_pgsql.c b/src/global/dict_pgsql.c
+index b96a81f..5408fc2 100644
+--- a/src/global/dict_pgsql.c
++++ b/src/global/dict_pgsql.c
+@@ -718,8 +718,9 @@ static void pgsql_parse_config(DICT_PGSQL *dict_pgsql, const char *pgsqlcf)
+      */
+     dict_pgsql->ctx = 0;
+     (void) db_common_parse(&dict_pgsql->dict, &dict_pgsql->ctx,
+-			   dict_pgsql->query, 1);
+-    (void) db_common_parse(0, &dict_pgsql->ctx, dict_pgsql->result_format, 0);
++			   dict_pgsql->query, DB_COMMON_QUERY);
++    (void) db_common_parse(0, &dict_pgsql->ctx, dict_pgsql->result_format,
++			   DB_COMMON_RESULT);
+     db_common_parse_domain(p, dict_pgsql->ctx);
+ 
+     /*
+diff --git a/src/global/dict_sqlite.c b/src/global/dict_sqlite.c
+index 8eb0da2..f12391c 100644
+--- a/src/global/dict_sqlite.c
++++ b/src/global/dict_sqlite.c
+@@ -291,8 +291,9 @@ static void sqlite_parse_config(DICT_SQLITE *dict_sqlite, const char *sqlitecf)
+      */
+     dict_sqlite->ctx = 0;
+     (void) db_common_parse(&dict_sqlite->dict, &dict_sqlite->ctx,
+-			   dict_sqlite->query, 1);
+-    (void) db_common_parse(0, &dict_sqlite->ctx, dict_sqlite->result_format, 0);
++			   dict_sqlite->query, DB_COMMON_QUERY);
++    (void) db_common_parse(0, &dict_sqlite->ctx, dict_sqlite->result_format,
++			   DB_COMMON_RESULT);
+     db_common_parse_domain(dict_sqlite->parser, dict_sqlite->ctx);
+ 
+     /*
+-- 
+1.8.1.2
+
