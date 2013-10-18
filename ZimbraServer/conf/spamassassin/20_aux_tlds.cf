@@ -37,7 +37,7 @@
 #
 
 
-# Last Update: 2013-01-28-AXB
+# Last Update: 2013-07-18-AXB
 
 
 
@@ -75,6 +75,8 @@ util_rb_3tld qld.edu.au
 util_rb_3tld perso.neuf.fr
 util_rb_3tld perso.sfr.fr
 util_rb_3tld hop.clickbank.net
+util_rb_3tld user.icpnet.pl
+util_rb_3tld en.alibaba.com
 #
 util_rb_3tld blogspot.co.nz
 util_rb_3tld blogspot.co.uk
@@ -84,6 +86,8 @@ util_rb_3tld blogspot.com.br
 util_rb_3tld blogspot.com.es
 #
 util_rb_3tld no-ip.co.uk
+#
+util_rb_3tld mobile.web.tr
 
 endif
 
@@ -175,6 +179,8 @@ util_rb_2tld googlegroups.com
 util_rb_2tld 150m.com
 util_rb_2tld bravepages.com
 util_rb_2tld ucoz.ru
+util_rb_2tld ucoz.com
+util_rb_2tld ucoz.net
 util_rb_2tld szm.com
 util_rb_2tld geocities.jp
 util_rb_2tld gmxhome.de
@@ -312,6 +318,7 @@ util_rb_2tld fromru.su
 util_rb_2tld krovatka.su
 util_rb_2tld pochta.com
 util_rb_2tld 5ballov.ru
+util_rb_2tld usa.cc
 
 #
 util_rb_2tld neostrada.pl

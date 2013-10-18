@@ -90,12 +90,11 @@ describe        URIBL_PH_SURBL  Contains an URL listed in the PH SURBL blocklist
 tflags          URIBL_PH_SURBL  net
 reuse           URIBL_PH_SURBL
 
-#DEPRECATED 10/22/2012 - BUG 6853 - TO BECOME MW 5-1-2013
-#urirhssub       URIBL_MW_SURBL  multi.surbl.org.        A   16
-#body            URIBL_MW_SURBL  eval:check_uridnsbl('URIBL_MW_SURBL')
-#describe        URIBL_MW_SURBL  Contains a Malware Domain or IP listed in the MW SURBL blocklist
-#tflags          URIBL_MW_SURBL  net
-#reuse           URIBL_MW_SURBL
+urirhssub       URIBL_MW_SURBL  multi.surbl.org.        A   16
+body            URIBL_MW_SURBL  eval:check_uridnsbl('URIBL_MW_SURBL')
+describe        URIBL_MW_SURBL  Contains a Malware Domain or IP listed in the MW SURBL blocklist
+tflags          URIBL_MW_SURBL  net
+reuse           URIBL_MW_SURBL
 
 urirhssub       URIBL_AB_SURBL  multi.surbl.org.        A   32
 body            URIBL_AB_SURBL  eval:check_uridnsbl('URIBL_AB_SURBL')
@@ -143,12 +142,14 @@ reuse           URIBL_BLOCKED
 # Don't bother looking for example domains as per RFC 2606.
 uridnsbl_skip_domain example.com example.net example.org
 
+uridnsbl_skip_domain local.cf 
+
 # MUA CSS class definitions
 uridnsbl_skip_domain div.tk p.tk li.tk no.tk
 
 # (roughly) top 200 domains not blacklisted by SURBL
 uridnsbl_skip_domain 126.com 163.com 2o7.net 4at1.com
-uridnsbl_skip_domain 5iantlavalamp.com about.com adelphia.net adobe.com
+uridnsbl_skip_domain 5iantlavalamp.com about.com adelphia.net adobe.com addthis.com
 uridnsbl_skip_domain agora-inc.com agoramedia.com akamai.net
 uridnsbl_skip_domain akamaitech.net amazon.com ancestry.com aol.com
 uridnsbl_skip_domain apache.org apple.com arcamax.com astrology.com
