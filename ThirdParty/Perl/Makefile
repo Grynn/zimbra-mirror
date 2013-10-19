@@ -12,6 +12,7 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 PERL_TGZ_DEST_DIR := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/perl
 PERL_BIN_TGZ_DEST := $(PERL_TGZ_DEST_DIR)/perlbin.tgz
 PERL_TGZ_DEST	:= $(PERL_TGZ_DEST_DIR)/perllib.tgz
+PERL_SA_RULES	:= $(PERL_TGZ_DEST_DIR)/perl-sa-rules.tgz
 
 ifeq ($(BUILD_PLATFORM), )
         BUILD_PLATFORM := "UNKNOWN"
@@ -296,6 +297,7 @@ CLEAN_TARGETS	:=	\
 		$(TMPDIR) \
 		$(DEST_DIR) \
 		$(PERL_TGZ_DEST) \
+		$(PERL_SA_RULES) \
 		$(PERL_BIN_TGZ_DEST)
 
 all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR) build check tarball
@@ -460,7 +462,17 @@ build:
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(ZIMBRA_HOME)/zimbramon LIB=$(ZIMBRA_HOME)/zimbramon/lib DATADIR=$(ZIMBRA_HOME)/conf/spamassassin CONFDIR=/opt/zimbra/conf/spamassassin LOCALSTATEDIR=$(ZIMBRA_HOME)/data/spamassassin; \
 			$(MAKE); $(MAKE) install DESTDIR=$(DEST_DIR); \
 			cp -R $(DEST_DIR)/opt/zimbra/zimbramon/* $(DEST_DIR); \
-			rm -rf $(DEST_DIR)/opt;) >> $(LOGFILE) 2>&1; \
+			rm -rf $(DEST_DIR)/opt; \
+			rm -rf /opt/zimbra/conf/spamassassin; \
+			rm -rf ../../spamassassin; \
+			rm -rf ../../sa-rules; \
+			mkdir -p /opt/zimbra/conf/spamassassin; \
+			cp -pfR rules/* /opt/zimbra/conf/spamassassin; \
+			perl -T -I ../../zimbramon/lib ../../zimbramon/bin/sa-update --updatedir=../../spamassassin; \
+			mkdir -p ../../sa-rules; \
+			cp -pfR rules/* ../../sa-rules; \
+			cp -pfR ../../spamassassin/updates_spamassassin_org/* ../../sa-rules; \
+			rm -rf /opt/zimbra/conf/spamassassin;) >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
@@ -506,6 +518,11 @@ tarball:
 	(cd $(DEST_BIN_DIR); \
 	tar cfz $(PERL_BIN_TGZ_DEST) sa-compile sa-learn sa-update spamassassin spamc spamd innotop); \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
+	@echo -n "Creating $(PERL_SA_RULES)..."; \
+	(tar cfz $(PERL_SA_RULES) sa-rules); \
+	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
+	rm -rf sa-rules;
+	rm -rf spamassassin;
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)/*
 
 $(PERL_TGZ_DEST_DIR):
