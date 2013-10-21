@@ -468,10 +468,10 @@ build:
 			rm -rf ../../sa-rules; \
 			mkdir -p /opt/zimbra/conf/spamassassin; \
 			cp -pfR rules/* /opt/zimbra/conf/spamassassin; \
-			perl -T -I ../../zimbramon/lib ../../zimbramon/bin/sa-update --updatedir=../../spamassassin; \
-			mkdir -p ../../sa-rules; \
-			cp -pfR rules/* ../../sa-rules; \
-			cp -pfR ../../spamassassin/updates_spamassassin_org/* ../../sa-rules; \
+			perl -T -I ../../zimbramon/lib ../../zimbramon/bin/sa-update --updatedir=../../sa-rules; \
+			mkdir -p ../../spamassassin; \
+			cp -pfR rules/* ../../spamassassin; \
+			cp -pfR ../../sa-rules/updates_spamassassin_org/* ../../spamassassin; \
 			rm -rf /opt/zimbra/conf/spamassassin;) >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
@@ -519,9 +519,9 @@ tarball:
 	tar cfz $(PERL_BIN_TGZ_DEST) sa-compile sa-learn sa-update spamassassin spamc spamd innotop); \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
 	@echo -n "Creating $(PERL_SA_RULES)..."; \
-	(tar cfz $(PERL_SA_RULES) sa-rules); \
+	(tar cfz $(PERL_SA_RULES) spamassassin); \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
-	rm -rf sa-rules;
+	rm -rf spamassassin;
 	rm -rf spamassassin;
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)/*
 
