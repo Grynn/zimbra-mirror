@@ -43,6 +43,8 @@ public class CreateAllDayAppointment extends CalendarWorkWeekTest {
 	)
 	public void CreateAllDayAppointment_01() throws HarnessException {
 		
+		allDayTest = true;
+		
 		// Create appointment
 		AppointmentItem appt = new AppointmentItem();
 		Calendar now = this.calendarWeekDayUTC;

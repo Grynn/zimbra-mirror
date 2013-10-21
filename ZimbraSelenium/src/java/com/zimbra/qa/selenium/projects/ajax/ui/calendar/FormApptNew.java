@@ -1096,15 +1096,17 @@ public class FormApptNew extends AbsForm {
 				this.zKeyboard.zSelectAll();
 				this.sTypeDateTime(locator, value);
 			} else {
-				this.sType(locator, value);
+				this.sType(locator, value);				
 			}
-			SleepUtil.sleepSmall();
 
 			if (field == Field.Attendees || field == Field.Optional
 					|| field == Field.Location || field == Field.Equipment) {
+				SleepUtil.sleepMedium();
 				this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
+				SleepUtil.sleepSmall();
 			}
 		}
+		SleepUtil.sleepSmall();
 		this.zWaitForBusyOverlay();
 	}
 

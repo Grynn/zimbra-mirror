@@ -15,20 +15,11 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
 import java.awt.event.KeyEvent;
-import java.util.*;
-import org.apache.commons.lang.StringUtils;
-import org.seleniumhq.jetty7.util.log.Log;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
-import com.zimbra.qa.selenium.framework.core.SeleniumService;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew.Locators;
 
-@SuppressWarnings("unused")
 public class QuickAddAppointment extends AbsTab {
 
 	public static class Locators {
@@ -128,6 +119,8 @@ public class QuickAddAppointment extends AbsTab {
 	 */
 	public void zFillField(Field field, String value) throws HarnessException {
 		
+		SleepUtil.sleepMedium();
+		
 		tracer.trace("Set " + field + " to " + value);
 
 		String locator = null;
@@ -211,7 +204,8 @@ public class QuickAddAppointment extends AbsTab {
 			zRecurringOptions(locator, value, isRepeat);
 		} else {
 		    if(ZimbraSeleniumProperties.isWebDriver()){
-			this.clearField(locator);
+		    	this.clearField(locator);
+		    	SleepUtil.sleepSmall();
 		    }
 		    this.sType(locator, value);
 		}
@@ -278,6 +272,8 @@ public class QuickAddAppointment extends AbsTab {
 	
 	public void zFill(IItem item) throws HarnessException {
 		
+		SleepUtil.sleepSmall();
+		
 		logger.info(myPageName() + ".zFill(ZimbraItem)");
 		logger.info(item.prettyPrint());
 
@@ -307,13 +303,21 @@ public class QuickAddAppointment extends AbsTab {
 		// Start date-time
 		if (appt.getStartTime() != null) {
 			zFillField(Field.StartDate, appt.getStartTime());
-			zFillField(Field.StartTime, appt.getStartTime());
+			
+			// web driver fails for all day appointment
+			if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.quickadd.CreateAllDayAppointment.allDayTest = false) {
+				zFillField(Field.StartTime, appt.getStartTime());
+			}	
 		}
 
 		// End date-time
 		if (appt.getEndTime() != null) {
 			zFillField(Field.EndDate, appt.getEndTime());
-			zFillField(Field.EndTime, appt.getEndTime());
+			
+			// web driver fails for all day appointment
+			if (com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.quickadd.CreateAllDayAppointment.allDayTest = false) {
+				zFillField(Field.EndTime, appt.getEndTime());
+			}	
 		}
 
 		// Calendar
