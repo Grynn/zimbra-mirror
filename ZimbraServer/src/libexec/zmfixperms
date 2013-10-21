@@ -477,8 +477,8 @@ fi
 if [ -L ${zimbra_home}/jetty ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/jetty"
 
-  if [ ! -d "${zimbra_home}/data/libreoffice" ]; then
-    mkdir -p ${zimbra_home}/data/libreoffice
+  if [ ! -d "${zimbra_home}/data/tmp/libreoffice" ]; then
+    mkdir -p ${zimbra_home}/data/tmp/libreoffice
     chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/tmp/libreoffice
   fi
   chown  ${root_user}:${root_group} /opt/zimbra/jetty-* 2> /dev/null
