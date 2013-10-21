@@ -27,7 +27,8 @@ import java.util.*;
  */
 public class CalendarWorkWeekTest extends AjaxCommonTest {
 	
-	public static boolean organizerTest;
+	public static boolean organizerTest = false;
+	public static boolean allDayTest = false;
 	
 	protected Calendar calendarWeekDayUTC = null;
 	
