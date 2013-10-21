@@ -27,7 +27,6 @@ import com.zimbra.qa.selenium.framework.util.ZTimeZone;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.CalendarWorkWeekTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
@@ -137,11 +136,10 @@ public class ReplyToAll extends CalendarWorkWeekTest {
         // Refresh the view
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
    
-        // Verify if Optional attendee appears in the CC feild when organizer repliles all to meeting  
+        // Verify if Optional attendee appears in the CC feild when organizer replies all to meeting  
         FormMailNew mailComposeForm = (FormMailNew)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK,Button.O_REPLY_TO_ALL_MENU, apptSubject);
-    
-        //String userInCcField = mailComposeForm.sGetText(Locators.CcField);
-		//ZAssert.assertStringContains(apptAttendee2, userInCcField, "Verify the optional attendee appears in the CC field");
+        String userInCcField = mailComposeForm.ZGetFieldValue(Field.Cc);
+		ZAssert.assertStringContains(apptAttendee2, userInCcField, "Verify the optional attendee appears in the CC field");
 		
 	}
 }

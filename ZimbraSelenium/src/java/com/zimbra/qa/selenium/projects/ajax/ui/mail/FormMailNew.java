@@ -83,7 +83,7 @@ public class FormMailNew extends AbsForm {
 		public static final String zBubbleToField		= "css=[id^=zv__COMPOSE][id$=_to_cell]";
 		public static final String zBubbleCcField		= "css=[id^=zv__COMPOSE][id$=_cc_cell]";
 		public static final String zBubbleBccField		= "css=[id^=zv__COMPOSE][id$=_bcc_cell]";
-		
+		public static final String CcField              = "css= td[id='zv__COMPOSE-1_cc_cell']  div[class='addrBubbleContainer']";
 	}
 
 	public static class Field {
@@ -1287,6 +1287,35 @@ public class FormMailNew extends AbsForm {
 		this.sMouseOver(entry.getLocator() + " td + td");
 		this.zWaitForBusyOverlay();
 		
+	}
+
+	public String ZGetFieldValue(Field field) throws HarnessException {
+		String locator = null;
+		String fieldValue= null;
+
+		if ( field == Field.Cc ) {	
+			locator = Locators.CcField;
+			
+		} else {
+			
+			throw new HarnessException("no logic defined for field "+ field);
+			
+		}
+
+		// Make sure something was set
+		if ( locator == null )
+			throw new HarnessException("locator was null for field = "+ field);
+		
+		// Make sure the field is present
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Unable to find the field = "+ field +" using locator = "+ locator);
+		
+		// Get the field value
+		fieldValue = this.sGetText(locator);
+		logger.info("DisplayMail.ZGetFieldValue(" + field + ") = " + fieldValue);
+		return(fieldValue);
+
+
 	}
 
 	
