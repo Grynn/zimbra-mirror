@@ -30,7 +30,6 @@ public class ZUserAgentBean {
     boolean isOsWindows = false;
     boolean isOsLinux = false;
     boolean isOsAndroid = false;
-    boolean isAndroidTablet = false;
     boolean isNav  = false;
     boolean isIE = false;
     boolean isModernIE = false;
@@ -46,6 +45,7 @@ public class ZUserAgentBean {
     boolean isIPhone = false;
     boolean isIPod = false;
     boolean isTouchiPad = false;
+    boolean isMobile = false;
 
     // Refer bug 80330 for details.
     @Deprecated
@@ -127,7 +127,7 @@ public class ZUserAgentBean {
                 } else if ((index = token.indexOf("netscape/")) != -1){
                     trueNs = true;
                     browserVersion = new Version(token.substring(index + 9));
-                } else if ((index = token.indexOf("safari/")) != -1){
+                } else if (token.indexOf("safari/") != -1){
                     isSafari = true;
                 } else if ((index = token.indexOf("chrome/")) != -1){
                     isChrome = true;
@@ -141,12 +141,11 @@ public class ZUserAgentBean {
                     isOsLinux = true;
                 }else if (token.indexOf("android") != -1){
                     isOsAndroid = true;
-                    isAndroidTablet = true;
                 }else if ((index = token.indexOf("version/")) != -1){
                     //In case of safari, get the browser version here
                     browserVersion = new Version(token.substring(index + 8));
-                }else if (token.indexOf("mobile") != -1 && isOsAndroid) {
-                    isAndroidTablet = false;
+                }else if (token.indexOf("mobile") != -1) {
+                    isMobile = true;
                 }
 
                 token = agtArr.hasMoreTokens() ? agtArr.nextToken() : null;
@@ -182,8 +181,6 @@ public class ZUserAgentBean {
 
     public boolean getIsOsAndroid() { return isOsAndroid; }
 
-    public boolean getIsAndroidTablet() { return isAndroidTablet; }
-    
     public boolean getIsOpera() { return isOpera; }
     
     public boolean getIsSafari() { return isSafari; }
@@ -272,6 +269,8 @@ public class ZUserAgentBean {
     public boolean getIsiPad() { return isIPad; }
 
     public boolean getIsTouchiPad() { return isTouchiPad; }
+
+    public boolean getIsMobile() { return isMobile; }
 
     public static class Version {
         
