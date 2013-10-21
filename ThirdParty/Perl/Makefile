@@ -522,7 +522,7 @@ tarball:
 	(tar cfz $(PERL_SA_RULES) spamassassin); \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
 	rm -rf spamassassin;
-	rm -rf spamassassin;
+	rm -rf sa-rules;
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)/*
 
 $(PERL_TGZ_DEST_DIR):
