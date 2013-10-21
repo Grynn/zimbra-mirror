@@ -18,7 +18,7 @@ use lib '/opt/zimbra/zimbramon/lib';
 use Getopt::Long;
 
 if ( ! -d "/opt/zimbra/conf/spamassassin" ) {
-  print "ERROR: openldap does not appear to be installed - exiting\n";
+  print "ERROR: SpamAssassin does not appear to be installed - exiting\n";
   exit(1);
 }
 
