@@ -1459,4 +1459,16 @@ public class FormApptNew extends AbsForm {
 	    confirmClose.zClickButton(Button.B_CANCEL);	
 	}
 	
+	public boolean zVerifyComposeFormatHTML()throws HarnessException {
+		String disappeared = sGetEval("window.document.getElementsByClassName('DwtHtmlEditorTextArea')[0].style.display");
+		
+		// if display proerty returns 'none' it is HTML compose format else it is Plain text format
+		if (disappeared.equalsIgnoreCase("none")){
+			return true;
+		}else{
+		   return false;
+		
+		}
+		
+	}
 }
