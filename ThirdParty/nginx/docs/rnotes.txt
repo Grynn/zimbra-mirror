@@ -1,0 +1,122 @@
+Here is some info about Nginx lookup, load balancing -https://wiki.eng.vmware.com/Zimbra/Admin/Proxy/Nginx_Lookup
+http://stackoverflow.com/questions/7325211/tuning-nginx-worker-process-to-obtain-100k-hits-per-min
+http://blog.martinfjordvald.com/2011/04/optimizing-nginx-for-high-traffic-loads/
+
+
+For kerbros based auth pls refer to http://wiki.zimbra.com/wiki/Running_Kerberos_with_Zimbra_Collaboration_Suite
+More Nginx documentation in ~p4/main/ThirdParty/nginx/docs. I would recommend to read everything.
+
+
+I'm making this writing assuming you'll be running Nginx, Memcached and ZimbraServer on the same machine or VM. You could run this step-up over different machines as well.
+
+
+
+How to install Nginx LookUp Extension:
+1. Download ~p4/main/ZimbraNginxLookup
+2. You need to have a ZimbraServer running on the machine.
+3. Then Run "ant deploy" in ~p4/main/ZimbraNginxLookup which deploys the extension file under /opt/zimbra/lib/ext/
+
+
+How to debug:
+Debugging steps for ZimbraNginxLookup is similar to ZimbraServer. I would recommend eclipse for debugging rather than relying on Zimbra logs.
+
+
+
+How to test Zimbra LookUP Extension:
+curl -vv -H "Auth-Method: username" -H "Auth-Pass: _password_" -H "Auth-Protocol: imap" -H "Auth-User: user1" http://localhost:7072/service/extension/nginx-lookup
+
+
+How to install Nginx:
+
+
+
+For main branch based Nginx installation use UBUNTU 12.04 LTS and for HELIX based installation use Ubuntu 10.04.4 LTS
+
+
+
+Make sure your OS version is listed in ZimbraBuild/rpmconf/Build/get_plat_tag.sh otherwise just add the entry to the shell script and check-in the code to perforce.
+
+
+
+1. Download the following modules to your machine 
+    ~p4/main/ThirdParty
+     ~p4/main/ThirdPartyBuilds
+
+
+2. Go to  ~p4/main/ThirdParty and then install the modules in the same order as follows.
+
+
+
+  . 
+
+sudo apt-get install ant ant-optional libtool autoconf bison flex \ 
+
+                       g++ patch libncurses5-dev zlib1g-dev \ 
+
+                       libexpat1-dev libpcre3-dev libpopt-dev
+
+
+~p4/main/ThirdParty/libtools
+~p4/main/ThirdParty/libxml2
+~p4/main/ThirdParty/openssl
+~p4/main/ThirdParty/heimdal
+~p4/main/ThirdParty/curl
+~p4/main/ThirdParty/cyrusl-sasl
+~p4/main/ThirdParty/memcached
+
+
+3. Then install nginx in ~p4/main/ThirdParty/nginx -> just run make file, it will automatically pick the latest version of Nginx inside /nginx/* directory and installs the binary under /opt/zimbra/nginx.
+
+
+4. Copy the attached nginx.conf file to /opt/zimbra/conf/
+
+
+5. Create nginx auth certificate using the steps in ~p4/main/ZimbraServer/docs/certauth.txt and name/rename the files as nginx.crt, nginx.csr, nginx.key
+
+
+6. Create a 'zimbra' username on the machine where nginx is supposed to run.
+
+
+7. Create directories /opt/zimbra/conf/nginx/includes/ and /opt/zimbra/conf/nginx/templates/ for template files
+
+
+8. Copy the source template files from ~p4/main/ZimbraServer/conf/nginx/* to /opt/zimbra/conf/nginx/templates/
+
+
+9. Before we generate nginx template files using the source template files copied in the above step we need to set some LDAP attributes like nginx http/https ports, IMAP/POP3 (s) ports and few other settings. Most of the attributes are self explanatory. I wrote a perl script with all the test LDAP attribute values to set - Pls run the attached nginx-zimbra-config.pl on the machine where you've LDAP server running to set those LDAP attributes. Pls review the perl script and change it when ever required.
+
+
+10. Now create Nginx template files by calling /opt/zimbra/bin/zmproxyconfgen -s "LDAP_SERVER_URL" (Try /opt/zimbra/bin/zmproxyconfgen -help to get to know other options)
+
+
+11. Now start memcached on port 11211. Go to directory -> /opt/zimbra/memcached/bin and then run ./memcached -p 11211
+
+
+12. Now start Nginx. Go to directory -> /opt/zimbra/nginx/sbin and then run ./nginx -c /opt/zimbra/conf/nginx.conf
+
+
+13. To view/purge routes stored in memcached use the proxy purge tool -> /opt/zimbra/bin/zmproxypurge
+
+
+How to debug Nginx:
+
+
+Nginx is a non blocking IO based server. You can debug it using gdb or eclipse. If you prefer to use eclipse follow the following steps.
+
+
+1. File-> New -> c project. In Project type-> Empty project.
+    Uncheck default location and browse for the code location in ~p4/main/ThirdParty/nginx/nginx-1.2.0-zimbra and same way do it for nginx executable in /opt/zimbra/nginx/sbin/nginx.
+
+
+2. Debug configurations. 
+    a. Copy the attached nginx.debug.conf to /opt/zimbra/conf
+    b. Create a new C/C++ Application under debug configurations. Browse the C/C++ application to nginx bianary located in /opt/zimbra/nginx/sbin/nginx
+    c. Browse the project pointing to the source code in ~p4/main/ThirdParty/nginx/nginx-1.2.0-zimbra
+    d. Set program arguments as "-c /opt/zimbra/conf/nginx.debug.conf"
+
+
+3. If any Seg fault happens while running nginx from eclipse, it will automatically breakpoint there.
+
+
+Pls feel free to ping me if you've any questions.
+
