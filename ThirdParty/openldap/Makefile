@@ -49,6 +49,7 @@ build:
 	patch -g0 -N -p1 < ../patches/ITS5037.patch; \
 	$(PATCH) \
 	patch -g0 -N -p1 < ../patches/leopard.fix; \
+	patch -g0 -N -p1 < ../patches/index-slot-increase.patch; \
 	$(LDFLAGS) \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) \
 	CPPFLAGS="-I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include \
