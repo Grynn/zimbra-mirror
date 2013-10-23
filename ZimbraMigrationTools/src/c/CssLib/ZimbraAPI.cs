@@ -3197,6 +3197,9 @@ public class ZimbraAPI
         string parentPath = "";
         string folderName = "";
 
+        if ((Langid > 0) && ((GetSpecialFolderNum(FolderPath).Length > 0)))
+            return 0;
+
         if (!GetParentAndChild("/", FolderPath, out parentPath, out folderName))
             return FOLDER_CREATE_FAILED_SYN;
 
