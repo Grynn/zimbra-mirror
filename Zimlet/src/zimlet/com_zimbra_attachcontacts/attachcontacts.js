@@ -204,9 +204,9 @@ AttachContactsZimlet.prototype._openCompose = function() {
  * Overrides method in ZmListController
  */
 AttachContactsZimlet.prototype._setContactText =
-function(isContact) {
+function(contact) {
 	if (this._participantActionMenu) {
-		this._participantActionMenu.enable(AttachContactsZimlet.SEND_CONTACTS, isContact); // Set enabled/disabled depending on whether we have a contact for the participant
+		this._participantActionMenu.enable(AttachContactsZimlet.SEND_CONTACTS, contact && !contact.isGal); // Set enabled/disabled depending on whether we have a contact for the participant
 	}
 	arguments.callee.func.apply(this, arguments); // Call overridden function
 };
