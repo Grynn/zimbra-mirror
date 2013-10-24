@@ -510,7 +510,7 @@ function(object, context, x, y, span) {
 	this.y = y;
 	this.tooltip = tooltip;
 	//this is used by mail/conv list
-    Dwt.setHandler(tooltip._div, DwtEvent.ONMOUSEOUT, AjxCallback.simpleClosure(this.hoverOut, this));
+    tooltip.setListener(DwtEvent.ONMOUSEOUT, new AjxListener(this, this.hoverOut));
 
 	var addr = (object instanceof AjxEmailAddress) ? object.address : object;
 	var isMailTo = this.isMailToLink(addr);

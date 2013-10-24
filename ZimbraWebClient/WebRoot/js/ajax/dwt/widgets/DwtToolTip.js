@@ -30,6 +30,8 @@ DwtToolTip = function(shell, className, dialog) {
 	Dwt.setZIndex(this._div, Dwt.Z_HIDDEN);
 	Dwt.setLocation(this._div, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 
+	this._eventMgr = new AjxEventMgr();
+
     // create html
     // NOTE: This id is ok because there's only ever one instance of a tooltip
     var templateId = "dwt.Widgets#DwtToolTip";
@@ -44,6 +46,12 @@ DwtToolTip = function(shell, className, dialog) {
 
     Dwt.setHandler(this._div, DwtEvent.ONMOUSEOVER, AjxCallback.simpleClosure(this._mouseOverListener, this));
     Dwt.setHandler(this._div, DwtEvent.ONMOUSEOUT, AjxCallback.simpleClosure(this._mouseOutListener, this));
+
+	var events = [DwtEvent.ONCLICK,DwtEvent.ONDBLCLICK,DwtEvent.ONMOUSEDOWN,DwtEvent.ONMOUSEENTER,DwtEvent.ONMOUSELEAVE,DwtEvent.ONMOUSEMOVE,DwtEvent.ONMOUSEUP,DwtEvent.ONMOUSEWHEEL,DwtEvent.ONSCROLL];
+	for (var i=0; i<events.length; i++) {
+		var event = events[i];
+    	Dwt.setHandler(this._div, event, AjxCallback.simpleClosure(this.notifyListeners, this, [event]));
+	}
 };
 
 DwtToolTip.prototype.isDwtToolTip = true;
@@ -205,6 +213,7 @@ function(ev) {
             callback.run();
 		}
     }
+	this.notifyListeners(DwtEvent.ONMOUSEOVER);
 };
 
 DwtToolTip.prototype._mouseOutListener = 
@@ -215,6 +224,7 @@ function(ev) {
 	// We sometimes get mouseover events even though the cursor is inside the tooltip, so double-check before popping down
 	if (ev.clientX <= location.x || ev.clientX >= (location.x + size.x) || ev.clientY <= location.y || ev.clientY >= (location.y + size.y)) {
 		this.popdown();
+		this.notifyListeners(DwtEvent.ONMOUSEOUT);
 	}
 };
 
@@ -222,3 +232,38 @@ DwtToolTip.prototype.getHovered =
 function() {
 	return this._hovered;
 };
+
+
+// The com_zimbra_email zimlet wants to put a listener on our mouseout event, but overwriting the existing handler is a no-no
+// and we actually only want that event when the double-check above succeeds. Let API users add event listeners in a more clean way.
+DwtToolTip.prototype.addListener =
+function(eventType, listener, index) {
+	return this._eventMgr.addListener(eventType, listener, index);
+};
+
+DwtToolTip.prototype.setListener =
+function(eventType, listener, index) {
+	this.removeAllListeners(eventType);
+	return this._eventMgr.addListener(eventType, listener, index);
+};
+
+DwtToolTip.prototype.removeListener =
+function(eventType, listener) {
+	return this._eventMgr.removeListener(eventType, listener);
+};
+
+DwtToolTip.prototype.removeAllListeners =
+function(eventType) {
+	return this._eventMgr.removeAll(eventType);
+};
+
+DwtToolTip.prototype.isListenerRegistered =
+function(eventType) {
+	return this._eventMgr.isListenerRegistered(eventType);
+};
+
+DwtToolTip.prototype.notifyListeners =
+function(eventType, event) {
+	return this._eventMgr.notifyListeners(eventType, event);
+};
+
