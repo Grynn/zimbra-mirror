@@ -16,6 +16,8 @@
  * 
  */
 package com.zimbra.qa.selenium.framework.items;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.LogManager;
@@ -27,7 +29,6 @@ import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 
 
 /**
@@ -36,20 +37,10 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST
  */
 public class FolderItem extends AFolderItem implements IItem, IOctListViewItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
-	private boolean _isDesktopClientFolder = false;
-	private boolean _isDesktopLocalFolder = false;
     
 	// a place holder for virtual folder "Distribution Lists"
 	public static FolderItem DistributionListFolder= new FolderItem();
     
-	public boolean isDesktopClientFolder() {
-      return _isDesktopClientFolder;
-   }
-
-	public boolean isDesktopClientLocalFolder() {
-      return _isDesktopLocalFolder;
-   }
-
 	/**
 	 * Logical objects that represent the default system folders
 	 * @author Matt Rhoades
@@ -168,40 +159,31 @@ public class FolderItem extends AFolderItem implements IItem, IOctListViewItem {
 	}
 
 	/**
-    * Delete a folder using SOAP with the default SERVER type destination host
-    * @param account Account used for deleting the folder
-    * @param folderName Folder name to be deleted
-    * @throws HarnessException
-    */
-	public static void deleteUsingSOAP(ZimbraAccount account, String folderName)
-	      throws HarnessException {
-	   deleteUsingSOAP(account, folderName, SOAP_DESTINATION_HOST_TYPE.SERVER, null);
-	}
-
-	/**
-	 * Delete a folder using SOAP with specific account name to be added to SOAP context
+	 * Delete a folder using SOAP with the default SERVER type destination host
 	 * @param account Account used for deleting the folder
 	 * @param folderName Folder name to be deleted
-	 * @param destType Destination host type: CLIENT or SERVER
-	 * @param accountName Account name to be added to SOAP context
 	 * @throws HarnessException
 	 */
-	public static void deleteUsingSOAP(ZimbraAccount account, String folderName,
-	      SOAP_DESTINATION_HOST_TYPE destType, String accountName) throws HarnessException {
-	   account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'/>", destType, accountName);
-	   String id = account.soapSelectValue("//mail:folder[@name='"+ folderName +"']", "id");
-	   account.soapSend("<FolderActionRequest xmlns='urn:zimbraMail'>" +
-	                       "<action id='" + id + "' op='delete'/>" +
-	                    "</FolderActionRequest>", destType);
-	   Element[] response = account.soapSelectNodes("//mail:FolderActionResponse");
-      if ( response.length != 1 ) {
-         throw new HarnessException("Unable to delete folder "+ account.soapLastResponse());
-      }
+	public static void deleteUsingSOAP(ZimbraAccount account, String folderName)
+			throws HarnessException {
 
-      Object[] params = {"//mail:folder[@name='"+ folderName +"']", "id"};
-      GeneralUtility.waitFor(null,
-            account, false, "soapSelectValue", params, WAIT_FOR_OPERAND.EQ, null, 30000, 1000);
-   }
+
+		account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'/>");
+		String id = account.soapSelectValue("//mail:folder[@name='"+ folderName +"']", "id");
+
+		account.soapSend(
+				"<FolderActionRequest xmlns='urn:zimbraMail'>" +
+					"<action id='" + id + "' op='delete'/>" +
+				"</FolderActionRequest>");
+		Element[] response = account.soapSelectNodes("//mail:FolderActionResponse");
+		if ( response.length != 1 ) {
+			throw new HarnessException("Unable to delete folder "+ account.soapLastResponse());
+		}
+
+		Object[] params = {"//mail:folder[@name='"+ folderName +"']", "id"};
+		GeneralUtility.waitFor(null,
+				account, false, "soapSelectValue", params, WAIT_FOR_OPERAND.EQ, null, 30000, 1000);
+	}
 
 	/**
 	 * Import a FolderItem specified in a GetFolderResponse
@@ -213,10 +195,7 @@ public class FolderItem extends AFolderItem implements IItem, IOctListViewItem {
 	 * @return
 	 * @throws HarnessException
 	 */
-	public static FolderItem importFromSOAP(Element response,
-	      boolean isDesktopFolder,
-	      boolean isDesktopLocalFolder)
-	throws HarnessException {
+	public static FolderItem importFromSOAP(Element response) throws HarnessException {
 		if ( response == null )
 			throw new HarnessException("Element cannot be null");
 
@@ -238,10 +217,6 @@ public class FolderItem extends AFolderItem implements IItem, IOctListViewItem {
 		try {
 
 			item = CreateFolderItem(fElement);
-
-			item._isDesktopClientFolder = isDesktopFolder;
-			item._isDesktopLocalFolder = isDesktopLocalFolder;
-			
 			return (item);
 			
 		} catch (NumberFormatException e) {
@@ -252,11 +227,6 @@ public class FolderItem extends AFolderItem implements IItem, IOctListViewItem {
 			if (item != null)
 				logger.info(item.prettyPrint());
 		}
-	}
-
-	public static FolderItem importFromSOAP(Element response)
-   throws HarnessException {
-	   return importFromSOAP(response, false, false);
 	}
 
 	protected static FolderItem CreateFolderItem(Element e)
@@ -280,20 +250,6 @@ public class FolderItem extends AFolderItem implements IItem, IOctListViewItem {
 	}	
 
 	/**
-    * Import a system folder (i.e. Inbox, Sent, Trash, Contacts, etc.) with specified destination type
-    * @param account
-    * @param folder
-    * @param destType Destination Type
-    * @param accountName Account Name to get the folder from
-    * @return
-    * @throws HarnessException
-    */
-   public static FolderItem importFromSOAP(ZimbraAccount account, SystemFolder folder,
-         SOAP_DESTINATION_HOST_TYPE destType, String accountName) throws HarnessException {
-      return (importFromSOAP(account, folder.name, destType, accountName));
-   }
-
-	/**
 	 * Import a system folder (i.e. Inbox, Sent, Trash, Contacts, etc.) with default destination type: SERVER
 	 * @param account
 	 * @param folder
@@ -312,24 +268,10 @@ public class FolderItem extends AFolderItem implements IItem, IOctListViewItem {
     * @throws HarnessException
     */
 	public static FolderItem importFromSOAP(ZimbraAccount account, String name) throws HarnessException {
-	   return importFromSOAP(account, name, SOAP_DESTINATION_HOST_TYPE.SERVER, null);
-	}
-
-	/**
-	 * Import a folder by name
-	 * @param account
-	 * @param name Folder name to be imported
-	 * @param destType Destination Host Type: CLIENT or SERVER
-	 * @param accountName Account Name to be added in SOAP context while importing
-	 * @return (FolderItem)
-	 * @throws HarnessException
-	 */
-	public static FolderItem importFromSOAP(ZimbraAccount account, String name,
-	      SOAP_DESTINATION_HOST_TYPE destType, String accountName) throws HarnessException {
 		logger.debug("importFromSOAP("+ account.EmailAddress +", "+ name +")");
 		
 		// Get all the folders
-		account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'/>", destType, accountName);
+		account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'/>");
 		String id = account.soapSelectValue("//mail:folder[@name='"+ name +"']", "id");
 
 		// cannot find folder name on the server
@@ -341,37 +283,11 @@ public class FolderItem extends AFolderItem implements IItem, IOctListViewItem {
 		account.soapSend(
 				"<GetFolderRequest xmlns='urn:zimbraMail'>" +
 					"<folder l='"+ id +"'/>" +
-				"</GetFolderRequest>",
-				destType, accountName);
+				"</GetFolderRequest>");
 		Element response = account.soapSelectNode("//mail:GetFolderResponse", 1);
 
-		return (importFromSOAP(response,
-		      destType == SOAP_DESTINATION_HOST_TYPE.CLIENT,
-		      accountName!=null && accountName.equals(ZimbraAccount.clientAccountName)));
+		return (importFromSOAP(response));
 	}
-
-	/**
-	 * Get the parent FolderItem
-	 * @param account 
-	 * @param destType Destination Host Type: CLIENT or SERVER
-	 * @param accountName Account Name to be added in SOAP context while importing
-	 * @return parent FolderItem
-	 * @throws HarnessException
-	 */
-	public FolderItem getParentFolder(ZimbraAccount account,
-	      SOAP_DESTINATION_HOST_TYPE destType, String accountName) throws HarnessException {
-	   // Get just the folder specified
-      account.soapSend(
-            "<GetFolderRequest xmlns='urn:zimbraMail'>" +
-               "<folder l='" + super.getParentId() + "'/>" +
-            "</GetFolderRequest>",
-            destType, accountName);
-      Element response = account.soapSelectNode("//mail:GetFolderResponse", 1);
-
-      return (importFromSOAP(response,
-            destType == SOAP_DESTINATION_HOST_TYPE.CLIENT,
-            (accountName !=null && accountName.equals(ZimbraAccount.clientAccountName))));
-	 }
 
 	@Override
 	public String prettyPrint() {

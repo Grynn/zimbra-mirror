@@ -22,7 +22,6 @@ import org.apache.log4j.*;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 
 
 /**
@@ -121,24 +120,10 @@ public class FolderMountpointItem extends FolderItem {
 
 
 	public static FolderMountpointItem importFromSOAP(ZimbraAccount account, String name) throws HarnessException {
-	   return importFromSOAP(account, name, SOAP_DESTINATION_HOST_TYPE.SERVER, null);
-	}
-
-	/**
-	 * Import a folder by name
-	 * @param account
-	 * @param name Folder name to be imported
-	 * @param destType Destination Host Type: CLIENT or SERVER
-	 * @param accountName Account Name to be added in SOAP context while importing
-	 * @return (FolderMountpointItem)
-	 * @throws HarnessException
-	 */
-	public static FolderMountpointItem importFromSOAP(ZimbraAccount account, String name,
-	      SOAP_DESTINATION_HOST_TYPE destType, String accountName) throws HarnessException {
 		logger.debug("importFromSOAP("+ account.EmailAddress +", "+ name +")");
 		
 		// Get all the folders
-		account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'/>", destType, accountName);
+		account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'/>");
 		String id = account.soapSelectValue("//mail:link[@name='"+ name +"']", "id");
 
 		if (id == null) {
@@ -149,8 +134,7 @@ public class FolderMountpointItem extends FolderItem {
 		account.soapSend(
 				"<GetFolderRequest xmlns='urn:zimbraMail'>" +
 					"<folder l='"+ id +"'/>" +
-				"</GetFolderRequest>",
-				destType, accountName);
+				"</GetFolderRequest>");
 		Element response = account.soapSelectNode("//mail:GetFolderResponse", 1);
 				
 		return (importFromSOAP(response));

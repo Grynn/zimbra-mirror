@@ -20,7 +20,6 @@ import org.apache.log4j.*;
 
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 
 /**
  * Used to define a Zimbra Contact
@@ -257,15 +256,6 @@ public class ContactItem implements IItem {
 
 	public static ContactItem importFromSOAP(ZimbraAccount account, String query)
 			throws HarnessException {
-		return importFromSOAP(
-				account,
-				query,
-				SOAP_DESTINATION_HOST_TYPE.SERVER,
-				null);
-	}
-
-	public static ContactItem importFromSOAP(ZimbraAccount account,
-			String query, SOAP_DESTINATION_HOST_TYPE destType, String accountName) throws HarnessException {
 
 		try
 		{
@@ -273,9 +263,7 @@ public class ContactItem implements IItem {
 			account.soapSend(
 					"<SearchRequest xmlns='urn:zimbraMail' types='contact'>" +
 							"<query>"+ query +"</query>" +
-							"</SearchRequest>",
-							destType,
-							accountName);
+							"</SearchRequest>");
 
 			Element[] results = account.soapSelectNodes("//mail:SearchResponse/mail:cn");
 			if (results.length == 0) {
@@ -289,9 +277,7 @@ public class ContactItem implements IItem {
 			account.soapSend(
 					"<GetContactsRequest xmlns='urn:zimbraMail' >" +
 							"<cn id='"+ id +"'/>" +
-							"</GetContactsRequest>",
-							destType,
-							accountName);
+							"</GetContactsRequest>");
 			Element getContactsResponse = account.soapSelectNode("//mail:GetContactsResponse", 1);
 
 			// Using the response, create this item

@@ -27,7 +27,6 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 
 
 /**
@@ -359,21 +358,12 @@ public class MailItem implements IItem {
 
 	public static MailItem importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
 		
-		return importFromSOAP(account, query, SOAP_DESTINATION_HOST_TYPE.SERVER, null);
-
-	}
-
-	public static MailItem importFromSOAP(ZimbraAccount account, String query,
-	      SOAP_DESTINATION_HOST_TYPE destType, String accountName) throws HarnessException {
-
 	   try {
 
          account.soapSend(
                "<SearchRequest xmlns='urn:zimbraMail' types='message'>" +
                   "<query>"+ query +"</query>" +
-               "</SearchRequest>",
-               destType,
-               accountName);
+               "</SearchRequest>");
          
          Element[] results = account.soapSelectNodes("//mail:SearchResponse/mail:m");
          if (results.length != 1)
@@ -385,9 +375,7 @@ public class MailItem implements IItem {
          account.soapSend(
                "<GetMsgRequest xmlns='urn:zimbraMail'>" +
                      "<m id='"+ id +"' />" +
-                   "</GetMsgRequest>",
-                   destType,
-                   accountName);
+                   "</GetMsgRequest>");
          Element getMsgResponse = account.soapSelectNode("//mail:GetMsgResponse", 1);
          
          // Using the response, create this item
