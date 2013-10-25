@@ -116,22 +116,6 @@ public class ZimbraAccount {
 	}
 
 	/**
-	 * Get the user account logged into ZDC being tested
-	 * @return the ZimbraAccount object representing the test account
-	 */
-	public static synchronized ZimbraAccount AccountZDC() {
-		if ( _AccountZDC == null ) {
-			_AccountZDC = new ZimbraAccount();
-			_AccountZDC.provision();
-
-			logger.debug("Authenticating Mail server");
-			_AccountZDC.authenticate();
-
-		}
-		return (_AccountZDC);
-	}
-
-	/**
 	 * This is to reset the Client's authentication.
 	 * Note: To be used when terminating client app.
 	 */
@@ -158,12 +142,6 @@ public class ZimbraAccount {
 		}
 		return MyClientAuthToken;
 	}
-
-	public static synchronized void ResetAccountZDC() {
-		logger.warn("AccountZDC is being reset");
-		_AccountZDC = null;
-	}
-	private static ZimbraAccount _AccountZDC = null;
 
 	/**
 	 * Get the user account logged into ZWC being tested
@@ -278,7 +256,6 @@ public class ZimbraAccount {
 		ZimbraAccount._AccountB = null;
 		ZimbraAccount._AccountC = null;
 		ZimbraAccount._AccountHTML = null;
-		ZimbraAccount._AccountZDC = null;
 		ZimbraAccount._AccountZMC = null;
 		ZimbraAccount._AccountZWC = null;
 		ZimbraAccount._AccountZTC = null;

@@ -30,7 +30,6 @@ public class HarnessException extends Exception {
 		ZimbraAccount.ResetAccountZWC();
 		ZimbraAccount.ResetAccountHTML();
 		ZimbraAccount.ResetAccountZMC();
-		ZimbraAccount.ResetAccountZDC();
 		ZimbraAdminAccount.ResetAccountAdminConsoleAdmin();
 		if (ZimbraSeleniumProperties.getAppType() == AppType.ADMIN) {
 			// WORKAROUND for all the dialogs that need to be dismissed
