@@ -402,7 +402,7 @@ ngx_vslprintf(u_char *buf, u_char *last, const char *fmt, va_list args)
                         ui64++;
                         frac = 0;
                     }
-                    }
+                }
 
                 buf = ngx_sprintf_num(buf, last, ui64, zero, 0, width);
 

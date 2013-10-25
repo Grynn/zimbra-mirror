@@ -259,7 +259,7 @@ ngx_http_upstream_header_t  ngx_http_upstream_headers_in[] = {
     { ngx_string("Transfer-Encoding"),
                  ngx_http_upstream_process_transfer_encoding, 0,
                  ngx_http_upstream_ignore_header_line, 0, 0 },
-                 
+
 #if (NGX_HTTP_GZIP)
     { ngx_string("Content-Encoding"),
                  ngx_http_upstream_process_header_line,
@@ -600,7 +600,7 @@ ngx_http_upstream_init_request(ngx_http_request_t *r)
                                                NGX_HTTP_INTERNAL_SERVER_ERROR);
             return;
         }
-        
+
         temp.name = *host;
 
         ctx = ngx_resolve_start(clcf->resolver, &temp);
@@ -683,7 +683,7 @@ ngx_http_upstream_cache(ngx_http_request_t *r, ngx_http_upstream_t *u)
         /* TODO: add keys */
 
         ngx_http_file_cache_create_key(r);
-        
+
         if (r->cache->header_start + 256 >= u->conf->buffer_size) {
             ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
                           "%V_buffer_size %uz is not enough for cache key, "
@@ -696,7 +696,7 @@ ngx_http_upstream_cache(ngx_http_request_t *r, ngx_http_upstream_t *u)
         }
 
         u->cacheable = 1;
-        
+
         switch (ngx_http_test_predicates(r, u->conf->cache_bypass)) {
 
         case NGX_ERROR:
@@ -715,7 +715,7 @@ ngx_http_upstream_cache(ngx_http_request_t *r, ngx_http_upstream_t *u)
         c->min_uses = u->conf->cache_min_uses;
         c->body_start = u->conf->buffer_size;
         c->file_cache = u->conf->cache->data;
-        
+
         c->lock = u->conf->cache_lock;
         c->lock_timeout = u->conf->cache_lock_timeout;
 
@@ -2032,7 +2032,7 @@ ngx_http_upstream_process_body_in_memory(ngx_http_request_t *r,
             break;
         }
     }
-    
+
     if (u->length == 0) {
         ngx_http_upstream_finalize_request(r, u, 0);
         return;

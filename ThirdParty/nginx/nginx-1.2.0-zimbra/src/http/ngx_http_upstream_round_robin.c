@@ -636,7 +636,7 @@ ngx_http_upstream_get_peer(ngx_http_upstream_rr_peers_t *peers)
 
             return n;
         }
-        
+
         if (reset++) {
             return 0;
         }
@@ -670,9 +670,9 @@ ngx_http_upstream_free_round_robin_peer(ngx_peer_connection_t *pc, void *data,
         pc->tries = 0;
         return;
     }
-    
-        peer = &rrp->peers->peer[rrp->current];
-        
+
+    peer = &rrp->peers->peer[rrp->current];
+
     if (state & NGX_PEER_FAILED) {
         now = ngx_time();
 
@@ -695,7 +695,7 @@ ngx_http_upstream_free_round_robin_peer(ngx_peer_connection_t *pc, void *data,
         }
 
         /* ngx_unlock_mutex(rrp->peers->mutex); */
-        
+
     } else {
 
         /* mark peer live if check passed */

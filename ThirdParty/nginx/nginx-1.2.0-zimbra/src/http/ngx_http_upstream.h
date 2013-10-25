@@ -57,7 +57,7 @@ typedef struct {
     ngx_uint_t                       status;
     time_t                           response_sec;
     ngx_uint_t                       response_msec;
-    off_t                           response_length;
+    off_t                            response_length;
 
     ngx_str_t                       *peer;
 } ngx_http_upstream_state_t;
@@ -168,7 +168,7 @@ typedef struct {
     ngx_uint_t                       cache_min_uses;
     ngx_uint_t                       cache_use_stale;
     ngx_uint_t                       cache_methods;
-    
+
     ngx_flag_t                       cache_lock;
     ngx_msec_t                       cache_lock_timeout;
 
@@ -281,7 +281,7 @@ struct ngx_http_upstream_s {
     ngx_http_upstream_resolved_t    *resolved;
 
     ngx_buf_t                        buffer;
-    off_t                           length;
+    off_t                            length;
 
     ngx_chain_t                     *out_bufs;
     ngx_chain_t                     *busy_bufs;

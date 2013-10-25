@@ -429,7 +429,7 @@ cat << END
 
   --add-module=PATH                  enable an external module
 
-   --with-cc=PATH                     set C compiler pathname
+  --with-cc=PATH                     set C compiler pathname
   --with-cpp=PATH                    set C preprocessor pathname
   --with-cc-opt=OPTIONS              set additional C compiler options
   --with-ld-opt=OPTIONS              set additional linker options
@@ -442,7 +442,7 @@ cat << END
   --with-pcre=DIR                    set path to PCRE library sources
   --with-pcre-opt=OPTIONS            set additional build options for PCRE
   --with-pcre-jit                    build PCRE with JIT compilation support
-  
+
   --with-md5=DIR                     set path to md5 library sources
   --with-md5-opt=OPTIONS             set additional build options for md5
   --with-md5-asm                     use md5 assembler sources
