@@ -114,12 +114,12 @@ ngx_mail_imap_init_protocol(ngx_event_t *rev)
 void
 ngx_mail_imap_auth_state(ngx_event_t *rev)
 {
-    u_char                    *p, *dst, *src, *end;
-    ngx_str_t                 *arg;
-    ngx_int_t                  rc;
-    ngx_uint_t                 tag, i;
-    ngx_connection_t          *c;
-    ngx_mail_session_t        *s;
+    u_char              *p, *dst, *src, *end;
+    ngx_str_t           *arg;
+    ngx_int_t            rc;
+    ngx_uint_t           tag, i;
+    ngx_connection_t    *c;
+    ngx_mail_session_t  *s;
 
     c = rev->data;
     s = c->data;
@@ -519,7 +519,7 @@ ngx_mail_imap_authenticate(ngx_mail_session_t *s, ngx_connection_t *c)
         return NGX_ERROR;
     }
 
-     return rc;
+    return rc;
 }
 
 
@@ -548,7 +548,7 @@ ngx_mail_imap_capability(ngx_mail_session_t *s, ngx_connection_t *c)
         }
     }
 #endif
-            
+
     s->text = iscf->capability;
 
     return NGX_OK;
