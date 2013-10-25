@@ -22,7 +22,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
+
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
@@ -79,7 +79,7 @@ public class OpenDocument extends FeatureBriefcaseTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on open in a separate window icon in toolbar
@@ -162,7 +162,7 @@ public class OpenDocument extends FeatureBriefcaseTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Double Click on item in the list view
@@ -228,7 +228,7 @@ public class OpenDocument extends FeatureBriefcaseTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Open Document using Right Click Context Menu

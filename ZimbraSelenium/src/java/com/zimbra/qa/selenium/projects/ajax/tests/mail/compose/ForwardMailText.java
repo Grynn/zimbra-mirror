@@ -74,7 +74,7 @@ public class ForwardMailText extends PrefGroupMailByMessageTest {
 		// Send the message
 		mailform.zSubmit();
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// From the receiving end, verify the message details
 		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountB(), "subject:("+ mail.dSubject +")");

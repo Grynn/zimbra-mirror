@@ -52,7 +52,7 @@ public class ReplyMailText extends PrefGroupMailByMessageTest {
 						"</m>" +
 					"</SendMsgRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Get the mail item for the new message
       MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
@@ -70,7 +70,7 @@ public class ReplyMailText extends PrefGroupMailByMessageTest {
 		// Send the message
 		mailform.zSubmit();
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// From the receiving end, verify the message details
 		// Need 'in:inbox' to seprate the message from the sent message

@@ -69,7 +69,7 @@ public class TagDocument extends FeatureBriefcaseTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Create a tag using GUI
@@ -174,7 +174,7 @@ public class TagDocument extends FeatureBriefcaseTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Tag document selecting pre-existing tag from Toolbar drop down list

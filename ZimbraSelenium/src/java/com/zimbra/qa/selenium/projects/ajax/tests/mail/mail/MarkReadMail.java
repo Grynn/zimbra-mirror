@@ -69,7 +69,7 @@ public class MarkReadMail extends PrefGroupMailByMessageTest {
 		// Wait to read the message
 		SleepUtil.sleep(1000L * (delaySeconds));
 
-      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      
 
 		// Wait the for the client to send the change to the server
 		app.zPageMail.zWaitForBusyOverlay();
@@ -128,7 +128,7 @@ public class MarkReadMail extends PrefGroupMailByMessageTest {
 		// Select the next item immediately
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail2.dSubject);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Verify the message is marked read in the server (flags attribute should not contain (u)nread)
 		mail1 = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject1 +")");
@@ -174,7 +174,7 @@ public class MarkReadMail extends PrefGroupMailByMessageTest {
 		// TODO: need to L10N this
 		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKREAD);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Verify the message is marked read in the server (flags attribute should not contain (u)nread)
 		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");

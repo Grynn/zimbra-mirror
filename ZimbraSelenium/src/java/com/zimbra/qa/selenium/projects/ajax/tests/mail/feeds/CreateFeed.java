@@ -53,7 +53,7 @@ public class CreateFeed extends PrefGroupMailByMessageTest {
 
 		createFolderDialog.zClickButton(Button.B_OK);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Make sure the folder was created on the ZCS server
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);

@@ -54,7 +54,7 @@ public class DragAndDropMessage extends PrefGroupMailByMessageTest {
 		// Click Get Mail button to view folder in list		
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 		FolderItem subfolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
 
 		// Send a message to the account
@@ -87,7 +87,7 @@ public class DragAndDropMessage extends PrefGroupMailByMessageTest {
 					"css=span[id$='"+ mail.getId() +"__su']", // <td id="zlif__TV__12345__su" .../>
 					"css=div[id='zti__main_Mail__"+ subfolder.getId() +"']"); // <div id="zti__main_Mail__67890" .../>
 		
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Get the message, make sure it is in the correct folder
 		app.zGetActiveAccount().soapSend(

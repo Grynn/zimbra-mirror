@@ -57,7 +57,7 @@ public class CreateTag extends AjaxCommonTest {
 		// Fill out the form with the basic details
 		dialog.zSubmit(name);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Make sure the tag was created on the server
 		TagItem tag = app.zPageTasks.zGetTagItem(app.zGetActiveAccount(), name);
@@ -86,7 +86,7 @@ public class CreateTag extends AjaxCommonTest {
 		// Fill out the form with the basic details
 		dialog.zSubmit(name);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		//Need to click on Task folder explicitly so that created tag does show in tag list.
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
@@ -114,7 +114,7 @@ public class CreateTag extends AjaxCommonTest {
 				"<tag name='"+name2+"' color='1' />" +
 		"</CreateTagRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Get the tag
 		TagItem tag2 = TagItem.importFromSOAP(app.zGetActiveAccount(), name2);
@@ -129,7 +129,7 @@ public class CreateTag extends AjaxCommonTest {
 		// Fill out the form with the basic details
 		dialog.zSubmit(name1);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Make sure the tag was created on the server
 		TagItem tag1 = app.zPageTasks.zGetTagItem(app.zGetActiveAccount(), name1);
@@ -153,7 +153,7 @@ public class CreateTag extends AjaxCommonTest {
 		// Fill out the form with the basic details
 		dialog.zSubmit(name);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Make sure the task was created on the server
 		TagItem tag = app.zPageTasks.zGetTagItem(app.zGetActiveAccount(), name);

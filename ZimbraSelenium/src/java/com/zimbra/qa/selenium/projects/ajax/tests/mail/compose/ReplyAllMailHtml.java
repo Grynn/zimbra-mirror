@@ -83,7 +83,7 @@ public class ReplyAllMailHtml extends PrefGroupMailByMessageTest {
 		// Send the message
 		mailform.zSubmit();
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// From the receiving end, verify the message details
 		// Need 'in:inbox' to seprate the message from the sent message

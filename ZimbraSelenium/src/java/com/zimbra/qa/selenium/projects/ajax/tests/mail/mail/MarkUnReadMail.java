@@ -76,7 +76,7 @@ public class MarkUnReadMail extends PrefGroupMailByMessageTest {
 		// TODO: need to L10N this
 		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKUNREAD);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Verify the message is marked read in the server (flags attribute should not contain (u)nread)
 		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
@@ -120,7 +120,7 @@ public class MarkUnReadMail extends PrefGroupMailByMessageTest {
 		// Select the item
 		app.zPageMail.zListItem(Action.A_RIGHTCLICK, Button.O_MARK_AS_UNREAD, mail.dSubject);
 		
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Verify the message is marked read in the server (flags attribute should not contain (u)nread)
 		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");

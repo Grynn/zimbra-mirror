@@ -74,7 +74,7 @@ public class DragAndDropTask extends AjaxCommonTest {
 				+		"</m>"
 				+	"</CreateTaskRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Get the task item for the new task
 		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(),subject);

@@ -105,7 +105,7 @@ public class UnTagFile extends FeatureBriefcaseTest {
 		 * SleepUtil.sleepVerySmall();
 		 * 
 		 * // Click on created document
-		 * GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		 * 
 		 * app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 		 * 
 		 * // Click on New Tag DialogTag dialogTag = (DialogTag)
@@ -190,7 +190,7 @@ public class UnTagFile extends FeatureBriefcaseTest {
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG,
 				Button.O_TAG_REMOVETAG, null);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"

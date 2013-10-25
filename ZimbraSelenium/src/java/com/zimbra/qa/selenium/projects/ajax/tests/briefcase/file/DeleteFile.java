@@ -21,7 +21,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
+
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -107,7 +107,7 @@ public class DeleteFile extends FeatureBriefcaseTest {
 		// if ZD is not synced to ZCS, ZCS will be confused, and the next
 		// uploaded file
 		// will be deleted per previous command.
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Verify document was deleted
 		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(fileName),

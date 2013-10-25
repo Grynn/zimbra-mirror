@@ -16,7 +16,6 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contacts;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -27,7 +26,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
+
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -94,7 +93,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	public void ShowContextMenu() throws HarnessException {
 		
 		ContactItem contactItem = createSelectARandomContactItem();
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Select the item
         // Right click to show the menu
@@ -134,7 +133,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	public void NewEmail() throws HarnessException {
 	
 		ContactItem contactItem = createSelectARandomContactItem();
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		//Click New Email
         FormMailNew formMailNew = (FormMailNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_NEW, contactItem.fileAs);        
@@ -155,7 +154,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	public void AdvancedSearch() throws HarnessException {
 	
 		ContactItem contactItem = createSelectARandomContactItem();
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		//Click Advanced Search
         PageAdvancedSearch pageAdvancedSearch = (PageAdvancedSearch) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_SEARCHADVANCED, contactItem.fileAs);        
@@ -171,7 +170,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 			groups = { "smoke-not-run-for-now" })	
 	public void Print() throws HarnessException {
 		ContactItem contactItem = createSelectARandomContactItem();
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
         PagePrint pagePrint = (PagePrint) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_PRINT, contactItem.fileAs);        
                 

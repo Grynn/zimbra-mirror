@@ -21,7 +21,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
+
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
@@ -84,7 +84,7 @@ public class DeleteDocument extends FeatureBriefcaseTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on Delete document icon in toolbar
@@ -163,7 +163,7 @@ public class DeleteDocument extends FeatureBriefcaseTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click the Delete keyboard shortcut
@@ -225,7 +225,7 @@ public class DeleteDocument extends FeatureBriefcaseTest {
 		SleepUtil.sleepVerySmall();
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Delete Document using Backspace keyboard shortcut
@@ -283,7 +283,7 @@ public class DeleteDocument extends FeatureBriefcaseTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Delete Document using Right Click Context Menu

@@ -69,7 +69,7 @@ public class MarkSpamMessage extends PrefGroupMailByMessageTest {
 		// Click spam
 		app.zPageMail.zToolbarPressButton(Button.B_RESPORTSPAM);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 		
 		// Get the mail item for the new message
 		// Need 'is:anywhere' to include the spam folder
@@ -116,7 +116,7 @@ public class MarkSpamMessage extends PrefGroupMailByMessageTest {
 		// Spam the item
 		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKSPAM);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 		
 		// Get the mail item for the new message
 		// Need 'is:anywhere' to include the spam folder

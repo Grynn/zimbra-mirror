@@ -96,7 +96,7 @@ public class GetTask extends AjaxCommonTest {
 					"</m>" +
 				"</CreateTaskRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
 		ZAssert.assertNotNull(task, "Verify the task is created");
@@ -145,7 +145,7 @@ public class GetTask extends AjaxCommonTest {
 					"</m>" +
 				"</CreateTaskRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
 		ZAssert.assertNotNull(task, "Verify the task is created");
@@ -206,7 +206,7 @@ public class GetTask extends AjaxCommonTest {
 	/*	String calItemId = app.zGetActiveAccount().soapSelectValue(
 				"//mail:CreateTaskResponse", "calItemId");*/
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 
 		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
@@ -270,7 +270,7 @@ public class GetTask extends AjaxCommonTest {
 					"</m>" +
 				"</CreateTaskRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
 		ZAssert.assertNotNull(task, "Verify the task is created");
@@ -325,7 +325,7 @@ public class GetTask extends AjaxCommonTest {
 					"</m>" +
 				"</CreateTaskRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
 		ZAssert.assertNotNull(task, "Verify the task is created");
@@ -388,7 +388,7 @@ public class GetTask extends AjaxCommonTest {
 					"</m>" +
 				"</CreateTaskRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
 		ZAssert.assertNotNull(task, "Verify the task is created");
@@ -480,7 +480,7 @@ public class GetTask extends AjaxCommonTest {
 					"</m>" +
 				"</CreateTaskRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
 		ZAssert.assertNotNull(task, "Verify the task is created");

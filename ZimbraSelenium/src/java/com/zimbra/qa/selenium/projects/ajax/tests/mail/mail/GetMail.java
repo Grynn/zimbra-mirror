@@ -240,7 +240,7 @@ public class GetMail extends PrefGroupMailByMessageTest {
 						"</m>" +
 					"</SendMsgRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 

@@ -88,7 +88,7 @@ public class FlagUnFlagMail extends PrefGroupMailByMessageTest {
 			}
 		}
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Make sure the GUI shows "flagged"
 		ZAssert.assertNotNull(listmail, "Verify the message is in the list");
@@ -151,7 +151,7 @@ public class FlagUnFlagMail extends PrefGroupMailByMessageTest {
 			}
 		}
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Make sure the GUI shows "flagged"
 		ZAssert.assertNotNull(listmail, "Verify the message is in the list");
