@@ -33,7 +33,6 @@ import org.apache.log4j.Logger;
 
 import com.zimbra.common.util.tar.TarEntry;
 import com.zimbra.common.util.tar.TarInputStream;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 
@@ -329,12 +328,7 @@ public class GeneralUtility {
          Stafpostqueue sp = new Stafpostqueue();
          sp.waitForPostqueue();
 
-         String request =
-               "<SyncRequest xmlns=\"urn:zimbraOffline\"/>";
-
-         account.soapSend(request,
-               SOAP_DESTINATION_HOST_TYPE.CLIENT,
-               emailAddressToBeSynced);
+         account.soapSend("<SyncRequest xmlns=\"urn:zimbraOffline\"/>");
 
          sp.waitForPostqueue();
 
