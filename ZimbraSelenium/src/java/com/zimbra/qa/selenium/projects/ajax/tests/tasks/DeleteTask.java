@@ -698,7 +698,7 @@ public class DeleteTask extends AjaxCommonTest {
 				"</m>" +
 		"</CreateTaskRequest>");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
 		ZAssert.assertNotNull(task, "Verify the task is created");

@@ -70,7 +70,7 @@ public class UndoDeleteTask extends AjaxCommonTest {
 		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
 		ZAssert.assertNotNull(task, "Verify the task is created");
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
 
 		// Refresh the tasks view
 		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
