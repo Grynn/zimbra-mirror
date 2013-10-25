@@ -53,10 +53,8 @@ public class ComposeHtmlMsgWithHtmlSignature extends AjaxCommonTest {
 
 	@BeforeMethod( groups = { "always" } )
 	public void CreateSignature() throws HarnessException {
-		logger.info("CreateSignature: start");
-
-//		System.out.println(this.sigName);
-//		ZimbraAccount.AccountZWC().authenticate(SOAP_DESTINATION_HOST_TYPE.SERVER);
+		System.out.println(this.sigName);
+		ZimbraAccount.AccountZWC().authenticate();
 		ZimbraAccount.AccountZWC().soapSend(
 				"<CreateSignatureRequest xmlns='urn:zimbraAccount'>"
 				+ "<signature name='" + this.sigName + "' >"

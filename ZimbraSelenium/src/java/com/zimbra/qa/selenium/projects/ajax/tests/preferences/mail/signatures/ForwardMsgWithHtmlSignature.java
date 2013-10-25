@@ -56,7 +56,7 @@ public class ForwardMsgWithHtmlSignature extends AjaxCommonTest {
 
 	@BeforeMethod(groups = { "always" })
 	public void CreateSignature() throws HarnessException {
-		
+		ZimbraAccount.AccountZWC().authenticate();
 		ZimbraAccount.AccountZWC().soapSend(
 				"<CreateSignatureRequest xmlns='urn:zimbraAccount'>"
 				+ "<signature name='" + this.sigName + "' >"

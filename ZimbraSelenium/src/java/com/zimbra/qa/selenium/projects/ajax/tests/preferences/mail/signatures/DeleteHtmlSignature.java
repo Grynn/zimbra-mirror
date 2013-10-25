@@ -51,7 +51,7 @@ public class DeleteHtmlSignature extends AjaxCommonTest {
 	@BeforeMethod(groups = { "always" })
 	public void CreateHtmlSignature() throws HarnessException {
 
-		//ZimbraAccount.AccountZWC().authenticate(SOAP_DESTINATION_HOST_TYPE.SERVER);
+		ZimbraAccount.AccountZWC().authenticate();
 		ZimbraAccount.AccountZWC().soapSend(
 				"<CreateSignatureRequest xmlns='urn:zimbraAccount'>"
 				+ "<signature name='" + this.sigHtmlName + "' >"
