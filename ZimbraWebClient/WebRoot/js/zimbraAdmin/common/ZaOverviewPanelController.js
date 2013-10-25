@@ -1015,6 +1015,8 @@ ZaOverviewPanelController.domainListTreeListener = function (ev) {
         extquery = "(" + ZaDomain.A_domainDefaultCOSId + "=" + cos.id + ")";
         if(cos.name == "default") {
             extquery = "(|(!(" + ZaDomain.A_domainDefaultCOSId + "=*))" + extquery + ")";
+        } else if(cos.name == "defaultExternal") {
+            extquery = "(|(!(" + ZaDomain.A_domainDefaultExternalUserCOSId + "=*))" + extquery + ")";
         }
     } else if(actionType == ZaZimbraAdmin._DOMAIN_ALIAS_LIST_VIEW) {
         var domain = ev.item.getData("domainItem");
@@ -1083,7 +1085,9 @@ ZaOverviewPanelController.accountListTreeListener = function (ev) {
         var cos = ev.item.getData("cosItem");
         var extquery = "(" + ZaAccount.A_COSId + "=" + cos.id + ")";
         if(cos.name == "default") {
-            extquery = "(|(!(" + ZaAccount.A_COSId + "=*))" + extquery + ")";
+            extquery = "(|(&(!(" + ZaAccount.A_COSId + "=*))(!(" + ZaAccount.A_zimbraIsExternalVirtualAccount + "=TRUE)))" + extquery + ")";
+        } else if(cos.name == "defaultExternal") {
+            extquery = "(|(&(!(" + ZaAccount.A_COSId + "=*))(" + ZaAccount.A_zimbraIsExternalVirtualAccount + "=TRUE))" + extquery + ")";
         }
         this._showAccountsView(ZaItem.ACCOUNT,ev, extquery);
     } else
@@ -1456,10 +1460,16 @@ ZaOverviewPanelController.prototype.refreshRelatedTree = function(items,skipCos,
                         ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_configure,ZaMsg.OVP_cos,cosName],cos) ;
                     }
 
-                    if(typeof(tempHashCos["default"]) == "undefined"){//because defaultCos search all accounts
+                    if(typeof(tempHashCos["default"]) == "undefined"){
                         tempHashCos["default"]=1;
                         defaultCos = ZaCos.getCosByName("default");
                         ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_configure,ZaMsg.OVP_cos,"default"],defaultCos) ;
+                    }
+
+                    if(typeof(tempHashCos["defaultExternal"]) == "undefined"){
+                        tempHashCos["defaultExternal"]=1;
+                        defaultCos = ZaCos.getCosByName("defaultExternal");
+                        ZaOverviewPanelController.manageRelatedTreeListener.call(this,[ZaMsg.OVP_home,ZaMsg.OVP_configure,ZaMsg.OVP_cos,"defaultExternal"],defaultCos) ;
                     }
                 }//cos
 
