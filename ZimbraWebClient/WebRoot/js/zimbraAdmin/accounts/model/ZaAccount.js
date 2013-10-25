@@ -2387,7 +2387,7 @@ function (instance, firstName, lastName, initials) {
 
 ZaAccount.setDefaultCos =
 function (instance) {
-	var defaultCos = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name]);
+	var defaultCos = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name], instance.attrs[ZaAccount.A_zimbraIsExternalVirtualAccount] == "TRUE");
 			
 	if( defaultCos && defaultCos.id) {
 		instance._defaultValues = defaultCos;
@@ -2402,7 +2402,7 @@ function (){
 		var currentCos ;
 		currentCos = ZaCos.getCosById(this.attrs[ZaAccount.A_COSId]);
 		if (!currentCos){
-			currentCos = ZaCos.getDefaultCos4Account( this.name );
+			currentCos = ZaCos.getDefaultCos4Account(this.name, this.attrs[ZaAccount.A_zimbraIsExternalVirtualAccount] == "TRUE");
 		}
 		return currentCos ;
 	} catch (ex) {
@@ -2544,7 +2544,7 @@ ZaAccount.getAccountTypeOutput = function (isNewAccount) {
             currentType = currentCos.id ;
         */
         var currentType = instance[ZaAccount.A2_currentAccountType] ;
-	var defaultType = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name]); 
+	var defaultType = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name], instance.attrs[ZaAccount.A_zimbraIsExternalVirtualAccount] == "TRUE");
 	if(!currentType && defaultType)
 		currentType = defaultType.id;
 
@@ -2658,7 +2658,7 @@ ZaAccount.setAccountType = function (newType, ev) {
 ZaAccount.isAccountTypeSet = function (tmpObj) {
 
     var cosId = tmpObj.attrs [ZaAccount.A_COSId] || tmpObj[ZaAccount.A2_currentAccountType];
-    var defaultType = ZaCos.getDefaultCos4Account(tmpObj[ZaAccount.A_name]);
+    var defaultType = ZaCos.getDefaultCos4Account(tmpObj[ZaAccount.A_name], tmpObj.attrs[ZaAccount.A_zimbraIsExternalVirtualAccount] == "TRUE");
     if (!tmpObj.accountTypes  || tmpObj.accountTypes.length <= 0) {
         return  true ; //account type is not present, no need to check if it is set
     } else if (!cosId){
@@ -2746,7 +2746,7 @@ ZaAccount.getRelatedList =
 function (parentPath) {
     var alias = this.attrs[ZaAccount.A_zimbraMailAlias];
     var cos = ZaCos.getCosById(this.attrs[ZaAccount.A_COSId])
-            || ZaCos.getDefaultCos4Account(this[ZaAccount.A_name]);
+            || ZaCos.getDefaultCos4Account(this[ZaAccount.A_name], this.attrs[ZaAccount.A_zimbraIsExternalVirtualAccount] == "TRUE");
     var domainName = ZaAccount.getDomain(this[ZaAccount.A_name]);
     var domainObj =  ZaDomain.getDomainByName (domainName) ;
     //var zimletList = item.attrs[ZaAccount.A_zimbraZimletAvailableZimlets]

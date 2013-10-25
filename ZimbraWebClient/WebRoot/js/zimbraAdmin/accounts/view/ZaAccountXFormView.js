@@ -1734,7 +1734,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 						elementChanged: function(elementValue,instanceValue, event) {
 							this.getForm().parent.setDirty(true);
 							if(elementValue=="TRUE") {
-								var defaultCos = ZaCos.getDefaultCos4Account(this.getInstance()[ZaAccount.A_name]);
+								var defaultCos = ZaCos.getDefaultCos4Account(this.getInstance()[ZaAccount.A_name], this.getInstance().attrs[ZaAccount.A_zimbraIsExternalVirtualAccount] == "TRUE");
 								if(defaultCos && defaultCos.id) {
 									this.getInstance()._defaultValues = defaultCos;
 									this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A_COSId,defaultCos.id);

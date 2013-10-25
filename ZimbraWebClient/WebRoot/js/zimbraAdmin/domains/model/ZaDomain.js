@@ -121,6 +121,7 @@ ZaDomain.A_notes = "zimbraNotes";
 ZaDomain.A_domainName = "zimbraDomainName";
 ZaDomain.A_domainType = "zimbraDomainType" ;
 ZaDomain.A_domainDefaultCOSId = "zimbraDomainDefaultCOSId";
+ZaDomain.A_domainDefaultExternalUserCOSId = "zimbraDomainDefaultExternalUserCOSId";
 ZaDomain.A_zimbraDomainStatus = "zimbraDomainStatus";
 ZaDomain.A_zimbraPublicServiceHostname = "zimbraPublicServiceHostname";
 ZaDomain.A_zimbraPublicServicePort = "zimbraPublicServicePort";
