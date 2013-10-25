@@ -33,6 +33,7 @@ removeVamilocale();
 cleanRC();
 removeVAMIInitScripts();
 cleanVMtools();
+tuneFilesystems();
 
 print "Completed removal of ZCA VAMI.\n";
 
@@ -166,3 +167,18 @@ sub cleanVMtools
 	close($orig_vmware_tools);
 	move "/tmp/tools.conf","/etc/vmware-tools/tools.conf";
 }
+
+sub tuneFilesystems
+{
+	print "Checking for filesystems to tune...\n";
+	@filesystems=qx(mount | grep \' ext[2-4] \' | cut -d " " -f 1);
+	for ($i=0;$i<$#filesystems;$i++)
+	{
+		chop($filesystems[$i]);
+		print "Tuning filesystem $filesystems[$i]...";
+		qx(/sbin/tune2fs -c 0 $filesystems[$i]);
+		print "done.\n";
+	}
+	print "Finished tuning filesystems.\n";
+}
+
