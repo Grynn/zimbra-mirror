@@ -607,15 +607,15 @@ ngx_mail_proxy_pop3_handler(ngx_event_t *rev)
 static void
 ngx_mail_proxy_imap_handler(ngx_event_t *rev)
 {
-    u_char                     *p;
-    ngx_int_t                   rc;
-    ngx_uint_t                  family;
-    size_t                      len;
-    ngx_str_t                   line, proxy_ip;
-    ngx_connection_t           *c;
-    ngx_mail_session_t         *s;
-    ngx_mail_proxy_conf_t      *pcf;
-    struct sockaddr_in         *sin;
+    u_char                 *p;
+    ngx_int_t               rc;
+    ngx_uint_t              family;
+    size_t                  len;
+    ngx_str_t               line, proxy_ip;
+    ngx_connection_t       *c;
+    ngx_mail_session_t     *s;
+    ngx_mail_proxy_conf_t  *pcf;
+    struct sockaddr_in     *sin;
 
 #if (NGX_HAVE_INET6)
     struct sockaddr_in6        *sin6;
