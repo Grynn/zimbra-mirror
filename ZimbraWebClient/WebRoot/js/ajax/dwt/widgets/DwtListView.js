@@ -1266,6 +1266,11 @@ function(item, params, asHtml, count) {
 	if (asHtml) {
 		idx = this._getDivHtml(item, params, htmlArr, idx, count);
 	} else {
+		if (params.div) {
+			var classes = [this._getDivClass(params.divClass || this._normalClass, item, params),
+				(count % 2) ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD];
+			params.div.className = classes.join(" ");
+		}
 		div = params.div || this._getDiv(item, params);
 	}
 
