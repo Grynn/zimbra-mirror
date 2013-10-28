@@ -91,7 +91,6 @@ public class TouchCommonTest {
 	 */
 	protected AppTouchClient app = null;
 
-	private Repository _repository = new Repository();
 
 
 	/**
@@ -136,42 +135,7 @@ public class TouchCommonTest {
 	throws HarnessException, IOException, InterruptedException, SAXException {
 		logger.info("commonTestBeforeSuite: start");
 
-      //Racetrack
-      String DbHostURL = ZimbraSeleniumProperties.getStringProperty("racetrack.dbUrl",
-            "racetrack.eng.zimbra.com");
-      String buildNumber = ZimbraSeleniumProperties.getStringProperty("racetrack.buildNumber",
-            "000000");
-      String userName = ZimbraSeleniumProperties.getStringProperty("racetrack.username",
-            "anonymous");
-      String product = ZimbraSeleniumProperties.getStringProperty("racetrack.product",
-            "ZCS");
-      String description = ZimbraSeleniumProperties.getStringProperty("racetrack.description",
-            "zdesktop description");
-      String branch = ZimbraSeleniumProperties.getStringProperty("racetrack.branch",
-            "Please specify version");
-      String buildType = ZimbraSeleniumProperties.getStringProperty("racetrack.buildType",
-            "beta");
-      String testType = ZimbraSeleniumProperties.getStringProperty("racetrack.testType",
-            "functional");
-      String recordToRacetrack = ZimbraSeleniumProperties.getStringProperty("racetrack.recordToRacetrack",
-            "false");
-      String appendToExisting = ZimbraSeleniumProperties.getStringProperty("racetrack.appendToExisting",
-            "false");
-      String resultId = ZimbraSeleniumProperties.getStringProperty("racetrack.resultId",
-            "");
 
-      _repository.connectingToRacetrack(DbHostURL);
-      _repository.beginTestSet(
-            buildNumber,
-            userName,
-            product,
-            description,
-            branch,
-            buildType,
-            testType,
-            Boolean.parseBoolean(recordToRacetrack),
-            Boolean.parseBoolean(appendToExisting),
-            resultId);
 
       // Make sure there is a new default account
 		ZimbraAccount.ResetAccountZTC();
@@ -297,13 +261,10 @@ public class TouchCommonTest {
 	public void commonTestBeforeMethod(Method method, ITestContext testContext) throws HarnessException {
 		logger.info("commonTestBeforeMethod: start");
 
-		String packageName = method.getDeclaringClass().getPackage().getName();
-		String methodName = method.getName();
 
 		// Get the test description
 		// By default, the test description is set to method's name
 		// if it is set, then change it to the specified one
-		String testDescription = methodName;
 		for (ITestNGMethod ngMethod : testContext.getAllTestMethods()) {
 			String methodClass = ngMethod.getRealClass().getSimpleName();
 			if (methodClass.equals(method.getDeclaringClass().getSimpleName())
@@ -314,13 +275,11 @@ public class TouchCommonTest {
 							+ "." + ngMethod.getMethodName());
 					logger.info("Description: " + ngMethod.getDescription());
 					logger.info("----------------------------------------");
-					testDescription = ngMethod.getDescription();
 				}
 				break;
 			}
 		}
 
-		Repository.testCaseBegin(methodName, packageName, testDescription);
 
 		// If test account preferences are defined, then make sure the test account
 		// uses those preferences
@@ -407,7 +366,6 @@ public class TouchCommonTest {
 			ClientSessionFactory.session().selenium().stop();
 		}
 		
-		_repository.endRepository();
 
 		logger.info("commonTestAfterSuite: finish");
 
@@ -446,8 +404,6 @@ public class TouchCommonTest {
 	throws HarnessException {
 		logger.info("commonTestAfterMethod: start");
 
-		String testCaseResult = String.valueOf(testResult.getStatus());
-		Repository.testCaseEnd(testCaseResult);
 
 		// If the active URL does not match the base URL, then
 		// the test case may have manually navigated somewhere.
