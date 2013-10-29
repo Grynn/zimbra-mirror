@@ -57,6 +57,7 @@ DIRS := openssl \
 	libmemcached \
 	opendkim \
 	altermime \
+	unbound \
 	zeromq
 endif
 
