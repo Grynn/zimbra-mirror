@@ -24,7 +24,6 @@ ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 endif
 
 NGINX_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx/nginx-$(NGINX_VERSION)-zimbra.tgz
-NGINX_INSTALL := $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
 
 CHUNKIN_TGZ_SRC := $(NGINX_ROOT)/src/chunkin-nginx-module-0.23rc2.tar.gz
 CHUNKIN_SOURCE := $(NGINX_ROOT)/chunkin-nginx-module
@@ -70,7 +69,7 @@ build:
             --add-module=$(CHUNKIN_SOURCE);)
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
 	LD_RUN_PATH="$(CYRUS_LIB_DIR):$(OPENSSL_LIB_DIR)" make; make install)
-	(cd $(ZIMBRA_HOME); ln -s $(NGINX_INSTALL) nginx)
+	(cd $(ZIMBRA_HOME); ln -s nginx-$(NGINX_VERSION) nginx)
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx

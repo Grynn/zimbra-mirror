@@ -20,7 +20,6 @@ endif
 LIBEVENT_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/memcached/libevent-$(LIBEVENT_VERSION).tgz
 
 MEMCACHED_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/memcached/memcached-$(MEMCACHED_VERSION).tgz
-MEMCACHED_INSTALL := $(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION)
 
 filesa	:= $(wildcard src/libevent-$(LIBEVENT_VERSION).tar.gz)
 filesb	:= $(wildcard src/memcached-$(MEMCACHED_VERSION).tar.gz)
@@ -44,7 +43,7 @@ build:
 	CFLAGS="-g -O2" ./configure --prefix=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION) \
 	--with-libevent=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION); \
 	LD_RUN_PATH=/opt/zimbra/memcached/lib make; make install)
-	ln -s $(MEMCACHED_INSTALL) $(ZIMBRA_HOME)/memcached
+	(cd $(ZIMBRA_HOME); ln -s memcached-$(MEMCACHED_VERSION) memcached)
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/memcached
