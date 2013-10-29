@@ -1,26 +1,5 @@
---- postfix-2.11/src/global/mkmap_lmdb.c	2013/10/01 21:03:36	1.1
-+++ postfix-2.11/src/global/mkmap_lmdb.c	2013/10/01 21:04:00
-@@ -98,18 +98,6 @@
-     dict_lmdb_map_size = var_lmdb_map_size;
- 
-     /*
--     * XXX Why is this not set in mail_params.c (with proper #ifdefs)?
--     * 
--     * Set the max number of concurrent readers per table. This is the
--     * maximum number of postfix processes, plus some extra for CLI users.
--     * 
--     * XXX Postfix uses asynchronous or blocking I/O with single-threaded
--     * processes so this limit will never be reached, assuming that the limit
--     * is a per-client property, not a shared database property.
--     */
--    dict_lmdb_max_readers = var_proc_limit * 2 + 16;
--
--    /*
-      * Fill in the generic members.
-      */
-     mkmap->open = dict_lmdb_open;
---- postfix-2.11/src/util/dict_lmdb.c	2013/10/01 21:00:27	1.1
-+++ postfix-2.11/src/util/dict_lmdb.c	2013/10/01 20:59:38
+--- postfix-2.11/src/util/dict_lmdb.c.orig	2013/10/01 21:00:27	1.1
++++ postfix-2.11/src/util/dict_lmdb.c	2013/10/24 09:40:55
 @@ -134,13 +134,7 @@
  #define DICT_LMDB_BULK_RETRY_LIMIT \
  	(2 * sizeof(size_t) * CHAR_BIT)	/* Retries per bulk-mode transaction */
@@ -42,7 +21,7 @@
 +     * Acquire a shared lock.
 +     */
 +    if ((dict->flags & DICT_FLAG_LOCK)
-+	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_SHARED) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_SHARED) < 0)
 +	msg_fatal("%s: lock dictionary: %m", dict->name);
 +
 +    /*
@@ -58,7 +37,7 @@
 +     * Release the shared lock.
 +     */
 +    if ((dict->flags & DICT_FLAG_LOCK)
-+	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_NONE) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_NONE) < 0)
 +	msg_fatal("%s: unlock dictionary: %m", dict->name);
 +
      return (result);
@@ -71,7 +50,7 @@
 +     * Acquire an exclusive lock.
 +     */
 +    if ((dict->flags & DICT_FLAG_LOCK)
-+	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_EXCLUSIVE) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_EXCLUSIVE) < 0)
 +	msg_fatal("%s: lock dictionary: %m", dict->name);
 +
 +    /*
@@ -87,7 +66,7 @@
 +     * Release the exclusive lock.
 +     */
 +    if ((dict->flags & DICT_FLAG_LOCK)
-+	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_NONE) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_NONE) < 0)
 +	msg_fatal("%s: unlock dictionary: %m", dict->name);
 +
      return (status);
@@ -100,7 +79,7 @@
 +     * Acquire an exclusive lock.
 +     */
 +    if ((dict->flags & DICT_FLAG_LOCK)
-+	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_EXCLUSIVE) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_EXCLUSIVE) < 0)
 +	msg_fatal("%s: lock dictionary: %m", dict->name);
 +
 +    /*
@@ -116,7 +95,7 @@
 +     * Release the exclusive lock.
 +     */
 +    if ((dict->flags & DICT_FLAG_LOCK)
-+	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_NONE) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_NONE) < 0)
 +	msg_fatal("%s: unlock dictionary: %m", dict->name);
 +
      return (status);
@@ -129,7 +108,7 @@
 +     * Acquire a shared lock.
 +     */
 +    if ((dict->flags & DICT_FLAG_LOCK)
-+	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_SHARED) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_SHARED) < 0)
 +	msg_fatal("%s: lock dictionary: %m", dict->name);
 +
 +    /*
@@ -148,7 +127,7 @@
 +     * Release the shared lock.
 +     */
 +    if ((dict->flags & DICT_FLAG_LOCK)
-+	&& myflock(dict->lock_fd, INTERNAL_LOCK, MYFLOCK_OP_NONE) < 0)
++	&& myflock(dict->lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_NONE) < 0)
 +	msg_fatal("%s: unlock dictionary: %m", dict->name);
  
 -static int dict_lmdb_lock(DICT *dict, int unused_op)
@@ -159,15 +138,15 @@
  }
  
  /* dict_lmdb_close - disassociate from data base */
-@@ -840,7 +886,7 @@
+@@ -838,7 +884,7 @@
  
-     env_flags = MDB_NOSUBDIR;
+     mdb_path = concatenate(path, "." DICT_TYPE_LMDB, (char *) 0);
+ 
+-    env_flags = MDB_NOSUBDIR;
++    env_flags = MDB_NOSUBDIR|MDB_NOLOCK;
      if (open_flags == O_RDONLY)
--	env_flags |= MDB_RDONLY;
-+	env_flags |= MDB_RDONLY|MDB_NORDLOCK;
+ 	env_flags |= MDB_RDONLY;
  
-     if ((status = mdb_env_create(&env)))
- 	msg_fatal("env_create %s: %s", mdb_path, mdb_strerror(status));
 @@ -850,9 +896,6 @@
      if ((status = mdb_env_set_mapsize(env, map_size)))
  	msg_fatal("env_set_mapsize %s: %s", mdb_path, mdb_strerror(status));
@@ -178,20 +157,32 @@
      /*
       * Gracefully handle the most common mistake.
       */
-@@ -878,11 +921,11 @@
+@@ -878,11 +921,13 @@
      dict_lmdb->dict.delete = dict_lmdb_delete;
      dict_lmdb->dict.sequence = dict_lmdb_sequence;
      dict_lmdb->dict.close = dict_lmdb_close;
 -    dict_lmdb->dict.lock = dict_lmdb_lock;
-     if ((dict_lmdb->dict.stat_fd = open(mdb_path, O_RDONLY)) < 0)
- 	msg_fatal("dict_lmdb_open: %s: %m", mdb_path);
+-    if ((dict_lmdb->dict.stat_fd = open(mdb_path, O_RDONLY)) < 0)
+-	msg_fatal("dict_lmdb_open: %s: %m", mdb_path);
++
++    if ((status = mdb_env_get_fd(env, &dict_lmdb->dict.stat_fd)))
++	msg_fatal("mdb_env_get_fd %s: %s", mdb_path, mdb_strerror(status));
++
      if (fstat(dict_lmdb->dict.stat_fd, &st) < 0)
  	msg_fatal("dict_lmdb_open: fstat: %m");
 +    dict_lmdb->dict.lock_fd = dict_lmdb->dict.stat_fd;
      dict_lmdb->dict.mtime = st.st_mtime;
      dict_lmdb->dict.owner.uid = st.st_uid;
      dict_lmdb->dict.owner.status = (st.st_uid != 0);
-@@ -918,8 +961,17 @@
+@@ -897,7 +942,6 @@
+ 	&& st.st_mtime < time((time_t *) 0) - 100)
+ 	msg_warn("database %s is older than source file %s", mdb_path, path);
+ 
+-    close_on_exec(dict_lmdb->dict.stat_fd, CLOSE_ON_EXEC);
+     dict_lmdb->dict.flags = dict_flags | DICT_FLAG_FIXED;
+     if ((dict_flags & (DICT_FLAG_TRY0NULL | DICT_FLAG_TRY1NULL)) == 0)
+ 	dict_lmdb->dict.flags |= (DICT_FLAG_TRY0NULL | DICT_FLAG_TRY1NULL);
+@@ -918,8 +962,17 @@
      dict_lmdb->env_flags = env_flags;
      dict_lmdb->txn = txn;
      dict_lmdb_prepare(dict_lmdb);
@@ -199,14 +190,45 @@
 +    if (dict_flags & DICT_FLAG_BULK_UPDATE) {
 +    	/* We just need to acquire exclusive access momentarily. This establishes
 +	 * that no readers are accessing old txn snapshots, so we are free to reuse
-+	 * all eligible old pages. Release the lock right after acquiring it.
++	 * all eligible old pages. Downgrade the lock right after acquiring it.
 +	 */
-+    	if (myflock(dict_lmdb->dict.lock_fd, INTERNAL_LOCK, MYFLOCK_OP_EXCLUSIVE) < 0)
++    	if (myflock(dict_lmdb->dict.lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_EXCLUSIVE) < 0)
 +	    msg_fatal("%s: lock dictionary: %m", dict_lmdb->dict.name);
-+    	if (myflock(dict_lmdb->dict.lock_fd, INTERNAL_LOCK, MYFLOCK_OP_NONE) < 0)
++    	if (myflock(dict_lmdb->dict.lock_fd, MYFLOCK_STYLE_FCNTL, MYFLOCK_OP_SHARED) < 0)
 +	    msg_fatal("%s: unlock dictionary: %m", dict_lmdb->dict.name);
  	dict_jmp_alloc(&dict_lmdb->dict);	/* build into dict_alloc() */
 +    }
  
      myfree(mdb_path);
  
+--- postfix-2.11/src/global/mkmap_lmdb.c	2013/10/01 21:03:36	1.1
++++ postfix-2.11/src/global/mkmap_lmdb.c	2013/10/01 21:04:00
+@@ -98,18 +98,6 @@
+     dict_lmdb_map_size = var_lmdb_map_size;
+ 
+     /*
+-     * XXX Why is this not set in mail_params.c (with proper #ifdefs)?
+-     * 
+-     * Set the max number of concurrent readers per table. This is the
+-     * maximum number of postfix processes, plus some extra for CLI users.
+-     * 
+-     * XXX Postfix uses asynchronous or blocking I/O with single-threaded
+-     * processes so this limit will never be reached, assuming that the limit
+-     * is a per-client property, not a shared database property.
+-     */
+-    dict_lmdb_max_readers = var_proc_limit * 2 + 16;
+-
+-    /*
+      * Fill in the generic members.
+      */
+     mkmap->open = dict_lmdb_open;
+--- postfix-2.11/src/util/dict_lmdb.h	2013/10/01 21:28:14	1.1
++++ postfix-2.11/src/util/dict_lmdb.h	2013/10/01 21:28:22
+@@ -27,7 +27,6 @@
+   * XXX Should be part of the DICT interface.
+   */
+ extern size_t dict_lmdb_map_size;
+-extern unsigned int dict_lmdb_max_readers;
+ 
+ /* LICENSE
+ /* .ad
