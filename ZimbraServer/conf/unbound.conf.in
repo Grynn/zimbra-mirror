@@ -1,0 +1,10 @@
+## Simple recursive caching DNS
+#
+server:
+	interface: 127.0.0.1
+	interface: ::1
+	verbosity: 1
+
+forward-zone:
+	name: "."
+	%%explode	forward-addr: VAR:zimbraDNSMasters%%
