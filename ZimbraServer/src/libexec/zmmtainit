@@ -172,6 +172,7 @@ server_port = ${ldap_port}
 search_base =
 query_filter = (&(|(zimbraMailDeliveryAddress=%s)(zimbraMailAlias=%s)(zimbraMailCatchAllAddress=%s))(zimbraMailStatus=enabled))
 result_attribute = zimbraMailDeliveryAddress,zimbraMailForwardingAddress,zimbraPrefMailForwardingAddress
+result_filter = OK
 version = 3
 start_tls = ${STARTTLS}
 tls_ca_cert_dir = /opt/zimbra/conf/ca
