@@ -1,0 +1,144 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2012, 2013 Zimbra Software, LLC.
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.4 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+# 
+
+if [ x`whoami` != xzimbra ]; then
+  echo Error: must be run as zimbra user
+  exit 1
+fi
+
+if [ ! -L "/opt/zimbra/unbound" ]; then
+  exit 0
+fi
+
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+  zimbra_home \
+  zimbra_log_directory
+
+PID=""
+PIDFILE=${zimbra_log_directory}/unbound.pid
+unbound=${zimbra_home}/libexec/zmunbound
+config=${zimbra_home}/conf/unbound.conf
+
+rewriteconfig() {
+    /opt/zimbra/libexec/configrewrite dnscache > /dev/null 2>&1
+}
+
+getpid()
+{
+        if [ -f $PIDFILE ]; then
+                PID=`cat $PIDFILE`
+        fi
+}
+
+
+checkrunning()
+{
+        getpid
+        if [ "x$PID" = "x" ]; then
+                RUNNING=0
+        else
+                kill -0 $PID
+                if [ $? != 0 ]; then
+                        PID=""
+                        RUNNING=0
+                else
+                        RUNNING=1
+                fi
+        fi
+}
+
+start()
+{
+        checkrunning
+        if [ $RUNNING = 0 ]; then
+          if [ x$1 = "x" ]; then
+            rewriteconfig
+          fi
+          sudo $unbound
+          if [ $? != 0 ]; then
+            echo "Failed to start dnscache: $?"
+            exit 1
+          fi
+          sleep 2
+          getpid
+          echo "Started dnscache: pid $PID"
+        else
+          echo "dnscache already running: pid $PID"
+          exit 0
+        fi
+}
+
+stop()
+{
+        checkrunning
+        if [ $RUNNING = 0 ]; then
+          echo "dnscache not running"
+          exit 0
+        else
+          echo -n "Stopping dnscache..."
+          kill -TERM $PID 2> /dev/null
+          for ((i=0; i < 300; i++)); do
+            sleep 5
+            kill -0 $PID 2> /dev/null
+            if [ $? != 0 ]; then
+              echo " done."
+              exit 0
+            fi
+          done
+          kill -TERM $PID 2> /dev/null
+          if [ $? = 0 ]; then
+            echo " failed to stop $PID"
+            exit 1
+          else
+            echo " done."
+          fi
+        fi
+        exit 0
+}
+
+status()
+{
+        checkrunning
+        echo -n "dnscache is "
+        if [ $RUNNING = 0 ]; then
+                echo "not running."
+                exit 1
+        else
+                echo "running with pid: $PID"
+                exit 0
+        fi
+}
+
+case "$1" in
+        reload|restart)
+                $0 stop
+                $0 start $2
+                ;;
+        start)
+                start $2
+                ;;
+        stop)
+                stop
+                ;;
+        status)
+                status
+                ;;
+        *)
+                echo "Usage: $0 start|stop|restart|reload|status"
+                exit 1
+                ;;
+esac
