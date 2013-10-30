@@ -71,8 +71,8 @@
 	<classpathentry kind="lib" path="jars/xercesImpl-2.9.1.jar" sourcepath="/ThirdParty/xerces-2_9_1-src/src"/>
 	<classpathentry kind="lib" path="jars/zimbra-charset.jar"/>
 	<classpathentry kind="lib" path="jars/zimbra-native.jar" sourcepath="/ZimbraNative/src/java"/>
-	<classpathentry kind="lib" path="jars/jfreechart-1.0.14.jar"/>
-	<classpathentry kind="lib" path="jars/jcommon-1.0.16.jar"/>
+	<classpathentry kind="lib" path="jars/jfreechart-1.0.16.jar"/>
+	<classpathentry kind="lib" path="jars/jcommon-1.0.20.jar"/>
 	<classpathentry kind="lib" path="jars/json.jar" sourcepath="/ThirdParty/json/src/java"/>
 	<classpathentry kind="lib" path="jars/ant-1.7.0-ziputil-patched.jar"/>
 	<classpathentry kind="lib" path="jars/memcached-2.6.jar" sourcepath="jars-src/memcached-2.6-sources.jar">
