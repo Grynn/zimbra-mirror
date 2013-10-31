@@ -403,7 +403,7 @@ function(item) {
 
 DwtTree.prototype._itemActioned =
 function(item, ev) {
-	if (this._actionedItem) {
+	if (this._actionedItem && !this._actionedItem.isDisposed()) {
 		this._actionedItem._setActioned(false);
 		this._notifyListeners(DwtEvent.SELECTION, [this._actionedItem], DwtTree.ITEM_DESELECTED, ev, this._selEv);
 	}
