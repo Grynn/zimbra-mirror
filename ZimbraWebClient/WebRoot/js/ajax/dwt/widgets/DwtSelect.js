@@ -145,6 +145,7 @@ function(option, selected, value, image) {
 
 	var opt = null;
 	var val = null;
+    var id = null;
 	if (typeof(option) == 'string') {
 		val = value != null ? value : option;
 		opt = new DwtSelectOption(val, selected, option, this, null, image);
@@ -159,6 +160,7 @@ function(option, selected, value, image) {
 			val = value != null ? value : option.value;
 			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this, null, option.image, option.selectedValue);
 			selected = Boolean(option.isSelected);
+            id = option.id;
 		} else {
 			return -1;
 		}
@@ -176,7 +178,7 @@ function(option, selected, value, image) {
 	var cell = row.insertCell(-1);
 	cell.className = 'ZSelectPseudoItem';
 	cell.innerHTML = [
-        "<div class='ZWidgetTitle'>",
+        "<div class='ZWidgetTitle' id='" + id + "'>",
             AjxStringUtil.htmlEncode(opt.getDisplayValue()),
         "</div>"
     ].join("");
@@ -762,7 +764,7 @@ function() {
  * 
  * @private
  */
-DwtSelectOptionData = function(value, displayValue, isSelected, selectedValue, image) {
+DwtSelectOptionData = function(value, displayValue, isSelected, selectedValue, image, id) {
 	if (value == null || displayValue == null) { return null; }
 
 	this.value = value;
@@ -770,6 +772,7 @@ DwtSelectOptionData = function(value, displayValue, isSelected, selectedValue, i
 	this.isSelected = isSelected;
 	this.selectedValue = selectedValue;
 	this.image = image;
+    this.id = id || Dwt.getNextId();
 };
 
 //
