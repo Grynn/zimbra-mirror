@@ -7,4 +7,4 @@ server:
 
 forward-zone:
 	name: "."
-	%%explode	forward-addr: VAR:zimbraDNSMasterIP%%
+%%explode 	forward-addr: VAR:zimbraDNSMasterIP%%
