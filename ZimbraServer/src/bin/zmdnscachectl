@@ -29,7 +29,6 @@ zmsetvars \
   zimbra_log_directory
 
 PID=""
-PIDFILE=${zimbra_log_directory}/unbound.pid
 unbound=${zimbra_home}/libexec/zmunbound
 config=${zimbra_home}/conf/unbound.conf
 
@@ -39,9 +38,7 @@ rewriteconfig() {
 
 getpid()
 {
-        if [ -f $PIDFILE ]; then
-                PID=`cat $PIDFILE`
-        fi
+	PID=`ps auxwww | grep /opt/zimbra/unbound/sbin/unbound | grep -v grep | awk '{print $2}'`
 }
 
 
