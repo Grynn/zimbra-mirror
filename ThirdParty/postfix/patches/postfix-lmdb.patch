@@ -1,17 +1,11 @@
---- postfix-2.11-20131031/src/util/slmdb.c.orig	2013-10-31 17:30:17.000000000 -0700
-+++ postfix-2.11-20131031/src/util/slmdb.c	2013-11-01 10:14:58.475107620 -0700
-@@ -146,6 +146,8 @@
- /*	Yorktown Heights, NY 10598, USA
- /*--*/
+--- postfix-2.11-20131101/src/util/slmdb.c.orig	2013-11-01 15:28:09.423104910 -0700
++++ postfix-2.11-20131101/src/util/slmdb.c	2013-11-01 15:28:22.251104482 -0700
+@@ -257,7 +257,7 @@
  
-+#ifdef HAS_LMDB
-+
- /* System library. */
+ static int slmdb_prepare(SLMDB *slmdb)
+ {
+-    int     status;
++    int     status = 0;
  
- #include <sys/stat.h>
-@@ -662,3 +664,5 @@
- 
-     return (status);
- }
-+
-+#endif
+     /*
+      * This is called before accessing the database, or after recovery from
