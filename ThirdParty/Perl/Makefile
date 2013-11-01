@@ -160,6 +160,7 @@ PERL_LIBS 	:= \
 	LWP::UserAgent \
 	LWP::Protocol::https \
 	IO::Stringy \
+	Date::Parse \
 	Mail::Mailer \
 	MIME::Types \
 	MIME::Lite \
@@ -169,7 +170,6 @@ PERL_LIBS 	:= \
 	Module::CoreList \
 	Module::Load::Conditional \
 	IPC::Cmd \
-	Date::Parse \
 	Pod::Escapes \
 	Class::Data::Inheritable \
 	Devel::StackTrace \
