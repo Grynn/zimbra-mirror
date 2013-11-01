@@ -1,8 +1,7 @@
 ## Simple recursive caching DNS
 #
 server:
-	interface: 127.0.0.1
-	interface: ::1
+%%explode 	interface: VAR:zimbraUnboundBindAddress%%
 	verbosity: 1
 
 forward-zone:

@@ -95,6 +95,7 @@ class ServerConfig(config.Config):
 			v = str(v)
 			v = v.lower()
 			if v == "ipv4":
+				self["zimbraUnboundBindAddress"] = "127.0.0.1"
 				self["zimbraLocalBindAddress"] = "127.0.0.1"
 				self["zimbraPostconfProtocol"] = "ipv4"
 				self["zimbraAmavisListenSockets"] = "'10024','10026','10032'"
@@ -102,6 +103,7 @@ class ServerConfig(config.Config):
 				if self["zimbraMilterBindAddress"] is None:
 					self["zimbraMilterBindAddress"] = "127.0.0.1"
 			if v == "ipv6":
+				self["zimbraUnboundBindAddress"] = "::1"
 				self["zimbraLocalBindAddress"] = "::1"
 				self["zimbraPostconfProtocol"] = "ipv6"
 				self["zimbraAmavisListenSockets"] = "'[::1]:10024','[::1]:10026','[::1]:10032'"
@@ -109,6 +111,7 @@ class ServerConfig(config.Config):
 				if self["zimbraMilterBindAddress"] is None:
 					self["zimbraMilterBindAddress"] = "[::1]"
 			if v == "both":
+				self["zimbraUnboundBindAddress"] = "127.0.0.1 ::1"
 				self["zimbraLocalBindAddress"] = "::1"
 				self["zimbraPostconfProtocol"] = "all"
 				self["zimbraAmavisListenSockets"] = "'10024','10026','10032','[::1]:10024','[::1]:10026','[::1]:10032'"
