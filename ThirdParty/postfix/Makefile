@@ -50,8 +50,8 @@ build:
 	$(PATCH) \
 	patch -g0 -p1 < ../patches/postfix-main-cf-zimbra.patch; \
 	patch -g0 -p1 < ../patches/stop-warning.patch; \
-	patch -g0 -p1 < ../patches.postfix-lmdb.patch; \
-	patch -g0 -p1 < ../patches.postfix-ldap.patch; \
+	patch -g0 -p1 < ../patches/postfix-lmdb.patch; \
+	patch -g0 -p1 < ../patches/postfix-ldap.patch; \
 	$(MAKE) $(MAKEARGS)  makefiles \
 	OPT="-O2" \
 	DEBUG="-g" \
