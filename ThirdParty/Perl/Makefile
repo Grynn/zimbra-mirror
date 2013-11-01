@@ -232,7 +232,8 @@ PERL_LIBS 	:= \
 	IP::Country \
 	DBD::SQLite \
 	Filesys::Df \
-	LMDB_File
+	LMDB_File \
+	Data::Validate::IP
 
 NET_SSLeay := \
 	Net-SSLeay-1.55
