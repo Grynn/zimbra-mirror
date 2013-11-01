@@ -460,7 +460,11 @@ ZmArchiveZimlet.prototype.onSendButtonClicked = function(controller, msg) {
 
 ZmArchiveZimlet.prototype.onSendMsgSuccess = function(controller, msg) {
 
-	var id = msg.id || (msg._origMsg && msg._origMsg.id);
+	var id = msg.origId;
+	if (!id) {
+		//nothing to archive, shouldn't happen from send+archive since it won't have "send+archive" for new message.
+		return;
+	}
 	if (!this._msgMap[id]) {
 		//note to self - _msgMap is weird - I don't think it could really have multiple items (so not sure need for a map rather than one item),
 		// but keep it this way. Basically it's a way to check that the message sent also had the "send+archive" button clicked for.
