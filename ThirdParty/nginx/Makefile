@@ -69,7 +69,7 @@ build:
             --add-module=$(CHUNKIN_SOURCE);)
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
 	LD_RUN_PATH="$(CYRUS_LIB_DIR):$(OPENSSL_LIB_DIR)" make; make install)
-	(cd $(ZIMBRA_HOME); ln -s nginx-$(NGINX_VERSION) nginx)
+	(cd $(ZIMBRA_HOME); ln -s nginx-$(NGINX_VERSION)-zimbra nginx)
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx
