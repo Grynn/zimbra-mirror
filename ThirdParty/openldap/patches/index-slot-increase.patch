@@ -31,14 +31,3 @@
  #define MDB_IDL_DB_SIZE		(1<<MDB_IDL_LOGN)
  #define MDB_IDL_UM_SIZE		(1<<(MDB_IDL_LOGN+1))
  #define MDB_IDL_UM_SIZEOF	(MDB_IDL_UM_SIZE * sizeof(ID))
---- openldap-2.4.31/servers/slapd/back-mdb/delete.c.orig	2012-05-08 16:49:15.478476029 -0700
-+++ openldap-2.4.31/servers/slapd/back-mdb/delete.c	2012-05-08 16:49:36.658475272 -0700
-@@ -419,7 +419,7 @@
- 	}
- 
- 	if( rs->sr_err != 0 ) {
--		Debug( LDAP_DEBUG_TRACE,
-+		Debug( LDAP_DEBUG_ANY,
- 			LDAP_XSTRING(mdb_delete) ": txn_%s failed: %s (%d)\n",
- 			op->o_noop ? "abort (no-op)" : "commit",
- 			mdb_strerror(rs->sr_err), rs->sr_err );
