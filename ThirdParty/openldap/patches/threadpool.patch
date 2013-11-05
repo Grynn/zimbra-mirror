@@ -953,15 +953,6 @@ index 87e9594..23a0624 100644
  	{ "timelimit", "limit", 2, 0, 0, ARG_MAY_DB|ARG_MAGIC,
  		&config_timelimit, "( OLcfgGlAt:67 NAME 'olcTimeLimit' "
  			"SYNTAX OMsDirectoryString )", NULL, NULL },
-@@ -807,7 +816,7 @@
- 		 "olcDisallows $ olcGentleHUP $ olcIdleTimeout $ "
- 		 "olcIndexSubstrIfMaxLen $ olcIndexSubstrIfMinLen $ "
- 		 "olcIndexSubstrAnyLen $ olcIndexSubstrAnyStep $ olcIndexIntLen $ "
--		 "olcLocalSSF $ olcLogFile $ olcLogLevel $ "
-+		 "olcListenerThreads $ olcLocalSSF $ olcLogFile $ olcLogLevel $ "
- 		 "olcPasswordCryptSaltFormat $ olcPasswordHash $ olcPidFile $ "
- 		 "olcPluginLogFile $ olcReadOnly $ olcReferral $ "
- 		 "olcReplogFile $ olcRequires $ olcRestrict $ olcReverseLookup $ "
 @@ -816,7 +825,8 @@
  		 "olcSecurity $ olcServerID $ olcSizeLimit $ "
  		 "olcSockbufMaxIncoming $ olcSockbufMaxIncomingAuth $ "
