@@ -14,6 +14,7 @@ else
 	include $(DNS_ROOT)/../versions.def
 endif
 
+PATCH	:= patch -g0 -N -p1 < ../patches/log-facility.patch;
 
 UNBOUND_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/unbound/unbound-$(UNBOUND_VERSION).tgz
 LDNS_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/unbound/ldns-$(LDNS_VERSION).tgz

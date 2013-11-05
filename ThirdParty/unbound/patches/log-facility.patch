@@ -1,0 +1,11 @@
+--- unbound-1.4.21/util/log.c.orig	2013-11-04 16:58:55.632108696 -0800
++++ unbound-1.4.21/util/log.c	2013-11-04 16:59:50.600106865 -0800
+@@ -102,7 +102,7 @@
+ 	if(use_syslog) {
+ 		/* do not delay opening until first write, because we may
+ 		 * chroot and no longer be able to access dev/log and so on */
+-		openlog(ident, LOG_NDELAY, LOG_DAEMON);
++		openlog(ident, LOG_NDELAY, LOG_LOCAL4);
+ 		logging_to_syslog = 1;
+ 		return;
+ 	}
