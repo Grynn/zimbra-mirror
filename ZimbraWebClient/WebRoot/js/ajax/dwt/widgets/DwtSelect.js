@@ -129,7 +129,7 @@ function(element) {
 /**
  * Adds an option.
  * 
- * @param {string|DwtSelectOption}		option			a {String} for the option value or the {@link DwtSelectOption} object
+ * @param {string|DwtSelectOption|DwtSelectOptionData}		option			a {String} for the option value or the {@link DwtSelectOption} object
  * @param {boolean}	[selected]		indicates whether option should be the selected option
  * @param {Object}	value			if the option parameter is a {@link DwtSelectOption}, this will override the value already set in the option.
  * @param {String}  image	(optional)
@@ -158,7 +158,7 @@ function(option, selected, value, image) {
 			selected = opt.isSelected();
 		} else if(option instanceof DwtSelectOptionData || option.value != null) {
 			val = value != null ? value : option.value;
-			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this, null, option.image, option.selectedValue);
+			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this, null, option.image, option.selectedValue, false, option.extraData);
 			selected = Boolean(option.isSelected);
             id = option.id;
 		} else {
@@ -764,7 +764,7 @@ function() {
  * 
  * @private
  */
-DwtSelectOptionData = function(value, displayValue, isSelected, selectedValue, image, id) {
+DwtSelectOptionData = function(value, displayValue, isSelected, selectedValue, image, id, extraData) {
 	if (value == null || displayValue == null) { return null; }
 
 	this.value = value;
@@ -772,6 +772,7 @@ DwtSelectOptionData = function(value, displayValue, isSelected, selectedValue, i
 	this.isSelected = isSelected;
 	this.selectedValue = selectedValue;
 	this.image = image;
+	this.extraData = extraData;
     this.id = id || Dwt.getNextId();
 };
 
@@ -792,14 +793,16 @@ DwtSelectOptionData = function(value, displayValue, isSelected, selectedValue, i
  * @param {String}	optionalDOMId		not used
  * @param {String}	[selectedValue] 	the text value to use when this value is the currently selected value
  * @param {Boolean}	hr                  True => This option will be usd to create a unselectable horizontal rule
+ * @param {Object} extraData  map of extra name/value pairs
  */
-DwtSelectOption = function(value, selected, displayValue, owner, optionalDOMId, image, selectedValue, hr) {
+DwtSelectOption = function(value, selected, displayValue, owner, optionalDOMId, image, selectedValue, hr, extraData) {
 	this._value = value;
 	this._selected = selected;
 	this._displayValue = displayValue;
 	this._image = image;
 	this._selectedValue = selectedValue;
     this._hr = hr;
+	this._extraData = extraData;
 
 	this._internalObjectId = DwtSelect._assignId(this);
 	this.enabled = true;
@@ -915,6 +918,13 @@ DwtSelectOption.prototype.getIdentifier =
 function() {
 	return this._internalObjectId;
 };
+
+DwtSelectOption.prototype.getExtraData =
+function(key) {
+	return this._extraData && this._extraData[key];
+};
+
+
 
 /**
  * Creates a select menu.
