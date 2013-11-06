@@ -1,0 +1,6 @@
+#!/bin/bash
+PATH=/opt/zimbra/unbound/sbin:/usr/sbin:/usr/bin:/sbin:/bin
+
+if [ ! -x /opt/zimbra/unbound/sbin/unbound ]; then
+    exit 0
+fi
