@@ -72,9 +72,7 @@ start()
     fi
     if [ x"$RESOLVCONF" = "xtrue" ]; then
       /opt/zimbra/unbound/sbin/unbound-checkconf -o interface | (
-        default=yes
         while read interface; do
-          default=no
           if [ "x$interface" = x127.0.0.1 ]; then
             echo "nameserver 127.0.0.1"
           elif [ "x$interface" = x::1 ]; then
