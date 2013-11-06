@@ -68,12 +68,15 @@ components="\
   heimdal \
   httpd \
   keyview \
+  ldns \
+  libmemcached \
   libtool \
   memcached \
   mariadb \
   mysql \
   net-snmp \
   nginx \
+  opendkim \
   openldap \
   openldap-clibs \
   openssl \
@@ -81,6 +84,8 @@ components="\
   rsync \
   snmp \
   tcmalloc \
+  unbound \
+  zeromq \
   zimbramon/bin \
   zimbramon/crontabs \
   zimbramon/rrdtool \
@@ -650,22 +655,10 @@ if [ -d ${zimbra_home}/zimbramon/lib ]; then
   chown -R ${root_user}:${root_group} ${zimbra_home}/zimbramon/lib
 fi
 
-if [ -L ${zimbra_home}/libmemcached ]; then
-  printMsg "Fixing ownership and permissions on ${zimbra_home}/libmemcached"
-  chown -fR ${root_user}:${root_group} ${zimbra_home}/libmemcached*
-fi
-
 if [ -L ${zimbra_home}/opendkim ]; then
-  printMsg "Fixing ownership and permissions on ${zimbra_home}/opendkim"
-  chown -fR ${root_user}:${root_group} ${zimbra_home}/opendkim*
   if [ -d ${zimbra_home}/data/opendkim ]; then
     chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/opendkim
   fi
-fi
-
-if [ -L ${zimbra_home}/zeromq ]; then
-  printMsg "Fixing ownership and permissions on ${zimbra_home}/zeromq"
-  chown -fR ${root_user}:${root_group} ${zimbra_home}/zeromq*
 fi
 
 if [ -L ${zimbra_home}/postfix ]; then
