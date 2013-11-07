@@ -449,9 +449,12 @@ sub processfile
     }
     elsif ($_=~/^CLASS:PRIVATE/)                   #Mark it as PUBLIC
     {
-      print_outfile("CLASS:PUBLIC");
-      $fdelete=1;
-      $write_pos = tell OTHANDLE;
+      if ($Isclass_normal)
+      {
+        print_outfile("CLASS:PUBLIC");
+        $fdelete=1;
+        $write_pos = tell OTHANDLE;
+      }
     }
     elsif ($_=~/^DTSTART[:;]/)           #store DTSTART
     {
