@@ -5,7 +5,7 @@
  		/* do not delay opening until first write, because we may
  		 * chroot and no longer be able to access dev/log and so on */
 -		openlog(ident, LOG_NDELAY, LOG_DAEMON);
-+		openlog(ident, LOG_NDELAY, LOG_LOCAL4);
++		openlog(ident, LOG_NDELAY, LOG_LOCAL0);
  		logging_to_syslog = 1;
  		return;
  	}
