@@ -1369,15 +1369,6 @@ function(it) {
 	}
 };
 
-Dwt.toggle =
-function(it, show) {
-	it = Dwt.byId(it);
-	if (show == null) {
-		show = (Dwt.getVisible(it) != true);
-	}
-	Dwt.setVisible(it, show);
-};
-
 //setText Methods
 
 Dwt.setText =
