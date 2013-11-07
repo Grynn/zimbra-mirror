@@ -31,6 +31,7 @@ zmsetvars \
 PID=""
 unbound=${zimbra_home}/libexec/zmunbound
 config=${zimbra_home}/conf/unbound.conf
+platform=`${zimbra_home}/libexec/get_plat_tag.sh`;
 
 RESOLVCONF=false
 if [ -x /sbin/resolvconf ]; then
@@ -71,7 +72,7 @@ start()
       rewriteconfig
     fi
     if [ x"$RESOLVCONF" = "xtrue" ]; then
-      /opt/zimbra/unbound/sbin/unbound-checkconf -o interface | (
+      ${zimbra_home}/unbound/sbin/unbound-checkconf -o interface | (
         while read interface; do
           if [ "x$interface" = x127.0.0.1 ]; then
             echo "nameserver 127.0.0.1"
@@ -80,6 +81,8 @@ start()
           fi
         done
       ) | sudo /sbin/resolvconf -a lo.zimbra-unbound
+    elif [[ $platform == "RHEL"*"64" || $platform == "SLES"*"64" || $platform == "CentOS"*"64" ]]; then
+      sudo ${zimbra_home}/libexec/zmdnscachealign add
     fi
     sudo $unbound
     if [ $? != 0 ]; then
@@ -97,64 +100,67 @@ start()
 
 stop()
 {
-        checkrunning
-        if [ x"$RESOLVCONF" = "xtrue" ]; then
-            sudo /sbin/resolvconf -d lo.zimbra-unbound
-        fi
-        if [ $RUNNING = 0 ]; then
-          echo "dnscache not running"
-          exit 0
-        else
-          echo -n "Stopping dnscache..."
-          kill -TERM $PID 2> /dev/null
-          for ((i=0; i < 300; i++)); do
-            sleep 5
-            kill -0 $PID 2> /dev/null
-            if [ $? != 0 ]; then
-              echo " done."
-              exit 0
-            fi
-          done
-          kill -TERM $PID 2> /dev/null
-          if [ $? = 0 ]; then
-            echo " failed to stop $PID"
-            exit 1
-          else
-            echo " done."
-          fi
-        fi
+  checkrunning
+  if [ x"$RESOLVCONF" = "xtrue" ]; then
+    sudo /sbin/resolvconf -d lo.zimbra-unbound
+  fi
+  elif [[ $platform == "RHEL"*"64" || $platform == "SLES"*"64" || $platform == "CentOS"*"64" ]]; then
+    sudo ${zimbra_home}/libexec/zmdnscachealign remove
+  fi
+  if [ $RUNNING = 0 ]; then
+    echo "dnscache not running"
+    exit 0
+  else
+    echo -n "Stopping dnscache..."
+    kill -TERM $PID 2> /dev/null
+    for ((i=0; i < 300; i++)); do
+      sleep 5
+      kill -0 $PID 2> /dev/null
+      if [ $? != 0 ]; then
+        echo " done."
         exit 0
+      fi
+    done
+    kill -TERM $PID 2> /dev/null
+    if [ $? = 0 ]; then
+      echo " failed to stop $PID"
+      exit 1
+    else
+      echo " done."
+    fi
+  fi
+  exit 0
 }
 
 status()
 {
-        checkrunning
-        echo -n "dnscache is "
-        if [ $RUNNING = 0 ]; then
-                echo "not running."
-                exit 1
-        else
-                echo "running with pid: $PID"
-                exit 0
-        fi
+  checkrunning
+  echo -n "dnscache is "
+  if [ $RUNNING = 0 ]; then
+          echo "not running."
+          exit 1
+  else
+          echo "running with pid: $PID"
+          exit 0
+  fi
 }
 
 case "$1" in
-        reload|restart)
-                $0 stop
-                $0 start $2
-                ;;
-        start)
-                start $2
-                ;;
-        stop)
-                stop
-                ;;
-        status)
-                status
-                ;;
-        *)
-                echo "Usage: $0 start|stop|restart|reload|status"
-                exit 1
-                ;;
+  reload|restart)
+          $0 stop
+          $0 start $2
+          ;;
+  start)
+          start $2
+          ;;
+  stop)
+          stop
+          ;;
+  status)
+          status
+          ;;
+  *)
+          echo "Usage: $0 start|stop|restart|reload|status"
+          exit 1
+          ;;
 esac

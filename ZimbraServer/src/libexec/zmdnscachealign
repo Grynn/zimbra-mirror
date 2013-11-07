@@ -1,0 +1,51 @@
+#!/bin/bash
+
+add_dns() {
+  if [ -x /opt/zimbra/unbound/sbin/unbound ]; then
+    /opt/zimbra/unbound/sbin/unbound-checkconf -o interface | (
+      while read interface; do
+        if [ "x$interface" = x127.0.0.1 ]; then
+          if [[ ! $(grep 127.0.0.1 /etc/resolv.conf) ]]; then
+            sed -i '1s|^|nameserver 127.0.0.1\n|' /etc/resolv.conf
+          fi
+        elif [ "x$interface" = x::1 ]; then
+          if [[ ! $(grep ::1 /etc/resolv.conf) ]]; then
+            sed -i '1s|^|nameserver ::1\n|' /etc/resolv.conf
+          fi
+        fi
+      done
+    )
+  fi
+}
+
+remove_dns() {
+  if [ -x /opt/zimbra/unbound/sbin/unbound ]; then
+      /opt/zimbra/unbound/sbin/unbound-checkconf -o interface | (
+        while read interface; do
+          if [ "x$interface" = x127.0.0.1 ]; then
+            if [[ $(grep 127.0.0.1 /etc/resolv.conf) ]]; then
+              sed -i '/nameserver 127.0.0.1/d' /etc/resolv.conf
+            fi
+          elif [ "x$interface" = x::1 ]; then
+            if [[ ! $(grep ::1 /etc/resolv.conf) ]]; then
+              sed -i '/nameserver ::1/d' /etc/resolv.conf
+            fi
+          fi
+        done
+      )
+  fi
+}
+
+case "$1" in
+  add)
+          add_dns
+          ;;
+  remove)
+          remove_dns
+          ;;
+  *)
+          echo "Usage: $0 add|remove"
+          exit 1
+          ;;
+esac
+
