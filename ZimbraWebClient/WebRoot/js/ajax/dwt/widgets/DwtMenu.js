@@ -915,7 +915,7 @@ function(child) {
 			this._table.rows[0].deleteCell(Dwt.getCellIndex(cell));
 		} else {
 			var el = child.getHtmlElement();
-			if (el && el.parentNode.parentNode.rowIndex > -1)// Make sure that the element exists in the table
+			if (el && el.parentNode && el.parentNode.parentNode.rowIndex > -1)// Make sure that the element exists in the table
 				this._table.deleteRow(el.parentNode.parentNode.rowIndex);
 		}
 	}
