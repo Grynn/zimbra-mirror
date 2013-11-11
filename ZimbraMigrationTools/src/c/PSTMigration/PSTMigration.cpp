@@ -51,7 +51,7 @@ void AdminAuth()
     m_pAdminConnection = new Zimbra::Rpc::AdminConnection(lpServerAddress, nAdminPort, TRUE, 0,
         L"");
     m_pAdminConnection->SetCurrentUser((LPWSTR)lpAccountUser);
-    m_pAdminConnection->SendRequest(authRequest, pResponseXml.getref());
+    m_pAdminConnection->SendRequestSynchronousXMLDoc(authRequest, pResponseXml.getref());
 }
 
 void UserAuth()
@@ -65,7 +65,7 @@ void UserAuth()
 
     Zimbra::Rpc::AuthRequest authRequest(lpAccountUser, lpAccountUserPwd, lpServerAddress);
 
-    m_pConnection->SendRequest(authRequest, pResponseXml.getref());
+    m_pConnection->SendRequestSynchronousXMLDoc(authRequest, pResponseXml.getref());
 
     Zimbra::Util::ScopedPtr<Zimbra::Rpc::Response> pResponse(
     Zimbra::Rpc::Response::Manager::NewResponse(pResponseXml.get()));
@@ -127,7 +127,7 @@ void ZCFileUploadTest()
 
     try
     {
-        z_pConnection->SendRequest(request, pResponse.getref());
+        z_pConnection->SendRequestSynchronousZC(request, pResponse.getref());
     }
     catch (Zimbra::Rpc::SoapFaultResponse &fault)
     {
