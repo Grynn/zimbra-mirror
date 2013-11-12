@@ -1,6 +1,8 @@
 AjxPackage.require("ajax.3rdparty.tinymce.tinymce_min");
 AjxPackage.require("ajax.3rdparty.tinymce.jquery_tinymce_min");
 AjxPackage.require("ajax.3rdparty.tinymce.locales");
+AjxPackage.require("ajax.3rdparty.tinymce.plugins.zemoticons.data");
+AjxPackage.require("ajax.3rdparty.tinymce.plugins.zemoticons.plugin");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.autolink.plugin_min");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.charmap.plugin_min");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.contextmenu.plugin_min");
