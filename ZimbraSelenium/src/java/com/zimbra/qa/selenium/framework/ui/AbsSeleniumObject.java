@@ -2855,10 +2855,14 @@ public abstract class AbsSeleniumObject {
 		WebElement we = null;
 		if(bys != null){
 			for(By by:bys){
-				if(we == null){
-					we = webDriver().findElement(by);
-				}else{
-					we = we.findElement(by);
+				try {					
+					if(we == null){
+						we = webDriver().findElement(by);
+					}else{
+						we = we.findElement(by);
+					}
+				}catch(Exception ex){
+					logger.info("...findBy()..." + ex);
 				}
 			}
 		}

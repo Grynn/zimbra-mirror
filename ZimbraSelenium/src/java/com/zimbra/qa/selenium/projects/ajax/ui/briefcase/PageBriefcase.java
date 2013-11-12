@@ -883,7 +883,7 @@ public class PageBriefcase extends AbsTab {
 			for (int i = 1; i <= count; i++) {
 			    itemIndexLocator = itemLocator + "[position()=" + i + "]";
 			    if (sIsElementPresent(itemIndexLocator + "//*[contains(text(),'" + itemName + "')]")) {
-				checkBoxLocator = itemIndexLocator + "//td[contains(@id,'zlif__BDLV')]/div[contains(@class,'ImgCheckbox')]";
+				checkBoxLocator = itemIndexLocator + "//div[contains(@id,'zlif__BDLV')]/div[contains(@class,'ImgCheckbox')]";
 				break;
 			    }
 			}
@@ -1404,7 +1404,7 @@ public class PageBriefcase extends AbsTab {
 			if (sIsElementPresent(itemLocator + ":nth-child(" + i
 					+ "):contains(" + itemName + ")")) {
 				lockIconLocator = itemLocator + ":nth-child(" + i
-						+ ")>table>tbody>tr>td>div[id^=zlif__BDLV][id$=__loid][class^=Img]";
+						+ ")>table>tbody>tr>td>div[id^=zlif__BDLV][id$=__loid]>[class^=Img]";
 				break;
 			}
 		}
