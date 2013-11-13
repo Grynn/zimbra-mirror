@@ -1773,7 +1773,7 @@ function(text, isHtml) {
 
 	// Check for UNKNOWN followed by HEADER
 	var first = results[0], second = results[1];
-	if (first && first.type === AjxStringUtil.ORIG_UNKNOWN && second && second.type === AjxStringUtil.ORIG_HEADER) {
+	if (first && first.type === AjxStringUtil.ORIG_UNKNOWN && second && (second.type === AjxStringUtil.ORIG_HEADER || second.type === AjxStringUtil.ORIG_WROTE_STRONG)) {
 		var originalText = AjxStringUtil._getTextFromBlock(first.block);
 		if (originalText) {
 			return originalText;
