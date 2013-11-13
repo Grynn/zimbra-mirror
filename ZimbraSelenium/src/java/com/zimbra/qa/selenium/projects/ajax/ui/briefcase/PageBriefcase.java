@@ -1145,7 +1145,10 @@ public class PageBriefcase extends AbsTab {
 			}
 
 			// click on the option
-			this.zClickAt(optionLocator, "0,0");
+			//this.zClickAt(optionLocator, "0,0");
+			//optionLocator = "css=div[id=zm__Briefcase] div[id=TAG_MENU] tr[id=POPUP_TAG_MENU]>td[id^=TAG_MENU_dropdown]>div[class=ImgCascade]";
+			this.sMouseOver(optionLocator);
+
 
 			// Now the ContextMenu option is opened
 			// Click on the specified sub option
