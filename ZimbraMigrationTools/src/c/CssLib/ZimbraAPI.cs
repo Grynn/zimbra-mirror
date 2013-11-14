@@ -194,6 +194,23 @@ public class ZimbraAPI
         {"/MAPIRoot/Chats","14"},
         {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Zadania","15"}};
 
+   Dictionary<string, string> specialFoldersMap_pt = new Dictionary<string, string>()  //Portuguese (Portugal)
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Entrada","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Lixeira","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Spam","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Enviadas","5"},
+        {"/MAPIRoot/Drafts","6"},  {"/MAPIRoot/Rascunhos","6"},
+        {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Contactos","7"},
+        {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Marcadores","8"},
+        {"/MAPIRoot/Conversations","9"}, {"/MAPIRoot/T\u00f3picos de conversa\u00e7\u00e3o","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Agenda","10"},
+        {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Contatos que receberam e-mail","13"},
+        {"/MAPIRoot/Chats","14"}, {"/MAPIRoot/Bate-papos","14"},
+        {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/Tarefas","15"}};
+
+  
    Dictionary<string, string> specialFoldersMap_ptb = new Dictionary<string, string>()  //Portuguese (Brazil)
     {{"","0"},{"/MAPIRoot","1"},
         {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Caixa de entrada","2"},
@@ -582,6 +599,19 @@ public class ZimbraAPI
 
 
                 }
+            case 2070:
+                {
+                    {
+                        string tempstr = folderPath;
+                        if (specialFoldersMap_pt.ContainsKey(tempstr))
+                            return specialFoldersMap_ptb[tempstr];
+                        else
+                            return "";
+                    }
+
+
+                }
+
 
             case 1048:
                 {
