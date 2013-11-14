@@ -269,8 +269,10 @@ function() {
 			pattern = "\\b"+pattern+"\\b";
 		}
 
+		var caseSensitive = this.getMessage("format.caseSensitive") === BOUNDARY_TRUE;
+
 		// save regex
-		regex = new RegExp(pattern, "gi");
+		regex = new RegExp(pattern, "g" + (!caseSensitive ? "i" : ""));
 		regex.mapping = Com_Zimbra_Date.__replaceKeyword_mapping;
 		Com_Zimbra_Date.REGEXES.push(regex);
 
