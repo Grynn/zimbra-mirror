@@ -40,8 +40,10 @@ keymap = {
 	"ldap_common_writetimeout"		:	("olcWriteTimeout",	"cn=config", False),
 
 	"ldap_db_maxsize"			:	("olcDbMaxsize",	"olcDatabase={3}mdb,cn=config", False),
+	"ldap_db_envflags"			:	("olcDbEnvFlags",	"olcDatabase={3}mdb,cn=config", False),
 
 	"ldap_accesslog_maxsize"		:	("olcDbMaxsize",	"olcDatabase={2}mdb,cn=config", True),
+	"ldap_accesslog_envflags"		:	("olcDbEnvFlags",	"olcDatabase={2}mdb,cn=config", True),
 
 	"ldap_overlay_syncprov_checkpoint"	:	("olcSpCheckpoint",	"olcOverlay={0}syncprov,olcDatabase={3}mdb,cn=config", True),
 
