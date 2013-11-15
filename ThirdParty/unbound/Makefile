@@ -74,6 +74,7 @@ build:
 		--with-username=zimbra \
 		--with-conf-file=/opt/zimbra/conf/unbound.conf \
 		--with-pidfile=/opt/zimbra/log/unbound.pid \
+		--with-chroot-dir=/opt/zimbra \
 		--with-ldns=/opt/zimbra/ldns-$(LDNS_VERSION))
 	(cd unbound-$(UNBOUND_VERSION);  LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(LDNS_LIB_DIR) $(MAKE) $(MAKEARGS))
 	(cd unbound-$(UNBOUND_VERSION); LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(LDNS_LIB_DIR) $(MAKE) $(MAKEARGS) install)
