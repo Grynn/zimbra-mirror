@@ -103,7 +103,6 @@ stop()
   checkrunning
   if [ x"$RESOLVCONF" = "xtrue" ]; then
     sudo /sbin/resolvconf -d lo.zimbra-unbound
-  fi
   elif [[ $platform == "RHEL"*"64" || $platform == "SLES"*"64" || $platform == "CentOS"*"64" ]]; then
     sudo ${zimbra_home}/libexec/zmdnscachealign remove
   fi
