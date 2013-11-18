@@ -369,11 +369,6 @@ public class AcceptMeeting extends CalendarWorkWeekTest {
 
         // Click Accept -> Edit Reply , which will open a new reply compose
         FormMailNew editReply = (FormMailNew)display.zPressButtonPulldown(Button.B_ACCEPT, Button.O_ACCEPT_EDIT_REPLY);
-	/* TODO: ... debugging to be moved to mailform class*/
-        String bodyLocator = "css=body[id=tinymce]";
-	boolean present = editReply.zWaitForElementPresent(bodyLocator, "30000");
-	ZAssert.assertTrue(present,"Verify the body field is available");
-
         editReply.zFillField(Field.Body, modifiedBody);
         editReply.zSubmit();
         

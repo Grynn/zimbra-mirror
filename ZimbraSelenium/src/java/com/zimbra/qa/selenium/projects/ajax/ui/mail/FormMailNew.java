@@ -831,7 +831,11 @@ public class FormMailNew extends AbsForm {
 
 					try {
 
-						this.sSelectFrame("css=iframe[id$='_content_ifr']"); // iframe index is 0 based
+						if (ZimbraSeleniumProperties.isWebDriver()) {
+							this.sSelectFrame("css=body[id=tinymce]");
+						} else {
+							this.sSelectFrame("css=iframe[id$='_content_ifr']");
+						}
 
 						locator = "css=html body";
 

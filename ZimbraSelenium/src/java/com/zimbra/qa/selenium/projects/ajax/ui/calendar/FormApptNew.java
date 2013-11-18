@@ -1133,6 +1133,7 @@ public class FormApptNew extends AbsForm {
 			zFillField(Field.Attendees, appt.getAttendees());
 			SleepUtil.sleepSmall();
 			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+			SleepUtil.sleepSmall();
 			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
 		}
 
@@ -1142,6 +1143,7 @@ public class FormApptNew extends AbsForm {
 			zFillField(Field.Optional, appt.getOptional());
 			SleepUtil.sleepSmall();
 			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+			SleepUtil.sleepSmall();
 		}
 
 		// Location
@@ -1149,6 +1151,7 @@ public class FormApptNew extends AbsForm {
 			zFillField(Field.Location, appt.getLocation());
 			SleepUtil.sleepSmall();
 			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+			SleepUtil.sleepSmall();
 			this.sClickAt("css= input[id$='_location_input']", "");
 			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
 			
@@ -1160,6 +1163,7 @@ public class FormApptNew extends AbsForm {
 			zFillField(Field.Equipment, appt.getEquipment());
 			SleepUtil.sleepSmall();
 			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+			SleepUtil.sleepSmall();
 		}
 
 		// Start date-time
