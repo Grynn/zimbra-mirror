@@ -196,15 +196,15 @@ public class ZimbraAPI
 
    Dictionary<string, string> specialFoldersMap_pt = new Dictionary<string, string>()  //Portuguese (Portugal)
     {{"","0"},{"/MAPIRoot","1"},
-        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Entrada","2"},
-        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Lixeira","3"},
-        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Spam","4"},
-        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Enviadas","5"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/Entrada","2"},{"/MAPIRoot/A Receber","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/Lixeira","3"},{"/MAPIRoot/Itens Eliminados","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/Spam","4"},{"/MAPIRoot/Correio Electrónico Não Solicitado","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/Enviadas","5"},{"/MAPIRoot/Itens Enviados","5"},
         {"/MAPIRoot/Drafts","6"},  {"/MAPIRoot/Rascunhos","6"},
         {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/Contactos","7"},
         {"/MAPIRoot/Tags","8"}, {"/MAPIRoot/Marcadores","8"},
         {"/MAPIRoot/Conversations","9"}, {"/MAPIRoot/T\u00f3picos de conversa\u00e7\u00e3o","9"},
-        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Agenda","10"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/Agenda","10"},{"/MAPIRoot/Calendário","10"},
         {"/MAPIRoot/Wiki","12"},
         {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/Contatos que receberam e-mail","13"},
         {"/MAPIRoot/Chats","14"}, {"/MAPIRoot/Bate-papos","14"},
@@ -604,7 +604,7 @@ public class ZimbraAPI
                     {
                         string tempstr = folderPath;
                         if (specialFoldersMap_pt.ContainsKey(tempstr))
-                            return specialFoldersMap_ptb[tempstr];
+                            return specialFoldersMap_pt[tempstr];
                         else
                             return "";
                     }
@@ -3233,11 +3233,20 @@ public class ZimbraAPI
         if (!GetParentAndChild("/", FolderPath, out parentPath, out folderName))
             return FOLDER_CREATE_FAILED_SYN;
 
+        
         // first look in the special folders array
         // if it's not there, look in the map
         string strParentNum = GetSpecialFolderNum(parentPath);
 
-        
+       /* if (parentPath.Contains("IPM_SUBTREE"))
+        {
+            if (dFolderMap.ContainsKey(parentPath))
+                strParentNum = dFolderMap[parentPath];
+            else
+            strParentNum = "1";
+
+        }*/
+
 
         if (strParentNum.Length == 0)
         {
