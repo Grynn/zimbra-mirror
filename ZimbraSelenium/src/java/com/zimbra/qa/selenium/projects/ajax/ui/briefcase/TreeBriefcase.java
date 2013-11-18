@@ -348,6 +348,11 @@ public class TreeBriefcase extends AbsTree {
 				page = new DialogCreateBriefcaseFolder(MyApplication,
 						((AppAjaxClient) MyApplication).zPageBriefcase);
 
+			} else if (option == Button.B_TREE_FIND_SHARES) {
+
+				optionLocator = "css=div[id='ZmActionMenu_briefcase_BRIEFCASE'] div[id='FIND_SHARES'] td[id$='_title']";
+				page = new DialogFindShares(MyApplication,
+						((AppAjaxClient) MyApplication).zPageBriefcase);
 			} else {
 				throw new HarnessException("Pulldown/Option " + pulldown + "/"
 						+ option + " not implemented");

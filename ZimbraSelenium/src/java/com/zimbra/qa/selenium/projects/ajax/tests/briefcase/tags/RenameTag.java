@@ -63,7 +63,7 @@ public class RenameTag extends FeatureBriefcaseTest {
 		ZAssert.assertNotNull(dialog, "Verify the Rename Tag dialog opened");
 
 		// Set the new name, click OK
-		SleepUtil.sleepSmall();
+		SleepUtil.sleepMedium();
 		dialog.zSetNewName(name2);
 		dialog.zClickButton(Button.B_OK);
 

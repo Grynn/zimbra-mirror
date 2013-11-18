@@ -25,6 +25,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.ajax.core.FeatureBriefcaseTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogFindShares;
 
 public class FindSharesWithFeatureDisabled extends FeatureBriefcaseTest {
@@ -42,7 +43,7 @@ public class FindSharesWithFeatureDisabled extends FeatureBriefcaseTest {
 		// super.startingAccountPreferences.put("zimbraFeatureTasksEnabled", "FALSE");
 	}	
 
-	@Bugs(ids = "60854")
+	@Bugs(ids = "60854,83663")
 	@Test(description = "Click on Find Shares link when some of the Features are disabled - Verify Find Shares dialog is displayed", groups = { "functional" })
 	public void FindSharesWithFeatureDisabled_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
@@ -57,8 +58,8 @@ public class FindSharesWithFeatureDisabled extends FeatureBriefcaseTest {
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Click on Find shares link
-		DialogFindShares dialog = (DialogFindShares) app.zTreeBriefcase
-				.zTreeItem(Action.A_LEFTCLICK, link);
+		DialogFindShares dialog = (DialogFindShares)app.zTreeBriefcase
+				.zPressPulldown(Button.B_TREE_FOLDERS_OPTIONS, Button.B_TREE_FIND_SHARES);
 
 		// Verify Find Shares dialog is opened
 		ZAssert.assertTrue(dialog.zIsActive(),

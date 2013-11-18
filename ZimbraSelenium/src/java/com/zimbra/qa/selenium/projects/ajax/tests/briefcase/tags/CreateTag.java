@@ -75,6 +75,7 @@ public class CreateTag extends FeatureBriefcaseTest {
 				.zKeyboardShortcut(shortcut);
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 
+		SleepUtil.sleepMedium();
 		// Fill out the input field
 		dialog.zSetTagName(name);
 		
@@ -149,6 +150,7 @@ public class CreateTag extends FeatureBriefcaseTest {
 				Action.A_RIGHTCLICK, Button.B_TREE_NEWTAG, tag1);
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 
+		SleepUtil.sleepMedium();
 		// Fill out the input field
 		dialog.zSetTagName(name2);
 		dialog.zClickButton(Button.B_OK);
@@ -187,6 +189,7 @@ public class CreateTag extends FeatureBriefcaseTest {
 		
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 
+		SleepUtil.sleepMedium();
 		// Fill out the input field
 		dialog.zSetTagName(name);
 		dialog.zClickButton(Button.B_OK);
