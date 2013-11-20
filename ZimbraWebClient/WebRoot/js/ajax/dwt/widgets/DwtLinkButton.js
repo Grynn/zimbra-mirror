@@ -26,6 +26,7 @@
 DwtLinkButton = function(params) {
 	params.className = params.className || "ZButtonLink";
 	this._noDropDown = params.noDropDown;
+	this._elementTag = params.elementTag;
 	DwtButton.call(this, params);
 };
 
@@ -53,5 +54,5 @@ DwtLinkButton.prototype._createHtmlFromTemplate = function(templateId, data) {
 
 DwtLinkButton.prototype._createElement =
 function() {
-	return document.createElement("SPAN")
+	return document.createElement(this._elementTag || "SPAN");
 };
