@@ -469,7 +469,7 @@ createCA() {
     KEYSIZE="$1"
     shift
   else 
-    KEYSIZE=1024
+    KEYSIZE=2048
   fi
   #echo "createCA: RSA keysize: $KEYSIZE"
   
@@ -973,7 +973,7 @@ createCert() {
     KEYSIZE="$1"
     shift
   else 
-    KEYSIZE=1024
+    KEYSIZE=2048
   fi
   #echo "createCert: RSA keysize: $KEYSIZE"
 
@@ -1353,7 +1353,7 @@ createCSR() {
     KEYSIZE="$1"
     shift
   else 
-    KEYSIZE=1024
+    KEYSIZE=2048
   fi
   
   if [ x"${1}" = "x-digest" ]; then
@@ -1604,10 +1604,10 @@ migrate () {
 usage () {
   echo "Usage: "
   echo "  $0 -help"
-  echo "  $0 createca [-new] [-keysize 1024] [-digest digest] [-subject subject]"
+  echo "  $0 createca [-new] [-keysize 2048] [-digest digest] [-subject subject]"
   echo "  $0 deployca"
-  echo "  $0 createcsr <self|comm> [-new] [-digest digest] [-keysize 1024] [-subject subject] [-subjectAltNames \"host1,host2\"]"
-  echo "  $0 createcrt [-new] [-days validation days] [-digest digest] [-keysize 1024] [-subject subject] [-subjectAltNames \"host1,host2\"]"
+  echo "  $0 createcsr <self|comm> [-new] [-digest digest] [-keysize 2048] [-subject subject] [-subjectAltNames \"host1,host2\"]"
+  echo "  $0 createcrt [-new] [-days validation days] [-digest digest] [-keysize 2048] [-subject subject] [-subjectAltNames \"host1,host2\"]"
   echo "  $0 deploycrt <self>"
   echo "  $0 deploycrt <comm> [certfile] [ca_chain_file]"
   echo "  $0 savecrt"
@@ -1629,7 +1629,7 @@ usage () {
   echo "     commercial  ${commercial_key}"
   echo "-  Default <subject>"
   echo "     \"$SUBJECT\""
-  echo "-  Default RSA <keysize> is 1024."
+  echo "-  Default RSA <keysize> is 2048"
   echo "-  Default <validation_days> is 1825 (5 years). "
   echo "-  Default <csr_file> is ${zimbra_csr}"
   echo "-  deploycrt self installs the certificates using self signed csr in ${zimbra_self_cert_directory}"
