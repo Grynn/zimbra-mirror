@@ -423,11 +423,14 @@ function(attrs) {
 		attrs["fullName"] = "";
 	}
 	return attrs;
-}
+};
 
 UnknownPersonSlide.prototype._setProfileImage =
 function(imgUrl) {
 	var div = document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID);
+	if (!div || !this.emailZimlet.emailAddress) {
+		return;
+	}
 	if (this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN) == -1 || !imgUrl || !div) {
 		this._handleImgLoadFailure();
 		return;
