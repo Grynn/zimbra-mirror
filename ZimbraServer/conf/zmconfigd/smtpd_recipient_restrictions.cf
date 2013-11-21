@@ -10,6 +10,7 @@ reject_unlisted_recipient
 %%contains VAR:zimbraMtaRestriction reject_unknown_reverse_client_hostname%%
 %%contains VAR:zimbraMtaRestriction reject_unknown_helo_hostname%%
 %%contains VAR:zimbraMtaRestriction reject_unknown_sender_domain%%
+%%contains VAR:zimbraMtaRestriction check_client_access lmdb:/opt/zimbra/conf/postfix_rbl_override%%
 %%explode reject_rbl_client VAR:zimbraMtaRestrictionRBLs%%
 %%explode reject_rhsbl_client VAR:zimbraMtaRestrictionRHSBLCs%%
 %%explode reject_rhsbl_reverse_client VAR:zimbraMtaRestrictionRHSBLRCs%%
