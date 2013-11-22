@@ -12,7 +12,7 @@ endif
 MAKEARGS ?= -j2 DEFINES="-DCHECK_CSN -DSLAP_SCHEMA_EXPOSE"
 ZIMBRA_HOME ?= /opt/zimbra
 
-PATCH	:= patch -g0 -N -p1 < ../patches/threadpool.patch; patch -g0 -N -p1 < ../patches/writers.patch;
+PATCH	:= patch -g0 -N -p1 < ../patches/threadpool.patch; patch -g0 -N -p1 < ../patches/writers.patch; patch -g0 -N -p1 < ../patches/ITS7749.patch;
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
