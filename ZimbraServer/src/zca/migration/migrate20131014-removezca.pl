@@ -28,6 +28,7 @@ doPreflightChecks();
 removeVAMI();
 configureVirtualConsole();
 cleanEnvironment();
+setVars();
 cleanProfile();
 removeVamilocale();
 cleanRC();
@@ -97,6 +98,14 @@ sub cleanEnvironment
 	close($orig_environment);
 	move "/tmp/environment","/etc/environment";
 }
+
+sub setVars
+{
+	print "Setting variables in /etc/sysctl.conf\n";
+	qx(sysctl -w vm.swappiness=0);
+	qx(echo vm.swappiness=0 > /etc/sysctl.d/60-vm.swappiness.conf);
+}
+	
 
 sub cleanProfile
 {
