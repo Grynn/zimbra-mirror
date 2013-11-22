@@ -1,5 +1,6 @@
 AjxPackage.require("ajax.3rdparty.tinymce.tinymce_jquery");
 AjxPackage.require("ajax.3rdparty.tinymce.locales");
+AjxPackage.require("ajax.3rdparty.tinymce.localeconv");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.zemoticons.data");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.zemoticons.plugin");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.autolink.plugin");
