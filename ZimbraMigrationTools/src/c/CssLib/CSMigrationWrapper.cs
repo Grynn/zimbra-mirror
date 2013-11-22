@@ -1404,7 +1404,12 @@ public class CSMigrationWrapper
         }
         else
         {
-            Log.err("CSmigrationwrapper get folders returned null for folders");
+            string s = "CSmigrationwrapper get folders returned null for folders";
+            Acct.LastProblemInfo = new ProblemInfo(accountName, s, ProblemInfo.TYPE_ERR);
+            Acct.TotalErrors++;
+            Acct.IsCompletedMigration = false;
+            Log.err(s);
+            user.Uninit();
             return;
         }
         Acct.migrationFolder.CurrentCountOfItems = folders.Count();

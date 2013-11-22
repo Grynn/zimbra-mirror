@@ -44,7 +44,7 @@ MAPIStore::MAPIStore(): m_Store(NULL), m_mapiSession(NULL)
 MAPIStore::~MAPIStore()
 {
     Zimbra::Util::AutoCriticalSection autocriticalsection(cs_store);
-    ULONG flags = LOGOFF_ORDERLY;
+    //ULONG flags = 0;//LOGOFF_ORDERLY;
 	if ((m_specialFolderIds.cValues != 0) && (m_specialFolderIds.lpbin != NULL))
 	{
 		Zimbra::MAPI::Util::FreeAllSpecialFolders(&m_specialFolderIds);
@@ -54,7 +54,8 @@ MAPIStore::~MAPIStore()
 
     if (m_Store)
     {
-        m_Store->StoreLogoff(&flags);
+		//hangs on OL 2007
+        //m_Store->StoreLogoff(&flags);
         m_Store->Release();
     }
     m_Store = NULL;

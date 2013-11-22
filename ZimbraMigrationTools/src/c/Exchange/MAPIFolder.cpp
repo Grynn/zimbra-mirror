@@ -110,6 +110,7 @@ MAPIFolder::~MAPIFolder()
 		UlRelease(m_pContentsTable);
 	if(m_pHierarchyTable!=NULL)
 		UlRelease(m_pHierarchyTable);
+	m_pHierarchyTable=NULL;
 	m_pContentsTable = NULL;
     m_folder = NULL;
     m_EntryID.lpb = NULL;

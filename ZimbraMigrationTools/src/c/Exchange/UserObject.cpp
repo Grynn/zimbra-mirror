@@ -87,7 +87,7 @@ STDMETHODIMP CUserObject::GetFolders(VARIANT *vObjects)
     dlog.trace(L"Begin GetFolders");
     VariantInit(vObjects);
     hr = mapiObj->GetFolderList(vObjects);    
-    if (FAILED(hr))
+    if (hr!=S_OK)
     {
           CComBSTR str = "End GetFolders " ;
           str += hr;
