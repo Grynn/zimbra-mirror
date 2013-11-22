@@ -47,7 +47,6 @@ build:
 	tar xzf src/mariadb-$(MARIADB_VERSION_STRING).tar.gz
 	(cd mariadb-$(MARIADB_VERSION_STRING); \
 	$(PATCH) \
-	CFLAGS="-g -O3 -DNDEBUG" CXXFLAGS="-g -O3 -DNDEBUG -felide-constructors -fno-exceptions -fno-rtti" \
 	$(LDFLAGS) \
 	CPPFLAGS="-I/opt/zimbra/openssl-$(OPENSSL_VERSION)/include -I/opt/zimbra/tcmalloc-$(TCMALLOC_VERSION)/include" \
 	/usr/bin/cmake . -DCMAKE_SKIP_BUILD_RPATH=FALSE \
@@ -55,6 +54,7 @@ build:
 		-DCMAKE_INSTALL_RPATH="/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib" \
 		-DCMAKE_PREFIX_PATH=/opt/zimbra/openssl-$(OPENSSL_VERSION) -DWITH_SSL=yes \
 		-DCMAKE_INSTALL_PREFIX=/opt/zimbra/mariadb-$(MARIADB_VERSION) \
+		-DBUILD_TYPE=RELEASE \
 		-DWITH_SAFEMALLOC=OFF \
 		-DWITH_FAST_MUTEXES=ON \
 		-DENABLED_PROFILING=ON \
