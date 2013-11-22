@@ -101,9 +101,17 @@ sub cleanEnvironment
 
 sub setVars
 {
-	print "Setting variables in /etc/sysctl.conf\n";
+	print "Setting variables in /etc/sysctl.d/60-zcs.conf\n";
 	qx(sysctl -w vm.swappiness=0);
-	qx(echo vm.swappiness=0 > /etc/sysctl.d/60-vm.swappiness.conf);
+	qx(sysctl -w vm.oom_dump_tasks=1);
+	qx(sysctl -w net.ipv4.tcp_fin_timeout=15);
+	qx(sysctl -w net.ipv4.tcp_tw_reuse=1);
+	qx(sysctl -w net.ipv4.tcp_tw_recycle=1);
+	qx(echo vm.swappiness=0 > /etc/sysctl.d/60-zcs.conf);
+	qx(echo vm.oom_dump_tasks=1 >> /etc/sysctl.d/60-zcs.conf);
+	qx(echo net.ipv4.tcp_fin_timeout=15 >> /etc/sysctl.d/60-zcs.conf);
+	qx(echo net.ipv4.tcp_tw_reuse=1 >> /etc/sysctl.d/60-zcs.conf);
+	qx(echo net.ipv4.tcp_tw_recycle=1 >> /etc/sysctl.d/60-zcs.conf);
 }
 	
 
