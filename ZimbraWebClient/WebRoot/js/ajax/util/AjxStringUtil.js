@@ -45,7 +45,7 @@ function(val) {
  * @param {string} str  The string to capitalize.
  */
 AjxStringUtil.capitalize = function(str) {
-	return str.length > 0 ? str.charAt(0).toUpperCase() + str.substr(1).toLowerCase() : "";
+	return str && str.length > 0 ? str.charAt(0).toUpperCase() + str.substr(1).toLowerCase() : "";
 };
 
 /**
@@ -55,7 +55,7 @@ AjxStringUtil.capitalize = function(str) {
  * @param {string} str  The string to capitalize.
  */
 AjxStringUtil.capitalizeFirstLetter = function(str) {
-	return str.length > 0 ? str.charAt(0).toUpperCase() + str.substr(1) : "";
+	return str && str.length > 0 ? str.charAt(0).toUpperCase() + str.substr(1) : "";
 };
 
 
@@ -66,7 +66,7 @@ AjxStringUtil.capitalizeFirstLetter = function(str) {
  * @param {string} str  The string to capitalize.
  */
 AjxStringUtil.capitalizeWords = function(str) {
-    return AjxUtil.map(str.split(/\s+/g), AjxStringUtil.capitalizeFirstLetter).join(" ");
+    return str ? AjxUtil.map(str.split(/\s+/g), AjxStringUtil.capitalizeFirstLetter).join(" ") : "";
 };
 
 /**
@@ -1903,6 +1903,9 @@ AjxStringUtil._getOriginalHtmlContent = function(text) {
 	var ln = nodeList.length, i, results = [], count = {}, el, prevEl, nodeName, type, prevType, sepNode;
 	for (i = 0; i < ln; i++) {
 		el = nodeList[i];
+		if (el.nodeType === AjxUtil.ELEMENT_NODE) {
+			el.normalize();
+		}
 		nodeName = el.nodeName.toLowerCase();
 		type = AjxStringUtil._checkNode(nodeList[i]);
 		if (type !== null) {
