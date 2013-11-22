@@ -1,0 +1,24 @@
+From ac9ac0094e5d5aa45b726bd93a06ec57edf830e4 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@openldap.org>
+Date: Thu, 21 Nov 2013 11:18:24 -0800
+Subject: [PATCH] ITS#7749 more for prev commit
+
+---
+ servers/slapd/overlays/syncprov.c |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+diff --git a/servers/slapd/overlays/syncprov.c b/servers/slapd/overlays/syncprov.c
+index b00d515..6279bb5 100644
+--- a/servers/slapd/overlays/syncprov.c
++++ b/servers/slapd/overlays/syncprov.c
+@@ -450,7 +450,6 @@ syncprov_findbase( Operation *op, fbase_cookie *fc )
+ 		fop.o_sync_mode = 0;	/* turn off sync mode */
+ 		fop.o_managedsait = SLAP_CONTROL_CRITICAL;
+ 		fop.o_callback = &cb;
+-		LDAP_SLIST_INIT( &fop.o_extra );
+ 		fop.o_tag = LDAP_REQ_SEARCH;
+ 		fop.ors_scope = LDAP_SCOPE_BASE;
+ 		fop.ors_limit = NULL;
+-- 
+1.7.4.2
+
