@@ -158,7 +158,7 @@ function(option, selected, value, image) {
 			selected = opt.isSelected();
 		} else if(option instanceof DwtSelectOptionData || option.value != null) {
 			val = value != null ? value : option.value;
-			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this, null, option.image, option.selectedValue, false, option.extraData);
+			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this, null, option.image, option.selectedValue, false, option.extraData, option.id);
 			selected = Boolean(option.isSelected);
             id = option.id;
 		} else {
@@ -178,7 +178,7 @@ function(option, selected, value, image) {
 	var cell = row.insertCell(-1);
 	cell.className = 'ZSelectPseudoItem';
 	cell.innerHTML = [
-        "<div class='ZWidgetTitle' id='" + id + "'>",
+        "<div class='ZWidgetTitle'>",
             AjxStringUtil.htmlEncode(opt.getDisplayValue()),
         "</div>"
     ].join("");
@@ -648,7 +648,7 @@ function() {
             mi = new DwtMenuItem({parent:menu, style:DwtMenuItem.SEPARATOR_STYLE});
             mi.setEnabled(false);
         } else {
-            var mi = new DwtSelectMenuItem(menu, Dwt.getNextId(option._value + "_"));
+            var mi = new DwtSelectMenuItem(menu, Dwt.getNextId((option.id || option._value) + "_"));
             var image = option.getImage();
             if (image) {
                 mi.setImage(image);
@@ -795,7 +795,7 @@ DwtSelectOptionData = function(value, displayValue, isSelected, selectedValue, i
  * @param {Boolean}	hr                  True => This option will be usd to create a unselectable horizontal rule
  * @param {Object} extraData  map of extra name/value pairs
  */
-DwtSelectOption = function(value, selected, displayValue, owner, optionalDOMId, image, selectedValue, hr, extraData) {
+DwtSelectOption = function(value, selected, displayValue, owner, optionalDOMId, image, selectedValue, hr, extraData, id) {
 	this._value = value;
 	this._selected = selected;
 	this._displayValue = displayValue;
@@ -803,6 +803,8 @@ DwtSelectOption = function(value, selected, displayValue, owner, optionalDOMId, 
 	this._selectedValue = selectedValue;
     this._hr = hr;
 	this._extraData = extraData;
+
+	this.id = id;
 
 	this._internalObjectId = DwtSelect._assignId(this);
 	this.enabled = true;
