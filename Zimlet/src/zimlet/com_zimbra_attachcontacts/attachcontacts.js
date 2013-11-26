@@ -47,8 +47,7 @@ AttachContactsZimlet.prototype.init = function() {
 
 AttachContactsZimlet.prototype.initializeAttachPopup =
 function(menu, controller) {
-    var mi = controller._createAttachMenuItem(menu, ZmMsg.contacts,
-                    new AjxListener(this, this.showAttachmentDialog ));
+	controller._createAttachMenuItem(menu, ZmMsg.contacts, this.showAttachmentDialog.bind(this), "ATTACH_MENU_CONTACT");
 };
 
 AttachContactsZimlet.prototype.removePrevAttDialogContent =

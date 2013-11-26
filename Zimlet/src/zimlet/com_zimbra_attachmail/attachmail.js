@@ -38,8 +38,7 @@ var AttachMailZimlet = com_zimbra_attachmail_HandlerObject;
 
 AttachMailZimlet.prototype.initializeAttachPopup =
 function(menu, controller) {
-    var mi = controller._createAttachMenuItem(menu, ZmMsg.mail,
-        new AjxListener(this, this.showAttachmentDialog ));
+	controller._createAttachMenuItem(menu, ZmMsg.mail, this.showAttachmentDialog.bind(this), "ATTACH_MENU_MAIL");
 };
 
 AttachMailZimlet.prototype.removePrevAttDialogContent =
