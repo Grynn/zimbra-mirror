@@ -306,6 +306,9 @@ function(delay, kbGenerated) {
 		x = pb.x + pb.width + vBorder;
 		hBorder = (ppHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderTopWidth);
 		y = pb.y + hBorder;
+        if (menu.centerOnParentVertically()) {
+            y += pb.height / 2;
+        }
 		//x = ((x + s.x) >= ws.x) ? pb.x - s.x - vBorder : x;
 	}
 	menu.popup(delay, x, y, kbGenerated);
