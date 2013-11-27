@@ -172,7 +172,7 @@ function() {
 	this._preferenceView = new DwtComposite(this.getShell());
 	this._preferenceView.getHtmlElement().style.overflow = "auto";
 	this._preferenceView.getHtmlElement().innerHTML = this._createPrefView();
-	this._preferenceDialog = this._createDialog({title:"Yahoo! Emoticons Preferences", view:this._preferenceView, standardButtons:[DwtDialog.OK_BUTTON]});
+	this._preferenceDialog = this._createDialog({title: "Yahoo! Emoticons Preferences", view: this._preferenceView, standardButtons: [DwtDialog.OK_BUTTON], id: "YahooEmoticonsPrefs"});
 	this._preferenceDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okPreferenceBtnListener));
 
 	if (!this.enableInMail) {
