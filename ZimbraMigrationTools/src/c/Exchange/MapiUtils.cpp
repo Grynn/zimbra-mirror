@@ -2558,8 +2558,22 @@ bool Zimbra::MAPI::Util::SetOLProfileRegistryEntries(LPCWSTR strProfileName)
 
     if (lRet == ERROR_SUCCESS)
     {
-        wstring cstrRegistryKeyPath = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\";
+		wstring cstrRegistryKeyPath =L"";
+
+		if(iOLVersion == 15)
+		{
+
+			  cstrRegistryKeyPath = L"Software\\Microsoft\\Office\\15\\Outlook\\Profiles\\";
+
+
+		}
+		else
+		{
+         cstrRegistryKeyPath = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\";
 		cstrRegistryKeyPath += L"Windows Messaging Subsystem\\Profiles\\";
+		}
+        /*wstring cstrRegistryKeyPath = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\";
+		cstrRegistryKeyPath += L"Windows Messaging Subsystem\\Profiles\\";*/
 		
 		cstrRegistryKeyPath += strProfileName;
 		cstrRegistryKeyPath += L"\\0a0d020000000000c000000000000046";	
@@ -2587,7 +2601,7 @@ bool Zimbra::MAPI::Util::SetOLProfileRegistryEntries(LPCWSTR strProfileName)
 				bRet=true;
 			}
 		}//end olversion 12
-		else if(iOLVersion == 14)
+		else if(iOLVersion >= 14)
 		{
 			if( lRetCode == ERROR_SUCCESS )
 			{
@@ -2664,7 +2678,7 @@ LONG Zimbra::MAPI::Util::GetOutlookVersion(int &iVersion)
 
             _stscanf(pszOlkVer, _T("Outlook.Application.%d"), &nOlkVer);
             // Set the OOM version only if its outlook 2003 or 2007
-            if ((11 == nOlkVer) || (12 == nOlkVer) || (14 == nOlkVer))
+            if ((11 == nOlkVer) || (12 == nOlkVer) || (14 == nOlkVer) ||(15 == nOlkVer))
                 iVersion = nOlkVer;
         }
         delete[] pszOlkVer;
