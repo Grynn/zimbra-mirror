@@ -1175,6 +1175,33 @@ STDMETHODIMP CMapiAccessWrap::GetRuleList(VARIANT *rules)
     return hr;
 }
 
+
+STDMETHODIMP CMapiAccessWrap::InitializePublicFolders(BSTR * statusMsg)
+{
+	HRESULT hr = S_OK;
+	// Create Session and Open admin store.
+    MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook.PUBLIC");
+
+	//Zimbra::MAPI::MAPIAccessAPI *maapi = NULL;
+	//maapi = new Zimbra::MAPI::MAPIAccessAPI(L"", L"");
+	maapi->InitializePublicFolders();
+    
+	std::vector<std::string> pubFldrList;
+	
+	//enumerate public folder
+    maapi->EnumeratePublicFolders(pubFldrList); 
+	//print pblic folder
+	vector<std::string>::iterator pfenumItr;
+	printf("Enumerated Public folders:\n");
+	for (pfenumItr = pubFldrList.begin(); pfenumItr != pubFldrList.end(); pfenumItr++)
+    {
+		printf("- %s \n", (*pfenumItr).c_str());
+	}
+	
+	 *statusMsg =  SysAllocString(L"");
+
+return hr;
+}
 void CMapiAccessWrap::CreateAttachmentAttrs(BSTR attrs[], int num)
 {
 

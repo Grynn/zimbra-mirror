@@ -3238,14 +3238,14 @@ public class ZimbraAPI
         // if it's not there, look in the map
         string strParentNum = GetSpecialFolderNum(parentPath);
 
-       /* if (parentPath.Contains("IPM_SUBTREE"))
+       if (parentPath.Contains("IPM_SUBTREE"))
         {
             if (dFolderMap.ContainsKey(parentPath))
                 strParentNum = dFolderMap[parentPath];
             else
             strParentNum = "1";
 
-        }*/
+        }
 
 
         if (strParentNum.Length == 0)

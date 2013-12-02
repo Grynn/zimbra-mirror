@@ -76,6 +76,7 @@ public:
     STDMETHOD(UserUninit) ();
     STDMETHODIMP GetOOOInfo(BSTR *OOOInfo);
     STDMETHODIMP GetRuleList(VARIANT *rules);
+	STDMETHODIMP InitializePublicFolders(BSTR * statusMsg);
     void CreateAttachmentAttrs(BSTR attrs[], int num);
     void CreateExceptionAttrs(BSTR attrs[], int num);
 

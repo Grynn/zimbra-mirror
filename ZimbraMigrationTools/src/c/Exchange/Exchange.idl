@@ -91,6 +91,7 @@ interface IMapiAccessWrap : IDispatch{
     [id(5)] HRESULT UserUninit();
     [id(6)] HRESULT GetOOOInfo([out] BSTR *OOOInfo);
     [id(7)] HRESULT GetRuleList([out] VARIANT *rules);
+	[id(8)] HRESULT InitializePublicFolders([out] BSTR * statusMsg);
 };
 
 [

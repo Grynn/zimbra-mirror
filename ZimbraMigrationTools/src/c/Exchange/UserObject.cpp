@@ -46,6 +46,22 @@ STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account, BSTR *pEr
         Log::KV<BSTR>(L"account", account));
     MailType = L"MAPI";
     UserID = location;
+	bool m_public = false;
+
+	if(m_public)
+	{
+
+		 LPCWSTR err = MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook.PUBLIC");
+
+        if (err)
+            *pErrorText = CComBSTR(err);
+        else
+            hr = mapiObj->UserInit(L"", L"", pErrorText);
+		hr = mapiObj->InitializePublicFolders(pErrorText);
+	}
+	else
+	{
+
     if (host && *host)
     {
         hr = mapiObj->UserInit(location, account, pErrorText);
@@ -59,6 +75,7 @@ STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account, BSTR *pEr
         else
             hr = mapiObj->UserInit(L"", account, pErrorText);
     }
+	}
     if (FAILED(hr))
     {
         CComBSTR str = "Init error ";

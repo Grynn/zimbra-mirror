@@ -1336,6 +1336,10 @@ public class CSMigrationWrapper
         InitLogFile(accountName, level);
         try
         {
+            bool IsPublic = false;
+            if(IsPublic)
+                value = user.Init("", "", accountName);
+            else
             value = user.Init(isServer ? "host" : "", Acct.AccountID, accountName);
         }
         catch (Exception e)
