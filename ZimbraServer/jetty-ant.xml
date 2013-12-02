@@ -66,6 +66,7 @@
     <jetty.run tempDirectory="${project.outputDirectory}" jettyXml="jetty-ant-config.xml">
       <connectors>
         <connector port="7070" />
+      	<connector port="7072" />
       </connectors>
 
       <systemProperties>
