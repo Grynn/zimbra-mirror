@@ -412,6 +412,7 @@ function(htmlElement, style) {
  * @return {DwtRectangle}	the elements bounds
  *
  * @see #setBounds
+ * @see #getInsetBounds
  * @see #getLocation
  * @see #getSize
  */
@@ -911,6 +912,27 @@ Dwt.insetBounds = function(bounds, insets) {
 	bounds.width  -= insets.left + insets.right;
 	bounds.height -= insets.top + insets.bottom;
 	return bounds;
+};
+
+/**
+ * Gets the bounds of an HTML element, excluding borders and paddings.
+ *
+ * @param {HTMLElement} htmlElement		the HTML element
+ *
+ * @return {DwtRectangle}	the elements bounds
+ *
+ * @see #setBounds
+ * @see #getInsetBounds
+ * @see #getLocation
+ * @see #getSize
+ */
+Dwt.getInsetBounds = function(htmlElement) {
+	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
+
+	var bounds = Dwt.getBounds(htmlElement);
+	var insets = Dwt.getInsets(htmlElement);
+
+	return Dwt.insetBounds(bounds, insets);
 };
 
 Dwt.getMargins = function(htmlElement) {

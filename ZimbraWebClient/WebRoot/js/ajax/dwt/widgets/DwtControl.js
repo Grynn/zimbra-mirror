@@ -813,6 +813,8 @@ function(propagate, events) {
  * @return {DwtRectangle}		the control bounds
  *
  * @see DwtRectangle
+ * @see #getInsetBounds
+ * @see #getInsets
  * @see #getSize
  * @see #getLocation
  * @see #getH
@@ -833,6 +835,61 @@ function() {
 };
 
 /**
+ * Gets the inset bounds of the component. Similar to the bounds, but excluding borders and paddings.
+ *
+ * @return {DwtRectangle}		the control inset bounds
+ *
+ * @see DwtRectangle
+ * @see #getBounds
+ * @see #getInsets
+ * @see #getSize
+ * @see #getLocation
+ * @see #getH
+ * @see #getW
+ * @see #getX
+ * @see #getXW
+ * @see #getY
+ * @see #getYH
+ * @see #setBounds
+ * @see #setSize
+ * @see #setLocation
+ */
+DwtControl.prototype.getInsetBounds =
+function() {
+	if (!this._checkState()) { return; }
+
+	return Dwt.getInsetBounds(this.getHtmlElement());
+};
+
+/**
+ * Gets the insets of the component, i.e. the width of borders and paddings.
+ *
+ * @return {DwtRectangle}		the control insets
+ *
+ * @see DwtRectangle
+ * @see #getBounds
+ * @see #getInsetBounds
+ * @see #getInsets
+ * @see #getSize
+ * @see #getLocation
+ * @see #getH
+ * @see #getW
+ * @see #getX
+ * @see #getXW
+ * @see #getY
+ * @see #getYH
+ * @see #setBounds
+ * @see #setSize
+ * @see #setLocation
+ */
+DwtControl.prototype.getInsets =
+function() {
+	if (!this._checkState()) { return; }
+
+	return Dwt.getInsets(this.getHtmlElement());
+};
+
+/**
  * Sets the bounds of a control. The position type of the control must
  * be absolute or else an exception is thrown. To omit setting a value set the
  * actual parameter value to <i>Dwt.DEFAULT</i>
@@ -846,6 +903,8 @@ function() {
  *
  * @see DwtRectangle
  * @see #getBounds
+ * @see #getInsetBounds
+ * @see #getInsets
  * @see #setSize
  * @see #setLocation
  * @see #getSize
@@ -1306,6 +1365,8 @@ function(id) {
  * @return {number}		the X coordinate of the control 
  *
  * @see #getBounds
+ * @see #getInsetBounds
+ * @see #getInsets
  * @see #getSize
  * @see #getLocation
  * @see #getH
@@ -1330,6 +1391,8 @@ function() {
  * @return {number} 	the horizontal extent of the control
  *
  * @see #getBounds
+ * @see #getInsetBounds
+ * @see #getInsets
  * @see #getSize
  * @see #getLocation
  * @see #getH
@@ -1355,6 +1418,8 @@ function() {
  * @return {number}		the Y coordinate of the control 
  *
  * @see #getBounds
+ * @see #getInsetBounds
+ * @see #getInsets
  * @see #getSize
  * @see #getLocation
  * @see #getH
@@ -1379,6 +1444,8 @@ function() {
  * @return {number}		the vertical extent of the control
  *
  * @see #getBounds
+ * @see #getInsetBounds
+ * @see #getInsets
  * @see #getSize
  * @see #getLocation
  * @see #getH
@@ -1426,6 +1493,8 @@ function(posStyle) {
  * @return {DwtPoint}		the location of the control
  *
  * @see #getBounds
+ * @see #getInsetBounds
+ * @see #getInsets
  * @see #getSize
  * @see #setLocation
  * @see #getH
@@ -1457,6 +1526,8 @@ function() {
  * @return {DwtControl}		this control
  *
  * @see #getBounds
+ * @see #getInsetBounds
+ * @see #getInsets
  * @see #getSize
  * @see #getLocation
  * @see #getH
@@ -1557,6 +1628,8 @@ function(position) {
  * @return	{number}		the width of the control
  *
  * @see #getBounds
+ * @see #getInsetBounds
+ * @see #getInsets
  * @see #getSize
  * @see #getLocation
  * @see #getH
@@ -1581,6 +1654,8 @@ function() {
  * @return {number}	the height of the control
  *
  * @see #getBounds
+ * @see #getInsetBounds
+ * @see #getInsets
  * @see #getSize
  * @see #getLocation
  * @see #getW
@@ -1606,6 +1681,8 @@ function() {
  * @return {DwtPoint}		the control size
  *
  * @see #getBounds
+ * @see #getInsetBounds
+ * @see #getInsets
  * @see #getLocation
  * @see #getH
  * @see #getW
@@ -1633,6 +1710,8 @@ function(getFromStyle) {
  * @return {DwtControl}	this control
  *
  * @see #getBounds
+ * @see #getInsetBounds
+ * @see #getInsets
  * @see #getSize
  * @see #setLocation
  * @see #getH
