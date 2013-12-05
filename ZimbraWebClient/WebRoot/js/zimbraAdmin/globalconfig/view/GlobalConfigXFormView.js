@@ -103,7 +103,7 @@ GlobalConfigXFormView.shouldEnableAddAllButton = function () {
 GlobalConfigXFormView.removeExt = function () {
 	var blockedExtArray = this.getInstanceValue(ZaGlobalConfig.A_zimbraMtaBlockedExtension);
 	var selectedExtArray = this.getInstanceValue(ZaGlobalConfig.A2_blocked_extension_selection);
-	var newBlockedExtArray = AjxUtil.arraySubstract(blockedExtArray,selectedExtArray);
+	var newBlockedExtArray = AjxUtil.arraySubtract(blockedExtArray,selectedExtArray);
 	this.setInstanceValue(newBlockedExtArray,ZaGlobalConfig.A_zimbraMtaBlockedExtension);
 	this.getForm().parent.setDirty(true);	
 }

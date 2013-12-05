@@ -677,7 +677,7 @@ AjxUtil.__mergeArrays_orderfunc = function (val1,val2) {
     if(val1 == val2) return  0;
 };
 
-AjxUtil.arraySubstract = function (arr1, arr2, orderfunc) {
+AjxUtil.arraySubtract = function (arr1, arr2, orderfunc) {
 	if(!orderfunc) {
 		orderfunc = function (val1,val2) {
 			if(val1>val2)
@@ -725,7 +725,11 @@ AjxUtil.arraySubstract = function (arr1, arr2, orderfunc) {
 	}
 	
 	return resArr;
-}
+};
+
+// Support deprecated, misspelled version
+AjxUtil.arraySubstract = AjxUtil.arraySubtract;
+
 /**
  * Returns the keys of the given hash as a sorted list.
  *

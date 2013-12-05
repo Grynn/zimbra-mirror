@@ -255,12 +255,12 @@ ZaNewDLXWizard.removeMembers = function(event) {
 	var tmpCurrentRemoveList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList);
 	var tmpOrigList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_origList);
 
-	var newMemberList = AjxUtil.arraySubstract(tmpCurrentMemberList, form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected));
+	var newMemberList = AjxUtil.arraySubtract(tmpCurrentMemberList, form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected));
 	newMemberList._version = tmpCurrentMemberList._version + 1;
 	this.setInstanceValue(newMemberList, ZaDistributionList.A2_memberList);
 
 
-	var newAddList = AjxUtil.arraySubstract(tmpCurrentAddList,form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected));
+	var newAddList = AjxUtil.arraySubtract(tmpCurrentAddList,form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected));
 	newAddList._version = tmpCurrentAddList._version + 1;
 	this.setInstanceValue(newAddList, ZaDistributionList.A2_addList);
 

@@ -565,7 +565,7 @@ function () {
 	if(AjxUtil.isEmpty(allNoteBookACLs))
 		return;
 
-	var newNoteBookACLs = AjxUtil.arraySubstract(allNoteBookACLs,aclSelectionCache,ZaDomain.compareACLs);
+	var newNoteBookACLs = AjxUtil.arraySubtract(allNoteBookACLs,aclSelectionCache,ZaDomain.compareACLs);
 	newNoteBookACLs._version = allNoteBookACLs._version+1;
 	*/
 	/*var cnt = allNoteBookACLs.length;
