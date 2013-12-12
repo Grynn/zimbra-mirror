@@ -142,7 +142,7 @@ P2
 * ability to change options of a select on the fly (property of SELECT, run routine on update)
 * repeat w/max number of rows (and scrolling?)
 * test deep nesting of subclasses
-	(wierdness with _BUTTON_GRID_ -> _TAB_BAR_ -> _SWITCH_TAB_BAR_)
+	(weirdness with _BUTTON_GRID_ -> _TAB_BAR_ -> _SWITCH_TAB_BAR_)
 * remove dependence on XFG class
 * 
 * model.addRowAfter:
