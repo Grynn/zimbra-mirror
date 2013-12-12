@@ -140,7 +140,7 @@ P2
 	- eg: value not being inherited?
 * make good, well-named, consistent css classes
 * ability to change options of a select on the fly (property of SELECT, run routine on update)
-* repeat w/ maximum number of rows (and scrolling?)
+* repeat w/ max number of rows (and scrolling?)
 * test deep nesting of subclasses
 	(weirdness with _BUTTON_GRID_ -> _TAB_BAR_ -> _SWITCH_TAB_BAR_)
 * remove dependence on XFG class
