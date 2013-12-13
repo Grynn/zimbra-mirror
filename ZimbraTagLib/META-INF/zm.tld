@@ -2694,7 +2694,7 @@
 
         <attribute>
             <description>
-                intial search folder path
+                initial search folder path
             </description>
             <name>folderpath</name>
             <required>false</required>
@@ -2706,6 +2706,15 @@
                 sortby
             </description>
             <name>sortby</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                whether or not to get all of a conversation's messages and their locations in search results
+            </description>
+            <name>fullconversation</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

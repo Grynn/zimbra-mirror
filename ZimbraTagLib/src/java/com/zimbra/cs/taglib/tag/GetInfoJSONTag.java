@@ -45,6 +45,7 @@ public class GetInfoJSONTag extends ZimbraSimpleTag {
     private boolean mDoSearch;
     private String mFolderPath;
     private String mSortBy;
+	private boolean mFullConversation;
 
     public void setVar(String var) { this.mVar = var; }
     public void setAuthtoken(ZAuthToken authToken) { this.mAuthToken = authToken; }
@@ -53,7 +54,8 @@ public class GetInfoJSONTag extends ZimbraSimpleTag {
     public void setTypes(String types) { mTypes = types; }
     public void setFolderpath(String folderPath) {mFolderPath = folderPath; }
     public void setSortby(String sortBy) {mSortBy = sortBy; }
-    public void doTag() throws JspException {
+	public void setFullconversation(boolean fullConversation) { mFullConversation = fullConversation; }
+	public void doTag() throws JspException {
         try {
             JspContext ctxt = getJspContext();
             PageContext pageContext = (PageContext) ctxt;
@@ -72,7 +74,7 @@ public class GetInfoJSONTag extends ZimbraSimpleTag {
                     mSortBy = this.getSortByAttr(folderId, mSortBy);
                 }
             }
-            Element e = getBootstrapJSON(url, remoteAddr, mAuthToken, mDoSearch, mItemsPerPage, mTypes, mSortBy);
+            Element e = getBootstrapJSON(url, remoteAddr, mAuthToken, mDoSearch, mItemsPerPage, mTypes, mSortBy, mFullConversation);
             ctxt.setAttribute(mVar, e.toString(),  PageContext.REQUEST_SCOPE);
         } catch (ServiceException e) {
             throw new JspTagException(e.getMessage(), e);
@@ -91,7 +93,7 @@ public class GetInfoJSONTag extends ZimbraSimpleTag {
      * @return top-level JSON respsonse
      * @throws ServiceException on error
      */
-    public static Element getBootstrapJSON(String url, String remoteAddr, ZAuthToken authToken, boolean doSearch, String itemsPerPage, String searchTypes, String sortBy) throws ServiceException {
+    public static Element getBootstrapJSON(String url, String remoteAddr, ZAuthToken authToken, boolean doSearch, String itemsPerPage, String searchTypes, String sortBy, boolean fullConversation) throws ServiceException {
         JsonDebugListener debug = new JsonDebugListener();
         SoapTransport transport = TagUtil.newJsonTransport(url, remoteAddr, authToken, debug);
 
@@ -108,6 +110,7 @@ public class GetInfoJSONTag extends ZimbraSimpleTag {
                 if (sortBy != null && !sortBy.isEmpty()) {
                     search.addAttribute(MailConstants.A_SORTBY, sortBy);
                 }
+	            search.addAttribute(MailConstants.A_FULL_CONVERSATION, fullConversation);
             }
             transport.invoke(batch);
             return debug.getEnvelope();
