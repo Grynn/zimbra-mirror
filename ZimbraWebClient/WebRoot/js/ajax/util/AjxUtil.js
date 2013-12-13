@@ -429,10 +429,52 @@ AjxUtil.values = function(object, acceptFunc) {
     return values;
 };
 
-AjxUtil.foreach = function(array, func) {
+/**
+ * Generate another hash mapping property values to their names. Each value
+ * should be unique; otherwise the results are undefined.
+ *
+ * @param obj                   An object, treated as a hash.
+ * @param func [function]       An optional function for filtering properties.
+ */
+AjxUtil.valueHash = function(obj, acceptFunc) {
+    // don't rely on the value in the object itself
+    hasown = Object.prototype.hasOwnProperty.bind(obj);
+
+    var r = {};
+    for (var k in obj) {
+        var v = obj[k];
+
+        if (!hasown(k) || (acceptFunc && !acceptFunc(k, obj)))
+            continue;
+        r[v] = k;
+    }
+    return r;
+};
+
+/**
+ * Call a function with the the items in the given object, which special logic
+ * for handling of arrays.
+ *
+ * @param obj                   Array or other object
+ * @param func [function]       Called with index or key and value.
+ */
+AjxUtil.foreach = function(obj, func) {
     if (!func) return;
-    for (var i = 0; i < array.length; i++) {
-        func(array[i], i);
+
+    if ('length' in obj) {
+        var array = obj;
+
+        for (var i = 0; i < array.length; i++) {
+            func(array[i], i);
+        }
+    } else {
+        // don't rely on the value in the object itself
+        hasown = Object.prototype.hasOwnProperty.bind(obj);
+
+        for (var k in obj) {
+            if (hasown(k))
+                func(obj[k], k)
+        }
     }
 };
 
