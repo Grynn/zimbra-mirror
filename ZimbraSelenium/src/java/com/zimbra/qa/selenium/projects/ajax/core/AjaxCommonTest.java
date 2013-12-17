@@ -204,6 +204,13 @@ public class AjaxCommonTest {
 					if (ZimbraSeleniumProperties.isWebDriver()) {
 						//_webDriver.get(ZimbraSeleniumProperties.getBaseURL());
 						_webDriver.navigate().to(ZimbraSeleniumProperties.getBaseURL());
+						/*
+						if(ZimbraSeleniumProperties.getCalculatedBrowser().contains("iexplore")){	
+							if(app.zPageMain.sIsElementPresent("id=overridelink")){
+								_webDriver.navigate().to("javascript:document.getElementById('overridelink').click()");						
+							}
+						}
+						*/
 					} 
 					else if (ZimbraSeleniumProperties.isWebDriverBackedSelenium()) 
 						_webDriverBackedSelenium.open(ZimbraSeleniumProperties.getBaseURL());

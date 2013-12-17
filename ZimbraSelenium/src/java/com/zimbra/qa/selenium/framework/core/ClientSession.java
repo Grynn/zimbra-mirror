@@ -113,31 +113,41 @@ public class ClientSession {
 	 */
 	public WebDriver webDriver() {
 		if (webDriver == null) {			
-			if(ZimbraSeleniumProperties.getStringProperty("browser").contains("iexplore")){	
+			if(ZimbraSeleniumProperties.getCalculatedBrowser().contains("iexplore")){	
 				DesiredCapabilities desiredCapabilities = DesiredCapabilities.internetExplorer();
 				//desiredCapabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+				//desiredCapabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+				//System.getenv("webdriver.ie.driver");System.getProperty("webdriver.ie.driver");
 				desiredCapabilities.setCapability("ignoreProtectedModeSettings", true);
 				String iedriverPath = null;
-				if((iedriverPath = ZimbraSeleniumProperties.getStringProperty("iedriver.path"))!=null){
-					System.setProperty("webdriver.ie.driver",iedriverPath);
+				if(System.getProperty("webdriver.ie.driver")==null){
+					if((iedriverPath = ZimbraSeleniumProperties.getStringProperty("iedriver.path"))!=null
+							||(iedriverPath = System.getenv("webdriver.ie.driver"))!=null){
+						System.setProperty("webdriver.ie.driver",iedriverPath);
+					}
 				}
+				
 				webDriver = new InternetExplorerDriver(desiredCapabilities);	
 			}
-			else if(ZimbraSeleniumProperties.getStringProperty("browser").contains("googlechrome")){
+			else if(ZimbraSeleniumProperties.getCalculatedBrowser().contains("googlechrome")){
 				//DesiredCapabilities caps = DesiredCapabilities.chrome();
 				//caps.setJavascriptEnabled(true);
 				//caps.setCapability("chrome.binary", "path/to/chrome.exe");
 				//System.setProperty("webdriver.chrome.driver","/path/to/chromedriver.exe");
 				//ChromeDriver driver = new ChromeDriver(caps);
-				
+				//System.getenv("webdriver.chrome.driver");System.getProperty("webdriver.chrome.driver");
 				ChromeOptions options = new ChromeOptions();
 				String chromedriverPath = null;
-				if((chromedriverPath = ZimbraSeleniumProperties.getStringProperty("chromedriver.path"))!=null){
-					System.setProperty("webdriver.chrome.driver",chromedriverPath);
+				if(System.getProperty("webdriver.chrome.driver")==null){
+					if((chromedriverPath = ZimbraSeleniumProperties.getStringProperty("chromedriver.path"))!=null
+							||(chromedriverPath = System.getenv("webdriver.chrome.driver"))!=null){
+						System.setProperty("webdriver.chrome.driver",chromedriverPath);
+					}
 				}
+
 				webDriver = new ChromeDriver(options);
 				//webDriver = new ChromeDriver();
-			} else if (ZimbraSeleniumProperties.getStringProperty("browser").contains("firefox")){
+			} else if (ZimbraSeleniumProperties.getCalculatedBrowser().contains("firefox")){
 				FirefoxProfile profile = new FirefoxProfile();
 				//Proxy proxy = new Proxy();
 				//proxy.setHttpProxy("proxy.zimbra.com:3128");
@@ -146,7 +156,7 @@ public class ClientSession {
 				profile.setEnableNativeEvents(false);
 				webDriver = new FirefoxDriver(profile);
 				//webDriver = new FirefoxDriver();					
-			} else if(ZimbraSeleniumProperties.getStringProperty("browser").contains("remoteff")){
+			} else if(ZimbraSeleniumProperties.getCalculatedBrowser().contains("remoteff")){
 				try {
 					DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
 					desiredCapabilities.setBrowserName(DesiredCapabilities.firefox().getBrowserName());
@@ -158,7 +168,7 @@ public class ClientSession {
 				} catch (Exception ex) {
 					logger.error(ex);
 				}
-			}else if(ZimbraSeleniumProperties.getStringProperty("browser").contains("remotechrome")){
+			}else if(ZimbraSeleniumProperties.getCalculatedBrowser().contains("remotechrome")){
 				try {
 					DesiredCapabilities desiredCapabilities = DesiredCapabilities.chrome();
 					desiredCapabilities.setJavascriptEnabled(true);
@@ -166,7 +176,7 @@ public class ClientSession {
 				} catch (Exception ex) {
 						logger.error(ex);					
 				}					
-			}else if(ZimbraSeleniumProperties.getStringProperty("browser").contains("remoteie")){
+			}else if(ZimbraSeleniumProperties.getCalculatedBrowser().contains("remoteie")){
 				try {
 					DesiredCapabilities desiredCapabilities = DesiredCapabilities.internetExplorer();
 					desiredCapabilities.setJavascriptEnabled(true);
