@@ -164,6 +164,25 @@ DwtForm.prototype.setLabel = function(id, label) {
 };
 
 /**
+ * Sets the image.
+ *
+ * @param	{string}	id 		the id
+ * @param	{string}	image 	the image
+ */
+DwtForm.prototype.setImage = function(id, image) {
+	var item = this._items[id];
+	if (!item) {
+		return;
+	}
+	var control = item.control;
+	if (!control) {
+		return;
+	}
+	control.setImage(image);
+};
+
+
+/**
  * Gets the label.
  * 
  * @param	{string}	id 		the id
