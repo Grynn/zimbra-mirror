@@ -47,6 +47,7 @@ build:
 	tar xzf src/mariadb-$(MARIADB_VERSION_STRING).tar.gz
 	(cd mariadb-$(MARIADB_VERSION_STRING); \
 	$(PATCH) \
+	CFLAGS="-g -O3" CXXFLAGS="-g -O3 -felide-constructors -fno-exceptions -fno-rtti" \
 	$(LDFLAGS) \
 	CPPFLAGS="-I/opt/zimbra/openssl-$(OPENSSL_VERSION)/include -I/opt/zimbra/tcmalloc-$(TCMALLOC_VERSION)/include" \
 	/usr/bin/cmake . -DCMAKE_SKIP_BUILD_RPATH=FALSE \
