@@ -69,6 +69,7 @@ sub getLocalConfig {
     $val =~ s/^'//;
     $ENV{$key} = $val;
   }
+  chomp($key);
   $ENV{zmsetvars} = 'true';
   return $ENV{$key};
 }
