@@ -438,7 +438,7 @@ AjxUtil.values = function(object, acceptFunc) {
  */
 AjxUtil.valueHash = function(obj, acceptFunc) {
     // don't rely on the value in the object itself
-    hasown = Object.prototype.hasOwnProperty.bind(obj);
+    var hasown = Object.prototype.hasOwnProperty.bind(obj);
 
     var r = {};
     for (var k in obj) {
@@ -450,6 +450,7 @@ AjxUtil.valueHash = function(obj, acceptFunc) {
     }
     return r;
 };
+AjxUtil.backMap = AjxUtil.valueHash;
 
 /**
  * Call a function with the the items in the given object, which special logic
