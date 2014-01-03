@@ -55,6 +55,7 @@ ZmBatchCommand = function(continueOnError, accountName, useJson) {
 	this._onError = (continueOnError === false) ? ZmBatchCommand.STOP : ZmBatchCommand.CONTINUE;
 	this._accountName = accountName;
 	this._useJson = useJson;
+    this._requestBody = null;
 
 	this.curId = 0;
     this._cmds = [];
@@ -192,6 +193,7 @@ function(callback, errorCallback, offlineCallback) {
                 }
 			}
 			params.jsonObj = jsonObj;
+            this._requestBody = jsonObj;
 		}
 	}
 	else {
@@ -208,6 +210,7 @@ function(callback, errorCallback, offlineCallback) {
 				batchSoapDoc.getMethod().appendChild(node);
 			}
 			params.soapDoc = batchSoapDoc;
+            this._requestBody = batchSoapDoc;
 		}
 	}
 
@@ -219,6 +222,11 @@ function(callback, errorCallback, offlineCallback) {
 		callback.run();
 	}
 };
+
+ZmBatchCommand.prototype.getRequestBody =
+function() {
+    return this._requestBody;
+}
 
 /**
  * @private
