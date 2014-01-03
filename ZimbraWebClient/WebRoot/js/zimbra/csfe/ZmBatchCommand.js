@@ -152,7 +152,7 @@ function() {
  *										stop.
  */
 ZmBatchCommand.prototype.run =
-function(callback, errorCallback) {
+function(callback, errorCallback, offlineCallback) {
 
 	// Invoke each command so that it hands us its SOAP doc, response callback,
 	// and error callback
@@ -168,6 +168,7 @@ function(callback, errorCallback) {
 		asyncMode:		true,
 		callback:		new AjxCallback(this, this._handleResponseRun, [callback, errorCallback]),
 		errorCallback:	errorCallback,
+		offlineCallback: offlineCallback,
 		accountName:	this._accountName
 	};
 
