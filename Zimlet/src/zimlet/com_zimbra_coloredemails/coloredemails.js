@@ -251,7 +251,11 @@ com_zimbra_coloredemails.prototype._showPreferenceDlg = function() {
 	document.getElementById('cEmail_showHideLnk').onclick = AjxCallback.simpleClosure(this._showHideDetails, this);
 	this._showHideDetails();//initially hide the div
 	var pickrComposite = new DwtComposite(this.getShell());
-	this._fontColorButton = new ZmHtmlEditorColorPicker(pickrComposite, null, "ZButton");
+	this._fontColorButton = new DwtButtonColorPicker({
+		parent: pickrComposite,
+		className: "ZButton",
+		template: "dwt.Widgets#ZToolbarButton"
+	});
 	this._fontColorButton.dontStealFocus();
 	this._fontColorButton.setImage("FontColor");
 	this._fontColorButton.showColorDisplay(true);
@@ -260,7 +264,11 @@ com_zimbra_coloredemails.prototype._showPreferenceDlg = function() {
 	document.getElementById("cEmail_colorsMenuTD").appendChild(pickrComposite.getHtmlElement());
 
 	var pickrBgComposite = new DwtComposite(this.getShell());
-	this._fontBackgroundButton = new ZmHtmlEditorColorPicker(pickrBgComposite, null, "ZButton");
+	this._fontBackgroundButton = new DwtButtonColorPicker({
+		parent: pickrBgComposite,
+		className: "ZButton",
+		template: "dwt.Widgets#ZToolbarButton"
+	});
 	this._fontBackgroundButton.dontStealFocus();
 	this._fontBackgroundButton.setImage("FontBackground");
 	this._fontBackgroundButton.showColorDisplay(true);
