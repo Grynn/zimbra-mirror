@@ -237,6 +237,9 @@ Dwt.DND_DROP_MOVE = 2;
  */
 Dwt.SCROLLBAR_WIDTH = 22;
 
+// Editor formats
+Dwt.HTML = "text/html";
+Dwt.TEXT = "text/plain";
 
 // Keys used for retrieving data
 // TODO JSDoc

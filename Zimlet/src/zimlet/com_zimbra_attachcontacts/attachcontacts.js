@@ -78,7 +78,7 @@ function() {
     this.AttachContactsView.attachDialog = attachDialog;
 	attachDialog.setOkListener(new AjxCallback(this, this._okListener));
     this.AttachContactsView.attachDialog.popup();
-    this.AttachContactsView.attachDialog.enableInlineOption(this._composeMode == DwtHtmlEditor.HTML);
+    this.AttachContactsView.attachDialog.enableInlineOption(this._composeMode == Dwt.HTML);
     this._addedToMainWindow = true;
 };
 

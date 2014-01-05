@@ -40,7 +40,7 @@
  *
  * We also have classes that create elements in another document (IFRAME) forward
  * their mouse events to us so that we can notify a client object if appropriate.
- * The two classes that do that are DwtIframe and DwtHtmlEditor.
+ * The one class that does that is DwtIframe.
  *
  * The framework can support multiple simultaneous clients. For example, a context
  * menu and toast could both be listening for outside mouse clicks at the same time.

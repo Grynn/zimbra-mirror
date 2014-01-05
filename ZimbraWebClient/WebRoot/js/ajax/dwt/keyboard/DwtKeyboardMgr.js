@@ -676,7 +676,7 @@ function(kbMgr, obj) {
 	
 //	DBG.println("kbnav", "DwtKeyboardMgr.__syncFocus: focus obj: " + kbMgr.__focusObj + " - obj: " + obj);
 	if (!kbMgr.__dwtCtrlHasFocus) {
-		// DwtInputField DwtHtmlEditor
+		// DwtInputField
 		if ((obj != kbMgr.__focusObj) && !kbMgr.__dwtInputCtrl) {
 //			DBG.println("kbnav", "Focus out of sync, resetting");
 			if (kbMgr.__currTabGroup && kbMgr.__currTabGroup.setFocusMember(obj)) {

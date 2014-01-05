@@ -1247,11 +1247,6 @@ function(){
 	return null;
 };
 
-/* Note that a hack has been added to DwtHtmlEditor to call this method when the 
- * editor gets focus. The reason for this is that the editor uses an Iframe 
- * whose events are independent of the menu's document. In this case event will 
- * be null.
- */
 DwtMenu._outsideMouseDownListener =
 function(ev) {
 

@@ -60,7 +60,7 @@
 <calcxmlRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.calcxml.com/schema/calcxmlRequest.xsd" username="<$= data.username $>" password="<$= data.password $>" responseType="both" version="1.1" returnDataTable="true">
 	<xyChart> <chartTitle><$= data.title $></chartTitle> <xTitle/> <yTitle/> <threeD>1</threeD> <barColor>6D9D6D</barColor> <barColor>CD3B3B</barColor> <barColor>8C93A5</barColor> <chartWidth>500</chartWidth> <chartHeight>300</chartHeight> </xyChart>	
 	<dataTable>
-		<cssClassName>DwtHtmlEditor-Table</cssClassName>
+		<cssClassName>ZmHtmlEditor-Table</cssClassName>
 	</dataTable>
 	<calcInput includeInResponse="true">
 		<<$=data.calcInputName $>>

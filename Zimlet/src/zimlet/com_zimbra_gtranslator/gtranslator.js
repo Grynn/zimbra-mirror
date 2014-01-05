@@ -105,7 +105,7 @@ function(viewId, isNewView) {
 		var saperator = "\r\n";
 
 		data = AjxStringUtil.htmlDecode(data);
-		if (mode == DwtHtmlEditor.HTML) {
+		if (mode == Dwt.HTML) {
 			saperator = "<br/>";
 			data = AjxStringUtil.nl2br(data);
 		}

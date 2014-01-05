@@ -335,7 +335,7 @@ function(controller, composeView, templateSubject, templateBody, currentBodyCont
 
 	//insert body
 	var saperator = "\r\n";
-	if ((this._composeMode == DwtHtmlEditor.HTML)) {
+	if ((this._composeMode == Dwt.HTML)) {
 		saperator = "</br>";
 	}
 	if (this.viewType == ZmId.VIEW_APPOINTMENT) {

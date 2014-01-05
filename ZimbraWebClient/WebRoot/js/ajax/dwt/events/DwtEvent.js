@@ -213,7 +213,7 @@ DwtEvent.TREE = "TREE";
 
 /**
  * State change events are fired when some intrinsic state of a widget changes. For
- * example it may be the font style of some text in {@link DwtHtmlEditor} changed.
+ * example it may be that an item was added to a {@link DwtListView}
  */
 DwtEvent.STATE_CHANGE	= "STATE_CHANGE";
 

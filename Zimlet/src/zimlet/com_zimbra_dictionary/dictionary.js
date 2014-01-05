@@ -152,7 +152,7 @@ function() {
 		fromIframe = false;
 		var els = document.getElementsByTagName("textarea");
 		for (var i = 0; i < els.length; i++) {
-			if (els[i].className == "DwtHtmlEditorTextArea") {
+			if (els[i].className == "ZmHtmlEditorTextArea") {
 				userSelection = (els[i].value).substring(els[i].selectionStart, els[i].selectionEnd);
 			}
 		}
