@@ -28,13 +28,6 @@ public class PageLogin extends AbsTab {
 		// Buttons
 		public static final String zBtnLogin = "css=input[class*=LoginButton]";
 
-
-		// Desktop-specific
-		public static final String zAddNewAccountButton = "css=td div[class*='ZPanel'][onclick*='OnAdd()']";
-		public static final String zMyAccountsTab = "css=div[class$='ctive ZPanelFirstTab']";
-		public static final String zBtnLoginDesktop = "css=div[id*='loginButton']";
-		public static final String zDeleteButton = "css=div[class*='ZPanelInfoInner'] a[href*='OnDelete']";
-
 		// Text Input
 		public static final String zInputUsername = "css=input[id='username']";
 		public static final String zInputPassword = "css=input[id='password']";
@@ -69,9 +62,6 @@ public class PageLogin extends AbsTab {
 			break;
 		case TOUCH:
 			locator = Locators.zBtnLogin;
-			break;
-		case DESKTOP:
-			locator = Locators.zAddNewAccountButton;
 			break;
 		default:
 			throw new HarnessException("Please add a support for appType: " + appType);

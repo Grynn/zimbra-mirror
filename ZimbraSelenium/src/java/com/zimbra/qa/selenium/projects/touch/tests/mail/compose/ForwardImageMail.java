@@ -48,13 +48,10 @@ public class ForwardImageMail extends TouchCommonTest {
 		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inbox);
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_FORWARD);
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressPulldown(Button.B_REPLY, Button.O_FORWARD);
 		ZAssert.assertTrue(app.zPageMail.zVerifyBodyContent(), "Verify the content of the mail");
 		ZAssert.assertTrue(app.zPageMail.zVerifyInlineImageInReadingPane(), "Verify inline image showing in the reading pane");
-		
-		mailform =  new FormMailNew(app);
 		mailform.zToolbarPressButton(Button.B_CANCEL);
-		mailform.zPressButton(Button.B_NO);
 		
 	}
 	
@@ -79,7 +76,7 @@ public class ForwardImageMail extends TouchCommonTest {
 		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inbox);
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_FORWARD);
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressPulldown(Button.B_REPLY, Button.O_FORWARD);
 		ZAssert.assertTrue(app.zPageMail.zVerifyInlineImageInComposedMessage(), "Verify image tag in the composed mail");
 		
 		mailform.zFillField(Field.To, ZimbraAccount.AccountB().EmailAddress);
@@ -108,7 +105,7 @@ public class ForwardImageMail extends TouchCommonTest {
 	
 	@Bugs( ids = "81069")
 	@Test( description = "Verify external image present after hitting Forward from the mail",
-			groups = { "smoke" })
+			groups = { "functional" })
 			
 	public void ForwardExternalImageMail_03() throws HarnessException {
 		
@@ -124,13 +121,10 @@ public class ForwardImageMail extends TouchCommonTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		app.zPageMail.zToolbarPressButton(Button.B_LOAD_IMAGES);
 		
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_FORWARD);
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressPulldown(Button.B_REPLY, Button.O_FORWARD);
 		ZAssert.assertTrue(app.zPageMail.zVerifyBodyContent(), "Verify the content of the mail");
 		ZAssert.assertTrue(app.zPageMail.zVerifyInlineImageInReadingPane(), "Verify inline image in the reading pane");
-		
-		mailform =  new FormMailNew(app);
 		mailform.zToolbarPressButton(Button.B_CANCEL);
-		mailform.zPressButton(Button.B_NO);
 		
 	}
 	
@@ -156,7 +150,7 @@ public class ForwardImageMail extends TouchCommonTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		app.zPageMail.zToolbarPressButton(Button.B_LOAD_IMAGES);
 		
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_FORWARD);
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressPulldown(Button.B_REPLY, Button.O_FORWARD);
 		ZAssert.assertTrue(app.zPageMail.zVerifyInlineImageInComposedMessage(), "Verify image tag in the composed mail");
 		
 		mailform.zFillField(Field.To, ZimbraAccount.AccountB().EmailAddress);

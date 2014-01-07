@@ -15,6 +15,8 @@
 package com.zimbra.qa.selenium.projects.touch.tests.mail.compose;
 
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -29,6 +31,7 @@ public class ReplyMail extends TouchCommonTest {
 		logger.info("New "+ ReplyMail.class.getCanonicalName());
 	}
 	
+	@Bugs( ids = "85534")
 	@Test( description = "Reply to a message and verify it",
 			groups = { "sanity" })
 			
@@ -38,7 +41,7 @@ public class ReplyMail extends TouchCommonTest {
 		
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "text <strong>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong> text";
-		String modifiedContent = " modified body" + ZimbraSeleniumProperties.getUniqueString();
+		String modifiedContent = "modified body" + ZimbraSeleniumProperties.getUniqueString();
 		String htmlBody = XmlStringUtil.escapeXml(
 				"<html>" +
 					"<head></head>" +
@@ -70,7 +73,7 @@ public class ReplyMail extends TouchCommonTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
 		// Reply to mail
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_REPLY);
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressPulldown(Button.B_REPLY, Button.O_REPLY);
 		mailform.zFillField(Field.Body, modifiedContent);
 		mailform.zSubmit();
 

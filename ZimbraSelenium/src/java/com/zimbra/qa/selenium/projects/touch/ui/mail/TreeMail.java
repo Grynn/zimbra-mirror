@@ -551,7 +551,7 @@ public class TreeMail extends AbsTree {
 
 		if ( action == Action.A_LEFTCLICK ) {
 			
-			locator = "css=div[id='ext-simplelistitem-" + (Integer.parseInt(folder.getId())-1) + "'] span[class='x-list-item-leaf']";
+			locator = "css=div[id='ext-simplelistitem-" + (Integer.parseInt(folder.getId())-1) + "'] div[class='zcs-menu-label']";
 
 		} else {
 			throw new HarnessException("Action "+ action +" not yet implemented");

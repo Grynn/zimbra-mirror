@@ -49,19 +49,20 @@ public class FormMailNew extends AbsForm {
 	 */
 	public static class Locators {
 		
-		public static final String zSendButton			= "css=div[class=x-body'] span[class='x-button-label']:contains('Send')";
-		public static final String zCancelButton		= "css=div[class=x-body'] span[class='x-button-label']:contains('Cancel')";
-		public static final String zSaveDraftButton		= "css=div[class=x-body'] span[class='x-button-label']:contains('Save Draft')";
+		public static final String zSendButton			= "css=div[id^='ext-composepanel'] span[class='x-button-label']:contains('Send')";
+		public static final String zCancelButton		= "css=div[id^='ext-composepanel'] span[class='x-button-label']:contains('Cancel')";
+		public static final String zSaveDraftButton		= "css=div[id^='ext-composepanel'] span[class='x-button-label']:contains('Save Draft')";
+		public static final String zAttachButton		= "css=div[id^='ext-composepanel'] div[id^=ext-element']['x-innerhtml']:contains('Attach')";
 				
-		public static final String zToField				= "css=div[class='x-container x-layout-box-item x-sized'] div[class^='x-innerhtml'] input";
-		public static final String zCcField				= "css=div[id='ext-contactfield-2'] div[class^='x-innerhtml'] input";
-		public static final String zBccField			= "css=div[id='ext-contactfield-3'] div[class^='x-innerhtml'] input";
+		public static final String zToField				= "css=div[id^='ext-composepanel'] div[id='ext-contactfield-1'] div[class^='x-innerhtml'] input";
+		public static final String zCcField				= "css=div[id^='ext-composepanel'] div[id='ext-contactfield-2'] div[class^='x-innerhtml'] input";
+		public static final String zBccField			= "css=div[id^='ext-composepanel'] div[id='ext-contactfield-3'] div[class^='x-innerhtml'] input";
 		public static final String zSubjectField		= "css=input[name=subject]";
 		public static final String zBodyField			= "css=div[class$='zcs-fully-editable']";
 		
-		public static final String zYesWarningDialog	= "css=div[class^='x-dock x-dock-vertical x-unsized'] div[class^='x-button-normal'] span[class='x-button-label']:contains('Yes')";
-		public static final String zNoWarningDialog		= "css=div[class^='x-dock x-dock-vertical x-unsized'] div[class^='x-button-normal'] span[class='x-button-label']:contains('No')";
-		public static final String zCancelWarningDialog	= "css=div[class^='x-dock x-dock-vertical x-unsized'] div[class^='x-button-normal'] span[class='x-button-label']:contains('Cancel')";
+		public static final String zYesWarningDialog	= "css=div[id^='ext-sheet'] div[id^='ext-toolbar'] span[class='x-button-label']:contains('Yes')";
+		public static final String zNoWarningDialog		= "css=div[id^='ext-sheet'] div[id^='ext-toolbar'] span[class='x-button-label']:contains('No')";
+		public static final String zCancelWarningDialog	= "css=div[id^='ext-sheet'] div[id^='ext-toolbar'] span[class='x-button-label']:contains('Cancel')";
 		
 	}
 
@@ -150,9 +151,9 @@ public class FormMailNew extends AbsForm {
 			locator = Locators.zSaveDraftButton;
 			page = this;
 			
-		} else if ( button == Button.B_SHOWCC || button == Button.B_SHOWBCC) {
+		} else if ( button == Button.B_EXPAND) {
 
-			locator = "css=div[class^='x-innerhtml']:contains('Show Cc/Bcc')";
+			locator = "css=span[class='x-button-icon x-shown collapsed']";
 			page = this;
 
 			if ( zCcBccIsActive() )
@@ -286,9 +287,11 @@ public class FormMailNew extends AbsForm {
 				throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
 			
 			this.sClickAt(locator, "");
-			this.sType(locator, value);
+			this.zTypeKeys(locator, value);
 			SleepUtil.sleepSmall();
-			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_SPACE);
+			SleepUtil.sleepSmall();
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_BACK_SPACE); //temporary work around
 			SleepUtil.sleepSmall();
 
 			return;
@@ -298,7 +301,7 @@ public class FormMailNew extends AbsForm {
 			locator = Locators.zCcField;
 
 			if ( !zCcBccIsActive() ) {
-				this.zToolbarPressButton(Button.B_SHOWCC);
+				this.zToolbarPressButton(Button.B_EXPAND);
 			}
 			
 			if ( !this.sIsElementPresent(locator) )
@@ -307,7 +310,9 @@ public class FormMailNew extends AbsForm {
 			this.sClickAt(locator, "");
 			this.sType(locator, value);
 			SleepUtil.sleepSmall();
-			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_SPACE);
+			SleepUtil.sleepSmall();
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_BACK_SPACE); //temporary work around
 			SleepUtil.sleepSmall();
 
 			return;
@@ -322,7 +327,9 @@ public class FormMailNew extends AbsForm {
 			this.sClickAt(locator, "");
 			this.sType(locator, value);
 			SleepUtil.sleepSmall();
-			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_SPACE);
+			SleepUtil.sleepSmall();
+			this.zKeyboard.zTypeKeyEvent(KeyEvent.VK_BACK_SPACE); //temporary work around
 			SleepUtil.sleepSmall();
 
 			return;
@@ -376,7 +383,7 @@ public class FormMailNew extends AbsForm {
 		logger.info(myPageName() + ".zCcBccIsActive()");
 
 		String locator;
-		locator = "css=div[class^='x-innerhtml']:contains('Cc/Bcc')";
+		locator = "css=span[class='x-button-icon x-shown collapsed']";
 		
 		if ( !sIsElementPresent(locator) )
 			throw new HarnessException("Unable to locate the BCC field "+ locator);
@@ -458,14 +465,17 @@ public class FormMailNew extends AbsForm {
 		// Fill out the To field
 		if ( to != null ) {
 			this.zFillField(Field.To, to.toString());
+			this.zMouseClick(500, 500); //temporary work around to enable save button (see bug https://bugzilla.zimbra.com/show_bug.cgi?id=85490)
 		}
 		
 		if ( cc != null ) {
 			this.zFillField(Field.Cc, cc.toString());
+			this.zMouseClick(500, 500); //temporary work around to enable save button (see bug https://bugzilla.zimbra.com/show_bug.cgi?id=85490)
 		}
 		
 		if ( bcc != null ) {
 			this.zFillField(Field.Bcc, bcc.toString());
+			this.zMouseClick(500, 500); //temporary work around to enable save button (see bug https://bugzilla.zimbra.com/show_bug.cgi?id=85490)
 		}
 	}
 

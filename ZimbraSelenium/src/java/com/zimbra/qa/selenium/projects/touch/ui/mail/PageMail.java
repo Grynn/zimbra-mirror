@@ -30,9 +30,15 @@ public class PageMail extends AbsTab {
 
 	public static class Locators {
 		
-		public static final String FolderTreeIcon		= "css=div[id='ext-button-2'] span[class='x-button-icon x-shown organizer']";
-		public static final String ActionsDropdown		= "css=div[class='zcs-mail-msgHdr expanded'] span[class='zcs-msgHeader-menuButton-span x-button-icon x-shown arrow_down']";
-		public static final String ForwardMenu			= "css=div[class^='x-scroll-container'] div[class^='x-innerhtml']:contains('Forward')";
+		public static final String FolderTreeIcon		= "css=span[class='x-button-icon x-shown organizer']";
+		public static final String ReplyForwardDropdown	= "css=span[class='x-button-icon x-shown reply']";
+		
+		public static final String ReplyMenu			= "css=div[id^='ext-listitem-'] div[class='x-innerhtml']:contains('Reply')";
+		public static final String ReplyAllMenu			= "css=div[id^='ext-listitem-'] div[class='x-innerhtml']:contains('Reply to all')";
+		public static final String ForwardMenu			= "css=div[id^='ext-listitem-'] div[class='x-innerhtml']:contains('Forward')";
+		
+		public static final String DeleteButton			= "css=span[class=x-button-icon x-shown trash']";		
+		public static final String ActionsDropdown		= "css=span[class=x-button-icon x-shown arrow_down']";
 		
 		public static final String zReplyIcon			= "css=span[class='x-button-icon x-shown reply']";
 		public static final String zReplyAllIcon		= "css=span[class='x-button-icon x-shown replytoall']";
@@ -278,12 +284,6 @@ public class PageMail extends AbsTab {
 		if ( locator == null ) {
 			throw new HarnessException("locator was null for button "+ button);
 		}
-
-		if ( button == Button.B_FORWARD) {
-			SleepUtil.sleepSmall();
-			this.sClickAt(Locators.ActionsDropdown,"0,0");
-			SleepUtil.sleepSmall();
-		}
 		
 		this.sClickAt(locator,"0,0");
 		
@@ -355,6 +355,22 @@ public class PageMail extends AbsTab {
 				optionLocator = "css=td[id$='__NEW_MENU_NEW_FOLDER_left_icon']>div[class='ImgNewFolder']";
 				//page = new DialogCreateFolder(this.MyApplication, this);
 
+			}
+		} else if (pulldown == Button.B_REPLY) {
+
+			pulldownLocator = Locators.ReplyForwardDropdown;
+
+			if (option == Button.O_REPLY) {
+				optionLocator = Locators.ReplyMenu;
+				page = new FormMailNew(this.MyApplication);
+
+			} else if (option == Button.O_REPLY_TO_ALL) {
+				optionLocator = Locators.ReplyAllMenu;
+				page = new FormMailNew(this.MyApplication);
+				
+			} else if (option == Button.O_FORWARD) {
+				optionLocator = Locators.ForwardMenu;
+				page = new FormMailNew(this.MyApplication);
 			}
 
 		} else if ( pulldown == Button.B_ACTIONS ) {

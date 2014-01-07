@@ -15,6 +15,8 @@
 package com.zimbra.qa.selenium.projects.touch.tests.mail.compose;
 
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -29,6 +31,7 @@ public class ForwardTextMail extends TouchCommonTest {
 		logger.info("New "+ ForwardTextMail.class.getCanonicalName());
 	}
 	
+	@Bugs( ids = "85534")
 	@Test( description = "Forward a text mail and verify subject, from and to fields",
 			groups = { "sanity" })
 			
@@ -37,7 +40,7 @@ public class ForwardTextMail extends TouchCommonTest {
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
-		String modifiedContent = " modified body" + ZimbraSeleniumProperties.getUniqueString();
+		String modifiedContent = "modified body" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Send a message to the account
 		ZimbraAccount.AccountA().soapSend(
@@ -57,7 +60,7 @@ public class ForwardTextMail extends TouchCommonTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
 		// Forward the mail
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_FORWARD);
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressPulldown(Button.B_REPLY, Button.O_FORWARD);
 		mailform.zFillField(Field.To, ZimbraAccount.AccountB().EmailAddress);
 		mailform.zFillField(Field.Body, modifiedContent);
 		mailform.zSubmit();
@@ -91,7 +94,7 @@ public class ForwardTextMail extends TouchCommonTest {
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
-		String modifiedContent = " modified body" + ZimbraSeleniumProperties.getUniqueString();
+		String modifiedContent = "modified body" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Send a message to the account
 		ZimbraAccount.AccountA().soapSend(
@@ -111,7 +114,7 @@ public class ForwardTextMail extends TouchCommonTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
 		// Forward the mail
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_FORWARD);
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressPulldown(Button.B_REPLY, Button.O_FORWARD);
 		mailform.zFillField(Field.To, ZimbraAccount.AccountB().EmailAddress);
 		mailform.zFillField(Field.Body, modifiedContent);
 		mailform.zSubmit();
@@ -130,7 +133,6 @@ public class ForwardTextMail extends TouchCommonTest {
 		String tobody = ZimbraAccount.AccountB().soapSelectValue("//mail:content", null);
 		ZAssert.assertStringContains(tobody, body, "Verify the body content");
 		ZAssert.assertStringContains(tobody, modifiedContent, "Verify the modified content");
-		ZAssert.assertStringContains(tobody, "----- Forwarded Message -----", "Verify the body content");
 		
 	}
 }

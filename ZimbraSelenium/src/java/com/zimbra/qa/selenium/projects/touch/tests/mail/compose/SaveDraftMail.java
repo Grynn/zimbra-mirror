@@ -51,8 +51,8 @@ public class SaveDraftMail extends TouchCommonTest {
 		// Open new mail form
 		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
 		mailform.zFill(mail);
-		mailform.zToolbarPressButton(Button.B_SAVE_DRAFT);
-		mailform.zToolbarPressButton(Button.B_CANCEL);
+		mailform.zToolbarPressButton(Button.B_CANCEL); //UI has been changed and we have removed save draft button
+		mailform.zPressButton(Button.B_YES);
 
 		// Verify To: user doesn't receive any email
 		ZimbraAccount.AccountA().soapSend(

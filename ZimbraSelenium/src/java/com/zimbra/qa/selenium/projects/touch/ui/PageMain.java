@@ -26,13 +26,15 @@ import com.zimbra.qa.selenium.projects.touch.ui.mail.*;
 public class PageMain extends AbsTab {
 
 	public static class Locators {
-				
-		public static final String zSettingsPulldown	= "css=span[class='x-button-icon x-shown settings']";
-		public static final String zSignOutMenu			= "css=div[class^='x-innerhtml']:contains('Sign Out')";
+		
+		public static final String zNavigationIcon	= "css=span[class='x-button-icon x-shown organizer']";
+		public static final String zAppsIcon		= "css=span[class='x-button-icon x-shown apps']";
+		
+		public static final String zSignOutMenu		= "css=div[class='zcs-menu-label']:contains('Sign Out')";
 		
 		public static final String zMailTab			= "css=div[id='ext-tab-1']";
 		public static final String zContactsTab		= "css=div[id='ext-tab-2']";
-		public static final String zCalendarTab			= "css=div[id='ext-tab-3']";
+		public static final String zCalendarTab		= "css=div[id='ext-tab-3']";
 
 		public static final String ButtonRefreshLocatorCSS = "css=div[id='CHECK_MAIL'] td[id='CHECK_MAIL_left_icon']>div";
 	}
@@ -77,7 +79,7 @@ public class PageMain extends AbsTab {
 
 		// Look for the Logout button 
 		// check if zimlet + minical loaded
-		boolean present = sIsElementPresent(Locators.zSettingsPulldown);
+		boolean present = sIsElementPresent(Locators.zNavigationIcon);
 		if ( !present ) {
 			logger.debug("Settings button present = "+ present);
 			return (false);
@@ -141,12 +143,12 @@ public class PageMain extends AbsTab {
 			getElement("css=div[class=DwtLinkButtonDropDownArrow]").click();			
 		}else{
 		
-			if ( !sIsElementPresent(Locators.zSettingsPulldown) ) {
-				throw new HarnessException("The logoff button is not present " + Locators.zSettingsPulldown);
+			if ( !sIsElementPresent(Locators.zNavigationIcon) ) {
+				throw new HarnessException("The logoff button is not present " + Locators.zNavigationIcon);
 			}
 
 			// Click on logout pulldown
-			zClickAt(Locators.zSettingsPulldown, "0,0");
+			zClickAt(Locators.zNavigationIcon, "0,0");
 		}
 		
 		this.zWaitForBusyOverlay();
@@ -160,7 +162,12 @@ public class PageMain extends AbsTab {
 			}
 
 			// Click on logout pulldown
+			zClick(Locators.zNavigationIcon);
+			SleepUtil.sleepSmall();
+			zClick(Locators.zAppsIcon);
+			SleepUtil.sleepSmall();
 			zClick(Locators.zSignOutMenu);
+			SleepUtil.sleepSmall();
 		}
 		
 		this.zWaitForBusyOverlay();
@@ -173,6 +180,7 @@ public class PageMain extends AbsTab {
 
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
@@ -221,6 +229,7 @@ public class PageMain extends AbsTab {
 		
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
