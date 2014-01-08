@@ -112,6 +112,7 @@ public class FormMailNew extends AbsForm {
 	public void zSubmit() throws HarnessException {
 		logger.info("FormMailNew.submit()");
 		
+		SleepUtil.sleepSmall();
 		zToolbarPressButton(Button.B_SEND);
 
 		this.zWaitForBusyOverlay();
@@ -352,7 +353,7 @@ public class FormMailNew extends AbsForm {
 			
 			this.sClickAt(locator, "");
 			this.sFocus(locator);
-			this.zMouseClick(500, 500);
+			this.zMouseClick(230, 230);
 			
 			SleepUtil.sleepSmall();
 			this.zKeyboard.zTypeCharacters(value);

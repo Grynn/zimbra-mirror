@@ -33,7 +33,7 @@ public class ForwardImageMail extends TouchCommonTest {
 	
 	@Bugs( ids = "81331")
 	@Test( description = "Verify inline image present after hitting Forward from the mail",
-			groups = { "smoke" })
+			groups = { "sanity" })
 			
 	public void ForwardInlineImageMail_01() throws HarnessException {
 		
@@ -62,10 +62,10 @@ public class ForwardImageMail extends TouchCommonTest {
 	public void ForwardInlineImageMail_02() throws HarnessException {
 		
 		String subject = "inline image testing";
-		String startTextOfBody = "body of the image starts..";
-		String endTextOfBody = "body of the image ends..";;
+		String startTextOfBody = "body of the inline image starts..";
+		String endTextOfBody = "body of the inline image ends..";;
 		String imgSrc = "cid:c44b200d9264f34d048f41c1280beee5b1e7dd38@zimbra";
-		String modifiedContent = " modified body" + ZimbraSeleniumProperties.getUniqueString();
+		String modifiedContent = "modified body" + ZimbraSeleniumProperties.getUniqueString();
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 		
 		String MimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email13/inline image.txt";
@@ -86,7 +86,7 @@ public class ForwardImageMail extends TouchCommonTest {
 		// Verify received mail
 		ZimbraAccount.AccountB().soapSend(
 				"<SearchRequest types='message' xmlns='urn:zimbraMail'>"
-						+ "<query>subject:(" + subject + ")</query>"
+						+ "<query>" + "subject:(" + subject + ")</query>"
 						+ "</SearchRequest>");
 		String toid = ZimbraAccount.AccountB().soapSelectValue("//mail:m", "id");
 		
@@ -129,16 +129,16 @@ public class ForwardImageMail extends TouchCommonTest {
 	}
 	
 	@Bugs( ids = "81069")
-	@Test( description = "Forward a which mail contains external image and verify it at the receipient side",
+	@Test( description = "Forward a mail which contains external image and verify it at the receipient side",
 			groups = { "smoke" })
 			
 	public void ForwardExternalImageMail_04() throws HarnessException {
 		
 		String subject = "external image testing";
 		String startTextOfBody = "body of the image starts..";
-		String endTextOfBody = "body of the image ends..";;
+		String endTextOfBody = "body of the image ends..";
 		String imgSrc = "cid:c44b200d9264f34d048f41c1280beee5b1e7dd38@zimbra";
-		String modifiedContent = " modified body" + ZimbraSeleniumProperties.getUniqueString();
+		String modifiedContent = "modified body" + ZimbraSeleniumProperties.getUniqueString();
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 		
 		String MimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email13/external image.txt";

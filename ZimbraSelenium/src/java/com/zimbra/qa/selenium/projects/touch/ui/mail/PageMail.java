@@ -357,7 +357,7 @@ public class PageMail extends AbsTab {
 
 			}
 		} else if (pulldown == Button.B_REPLY) {
-
+			
 			pulldownLocator = Locators.ReplyForwardDropdown;
 
 			if (option == Button.O_REPLY) {
@@ -578,12 +578,13 @@ public class PageMail extends AbsTab {
 			if (pulldownLocator.equals(Locators.IcsLinkInBody)) {
 				this.zRightClickAt(pulldownLocator, "0,0");
 			} else {
+				SleepUtil.sleepSmall();
 				this.zClickAt(pulldownLocator, "0,0");
 			}
 			
 
 			// If the app is busy, wait for it to become active
-			zWaitForBusyOverlay();
+			SleepUtil.sleepSmall();
 
 			if (optionLocator != null) {
 
@@ -596,8 +597,10 @@ public class PageMail extends AbsTab {
 
 				// 8.0 change ... need zClickAt()
 				// this.zClick(optionLocator);
+				
 				this.zClickAt(optionLocator, "0,0");
-
+				SleepUtil.sleepSmall();
+				
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
 			}
@@ -794,6 +797,8 @@ public class PageMail extends AbsTab {
 		if ( action == Action.A_LEFTCLICK ) {
 
 			this.sClickAt(itemlocator,"");
+			
+			SleepUtil.sleepLong();
 
 			this.zWaitForBusyOverlay();
 
@@ -804,8 +809,6 @@ public class PageMail extends AbsTab {
 		if ( page != null ) {
 			page.zWaitForActive();
 		}
-		
-		SleepUtil.sleepMedium();
 
 		// default return command
 		return (page);
