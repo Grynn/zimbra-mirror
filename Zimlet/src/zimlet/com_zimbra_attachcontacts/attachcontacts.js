@@ -153,10 +153,13 @@ AttachContactsZimlet.prototype._initContactsReminderToolbar = function(toolbar, 
  */
 AttachContactsZimlet.prototype.resetToolbarOperations =
 function(parent, num){
-	if (!parent.isZmActionMenu) {
-		return;
+	var menu = parent;
+	var after = null;
+	if (parent.isZmButtonToolBar) {
+		menu = menu.getActionsMenu();
+		after = ZmOperation.NEW_MESSAGE;
 	}
-	this._addContactActionMenuItem(parent);
+	this._addContactActionMenuItem(menu, after);
 	if (!parent.getOp(AttachContactsZimlet.SEND_CONTACTS)){
 		return;
 	}
@@ -230,8 +233,8 @@ function(controller, menu) {
 };
 
 AttachContactsZimlet.prototype._addContactActionMenuItem =
-function(actionMenu) {
-	this.addMenuButton(this._getContact.bind(this), actionMenu, ZmOperation.CONTACT);
+function(actionMenu, after) {
+	this.addMenuButton(this._getContact.bind(this), actionMenu, after || ZmOperation.CONTACT);
 };
 
 AttachContactsZimlet.prototype._getContact =
@@ -241,16 +244,27 @@ function() {
 		return;
 	}
 
+	var actionedContact = controller._actionEv && controller._actionEv.contact;
+
 	if (controller instanceof ZmContactListController) {
 		var view = controller.getListView();
 		if (view) {
 			var selection = view.getSelection();
-			if (selection && selection.length > 1) {
-				return selection;
+			if (selection && selection.length > 0) {
+				if (!actionedContact) {
+					return selection;
+				}
+				//If there's an actioned contact, and it's part of the selection - return the entire selection.
+				//otherwise only the actioned contact should be returned. That's consistent with the mail app etc.
+				for (var i = 0; i < selection.length; i++) {
+					if (selection[i] === actionedContact) {
+						return selection;
+					}
+				}
 			}
 		}
 	}
-	return (controller && controller._actionEv && controller._actionEv.contact) || null;
+	return actionedContact;
 };
 
 /**
