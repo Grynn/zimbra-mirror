@@ -824,7 +824,13 @@ public class SkinResources
 				sb.append("\n").append(appContextPath).append("/js/TasksCore_all.js.zgz?v=").append(cacheBusterVersion);
 				sb.append("\n");
 			}
+			
+			sb.append("\n\n#sound files\n");
+			// Append the alert sound file
+			sb.append("\n").append(appContextPath).append("/public/sounds/im/alert.wav");
+
 			sb.append("\nNETWORK:\n").append("*\n");
+		
 			return sb.toString();
 		}
 		return cout.toString();
