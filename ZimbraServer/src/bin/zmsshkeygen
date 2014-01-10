@@ -36,15 +36,15 @@ chmod 700 ${zimbra_home}/.ssh
 
 rm -f ${keyfile}
 
-keytype=${1:-dsa}
+keytype=${1:-rsa}
 
-if [ $keytype != "dsa" -a $keytype != "rsa" ]; then
+if [ $keytype != "rsa" ]; then
 	echo "Bad keytype: $keytype"
 	echo ""
 	exit 1
 fi
 
-ssh-keygen -f ${keyfile} -b 1024 -N '' \
+ssh-keygen -f ${keyfile} -b 2048 -N '' \
 	-t ${keytype} -C ${zimbra_server_hostname}
 
 pubkey=`cat ${keyfile}.pub`
