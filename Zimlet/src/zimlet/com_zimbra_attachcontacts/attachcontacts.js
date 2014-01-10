@@ -151,7 +151,7 @@ AttachContactsZimlet.prototype._initContactsReminderToolbar = function(toolbar, 
  * @param	{ZmActionMenu}	 	parent			the action menu (or something else we don't care about)
  * @param	{int}			    num		        number of items selected
  */
-AttachContactsZimlet.prototype.resetToolbarOperations =
+AttachContactsZimlet.prototype.resetContactListToolbarOperations =
 function(parent, num){
 	var menu = parent;
 	var after = null;
@@ -160,10 +160,7 @@ function(parent, num){
 		after = ZmOperation.NEW_MESSAGE;
 	}
 	this._addContactActionMenuItem(menu, after);
-	if (!parent.getOp(AttachContactsZimlet.SEND_CONTACTS)){
-		return;
-	}
-	parent.enable(AttachContactsZimlet.SEND_CONTACTS, num > 0 && this._isOkayToAttach());
+	menu.enable(AttachContactsZimlet.SEND_CONTACTS, num > 0 && this._isOkayToAttach());
 };
 
 
@@ -179,15 +176,17 @@ AttachContactsZimlet.prototype._contactListSendListener = function() {
 };
 
 AttachContactsZimlet.prototype._getContactListIds = function() {
-	var controller = appCtxt.getApp(ZmApp.CONTACTS).getContactListController();
+	var controller = appCtxt.getCurrentController();
 	this.contactIdsToAttach = [];
-	var listView = controller.getListView();
+	var listView = controller.getListView && controller.getListView();
 	if (listView) {
 		var items = listView.getSelection();
-		for (var i=0; i<items.length; i++) {
-			if (!items[i].isGroup()) {
-				this.contactIdsToAttach.push(items[i].id);
+		for (var i = 0; i < items.length; i++) {
+			var contact = items[i];
+			if (contact.isGal || contact.isGroup()) {
+				continue;
 			}
+			this.contactIdsToAttach.push(contact.id);
 		}
 	}
 	return this.contactIdsToAttach;
@@ -239,7 +238,7 @@ function(actionMenu, after) {
 
 AttachContactsZimlet.prototype._getContact =
 function() {
-	var controller = appCtxt.getApp(ZmApp.CONTACTS).getContactListController();
+	var controller = appCtxt.getCurrentController();
 	if (!controller) {
 		return;
 	}
