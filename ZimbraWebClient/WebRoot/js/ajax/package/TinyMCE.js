@@ -14,4 +14,7 @@ AjxPackage.require("ajax.3rdparty.tinymce.plugins.link.plugin");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.paste.plugin");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.table.plugin");
 AjxPackage.require("ajax.3rdparty.tinymce.plugins.textcolor.plugin");
+AjxPackage.require("ajax.3rdparty.tinymce.plugins.lists.plugin");
+AjxPackage.require("ajax.3rdparty.tinymce.plugins.advlist.plugin");
+AjxPackage.require("ajax.3rdparty.tinymce.plugins.code.plugin");
 AjxPackage.require("ajax.3rdparty.tinymce.themes.modern.theme");
