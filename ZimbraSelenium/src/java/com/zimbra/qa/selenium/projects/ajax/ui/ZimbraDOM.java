@@ -83,7 +83,7 @@ public class ZimbraDOM {
 	private static final String PART = 
 		"var ids = ZmId.lookup()," +
 		"len = ids.length," +
-		"backMap = ZmId._getBackMap()," +
+	//	"backMap = ZmId._getBackMap()," +
 		"text = \"\\n\\n{\"," +
 		"i; " +
 		"for (i = 0; i < len; i++) " +
@@ -100,7 +100,7 @@ public class ZimbraDOM {
 		"if (!value) {" +
 		"continue;" +
 		"}" +
-		"value = backMap[value] ? \"ZmId.\" + backMap[value] : value;" +
+		"value = ZmId._backMap[value] ? \"ZmId.\" + ZmId._backMap[value] : value;" +
 		"text += paramName + \":\" + value + \",\\n\";}text + \"}\\n\\n\"}";
 	
 	private static final String SCRIPT;
