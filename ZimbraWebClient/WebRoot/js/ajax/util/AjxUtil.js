@@ -1004,3 +1004,43 @@ function (dataURI) {
     }
 
 };
+
+AjxUtil.reduce = function(array, callback, opt_initialValue) {
+	var reducefn = Array.prototype.reduce;
+
+	if (reducefn) {
+		return reducefn.call(array, callback, opt_initialValue);
+	} else {
+		// polyfill from the Mozilla Developer Network for browsers without
+		// reduce -- i.e. IE8.
+
+		if (array === null || 'undefined' === typeof array) {
+			throw new TypeError('AjxUtil.reduce called on null or undefined');
+		}
+		if ('function' !== typeof callback) {
+			throw new TypeError(callback + ' is not a function');
+		}
+		var index, value,
+		length = array.length >>> 0,
+		isValueSet = false;
+		if (1 < arguments.length) {
+			value = opt_initialValue;
+			isValueSet = true;
+		}
+		for (index = 0; length > index; ++index) {
+			if (array.hasOwnProperty(index)) {
+				if (isValueSet) {
+					value = callback(value, array[index], index, array);
+				}
+				else {
+					value = array[index];
+					isValueSet = true;
+				}
+			}
+		}
+		if (!isValueSet) {
+			throw new TypeError('Reduce of empty array with no initial value');
+		}
+		return value;
+	}
+};

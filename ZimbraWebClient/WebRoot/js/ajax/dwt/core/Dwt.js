@@ -954,6 +954,38 @@ Dwt.getMargins = function(htmlElement) {
 	};
 };
 
+/**
+ * Get ancestor elements of the given node, up to and including the given
+ * parent node. If no parent is given, assume the root document node. If the
+ * parent node is not an ancestor of the child, return <code>null</code>.
+ *
+ * @param {HTMLElement} childNode		the child HTML element
+ * @param {HTMLElement} parentNode		the parent HTML element
+ *
+ * @return {Array}						a list of HTML elements
+ */
+Dwt.getAncestors =
+function(childNode, parentNode) {
+	var ancestors = [];
+
+	// a reasonable default
+	if (!parentNode) {
+		parentNode = document.documentElement;
+	}
+
+	do {
+		ancestors.push(childNode.parentNode);
+		childNode = childNode.parentNode;
+	} while (childNode && childNode != parentNode);
+
+	// check if the parent was an ancestor
+	if (ancestors[ancestors.length - 1] != parentNode) {
+		return null;
+	}
+
+	return ancestors;
+};
+
 Dwt.setStatus =
 function(text) {
 	window.status = text;

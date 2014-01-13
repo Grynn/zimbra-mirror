@@ -3516,3 +3516,17 @@ DwtControl.prototype.getTooltipBase =
 function(hoverEv) {
 	return this.getHtmlElement();
 };
+
+DwtControl.prototype.boundsForChild =
+function(child) {
+	if (child && child.getHtmlElement) {
+		child = child.getHtmlElement();
+	}
+
+	var fn = function(bounds, node) {
+		return Dwt.insetBounds(bounds, Dwt.getInsets(node));
+	};
+
+	return AjxUtil.reduce(Dwt.getAncestors(child, this.getHtmlElement()),
+	                      fn, this.getBounds());
+};
