@@ -55,9 +55,9 @@ DIRS := openssl \
 	nginx \
 	tcmalloc \
 	libmemcached \
+	unbound \
 	opendkim \
 	altermime \
-	unbound \
 	zeromq
 endif
 
