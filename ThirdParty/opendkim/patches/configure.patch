@@ -1,0 +1,11 @@
+--- opendkim-2.9.0/configure.orig	2014-01-14 12:29:58.000000000 -0600
++++ opendkim-2.9.0/configure	2014-01-14 12:30:29.000000000 -0600
+@@ -19089,7 +19089,7 @@
+ 	then
+ 		if test -f $mdbpath/include/lmdb.h
+ 		then
+-			LDFLAGS="-L$mdbpath/lib"
++			LDFLAGS="$saved_ldflags -L$mdbpath/lib"
+ 			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for mdb_env_open in -llmdb" >&5
+ $as_echo_n "checking for mdb_env_open in -llmdb... " >&6; }
+ if ${ac_cv_lib_lmdb_mdb_env_open+:} false; then :
