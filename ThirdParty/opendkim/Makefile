@@ -58,6 +58,7 @@ build:
 	--with-openssl=/opt/zimbra/openssl \
 	--with-milter=/opt/zimbra/sendmail \
 	--with-libmemcached=/opt/zimbra/libmemcached \
+	--with-unbound=/opt/zimbra/unbound \
 	--with-openldap=/opt/zimbra/openldap \
 	--with-sasl=/opt/zimbra/cyrus-sasl \
 	--with-libcurl=/opt/zimbra/curl \
