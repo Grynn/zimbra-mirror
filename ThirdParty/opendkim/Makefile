@@ -20,6 +20,7 @@ else
 endif
 
 LDFLAGS	:=	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L$(LIBTOOL_LIB_DIR) -L$(ZIMBRA_HOME)/libxml2/lib \
+		-L$(ZIMBRA_HOME)/libbsd/lib -Wl,-rpath,$(ZIMBRA_HOME)/libbsd/lib \
 		 -Wl,-rpath,$(OPENSSL_LIB_DIR) -Wl,-rpath,$(CYRUS_LIB_DIR) -Wl,-rpath,$(LDAP_LIB_DIR) -Wl,-rpath,$(LIBTOOL_LIB_DIR)"
 
 DKIM_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/opendkim/opendkim-$(DKIM_VERSION).tgz
@@ -39,6 +40,7 @@ build:
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) \
 	ac_cv_path_SENDMAIL_PATH=/opt/zimbra/postfix/sbin/sendmail \
 	CPPFLAGS="-I$(ZIMBRA_HOME)/libxml2/include/libxml2 -I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include -I$(ZIMBRA_HOME)/libxml2/include -I$(ZIMBRA_HOME)/curl/include \
+		  -I$(ZIMBRA_HOME)/libbsd/include \
 		  -I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include -I$(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION)/include $(CPPFLAG)" \
 	CFLAGS="-g -O0" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/opendkim-$(DKIM_VERSION) \

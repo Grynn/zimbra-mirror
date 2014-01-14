@@ -56,6 +56,7 @@ DIRS := openssl \
 	tcmalloc \
 	libmemcached \
 	unbound \
+	libbsd \
 	opendkim \
 	altermime \
 	zeromq
