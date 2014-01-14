@@ -30,8 +30,9 @@ checksrc:
 build:
 	(tar xJf src/libbsd-$(BSD_VERSION).tar.xz; \
 	cd libbsd-$(BSD_VERSION); \
-	CFLAGS="-D_REENTRANT -g -O2" CXXFLAGS="-D_REENTRANT -g -O2" LD_RUN_PATH=$(LIBBSD_LIB_DIR) ./configure --prefix=$(ZIMBRA_HOME)/libbsd-$(BSD_VERSION); \
-	CFLAGS="-D_REENTRANT -g -O2" CXXFLAGS="-D_REENTRANT -g -O2" LD_RUN_PATH=$(LIBBSD_LIB_DIR) $(MAKE) $(MAKEARGS); \
+	CFLAGS="-fPIC -D_REENTRANT -g -O2" CXXFLAGS="-D_REENTRANT -g -O2" LD_RUN_PATH=$(LIBBSD_LIB_DIR) ./configure --prefix=$(ZIMBRA_HOME)/libbsd-$(BSD_VERSION) \
+	--disable-shared; \
+	CFLAGS="-fPIC -D_REENTRANT -g -O2" CXXFLAGS="-D_REENTRANT -g -O2" LD_RUN_PATH=$(LIBBSD_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	LD_RUN_PATH=$(LIBBSD_LIB_DIR) $(MAKE) install)
 	(cd $(ZIMBRA_HOME); ln -s libbsd-$(BSD_VERSION) libbsd; rm -rf $(ZIMBRA_HOME)/libbsd-$(BSD_VERSION)/{bin,share})
 
