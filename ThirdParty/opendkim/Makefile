@@ -49,14 +49,11 @@ build:
 	--enable-atps \
 	--enable-rate_limit \
 	--enable-replace_rules \
-	--enable-redirect \
 	--enable-resign \
-	--enable-selector_header \
 	--enable-sender_macro \
 	--enable-vbr \
 	--enable-default_sender \
 	--enable-rpath \
-	--enable-arlib \
 	--with-openssl=/opt/zimbra/openssl \
 	--with-milter=/opt/zimbra/sendmail \
 	--with-libmemcached=/opt/zimbra/libmemcached \
@@ -66,7 +63,6 @@ build:
 	--with-libcurl=/opt/zimbra/curl \
 	--with-mdb=/opt/zimbra/openldap \
 	--without-db \
-	--with-libxml2=/opt/zimbra/libxml2; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) install STRIP="";)
 	(cd $(ZIMBRA_HOME); ln -s opendkim-$(DKIM_VERSION) opendkim)
