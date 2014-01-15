@@ -5,7 +5,7 @@
  		if test -f $mdbpath/include/lmdb.h
  		then
 -			LDFLAGS="-L$mdbpath/lib"
-+			LDFLAGS="$saved_ldflags -L$mdbpath/lib"
++			LDFLAGS="-L$mdbpath/lib $STRL_LIBS"
  			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for mdb_env_open in -llmdb" >&5
  $as_echo_n "checking for mdb_env_open in -llmdb... " >&6; }
  if ${ac_cv_lib_lmdb_mdb_env_open+:} false; then :
