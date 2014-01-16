@@ -11,7 +11,7 @@ endif
 MAKEARGS ?= -j2
 ZIMBRA_HOME ?= /opt/zimbra
 
-PATCH	:= patch -g0 -N -p1 < ../patches/configure.patch;
+PATCH	:=
 
 ifdef BETA
 	include $(OPENDKIM_ROOT)/../beta_versions.def
@@ -62,7 +62,7 @@ build:
 	--with-sasl=/opt/zimbra/cyrus-sasl \
 	--with-libcurl=/opt/zimbra/curl \
 	--with-mdb=/opt/zimbra/openldap \
-	--without-db \
+	--without-db; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) install STRIP="";)
 	(cd $(ZIMBRA_HOME); ln -s opendkim-$(DKIM_VERSION) opendkim)
