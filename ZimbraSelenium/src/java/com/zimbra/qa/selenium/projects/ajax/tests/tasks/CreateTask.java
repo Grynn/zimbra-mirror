@@ -300,8 +300,8 @@ public class CreateTask extends AjaxCommonTest {
 	public Object[][] DataProvidePriorities() {
 	  return new Object[][] {
 			  new Object[] { Button.O_PRIORITY_HIGH, "1" },
-			  new Object[] { Button.O_PRIORITY_NORMAL, "5" },
-			  new Object[] { Button.O_PRIORITY_LOW, "9" }
+			  new Object[] { Button.O_PRIORITY_LOW, "9" },
+			  new Object[] { Button.O_PRIORITY_NORMAL, "5" }
 	  };
 	}
 
@@ -310,18 +310,10 @@ public class CreateTask extends AjaxCommonTest {
 			dataProvider = "DataProvidePriorities")
 	public void CreateTask_10(Button option, String verify) throws HarnessException {
 		
-		// option: Button.B_PRIORITY_HIGH/NORMAL/LOW
-		// verify: the f field in the GetMsgResponse
-		
-
 		//-- DATA
 		
 		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
-		String body = "taskbody"+ ZimbraSeleniumProperties.getUniqueString();
-
-		
-		
-		//-- GUI
+		String body = "taskbody"+ ZimbraSeleniumProperties.getUniqueString();		
 		
 		// Click NEW button
 		FormTaskNew form = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
@@ -334,8 +326,6 @@ public class CreateTask extends AjaxCommonTest {
 		form.zToolbarPressPulldown(Button.B_PRIORITY, option);
 		
 		form.zSubmit();
-
-
 		
 		//-- VERIFICATION
 		
