@@ -220,6 +220,10 @@ function() {
 			continue;
 		}
 		var bubbleParams = this._bubbleParams[id];
+		if (bubbleParams.created) {
+			continue;
+		}
+		bubbleParams.created = true;
 		var bubble = new ZmAddressBubble(bubbleParams);
 		bubble.replaceElement(id);
 		if (this._bubbleList) {
