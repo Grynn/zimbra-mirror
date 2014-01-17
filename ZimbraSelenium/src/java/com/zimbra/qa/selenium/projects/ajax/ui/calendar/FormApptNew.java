@@ -960,8 +960,8 @@ public class FormApptNew extends AbsForm {
 				// iframes. Also there is a a bug in iframe counting if single test
 				// logouts multiple time for e.g. run 2 Accept propose new time tests
 				if (this
-						.sIsElementPresent("css=textarea[class='DwtHtmlEditorTextArea']") && frames == 1) {
-					locator = "css=textarea[class='DwtHtmlEditorTextArea']";
+						.sIsElementPresent("css=textarea[class='ZmHtmlEditorTextArea']") && frames == 1) {
+					locator = "css=textarea[class='ZmHtmlEditorTextArea']";
 					
 					this.sFocus(locator);
 					this.zClick(locator);
@@ -974,7 +974,7 @@ public class FormApptNew extends AbsForm {
 				if (frames == 0) {
 					// Text compose
 
-					locator = "css=textarea[class='DwtHtmlEditorTextArea']";
+					locator = "css=textarea[class='ZmHtmlEditorTextArea']";
 
 					if (!this.sIsElementPresent(locator))
 						throw new HarnessException(
@@ -1040,8 +1040,8 @@ public class FormApptNew extends AbsForm {
 							//this.sType(locator, value);
 							this.zKeyboard.zTypeCharacters(value);
 
-						} else if (this.sIsElementPresent("css=textarea[class='DwtHtmlEditorTextArea']")) {	
-							locator = "css=textarea[class='DwtHtmlEditorTextArea']";
+						} else if (this.sIsElementPresent("css=textarea[class='ZmHtmlEditorTextArea']")) {	
+							locator = "css=textarea[class='ZmHtmlEditorTextArea']";
 							this.sFocus(locator);
 							this.zClick(locator);
 							this.sType(locator, value);
@@ -1464,7 +1464,7 @@ public class FormApptNew extends AbsForm {
 	}
 	
 	public boolean zVerifyComposeFormatHTML()throws HarnessException {
-		String disappeared = sGetEval("window.document.getElementsByClassName('DwtHtmlEditorTextArea')[0].style.display");
+		String disappeared = sGetEval("window.document.getElementsByClassName('ZmHtmlEditorTextArea')[0].style.display");
 		
 		// if display proerty returns 'none' it is HTML compose format else it is Plain text format
 		if (disappeared.equalsIgnoreCase("none")){
