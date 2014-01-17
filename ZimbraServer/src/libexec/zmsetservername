@@ -43,8 +43,6 @@ GetOptions("help" => \$help,
 
 &usage if ($help or !$newServerName);
 
-
-
 $c{zmlocalconfig}="/opt/zimbra/bin/zmlocalconfig";
 $c{zimbra_home} = getLocalConfig("zimbra_home");
 $c{zmprov}="$c{zimbra_home}/bin/zmprov -l -m --";
@@ -60,7 +58,6 @@ if ($oldServerName) {
 } else {
   $c{zimbra_server_hostname} = getLocalConfig("zimbra_server_hostname");
 }
-
 
 if ($c{zimbra_server_hostname} eq $newServerName) {
   print "Hostname is already $newServerName.\n";
@@ -130,6 +127,7 @@ if (!$usersonly) {
   if (!$skipusers) {
     modifyAccountData($newServerName);
   }
+  modifyListData($newServerName);
 
   print "Services: $c{zimbraServerEnabled}\n";
   # Reinitialize mta config
@@ -173,7 +171,6 @@ if (!$usersonly) {
 } else {
   modifyAccountData($newServerName);
 }
-
 
 exit 0;
 # ***** End Main *****
@@ -524,6 +521,50 @@ sub modifyAccountData($) {
       $result = $ldap->modify(
         $entry->dn,
         replace => {zimbraMailTransport => "$value"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
+  }
+  $result = $ldap->unbind;
+  return 0;
+}
+
+sub modifyListData($) {
+  my ($server) = @_;
+  my $ldap_base = "";
+  my $ldap;
+  unless($ldap = Net::LDAP->new($master_ref)) {
+    print ("Unable to contact $c{ldap_master_url}: $!\n");
+    return 1;
+  }
+  my $result;
+  if ($c{ldap_master_url} !~ /^ldaps/i) {
+    if ($c{ldap_starttls_supported}) {
+      $result = $ldap->start_tls(
+        verify => 'none',
+        capath => "$c{zimbra_home}/conf/ca",
+        ) or die "start_tls: $@";
+      $result->code && die "TLS: " . $result->error . "\n";
+    }
+  }
+  $result = $ldap->bind($c{zimbra_ldap_userdn}, 
+    password => $c{zimbra_ldap_password});
+  if ($result->code()) {
+    print("ldap bind failed for $c{zimbra_ldap_userdn}");
+    return 1;
+  } else {
+    print("ldap bind done for $c{zimbra_ldap_userdn}\n") if ($verbose > 1);
+    print("Updating zimbraMailHost attribute for distribution lists\n") if ($verbose > 1);
+    $result = $ldap->search(base => $ldap_base,
+      scope =>'sub',
+      attrs => ['1.1'],
+      filter => "(&(objectClass=zimbraDistributionList)(zimbraMailHost=$c{zimbra_server_hostname}))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraMailHost for ", $entry->dn(), "...";
+      $result = $ldap->modify(
+        $entry->dn,
+        replace => {zimbraMailHost => "$server"},
         );
       print ($result->code() ? "failed.\n" : "done.\n");
     }
