@@ -1114,6 +1114,7 @@ function(el, del, add) {
 	}
 	var className = el.className || "";
 	className = className.replace(del, " ");
+	className = AjxStringUtil.trim(className);
 	el.className = add ? className + " " + add : className;
 };
 
