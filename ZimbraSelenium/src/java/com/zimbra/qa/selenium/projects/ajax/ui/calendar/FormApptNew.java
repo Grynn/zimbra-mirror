@@ -334,7 +334,7 @@ public class FormApptNew extends AbsForm {
 	}
 
 	public String zGetApptBodyValue() throws HarnessException {
-		return sGetValue("css=div[class='ZmHtmlEditor'] textarea[class='DwtHtmlEditorTextArea']");
+		return sGetValue("css=div[class='ZmHtmlEditor'] textarea[class='ZmHtmlEditorTextArea']");
 	}
 	
 	public String zGetApptBodyText() throws HarnessException {
