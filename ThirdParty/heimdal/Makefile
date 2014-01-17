@@ -38,6 +38,9 @@ LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -R$(OPENSSL_LIB_DIR)"
 ifeq ($(BUILD_PLATFORM), UBUNTU12_64)
 	LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -Wl,-rpath,$(OPENSSL_LIB_DIR)"
 endif
+ifeq ($(BUILD_PLATFORM), RHEL7_64)
+	LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -Wl,-rpath,$(OPENSSL_LIB_DIR)"
+endif
 
 check:
 	@echo "Verifying heimdal build...";

@@ -23,6 +23,9 @@ LDFLAGS	:=	LDFLAGS="-L/opt/zimbra/convertd/lib -R/opt/zimbra/convertd/lib -L/opt
 ifeq ($(BUILD_PLATFORM), UBUNTU12_64)
 LDFLAGS	:=	LDFLAGS="-L/opt/zimbra/convertd/lib -Wl,-rpath,/opt/zimbra/convertd/lib -L/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib -Wl,-rpath,/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib"
 endif
+ifeq ($(BUILD_PLATFORM), RHEL7_64)
+LDFLAGS	:=	LDFLAGS="-L/opt/zimbra/convertd/lib -Wl,-rpath,/opt/zimbra/convertd/lib -L/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib -Wl,-rpath,/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib"
+endif
 
 all: checksrc allclean build check
 

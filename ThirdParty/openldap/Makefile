@@ -32,6 +32,11 @@ LDFLAGS	:=	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L
 		 -Wl,-rpath,$(OPENSSL_LIB_DIR) -Wl,-rpath,$(CYRUS_LIB_DIR) -Wl,-rpath,$(LDAP_LIB_DIR) -Wl,-rpath,$(LIBTOOL_LIB_DIR)"
 endif
 
+ifeq ($(BUILD_PLATFORM), RHEL7_64)
+LDFLAGS	:=	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L$(LIBTOOL_LIB_DIR) \
+		 -Wl,-rpath,$(OPENSSL_LIB_DIR) -Wl,-rpath,$(CYRUS_LIB_DIR) -Wl,-rpath,$(LDAP_LIB_DIR) -Wl,-rpath,$(LIBTOOL_LIB_DIR)"
+endif
+
 LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-$(LDAP_VERSION).tgz
 LDAP_LIB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-libs-$(LDAP_VERSION).tgz
 

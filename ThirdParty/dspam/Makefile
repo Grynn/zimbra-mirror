@@ -27,6 +27,9 @@ LDFLAGS	:= LDFLAGS="-L$(ZIMBRA_HOME)/mariadb/lib -R$(ZIMBRA_HOME)/myqsl/lib"
 ifeq ($(BUILD_PLATFORM), UBUNTU12_64)
 LDFLAGS	:= LDFLAGS="-L$(ZIMBRA_HOME)/mariadb/lib -Wl,-rpath,$(ZIMBRA_HOME)/myqsl/lib"
 endif
+ifeq ($(BUILD_PLATFORM), RHEL7_64)
+LDFLAGS	:= LDFLAGS="-L$(ZIMBRA_HOME)/mariadb/lib -Wl,-rpath,$(ZIMBRA_HOME)/myqsl/lib"
+endif
 
 files	:= $(wildcard src/dspam-$(DSPAM_VERSION).tar.gz)
 

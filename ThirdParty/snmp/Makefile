@@ -24,6 +24,9 @@ PATCH	:=
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
+ifeq ($(BUILD_PLATFORM), RHEL7_64)
+	ENVMOD := env LIBS="-L/usr/lib64"
+endif
 ifeq ($(BUILD_PLATFORM), RHEL6_64)
 	ENVMOD := env LIBS="-L/usr/lib64"
 endif
@@ -33,6 +36,9 @@ endif
 
 LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -R$(OPENSSL_LIB_DIR)"
 ifeq ($(BUILD_PLATFORM), UBUNTU12_64)
+LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -Wl,-rpath,$(OPENSSL_LIB_DIR)"
+endif
+ifeq ($(BUILD_PLATFORM), RHEL7_64)
 LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -Wl,-rpath,$(OPENSSL_LIB_DIR)"
 endif
 

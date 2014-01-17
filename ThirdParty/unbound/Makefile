@@ -21,6 +21,10 @@ LDNS_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/unbound/ldns-$(
 
 LIB_DIR := /usr/lib
 
+ifeq ($(BUILD_PLATFORM), RHEL7_64)
+	LIB_DIR := /usr/lib64
+endif
+
 ifeq ($(BUILD_PLATFORM), RHEL6_64)
 	LIB_DIR := /usr/lib64
 endif
@@ -35,6 +39,9 @@ endif
 
 LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(LDNS_LIB_DIR) -R$(OPENSSL_LIB_DIR) -R$(LDNS_LIB_DIR)"
 ifeq ($(BUILD_PLATFORM), UBUNTU12_64)
+	LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(LDNS_LIB_DIR) -Wl,-rpath,$(OPENSSL_LIB_DIR) -Wl,-rpath,$(LDNS_LIB_DIR)"
+endif
+ifeq ($(BUILD_PLATFORM), RHEL7_64)
 	LDFLAGS	:= LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(LDNS_LIB_DIR) -Wl,-rpath,$(OPENSSL_LIB_DIR) -Wl,-rpath,$(LDNS_LIB_DIR)"
 endif
 
