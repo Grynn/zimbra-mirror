@@ -16,7 +16,6 @@ function com_zimbra_email_handlerObject() {
 	this.isPrimaryEmailTooltip = true;
 
 	// support for showing address objects in the msg header as bubbles
-	this._isBubble = {};
 	this._bubbleClassName = "addrBubble";
 	this._bubbleParams = {};
 	this._internalId = Dwt.getNextId();
@@ -140,13 +139,11 @@ function() {
 EmailTooltipZimlet.prototype._clearBubbles =
 function() {
     DBG.println(AjxDebug.DBG3, "EmailTooltipZimlet._clearBubbles");
-    if (appCtxt.get(ZmSetting.USE_ADDR_BUBBLES)) {
-		// TODO: dispose old bubbles
-		this._bubbleList = new ZmAddressBubbleList();
-		this._bubbleList.addSelectionListener(new AjxListener(this, this._bubbleSelectionListener));
-		this._bubbleList.addActionListener(new AjxListener(this, this._bubbleActionListener));
-		this._bubbleParams = {};
-	}
+	// TODO: dispose old bubbles
+	this._bubbleList = new ZmAddressBubbleList();
+	this._bubbleList.addSelectionListener(new AjxListener(this, this._bubbleSelectionListener));
+	this._bubbleList.addActionListener(new AjxListener(this, this._bubbleActionListener));
+	this._bubbleParams = {};
 }
 
 // create bubble for address in header
@@ -154,43 +151,38 @@ EmailTooltipZimlet.prototype.generateSpan =
 function(html, idx, obj, spanId, context, options) {
     DBG.println(AjxDebug.DBG3, "EmailTooltipZimlet.generateSpan");
 	options = options || {};
-	if (options.addrBubbles) {
-		this._isBubble[spanId] = true;
-		var canExpand = obj.isGroup && obj.canExpand && appCtxt.get("EXPAND_DL_ENABLED");
-		if (canExpand && !this._aclv) {
-			// create a ZmAutocompleteListView to handle DL expansion; it's never shown
-			var aclvParams = {
-				dataClass:		appCtxt.getAutocompleter(),
-				matchValue:		ZmAutocomplete.AC_VALUE_FULL,
-				options:		{addrBubbles:true, massDLComplete:true},
-				selectionCallback:	this._dlAddrSelected.bind(this),
-				contextId:		this.name
-			};
-			this._aclv = new ZmAutocompleteListView(aclvParams);
-		}
-
-		// We'll be creating controls (bubbles) later, so we provide the tooltip now and let the control manage
-		// it instead of the zimlet framework.
-		var bubbleParams = {
-			parent:		appCtxt.getShell(),
-			parentId:	this._internalId,
-			addrObj:	obj,
-			id:			spanId,
-			canExpand:	canExpand,
-			email:		this._getAddress(obj),
-			separator:	AjxEmailAddress.SEPARATOR
+	var canExpand = obj.isGroup && obj.canExpand && appCtxt.get("EXPAND_DL_ENABLED");
+	if (canExpand && !this._aclv) {
+		// create a ZmAutocompleteListView to handle DL expansion; it's never shown
+		var aclvParams = {
+			dataClass:		appCtxt.getAutocompleter(),
+			matchValue:		ZmAutocomplete.AC_VALUE_FULL,
+			options:		{massDLComplete:true},
+			selectionCallback:	this._dlAddrSelected.bind(this),
+			contextId:		this.name
 		};
-		ZmAddressInputField.BUBBLE_OBJ_ID[spanId] = this._internalId;	// pretend to be a ZmAddressInputField
-		this._bubbleParams[spanId] = bubbleParams;
-        DBG.println(AjxDebug.DBG3, "  create span = " + spanId + ", email = " + bubbleParams.email);
-
-		// placeholder SPAN
-		html[idx++] = "<span id='" + spanId + "'>";
-		html[idx++] = "</span>";
-		return idx;
-	} else {
-		return ZmObjectHandler.prototype.generateSpan.apply(this, arguments);
+		this._aclv = new ZmAutocompleteListView(aclvParams);
 	}
+
+	// We'll be creating controls (bubbles) later, so we provide the tooltip now and let the control manage
+	// it instead of the zimlet framework.
+	var bubbleParams = {
+		parent:		appCtxt.getShell(),
+		parentId:	this._internalId,
+		addrObj:	obj,
+		id:			spanId,
+		canExpand:	canExpand,
+		email:		this._getAddress(obj),
+		separator:	AjxEmailAddress.SEPARATOR
+	};
+	ZmAddressInputField.BUBBLE_OBJ_ID[spanId] = this._internalId;	// pretend to be a ZmAddressInputField
+	this._bubbleParams[spanId] = bubbleParams;
+    DBG.println(AjxDebug.DBG3, "  create span = " + spanId + ", email = " + bubbleParams.email);
+
+	// placeholder SPAN
+	html[idx++] = "<span id='" + spanId + "'>";
+	html[idx++] = "</span>";
+	return idx;
 };
 
 EmailTooltipZimlet.prototype.onMsgView =
@@ -259,8 +251,6 @@ function(ev) {
 EmailTooltipZimlet.prototype._menuPopdownListener =
 function() {
 
-	if (!appCtxt.get(ZmSetting.USE_ADDR_BUBBLES)) { return; }
-	
 	if (this._actionBubble) {
 		this._actionBubble.setClassName(this._bubbleClassName);
 	}
@@ -278,20 +268,17 @@ function() {
 
 EmailTooltipZimlet.prototype.getClassName =
 function(obj, context, spanId) {
-	return (this._isBubble[spanId]) ? this._bubbleClassName :
-				   					  ZmObjectHandler.prototype.getClassName.apply(this, arguments);
+	return this._bubbleClassName;
 };
 
 EmailTooltipZimlet.prototype.getHoveredClassName =
 function(obj, context, spanId) {
-	return (this._isBubble[spanId]) ? this._bubbleClassName :
-				   					  ZmObjectHandler.prototype.getHoveredClassName.apply(this, arguments);
+	return this._bubbleClassName;
 };
 
 EmailTooltipZimlet.prototype.getActiveClassName =
 function(obj, context, spanId) {
-	return (this._isBubble[spanId]) ? this._bubbleClassName :
-				   					  ZmObjectHandler.prototype.getActiveClassName.apply(this, arguments);
+	return this._bubbleClassName;
 };
 
 EmailTooltipZimlet.prototype._getHtmlContent =
