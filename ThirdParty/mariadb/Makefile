@@ -58,7 +58,7 @@ build:
 		-DCMAKE_INSTALL_RPATH="/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib" \
 		-DCMAKE_PREFIX_PATH=/opt/zimbra/openssl-$(OPENSSL_VERSION) -DWITH_SSL=yes \
 		-DCMAKE_INSTALL_PREFIX=/opt/zimbra/mariadb-$(MARIADB_VERSION) \
-		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_BUILD_TYPE=mysql_release \
 		-DWITH_SAFEMALLOC=OFF \
 		-DWITH_FAST_MUTEXES=ON \
 		-DENABLED_PROFILING=ON \
