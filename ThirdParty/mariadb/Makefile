@@ -50,7 +50,8 @@ build:
 	tar xzf src/mariadb-$(MARIADB_VERSION_STRING).tar.gz
 	(cd mariadb-$(MARIADB_VERSION_STRING); \
 	$(PATCH) \
-	CFLAGS="-g -O3 -DNDEBUG" CXXFLAGS="-g -O3 -DNDEBUG -felide-constructors -fno-exceptions -fno-rtti" \
+	CFLAGS="-O3 -fno-omit-frame-pointer -g -pipe -Wall -Wno-uninitialized" \
+	CXXFLAGS="-O3 -fno-omit-frame-pointer -g -pipe -Wall -Wno-uninitialized" \
 	$(LDFLAGS) \
 	CPPFLAGS="-I/opt/zimbra/openssl-$(OPENSSL_VERSION)/include -I/opt/zimbra/tcmalloc-$(TCMALLOC_VERSION)/include" \
 	/usr/bin/cmake . -DCMAKE_SKIP_BUILD_RPATH=FALSE \
@@ -59,10 +60,9 @@ build:
 		-DCMAKE_PREFIX_PATH=/opt/zimbra/openssl-$(OPENSSL_VERSION) -DWITH_SSL=yes \
 		-DCMAKE_INSTALL_PREFIX=/opt/zimbra/mariadb-$(MARIADB_VERSION) \
 		-DBUILD_CONFIG=mysql_release \
+		-DCOMPILATION_COMMENT="Zimbra binary distribution" \
 		-DWITH_SAFEMALLOC=OFF \
-		-DWITH_FAST_MUTEXES=ON \
-		-DENABLED_PROFILING=ON \
-		-DWITH_READLINE=TRUE; \
+		-DWITH_FAST_MUTEXES=ON; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	$(MAKE) install)
 	(cd $(ZIMBRA_HOME); rm -f mariadb; rm -rf $(ZIMBRA_HOME)/mariadb-$(MARIADB_VERSION)/mysql-test; ln -s mariadb-$(MARIADB_VERSION) mariadb)
