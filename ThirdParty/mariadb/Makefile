@@ -65,7 +65,12 @@ build:
 		-DWITH_FAST_MUTEXES=ON; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	$(MAKE) install)
-	(cd $(ZIMBRA_HOME); rm -f mariadb; rm -rf $(ZIMBRA_HOME)/mariadb-$(MARIADB_VERSION)/mysql-test; ln -s mariadb-$(MARIADB_VERSION) mariadb)
+	(cd $(ZIMBRA_HOME); rm -f mariadb; \
+	rm -rf $(ZIMBRA_HOME)/mariadb-$(MARIADB_VERSION)/mysql-test; \
+	rm -rf $(ZIMBRA_HOME)/mariadb-$(MARIADB_VERSION)/bin/*test*; \
+	rm -rf $(ZIMBRA_HOME)/mariadb-$(MARIADB_VERSION)/bin/*embed*; \
+	rm -rf $(ZIMBRA_HOME)/mariadb-$(MARIADB_VERSION)/lib/libmysqld*; \
+	ln -s mariadb-$(MARIADB_VERSION) mariadb)
 
 tar:
 	-mkdir -p $(shell dirname $(MARIADB_TGZ_TARGET))
