@@ -58,7 +58,6 @@ function(sep, compress) {
 AjxVector.fromArray =
 function(list) {
 	var vec = new AjxVector();
-	vec._array.length = 0;
 	if (AjxUtil.isArray1(list)) {
 		vec._array = list;
 	}
