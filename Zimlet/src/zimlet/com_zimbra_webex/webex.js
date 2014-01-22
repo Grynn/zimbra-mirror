@@ -794,7 +794,7 @@ WebExZimlet.prototype._handleTspAccountEnabled = function(requestBody, callback,
             accountIndex = parseInt(resp.toString());
         }
     }
-    var callInType = tspEnabled ? "CALLIN" : "OTHER";
+    var callInType = tspEnabled ? "CALLIN" : "NONE";
     var accountIndexNode = tspEnabled ? "<tspAccountIndex>" + accountIndex + "</tspAccountIndex>" : "";
     requestBody = requestBody.replace("@callintype@", callInType);
     requestBody = requestBody.replace("@tspAccountIndex@", accountIndexNode);
