@@ -24,9 +24,9 @@ PCRE_DEF := -DHAS_PCRE
 PCRE_INCLUDE := -I/usr/include/pcre
 PCRE_LIB := -lpcre
 
-MARIADB_VERSION ?= standard-$(MARIADB_VERSION_STRING)-pc-linux-gnu-i686-glibc23
+MARIADB_VERSION ?= $(MARIADB_VERSION_STRING)
 MARIADB_INC := /opt/zimbra/mariadb-$(MARIADB_VERSION)/include/mysql
-MARIADB_CLIENT_VERSION ?= standard-$(MARIADB_VERSION_STRING)-clientlibs
+MARIADB_CLIENT_VERSION ?= $(MARIADB_VERSION_STRING)-clientlibs
 
 SYSTEM_LIB := /usr/lib
 
