@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("ZimbraMigration")][assembly: AssemblyDescription(
 "Zimbra Migration GUI")][assembly: AssemblyConfiguration("")][assembly: AssemblyCompany("Telligent Systems, Inc.")]
 [assembly: AssemblyProduct("ZimbraMigration")]
-[assembly: AssemblyCopyright("Copyright © 2006-2013 Telligent Systems, Inc. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2006-2014 Telligent Systems, Inc. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 // Setting ComVisible to false makes the types in this assembly not visible

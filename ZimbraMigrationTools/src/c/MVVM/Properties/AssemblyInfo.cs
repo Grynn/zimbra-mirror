@@ -11,7 +11,7 @@ using System.Windows;
 "")][assembly: AssemblyConfiguration("")][assembly: AssemblyCompany("Telligent Systems, Inc.")]
 [assembly: AssemblyProduct("MVVM")]
 [assembly: AssemblyCopyright(
-"Copyright © 2006-2013 Telligent Systems, Inc.")]
+"Copyright © 2006-2014 Telligent Systems, Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 // Setting ComVisible to false makes the types in this assembly not visible

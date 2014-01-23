@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 "")][assembly: AssemblyConfiguration("")][assembly: AssemblyCompany("Telligent Systems, Inc.")]
 [assembly: AssemblyProduct(
 "ZimbraMigrationConsole")][assembly: AssemblyCopyright(
-"Copyright © 2006-2013 Telligent Systems, Inc. All rights reserved.")]
+"Copyright © 2006-2014 Telligent Systems, Inc. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture(
 "")]
