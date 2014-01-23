@@ -6,61 +6,49 @@
 
   <display-name>Zimlet Service</display-name>
   <description>Zimlet repository</description>
-
-    <!--
-  <filter>
-    <filter-name>ZimletFilter</filter-name>
-    <filter-class>com.zimbra.cs.zimlet.ZimletFilter</filter-class>
+  
+  <!-- ZIMLETJSPBEGIN %%comment VAR:zimbraZimletJspEnabled,-->%%
+  <servlet id="jsp">
+    <servlet-name>jsp</servlet-name>
+    <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
     <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>%%zimbraMailPort%%, %%zimbraMailSSLPort%%, 7070, 7443, 7071</param-value>
+        <param-name>fork</param-name>
+        <param-value>false</param-value>
     </init-param>
-  </filter>
-
-  <filter-mapping>
-    <filter-name>ZimletFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-
-  <servlet>
-    <servlet-name>ProxyServlet</servlet-name>
-    <servlet-class>com.zimbra.cs.zimlet.ProxyServlet</servlet-class>
     <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>%%zimbraMailPort%%, %%zimbraMailSSLPort%%, 7070</param-value>
+        <param-name>xpoweredBy</param-name>
+        <param-value>false</param-value>
     </init-param>
-    <load-on-startup>8</load-on-startup>
-  </servlet>
-
-  <servlet>
-    <servlet-name>ZimletResources</servlet-name>
-    <servlet-class>com.zimbra.cs.zimlet.ZimletResources</servlet-class>
     <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>%%zimbraMailPort%%, %%zimbraMailSSLPort%%, 7070, 7443, 7071</param-value>
+        <param-name>trimSpaces</param-name>
+        <param-value>true</param-value>
     </init-param>
-	<init-param>
-		<description>
-			The temp directory of the resource cache. The servlet creates
-			a "zimletres" sub-directory in the specified directory. So you
-			should NOT append that to the directory.
-			NOTE: The special string "${webapp}" can be used to specify
-			the webapp/service/ directory. It should ONLY be used at the
-			beginning of the parameter value.
-		</description>
-		<param-name>resource-cache-dir</param-name>
-		<param-value>${webapp}/../../work/resource-cache</param-value>
-	</init-param>
+    <init-param>
+        <param-name>development</param-name>
+        <param-value>false</param-value>
+    </init-param>
+    <init-param>
+        <param-name>checkInterval</param-name>
+        <param-value>0</param-value>
+    </init-param>
+    <init-param>
+        <param-name>reload-interval</param-name>
+        <param-value>-1</param-value>
+    </init-param>
+    <load-on-startup>0</load-on-startup>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>ProxyServlet</servlet-name>
-    <url-pattern>/proxy/*</url-pattern>
+    <servlet-name>jsp</servlet-name>
+    <url-pattern>*.jsp</url-pattern>
+    <url-pattern>*.jspf</url-pattern>
+    <url-pattern>*.jspx</url-pattern>
+    <url-pattern>*.xsp</url-pattern>
+    <url-pattern>*.JSP</url-pattern>
+    <url-pattern>*.JSPF</url-pattern>
+    <url-pattern>*.JSPX</url-pattern>
+    <url-pattern>*.XSP</url-pattern>
   </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>ZimletResources</servlet-name>
-    <url-pattern>/zimlet/*</url-pattern>
-  </servlet-mapping>
-    -->
+  %%comment VAR:zimbraZimletJspEnabled,<!--%% ZIMLETJSPEND -->
+  
 </web-app>
