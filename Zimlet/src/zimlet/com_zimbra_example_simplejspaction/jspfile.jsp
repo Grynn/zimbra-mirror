@@ -13,5 +13,4 @@
  * ***** END LICENSE BLOCK *****
 -->
 
-
-Hello World!
+<%= new String("Hello World!") %>
