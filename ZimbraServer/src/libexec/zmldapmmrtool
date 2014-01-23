@@ -1,0 +1,226 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2011, 2012, 2013 Zimbra Software, LLC.
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.4 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+# 
+use strict;
+use lib '/opt/zimbra/zimbramon/lib';
+use Net::LDAP;
+use XML::Simple;
+use Getopt::Long;
+use File::Copy qw/ cp /;
+use File::Path;
+
+if ( ! -d "/opt/zimbra/openldap/etc" ) {
+  print "ERROR: openldap does not appear to be installed - exiting\n";
+  exit(1);
+}
+
+my $id = getpwuid($<);
+chomp $id;
+if ($id ne "zimbra") {
+    print STDERR "Error: must be run as zimbra user\n";
+    exit (1);
+}
+my ($help,$masterURI,$rid,$tls,$replEntry,$entryNUM,$entryURI,$entryRID,$entryTLS,$query,$modify,$delete,$origRID,$break);
+$rid=0;
+$masterURI=0;
+$tls=0;
+$query=0;
+$modify=0;
+$delete=0;
+$origRID=0;
+$break=0;
+
+my $opts_good = GetOptions(
+        'h|help' => \$help,
+    	'q|query' => \$query,
+    	'd|delete' => \$delete,
+    	'u|update' => \$modify,
+    	'o|orig=i' => \$origRID,
+        'm|master=s' => \$masterURI,
+        'r|rid=i' => \$rid,
+        't|tls=s' => \$tls,
+);
+
+if (!$opts_good) {
+        print STDERR "\n";
+        usage();
+}
+if ($help) {
+        usage(0);
+}
+if (($modify || $delete) && !$origRID) {
+  usage(0);
+}
+
+if (!$modify && !$delete && !$query) {
+  usage(0);
+}
+
+if ($masterURI && $masterURI !~ /^ldaps?:\/\//) {
+  usage(0);
+}
+
+if ($masterURI && $masterURI !~ /\/$/) {
+  usage(0);
+}
+
+if ($tls && $tls ne "critical" && $tls ne "off") {
+  usage(0);
+}
+
+my $localxml = XMLin("/opt/zimbra/conf/localconfig.xml");
+my $ldap_root_password = $localxml->{key}->{ldap_root_password}->{value};
+chomp($ldap_root_password);
+my $ldap_is_master = $localxml->{key}->{ldap_is_master}->{value};
+chomp($ldap_is_master);
+my $zimbra_home = $localxml->{key}->{zimbra_home}->{value};
+my $ldap_replication_password = $localxml->{key}->{ldap_replication_password}->{value};
+my $ldap_starttls_supported = $localxml->{key}->{ldap_starttls_supported}->{value};
+my $zimbra_require_interprocess_security = $localxml->{key}->{zimbra_require_interprocess_security}->{value};
+
+if(lc($ldap_is_master) ne "true") {
+  usage(0);
+}
+
+if ($zimbra_home eq "") {
+   $zimbra_home = "/opt/zimbra";
+}
+
+if(lc($ldap_is_master) eq "true") {
+  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fdata%2fldap%2fstate%2frun%2fldapi/') or die "$@";
+  my $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
+  $mesg->code && die "Bind: ". $mesg->error . "\n"; 
+
+  my $bdn="olcDatabase={3}mdb,cn=config";
+  $mesg = $ldap->search(
+            base => "$bdn",
+            filter => "(olcSyncrepl=*)",
+            attrs => ['olcSyncrepl']
+  );
+  my $size = $mesg->count;
+  if ($size > 0) {
+    my $entry=$mesg->entry(0);
+    if ($query) { print "Master replication information\n"; }
+    my $count=1;
+    #$replEntry= $entry->get_value('olcSyncRepl');
+    foreach ($entry->get_value('olcSyncRepl')) {
+      $replEntry=$_;
+      my $junk;
+      ($entryNUM, $entryRID) = split (/rid=/, $_, 2);
+      ($junk, $entryURI) = split (/provider=/, $_, 2);
+      ($junk, $entryTLS) = split (/starttls=/, $_, 2);
+      ($entryRID, $junk) = split (/ /, $entryRID, 2);
+      ($entryURI, $junk) = split (/ /, $entryURI, 2);
+      ($entryTLS, $junk) = split (/ /, $entryTLS, 2);
+      if ($modify || $delete) {
+        if ($origRID == $entryRID) {
+    	  $break=1;
+    	  last;
+        }
+      }
+      if ($query) {
+        print "Master replica $count\n";
+    	print "rid: $entryRID URI: $entryURI TLS: $entryTLS\n";
+      }
+      $count++;
+    }
+  }
+  if ($query) {
+    $ldap->unbind;
+    exit 0;
+  }
+  if ($break == 0) {
+    print "RID $origRID not found, exiting.\n";
+    exit(0);
+  }
+
+  my $err;
+  if ($modify) {
+    if ($tls) {
+      if ($masterURI && $masterURI !~ /^ldaps/) {
+        if ($tls eq "critical") {
+          $tls="starttls=critical";
+        }
+      } else {
+        if ($tls eq "critical" && $entryURI !~ /^ldaps/) {
+          $tls="starttls=critical";
+        }
+      }
+    } else {
+      if ($masterURI && $masterURI !~ /^ldaps/) {
+        if ($ldap_starttls_supported && $zimbra_require_interprocess_security) {
+          $tls="starttls=critical";
+        }
+      } else {
+        if ($entryURI !~ /^ldaps/) {
+          if ($ldap_starttls_supported && $zimbra_require_interprocess_security) {
+            $tls="starttls=critical";
+          }
+        }
+      }
+    }
+  
+    if ($tls =~ /starttls/ && $replEntry !~ /starttls/) {
+      $replEntry =~ s/filter=/$tls filter=/;
+    } elsif ($tls !~ /starttls/ && $replEntry =~ /starttls/) {
+      $replEntry =~ s/starttls=critical //;
+    }
+  
+    if ($masterURI) {
+      $replEntry =~ s/provider=$entryURI/provider=$masterURI/;
+    }
+  
+    if ($rid) {
+      $replEntry =~ s/rid=$entryRID/rid=$rid/;
+    }
+  
+    $mesg = $ldap->modify(
+      $bdn,
+      replace=>{olcSyncrepl=>"$replEntry"},
+    );
+    $err=$mesg->code;
+  } else {
+    $mesg = $ldap->modify(
+      $bdn,
+      delete=>{olcSyncrepl=>"$entryNUM"},
+    );
+    $err=$mesg->code;
+  }
+
+  $ldap->unbind;
+  exit($err);
+}
+
+sub usage {
+
+        my ($msg) = (@_);
+
+        $msg && print STDERR "\nERROR: $msg\n";
+        print STDERR <<USAGE;
+  zmldapmmrtool [-q] [-d] [-u] [-o RID] [-r RID] [-m masterURI] [-t critical|off]
+
+  Where:
+  -q: Query the current MMR configuration.  This option ignores -m, -r, and -t
+  -d: Delete the configuration for the RID specified with -o
+  -u: Update the configuration for the RID specified with -o
+  -o: RID to select for modification or deletion
+  -r: New RID to assign.  Must be unique. Example: 101
+  -m: New master URI. Example: ldap://ldap3.example.com:389/
+  -t: New startTLS setting for rid specified via -o.  Can be critical or off
+
+USAGE
+        exit (1);
+}
+
