@@ -32,13 +32,15 @@ if ($id ne "zimbra") {
     print STDERR "Error: must be run as zimbra user\n";
     exit (1);
 }
-my ($help,$masterURI,$rid,$tls,$replEntry,$entryURI,$entryRID);
+my ($help,$masterURI,$rid,$tls,$replEntry,$entryURI,$entryRID,$entryTLS,$query);
 $rid=0;
 $masterURI=0;
 $tls=0;
+$query=0;
 
 my $opts_good = GetOptions(
         'h|help' => \$help,
+		'q|query' => \$query,
         'm|master=s' => \$masterURI,
         'r|rid=i' => \$rid,
         't|tls=s' => \$tls,
@@ -99,11 +101,20 @@ if(lc($ldap_is_master) ne "true") {
     $replEntry= $entry->get_value('olcSyncRepl');
     my $junk;
     ($junk, $entryRID) = split (/rid=/, $replEntry, 2);
-    ($junk, $entryURI) = split (/provider=/, $entryRID, 2);
+    ($junk, $entryURI) = split (/provider=/, $replEntry, 2);
+	($junk, $entryTLS) = split (/starttls=/, $replEntry, 2);
     ($entryRID, $junk) = split (/ /, $entryRID, 2);
     ($entryURI, $junk) = split (/ /, $entryURI, 2);
+	($entryTLS, $junk) = split (/ /, $entryTLS, 2);
   }
 
+  if ($query) {
+    print "This system has a provider of $entryURI\n";
+	print "This system is using a rid of $entryRID\n";
+	print "This system currently has a TLS setting of $entryTLS\n";
+    $ldap->unbind;
+	exit 0;
+  }
   if ($tls) {
     if ($masterURI && $masterURI !~ /^ldaps/) {
       if ($tls eq "critical") {
@@ -169,9 +180,10 @@ sub usage {
 
         $msg && print STDERR "\nERROR: $msg\n";
         print STDERR <<USAGE;
-  zmldapreplicatool [-r RID] [-m masterURI] [-t critical|off]
+  zmldapreplicatool [-q] [-r RID] [-m masterURI] [-t critical|off]
 
   Where:
+  -q: Query the current replication configuration.  This option ignores -m, -r, and -t
   -r: RID is a unique Integer Replication ID for this replication instance.  It must be unique inside this server.  Example: 100 Default: 100.  Generally no need to change this.
   -m: masterURI is the LDAP URI for the master.  Example: ldap://ldap-master.example.com:389/
   -t: set startTLS to critical (required) or off (disabled)
