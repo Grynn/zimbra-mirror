@@ -1180,7 +1180,7 @@ STDMETHODIMP CMapiAccessWrap::InitializePublicFolders(BSTR * statusMsg)
 {
 	HRESULT hr = S_OK;
 	// Create Session and Open admin store.
-    MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook.PUBLIC");
+    MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook.PUBLIC",FL_PUBLIC_FOLDER);
 
 	//Zimbra::MAPI::MAPIAccessAPI *maapi = NULL;
 	//maapi = new Zimbra::MAPI::MAPIAccessAPI(L"", L"");

@@ -234,6 +234,9 @@ typedef struct _TaskItemData: BaseItemData
     wstring recurMonthOfYear;
 } TaskItemData;
 
+#define FL_NONE				0
+#define FL_PUBLIC_FOLDER	1
+
 class MAPIAccessAPI
 {
 private:
@@ -264,8 +267,8 @@ public:
     // lpcwstrMigTarget -> Exchange Admin Profile for Exchange mailboxes migration
     // lpcwstrMigTarget -> Local Exchange profile migration
     // lpcwstrMigTarget -> PST file path for PST migration
-    static LPCWSTR InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget);
-	static LPCWSTR _InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget);	
+    static LPCWSTR InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget, ULONG flag=FL_NONE);
+	static LPCWSTR _InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget, ULONG flag);	
     static void UnInitGlobalSessionAndStore();
 
     // Per mailbox methods.

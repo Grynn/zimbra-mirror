@@ -358,7 +358,7 @@ void MAPIAccessAPITestV()
     if (PROFILE_MIGARTION)
     {
         // Outlook profile to be migrated
-        MAPIAccessAPI::InitGlobalSessionAndStore(L"user1");        // (L"E:\\temp\\PST\\OriginalEmailCalendar.pst");//
+        MAPIAccessAPI::InitGlobalSessionAndStore(L"user1",FL_NONE);        // (L"E:\\temp\\PST\\OriginalEmailCalendar.pst");//
         HANDLE hThread = ::CreateThread(NULL, 0, AccountMigrationThread, NULL, 0L, NULL);
 
         // wait till all finished
@@ -369,7 +369,7 @@ void MAPIAccessAPITestV()
     else
     {
         // Create Session and Open admin store.
-        MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook");
+        MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook",FL_NONE);
         DWORD const MAX_THREADS = 1;
         HANDLE hThreadArray[MAX_THREADS] = { 0 };
         migrationThreadParams mtparams[MAX_THREADS];
@@ -408,7 +408,7 @@ void MAPIAccessAPITestV()
 void MigratePublicFolder()
 {
 	// Create Session and Open admin store.
-    MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook.PUBLIC");
+	MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook",FL_PUBLIC_FOLDER);
 
 	Zimbra::MAPI::MAPIAccessAPI *maapi = NULL;
 	maapi = new Zimbra::MAPI::MAPIAccessAPI(L"", L"");

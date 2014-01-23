@@ -51,7 +51,7 @@ STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account, BSTR *pEr
 	if(m_public)
 	{
 
-		 LPCWSTR err = MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook.PUBLIC");
+		 LPCWSTR err = MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook",FL_PUBLIC_FOLDER);
 
         if (err)
             *pErrorText = CComBSTR(err);
@@ -68,7 +68,7 @@ STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account, BSTR *pEr
     }
     else
     {
-        LPCWSTR err = MAPIAccessAPI::InitGlobalSessionAndStore(location);
+        LPCWSTR err = MAPIAccessAPI::InitGlobalSessionAndStore(location,FL_NONE);
 
         if (err)
             *pErrorText = CComBSTR(err);

@@ -108,13 +108,13 @@ void MAPIAccessAPI::internalInit()
 	delete []pwszTempPath;
 }
 
-LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
+LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget, ULONG flag)
 {
 	internalInit();
 	LPWSTR exceptionmsg=NULL;
 	__try
 	{
-		return _InitGlobalSessionAndStore(lpcwstrMigTarget);
+		return _InitGlobalSessionAndStore(lpcwstrMigTarget,flag);
 	}
 	__except(Zimbra::Util::MiniDumpGenerator::GenerateCoreDump(GetExceptionInformation(),exceptionmsg))
 	{
@@ -124,7 +124,7 @@ LPCWSTR MAPIAccessAPI::InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
 	return NULL;
 }
 
-LPCWSTR MAPIAccessAPI::_InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
+LPCWSTR MAPIAccessAPI::_InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget, ULONG flag)
 {
     LPWSTR lpwstrStatus = NULL;
 	LPWSTR lpwstrRetVal= NULL;
@@ -181,16 +181,13 @@ LPCWSTR MAPIAccessAPI::_InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget)
             m_strTargetProfileName = wstrProfileName;
             SafeDelete(wstrProfileName);
         }
-		else if (strMigTarget.find(L".PUBLIC") != std::wstring::npos)
+		else if ((flag & FL_PUBLIC_FOLDER) == FL_PUBLIC_FOLDER)//(strMigTarget.find(L".PUBLIC") != std::wstring::npos)
 		{
 			bPublicFolder = true;
-			m_strTargetProfileName = lpcwstrMigTarget;
-			m_strTargetProfileName=m_strTargetProfileName.substr(0,strMigTarget.find(L".PUBLIC"));
 		}
-        else
-        {
-            m_strTargetProfileName = lpcwstrMigTarget;
-        }
+		
+		m_strTargetProfileName = lpcwstrMigTarget;
+		//m_strTargetProfileName=m_strTargetProfileName.substr(0,strMigTarget.find(L".PUBLIC"));		
 
         HRESULT hr = m_zmmapisession->Logon((LPWSTR)m_strTargetProfileName.c_str());
 

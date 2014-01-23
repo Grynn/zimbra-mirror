@@ -60,7 +60,7 @@ STDMETHODIMP CMapiWrapper::ConnectToServer(BSTR ServerHostName, BSTR Port, BSTR 
 
     // baseMigrationObj->Connecttoserver();
     dlog.trace(L"Begin Mapiwrapper connectoserver InitGlobalSessionAndStore");
-    LPCWSTR status = MAPIAccessAPI::InitGlobalSessionAndStore( /*ServerHostName, */ AdminID);
+    LPCWSTR status = MAPIAccessAPI::InitGlobalSessionAndStore( /*ServerHostName, */ AdminID,FL_NONE);
     if(status != NULL)
     {
         dlog.err("MAPIACCESSAPI->InitGlobalSessionAndStore errors out ",status);
