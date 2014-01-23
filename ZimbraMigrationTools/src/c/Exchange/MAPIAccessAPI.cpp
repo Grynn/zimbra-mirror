@@ -184,11 +184,13 @@ LPCWSTR MAPIAccessAPI::_InitGlobalSessionAndStore(LPCWSTR lpcwstrMigTarget, ULON
 		else if ((flag & FL_PUBLIC_FOLDER) == FL_PUBLIC_FOLDER)//(strMigTarget.find(L".PUBLIC") != std::wstring::npos)
 		{
 			bPublicFolder = true;
+			m_strTargetProfileName = lpcwstrMigTarget;
+		}
+		else
+		{
+			m_strTargetProfileName = lpcwstrMigTarget;
 		}
 		
-		m_strTargetProfileName = lpcwstrMigTarget;
-		//m_strTargetProfileName=m_strTargetProfileName.substr(0,strMigTarget.find(L".PUBLIC"));		
-
         HRESULT hr = m_zmmapisession->Logon((LPWSTR)m_strTargetProfileName.c_str());
 
         if (hr != S_OK)
