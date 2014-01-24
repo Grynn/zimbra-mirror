@@ -691,7 +691,7 @@ public class FormMailNew extends AbsForm {
 
 			}
 
-			locator = "css=div[id^='zv__COMPOSE'] textarea.DwtHtmlEditorTextArea";
+			locator = "css=div[id^='zv__COMPOSE'] textarea.ZmHtmlEditorTextArea";
 			if ( this.sIsElementPresent(locator) && this.zIsVisiblePerPosition(locator, 0, 0) ) {
 				
 				logger.info("FormMailNew.zFillField: Text Compose");
