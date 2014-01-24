@@ -37,7 +37,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jdom.jar" sourcepath="/ThirdParty/jdom-1.1/src"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/json.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api-3.0.jar">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api-3.1.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://download.oracle.com/docs/cd/E17802_01/products/products/servlet/2.5/docs/servlet-2_5-mr2/"/>
 		</attributes>
@@ -72,6 +72,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSoap"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/sqlite-jdbc-3.7.5-1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-continuation-9.0.6.v20130930.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-continuation-9.1.1.v20140108.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

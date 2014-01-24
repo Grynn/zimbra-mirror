@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="jars/jsp-2.2/org.apache.jasper.glassfish-2.2.2.v201112011158.jar"/>
 	<classpathentry kind="lib" path="jars/ant/ant-1.6.5.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/gifencoder.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api-3.0.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api-3.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.4.2-zimbra.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
@@ -15,8 +15,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/freemarker-2.3.19.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-servlet-9.0.6.v20130930.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-server-9.0.6.v20130930.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-9.0.6.v20130930.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-servlet-9.1.1.v20140108.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-server-9.1.1.v20140108.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-9.1.1.v20140108.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

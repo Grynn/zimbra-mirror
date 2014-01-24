@@ -24,7 +24,7 @@
       <attribute name="javadoc_location" value="http://www.dom4j.org/dom4j-1.5.2/apidocs/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api-3.0.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api-3.1.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.4.2-zimbra.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/guava-13.0.1.jar" sourcepath="/ZimbraCommon/jars-src/guava-13.0.1-sources.jar">
     <attributes>
@@ -34,7 +34,7 @@
   <classpathentry kind="src" path="src/java"/>
   <classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
   <classpathentry combineaccessrules="false" kind="src" path="/ZimbraSoap"/>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-io-9.0.6.v20130930.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-io-9.1.1.v20140108.jar"/>
   <classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
   <classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-codec-1.7.jar"/>
