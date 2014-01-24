@@ -393,6 +393,13 @@ wstring MAPIFolder::FindFolderPath()
        
         i = wstrPath.find( CONST_FORWDSLASH, i);
     }
+
+	if(wstrPath.compare(L"//")==0)
+	{
+		//its a root folder
+		wstrPath = L"/MAPIRoot/";
+		wstrPath.append(CONST_ROOTFOLDERNAME);
+	}
     return wstrPath;
 }
 

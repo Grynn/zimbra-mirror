@@ -1476,8 +1476,8 @@ public class CSMigrationWrapper
                 continue;
             }
             Log.info("Processing folder", folder.Name);
-            if (folder.Id == 0)
-            {
+            if ((folder.Id == 0) || ((folder.id == 1) && (folder.ItemCount > 0))) //1=ZM_ROOT and itemscount>0
+            { 
                 string ViewType = GetFolderViewType(folder.ContainerClass);
                 try
                 {

@@ -594,76 +594,88 @@ LPCWSTR MAPIAccessAPI::_GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist)
     return lpwstrStatus;
 }
 
+void AssignFolderData(Zimbra::MAPI::MAPIFolder *childFolder, Folder_Data &flderdata)
+{
+	ULONG itemCount = 0;
+	// folder item count
+	childFolder->GetItemCount(itemCount);
+    flderdata.itemcount = itemCount;
+
+    // store Folder EntryID
+    SBinary sbin = childFolder->EntryID();
+
+    CopyEntryID(sbin, flderdata.sbin);
+
+    // folder path
+    flderdata.folderpath = childFolder->GetFolderPath();
+
+    // container class
+	wstring wstrContainerClass;
+    childFolder->ContainerClass(wstrContainerClass);
+    flderdata.containerclass = wstrContainerClass;
+
+    // ExchangeFolderID
+    flderdata.zimbraid = (long)childFolder->GetZimbraFolderId();
+
+	//folderName
+	if(flderdata.zimbraid == ZM_ROOT)
+	{
+		flderdata.name =CONST_ROOTFOLDERNAME;
+	}
+	else
+	{
+		flderdata.name = childFolder->Name();
+	}
+}
+
+
 HRESULT MAPIAccessAPI::Iterate_folders(Zimbra::MAPI::MAPIFolder &folder,
     vector<Folder_Data> &fd)
 {
-    Zimbra::MAPI::FolderIterator *folderIter = new Zimbra::MAPI::FolderIterator;
+	BOOL bMore = TRUE;
+	bool bSkipFolder = false;
+	wstring wstrContainerClass;
+	
+	ExchangeSpecialFolderId exfid = folder.GetExchangeFolderId();
+    folder.ContainerClass(wstrContainerClass);
 
-    folder.GetFolderIterator(*folderIter);
-
-    BOOL bMore = TRUE;
-
-    while (bMore)
+    // skip folders in exclusion list, hidden folders and non-standard type folders
+    if (SkipFolder(exfid) || folder.HiddenFolder() || (((wstrContainerClass !=
+        L"IPF.Note") && (wstrContainerClass != L"IPF.Contact") && (wstrContainerClass !=
+        L"IPF.Appointment") && (wstrContainerClass != L"IPF.Task") && (wstrContainerClass !=
+        L"IPF.StickyNote") && (wstrContainerClass != L"IPF.Imap") 
+		&& (wstrContainerClass != L"")) && (exfid ==
+        SPECIAL_FOLDER_ID_NONE)))
+        bSkipFolder = true;
+    if (!bSkipFolder)
     {
-        ULONG itemCount = 0;
+		// get folder data
+        Folder_Data flderdata;
+		AssignFolderData(&folder,flderdata);
+        // Dont add root folder, if it has no data items
+		if((flderdata.zimbraid != ZM_ROOT) || ((flderdata.zimbraid == ZM_ROOT)&&(flderdata.itemcount>0)))
+			fd.push_back(flderdata);
 
-        // delete them while clearing the tree nodes
-        Zimbra::MAPI::MAPIFolder *childFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession,
+		Zimbra::MAPI::FolderIterator *folderIter = new Zimbra::MAPI::FolderIterator;
+		folder.GetFolderIterator(*folderIter);		
+
+		while(bMore)
+		{
+			Zimbra::MAPI::MAPIFolder *childFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession,
             *m_userStore);
+			bMore = folderIter->GetNext(*childFolder);
+			if (bMore)
+				Iterate_folders(*childFolder, fd);
 
-        bMore = folderIter->GetNext(*childFolder);
-
-        bool bSkipFolder = false;
-        ExchangeSpecialFolderId exfid = childFolder->GetExchangeFolderId();
-        wstring wstrContainerClass;
-
-        childFolder->ContainerClass(wstrContainerClass);
-        // skip folders in exclusion list, hidden folders and non-standard type folders
-        if (SkipFolder(exfid) || childFolder->HiddenFolder() || (((wstrContainerClass !=
-            L"IPF.Note") && (wstrContainerClass != L"IPF.Contact") && (wstrContainerClass !=
-            L"IPF.Appointment") && (wstrContainerClass != L"IPF.Task") && (wstrContainerClass !=
-            L"IPF.StickyNote") && (wstrContainerClass != L"IPF.Imap") 
-			&& (wstrContainerClass != L"")) && (exfid ==
-            SPECIAL_FOLDER_ID_NONE)))
-            bSkipFolder = true;
-        if (bMore && !bSkipFolder)
-        {
-            childFolder->GetItemCount(itemCount);
-
-            // store foldername
-            Folder_Data flderdata;
-
-            flderdata.name = childFolder->Name();
-
-            // folder item count
-            flderdata.itemcount = itemCount;
-
-            // store Folder EntryID
-            SBinary sbin = childFolder->EntryID();
-
-            CopyEntryID(sbin, flderdata.sbin);
-
-            // folder path
-            flderdata.folderpath = childFolder->GetFolderPath();
-
-            // container class
-            flderdata.containerclass = wstrContainerClass;
-
-            // ExchangeFolderID
-            flderdata.zimbraid = (long)childFolder->GetZimbraFolderId();
-
-            // append
-            fd.push_back(flderdata);
-        }
-        if (bMore && !bSkipFolder)
-            Iterate_folders(*childFolder, fd);
-        delete childFolder;
-        childFolder = NULL;
+			delete childFolder;
+			childFolder = NULL;
+		}
+		delete folderIter;
+		folderIter = NULL;
     }
-    delete folderIter;
-    folderIter = NULL;
-    return S_OK;
+	return S_OK;
 }
+
 
 HRESULT MAPIAccessAPI::GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder)
 {
