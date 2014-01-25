@@ -248,13 +248,42 @@ function(ev) {
 	}
 };
 
+EmailTooltipZimlet.prototype._menuPopupListener =
+function(ev) {
+
+	var menu = ZmZimletBase.prototype.getActionMenu.call(this);
+	if (menu) {
+		var clipboard = appCtxt.getClipboard();
+		if (clipboard) {
+			clipboard.addClient('EmailTooltipZimlet', menu.getOp("COPY"), {
+				onMouseDown:    this._clipCopy.bind(this),
+				onComplete:     this._clipCopyComplete.bind(this)
+			});
+		}
+	}
+};
+
+// Copies address text from the active bubble to the clipboard.
+EmailTooltipZimlet.prototype._clipCopy = function(clip) {
+	if (this._actionBubble) {
+		clip.setText(this._actionBubble.address + AjxEmailAddress.SEPARATOR);
+	}
+};
+
+EmailTooltipZimlet.prototype._clipCopyComplete = function(clip) {
+	var menu = ZmZimletBase.prototype.getActionMenu.call(this);
+	if (menu) {
+		menu.popdown();
+	}
+};
+
 EmailTooltipZimlet.prototype._menuPopdownListener =
 function() {
 
 	if (this._actionBubble) {
 		this._actionBubble.setClassName(this._bubbleClassName);
 	}
-	
+
 	// use a timer since popdown happens before listeners are called; alternatively, we could put the
 	// code below at the end of every menu action listener
 	AjxTimedAction.scheduleAction(new AjxTimedAction(this,
@@ -672,6 +701,7 @@ function(menu, rule, index) {
 
 EmailTooltipZimlet.prototype.getActionMenu =
 function(obj, span, context) {
+
 	// call base class first to get the action menu
 	var actionMenu = ZmZimletBase.prototype.getActionMenu.call(this, obj, span, context);
 	var isDetachWindow = appCtxt.isChildWindow;
@@ -686,6 +716,10 @@ function(obj, span, context) {
 	var addr = this._getAddress(obj);
 	if (this.isMailToLink(addr)) {
 		addr = (this.parseMailToLink(addr)).to || addr;
+	}
+
+	if (!AjxClipboard.isSupported()) {
+		actionMenu.removeOp("COPY");
 	}
 
 	if (!(appCtxt.get(ZmSetting.CONTACTS_ENABLED) || appCtxt.isOffline)) {
@@ -755,10 +789,9 @@ function(obj, span, context) {
 		}
 	}
 	
-	if (!actionMenu.isListenerRegistered(DwtEvent.POPDOWN)) {
-		actionMenu.addPopdownListener(new AjxListener(this, this._menuPopdownListener));
-	}
-	
+	actionMenu.addPopupListener(this._menuPopupListener.bind(this));
+	actionMenu.addPopdownListener(this._menuPopdownListener.bind(this));
+
 	return actionMenu;
 };
 
