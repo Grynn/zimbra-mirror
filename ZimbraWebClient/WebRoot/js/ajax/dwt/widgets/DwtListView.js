@@ -71,6 +71,7 @@ DwtListView = function(params) {
 		this._currentColId = null;
 		this.sortingEnabled = true;
 	} else {
+		this._listDiv = document.getElementById(params.id);
 		this.setScrollStyle(DwtControl.SCROLL); // auto scroll
 	}
 		
