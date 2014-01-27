@@ -57,10 +57,6 @@ mk_download_dir() {
   fi
 }
 
-rewriteWebXml() {
-  /opt/zimbra/libexec/configrewrite webxml > /dev/null 2>&1
-}
-
 #
 # Main
 #
@@ -90,9 +86,6 @@ case "$1" in
         mkdir -p ${mailboxd_directory}/work/zimbraAdmin/jsp
         if [ ! -d ${mailboxd_directory}/webapps/zimlet/WEB-INF ]; then
           mkdir -p ${mailboxd_directory}/webapps/zimlet/WEB-INF
-		  if [ "x$2" = "x" ]; then
-			  rewriteWebXml
-          fi
         fi
       fi
 
