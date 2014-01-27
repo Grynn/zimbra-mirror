@@ -37,7 +37,7 @@ my %BINARIES = (
     "openssl" => "1.0.1c",
     "rsync" => "3.0.9",
     "tcmalloc" => "2.0",
-    "jetty" => "distribution-9.0.6.v20130930"
+    "jetty" => "distribution-9.1.1.v20140108"
 );
 my $P4_CMD = "p4";
 
