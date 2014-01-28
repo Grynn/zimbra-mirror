@@ -65,7 +65,7 @@ if [ "x$1" = "xstatus" -o "x$1" = "xstart" ]; then
 	fi
 fi
 
-if [ "x$1" = "xstart" -o "x$1" = "xreload" ]; then
+if [ "x$1" = "xstart" -o "x$1" = "xreload" -o "x$1" = "xrestart" ]; then
 	rewritemtaconfig
 	if [ "x$2" != "xnorewrite" ]; then
 		rewriteconfig
