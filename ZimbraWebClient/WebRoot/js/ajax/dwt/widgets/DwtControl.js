@@ -3527,6 +3527,16 @@ function(child) {
 		return Dwt.insetBounds(bounds, Dwt.getInsets(node));
 	};
 
+	var bounds = this.getBounds();
+
+	if (isNaN(bounds.x) || !bounds.x) {
+		bounds.x = 0;
+	}
+
+	if (isNaN(bounds.y) || !bounds.y) {
+		bounds.y = 0;
+	}
+
 	return AjxUtil.reduce(Dwt.getAncestors(child, this.getHtmlElement()),
-	                      fn, this.getBounds());
+	                      fn, bounds);
 };
