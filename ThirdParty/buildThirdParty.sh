@@ -155,6 +155,10 @@ if [ x$CLEAN = x"no" ]; then
 	exit 1;
 fi
 
+if [ x"$ZIMBRA" = x"yes" ]; then
+  P4=`which p4`;
+fi
+
 PLAT=`$PATHDIR/../ZimbraBuild/rpmconf/Build/get_plat_tag.sh`;
 
 if [ x$PLAT = "x" ]; then
@@ -185,11 +189,32 @@ if [ x$SYNC = "xyes" ]; then
 fi
 
 if [ x$SYNC = "xyes" ]; then
+  if [ x"$ZIMBRA" = x"yes" ]; then
+	cd ${PATHDIR}
+	$P4 sync ... > /dev/null 
+  else
 	cd ${PATHDIR}/..
 	git pull
+  fi
+fi
+
+if [ x"$ZIMBRA" = x"yes" ]; then
+  if [ x$SYNC = "xyes" ]; then
+	cd ${PATHDIR}/../ZimbraBuild
+	$P4 sync ... > /dev/null 
+  fi
 fi
 
 mkdir -p ${PATHDIR}/../ThirdPartyBuilds/$PLAT
+
+if [ x"$ZIMBRA" = x"yes" ]; then
+  if [ x$SYNC = "xyes" ]; then
+	if [ x$RELEASE != "xFRANK" ]; then
+		cd ${PATHDIR}/../ThirdPartyBuilds/$PLAT
+		$P4 sync ... > /dev/null 
+	fi
+  fi
+fi
 
 if [[ $PLAT == "MACOSX"* ]]; then
 	LIBEXT=dylib
