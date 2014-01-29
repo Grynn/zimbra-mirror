@@ -254,7 +254,7 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 					// Text compose
 					// //
 
-					sType("css=textarea[class='DwtHtmlEditorTextArea']", value);
+					sType("css=textarea[class='ZmHtmlEditorTextArea']", value);
 
 					return;
 
