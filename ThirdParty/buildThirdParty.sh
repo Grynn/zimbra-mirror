@@ -155,14 +155,6 @@ if [ x$CLEAN = x"no" ]; then
 	exit 1;
 fi
 
-if [ x$SYNC = x"yes" ]; then
-	P4USER=public
-	P4CLIENT=public-view
-	P4PASSWD=public1234
-	export P4USER P4CLIENT P4PASSWD
-	P4=`which p4`;
-fi
-
 PLAT=`$PATHDIR/../ZimbraBuild/rpmconf/Build/get_plat_tag.sh`;
 
 if [ x$PLAT = "x" ]; then
@@ -193,23 +185,11 @@ if [ x$SYNC = "xyes" ]; then
 fi
 
 if [ x$SYNC = "xyes" ]; then
-	cd ${PATHDIR}
-	$P4 sync ... > /dev/null 
-fi
-
-if [ x$SYNC = "xyes" ]; then
-	cd ${PATHDIR}/../ZimbraBuild
-	$P4 sync ... > /dev/null 
+	cd ${PATHDIR}/..
+	git pull
 fi
 
 mkdir -p ${PATHDIR}/../ThirdPartyBuilds/$PLAT
-
-if [ x$SYNC = "xyes" ]; then
-	if [ x$RELEASE != "xFRANK" ]; then
-		cd ${PATHDIR}/../ThirdPartyBuilds/$PLAT
-		$P4 sync ... > /dev/null 
-	fi
-fi
 
 if [[ $PLAT == "MACOSX"* ]]; then
 	LIBEXT=dylib
