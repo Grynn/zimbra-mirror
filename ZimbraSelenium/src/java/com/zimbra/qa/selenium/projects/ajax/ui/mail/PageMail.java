@@ -989,9 +989,9 @@ public class PageMail extends AbsTab {
 
 		// Is it high priority?
 		item.gPriority = MailItem.Priority.Normal;
-		if ( this.sIsElementPresent(msglocator + " div[id$='__pr'][class*=ImgPriorityHigh_list]") )
+		if ( this.sIsElementPresent(msglocator + " div[id$='__pr']>div[class*=ImgPriorityHigh_list]") )
 			item.gPriority = MailItem.Priority.High;
-		if ( this.sIsElementPresent(msglocator + " div[id$='__pr'][class*=ImgPriorityLow_list]") )
+		if ( this.sIsElementPresent(msglocator + " div[id$='__pr']>div[class*=ImgPriorityLow_list]") )
 			item.gPriority = MailItem.Priority.Low;
 
 
@@ -1220,7 +1220,7 @@ public class PageMail extends AbsTab {
 
 		} else if ( action == Action.A_MAIL_CHECKBOX ) {
 
-			String selectlocator = itemlocator + " div[id$='__se']";
+			String selectlocator = itemlocator + " div[id$='__se']>div.ImgCheckboxUnchecked";
 			if ( !this.sIsElementPresent(selectlocator) )
 				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
 
@@ -1240,7 +1240,7 @@ public class PageMail extends AbsTab {
 
 		} else if ( action == Action.A_MAIL_UNCHECKBOX ) {
 
-			String selectlocator = itemlocator + " div[id$='__se']";
+			String selectlocator = itemlocator + " div[id$='__se']>div.ImgCheckboxChecked";
 			if ( !this.sIsElementPresent(selectlocator) )
 				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
 
