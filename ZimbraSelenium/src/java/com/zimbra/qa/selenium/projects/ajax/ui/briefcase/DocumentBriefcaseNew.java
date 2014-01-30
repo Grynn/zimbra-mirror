@@ -29,6 +29,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 	public static class Locators {
 		public static final String zFrame = "css=iframe[class=ZDEditor]";
+		//public static final String zFrame = "css=iframe[id*=content_ifr]";
 		public static final String zSaveAndCloseIconBtn = "css=[id='DWT9_left_icon']";
 		public static final String zBodyField = "css=body";
 		public static final String zNameField = "css=[id^=DWT4]>input";
@@ -47,7 +48,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 		}
 	}
 
-	public static final String pageTitle = "Zimbra Docs";
+	public static final String pageTitle = "Zimbra";
 
 	public DocumentBriefcaseNew(AbsApplication application) {
 		super(application);
