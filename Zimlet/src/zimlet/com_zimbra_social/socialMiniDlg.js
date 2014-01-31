@@ -120,7 +120,6 @@ com_zimbra_socialMiniDlg.prototype._showSocialMiniDlg = function(controller) {
 	this.zimlet.updateField.onfocus = AjxCallback.simpleClosure(this.zimlet._handleFieldFocusBlur, this.zimlet, this.zimlet.updateField, this.zimlet.getMessage("whatAreYouDoing"));
 	this.zimlet.updateField.onblur = AjxCallback.simpleClosure(this.zimlet._handleFieldFocusBlur, this.zimlet, this.zimlet.updateField, this.zimlet.getMessage("whatAreYouDoing"));
 	this.zimlet.updateUIWidgets();
-	this.zimlet._addSocialcastGroupsMenuHndler();
 	this.zimlet._addAccountCheckBoxListeners();
 	this.zimlet._updateMaxAllowedCharsToUpdate();
 	this.zimlet._showHideMaxAlowedCharsDiv();

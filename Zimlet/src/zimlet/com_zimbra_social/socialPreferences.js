@@ -26,12 +26,6 @@ function com_zimbra_socialPreferences(zimlet) {
 	this.social_pref_numberofTweetsSearchesToReturn = parseInt(this.zimlet.getUserProperty("social_pref_numberofTweetsSearchesToReturn"));
 	this.social_pref_autoShortenURLOn = this.zimlet.getUserProperty("social_pref_autoShortenURLOn") == "true";
 	this.social_pref_socializeBtnOn = this.zimlet.getUserProperty("social_pref_socializeBtnOn") == "true";
-	var socialcastAccounts = this.zimlet.getUserProperty("socialcastAccounts");
-	if(!socialcastAccounts) {
-		this.zimlet.socialcastAccounts = this.socialcastAccounts = [];
-	} else {
-		this.zimlet.socialcastAccounts = this.socialcastAccounts = JSON.parse(socialcastAccounts);
-	}
 }
 
 com_zimbra_socialPreferences.prototype._showManageAccntsDlg = function() {
@@ -48,7 +42,6 @@ com_zimbra_socialPreferences.prototype._showManageAccntsDlg = function() {
 	this._manageAccntsView.getHtmlElement().innerHTML = this._createManageeAccntsView();
 	this._manageAccntsDlg = this.zimlet._createDialog({title:this.zimlet.getMessage("addRemoveAccounts"), view:this._manageAccntsView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this._manageAccntsDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._manageAccntsOKBtnListener));
-	this.socialcastAddAccountDlg = new SocialcastAddAccountDlg(this, this.zimlet);
 	this._addPrefButtons();
 	this._updateAccountsTable();
 	this._updateAllFBPermissions();
@@ -87,9 +80,6 @@ function() {
 	var mi = menu.createMenuItem(id, {image:"social_facebookIcon", text:this.zimlet.getMessage("addFacebookAcc")});
 	mi.addSelectionListener(new AjxListener(this, this._addFacebookBtnListener));
 
-	var id = "social_pref_add_sc_account";
-	var mi = menu.createMenuItem(id, {image:"social_socialcastIcon", text:this.zimlet.getMessage("addSocialcastAcc")});
-	mi.addSelectionListener(new AjxListener(this.socialcastAddAccountDlg, this.socialcastAddAccountDlg.popup));
 
 	var deleteAccountBtn = new DwtButton({parent:this.zimlet.getShell()});
 	deleteAccountBtn.setText(this.zimlet.getMessage("deleteAcc"));
@@ -114,11 +104,6 @@ function() {
 	this.zimlet.twitter.performOAuth();
 };
 
-com_zimbra_socialPreferences.prototype.addSocialCastAccount =
-function(email, pwd, server) {
-	this.zimlet.socialcast.addAccount(email, pwd, server);
-};
-
 com_zimbra_socialPreferences.prototype._addFacebookBtnListener =
 function() {
 	this.showAddFBInfoDlg();
@@ -128,10 +113,8 @@ function() {
 com_zimbra_socialPreferences.prototype._deleteAccountBtnListener =
 function() {
 	var needToUpdateAllAccounts = false;
-	var needToUpdateSocialcastAccounts = false;
 
 	var hasAllAccounts = false;
-	var hasSCAccounts = false;
 	var newAllAccounts = new Array();
 	for (var id in this.zimlet.allAccounts) {
 		hasAllAccounts = true;
@@ -142,26 +125,12 @@ function() {
 		}
 	}
 	var newSAAccount = [];
-	for(var i=0; i< this.zimlet.socialcastAccounts.length; i++) {
-		hasSCAccounts = true;
-		var account = this.zimlet.socialcastAccounts[i];
-		 if (document.getElementById("social_pref_accnts_checkbox" + account.un).checked) {
-			  needToUpdateSocialcastAccounts = true;
-		 } else {
-			 newSAAccount.push(account);
-		 }
-	}
 	if (needToUpdateAllAccounts && hasAllAccounts) {
 		this.zimlet.allAccounts = newAllAccounts;
 		this.zimlet.setUserProperty("social_AllTwitterAccounts", this.zimlet.getAllAccountsAsString());
 	}
 
-	if (needToUpdateSocialcastAccounts && hasSCAccounts) {
-		this.zimlet.socialcastAccounts =  this.socialcastAccounts = newSAAccount;
-		this.zimlet.setUserProperty("socialcastAccounts", JSON.stringify(this.zimlet.socialcastAccounts));
-	}
-
-	if(needToUpdateSocialcastAccounts || needToUpdateAllAccounts) {
+	if (needToUpdateAllAccounts) {
 		this.zimlet.saveUserProperties();
 		this._updateAccountsTable();
 		this.zimlet._updateAllWidgetItems({updateSearchTree:false, updateSystemTree:true, updateAccntCheckboxes:true, searchCards:false});
@@ -291,12 +260,6 @@ function() {
 			statIcon = "social_checkIcon";
 		}
 		var params = {id:id, type: account.type, accIcon: accIcon, statIcon:statIcon, name:account.name};
-		html[i++] = this._getAccountPrefRowHtml(params);
-		noAccountsFound = false;
-	}
-	for(var j=0; j< this.socialcastAccounts.length; j++) {
-		var sa = this.socialcastAccounts[j];
-		var params = {id:sa.un, type: "socialcast", accIcon: "social_socialcastIcon", statIcon:"social_checkIcon", name:sa.e};
 		html[i++] = this._getAccountPrefRowHtml(params);
 		noAccountsFound = false;
 	}

@@ -23,14 +23,6 @@
     overflow: hidden;
 }
 
-.Imgsocial_socialcastIcon {
-    background: transparent url("social_socialcast.png") no-repeat 0 0;
-    width: 16px;
-    height: 16px;
-    overflow: hidden;
-}
-
-
 .Imgsocial_trendIcon {
     background: transparent url("social-twitterTrend.gif") no-repeat 0 0;
     width: 16px;
@@ -114,11 +106,6 @@
 
 .social_searchColor {
     background-image: url(social_bkground.gif);
-}
-
-.social_socialcastColor {
-    background:  #0D457F !important;
-    color:white;
 }
 
 .social_tweetMemeBg {

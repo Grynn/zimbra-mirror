@@ -118,44 +118,34 @@ SocialZimlet.prototype.initializeVariables =
 			this.tableIdAndSearchMap = new Array();
 			this.tableIdAndHttpErrorMap = new Array();
 			this._FBPostIdAndCommentboxMap = new Array();
-			this._SCPostIdAndCommentboxMap = new Array();
 			this.tableIdAndEndPostIdMap = new Array();
 			this.tableIdAndResultsMap = new Array();
 			this.allAccounts = new Array();
 			this._allHashLinks = new Array();
-			this._allSocialcastHashLinks = new Array();
 			this._allReweetLinks = new Array();
 			this._allDMLinks = new Array();
 			this._allTwitterDeleteLinks = new Array();
 			this._allReplyLinks = new Array();
 			this._allFollowLinks = new Array();
 			this._allAccountsLinks = new Array();
-			this._allSocialcastAccountsLinks = new Array();
 			this._allFacebookCommentsLinks = new Array();
-			this._allSCCommentsLinks = new Array();
 			this._allFBLikeLinks = new Array();
-			this._allSCLikeLinks = new Array();
 			this._allFBMoreCommentsLinks = new Array();
-			this._allSCMoreCommentsLinks = new Array();
 			this._scCommentDivAndHiddenDivsMap = new Array();
 			this.tableIdAndPageNumberMap = new Array();
 			this._tableIdAndBottomPostIdMap = new Array();
 			this.tableIdAndRefreshType = new Array();
 			this.tableIdAndMarkAsReadId = new Array();
 			this.tableIdAndTopPostIdMap = new Array();
-			this.tableIdAndSCStreamMap = new Array();
 			this.tableIdAndHighestPostIdMap = new Array();
 			this.tableIdAndCacheMap = new Array();
 			this.tableIdAndUnreadMap = new Array();
 			this.cardInfoSectionIdsArray = new Array();//every card's data div (used to reset its height when window is resized)
-			this.socialcastDisplayedStreams = new Array();
-			this.socialcastDisplayedStreamsHASH = new Array();
 			this.isTextPasted = false;
 			this._autoShorten = true;
 
 			this.preferences = new com_zimbra_socialPreferences(this);
 			this.twitter = new com_zimbra_socialTwitter(this, this.preferences);
-			this.socialcast = new com_zimbra_socialcast(this);
 			this.facebook = new com_zimbra_socialFacebook(this);
 			this.miniDlg = new com_zimbra_socialMiniDlg(this);
 			this.socialOAuth = new SocialOAuth(this);
@@ -171,32 +161,6 @@ SocialZimlet.prototype.initializeVariables =
 			if (this.social_emailLastUpdateDate != todayStr && this.preferences.social_pref_SocialMailUpdateOn) {
 				this.twitter.scanForUpdates("SEND_EMAIL");
 				this.setUserProperty("social_emailLastUpdateDate", todayStr, true);
-			}
-			var streams = this.getUserProperty("socialcastDisplayedStreams");
-			if (!streams) {
-				this.socialcastDisplayedStreams = [];
-				//un:un, n:streamName, id
-			} else {
-				try{
-					streams = JSON.parse(streams);
-				} catch (e) {
-					streams = [];
-				}
-				if(!(streams instanceof Array)) {
-					streams = [];
-				}
-				for(var i = 0; i < streams.length; i++) {
-					var sObj = streams[i];
-					var hash = sObj.un + sObj.n + sObj.id;
-					if(!this.socialcastDisplayedStreamsHASH[hash] && sObj.__s == "1") {
-						 this.socialcastDisplayedStreamsHASH[hash] = true;
-						 this.socialcastDisplayedStreams.push(sObj);
-					}
-				}
-				//for (var i = 0; i < this.socialcastDisplayedStreams.length; i++) {
-				//	var sObj = this.socialcastDisplayedStreams[i];
-				//	this.socialcastDisplayedStreamsHASH[sObj.un + sObj.n + sObj.id] = true;
-				//}
 			}
 
 			if (this.preferences.social_pref_showTweetAlertsOn) {
@@ -262,14 +226,6 @@ SocialZimlet.prototype._addAccountCheckBoxListeners =
 			for (var accntId in this.allAccounts) {
 				var callback = AjxCallback.simpleClosure(this._saveToAccountCheckboxesPref, this, accntId);
 				var domObj = document.getElementById(this.allAccounts[accntId].checkboxId);
-				if (domObj) {
-					Dwt.setHandler(domObj, DwtEvent.ONCLICK, callback);
-				}
-			}
-			for (var i = 0; i < this.socialcastAccounts.length; i++) {
-				var scAccount = this.socialcastAccounts[i];
-				var callback = AjxCallback.simpleClosure(this._updateSCCheckboxesPref, this, scAccount);
-				var domObj = document.getElementById(scAccount.checkboxId);
 				if (domObj) {
 					Dwt.setHandler(domObj, DwtEvent.ONCLICK, callback);
 				}
@@ -424,18 +380,6 @@ SocialZimlet.prototype._saveToAccountCheckboxesPref =
 			this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
 			this._updateMaxAllowedCharsToUpdate();
 			this._showHideMaxAlowedCharsDiv();
-		};
-
-SocialZimlet.prototype._updateSCCheckboxesPref =
-		function(scAccount, ev) {
-			if (scAccount.__on == "true") {
-				scAccount.__on = "false";
-			} else {
-				scAccount.__on = "true";
-			}
-
-			this.setUserProperty("socialcastAccounts", JSON.stringify(this.socialcastAccounts), true);
-			this._updateMaxAllowedCharsToUpdate();
 		};
 
 SocialZimlet.prototype._saveAutoShortenUrlPref =
@@ -646,17 +590,6 @@ SocialZimlet.prototype._addUpdateToCheckboxes =
 				html[idx++] = this._getUpdateToChkboxCellHtml(chkbxId, turnOnStr, this.allAccounts[id].name, this.allAccounts[id].type);
 
 			}
-			for (var i = 0; i < this.socialcastAccounts.length; i++) {
-				hasAccounts = true;
-				turnOnStr = "";
-				var account = this.socialcastAccounts[i];
-				if (account.__on == "true") {
-					turnOnStr = "checked";
-				}
-				var chkbxId = this.socialcastAccounts[i].checkboxId = "social_updateToCheckbox_" + Dwt.getNextId();
-				var menuId = this.socialcastAccounts[i].menuId = "social_socialcastMenuId_" + Dwt.getNextId();
-				html[idx++] = this._getUpdateToChkboxCellHtml(chkbxId, turnOnStr, account.name, "SOCIALCAST", true, menuId);
-			}
 			html[idx++] = "<td id='social_updateMenuTD'>";
 
 			"</td>";
@@ -669,20 +602,6 @@ SocialZimlet.prototype._addUpdateToCheckboxes =
 			}
 		};
 
-SocialZimlet.prototype._addSocialcastGroupsMenuHndler = function() {
-	for (var i = 0; i < this.socialcastAccounts.length; i++) {
-		var account = this.socialcastAccounts[i];
-		var menuId = account.menuId;
-		if (!menuId) {
-			return;
-		}
-		var div = document.getElementById(menuId);
-		if (div) {
-			//div.onclick =  (new AjxListener(this.socialcast, this.socialcast.showGroupsMenu, [account]));
-			div.onclick = AjxCallback.simpleClosure(this.socialcast.showGroupsMenu, this.socialcast, account);
-		}
-	}
-};
 /*
  SocialZimlet.prototype._setUpdateMenu = function() {
  if(!document.getElementById("social_updateMenuTD")) {
@@ -750,8 +669,6 @@ SocialZimlet.prototype._getUpdateToChkboxCellHtml =
 				icon = "social_facebookIcon";
 			} else if (type == "TWITTER") {
 				icon = "social_twitterIcon";
-			} else if (type == "SOCIALCAST") {
-				icon = "social_socialcastIcon";
 			}
 			var html = [];
 			var idx = 0;
@@ -825,10 +742,6 @@ SocialZimlet.prototype._showCard =
 				prettyName = type.toLowerCase();
 			} else if (type == "TREND") {
 				iconName = "social_trendIcon";
-			} else if (type == "SOCIALCAST") {
-				hdrCellColor = "white";
-				iconName = "social_socialcastIcon";
-				hdrClass = "social_axnClass social_socialcastColor";
 			}
 			var hdrCellStyle = "style='font-size:12px;color:" + hdrCellColor + ";font-weight:bold;font-family:'Lucida Grande',sans-serif;'";
 			var card = "";
@@ -881,14 +794,14 @@ SocialZimlet.prototype._showCard =
 			html[i++] = "<DIV style='display:block;' id='social_cardButtonsDiv" + this.cardIndex + "'>";
 			html[i++] = "<table>";
 			html[i++] = "<tr>";
-			if (type == "ACCOUNT" || type == "FACEBOOK" || type == "SOCIALCAST" || type == "SEARCH") {
+			if (type == "ACCOUNT" || type == "FACEBOOK" || type == "SEARCH") {
 				html[i++] = "<td width='5%' valign='middle' align='right'>";
 				html[i++] = "<img  title='" + this.getMessage("moveLeft") + "' src='" + this.getResource("social_leftArrow.png") + "' id='social_leftArrow" + this.cardIndex + "'/></td>";
 				html[i++] = "<td width='5%' valign='middle' align='left'>";
 				html[i++] = "<img  title='" + this.getMessage("moveRight") + "' src='" + this.getResource("social_rightArrow.png") + "' id='social_rightArrow" + this.cardIndex + "'/></td>";
 			}
 
-			if (type == "ACCOUNT" || type == "SEARCH" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS" || type == "FACEBOOK" || type == "SOCIALCAST") {
+			if (type == "ACCOUNT" || type == "SEARCH" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS" || type == "FACEBOOK") {
 				html[i++] = "<td width='5%'valign='middle'>";
 				html[i++] = "<img    title='" + this.getMessage("markAsRead") + "' src='" + this.getResource("social_markread.gif") + "' id='social_markAsReadBtn" + this.cardIndex + "' />";
 				html[i++] = "</td>";
@@ -926,13 +839,13 @@ SocialZimlet.prototype._showCard =
 				var callback = AjxCallback.simpleClosure(this._handleRefreshButton, this, params);
 				document.getElementById("social_refreshBtn" + this.cardIndex).onclick = callback;
 			}
-			if (type == "ACCOUNT" || type == "SEARCH" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS" || type == "FACEBOOK" || type == "SOCIALCAST") {
+			if (type == "ACCOUNT" || type == "SEARCH" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS" || type == "FACEBOOK") {
 				var params = {row:row, cellId:card.id, tableId:cardInfoSectionId, headerName:origHeaderName, type:type}
 				var callback = AjxCallback.simpleClosure(this._handleMarkAsReadButton, this, params);
 				document.getElementById("social_markAsReadBtn" + this.cardIndex).onclick = callback;
 			}
 
-			if (type == "ACCOUNT" || type == "FACEBOOK" || type == "SOCIALCAST" || type == "SEARCH") {
+			if (type == "ACCOUNT" || type == "FACEBOOK" || type == "SEARCH") {
 				var callback = AjxCallback.simpleClosure(this._swapColumns, this, "social_card" + this.cardIndex, 1);
 				document.getElementById("social_rightArrow" + this.cardIndex).onclick = callback;
 
@@ -1117,9 +1030,6 @@ SocialZimlet.prototype._doRefreshFeeds =
 				this.twitter.getTwitterFeeds({tableId: tableId, account: this.tableIdAndAccountMap[tableId], type:type});
 			} else if (type == "FACEBOOK") {
 				this.facebook._fbGetStream(tableId, this.tableIdAndAccountMap[tableId]);
-			} else if (type == "SOCIALCAST") {
-				var scStreamId = this.tableIdAndSCStreamMap[tableId] ? this.tableIdAndSCStreamMap[tableId].id : null;
-				this.socialcast.getMessages(tableId, this.tableIdAndAccountMap[tableId], scStreamId);
 			}
 		};
 
@@ -1146,9 +1056,6 @@ SocialZimlet.prototype._handleMarkAsReadButton =
 			} else if (type == "ACCOUNT" || type == "FACEBOOK") {
 				feedObj._p = _p;
 				this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
-			} else if (type == "SOCIALCAST") {
-				feedObj._p = _p;
-				this.setUserProperty("socialcastAccounts", JSON.stringify(this.socialcastAccounts), true);
 			} else if (type == "MENTIONS") {
 				feedObj._m = _p;
 				this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
@@ -1187,23 +1094,6 @@ SocialZimlet.prototype._handleCloseButton =
 				this.tableIdAndAccountMap[params.tableId]["__s"] = "0";
 				this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
 				delete this.tableIdAndAccountMap[params.tableId];
-			} else if (type == "SOCIALCAST") {
-				var tableId = params.tableId;
-				var s = this.tableIdAndSCStreamMap[tableId];
-				if (s) {
-					for (var i = 0; i < this.socialcastDisplayedStreams.length; i++) {
-						var sObj = this.socialcastDisplayedStreams[i];
-						if (sObj.un == s.un && sObj.n == s.n && sObj.id == s.id) {
-							this.socialcastDisplayedStreams[i].__s = "0";
-							break;
-						}
-					}
-					this.setUserProperty("socialcastDisplayedStreams", JSON.stringify(this.socialcastDisplayedStreams), true);
-				} else {
-					this.tableIdAndAccountMap[params.tableId].isDisplayed = false;
-					this.tableIdAndAccountMap[params.tableId]["__s"] = "0";
-					this.setUserProperty("socialcastAccounts", JSON.stringify(this.socialcastAccounts), true);
-				}
 			}
 			if (params.tableId) {
 				var timer = this.tableIdAndTimerMap[params.tableId];
@@ -1287,31 +1177,6 @@ SocialZimlet.prototype._createTreeView =
 
 			html[i++] = this._getTreeHeaderHTML(this.getMessage("accounts"), expandIconId);	//header
 			html[i++] = "<div class='DwtTreeItemLevel1ChildDiv' style='display: block;'>";
-			for (var j = 0; j < this.socialcastAccounts.length; j++) {
-				var folder = this.socialcastAccounts[j];
-				folder["name"] = folder.n;
-				folder["icon"] = "social_socialcastIcon";
-				folder["type"] = "SOCIALCAST";
-				var streams = this.getUserProperty(folder.e + "_streams");
-				try {
-					if (streams && streams != "") {
-						var streamObjs = JSON.parse(streams);
-					}
-				} catch (e) {
-					//ignore
-				}
-				if (streamObjs && (streamObjs instanceof Array) && streamObjs.length > 0) {
-					var childExpandIconId = "social_expandIcon_" + Dwt.getNextId();
-					this.expandIconAndFolderTreeMap[childExpandIconId] = new Array();
-					html[i++] = this._getFolderHTML(folder, expandIconId, childExpandIconId, false, true);
-					for (var m = 0; m < streamObjs.length; m++) {
-						var sObj = streamObjs[m];
-						html[i++] = this._getFolderHTML({name:sObj.n, icon:"social_socialcastIcon", account: folder, type:"SOCIALCAST", streamId:sObj.id, streamName:sObj.n}, expandIconId, childExpandIconId, true);
-					}
-				} else {
-					html[i++] = this._getFolderHTML(this.socialcastAccounts[j], expandIconId);
-				}
-			}
 			for (var j = 0; j < this.systemFolders.length; j++) {
 				var folder = this.systemFolders[j];
 				if (folder.account.type == "twitter") {
@@ -1402,13 +1267,6 @@ SocialZimlet.prototype._getFolderHTML =
 					|| folder.type == "SENT_MSGS" || folder.type == "FACEBOOK") {
 				id = "socialTreeItem__" + folder.type + "_" + folder.account.type + "_" + folder.account.name;
 				this.treeIdAndAccountMap[id] = folder.account;
-			} else if (folder.type == "SOCIALCAST") {
-				if (folder.streamId && folder.streamName) {
-					id = "socialTreeItem__" + folder.type + "STREAM:" + folder.streamName + "==::==" + folder.streamId;
-				} else {
-					id = "socialTreeItem__" + folder.type + "_" + folder.un;
-				}
-				this.treeIdAndAccountMap[id] = folder;
 			} else {
 				id = "socialTreeItem__" + folder.type + "_" + Dwt.getNextId();
 			}
@@ -1590,65 +1448,8 @@ SocialZimlet.prototype._handleTreeClick =
 				account["__s"] = "1";//__s means shown, 1 means true
 				//this._saveAllCardsAndPositions();
 				this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
-			} else if (elId.indexOf("socialTreeItem__SOCIALCAST") == 0) {
-				account = this.treeIdAndAccountMap[elId];
-				var streamid;
-				var isStream = false;
-				if (elId.indexOf("STREAM:") > 0) {
-					var sObj = elId.split("STREAM:")[1];
-					var tmpArry = sObj.split("==::==");
-					var streamName = tmpArry[0];
-					streamid = tmpArry[1];
-					account = account.account;
-					isStream = true;
-				}
-				if(account.isValid) {
-					this._displaySocialcastCard(account, streamid, streamName);
-				} else {
-					this._showWarningMsg(this.getMessage("couldNotAuthenticateSC"));
-				}
-
-				/*
-				 tableId = this._showCard({headerName:account.name, type:"SOCIALCAST",autoScroll:true});
-				 this.socialcast.getMessages(tableId, account);
-				 timer = setInterval(AjxCallback.simpleClosure(this.socialcast.getMessages, this.socialcast, tableId, account), 400000);
-				 this.tableIdAndTimerMap[tableId] = timer;
-				 this.tableIdAndAccountMap[tableId] = account;
-				 this.tableIdAndMarkAsReadId[tableId] = account._p;
-				 account["__s"] = "1";//__s means shown, 1 means true
-				 */
-				//this._saveAllCardsAndPositions();
-				if (!isStream) {
-					this.setUserProperty("socialcastAccounts", JSON.stringify(this.socialcastAccounts));
-				}
 			}
 			this.saveUserProperties();
-		};
-
-SocialZimlet.prototype._displaySocialcastCard =
-		function(account, streamId, streamName) {
-			var hdrName = streamName ? streamName : account.name;
-			var un = account.un;
-			tableId = this._showCard({headerName:hdrName, type:"SOCIALCAST",autoScroll:true});
-			if (streamId) {
-				this.tableIdAndSCStreamMap[tableId] = {un:un, id:streamId, n:streamName};
-				var hash = un + streamName + streamId;
-				if (!this.socialcastDisplayedStreamsHASH[hash]) {
-					this.socialcastDisplayedStreams.push({un:un, n:streamName, id:streamId, __s:"1"});
-				} else {
-					this.socialcastDisplayedStreamsHASH[hash].__s = "1";
-				}
-				this.setUserProperty("socialcastDisplayedStreams", JSON.stringify(this.socialcastDisplayedStreams), true);
-			}
-			this.tableIdAndPageNumberMap[tableId] = 1;
-			this.socialcast.getMessages(tableId, account, streamId);
-			timer = setInterval(AjxCallback.simpleClosure(this.socialcast.getMessages, this.socialcast, tableId, account, streamId), 400000);
-			this.tableIdAndTimerMap[tableId] = timer;
-			this.tableIdAndAccountMap[tableId] = account;
-			if (!streamId) {
-				this.tableIdAndMarkAsReadId[tableId] = account._p;
-				account["__s"] = "1";//__s means shown, 1 means true
-			}
 		};
 
 SocialZimlet.prototype._treeListener =
@@ -1710,7 +1511,6 @@ SocialZimlet.prototype.addTwitterSearchWidget =
 			var toolbar = this.app.getToolbar();
 			toolbar.getHtmlElement().innerHTML = AjxTemplate.expand("com_zimbra_social.templates.Social#TwitterSearchWidget", subs);
 			//this._setUpdateMenu();
-			this._addSocialcastGroupsMenuHndler();
 		};
 
 SocialZimlet.prototype._postToTweetOrFB =
@@ -1754,13 +1554,6 @@ SocialZimlet.prototype._postToTweetOrFB =
 					this.facebook._publishToFacebook({account:account, message:message});
 				}
 			}
-			for (var i = 0; i < this.socialcastAccounts.length; i++) {
-				var account = this.socialcastAccounts[i];
-				if (account.__on == "true" && account.type == "SOCIALCAST" && !isDM) {
-					noAccountSelected = false;
-					this.socialcast._publishToSocialcast({account:account, message:message});
-				}
-			}
 			if (noAccountSelected) {
 				appCtxt.getAppController().setStatusMsg(this.getMessage("pleaseSelectAnAccount"), ZmStatusView.LEVEL_WARNING);
 				return;
@@ -1798,8 +1591,6 @@ SocialZimlet.prototype.createCardView =
 			var isPreviouslyReadFlagDisplayed = false;
 			var unReadCount = 0;
 			var accountName = "";
-			var socialcastUserName = "";
-			var socialcastUsersUrl = "";
 			var socialTopicsbaseUrl = "";
 			this._cacheResults(tableId, jsonObj);
 			if (numberOfPosts == 0) {
@@ -1822,17 +1613,12 @@ SocialZimlet.prototype.createCardView =
 				type = "ACCOUNT";
 			}
 			if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS"
-					|| type == "SENT_MSGS" || type == "FACEBOOK" || type == "SOCIALCAST") {
+					|| type == "SENT_MSGS" || type == "FACEBOOK") {
 				if (!this.tableIdAndAccountMap[tableId]) {
 					return;
 				}
 				var account = this.tableIdAndAccountMap[tableId];
 				accountName = account.name;
-				if (type == "SOCIALCAST") {
-					socialcastUserName = account.un;
-					socialcastUsersUrl = ["https://", account.s, "/users/"].join("");
-					socialTopicsbaseUrl = ["https://", account.s, "/topics/"].join("");
-				}
 			}
 
 			for (var k = 0; k < numberOfPosts; k++) {
@@ -1854,18 +1640,11 @@ SocialZimlet.prototype.createCardView =
 				var columnSpan = 2;
 				if (type == "FACEBOOK") {
 					currentPostId = obj.updated_time;
-				} else if (type == "SOCIALCAST") {
-					currentPostId = obj.created_at;
-					if (currentPostId.indexOf("+") > 0) {
-						currentPostId = AjxDateFormat.parse(plusDateFormat, currentPostId).getTime();
-					} else {
-						currentPostId = AjxDateFormat.parse(minusDateFormat, currentPostId).getTime();
-					}
 				} else {
 					currentPostId = obj.id;
 				}
 
-				if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS" || type == "FACEBOOK" || type == "SOCIALCAST" || type == "SEARCH") {
+				if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS" || type == "FACEBOOK" || type == "SEARCH") {
 					if (k == 0) {
 						this.tableIdAndTopPostIdMap[tableId] = currentPostId;
 						if (this._isPageDirtyWithNewPosts(tableId, currentPostId)) {
@@ -1950,22 +1729,6 @@ SocialZimlet.prototype.createCardView =
 					imageAnchor = imageAnchor + "</td>";
 					notFollowing = user.following == null;
 					followId = userId;
-				} else if (type == "SOCIALCAST") {
-					user = obj.user;
-					userId = user.id;
-					screen_name = user.username;
-					var recipients = obj.recipients;
-
-					source = obj.source ? obj.source.name : "web";
-					profile_image_url = user.avatars.square45;
-					text = " " + obj.body;
-					created_at = obj.created_at;
-					imageAnchor = "<TD width=48px height=48px align='center'  valign='top'> ";
-					imageAnchor = imageAnchor + "<div class='social_accountBg'><a href='" + user.url + "' target='_blank' style='color:white'>";
-					imageAnchor = imageAnchor + "<img height='48' width='48' src='" + profile_image_url + "' />";
-					imageAnchor = imageAnchor + "</a></div>";
-					imageAnchor = imageAnchor + "</td>";
-
 				} else {
 					return;
 				}
@@ -1973,7 +1736,7 @@ SocialZimlet.prototype.createCardView =
 					source = source.replace("<a ", "<a target='_blank' style='font-size:11px;'");
 				}
 				var parsedDate = "";
-				if (type != "FACEBOOK" && type != "SOCIALCAST") {
+				if (type !== "FACEBOOK") {
 					created_at = created_at.replace("+0000", "");
 					created_at = created_at + " +0000";//hack to make it work in IE
 					parsedDate = Date.parse(created_at);
@@ -2010,13 +1773,8 @@ SocialZimlet.prototype.createCardView =
 				this._zimletDiv.innerHTML = AjxStringUtil.htmlEncode(text);
 				this._objectManager.findObjectsInNode(this._zimletDiv);
 				var zimletyFiedTxt = this._zimletDiv.innerHTML;
-				if (type == "SOCIALCAST") {
-					zimletyFiedTxt = this._socialcastReplaceHash(zimletyFiedTxt, socialTopicsbaseUrl);
-					zimletyFiedTxt = this._socialcastReplaceAt(zimletyFiedTxt, socialcastUsersUrl);
-				} else {
-					zimletyFiedTxt = this._replaceHash(zimletyFiedTxt);
-					zimletyFiedTxt = this._replaceAt(zimletyFiedTxt, userId, tableId, screen_name);
-				}
+				zimletyFiedTxt = this._replaceHash(zimletyFiedTxt);
+				zimletyFiedTxt = this._replaceAt(zimletyFiedTxt, userId, tableId, screen_name);
 
 				html[i++] = "<div id='" + rowId + "' class='social_rowsDiv'>";
 				html[i++] = "<TABLE width=100%>";
@@ -2027,23 +1785,9 @@ SocialZimlet.prototype.createCardView =
 				}
 				html[i++] = "<TD class='social_feedText' width=90%>";
 
-				if (type !== "FACEBOOK" && type !== "SOCIALCAST") {
+				if (type !== "FACEBOOK") {
 					html[i++] = [" <a href='javascript:void(0)' style='color:darkblue;font-size:12px;font-weight:bold' id='", this._getAccountLinkId(screen_name, tableId),
 						"'>", screen_name, ":</a> "].join("");
-				} else if (type == "SOCIALCAST") {
-					//html[i++] = "<label style='color:#262626;font-size:12px;font-weight:bold'>" + user.name + ": </label>";
-					html[i++] = [" <a href='javascript:void(0)' style='color:darkblue;font-size:12px;font-weight:bold' id='", this._getSocialcastAccountLinkId(user.url),
-						"'>", user.name, ":</a> "].join("");
-					if (recipients && recipients.length > 0) {
-						html[i++] = "<label style='font-weight: bold;'> > </label>";
-						var rHtml = [];
-						for (var t = 0; t < recipients.length; t++) {
-							var r = recipients[t];
-							rHtml.push([" <a href='javascript:void(0)' style='color:darkblue;font-size:12px;font-weight:bold' id='", this._getSocialcastAccountLinkId(r.url),
-								"'>", r.name, "</a> "].join(""));
-						}
-						html[i++] = rHtml.join(",");
-					}
 				} else {
 					html[i++] = "<label style='color:#262626;font-size:12px;font-weight:bold'>" + screen_name + ": </label>";
 				}
@@ -2053,12 +1797,10 @@ SocialZimlet.prototype.createCardView =
 				html[i++] = "</TD>";
 				html[i++] = "</TR>";
 
-				if (type == "FACEBOOK" || type == "SOCIALCAST") {
+				if (type === "FACEBOOK") {
 					var additionalInfo = {};
 					if (type == "FACEBOOK") {
 						additionalInfo = this._getAdditionalFBMessageInfo(obj, this.tableIdAndAccountMap[tableId], tableId);
-					} else if (type == "SOCIALCAST") {
-						additionalInfo = this._getAdditionalSCMessageInfo(obj, this.tableIdAndAccountMap[tableId], tableId);
 					}
 					if (additionalInfo.html != "") {
 						html[i++] = "<TR>";
@@ -2094,24 +1836,18 @@ SocialZimlet.prototype.createCardView =
 				}
 				if (type != "DIRECT_MSGS") {
 					var linkName = this.getMessage("retweet");
-					if (type == "FACEBOOK" || type == "SOCIALCAST") {
+					if (type === "FACEBOOK") {
 						linkName = this.getMessage("share");
 					}
 					html[i++] = "<a href='javascript:void(0)' title='" + this.getMessage("retweetThisItem") + "' style='color:gray;font-size:11px' id='" + this._gettwitterRetweetLinkId("RT @" + screen_name + text) + "'>" + linkName + "</a>&nbsp;&nbsp;";
 				}
 
-				if (type !== "FACEBOOK" && type !== "SOCIALCAST" && type != "DIRECT_MSGS") {
+				if (type !== "FACEBOOK" && type != "DIRECT_MSGS") {
 					html[i++] = "<a href='javascript:void(0)' title='" + this.getMessage("replyToThisPerson") + "' style='color:gray;font-size:11px' id='" + this._gettwitterReplyLinkId("@" + screen_name) + "'>" + this.getMessage("reply") + "</a>";
 				}
 				if (type == "FACEBOOK") {
 					html[i++] = "<a href='javascript:void(0)' title='" + this.getMessage("likeThisPost") + "' style='color:gray;font-size:11px' id='" + this._getFBLikeLinkId(obj.post_id, tableId) + "'>" + this.getMessage("like") + "</a>&nbsp;&nbsp;";
 					html[i++] = "<a href='javascript:void(0)' title='" + this.getMessage("commentOnThisPost") + "' style='color:gray;font-size:11px' id='" + this._getFacebookCommentLinkId(obj.post_id, tableId) + "'>" + this.getMessage("comment") + "</a>";
-				}
-				if (type == "SOCIALCAST") {
-					if (socialcastUserName != obj.user.username) {
-						html[i++] = "<a href='javascript:void(0)' title='" + this.getMessage("likeThisPost") + "' style='color:gray;font-size:11px' id='" + this._getSCLikeLinkId(obj.id, tableId) + "'>" + this.getMessage("like") + "</a>&nbsp;&nbsp;";
-					}
-					html[i++] = "<a href='javascript:void(0)' title='" + this.getMessage("commentOnThisPost") + "' style='color:gray;font-size:11px' id='" + this._getSCCommentLinkId(obj.id, tableId) + "'>" + this.getMessage("comment") + "</a>";
 				}
 				html[i++] = "</td>";
 				html[i++] = "</TR>";
@@ -2128,7 +1864,7 @@ SocialZimlet.prototype.createCardView =
 				return;
 			}
 			document.getElementById(tableId).innerHTML = html.join("");
-			if (type == "SEARCH" || type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS" || type == "FACEBOOK" || type == "SOCIALCAST") {
+			if (type == "SEARCH" || type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS" || type == "FACEBOOK") {
 				this._setCardUnreadCount(tableId, unReadCount, type);
 				var query = "";
 				if (additionalParams && additionalParams.query) {
@@ -2145,13 +1881,6 @@ SocialZimlet.prototype.createCardView =
 				this._addFbCommentLinkHandlers();
 				this._addFbPostLikeLinkHandlers();
 				this._addFbMoreCommentLinkHandlers();
-			}
-			if (type == "SOCIALCAST") {
-				this._addSocialcastHashHandlers();
-				this._addSCCommentLinkHandlers();
-				this._addSCPostLikeLinkHandlers();
-				this._addSCMoreCommentLinkHandlers();
-				this._addSCAccountLinkHandlers();
 			}
 
 			this._addTwitterDeleteLinkHandlers();
@@ -2282,82 +2011,6 @@ SocialZimlet.prototype._updatePageNumber =
 				pageNumber = 1;
 			}
 			this.tableIdAndPageNumberMap[tableId] = pageNumber + plusOrMinusOne;
-		};
-
-SocialZimlet.prototype._getAdditionalSCMessageInfo =
-		function(obj, account, tableId) {
-			var html = [];
-			var i = 0;
-			var commentBoxId = "social_SCcommentBoxId_" + Dwt.getNextId();
-			this._SCPostIdAndCommentboxMap[obj.id] = commentBoxId;
-			var attachments = obj.attachments;
-			var media_files = obj.media_files;
-			var mediaFilesLen = media_files.length;
-			var by2 = mediaFilesLen/2;
-			var numOfRows = Math.ceil(by2);
-			var mediaFilesCounter = 0;
-
-			html[i++] = "<table style='padding: 5px'>";
-			for (var j = 0; j < numOfRows; j++) {
-				html[i++] = "<tr>";
-				var m1 = media_files[mediaFilesCounter++];
-				var m2 = media_files[mediaFilesCounter++];
-				if(m1) {
-					html[i++] = "<td>";
-					html[i++] = "<a href='" + m1.url + "' target='_blank'><img style='width:90px;height:90px' src='" + m1.thumbnails.square45 + "'></img></a>";
-					html[i++] = "<br/><label style='font-height:12px;color:darkblue;padding-bottom:5px'>"+ m1.title +"</label></td>";
-				}
-				if(m2) {
-					html[i++] = "<td>";
-					html[i++] = "<a href='" + m2.url + "' target='_blank'><img style='width:90px;height:90px' src='" + m2.thumbnails.square45 + "'></img></a>";
-					html[i++] = "<br/><label style='font-height:12px;color:darkblue;padding-bottom:5px;'>"+ m2.title +"</label></td>";
-				}
-				html[i++] = "</tr>";
-			}
-			html[i++] = "</table>";
-			html[i++] = "<ul style='list-style-type:none;list-style:none outside none;clear:both;pading:8px 0 0;overflow:hidden;'>";
-			for (var j = 0; j < attachments.length; j++) {
-				var a = attachments[j];
-				if(a.content_type && a.content_type.indexOf("image") == 0) {
-					continue;
-				}
-				html[i++] = "<li style='clear:left;display:block;'><a target='_blank' href='" + a.url + "'>" + a.filename + "</a></li>";
-
-			}
-
-			if (obj.likes.length > 0) {
-				html[i++] = "<table width=100% cellpadding=1 cellspacing=1><tr><td align='center'>";
-				html[i++] = "<tr>";
-				html[i++] = "<TD style='width:16px;height:16px' align='center'>";
-				html[i++] = AjxImg.getImageHtml("Blank_16");
-				html[i++] = "</TD>";
-				html[i++] = "<TD>";
-				html[i++] = "<DIV class='social_FBCommentRow'>";
-				if (obj.likes.length == 1) {
-					html[i++] = "<a  href='" + obj.likes.href + "' target='_blank'>" + this.getMessage("onePersonLikeThis") + "</a> ";
-				} else {
-					html[i++] = "<a  href='" + obj.likes.href + "' target='_blank'>" + obj.likes.length + " " + this.getMessage("peopleLikeThis") + "</a>";
-				}
-				html[i++] = "</div>";
-				html[i++] = "</td>";
-				html[i++] = "<TD style='width:16px;height:16px' align='center'>";
-				html[i++] = AjxImg.getImageHtml("Blank_16");
-				html[i++] = "</TD>";
-				html[i++] = "</tr></table>";
-			}
-
-			if (obj.comments.length > 0) {
-				var comments = obj.comments;
-				var commentsDivId = "social_commentsdiv_" + Dwt.getNextId();
-				html[i++] = "<div id='" + commentsDivId + "'>";
-				html[i++] = this._getCommentsHtml(comments, obj.comments_count, obj.id, commentsDivId, account, tableId);
-				html[i++] = "</div>";
-			}
-			var str = html.join("");
-			if (str == "")
-				return  {html:"", commentBoxId:commentBoxId};
-			else
-				return {html:"<BR/>" + str, commentBoxId:commentBoxId};
 		};
 
 SocialZimlet.prototype._getAdditionalFBMessageInfo =
@@ -2564,7 +2217,6 @@ SocialZimlet.prototype._getCommentsHtml =
 		function(comments, totlCmnts, postId, divId, account, tableId) {
 			var html = new Array();
 			var i = 0;
-			var socialcastUsersUrl = ["https://", account.s, "/users/"].join("");
 			var socialTopicsbaseUrl = ["https://", account.s, "/topics/"].join("");
 			if (this._zimletDiv == undefined) {
 				this._zimletDiv = document.createElement("div");
@@ -2574,7 +2226,6 @@ SocialZimlet.prototype._getCommentsHtml =
 			var photoSrc = "";
 			var userName = "";
 			var accountType = account.type;
-			var maxSCComments = 2;
 			for (var j = 0; j < totlCmnts; j++) {
 				actualComments = j + 1;
 
@@ -2590,21 +2241,9 @@ SocialZimlet.prototype._getCommentsHtml =
 					photoUrl = profile.url ? profile.url : profile.profile_url;
 					photoSrc = profile.pic_square;
 					userName = profile.name;
-				} else if (accountType == "SOCIALCAST") {
-					photoUrl = comment.user.url;
-					photoSrc = comment.user.avatars.square30;
-					userName = comment.user.name;
 				}
 				var commentRowId = Dwt.getNextId();
-				if (j >= maxSCComments && accountType == "SOCIALCAST") {
-					html[i++] = "<div style='display:none;' id='" + commentRowId + "'>";
-					if (!this._scCommentDivAndHiddenDivsMap[divId]) {
-						this._scCommentDivAndHiddenDivsMap[divId] = [];
-					}
-					this._scCommentDivAndHiddenDivsMap[divId].push(commentRowId);
-				} else {
-					html[i++] = "<div>";
-				}
+				html[i++] = "<div>";
 				html[i++] = "<table width=100% cellpadding=1 cellspacing=1>";
 				html[i++] = "<tr>";
 				html[i++] = "<TD style='width:16px;height:16px' align='center'>";
@@ -2625,12 +2264,7 @@ SocialZimlet.prototype._getCommentsHtml =
 				this._zimletDiv.innerHTML = AjxStringUtil.htmlEncode(comment.text);
 				this._objectManager.findObjectsInNode(this._zimletDiv);
 				var zimletyFiedTxt = " " + this._zimletDiv.innerHTML;
-				if (accountType == "SOCIALCAST") {
-					zimletyFiedTxt = this._socialcastReplaceHash(zimletyFiedTxt, socialTopicsbaseUrl);
-					zimletyFiedTxt = this._socialcastReplaceAt(zimletyFiedTxt, socialcastUsersUrl);
-				} else {
-					zimletyFiedTxt = this._replaceHash(zimletyFiedTxt);
-				}
+				zimletyFiedTxt = this._replaceHash(zimletyFiedTxt);
 				html[i++] = zimletyFiedTxt + "<br><label  style='color:gray;font-size:11px'> - " + userName + "</label>";
 				html[i++] = "</TD></TR>";
 				html[i++] = "</TABLE>";
@@ -2643,14 +2277,12 @@ SocialZimlet.prototype._getCommentsHtml =
 				html[i++] = "</table>";
 				html[i++] = "</div>";
 			}
-			if (actualComments < totlCmnts || (accountType == "SOCIALCAST" && actualComments > maxSCComments)) {
+			if (actualComments < totlCmnts) {
 				var seeAllComments = AjxMessageFormat.format(this.getMessage("seeAllComments"), totlCmnts);
 				var moreCommentsLinkId = "";
 				var moreLinkRowDiv = Dwt.getNextId();
 				if (accountType == "facebook") {
 					moreCommentsLinkId = this._getFacebookMoreCommentsLinkId(postId, divId, account, tableId);
-				} else if (accountType == "SOCIALCAST") {
-					moreCommentsLinkId = this._getSocialcastMoreCommentsLinkId(postId, divId, account, tableId, moreLinkRowDiv);
 				}
 				html[i++] = "<table width=100% cellpadding=1 cellspacing=1><tr><td>";
 				html[i++] = "<tr>";
@@ -2699,23 +2331,10 @@ SocialZimlet.prototype._getAccountLinkId =
 			return id;
 		};
 
-SocialZimlet.prototype._getSocialcastAccountLinkId =
-		function(url) {
-			var id = "social_SCaccountsLink_" + Dwt.getNextId();
-			this._allSocialcastAccountsLinks[id] = {hasHandler:false, url:url};
-			return id;
-
-		};
 SocialZimlet.prototype._getFacebookCommentLinkId =
 		function(postId, tableId) {
 			var id = "social_FaceBookCommentLink_" + Dwt.getNextId();
 			this._allFacebookCommentsLinks[id] = {hasHandler:false, tableId:tableId, postId:postId};
-			return id;
-		};
-SocialZimlet.prototype._getSCCommentLinkId =
-		function(postId, tableId) {
-			var id = "social_FBCommenttLink_" + Dwt.getNextId();
-			this._allSCCommentsLinks[id] = {hasHandler:false, tableId:tableId, postId:postId};
 			return id;
 		};
 
@@ -2725,24 +2344,11 @@ SocialZimlet.prototype._getFBLikeLinkId =
 			this._allFBLikeLinks[id] = {hasHandler:false, tableId:tableId, account:this.tableIdAndAccountMap[tableId], postId:postId};
 			return id;
 		};
-SocialZimlet.prototype._getSCLikeLinkId =
-		function(postId, tableId) {
-			var id = "social_SCLikeLink_" + Dwt.getNextId();
-			this._allSCLikeLinks[id] = {hasHandler:false, tableId:tableId, account:this.tableIdAndAccountMap[tableId], postId:postId};
-			return id;
-		};
 
 SocialZimlet.prototype._getFacebookMoreCommentsLinkId =
 		function(postId, divId, account, tableId) {
 			var id = "social_FBMoreCommentsLink_" + Dwt.getNextId();
 			this._allFBMoreCommentsLinks[id] = {hasHandler:false, postId:postId, divId:divId, account:account, tableId:tableId};
-			return id;
-		};
-
-SocialZimlet.prototype._getSocialcastMoreCommentsLinkId =
-		function(postId, divId, account, tableId, moreLinkDivId) {
-			var id = "social_SCMoreCommentsLink_" + Dwt.getNextId();
-			this._allSCMoreCommentsLinks[id] = {hasHandler:false, postId:postId, divId:divId, account:account, tableId:tableId, moreLinkDivId:moreLinkDivId};
 			return id;
 		};
 
@@ -2830,18 +2436,6 @@ SocialZimlet.prototype._addFbCommentLinkHandlers =
 				}
 			}
 		};
-SocialZimlet.prototype._addSCCommentLinkHandlers =
-		function() {
-			for (var id in this._allSCCommentsLinks) {
-				var obj = this._allSCCommentsLinks[id];
-				var el = document.getElementById(id);
-				if (el && !obj.hasHandler) {
-					el.onclick = AjxCallback.simpleClosure(this._displayCommentWidget, this, {type :"SOCIALCAST",postId:obj.postId, tableId:obj.tableId, linkId:id});
-					obj.hasHandler = true;
-				}
-			}
-		};
-
 
 SocialZimlet.prototype._addFbPostLikeLinkHandlers =
 		function() {
@@ -2855,19 +2449,6 @@ SocialZimlet.prototype._addFbPostLikeLinkHandlers =
 			}
 		};
 
-SocialZimlet.prototype._addSCPostLikeLinkHandlers =
-		function() {
-			for (var id in this._allSCLikeLinks) {
-				var obj = this._allSCLikeLinks[id];
-				var el = document.getElementById(id);
-				if (!obj.hasHandler && el) {
-					el.onclick = AjxCallback.simpleClosure(this.socialcast.postLike, this.socialcast, obj);
-					obj.hasHandler = true;
-				}
-			}
-		};
-
-
 SocialZimlet.prototype._addFbMoreCommentLinkHandlers =
 		function() {
 			for (var id in this._allFBMoreCommentsLinks) {
@@ -2879,19 +2460,6 @@ SocialZimlet.prototype._addFbMoreCommentLinkHandlers =
 				}
 			}
 		};
-
-SocialZimlet.prototype._addSCMoreCommentLinkHandlers =
-		function() {
-			for (var id in this._allSCMoreCommentsLinks) {
-				var obj = this._allSCMoreCommentsLinks[id];
-				var el = document.getElementById(id);
-				if (!obj.hasHandler && el) {
-					el.onclick = AjxCallback.simpleClosure(this.socialcast._insertMoreComments, this.socialcast, obj);
-					obj.hasHandler = true;
-				}
-			}
-		};
-
 
 SocialZimlet.prototype._addReplyLinkHandlers =
 		function() {
@@ -2917,19 +2485,6 @@ SocialZimlet.prototype._addAccountLinkHandlers =
 			}
 		};
 
-SocialZimlet.prototype._addSCAccountLinkHandlers =
-		function() {
-			for (var id in this._allSocialcastAccountsLinks) {
-				var obj = this._allSocialcastAccountsLinks[id];
-				var el = document.getElementById(id);
-				if (!obj.hasHandler && el) {
-					el.onclick = AjxCallback.simpleClosure(this.openCenteredWindow, this, obj.url);
-					obj.hasHandler = true;
-				}
-			}
-		};
-
-
 SocialZimlet.prototype._addHashHandlers =
 		function() {
 			for (var id in this._allHashLinks) {
@@ -2937,17 +2492,6 @@ SocialZimlet.prototype._addHashHandlers =
 				var el = document.getElementById(id);
 				if (!obj.hasHandler && el) {
 					el.onclick = AjxCallback.simpleClosure(this._handleHashLinks, this, obj.word);
-					obj.hasHandler = true;
-				}
-			}
-		};
-SocialZimlet.prototype._addSocialcastHashHandlers =
-		function() {
-			for (var id in this._allSocialcastHashLinks) {
-				var obj = this._allSocialcastHashLinks[id];
-				var el = document.getElementById(id);
-				if (!obj.hasHandler && el) {
-					el.onclick = AjxCallback.simpleClosure(this.openCenteredWindow, this, obj.url);
 					obj.hasHandler = true;
 				}
 			}
@@ -2981,28 +2525,6 @@ SocialZimlet.prototype._replaceHash =
 			return newStr + extraStr;
 
 		};
-SocialZimlet.prototype._socialcastReplaceHash =
-		function(text, socialTopicsbaseUrl) {
-			var re = /([^a-zA-Z0-9_-]#[a-zA-Z0-9_-]+)/gm;
-			var newStr = "";
-			var start = 0;
-			while (match = re.exec(text)) {
-				var word = match[0];
-				var end = re.lastIndex;
-				var part = text.substring(start, end);
-				var id = "social_hashlink_" + Dwt.getNextId();
-				var url = ["<a  href='javascript:void(0)' id='", id, "'>", word, "</a>"].join("");
-				newStr = newStr + part.replace(word, url);
-				this._allSocialcastHashLinks[id] = {hasHandler:false, url: socialTopicsbaseUrl + (AjxStringUtil.trim(word.replace("#", "")))};
-				start = end;
-			}
-			var extraStr = "";
-			if (start < text.length) {
-				extraStr = text.substring(start, text.length)
-			}
-			return newStr + extraStr;
-
-		};
 /topics/
 
 SocialZimlet.prototype._replaceAt =
@@ -3026,28 +2548,6 @@ SocialZimlet.prototype._replaceAt =
 			return newStr + extraStr;
 		};
 
-SocialZimlet.prototype._socialcastReplaceAt =
-		function(text, baseUsersUrl) {
-			var re = /([^a-zA-Z0-9_-]@[a-zA-Z0-9_-]+)/gm;
-			var newStr = "";
-			var start = 0;
-			while (match = re.exec(text)) {
-				var word = match[0];
-				var end = re.lastIndex;
-				var part = text.substring(start, end);
-				var id = this._getSocialcastAccountLinkId(baseUsersUrl + AjxStringUtil.trim(word.replace("@", "")), tableId);
-				var url = ["<a  href='javascript:void(0)' id='", id, "'>", word, "</a>"].join("");
-				newStr = newStr + part.replace(word, url);
-				start = end;
-			}
-			var extraStr = "";
-			if (start < text.length) {
-				extraStr = text.substring(start, text.length)
-			}
-			return newStr + extraStr;
-		};
-
-
 SocialZimlet.prototype.addRetweetText = function(rt) {
 	this.isTextPasted = true;
 	this.addReplyText(rt);
@@ -3066,8 +2566,6 @@ SocialZimlet.prototype._displayCommentWidget = function(params) {
 	var commentBoxId;
 	if (params.type == "FACEBOOK") {
 		commentBoxId = this._FBPostIdAndCommentboxMap[params.postId];
-	} else if (params.type == "SOCIALCAST") {
-		commentBoxId = this._SCPostIdAndCommentboxMap[params.postId];
 	}
 	html[i++] = "<Textarea column=40 rows='5' cols='20' id='" + commentFieldId + "' style='width: 90%;height:30px;border:1px solid #BDC7D8;color:gray'>" + this.getMessage("writeAComment") + "</TextArea><BR/>";
 	html[i++] = "<div  align=center id='" + commentBtnId + "' />";
@@ -3088,9 +2586,6 @@ SocialZimlet.prototype._addCommentsHandlers = function(params) {
 	if (params.type == "FACEBOOK") {
 		btn.setImage("social_facebookIcon");
 		btn.addSelectionListener(new AjxListener(this.facebook, this.facebook._addFBComment, params));
-	} else if (params.type == "SOCIALCAST") {
-		btn.setImage("social_socialcastIcon");
-		btn.addSelectionListener(new AjxListener(this.socialcast, this.socialcast._addScComment, params));
 	}
 	document.getElementById(params.commentBtnId).appendChild(btn.getHtmlElement());
 	var field = document.getElementById(params.commentFieldId);
@@ -3218,7 +2713,6 @@ SocialZimlet.prototype._updateAllWidgetItems =
 			if (params.updateAccntCheckboxes) {
 				document.getElementById("social_updateToCell").innerHTML = this._addUpdateToCheckboxes();
 				//this._setUpdateMenu();
-				this._addSocialcastGroupsMenuHndler();
 				this._addAccountCheckBoxListeners();
 				this._updateMaxAllowedCharsToUpdate();
 				var accountsAndSearches = this._sortAndMergeAccountsAndSearches();
@@ -3269,41 +2763,10 @@ SocialZimlet.prototype._updateAllWidgetItems =
 					}
 
 				}
-				this._displaySocialcastCards();
 				this._saveAllCardsAndPositions();
 				this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString());
-				//this.setUserProperty("socialcastAccounts", JSON.stringify(this.socialcastAccounts));
 				this.saveUserProperties();
 			}
-		};
-
-SocialZimlet.prototype._displaySocialcastCards =
-		function() {
-			var postCallback = new AjxCallback(this, this._displayAllSCCards);
-			for (var i = 0; i < this.socialcastAccounts.length; i++) {
-				var account = this.socialcastAccounts[i];
-				this.socialcast.authenticate(account, postCallback);
-			}
-		};
-
-SocialZimlet.prototype._displayAllSCCards =
-		function(account) {
-			if (!account.isValid) {
-				this._showWarningMsg(this.getMessage("couldNotAuthenticateSC"));
-				return;
-			}
-			if (account.__s && account.__s != "0") {
-				this._displaySocialcastCard(account);
-			}
-			var un = account.un;
-			for (var j = 0; j < this.socialcastDisplayedStreams.length; j++) {
-				var sObj = this.socialcastDisplayedStreams[j];
-				if (un == sObj.un && sObj.__s == "1") {
-					this._displaySocialcastCard(account, sObj.id, sObj.n);
-				}
-			}
-			this.setUserProperty("socialcastAccounts", JSON.stringify(this.socialcastAccounts));
-			this.saveUserProperties();
 		};
 
 SocialZimlet.prototype._sortAndMergeAccountsAndSearches =
