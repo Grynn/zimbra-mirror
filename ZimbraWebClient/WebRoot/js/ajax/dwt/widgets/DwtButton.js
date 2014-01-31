@@ -619,6 +619,22 @@ function(actionCode, ev) {
 	return true;
 };
 
+/**
+ * Removes options from drop down menu
+ */
+DwtButton.prototype.removePullDownMenuOptions =
+function() {
+    if (this._menu) {
+        this._setDropDownCellMouseHandlers(false);
+        if (this._dropDownEl && this._dropDownImg) {
+            // removes initial down arrow
+            AjxImg.setImage(this._dropDownEl, "");
+            // removes arrow image set by mouse hover, click, etc.
+            this.setDropDownImages("", "", "", "");
+        }
+    }
+};
+
 // Private methods
 
 /**
