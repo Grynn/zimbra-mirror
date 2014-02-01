@@ -34,6 +34,7 @@ DwtPropertySheet = function(parent, className, posStyle, labelSide) {
 	
 	var element = this.getHtmlElement();
 	element.appendChild(this._tableEl);
+	this._setAllowSelection();
 }
 
 DwtPropertySheet.prototype = new DwtComposite;
