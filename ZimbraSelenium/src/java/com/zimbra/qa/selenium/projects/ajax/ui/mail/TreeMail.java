@@ -1027,7 +1027,12 @@ public class TreeMail extends AbsTree {
 
 		int count = this.sGetCssCount(searchLocator);
 		logger.debug(myPageName() + " zListGetFolders: number of folders: "+ count);
-
+		
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+				"8.5.")) {
+				count++; // temp-fix -- This is required because find share section removed			
+			}
+		
 		for ( int i = 1; i <= count; i++) {
 			String itemLocator = searchLocator + ":nth-child("+i+")";
 
@@ -1038,7 +1043,7 @@ public class TreeMail extends AbsTree {
 			String identifier = sGetAttribute(itemLocator +"@id");
 			logger.debug(myPageName() + " identifier: "+ identifier);
 
-			if ( identifier == null || identifier.trim().length() == 0 || !(identifier.startsWith("zti__main_Mail__")) ) {
+			if( identifier == null || identifier.trim().length() == 0 || !(identifier.startsWith("zti__main_Mail__")) ) {
 				// Not a folder
 				// Maybe "Find Shares ..."
 				count++; // Add one more to the total 'count' for this 'unknown' item
@@ -1056,9 +1061,8 @@ public class TreeMail extends AbsTree {
 			// Add any sub folders
 			items.addAll(zListGetFolders(itemLocator));
 
-
 		}
-
+	
 		return (items);
 
 	}
