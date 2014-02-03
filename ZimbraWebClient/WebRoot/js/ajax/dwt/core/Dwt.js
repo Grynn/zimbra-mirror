@@ -973,10 +973,10 @@ function(childNode, parentNode) {
 		parentNode = document.documentElement;
 	}
 
-	do {
+	while (childNode && childNode != parentNode) {
 		ancestors.push(childNode.parentNode);
 		childNode = childNode.parentNode;
-	} while (childNode && childNode != parentNode);
+	}
 
 	// check if the parent was an ancestor
 	if (ancestors[ancestors.length - 1] != parentNode) {
