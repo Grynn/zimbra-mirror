@@ -101,7 +101,7 @@ function(requestStr, serverUrl, requestHeaders, callback, method, timeout) {
 
 
 	var asyncMode = (callback != null);
-	var m = requestStr && requestStr.match(/.*"(\w+Request)"/);
+	var m = requestStr && requestStr.match && requestStr.match(/.*"(\w+Request)"/);
 	this.methodName = m ? m[1] : serverUrl || "";	// for debugging
 
 	// An exception here will be caught by AjxRpc.invoke
