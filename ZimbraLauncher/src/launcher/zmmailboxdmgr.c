@@ -566,7 +566,6 @@ Start(int nextArg, int argc, char *argv[])
     AddArgFmt("%s/start.jar", MAILBOXD_HOME);
     AddArg("--module=zimbra,server,servlet,servlets,jsp,jmx,resources,websocket,ext,plus,rewrite,monitor,continuation,setuid");
     AddArgFmt("jetty.home=%s", MAILBOXD_HOME);
-    AddArgFmt("%s/etc/jetty.properties", MAILBOXD_HOME);
     AddArgFmt("%s/etc/jetty.xml", MAILBOXD_HOME);
 
     if (Verbose) {
