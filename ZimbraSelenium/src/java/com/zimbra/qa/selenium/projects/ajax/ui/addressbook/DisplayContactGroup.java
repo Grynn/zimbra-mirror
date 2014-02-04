@@ -86,7 +86,7 @@ public class DisplayContactGroup extends AbsDisplay {
 		  locatorArray.add("css=table[class*='contactHeaderTable'] div[class*='contactHeader']");
 		}
 		if ( field == Field.Company ) {			
-			  locatorArray.add("css=table[class*='contactHeaderTable'] div[class*='companyName']");
+			  locatorArray.add("css=table[class*='contactHeaderTable'] div[class*='contactHeader']:nth-child(2)");
 			}		
 		else if ( field == Field.Email ) {					   			
 			getAllLocators(locatorArray,Field.Email);
