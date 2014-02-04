@@ -600,7 +600,7 @@ sub run() {
         my @headerAry = split(/,/o, $headers);
         @headerAry    = map { /^\s*(\S+)\s*$/o; $1 } @headerAry;
         my @dataAry   = split(/,/o, $data);
-        @dataAry      = map { /^\s*(\S*)\s*$/o; $1 } @dataAry;
+        for (@dataAry) { s/^\s+//; s/\s+$//; }
 
         my $structure = get_structure($dbh, $hostid, $csv_file);
         $structure    = create_structure(
