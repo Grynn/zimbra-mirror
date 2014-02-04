@@ -401,7 +401,7 @@ BEGIN {
       %banned_rules $penpals_threshold_low $penpals_threshold_high
       %dkim_signing_keys_by_domain
       @dkim_signing_keys_list @dkim_signing_keys_storage
-      $file $altermime $enable_anomy_sanitizer
+      $file $altermime $enable_anomy_sanitizer $external_disclaimer_only
     )],
     'sa' =>  # global SpamAssassin settings
     [qw(
@@ -1060,6 +1060,7 @@ BEGIN {
   $altermime = 'altermime';  # path to the altermime utility (optional)
   @altermime_args_defang     = qw(--verbose --removeall);
   @altermime_args_disclaimer = qw(--disclaimer=/etc/altermime-disclaimer.txt);
+  $external_disclaimer_only = 0;
   # @altermime_args_disclaimer =
   #  qw(--disclaimer=/etc/_OPTION_.txt --disclaimer-html=/etc/_OPTION_.html);
   # @disclaimer_options_bysender_maps = ( 'altermime-disclaimer' );
@@ -13440,6 +13441,9 @@ sub check_mail($$) {
                                    @rfc2822_from, $rfc2822_sender, $sender))) {
                 $to_be_mangled = 0;  # not for foreign 'Sender:' or 'From:'
                 do_log(5,"will not add disclaimer, sender not local");
+              } elsif ($external_disclaimer_only == 1) {
+                $to_be_mangled = 0  if $r->recip_is_local;
+                do_log(5, "will not add disclaimer, recipient is local");
               }
             }
           } else {  # defanging (not disclaiming)
