@@ -172,6 +172,8 @@ public class MoveMessage extends PrefGroupMailByMessageTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
+		app.zPageMail.zRefresh();
+		
 		// Select all
 		app.zPageMail.zToolbarPressButton(Button.B_SHIFT_SELECT_ALL);
 				
