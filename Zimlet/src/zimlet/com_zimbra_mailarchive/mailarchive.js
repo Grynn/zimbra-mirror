@@ -293,6 +293,26 @@ function() {
 	this._showPreferenceDlg();
 };
 
+/**
+ * Calls singleClicked when doubleClicked on panel item.
+ *
+ */
+ZmArchiveZimlet.prototype.doubleClicked = function() {
+	this.singleClicked();
+};
+
+/**
+ * Called by the Zimbra framework when a menu item is selected
+ */
+ZmArchiveZimlet.prototype.menuItemSelected = function(itemId) {
+	//Note - I do this as a switch for future use, if we add actions to the context menu, other than preferences. Also to be consistent with other zimlets.
+	switch (itemId) {
+		case "GENERAL_PREFERENCES":
+			this._showPreferenceDlg();
+			break;
+	}
+};
+
 
 ZmArchiveZimlet.prototype._showPreferenceDlg =
 function() {

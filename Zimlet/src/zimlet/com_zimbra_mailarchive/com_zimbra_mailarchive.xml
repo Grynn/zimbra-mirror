@@ -22,5 +22,8 @@
     <handlerObject>ZmArchiveZimlet</handlerObject>
     <zimletPanelItem label="${msg.label}" icon="archiveZimletIcon">
         <toolTipText>${msg.description}</toolTipText>
+        <contextMenu>
+            <menuItem icon="Preferences" label="${msg.preferences}" id="GENERAL_PREFERENCES"/>
+        </contextMenu>
     </zimletPanelItem>
 </zimlet>
