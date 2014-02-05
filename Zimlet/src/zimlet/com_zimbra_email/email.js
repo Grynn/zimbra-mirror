@@ -681,11 +681,14 @@ function(ev){
 		rule = this._rules.getRuleByName(rule.name) || rule;
 	}
 
+	var addrObject = this._actionObject;
+	var addrType = addrObject.isAjxEmailAddress ? addrObject.type : AjxEmailAddress.FROM;
+
 	var addr = this._getAddress(this._actionObject);
 	if (AjxUtil.isString(addr) && this.isMailToLink(addr)) {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
-	var subjMod = ZmFilterRule.C_ADDRESS_VALUE[ZmFilterRule.C_FROM];
+	var subjMod = ZmFilterRule.C_ADDRESS_VALUE[addrType];
 	rule.addCondition(ZmFilterRule.TEST_ADDRESS, ZmFilterRule.OP_IS, addr, subjMod);
 
 	appCtxt.getFilterRuleDialog().popup(rule, editMode);
