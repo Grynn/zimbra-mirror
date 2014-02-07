@@ -25,9 +25,8 @@ if ($> != 0) {
   exit 1;
 }
 
-my $zimbra_home = getLocalConfig("zimbra_home");
 # Exit if software-only node.
-exit(1) unless (-f "${zimbra_home}/conf/localconfig.xml");
+exit(1) unless (-f "/opt/zimbra/conf/localconfig.xml");
 
 my %options = ();
 unless ( getopts( 'dhv', \%options ) ) { usage(); }
@@ -37,7 +36,7 @@ my $verbose = $options{v} ? 1 : 0;
 $verbose = 1 if $debug;
 
 
-my $pidFile="${zimbra_home}/data/postfix/spool/pid/master.pid";
+my $pidFile="/opt/zimbra/data/postfix/spool/pid/master.pid";
 
 exit (mtaIsRunning() ? 0 : 1);
 

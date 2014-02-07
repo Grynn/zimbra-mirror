@@ -76,10 +76,10 @@ do
 done
 
 
-cd ${zmstat_log_directory} 2>/dev/null
-if [ $? -ne 0 -o "${PWD}" != "${zmstat_log_directory}" ]
+cd /opt/zimbra/zmstat 2>/dev/null
+if [ $? -ne 0 -o "${PWD}" != "/opt/zimbra/zmstat" ]
 then
-    echo "ERROR: Cannot change to the zmstats log directory ${zmstat_log_directory}."
+    echo "ERROR: Cannot change to the zmstats log directory /opt/zimbra/zmstat."
     exit -1
 fi
 

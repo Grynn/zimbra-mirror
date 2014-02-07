@@ -45,8 +45,8 @@ GetOptions("help" => \$help,
 
 $c{zmlocalconfig}="/opt/zimbra/bin/zmlocalconfig";
 $c{zimbra_home} = getLocalConfig("zimbra_home");
-$c{zmprov}="$c{zimbra_home}/bin/zmprov -l -m --";
-$c{zmcertmgr}="$c{zimbra_home}/bin/zmcertmgr";
+$c{zmprov}="/opt/zimbra/bin/zmprov -l -m --";
+$c{zmcertmgr}="/opt/zimbra/bin/zmcertmgr";
 
 if ($usersonly && !$oldServerName) {
   print "--usersonly requries --oldServerName.\n";

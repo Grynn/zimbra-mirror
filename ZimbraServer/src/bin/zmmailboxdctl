@@ -21,7 +21,7 @@ if [ ! -d ${mailboxd_directory} ]; then
   exit 0
 fi
 
-if [ ! -d ${zimbra_home}/mysql/bin ]; then
+if [ ! -d /opt/zimbra/mysql/bin ]; then
   exit 0
 fi
 
@@ -43,7 +43,7 @@ javaXmn=$(expr ${javaXmx} '*' ${mailboxd_java_heap_new_size_percent} / 100)
 # Spnego - the spnego_options_file is written by zmconfigd 
 #          to avoid a zmprov call here.
 #
-spnego_options_file=${zimbra_home}/conf/spnego_java_options
+spnego_options_file=/opt/zimbra/conf/spnego_java_options
 if [ -e ${spnego_options_file} ]; then
   spnegoJavaOptions=$(cat $spnego_options_file)
 fi
@@ -53,7 +53,7 @@ fi
 #
 mk_download_dir() {
   if [ -d "${mailboxd_directory}/webapps/zimbra/downloads" ]; then
-    ${zimbra_home}/libexec/zmupdatedownload
+    /opt/zimbra/libexec/zmupdatedownload
   fi
 }
 
@@ -64,9 +64,9 @@ case "$1" in
     'start')
       mk_download_dir
 	  if [ "x$2" = "x" ]; then
-		  ${zimbra_home}/bin/zmtlsctl > /dev/null 2>&1
+		  /opt/zimbra/bin/zmtlsctl > /dev/null 2>&1
 	  fi
-      sudo ${zimbra_home}/libexec/zmmailboxdmgr status
+      sudo /opt/zimbra/libexec/zmmailboxdmgr status
       if [ $? = 0 ]; then
         echo "mailboxd already running."
         exit 0
@@ -99,7 +99,7 @@ case "$1" in
         mailboxd_java_options="${mailboxd_java_options} -Dsun.net.inetaddr.ttl=${networkaddress_cache_ttl}"
       fi
       echo -n "Starting mailboxd..."
-      sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
+      sudo /opt/zimbra/libexec/zmmailboxdmgr start \
         -ea -Dfile.encoding=UTF-8 ${mailboxd_java_options} ${spnegoJavaOptions} -Xms${javaXms}m \
         -Xmx${javaXmx}m -Xmn${javaXmn}m < /dev/null > /dev/null 2>&1
       status=$?
@@ -127,13 +127,13 @@ case "$1" in
 
     'kill'|'stop')
       echo -n "Stopping mailboxd..."
-      sudo ${zimbra_home}/libexec/zmmailboxdmgr status
+      sudo /opt/zimbra/libexec/zmmailboxdmgr status
       if [ $? != 0 ]; then
         echo "mailboxd is not running."
         exit 0
       fi
       ${zimbra_home}/bin/zmthrdump -i -o ${zimbra_home}/log/stacktrace.$$.$(date +%Y%m%d%H%M%S) 2> /dev/null
-      sudo ${zimbra_home}/libexec/zmmailboxdmgr stop 
+      sudo /opt/zimbra/libexec/zmmailboxdmgr stop 
       if [ $? = 0 ]; then
         echo "done."
       else 
@@ -150,7 +150,7 @@ case "$1" in
     
     'status')
       echo -n "mailboxd is "
-      sudo ${zimbra_home}/libexec/zmmailboxdmgr status
+      sudo /opt/zimbra/libexec/zmmailboxdmgr status
       if [ $? = 0 ]; then
         echo "running."
         exit 0

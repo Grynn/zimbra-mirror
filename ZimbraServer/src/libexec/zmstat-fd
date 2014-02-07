@@ -21,6 +21,7 @@
 
 use strict;
 use Getopt::Long;
+use Cwd qw/realpath/;
 use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Mon::Zmstat;
 use Zimbra::Mon::Logger;
@@ -28,8 +29,7 @@ use vars qw($LOGFH $CONSOLE $LOGFILE $ROTATE_NOW $ROTATE_DEFER);
 
 Zimbra::Mon::Zmstat::osCheck();
 Zimbra::Mon::Zmstat::getLocalConfig('zimbra_home', 'zimbra_user', 'zimbra_server_hostname',
-               'zmstat_log_directory', 'zmstat_interval',
-               'zmstat_disk_interval');
+               'zmstat_interval', 'zmstat_disk_interval');
 my $zuser = $Zimbra::Mon::Zmstat::LC{zimbra_user};
 my ($zuid,$zgid) = (getpwnam($zuser))[2,3];
 
@@ -171,6 +171,15 @@ if (!$opts_good) {
     print STDERR "\n";
     usage();
 }
+
+$LOGFILE=realpath($LOGFILE);
+
+if ($LOGFILE !~ /^\/tmp|^\/var\/log|^\/opt\/zimbra\/log|^\/opt\/zimbra\/data\/tmp|^\/opt\/zimbra\/zmstat/) {
+  print "Error: Specified log file must be created in /tmp, /var/log, /opt/zimbra/zmstat, /opt/zimbra/log, or /opt/zimbra/data/tmp\n";
+  print "\n";
+  exit(1);
+}
+
 createPidFile('zmstat-fd-real.pid');
 
 my $date = getDate();
