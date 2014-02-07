@@ -1048,7 +1048,7 @@ public class FormMailNew extends AbsForm {
 	
 	public boolean zHasAttachment() throws HarnessException {
 	
-		String locator = "css=span[id$='_attachments_div'] div.attBubbleContainer";
+		String locator = "css=div[id$='_attachments_div'] div.attBubbleContainer";
 		
 		boolean hasBubble = this.sIsElementPresent(locator);
 		
@@ -1064,7 +1064,7 @@ public class FormMailNew extends AbsForm {
 		}
 		
 		// Find the attachment name
-		String locator = "css=span[id$='_attachments_div'] div.attBubbleContainer a.AttLink";
+		String locator = "css=div[id$='_attachments_div'] div.attBubbleContainer a.AttLink";
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false);
