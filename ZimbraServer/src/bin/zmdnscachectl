@@ -29,9 +29,9 @@ zmsetvars \
   zimbra_log_directory
 
 PID=""
-unbound=${zimbra_home}/libexec/zmunbound
+unbound=/opt/zimbra/libexec/zmunbound
 config=${zimbra_home}/conf/unbound.conf
-platform=`${zimbra_home}/libexec/get_plat_tag.sh`;
+platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
 
 RESOLVCONF=false
 if [ -x /sbin/resolvconf ]; then
@@ -72,7 +72,7 @@ start()
       rewriteconfig
     fi
     if [ x"$RESOLVCONF" = "xtrue" ]; then
-      ${zimbra_home}/unbound/sbin/unbound-checkconf -o interface | (
+      /opt/zimbra/unbound/sbin/unbound-checkconf -o interface | (
         while read interface; do
           if [ "x$interface" = x127.0.0.1 ]; then
             echo "nameserver 127.0.0.1"
@@ -82,7 +82,7 @@ start()
         done
       ) | sudo /sbin/resolvconf -a lo.zimbra-unbound
     elif [[ $platform == "RHEL"*"64" || $platform == "SLES"*"64" || $platform == "CentOS"*"64" ]]; then
-      sudo ${zimbra_home}/libexec/zmdnscachealign add
+      sudo /opt/zimbra/libexec/zmdnscachealign add
     fi
     sudo $unbound
     if [ $? != 0 ]; then
@@ -104,7 +104,7 @@ stop()
   if [ x"$RESOLVCONF" = "xtrue" ]; then
     sudo /sbin/resolvconf -d lo.zimbra-unbound
   elif [[ $platform == "RHEL"*"64" || $platform == "SLES"*"64" || $platform == "CentOS"*"64" ]]; then
-    sudo ${zimbra_home}/libexec/zmdnscachealign remove
+    sudo /opt/zimbra/libexec/zmdnscachealign remove
   fi
   if [ $RUNNING = 0 ]; then
     echo "dnscache not running"
