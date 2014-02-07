@@ -77,6 +77,9 @@ import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.servlet.DiskCacheServlet;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.kabuki.util.Colors;
+import com.zimbra.cs.account.AuthToken;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Account;
 
 /**
  * TODO: Clean up this code!
@@ -310,7 +313,11 @@ public class SkinResources
 
 		// generate buffer
 		String buffer = null;
-		File file = !debug ? getCacheFile(cacheId) : null;
+        File file = null;
+        //To do have to find a way to cache the appcache file
+        if (!type.equals(T_APPCACHE) && !debug) {
+            file = getCacheFile(cacheId);
+        }
 		if (file == null || !file.exists()) {
 			if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: generating buffer");
 			buffer = generate(req, resp, cacheId, macros, type, client, locale, templates, cacheBusterVersion);
@@ -685,6 +692,7 @@ public class SkinResources
 			}
             String skinStr = (getCookie(req, "ZM_CACHE_NEW_SKIN") != null) ? getCookie(req, "ZM_CACHE_NEW_SKIN").getValue() : skin;
             String localeStr = (getCookie(req, "ZM_CACHE_NEW_LANG") != null) ? getCookie(req, "ZM_CACHE_NEW_LANG").getValue() : null;
+            String reloadStr = (getCookie(req, "ZM_CACHE_RELOAD") != null) ? getCookie(req, "ZM_CACHE_RELOAD").getValue() : null;
 			String locale = "";
 			if (localeStr != null && !"".equals(localeStr)) {
 				locale = "locale=" + localeStr + "&";
@@ -693,9 +701,32 @@ public class SkinResources
 			    ZimbraLog.webclient.debug("DEBUG: skin=" + skinStr);
 			    ZimbraLog.webclient.debug("DEBUG: locale=" + localeStr);
 		    }
+            String offlineAccessEnabled = null;
+            try{
+                AuthToken authToken = getAuthTokenFromCookie(req, resp, true);
+                Provisioning prov = Provisioning.getInstance();
+                Account account = prov.getAccountById(authToken.getAccountId());
+                offlineAccessEnabled = account.getAttr(Provisioning.A_zimbraPrefWebClientOfflineAccessEnabled);
+                if (ZimbraLog.webclient.isDebugEnabled()) {
+                    ZimbraLog.webclient.debug("DEBUG: offlineAccessEnabled :: " + offlineAccessEnabled);
+                }
+            } catch(Exception e){
+
+            }
 			//create the full manifest file.
 			StringBuffer sb = new StringBuffer();
 			sb.append("CACHE MANIFEST\n\n");
+            if (Boolean.FALSE.toString().equalsIgnoreCase(offlineAccessEnabled)) {
+                if (ZimbraLog.webclient.isDebugEnabled()) {
+                    ZimbraLog.webclient.debug("DEBUG: offlineAccessEnabledofflineAccessEnabled :: " + offlineAccessEnabled);
+                }
+                sb.append("\nNETWORK:\n").append("*\n");
+                return sb.toString();
+            }
+            if (reloadStr != null) {
+                ZimbraLog.webclient.debug("DEBUG: reload version: "+reloadStr);
+                sb.append("#reload version ").append(reloadStr).append(" \n");
+            }
 			sb.append("#version ").append(cacheBusterVersion).append(" \n");
 			sb.append("CACHE:\n");
             sb.append("\n#HTML files\n\n");
@@ -707,6 +738,7 @@ public class SkinResources
 			sb.append("\n#images\n\n");
 			sb.append("/img/zimbra.gif\n"); //TODO remove this hardcoded image.
 			sb.append("/img/zimbra.png\n"); //TODO remove this hardcoded image.
+            sb.append("/img/large/ImgPerson_48.png\n");
             sb.append("/skins/_base/logos/LoginBanner.png?v=").append(cacheBusterVersion).append(" \n"); //TODO remove this hardcoded image.
 			sb.append("\n#style sheet images\n\n");
 			//find all the css rules with a url in it
