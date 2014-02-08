@@ -202,9 +202,9 @@ function(str) {
  * addresses, and all addresses is returned. Strict RFC822 validation (at least as far as it goes in the
  * regexes we have) is optional. If it's off, we'll retry a failed address after quoting the personal part.
  *
- * @param {string}	emailStr	an email string with one or more addresses
- * @param {constant}	type		address type of the string
- * @param {boolean}	strict		if <code>true</code>, do strict checking
+ * @param	{string}	emailStr	an email string with one or more addresses
+ * @param	{constant}	type		address type of the string
+ * @param	{boolean}	strict		if <code>true</code>, do strict checking
  * @return	{hash}		the good/bad/all addresses
  */
 AjxEmailAddress.parseEmailString =
@@ -240,6 +240,19 @@ function(emailStr, type, strict) {
 		}
 	}
 	return {good: good, bad: bad, all: all};
+};
+
+/**
+ * Returns an AjxVector with valid email addresses
+ *
+ * @param	{string}	emailStr	an email string with one or more addresses
+ * @param	{constant}	type		address type of the string
+ * @param	{boolean}	strict		if <code>true</code>, do strict checking
+ * @return	{AjxVector}				valid addresses
+ */
+AjxEmailAddress.getValidAddresses =
+function(emailStr, type, strict) {
+	return AjxEmailAddress.parseEmailString(emailStr, type, strict).good;
 };
 
 /**
