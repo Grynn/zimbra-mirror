@@ -18,6 +18,8 @@ import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
+
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
@@ -54,13 +56,15 @@ public class ZimbraFeatureCalendarEnabled extends AjaxCommonTest {
 	/**
 	 * @throws HarnessException
 	 */
+	@Bugs(	ids = "86552")
 	@Test(	description = "Load the mail tab with just Calendar enabled",
-			groups = { "functional" })
+			groups = { "disable_functional" })
 	public void ZimbraFeatureCalendarEnabled_01() throws HarnessException {
 		
 		// TODO: add basic verification that a simple appointment appears
 		
 	}
+	
 
 
 }
