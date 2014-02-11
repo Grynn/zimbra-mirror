@@ -42,7 +42,7 @@ public class CreateMeetingWhenMailFeatureDisabled extends CalendarWorkWeekTest {
 	}
 	
 	@Test(description = "Verify if organizer can Schedule meeting from account with Calendar enabled and Mail disabled",
-			groups = { "functional" })
+			groups = { "disable_functional" })
 			
 	public void CreateMeetingWhenMailFeatureDisabled_01() throws HarnessException {
 		

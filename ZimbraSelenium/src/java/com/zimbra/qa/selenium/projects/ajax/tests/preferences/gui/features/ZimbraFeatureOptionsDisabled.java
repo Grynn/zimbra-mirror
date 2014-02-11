@@ -52,7 +52,7 @@ public class ZimbraFeatureOptionsDisabled extends AjaxCommonTest {
 	@Bugs(ids="63652")	
 	@Test(
 			description = "Load the app with Preferences tab disabled", 
-			groups = { "functional" }
+			groups = { "disable_functional" }
 			)
 	public void ZimbraFeatureOptionsDisabled_01() throws HarnessException {
 		
