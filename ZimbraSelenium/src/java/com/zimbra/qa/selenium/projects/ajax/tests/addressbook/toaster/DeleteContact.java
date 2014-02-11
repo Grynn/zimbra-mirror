@@ -235,10 +235,10 @@ public class DeleteContact extends AjaxCommonTest {
 		app.zPageAddressbook.zRefresh();
 
 		// Select the item
+		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact3.fileAs);
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact1.fileAs);
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact2.fileAs);
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact3.fileAs);
-
+		
 		// delete 3 contacts
 		app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
 

@@ -174,9 +174,10 @@ public class DeleteContactGroup extends AjaxCommonTest {
 		app.zPageAddressbook.zRefresh();
 
 		// Select the contact group
+		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group3.getName());
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group1.getName());
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group2.getName());
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group3.getName());
+		
 
 		// delete contact group by click Delete button on toolbar
 		app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
@@ -188,7 +189,7 @@ public class DeleteContactGroup extends AjaxCommonTest {
 	
 	}
 
-	@Test(description = "Delete contact + contact group at once and verify toast msg", groups = { "functional" })
+	@Test(description = "Delete contact + contact group at once and verify toast msg", groups = { "zfunctional" })
 	public void DeleteContactGroupToastMsg_07() throws HarnessException {
 
 		// Create a contact group
@@ -201,8 +202,9 @@ public class DeleteContactGroup extends AjaxCommonTest {
 		app.zPageAddressbook.zRefresh();
 
 		// Select the contact group
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact.getName());
+		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
+		
 
 		// delete contact group by click Delete button on toolbar
 		app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);

@@ -142,9 +142,10 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		//-- Data
 		
 		// Create a contact
-		ContactItem contact1 = ContactItem.createContactItem(app.zGetActiveAccount());
+		ContactItem contact1 = ContactItem.createContactItem(app.zGetActiveAccount());		
 		ContactItem contact2 = ContactItem.createContactItem(app.zGetActiveAccount());
 		ContactItem contact3 = ContactItem.createContactItem(app.zGetActiveAccount());
+		
 		
 		// Create a contact group
 		ContactGroupItem group = ContactGroupItem.createContactGroupItem(app.zGetActiveAccount());
@@ -206,9 +207,12 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		//-- Data
 		
 		// Create a contact
-		ContactItem contact1 = ContactItem.createContactItem(app.zGetActiveAccount());
+		
+		ContactItem contact1 = ContactItem.createContactItem(app.zGetActiveAccount());		
 		ContactItem contact2 = ContactItem.createContactItem(app.zGetActiveAccount());
 		ContactItem contact3 = ContactItem.createContactItem(app.zGetActiveAccount());
+		ContactItem contact4 = ContactItem.createContactItem(app.zGetActiveAccount());
+		
 		
 		// Create a contact group
 		String groupname = "group"+ ZimbraSeleniumProperties.getUniqueString();
@@ -222,9 +226,9 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		app.zPageAddressbook.zRefresh();
 
 		// Check 3 contact items
-	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact1.getName());
+		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact1.getName());
 	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact2.getName());
-	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact3.getName());
+	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact3.getName());  
 
 
 		// Right click on one contact -> Group -> Existing Group Name
@@ -232,7 +236,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 				Action.A_RIGHTCLICK, 
 				Button.B_CONTACTGROUP, 
 				Button.O_NEW_CONTACTGROUP, 
-				contact1.getName());
+				contact3.getName());
 
 		dialog.zEnterGroupName(groupname);
 		dialog.zClickButton(Button.B_OK);
@@ -287,8 +291,9 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		app.zPageAddressbook.zRefresh();
 
 		// Check 3 contact items
+		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
 	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact.getName());
-	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
+	  
 
 
 		// Right click on one contact -> Group -> Existing Group Name
@@ -368,7 +373,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		//-- Verification
 		
 		// Verify the contact group is created
-		ContactGroupItem actual = ContactGroupItem.importFromSOAP(app.zGetActiveAccount(), group1.getName());
+		ContactGroupItem actual = ContactGroupItem.importFromSOAP(app.zGetActiveAccount(), group2.getName());
 		ZAssert.assertNotNull(actual,  "Verify the contact group is created");
 		
 		// Verify the contact group contains the contact
@@ -378,7 +383,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 				"Verify the contact group conatins the contact");
 		
 		// The group members will be added to the new group
-		for (ContactGroupItem.MemberItem m : group1.getMemberList()) {
+		for (ContactGroupItem.MemberItem m : group2.getMemberList()) {
 			ZAssert.assertContains(
 					actual.getMemberList(),
 					m,
