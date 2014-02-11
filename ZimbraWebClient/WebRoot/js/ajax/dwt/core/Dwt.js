@@ -1174,13 +1174,14 @@ Dwt.hasClass = function(el, className) {
  * @see #getSelectionStart
  * @see #getSelectionEnd
  * @see #setSelectionText
+ * @see #moveCursorToEnd
  */
 Dwt.setSelectionRange =
 function(input, start, end) {
-	if (AjxEnv.isGeckoBased || AjxEnv.isSafari) {
+	if (input.setSelectionRange) {
         input.focus();
 		input.setSelectionRange(start, end);
-	} else if (AjxEnv.isIE) {
+	} else if (input.createTextRange) {
 		var range = input.createTextRange();
 		range.collapse(true);
 		range.moveStart("character", start);
@@ -1204,20 +1205,20 @@ function(input, start, end) {
  * @see #getSelectionEnd
  * @see #setSelectionText
  * @see #setSelectionRange
+ * @see #moveCursorToEnd
  */
 Dwt.getSelectionStart =
 function(input) {
-	if (AjxEnv.isGeckoBased) {
+	if (AjxUtil.isSpecified(input.selectionStart)) {
 		return input.selectionStart;
-	}
-
-	if (AjxEnv.isIE) {
+	} else if (document.selection) {
 		var range = document.selection.createRange();
 		var isCollapsed = range.compareEndPoints("StartToEnd", range) == 0;
 		if (!isCollapsed)
 			range.collapse(true);
 		var b = range.getBookmark();
-		return b.charCodeAt(2) - 2;
+		var offset = input.createTextRange().getBookmark().charCodeAt(2);
+		return Math.max(b.charCodeAt(2) - offset, 0);
 	}
 
 	// FIXME: find solutions for other browsers
@@ -1235,20 +1236,20 @@ function(input) {
  * @see #getSelectionStart
  * @see #setSelectionText
  * @see #setSelectionRange
+ * @see #moveCursorToEnd
  */
 Dwt.getSelectionEnd =
 function(input) {
-	if (AjxEnv.isGeckoBased) {
+	if (AjxUtil.isSpecified(input.selectionEnd)) {
 		return input.selectionEnd;
-	}
-
-	if (AjxEnv.isIE) {
+	} else if (document.selection) {
 		var range = document.selection.createRange();
 		var isCollapsed = range.compareEndPoints("StartToEnd", range) == 0;
 		if (!isCollapsed)
 			range.collapse(false);
 		var b = range.getBookmark();
-		return b.charCodeAt(2) - 2;
+		var offset = input.createTextRange().getBookmark().charCodeAt(2);
+		return Math.max(b.charCodeAt(2) - offset, 0);
 	}
 
 	// FIXME: find solutions for other browsers
@@ -1265,6 +1266,7 @@ function(input) {
  * @see #getSelectionStart
  * @see #getSelectionEnd
  * @see #setSelectionRange
+ * @see #moveCursorToEnd
  */
 Dwt.setSelectionText =
 function(input, text) {
@@ -1283,6 +1285,21 @@ function(input, text) {
 		input.value = val;
 	}
 	Dwt.setSelectionRange(input, start, start + text.length);
+};
+
+/**
+ * Move cursor to the end of an input.
+ *
+ * @param {input} input	the text input for which to find the selection start point
+ *
+ * @see #getSelectionStart
+ * @see #getSelectionEnd
+ * @see #setSelectionText
+ * @see #setSelectionRange
+ */
+Dwt.moveCursorToEnd =
+function(input) {
+	Dwt.setSelectionRange(input, input.value.length, input.value.length);
 };
 
 Dwt.instanceOf =
@@ -1844,19 +1861,4 @@ function(htmlElement, id) {
         }
     }
     return descendant;
-};
-
-Dwt.moveCursorToEnd =
-function(input) {
-	if (AjxEnv.isIE) {
-		var tr = input.createTextRange();
-		tr.moveStart('character', input.value.length);
-		tr.collapse();
-		tr.select();
-	 }
-	else {
-		input.focus();
-		var length = input.value.length;
-		input.setSelectionRange(length, length);
-	}
 };
