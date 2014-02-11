@@ -661,6 +661,18 @@ public class Button {
 	
 	public static Button B_SAVE_MODIFICATION =   new Button("B_SAVE_MODIFICATION");
 	public static Button B_CANCEL_MODIFICATION =   new Button("B_CANCEL_MODIFICATION");
+	
+	// Added for Touch Client Contacts
+	public static Button B_PHONE_TYPE =   new Button("B_PHONE_TYPE");
+	public static Button B_ADDRESS_TYPE =   new Button("B_ADDRESS_TYPE");
+	public static Button B_URL_TYPE =   new Button("B_URL_TYPE");
+	public static Button O_MOBILE =   new Button("O_MOBILE");
+	public static Button O_HOME =   new Button("O_HOME");
+	public static Button O_WORK =   new Button("O_WORK");
+	public static Button O_OTHER =   new Button("O_OTHER");
+	
+	
+	
 	// Button properties
 	private final String ID;
 
