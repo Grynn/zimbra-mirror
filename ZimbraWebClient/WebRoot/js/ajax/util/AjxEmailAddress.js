@@ -39,6 +39,7 @@ AjxEmailAddress = function(address, type, name, dispName, isGroup) {
 };
 
 AjxEmailAddress.prototype.isAjxEmailAddress = true;
+
 /**
  * Defines list of custom invalid RegEx patterns that are set in LDAP
  */
@@ -139,13 +140,12 @@ function (str) {
  * @param	{string}	str		the string to parse
  * @return	{AjxEmailAddress}	the email address or <code>null</code>
  */
-AjxEmailAddress.parse =
-function(str) {
+AjxEmailAddress.parse = function(str) {
+
 	var addr, name;
 	var str = AjxStringUtil.trim(str);
 	var prelimOkay = AjxEmailAddress._prelimCheck(str);
 	if (!(prelimOkay && str.match(AjxEmailAddress.addrPat))) {
-		DBG.println(AjxDebug.DBG2, "mailbox match failed: " + str);
 		return null;
 	}
 
@@ -158,28 +158,28 @@ function(str) {
 	if (parts && parts.length) {
 		addr = parts[2];
 		str = str.replace(AjxEmailAddress.addrAnglePat, '');
-	} else {
+	}
+	else {
 		parts = str.match(AjxEmailAddress.addrPat1);
 		if (parts && parts.length) {
-			if (parts[1] == '"') {
+			if (parts[1] === '"') {
 				return null;	// unmatched quote
 			}
-            //AjxEmailAddress.addrPat recognizes the email better than using parts[0] from AjxEmailAddress.addrPat1
-            addr = str.match(AjxEmailAddress.addrPat);
-            addr = (addr && addr.length && addr[0] != "") ? AjxStringUtil.trim(addr[0]) : parts[0];
-			if (addr && addr.indexOf("..") != -1) {
-				return null;
-			}
+            // AjxEmailAddress.addrPat recognizes the email better than using parts[0] from AjxEmailAddress.addrPat1
+            var parts1 = str.match(AjxEmailAddress.addrPat);
+            addr = parts1 && parts1.length && parts1[0] ? AjxStringUtil.trim(parts1[0]) : parts[0];
 			str = str.replace(AjxEmailAddress.addrPat, '');
 		}
 	}
- 	if (!addr) {
+
+	// double-check with validateAddress(), which uses addrOnlyPat
+	if (!addr || !AjxEmailAddress.validateAddress(addr)) {
 		return null;
 	}
-	//Invalidate if address matches any of AjxEmailAddress.customInvalidEmailPats
-	for(var i = 0; i< AjxEmailAddress.customInvalidEmailPats.length; i++) {
-	   var match = addr.match(AjxEmailAddress.customInvalidEmailPats[i]);
-		if(match) {
+
+	// Validate against any customer-provided patterns
+	for (var i = 0; i < AjxEmailAddress.customInvalidEmailPats.length; i++) {
+		if (AjxEmailAddress.customInvalidEmailPats[i].test(addr)) {
 			return null;
 		}
 	}
@@ -190,8 +190,8 @@ function(str) {
 
 		// Trim off leading and trailing quotes, but leave escaped quotes and unescape them
 		name = name.replace(/\\"/g,"&quot;");
-		name = AjxStringUtil.trim(name, null, "\"");
-		name = name.replace(/&quot;/g,"\"");
+		name = AjxStringUtil.trim(name, null, '"');
+		name = name.replace(/&quot;/g, '"');
 	}
 	
 	return new AjxEmailAddress(addr, null, name);
