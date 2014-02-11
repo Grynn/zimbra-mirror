@@ -3398,7 +3398,7 @@ function(event) {
 		content = "";
 	} else if (typeof(tooltip) == "string") {
 		content = tooltip;
-	} else if (tooltip.isAjxCallback) {
+	} else if (tooltip.isAjxCallback || AjxUtil.isFunction(tooltip)) {
 		callback = tooltip;
 	} else if (typeof(tooltip) == "object") {
 		content = tooltip.content;

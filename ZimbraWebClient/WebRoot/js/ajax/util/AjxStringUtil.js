@@ -1295,6 +1295,41 @@ function(sourceUri) {
 };
 
 /**
+ * Parses a mailto: link into components. If the string is not a mailto: link, the object returned will
+ * have a "to" property set to the string.
+ *
+ * @param {String}      str     email address, possibly within a "mailto:" link
+ * @returns {Object}    object with at least a 'to' property, and possibly 'subject' and 'body'
+ */
+AjxStringUtil.parseMailtoLink = function(str) {
+
+	var parts = {};
+
+	if (!str) {
+		return parts;
+	}
+
+	if (str.toLowerCase().indexOf('mailto:') === -1) {
+		parts.to = str;
+		return parts;
+	}
+
+	var match = str.match(/\bsubject=([^&]+)/i);
+	parts.subject = match ? decodeURIComponent(match[1]) : null;
+
+	match = str.match(/\bto\:([^&]+)/);
+	if (!match) {
+		match = str.match(/\bmailto\:([^\?]+)/i);
+	}
+	parts.to = match ? decodeURIComponent(match[1]) : null;
+
+	match = str.match(/\bbody=([^&]+)/i);
+	parts.body = match ? decodeURIComponent(match[1]) : null;
+
+	return parts;
+};
+
+/**
  * Parse the query string (part after the "?") and return it as a hash of key/value pairs.
  * 
  * @param	{String}	sourceUri		the source query string
