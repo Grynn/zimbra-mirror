@@ -21,6 +21,8 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.touch.ui.AppTouchClient;
+import com.zimbra.qa.selenium.projects.touch.ui.mail.FormMailNew.Locators;
 
 
 
@@ -29,8 +31,12 @@ import com.zimbra.qa.selenium.projects.ajax.ui.*;
  *
  */
 public class FormContactNew extends AbsForm {
+
 	
 	public static class Locators {
+		
+		public static final String zSaveButton = "css=div[id^='ext-contactpanel'] span[class='x-button-label']:contains('Save')";
+		public static final String zCancelButton = "css=div[id^='ext-contactpanel'] span[class='x-button-label']:contains('Cancel')";	
 		
 		public static final String zNewContactMenuIconBtn = "id=zb__CNS__NEW_MENU_left_icon";
 		public static String zActiveEditForm = "editcontactform";
@@ -129,19 +135,15 @@ public class FormContactNew extends AbsForm {
 	public static class Field {
 		
 		public static final Field FullName		= new Field("fullName", null);
-		public static final Field NamePrefix	= new Field("namePrefix", "input[id$='_PREFIX_input']");
-		public static final Field FirstName		= new Field("firstName", "input[id$='_FIRST_input']");
-		public static final Field MiddleName	= new Field("middleName", "input[id$='_MIDDLE_input']");
-		public static final Field MaidenName	= new Field("maidenName", "input[id$='_MAIDEN_input']");
-		public static final Field LastName		= new Field("lastName", "input[id$='_LAST_input']");
-		public static final Field NameSuffix	= new Field("nameSuffix", "input[id$='_SUFFIX_input']");
-		public static final Field Nickname		= new Field("nickname", "input[id$='_NICKNAME_input']");
-		public static final Field JobTitle		= new Field("jobTitle", "input[id$='_TITLE_input']");
-		public static final Field Company		= new Field("company", "input[id$='_COMPANY_input']");
-		public static final Field Department	= new Field("department", "input[id$='_DEPARTMENT_input']");
-		public static final Field Email			= new Field("email", "input[id*='_EMAIL_']");
-		public static final Field PhoneNumber	= new Field("phone", "input[id*='_PHONE_']");
-		public static final Field MobilePhone	= new Field("mobilePhone", "input[id*='_PHONE_']");
+		public static final Field NamePrefix	= new Field("namePrefix", "input[name='namePrefix']");
+		public static final Field MiddleName	= new Field("middleName", "input[name='middleName']");
+		public static final Field MaidenName	= new Field("maidenName", "input[name='maidenName']");
+		public static final Field NameSuffix	= new Field("nameSuffix", "input[name='nameSuffix']");
+		public static final Field Nickname		= new Field("nickname", "input[name='nickname']");
+		public static final Field JobTitle		= new Field("jobTitle", "input[name='jobTitle']");
+		public static final Field Department	= new Field("department", "input[name='department']");
+		public static final Field PhoneNumber	= new Field("phone", "input[name='phone']");
+		public static final Field MobilePhone	= new Field("mobilePhone", "input[name='phone']");
 		public static final Field IM			= new Field("imAddress1", "input[id*='_IM_']");
 		public static final Field HomeStreet	= new Field("homeStreet", "textarea[id$='_STREET_input']");
 		public static final Field HomeCity		= new Field("homeCity", "input[id$='_CITY_input']");
@@ -150,6 +152,20 @@ public class FormContactNew extends AbsForm {
 		public static final Field HomeURL		= new Field("homeURL", "input[id*='_URL_']");
 		public static final Field Birthday		= new Field("birthday", "input[id*='_OTHER_']");
 		public static final Field Notes			= new Field("notes", "textarea[id$='_NOTES_input']");
+        
+		// Basic fields
+		public static final Field FirstName		= new Field("firstName", "input[name='firstName']");
+		public static final Field LastName		= new Field("lastName", "input[name='lastName']");
+		public static final Field Company		= new Field("company", "input[name='company']");
+        
+		// Hidden fields
+		public static final Field Email			= new Field("email", "input[name='email']");		
+		public static final Field OtherStreet	= new Field("otherStreet", "input[name='street0']");
+		public static final Field OtherState	= new Field("otherState", "input[name='state0']");
+		public static final Field OtherCity		= new Field("otherCity", "input[name='city0']");
+		public static final Field OtherZipcode  = new Field("otherZipcode", "input[name='postalCode0']");
+		public static final Field OtherCountry	= new Field("otherCountry", "input[name='country0']");
+		public static final Field WorkURL		= new Field("workURL", "input[name=url]");
 		
 
 		
@@ -210,24 +226,40 @@ public class FormContactNew extends AbsForm {
 	
 	
 	/**
-	 * Expand all the hidden name fields
+	 * Expand all the hidden contact fields
 	 * @throws HarnessException
 	 */
 	public void zDisplayHiddenName() throws HarnessException {
 		
-		/*
-		 * Commented rows are expanded by default
-		 */
-		zToolbarPressPulldown(Button.B_EXPAND, Button.O_PREFIX);
-//		zToolbarPressPulldown(Button.B_EXPAND, Button.O_FIRST);
-		zToolbarPressPulldown(Button.B_EXPAND, Button.O_MIDDLE);
-		zToolbarPressPulldown(Button.B_EXPAND, Button.O_MAIDEN);
-//		zToolbarPressPulldown(Button.B_EXPAND, Button.O_LAST);
-		zToolbarPressPulldown(Button.B_EXPAND, Button.O_SUFFIX);
-		zToolbarPressPulldown(Button.B_EXPAND, Button.O_NICKNAME);
-//		zToolbarPressPulldown(Button.B_EXPAND, Button.O_JOB_TITLE);
-		zToolbarPressPulldown(Button.B_EXPAND, Button.O_DEPARTMENT);
-//		zToolbarPressPulldown(Button.B_EXPAND, Button.O_COMPANY);
+		// Expand all hidden fields
+        this.zToolbarPressPulldown(Button.B_EXPAND, Button.O_SUFFIX);
+        this.zToolbarPressPulldown(Button.B_EXPAND, Button.O_MIDDLE);
+        this.zToolbarPressPulldown(Button.B_EXPAND, Button.O_MAIDEN);
+        this.zToolbarPressPulldown(Button.B_EXPAND, Button.O_PREFIX);
+        this.zToolbarPressPulldown(Button.B_EXPAND, Button.O_NICKNAME);
+        
+        this.zToolbarPressPulldown(Button.B_EXPAND, Button.O_DEPARTMENT);
+        this.zToolbarPressPulldown(Button.B_EXPAND, Button.O_JOB_TITLE);
+        
+        ArrayList<String> locators = new ArrayList<String>();
+		locators.add("css=div[class='contact-form-add-field-button-text']:contains('Add Email Address')");
+		locators.add("css=div[class='contact-form-add-field-button-text']:contains('Add Phone Number')");
+		locators.add("css=div[class='contact-form-add-field-button-text']:contains('Add Physical Address')");
+		locators.add("css=div[class='contact-form-add-field-button-text']:contains('Add Website URL')");
+	    
+		Iterator iter = locators.iterator();
+		while( iter.hasNext() ){
+			
+			String lctr = (String) iter.next();
+			
+			// Click it
+			zClickAt(lctr, "0,0");
+
+			// if the app is busy, wait for it to become active again
+			this.zWaitForBusyOverlay();
+			
+		}
+
 	
 	}
 	
@@ -347,61 +379,27 @@ public class FormContactNew extends AbsForm {
 	public void zFillField(Field field, String value) throws HarnessException {
 		tracer.trace("Set "+ field +" to "+ value);
 
-		
-		
-		// The field contains the locator, for example:
-		//     css=div#editcontactform_DWT98 inpput[id$='_NICKNAME_input']
-		//
-		String locator = String.format("css=div#%s %s", MyDivID, field.getLocator());
-		
-		if ( field == Field.Email || field == Field.IM || field == Field.HomeURL ) {
+		String locator = null;
+	
+		locator = String.format("css=%s",field.getLocator());
 			
-			// Make sure the button exists
-			if ( !this.sIsElementPresent(locator) )
-				throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
-			
-			// Email is a bit different, since there is an auto-complete action
-			// 
-			// For auto-complete, some extra events must occur
-			//
-			this.sFocus(locator);
-			this.zClick(locator);
-			this.zWaitForBusyOverlay();
-
-			// Enter text
-			this.sType(locator, value);
-			this.sFireEvent(locator, "keyup");
-			
-			// Wait for any busy overlay
-			this.zWaitForBusyOverlay();
-			
-			return;
-
-		} else if ( field == Field.PhoneNumber ) {
-			
-			// TODO: Can't seem to make the phone number work
-			throw new HarnessException("implement field: " + field);
-			
-		}
-		
-		// Default behavior, enter value into locator field
-		//
-		
 		// Make sure the button exists
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
-		
+			
+		// Put the cursor on input text box
+		this.sFocus(locator);
+		this.zClick(locator);
+		this.zWaitForBusyOverlay();
 
 		// Enter text
 		this.sType(locator, value);
-		
-		// For some reason, contact fields need a keyup event to
-		// determine that text has been added.
-		//
 		this.sFireEvent(locator, "keyup");
-		
+			
 		// Wait for any busy overlay
 		this.zWaitForBusyOverlay();
+			
+		return;
 
 	}
 	
@@ -439,38 +437,16 @@ public class FormContactNew extends AbsForm {
 		logger.info(myPageName() + " zIsActive()");
 		
 		
-		if ( MyDivID == null ) {
-
-			// Determine which ZmContactView div is visible (if any)
-			String locator = "//div[@id='z_shell']/div[contains(@class, 'ZmEditContactView')]";
-			int count = this.sGetXpathCount(locator);
-
-			for (int i = 1; i <= count; i++) {
-				String id = this.sGetAttribute(locator + "["+ i +"]@id");
-				if ( this.zIsVisiblePerPosition("css=div#"+ id, 0, 0) ) {
-					MyDivID = id;
-					return (true);
-				}
-			}
-
-			// No ZmContactView is active
+        String locator = Locators.zSaveButton;
+		
+		if ( !this.sIsElementPresent(locator) ) {
+			return (false);	
+		}
+		
+		if ( !this.zIsVisiblePerPosition(locator, 0, 0) ) {
 			return (false);
 		}
-
-		// Div ID is set, check it.
-
-		String locator = "css=div#" + MyDivID;
-
-		boolean present = this.sIsElementPresent(locator);
-		if ( !present ) {
-			return (false);
-		}
-
-		boolean visible = this.zIsVisiblePerPosition(locator, 0, 0);
-		if ( !visible ) {
-			return (false);
-		}
-
+		
 		logger.info(myPageName() + " zIsActive() = true");
 		return (true);
 
@@ -501,154 +477,96 @@ public class FormContactNew extends AbsForm {
 		AbsPage page = null; // If set, this page will be returned
 		
 
-		if (pulldown == Button.B_EXPAND) {
+		if ( pulldown == Button.B_EXPAND ) {
+			   
+			   if ( option == Button.O_PREFIX) {
+				   
+				   pulldownLocator = "css=div[id^='ext-namecontainer'] div[class='contact-form-add-field-button-text']:contains('Add Field')";
+	   
+	               optionLocator="css=div[id^='ext-listitem'] div[id^='ext-element']:contains('Prefix')";                
+				  
+				   //page = this;
+			   } else if ( option == Button.O_MIDDLE) {
+				   
+				   pulldownLocator = "css=div[id^='ext-namecontainer'] div[class='contact-form-add-field-button-text']:contains('Add Field')";
+				   
+				   optionLocator="css=div[id^='ext-listitem'] div[id^='ext-element']:contains('Middle Name')"; 
+				   
+				   //page = this;		   
+			   } else if ( option == Button.O_MAIDEN) {
+				   
+				   pulldownLocator = "css=div[id^='ext-namecontainer'] div[class='contact-form-add-field-button-text']:contains('Add Field')";
+				   
+				   optionLocator="css=div[id^='ext-listitem'] div[id^='ext-element']:contains('Maiden Name')"; 
+				   
+				   //page = this;		   
+			   } else if ( option == Button.O_SUFFIX) {
+				   
+				   pulldownLocator = "css=div[id^='ext-namecontainer'] div[class='contact-form-add-field-button-text']:contains('Add Field')";
+				   
+				   optionLocator="css=div[id^='ext-listitem'] div[id^='ext-element']:contains('Suffix')"; 
+				   
+				   //page = null;		   
+			   } else if ( option == Button.O_NICKNAME) {
+				   
+				   pulldownLocator = "css=div[id^='ext-namecontainer'] div[class='contact-form-add-field-button-text']:contains('Add Field')";
+				   
+				   optionLocator="css=div[id^='ext-listitem'] div[id^='ext-element']:contains('Nickname')"; 
+				   
+				   //page = this;		   
+			   } else if ( option == Button.O_DEPARTMENT) {
+				   
+				   pulldownLocator = "css=div[id^='ext-companycontainer'] div[class='contact-form-add-field-button-text']:contains('Add Field')";
+	               optionLocator="css=div[id^='ext-listitem'] div[id^='ext-element']:contains('Department')";                
+				  
+				   //page = this;		   
+			   } else if ( option == Button.O_JOB_TITLE) {
+				   
+				   pulldownLocator = "css=div[id^='ext-companycontainer'] div[class='contact-form-add-field-button-text']:contains('Add Field')";
+				   
+	               optionLocator="css=div[id^='ext-listitem'] div[id^='ext-element']:contains('Job Title')";                
+				  
+				   //page = this;		   
+			   }
+			   
+			   this.zClickAt(pulldownLocator, "0,0");
+			   zWaitForBusyOverlay();
+			   
+			   this.sMouseOver(optionLocator);
+			   this.zClick(optionLocator);
+			   zWaitForBusyOverlay();
+				
+				return (page);
+			   
+		   } else if (pulldown == Button.B_PHONE_TYPE) {
+
+			   pulldownLocator = "css=div[id^='ext-phonecontainer'] div[class='x-container x-layout-box-item x-stretched zcs-contact-form-multifield-field first'] div[id='ext-selectfield-1'] div[class='x-field-mask']";
+			   this.zClickAt(pulldownLocator, "0,0");
+			   zWaitForBusyOverlay();
+
+			   if (option == Button.O_WORK) {
+
+				   optionLocator = "css=div[class='x-list-item x-stretched x-list-item-tpl x-list-item-relative'] span[class='x-list-label']:contains('Work')";
+				   page = null;
+				
+			   } else if (option == Button.O_MOBILE) {
+				
+				   optionLocator = "css=div[id='ext-panel-4'] div[id^='ext-simplelistitem'] span[class='x-list-label']:contains('Mobile')";
+				   page = null;
+				   
+				
+			   } else if (option == Button.O_HOME) {
+
+				
+				
+			   } else if (option == Button.O_OTHER) {
 			
-			pulldownLocator = "css=div#"+ MyDivID + " div[id$='_DETAILS'] span[id$='_title']";
-			this.zClickAt(pulldownLocator, "0,0");
-			zWaitForBusyOverlay();
-			
-			SleepUtil.sleepMedium();
-
-			if (option == Button.O_PREFIX) {
-
-				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Prefix')";
-				page = null;
-
-				// FALL THROUGH
 				
-			} else if (option == Button.O_FIRST) {
-
-				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('First')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else if (option == Button.O_MIDDLE) {
-
-				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Middle')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else if (option == Button.O_MAIDEN) {
-
-				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Maiden')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else if (option == Button.O_LAST) {
-
-				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Last')";
-				page = null;
-
-				// FALL THROUGH
-				
-
-			} else if (option == Button.O_SUFFIX) {
-
-				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Suffix')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else if (option == Button.O_NICKNAME) {
-
-				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Nickname')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else if (option == Button.O_JOB_TITLE) {
-
-				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Job Title')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else if (option == Button.O_DEPARTMENT) {
-
-				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Department')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else if (option == Button.O_COMPANY) {
-
-				optionLocator = "css=div#"+ getExpandHiddenID() + " td.ZWidgetTitle:contains('Company')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else {
-				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
-			}
-			
-			this.zClickAt(optionLocator, "0,0");
-			zWaitForBusyOverlay();
-			
-			return (null);
-
-		} else if (pulldown == Button.B_FILEAS) {
-
-			pulldownLocator = "css=div#"+ MyDivID + " div[id$='_FILE_AS'] td[id$='_title']";
-			this.zClickAt(pulldownLocator, "0,0");
-			zWaitForBusyOverlay();
-
-			if (option == Button.O_FILEAS_COMPANY) {
-
-				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('Company')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else if (option == Button.O_FILEAS_FIRSTLAST) {
-
-				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('First Last')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else if (option == Button.O_FILEAS_LASTFIRST) {
-
-				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('Last, First')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else if (option == Button.O_FILEAS_FIRSTLASTCOMPANY) {
-
-				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('First Last (Company)')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else if (option == Button.O_FILEAS_LASTFIRSTCOMPANY) {
-
-				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('Last, First (Company)')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else if (option == Button.O_FILEAS_COMPANYFIRSTLAST) {
-
-				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('Company (First Last)')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else if (option == Button.O_FILEAS_COMPANYLASTFIRST) {
-
-				optionLocator = "css=div#"+ getFileAsMenuID() + " td.ZWidgetTitle:contains('Company (Last, First)')";
-				page = null;
-
-				// FALL THROUGH
-				
-			} else {
+			   } else {
 				
 				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
 				
-			}
+			   }
 			
 			if ( !this.sIsVisible(optionLocator) ) {
 				throw new HarnessException("menu is not visible: "+ optionLocator);
@@ -660,6 +578,84 @@ public class FormContactNew extends AbsForm {
 			
 			return (page);
 
+		} else if (pulldown == Button.B_ADDRESS_TYPE) {
+
+			   pulldownLocator = "css=div[id^='ext-addresscontainer'] div[id='ext-selectfield-2'] div[class='x-field-mask']";
+			   this.zClickAt(pulldownLocator, "0,0");
+			   zWaitForBusyOverlay();
+
+			   if (option == Button.O_WORK) {
+
+				   optionLocator = "css=div[class='x-list-item x-stretched x-list-item-tpl x-list-item-relative'] span[class='x-list-label']:contains('Work')";
+				   page = null;
+				
+			   } else if (option == Button.O_MOBILE) {
+				
+				   optionLocator = "css=div[id^='ext-panel'] div[id^='ext-simplelistitem'] span[class='x-list-label']:contains('Mobile')";
+				   page = null;
+				
+			   } else if (option == Button.O_HOME) {
+
+				
+				
+			   } else if (option == Button.O_OTHER) {
+				   optionLocator = "css=div[id^='ext-panel'] div[id^='ext-simplelistitem'] span[class='x-list-label']:contains('Other')";
+				   page = null;
+				
+			   } else {
+				
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+				
+			   }
+			
+			   if ( !this.sIsVisible(optionLocator) ) {
+				   throw new HarnessException("menu is not visible: "+ optionLocator);
+			   }
+			
+			   this.sMouseOver(optionLocator);
+			   this.zClick(optionLocator);
+			   zWaitForBusyOverlay();
+			
+			   return (page);
+		} else if (pulldown == Button.B_URL_TYPE) {
+
+			   pulldownLocator = "css=div[id^='ext-urlcontainer'] div[id='ext-selectfield-3'] div[class='x-field-mask']";
+			   this.zClickAt(pulldownLocator, "0,0");
+			   zWaitForBusyOverlay();
+
+			   if (option == Button.O_WORK) {
+
+				   optionLocator = "css=div[id^='ext-panel'] div[id^='ext-simplelistitem'] span[class='x-list-label']:contains('Work')";
+				   page = null;
+				
+			   } else if (option == Button.O_MOBILE) {
+				
+				   optionLocator = "css=div[id^='ext-panel'] div[id^='ext-simplelistitem'] span[class='x-list-label']:contains('Mobile')";
+				   page = null;
+				
+			   } else if (option == Button.O_HOME) {
+
+				
+				
+			   } else if (option == Button.O_OTHER) {
+				   optionLocator = "css=div[id^='ext-panel'] div[id^='ext-simplelistitem'] span[class='x-list-label']:contains('Other')";
+				   page = null;
+				
+			   } else {
+				
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+				
+			   }
+			
+			   if ( !this.sIsVisible(optionLocator) ) {
+				   throw new HarnessException("menu is not visible: "+ optionLocator);
+			   }
+			
+			   this.sMouseOver(optionLocator);
+			   this.zClick(optionLocator);
+			   zWaitForBusyOverlay();
+			
+			   return (page);
 		} else {
 			throw new HarnessException("no logic defined for pulldown/option "
 					+ pulldown + "/" + option);
@@ -690,21 +686,18 @@ public class FormContactNew extends AbsForm {
 		
 		if ( button == Button.B_SAVE ) {
 			
- 	    	locator = "css=div#"+ getToolbarID() + " div[id$='__SAVE'] td[id$='_title']";
+ 	    	locator = Locators.zSaveButton;
  	    	page = null;
 			
-		} else if ( button == Button.B_CANCEL || button == Button.B_CLOSE ) {
+		} else if ( button == Button.B_CANCEL ) {
 
- 	    	locator = "css=div#"+ getToolbarID() + " div[id$='__CANCEL'] td[id$='_title']";
+ 	    	locator = Locators.zCancelButton;
 		    if (zIsElementDisabled(locator)) {
 				throw new HarnessException("Tried clicking on "+ locator +" but it was disabled ");
 		    }
 		    
-			page = new DialogWarning(DialogWarning.DialogWarningID.CancelCreateContact, this.MyApplication, ((AppAjaxClient)this.MyApplication).zPageAddressbook);
+			page = new DialogWarning(DialogWarning.DialogWarningID.CancelCreateContact, this.MyApplication, ((AppTouchClient)this.MyApplication).zPageAddressbook);
 			
-			// The dialog will only appear if the contact is dirty.
-			// so, don't check for active here - instead check in the
-			// test case
 			
 			zClickAt(locator, "0,0");
 			this.zWaitForBusyOverlay();
@@ -712,21 +705,6 @@ public class FormContactNew extends AbsForm {
 			return (page);
 
 			
-		} else if ( button == Button.B_PRINT ) {
-			
- 	    	locator = "css=div#"+ getToolbarID() + " div[id$='__PRINT'] td[id$='_title']";
-			page = null;  // TODO
-			
-		} else if ( button == Button.B_DELETE ) {
-			
- 	    	locator = "css=div#"+ getToolbarID() + " div[id$='__DELETE'] td[id$='_title']";
-			page = null;  // TODO
-
-		} else if ( button == Button.B_MOVE ) {
-			
- 	    	locator = "css=div#"+ MyDivID+ " div[id$='_FOLDER'] td[id$='_title']";
-			page = new DialogMove(this.MyApplication, ((AppAjaxClient)this.MyApplication).zPageAddressbook);
-
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}

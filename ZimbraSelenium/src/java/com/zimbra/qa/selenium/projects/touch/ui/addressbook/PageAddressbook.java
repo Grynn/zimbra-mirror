@@ -19,6 +19,8 @@ import java.awt.event.KeyEvent;
 import java.util.*;
 
 import org.apache.log4j.LogManager;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -26,10 +28,21 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
+import com.zimbra.qa.selenium.projects.touch.ui.AppTouchClient;
+import com.zimbra.qa.selenium.projects.touch.ui.PageMain;
+import com.zimbra.qa.selenium.projects.touch.ui.PageMain.Locators;;
+
 
 public class PageAddressbook extends AbsTab {
 
 	
+	public static class Locators {
+		
+		public static final String PlusIcon		= "css=span[class$='x-button-icon x-shown add']";
+		public static final String EditIcon		= "css=div[id='ext-appview-2'] div[id^='ext-lefttitlebar'] div[id^='ext-button'] span[class$='x-button-icon x-shown edit']";
+		public static final String MenuIcon     = "css=div[id='ext-appview-2'] div[id^='ext-lefttitlebar'] div[id^='ext-button'] span[class$='x-button-icon x-shown arrow_down']";
+		
+	}	
 	
 	public static class CONTEXT_MENU {
 		public static final String LOCATOR		= "id='zm__Contacts'";
@@ -117,16 +130,16 @@ public class PageAddressbook extends AbsTab {
 	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the main page is active
-		if ( !((AppAjaxClient)MyApplication).zPageMain.zIsActive() ) {
-			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
+		if ( !((AppTouchClient)MyApplication).zPageMain.zIsActive() ) {
+			((AppTouchClient)MyApplication).zPageMain.zNavigateTo();
 		}
+		
+		String locator = "css=span[class='x-button-icon x-shown add']";
+		boolean active=sIsElementPresent(locator);
 
-		boolean active=sIsElementPresent("css=div[id='zb__App__Contacts'][class*=ZSelected]");
-			
-		String locator = "css=div#ztih__main_Contacts__ADDRBOOK_div";
 
 
-      active &= this.sIsElementPresent(locator);		   
+        active &= this.sIsElementPresent(locator);		   
 		return (active);
 
 	}
@@ -151,19 +164,19 @@ public class PageAddressbook extends AbsTab {
 		}
 
 
-		if ( !((AppAjaxClient)MyApplication).zPageMain.zIsActive() ) {
-			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
+		if ( !((AppTouchClient)MyApplication).zPageMain.zIsActive() ) {
+			((AppTouchClient)MyApplication).zPageMain.zNavigateTo();
 		}
 
 		tracer.trace("Navigate to "+ this.myPageName());
 
-		if (!GeneralUtility.waitForElementPresent(this,PageMain.Locators.zAppbarContact))  {
-			throw new HarnessException("Can't locate addressbook icon");
-		}
+		//if (!GeneralUtility.waitForElementPresent(this,PageMain.Locators.zAppbarContact))  {
+		//	throw new HarnessException("Can't locate addressbook icon");
+		//}
 
 		
 		// Click on Addressbook icon
-		zClickAt(PageMain.Locators.zAppbarContact,"0,0");
+		//zClickAt(PageMain.Locators.zAppbarContact,"0,0");
 
 		zWaitForActive();
 
@@ -174,9 +187,11 @@ public class PageAddressbook extends AbsTab {
 	 */
 	public void zRefresh() throws HarnessException {
 		
-		// Click refresh on the main app
-		((AppAjaxClient)this.MyApplication).zPageMain.zToolbarPressButton(Button.B_REFRESH);
+		//((AppTouchClient)this.MyApplication).zPageMain.zToolbarPressButton(Button.B_REFRESH);
+		((AppTouchClient)this.MyApplication).zPageMail.zToolbarPressButton(Button.B_FOLDER_TREE);
 		
+		((AppTouchClient)this.MyApplication).zPageMain.zClick(PageMain.Locators.zAppsIcon);
+		((AppTouchClient)this.MyApplication).zPageMain.zClick("css=div[id='ext-simplelistitem-12']");
 	}
 	
 	//get subFolders
@@ -203,6 +218,79 @@ public class PageAddressbook extends AbsTab {
 	}
 	
 	public boolean zIsContactDisplayed(ContactItem contactItem) throws HarnessException {
+        boolean isContactFound = false;
+        
+        String setslocator = "css=div[id^='ext-contactsitemview'] div[class='zcs-contactview-fieldSets']";
+        if (!this.sIsElementPresent(setslocator)) {
+			throw new HarnessException(setslocator);
+		}
+        WebElement we = this.getElement(setslocator);
+        String setLocator = "css=div[class='zcs-contactview-fieldSet']";
+        List<WebElement> wes = we.findElements(By.cssSelector(setLocator));
+        Iterator itr = wes.iterator();
+        while(itr.hasNext()){
+        	String labelLocator = "css=div[class='zcs-contactview-label']";
+        	String valueLocator = "css=div[class='zcs-contactview-field']";
+        	WebElement ww1 = ((WebElement)itr.next()).findElement(By.cssSelector(labelLocator));
+        	WebElement ww2 = ((WebElement)itr.next()).findElement(By.cssSelector(valueLocator));
+        	String value = contactItem.getAttribute(ww1.getText());
+        	if(ww2.getText() != value){
+        		return false;
+        	}
+        }
+        
+        return true;
+        //ensure it is in Addressbook main page
+/*		zNavigateTo();
+		
+        //assume that this is a list view
+		String listLocator = "div[id='zv__CNS-main']";		
+		String rowLocator  = "li[id^='zli__CNS-main__']";
+	    String noResultLocator = "td.NoResults";		
+		String fileAsLocator = " td[id^=zlif__CNS-main__][id$=__fileas]";
+		
+		//actually this is a search view
+		if (zIsInSearchView()) {
+			listLocator= "div[id=zv__CNS-SR-Contacts-1]";	
+		   	rowLocator= "li[id^=zli__CNS-SR-Contacts-1__]";
+		   	fileAsLocator=" td[id^=zlif__CNS-SR-Contacts-1__][id$=__fileas]";
+		}
+
+		// if there is no result
+		if (sIsElementPresent("css=" + listLocator + " " + noResultLocator)) {
+           return false;
+		}
+		
+		if (!this.sIsElementPresent("css=" + listLocator + " " + rowLocator)) {
+			throw new HarnessException("css=" + listLocator + " " + rowLocator + " not present");
+		}
+		
+		//Get the number of contacts (String) 
+		int count = this.sGetCssCount("css=" + listLocator + " " + rowLocator);
+
+		logger.info(myPageName() + " zIsContactDisplayed: number of contacts: "+ count);
+
+		// Get each contact's data from the table list
+		for (int i = 1; i <= count && !isContactFound; i++) {
+			String commonLocator = "css=" + listLocator + " li:nth-child(" + i +")";
+														
+			String contactType = getContactType(commonLocator);
+		    
+			String contactDisplayedLocator = commonLocator + fileAsLocator;
+			String fileAs = sGetText(contactDisplayedLocator);
+			logger.info("...found "+ contactType + " - " + fileAs );
+			isContactFound = ((contactType.equals(ContactGroupItem.IMAGE_CLASS) &&  contactItem instanceof ContactGroupItem) ||
+				  (contactType.equals(ContactItem.IMAGE_CLASS) &&  contactItem instanceof ContactItem)) &&
+				  (contactItem.fileAs.equals(fileAs.trim()));
+			
+				    	      
+		}
+
+
+		return isContactFound;		*/
+	}
+
+	public boolean zIsSlectedContactDisplayedonMainframe(ContactItem contactItem) throws HarnessException {
         boolean isContactFound = false;
         //ensure it is in Addressbook main page
 		zNavigateTo();
@@ -253,7 +341,7 @@ public class PageAddressbook extends AbsTab {
 
 		return isContactFound;		
 	}
-
+	
     // only return the list with a certain contact type				
 	// contactType should be one of ContactGroupItem.IMAGE_CLASS , ContactItem.IMAGE_CLASS	
 	public List<ContactItem> zListGetContacts(String contactType) throws HarnessException {
@@ -389,39 +477,19 @@ public class PageAddressbook extends AbsTab {
 
 		if ( button == Button.B_REFRESH ) {
 			
-			return (((AppAjaxClient)this.MyApplication).zPageMain.zToolbarPressButton(Button.B_REFRESH));
+			//TODO There is no refresh button. So we need to implement some othrer way. 
+			return (((AppTouchClient)this.MyApplication).zPageMain.zToolbarPressButton(Button.B_REFRESH));
 			
 		} else if ( button == Button.B_NEW ) {
 
-			// For "NEW" without a specified pulldown option, just return the default item
-			// To use "NEW" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
-
-			
-			locator = "css=div#zb__NEW_MENU td[id$='_title']";			
+			locator = Locators.PlusIcon;			
 			page = new FormContactNew(this.MyApplication);
 
 	
-		} else if ( button == Button.B_DELETE ) {
-
-			String id = "zb__CNS-main__DELETE";
-
-			if (this.zIsElementDisabled("css=div#" + id)) {
-				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ id);
-			}
-
-			locator = "id="+ id;
-
 		} else if ( button == Button.B_EDIT ) {
 
-			String id = "zb__CNS-main__EDIT";
-
-			
-			if (zIsElementDisabled("css=div#" + id )) {
-				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ id);
-			}
-
-			locator = "id="+ id;
-			page = newFormSelected();	
+			locator = Locators.EditIcon;
+			page = new FormContactNew(this.MyApplication);	
 			
 	    } else if ( button == Button.B_MOVE) {
 
@@ -433,14 +501,6 @@ public class PageAddressbook extends AbsTab {
 		    
 		   locator = "id="+ id;
 		   page = new DialogMove(MyApplication, this);
-	    } else if ( button == Button.B_FORWARD) {		 
-			locator = "css=div[id^=zb__CN-][id$=__SEND_CONTACTS_IN_EMAIL]";
-
-		    if (zIsElementDisabled(locator)) {
-				throw new HarnessException("Tried clicking on "+ button +" but it was disabled ");
-			}
-		   page = new FormMailNew(MyApplication);	
-		   
 	    } else if ( button == Button.B_CANCEL) {
  	    	//String id ="dizb__CN__CANCEL";
  	    	locator = "css=div[id^=zb__CN][id$=__CANCEL]" ;
@@ -457,21 +517,13 @@ public class PageAddressbook extends AbsTab {
 		    }		    			
 
 		    		
-	    } else if (isAlphabetButton(button))
-          {
-       	   locator=DisplayContactGroup.ALPHABET_PREFIX + button.toString() + DisplayContactGroup.ALPHABET_POSTFIX;
-       	   
-       	   //TODO
-       	   //page = ???
-	    }
+	    } 
 
       
 
 	    if ( locator == null )
 			throw new HarnessException("locator was null for button "+ button);
 
-		// Default behavior, process the locator by clicking on it
-		//
 
 		// Make sure the button exists
 		if ( !sIsElementPresent(locator) )
@@ -479,10 +531,7 @@ public class PageAddressbook extends AbsTab {
 
 		// Click it
 		zClickAt(locator,"0,0");
-		if (isAlphabetButton(button)) {
- 		  //for addressbook alphabet button only
-		  sClick(locator);
-		}
+		
 		zWaitForBusyOverlay();
 	
 		
@@ -614,6 +663,20 @@ public class PageAddressbook extends AbsTab {
 			   pulldownLocator=null;
 		   }
 		   
+	   } else if ( pulldown == Button.B_ACTIONS ) {
+		   
+		   pulldownLocator = Locators.MenuIcon;
+		   
+		   if ( option == Button.B_DELETE) {			 
+			    optionLocator="css=div[id^='ext-listitem'] div[id^='ext-element']:contains('Delete')";
+			    page = this;
+		   } else if (option == Button.B_MOVE){
+			    optionLocator="css=div[id^='ext-listitem'] div[id^='ext-element']:contains('Move')";
+		        page = new MoveContactView(this.MyApplication);
+		   } else if (option == Button.B_TAG){
+			    optionLocator="css=div[id^='ext-listitem'] div[id^='ext-element']:contains('Tag')";
+		        page = new TagContactView(this.MyApplication);
+		   }
 	   }
 	 
 	// Default behavior
