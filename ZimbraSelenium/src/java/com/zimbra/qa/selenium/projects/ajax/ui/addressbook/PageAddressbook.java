@@ -40,7 +40,7 @@ public class PageAddressbook extends AbsTab {
     
 		//TODO: contact group: "Edit Group" instead of "Edit Contact"
 		public static final ContextMenuItem CONTACT_EDIT = new ContextMenuItem("POPUP_CONTACT","Edit Contact","div[class*='ImgEdit']","");	
-		public static final ContextMenuItem CONTACT_FORWARD = new ContextMenuItem("POPUP_SEND_CONTACTS_IN_EMAIL","Forward Contact","div[class*='ImgMsgStatusSent']","");	
+		public static final ContextMenuItem CONTACT_FORWARD = new ContextMenuItem("SEND_CONTACTS_IN_EMAIL","Forward Contact","div[class*='ImgMsgStatusSent']","");	
 	
 		//TODO: contact group: "Tag Group" instead of "Tag Contact"
 		public static final ContextMenuItem CONTACT_TAG = new ContextMenuItem("POPUP_TAG_MENU","Tag Contact","div[class*='ImgTag']"," div[class='ImgCascade']");	
@@ -1007,7 +1007,8 @@ public class PageAddressbook extends AbsTab {
 				if (subOption == Button.O_NEW_CONTACTGROUP) {
 					cmi= CONTEXT_MENU.CONTACT_GROUP;
 					sub_cmi= CONTEXT_SUB_MENU.CONTACT_SUB_NEW_CONTACT_GROUP;
-					page = new DialogNewContactGroup(MyApplication, this);
+					page= new SimpleFormContactGroupNew(MyApplication);
+					//page = new DialogNewContactGroup((AppAjaxClient)MyApplication, this);
 				}				
 			}
 			else if (option == Button.B_SEARCH) {
@@ -1035,7 +1036,7 @@ public class PageAddressbook extends AbsTab {
 			
 			
 			if (zIsInSearchView()) {
-				locator = "css=div[id^=zm__Contacts__DWT]";
+				locator = "css=div[id^=zm__Contacts_DWT]";
 			} else {
 				locator = "css=div#zm__Contacts";
 			}	
@@ -1383,6 +1384,8 @@ public class PageAddressbook extends AbsTab {
 	    	
 		    if (option == Button.B_NEW) {
 		    	locator = "css=div#zm__Contacts tr[id^="+ cmi.locator +"]";			    		
+		    }else if (option == Button.B_FORWARD) {
+		    	locator = "css=div#zm__Contacts td[id^="+ cmi.locator +"]";	
 		    }
 			
 			//locator = "id="+ id;
@@ -1452,10 +1455,11 @@ public class PageAddressbook extends AbsTab {
 			
 			
 			//get the checkbox locator
-			contactLocator=contactLocator + " div.ImgCheckboxUnchecked";
+			contactLocator=contactLocator + " div[id$=__se]>div.ImgCheckboxUnchecked";
 					
 			//check the box			
-			zClick(contactLocator);
+			//zClick(contactLocator);
+			zClickAt(contactLocator,"0,0"); 
 			
 			//zWaitForBusyOverlay();
 						
