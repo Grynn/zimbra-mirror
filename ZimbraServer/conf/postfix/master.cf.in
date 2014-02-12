@@ -157,6 +157,7 @@ smtp-amavis unix -      -       n       -       %%zimbraAmavisMaxServers%%  smtp
 	-o smtpd_end_of_data_restrictions=
 	-o syslog_name=postfix/dkimmilter
 %%uncomment SERVICE:antispam%%	-o content_filter=smtp-amavis:[%%zimbraLocalBindAddress%%]:10032
+%%uncomment SERVICE:!antispam%%	-o content_filter=smtp:[%%zimbraLocalBindAddress%%]:10025
 #
 # PostJournal
 #
