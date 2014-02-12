@@ -7,6 +7,7 @@
 #               (yes)   (yes)   (yes)   (never) (100)
 # ==========================================================================
 smtp      inet  n       -       n       -       -       smtpd
+	-o smtpd_tls_security_level=%%zimbraMtaTlsSecurityLevel%%
 %%uncomment SERVICE:opendkim%%	-o content_filter=scan:[%%zimbraLocalBindAddress%%]:10030
 %%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_filter=[%%zimbraLocalBindAddress%%]:10027
 %%uncomment LOCAL:postjournal_enabled%%	-o smtpd_proxy_options=speed_adjust
