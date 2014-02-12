@@ -2,17 +2,23 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2010, 2011, 2012, 2013 Zimbra Software, LLC.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.4 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
 package com.zimbra.soap.account;
+
+import generated.zcsclient.account.testAuthRequest;
+import generated.zcsclient.account.testAuthResponse;
+import generated.zcsclient.ws.service.ZcsPortType;
+import generated.zcsclient.zm.testAccountBy;
+import generated.zcsclient.zm.testAccountSelector;
 
 import javax.xml.ws.soap.SOAPFaultException;
 
@@ -21,11 +27,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.zimbra.soap.Utility;
-import generated.zcsclient.account.testAuthRequest;
-import generated.zcsclient.account.testAuthResponse;
-import generated.zcsclient.ws.service.ZcsPortType;
-import generated.zcsclient.zm.testAccountBy;
-import generated.zcsclient.zm.testAccountSelector;
 
 public class WSDLAuthRequestTest {
 
@@ -50,14 +51,15 @@ public class WSDLAuthRequestTest {
         authReq.setPreauth(null);
         authReq.setAuthToken(null);
         testAuthResponse authResponse = eif.authRequest(authReq);
-        Assert.assertNotNull(authResponse);
+        Assert.assertNotNull("authResponse object", authResponse);
         String authToken = authResponse.getAuthToken();
-        Assert.assertTrue(authToken != null);
-        Assert.assertTrue(authToken.length() > 10);
+        Assert.assertNotNull("authToken", authToken);
+        Assert.assertTrue(String.format("AuthToken length %d should be greater than 10",  authToken.length()),
+                authToken.length() > 10);
         long lifetime = authResponse.getLifetime();
-        Assert.assertTrue(lifetime > 0);
-        Assert.assertNull(authResponse.getRefer());
-        Assert.assertEquals(authResponse.getSkin(), "serenity");  // If the default changes, this might change too?
+        Assert.assertTrue(String.format("lifetime %d should be > 0", lifetime), lifetime > 0);
+        Assert.assertNull("refer should be null", authResponse.getRefer());
+        Assert.assertEquals("Skin name", "harmony", authResponse.getSkin());  // If the default changes, this might change too?
     }
 
     /**
