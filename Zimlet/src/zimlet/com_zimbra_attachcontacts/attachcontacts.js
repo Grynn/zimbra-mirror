@@ -18,9 +18,7 @@
  *
  * @author Raja Rao DV
  */
-function com_zimbra_attachcontacts_HandlerObject() {
-}
-;
+function com_zimbra_attachcontacts_HandlerObject() {};
 
 com_zimbra_attachcontacts_HandlerObject.prototype = new ZmZimletBase();
 com_zimbra_attachcontacts_HandlerObject.prototype.constructor = com_zimbra_attachcontacts_HandlerObject;
@@ -37,8 +35,6 @@ AttachContactsZimlet.prototype.init = function() {
 	this._op = ZmOperation.registerOp(AttachContactsZimlet.SEND_CONTACTS, {image:"MsgStatusSent", text:this.getMessage("ACZ_Send"), tooltip:this.getMessage("ACZ_SendContactsAsAttachments")});
 	this._contactSendListener = new AjxListener(this, this._contactListSendListener);
 	this.overrideAPI(ZmListController.prototype, "_setContactText", this._setContactText);
-
-	this.setEmailActionMenu();
 };
 
 /**
@@ -325,34 +321,3 @@ AttachContactsZimlet.prototype.overrideAPI = function(object, funcname, newfunc)
         object[funcname].func = oldfunc;
     }
 };
-
-//---------------------------------------------------
-
-/**
- * Try to add to add to the actionmenu provided by com_zimbra_email
- */
-AttachContactsZimlet.prototype.setEmailActionMenu = function() {
-	if (window.com_zimbra_email_handlerObject) { // Other zimlet exists
-		this.overrideAPI(com_zimbra_email_handlerObject.prototype, "getActionMenu", AjxCallback.simpleClosure(AttachContactsZimlet._getEmailActionMenu, null, this));
-	}
-};
-
-/**
- * Will override EmailTooltipZimlet.prototype.getActionMenu in com_zimbra_email
- * NOTE - took me a while to understand - this is a different case than the contact right click... it's for email right click. We should have
- * probably combined both somehow, but why not keep it complex.
- */
-AttachContactsZimlet._getEmailActionMenu = function(attachContactsZimlet) {
-	var args = Array.prototype.slice.call(arguments, 1); // Cut off our own argument
-	var menu = this.getActionMenu.func.apply(this, args); // Call overridden function
-	var contactCallback = new AjxCallback(this, this._getActionedContact, [false]); // Callback to method in com_zimbra_email
-	var contact = contactCallback.run();
-	attachContactsZimlet.addMenuButton(contactCallback, menu, "NEWCONTACT");
-	if (!menu.getOp(AttachContactsZimlet.SEND_CONTACTS)) {
-		return menu;
-	}
-	var enable = contact && !contact.isGal && contact.id;
-	menu.enable(AttachContactsZimlet.SEND_CONTACTS, enable);
-	return menu;
-};
-
