@@ -131,14 +131,14 @@ public class GetMail extends PrefGroupMailByMessageTest {
 	}
 
 	@Test(	description = "Receive an html mail - verify mail contents",
-			groups = { "smoke" })
+			groups = { "zsmoke" })
 	public void GetMail_03() throws HarnessException {
 
 		
 		// Create the message data to be sent
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String bodyText = "text" + ZimbraSeleniumProperties.getUniqueString();
-		String bodyHTML = "text <strong>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong> text";
+		String bodyHTML = "text <strong style=\"\">bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong> text";
 		String contentHTML = XmlStringUtil.escapeXml(
 			"<html>" +
 				"<head></head>" +
