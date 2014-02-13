@@ -70,8 +70,8 @@ public class TagContactView extends AbsTree {
 		
 		if ( action == Action.A_LEFTCLICK ) {
 			
+			// choose target addressbook to move contact to (done for TouchPad)
 			locator = "css=div[id^='ext-tagview'] div[id^='ext-simplelistitem'] div[id^='ext-element']:contains('"+ tag.getName()+"')";
-			//locator = "id=zti__main_Contacts__"+ folder.getId() +"_textCell";
 			page = null;
 		}  
 		else if ( action == Action.A_RIGHTCLICK ) {
@@ -530,6 +530,7 @@ public class TagContactView extends AbsTree {
 		return (this.getClass().getName());
 	}
 
+	// (done for TouchPad)
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		// TODO Auto-generated method stub

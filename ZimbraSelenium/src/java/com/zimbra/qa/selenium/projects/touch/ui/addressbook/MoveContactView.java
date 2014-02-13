@@ -69,9 +69,8 @@ public class MoveContactView extends AbsTree {
 		
 		if ( action == Action.A_LEFTCLICK ) {
 			
-			locator = "css=div[id^='ext-moveview'] div[id^='ext-simplelistitem'] div[class='zcs-menu-label']:contains('Emailed Contacts')";
-
-			//locator = "id=zti__main_Contacts__"+ folder.getId() +"_textCell";
+			// choose target addressbook to move contact to (done for TP)
+			locator = "css=div[id^='ext-moveview'] div[id^='ext-simplelistitem'] div[class='zcs-menu-label']:contains('"+addressbook.getName()+"')";
 			page = null;
 		}  
 		else if ( action == Action.A_RIGHTCLICK ) {
@@ -530,6 +529,7 @@ public class MoveContactView extends AbsTree {
 		return (this.getClass().getName());
 	}
 
+	// (done for TP)
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		

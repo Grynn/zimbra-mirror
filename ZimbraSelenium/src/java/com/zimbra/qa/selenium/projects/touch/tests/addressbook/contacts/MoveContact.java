@@ -81,16 +81,16 @@ public class MoveContact extends TouchCommonTest  {
 		String locator = "css=div[id^='ext-contactslistview'] div[class='zcs-contactList-name']:contains('"+nameInList+"')";
 		app.zPageAddressbook.zClick(locator);
 		
-        // choose delete button from action menu
+        // choose move button from action menu
 		MoveContactView mcv = (MoveContactView)app.zPageAddressbook.zToolbarPressPulldown(Button.B_ACTIONS,Button.B_MOVE);
         
-		// choose target AddressBook which you move the contact to
+		// choose EmailedContact as target AddressBook which you move the contact to
         mcv.zTreeItem(Action.A_LEFTCLICK, emailedcontacts);
 		
         
         //-- Verification
         
-        //verify contact deleted from Contacts AddressBook
+        // verify contact moved from Contacts AddressBook
         ContactItem actual = ContactItem.importFromSOAP(app.zGetActiveAccount(), "in:contacts AND #firstname:"+ contact.firstName);
         ZAssert.assertNull(actual, "Verify the contact is deleted from the addressbook");
         
