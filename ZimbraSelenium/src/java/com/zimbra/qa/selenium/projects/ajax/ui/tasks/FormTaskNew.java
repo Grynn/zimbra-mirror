@@ -18,6 +18,7 @@ import com.zimbra.qa.selenium.framework.core.SeleniumService;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
@@ -227,21 +228,21 @@ public class FormTaskNew extends AbsForm {
 				
 				// I18N: https://bugzilla.zimbra.com/show_bug.cgi?id=83574
 				pulldownLocator = "css=div#"+ divID +" td[id$='_priority'] div.ImgSelectPullDownArrow";
-				optionLocator = "css=td[id$='_title']:contains('High')";
+				optionLocator = "css=div[id^='EditTaskPriorityMenu_high']";
 				page = this;
 
 			} else if ( option == Button.O_PRIORITY_NORMAL ) {
 				
 				// I18N: https://bugzilla.zimbra.com/show_bug.cgi?id=83574
 				pulldownLocator = "css=div#"+ divID +" td[id$='_priority'] div.ImgSelectPullDownArrow";
-				optionLocator = "css=td[id$='_title']:contains('Normal')";
+				optionLocator = "css=div[id^='EditTaskPriorityMenu_normal']";
 				page = this;
 
 			} else if ( option == Button.O_PRIORITY_LOW ) {
 				
 				// I18N: https://bugzilla.zimbra.com/show_bug.cgi?id=83574
 				pulldownLocator = "css=div#"+ divID +" td[id$='_priority'] div.ImgSelectPullDownArrow";
-				optionLocator = "css=td[id$='_title']:contains('Low')";
+				optionLocator = "css=div[id^='EditTaskPriorityMenu_low']";
 				page = this;
 
 			} else {
@@ -294,7 +295,10 @@ public class FormTaskNew extends AbsForm {
 				throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
 			}
 			
-			this.zClick(pulldownLocator);
+			SleepUtil.sleepMedium();
+			this.zClickAt(pulldownLocator,"");
+			SleepUtil.sleepMedium();
+			
 
 			this.zWaitForBusyOverlay();
 			
@@ -305,7 +309,7 @@ public class FormTaskNew extends AbsForm {
 					throw new HarnessException("Button "+ pulldown +" option "+ option +" optionLocator "+ optionLocator +" not present!");
 				}
 				
-				this.zClick(optionLocator);
+				this.zClickAt(optionLocator,"");
 
 				this.zWaitForBusyOverlay();
 
