@@ -23,7 +23,8 @@ ZmArchiveZimlet = function() {
 ZmArchiveZimlet.prototype = new ZmZimletBase();
 ZmArchiveZimlet.prototype.constructor = ZmArchiveZimlet;
 
-ZmArchiveZimlet.ARCHIVE_BUTTON_ID = "ARCHIVE_ZIMLET_BUTTON_ID";
+ZmArchiveZimlet.OP_ARCHIVE = "ARCHIVE";
+ZmArchiveZimlet.OP_SEND_ARCHIVE = "SEND_ARCHIVE";
 ZmArchiveZimlet.view = "message";
 
 ZmArchiveZimlet.prototype.init =
@@ -149,8 +150,8 @@ function(app, toolbar, controller, viewId) {
 			showTextInToolbar: true,
 			enabled: false
 		};
-		if (!toolbar.getOp(ZmArchiveZimlet.ARCHIVE_BUTTON_ID)) {
-			var button = toolbar.createOp(ZmArchiveZimlet.ARCHIVE_BUTTON_ID, buttonArgs);
+		if (!toolbar.getOp(ZmArchiveZimlet.OP_ARCHIVE)) {
+			var button = toolbar.createOp(ZmArchiveZimlet.OP_ARCHIVE, buttonArgs);
 			button.addSelectionListener(new AjxListener(controller, controller._archiveViaZimletListener, [this]));
 			button.archiveZimlet = this;
 			// override the function to reset the operations in the toolbar as there is no method to
@@ -158,14 +159,14 @@ function(app, toolbar, controller, viewId) {
 			var originalFunction = controller._resetOperations;
 			controller._resetOperations = function(parent, num) {
 				var showArchive = true;
-				var obj = parent.getOp(ZmArchiveZimlet.ARCHIVE_BUTTON_ID);
+				var obj = parent.getOp(ZmArchiveZimlet.OP_ARCHIVE);
 				var msg = controller.getMsg();
 				
 				if (msg && obj && obj.archiveZimlet && msg.folderId == obj.archiveZimlet._archiveFolderId) {
 					showArchive = false;
 				}
 				originalFunction.apply(controller, arguments);
-				parent.enable(ZmArchiveZimlet.ARCHIVE_BUTTON_ID, num && showArchive);
+				parent.enable(ZmArchiveZimlet.OP_ARCHIVE, num && showArchive);
 			};
 			
 			//add listener to listview so that we can enable button when multiple items are selected
@@ -198,12 +199,12 @@ function(app, toolbar, controller, viewId) {
 			showTextInToolbar: true,
 			enabled: true
 		};
-		if (!toolbar.getOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID") && this.isActionForArchive(controller._action) && this._showSendAndArchive && visible) {
-			var button = toolbar.createOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID", buttonArgs);
+		if (!toolbar.getOp(ZmArchiveZimlet.OP_SEND_ARCHIVE) && this.isActionForArchive(controller._action) && this._showSendAndArchive && visible) {
+			var button = toolbar.createOp(ZmArchiveZimlet.OP_SEND_ARCHIVE, buttonArgs);
 			button.addSelectionListener(new AjxListener(this, this.sendAndArchiveListener, [button]));
 		}
-		else if (toolbar.getOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID")){
-			var button = toolbar.getOp("SEND_ARCHIVE_ZIMLET_BUTTON_ID");
+		else if (toolbar.getOp(ZmArchiveZimlet.OP_SEND_ARCHIVE)){
+			var button = toolbar.getOp(ZmArchiveZimlet.OP_SEND_ARCHIVE);
 			if (this._showSendAndArchive && visible) {
 				visible = this.isActionForArchive(controller._action);
 			}
@@ -211,6 +212,15 @@ function(app, toolbar, controller, viewId) {
 			button.setVisible(visible);
 			button.setToolTipContent(tooltip);
 		}
+	}
+};
+
+ZmArchiveZimlet.prototype.enableComposeToolbarButtons =
+function(toolbar, enabled) {
+	var button = toolbar.getOp(ZmArchiveZimlet.OP_SEND_ARCHIVE);
+	//Note - button does not exist in case the compose is not a reply/forward/etc but a new compose - it's not archiveable so no send+archive button.
+	if (button) {
+		button.setEnabled(enabled);
 	}
 };
 
