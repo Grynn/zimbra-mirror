@@ -292,9 +292,11 @@ sub run() {
     my (undef, undef,$uid,$gid) = getpwnam('zimbra');
 
     chown $uid, $gid, $destination;
-    $> = $uid;
-    print STDERR "$destination is not writable by user zimbra" and exit 1 if !-w $destination;
-    $> = 0;
+
+    {
+        local $> = $uid;
+        print STDERR "$destination is not writable by user zimbra\n" and exit 1 if !-w $destination;
+    }
 
     chdir($destination);
     
