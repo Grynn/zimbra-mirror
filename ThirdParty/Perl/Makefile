@@ -52,7 +52,7 @@ WGET    := $(shell which wget)
 MAKE    := $(shell which make)
 SED     := $(shell which sed)
 UNZIP	:= $(shell which unzip)
-CMIRROR	?= http://zre-matrix.eng.vmware.com/cpan/
+CMIRROR	?= http://zre-matrix.eng.zimbra.com/cpan/
 
 BDB_INCLUDE	:= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
 LDAP_INCLUDE 	:= $(ZIMBRA_HOME)/openldap/include
