@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 
 import org.testng.annotations.*;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -201,7 +202,7 @@ public class GetMessage extends AjaxCommonTest {
 		
 	}
 
-
+	@Bugs(ids="86667")
 	@Test(	description = "Receive a mail with a date in subject",
 			groups = { "functional" })
 	public void GetMessage_05() throws HarnessException {
