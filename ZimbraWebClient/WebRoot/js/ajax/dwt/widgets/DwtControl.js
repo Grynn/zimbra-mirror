@@ -3524,7 +3524,11 @@ function(child) {
 	}
 
 	var fn = function(bounds, node) {
-		return Dwt.insetBounds(bounds, Dwt.getInsets(node));
+		var margins = Dwt.getMargins(node);
+		var bounds = Dwt.insetBounds(bounds, Dwt.getInsets(node));
+		bounds.width -= margins.left + margins.right;
+		bounds.height -= margins.top + margins.bottom;
+		return bounds;
 	};
 
 	var bounds = this.getBounds();
@@ -3537,6 +3541,6 @@ function(child) {
 		bounds.y = 0;
 	}
 
-	return AjxUtil.reduce(Dwt.getAncestors(child, this.getHtmlElement()),
+	return AjxUtil.reduce(Dwt.getAncestors(child, this.getHtmlElement(), true),
 	                      fn, bounds);
 };

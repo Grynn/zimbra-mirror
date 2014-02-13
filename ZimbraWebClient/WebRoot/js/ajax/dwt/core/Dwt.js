@@ -626,10 +626,29 @@ function(htmlElement, scrollStyle) {
 	}
 };
 
-// Note: in FireFox, offsetHeight includes border and clientHeight does not;
-// may want to look at clientHeight for FF
+
+/**
+ * Gets the size of an HTML element. Normally, this yields the
+ * calculated size of the element. However, if 'getFromStyle' is
+ * true, the style is obtained directly from the CSS style.
+ *
+ * @param {HTMLElement} htmlElement		the HTML element
+ * @param {DwtPoint} point		if given, reuse this point
+ * @param {Boolean} getFromStyle		whether to use the calculated size
+ *
+ * @return {DwtPoint}	the elements size, margins included
+ *
+ * @see #getBounds
+ * @see #setBounds
+ * @see #getInsetBounds
+ * @see #getLocation
+ * @see #getOuterSize
+ */
 Dwt.getSize =
 function(htmlElement, point, getFromStyle) {
+    // Note: in FireFox, offsetHeight includes border and clientHeight does not;
+    // may want to look at clientHeight for FF
+
 	if (!(htmlElement = Dwt.getElement(htmlElement))) { return; }
 	var p;
 	if (!point) {
@@ -648,6 +667,7 @@ function(htmlElement, point, getFromStyle) {
 		if (htmlElement.style.height) {
 			p.y = parseInt(htmlElement.style.height);
 		}
+
 		return p;
 	}
 
@@ -661,7 +681,36 @@ function(htmlElement, point, getFromStyle) {
 		p.x = parseInt(htmlElement.style.pixelWidth);
 		p.y = parseInt(htmlElement.style.pixelHeight);
 	}
+
 	return p;
+};
+
+
+/**
+ * Gets the outer size -- that is, the size including margins -- of an
+ * HTML element.
+ *
+ * @param {HTMLElement} htmlElement		the HTML element
+ *
+ * @return {DwtPoint}	the elements size, margins included
+ *
+ * @see #getSize
+ * @see #getBounds
+ * @see #setBounds
+ * @see #getInsetBounds
+ * @see #getLocation
+ */
+Dwt.getOuterSize =
+function(htmlElement, point) {
+    var p = Dwt.getSize(htmlElement, point);
+
+    if (p && Dwt.getVisible(htmlElement)) {
+        var margins = Dwt.getMargins(htmlElement);
+        p.x += margins.left + margins.right;
+        p.y += margins.top + margins.bottom;
+    }
+
+    return p;
 };
 
 Dwt.setSize =
@@ -961,16 +1010,21 @@ Dwt.getMargins = function(htmlElement) {
  *
  * @param {HTMLElement} childNode		the child HTML element
  * @param {HTMLElement} parentNode		the parent HTML element
+ * @param {Boolean} 	includeChild	if true, include the child itself
  *
  * @return {Array}						a list of HTML elements
  */
 Dwt.getAncestors =
-function(childNode, parentNode) {
+function(childNode, parentNode, includeChild) {
 	var ancestors = [];
 
 	// a reasonable default
 	if (!parentNode) {
 		parentNode = document.documentElement;
+	}
+
+	if (includeChild) {
+		ancestors.push(childNode);
 	}
 
 	while (childNode && childNode != parentNode) {
