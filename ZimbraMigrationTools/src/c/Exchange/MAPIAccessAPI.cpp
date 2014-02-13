@@ -1119,11 +1119,29 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
             ad->EndDate = mapiappointment.GetEndDate();
 			dlogi("EndDate: ",ad->EndDate.c_str());
             ad->Location = mapiappointment.GetLocation();
-            ad->PartStat = mapiappointment.GetResponseStatus();
+
+			if(!mapiappointment.GetResponseStatus().empty())
+				ad->PartStat = mapiappointment.GetResponseStatus();
+			else
+				ad->PartStat = L"NE";
+
 			ad->CurrStat = mapiappointment.GetCurrentStatus();
-			ad->RSVP = mapiappointment.GetResponseRequested();
-            ad->FreeBusy = mapiappointment.GetBusyStatus();
-            ad->AllDay = mapiappointment.GetAllday();
+
+			if(!mapiappointment.GetResponseRequested().empty())
+				ad->RSVP = mapiappointment.GetResponseRequested();
+			else
+				ad->RSVP = L"0";
+
+			if(!mapiappointment.GetBusyStatus().empty())
+				ad->FreeBusy = mapiappointment.GetBusyStatus();
+			else
+				ad->FreeBusy = L"F";
+
+			if(!mapiappointment.GetAllday().empty())
+				ad->AllDay = mapiappointment.GetAllday();
+			else
+				ad->AllDay = L"0";
+
             ad->Transparency = mapiappointment.GetTransparency();
             ad->ApptClass = mapiappointment.GetPrivate();
             ad->AlarmTrigger = mapiappointment.GetReminderMinutes();
