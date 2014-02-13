@@ -1007,8 +1007,8 @@ public class PageAddressbook extends AbsTab {
 				if (subOption == Button.O_NEW_CONTACTGROUP) {
 					cmi= CONTEXT_MENU.CONTACT_GROUP;
 					sub_cmi= CONTEXT_SUB_MENU.CONTACT_SUB_NEW_CONTACT_GROUP;
-					page= new SimpleFormContactGroupNew(MyApplication);
-					//page = new DialogNewContactGroup((AppAjaxClient)MyApplication, this);
+					//page= new SimpleFormContactGroupNew(MyApplication);
+					page = new DialogNewContactGroup((AppAjaxClient)MyApplication, this);
 				}				
 			}
 			else if (option == Button.B_SEARCH) {
@@ -1036,7 +1036,7 @@ public class PageAddressbook extends AbsTab {
 			
 			
 			if (zIsInSearchView()) {
-				locator = "css=div[id^=zm__Contacts_DWT]";
+				locator = "css=div[id^=zm__Contacts]";
 			} else {
 				locator = "css=div#zm__Contacts";
 			}	
