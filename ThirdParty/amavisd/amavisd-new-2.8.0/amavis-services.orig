@@ -45,7 +45,6 @@ use warnings FATAL => qw(utf8 void);
 no warnings 'uninitialized';
 
 use vars qw($VERSION);  $VERSION = 2.002;
-use lib "/opt/zimbra/zimbramon/lib";
 
 use Errno qw(ESRCH ENOENT);
 use POSIX qw(strftime);
@@ -140,8 +139,7 @@ $syslog_ident = $myproduct_name;
 $MYHOME = '/var/amavis';
 
 # should match one of the sockets in @zmq_sockets in amavisd.conf
-#$inner_sock_specs = "ipc://$MYHOME/amavisd-zmq.sock";
-$inner_sock_specs = ( "ipc:///opt/zimbra/data/tmp/amavisd-zmq.sock" );
+$inner_sock_specs = "ipc://$MYHOME/amavisd-zmq.sock";
 
 # should match a socket of the same name in amavis-status
 $outer_sock_specs = "tcp://127.0.0.1:23232";

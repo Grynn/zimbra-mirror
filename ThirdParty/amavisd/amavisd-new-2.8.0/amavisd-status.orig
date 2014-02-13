@@ -44,7 +44,6 @@ use re 'taint';
 use warnings;
 use warnings FATAL => qw(utf8 void);
 no warnings 'uninitialized';
-use lib "/opt/zimbra/zimbramon/lib";
 
 use Errno qw(ESRCH ENOENT);
 use POSIX qw(strftime);

@@ -62,7 +62,8 @@ $syslog_facility = 'local0';   # Syslog facility as a string
            # choose from: emerg, alert, crit, err, warning, notice, info, debug
 
 $enable_db = 0;              # enable use of BerkeleyDB/libdb (SNMP and nanny)
-# $enable_zmq = 1;           # enable use of ZeroMQ (SNMP and nanny)
+$enable_zmq = 1;           # enable use of ZeroMQ (SNMP and nanny)
+@zmq_sockets = ( "ipc:///opt/zimbra/data/tmp/amavisd-zmq.sock" );
 $nanny_details_level = 2;    # nanny verbosity: 1: traditional, 2: detailed
 $enable_dkim_verification = %%binary VAR:zimbraAmavisEnableDKIMVerification%%;  # enable DKIM signatures verification
 $enable_dkim_signing = 0;    # load DKIM signing code, keys defined by dkim_key

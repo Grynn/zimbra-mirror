@@ -44,7 +44,6 @@ use re 'taint';
 use warnings;
 use warnings FATAL => qw(utf8 void);
 no warnings 'uninitialized';
-use lib "/opt/zimbra/zimbramon/lib";
 
 use vars qw($VERSION);  $VERSION = 2.002;
 
@@ -68,16 +67,16 @@ use vars qw(@path @services $daemon_user $daemon_group $pid_file $log_level
 
 ### USER CONFIGURABLE:
 
-$daemon_user  = 'zimbra';
-$daemon_group = 'zimbra';
+$daemon_user  = 'vscan';
+$daemon_group = 'vscan';
 
-$pid_file = '/opt/zimbra/log/amavis-mc.pid';
+$pid_file = '/var/amavis/amavis-mc.pid';
 
 $log_level = 0;
 $syslog_ident = 'amavis-mc';
 $syslog_facility = LOG_MAIL;
 
-@path = qw(/opt/zimbra/amavisd/sbin /usr/local/sbin /usr/local/bin /usr/sbin /sbin /usr/bin /bin);
+@path = qw(/usr/local/sbin /usr/local/bin /usr/sbin /sbin /usr/bin /bin);
 
 @services = (
   { cmd => 'amavis-services msg-forwarder' },
