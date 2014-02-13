@@ -37,10 +37,6 @@ if [ ! -d "/opt/zimbra/data/amavisd/.spamassassin" ]; then
     mkdir -p /opt/zimbra/data/amavisd/.spamassassin
 fi
 
-if [ ! -d "/opt/zimbra/data/amavisd/db" ]; then
-    mkdir -p /opt/zimbra/data/amavisd/db
-fi
-
 rewriteconfig() {
   /opt/zimbra/libexec/configrewrite amavis > /dev/null 2>&1
   /opt/zimbra/libexec/zmaltermimeconfig > /dev/null 2>&1
