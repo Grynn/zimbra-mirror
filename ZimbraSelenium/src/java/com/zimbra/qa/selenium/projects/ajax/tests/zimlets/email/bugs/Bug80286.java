@@ -84,7 +84,7 @@ public class Bug80286 extends PrefGroupMailByMessageTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 
 		// Hover over the email address
-		String locator = "css=span[id$='_com_zimbra_email']:contains("+ email +")";
+		String locator = "css=span[id$='_ZmEmailObjectHandler']:contains("+ email +")";
 		app.zPageMail.sMouseOver(locator, (WebElement[]) null);
 		
 		
@@ -143,7 +143,7 @@ public class Bug80286 extends PrefGroupMailByMessageTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 
 		// Hover over the email address
-		String locator = "css=span[id$='_com_zimbra_email']:contains("+ contactGAL.EmailAddress +")";
+		String locator = "css=span[id$='_ZmEmailObjectHandler']:contains("+ contactGAL.EmailAddress +")";
 		app.zPageMail.sMouseOver(locator, (WebElement[]) null);
 		
 		
@@ -263,7 +263,7 @@ public class Bug80286 extends PrefGroupMailByMessageTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 
 		// Hover over the email address
-		String locator = "css=span[id$='_com_zimbra_email']:contains("+ email +")";
+		String locator = "css=span[id$='_ZmEmailObjectHandler']:contains("+ email +")";
 		app.zPageMail.sMouseOver(locator, (WebElement[]) null);
 		
 		
