@@ -32,6 +32,7 @@ zmsetvars \
 
 platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 pidfile=${zimbra_log_directory}/amavisd.pid
+mcpidfile=${zimbra_log_directory}/amavis-mc.pid
 
 if [ ! -d "/opt/zimbra/data/amavisd/.spamassassin" ]; then
     mkdir -p /opt/zimbra/data/amavisd/.spamassassin
@@ -76,14 +77,55 @@ checkrunning() {
   fi
 }
 
+checkrunning-mc() {
+  # amavisd (master) should be listed in the $pidfile.
+  if [ -f $mcpidfile ]; then
+    MCPID=`cat $mcpidfile`
+  fi
+  #  If no PID file or PID file is empty, then get PID from scanning the proc table.
+  if [ "x$MCPID" = "x" ]; then
+    # PID file is NULL.  Get info from proc table.
+    MCPID=`/bin/ps axo user,pid,ppid,command | awk '{ if ((($6 ~ /amavis-mc$/) || ($6 ~ /\/opt\/zimbra\/amavisd\/sbin\/amavis-mc$/))) { print $2 } }'`
+  fi
+  # If PID is still not set, then we cannot find any amavisd (master) process.  Assume amavisd is not running.
+  if [ "x$MCPID" = "x" ]; then
+    MCRUNNING=0
+    return
+  fi
+
+  MCRUNNING=1
+  return
+}
+
 
 #
 # Main
 #
 case "$1" in
   'start')
+    checkrunning-mc
+    echo -n "Starting amavisd-mc..."
+    if [ $MCRUNNING = 1 ]; then
+      echo "amavisd-mc is already running."
+    else
+      if [ $MCRUNNING = 0 ]; then
+        sudo /opt/zimbra/amavisd/sbin/amavis-mc
+        for ((i=0; i < 30; i++)); do
+          checkrunning-mc
+          if [ $MCRUNNING = 1 ]; then 
+            break
+          fi  
+          sleep 1
+        done
+      fi
+      if [ "x$MCPID" = "x" ]; then
+        echo "failed."
+        exit
+      else 
+        echo "done."
+      fi 
+    fi
     checkrunning
-  
     echo -n "Starting amavisd..."
     if [ $RUNNING = 1 ]; then
       echo "amavisd is already running."
@@ -135,23 +177,42 @@ case "$1" in
     echo -n "Stopping amavisd..."
     if [ $RUNNING = 0 ]; then
       echo "amavisd is not running."
-      exit 0
     else 
       kill -TERM $PID 2> /dev/null
       for ((i=0; i < 300; i++)); do
         sleep 5
         kill -0 $PID 2> /dev/null
         if [ $? != 0 ]; then
-          echo " done."
-          exit 0
+          break
         fi
       done
       kill -TERM $PID 2> /dev/null
-      if [ $? = 0 ]; then
+      if [ $? != 0 ]; then
+        echo " done."
+      else 
         echo " failed to stop $PID"
         exit 1
-      else 
+      fi
+    fi
+    checkrunning-mc
+    echo -n "Stopping amavisd-mc..."
+    if [ $MCRUNNING = 0 ]; then
+      echo "amavisd-mc is not running."
+    else
+      kill -TERM $MCPID 2> /dev/null
+      for ((i=0; i < 300; i++)); do
+        sleep 5
+        kill -0 $MCPID 2> /dev/null
+        if [ $? != 0 ]; then
+          break
+        fi
+      done
+      kill -TERM $MCPID 2> /dev/null
+      if [ $? != 0 ]; then
         echo " done."
+      else 
+        echo " failed to stop $PID"
+        exit 1
       fi
     fi
     exit 0
@@ -166,6 +227,14 @@ case "$1" in
     checkrunning
     echo -n "amavisd is "
     if [ $RUNNING = 0 ]; then
+      echo "not running."
+      exit 1
+    else
+      echo "running."
+    fi
+    checkrunning-mc
+    echo -n "amavisd-mc is "
+    if [ $MCRUNNING = 0 ]; then
       echo "not running."
       exit 1
     else
