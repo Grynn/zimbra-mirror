@@ -324,7 +324,9 @@ function(object, context, x, y, span) {
 	this.y = y;
 	this.tooltip = tooltip;
 	//this is used by mail/conv list
-    tooltip.setListener(DwtEvent.ONMOUSEOUT, new AjxListener(this, this.hoverOut));
+	tooltip.setListener((AjxEnv.isIE8 ?
+	                     DwtEvent.ONMOUSELEAVE : DwtEvent.ONMOUSEOUT),
+	                    new AjxListener(this, this.hoverOut));
 
 	var addr = (object instanceof AjxEmailAddress) ? object.address : object;
 
