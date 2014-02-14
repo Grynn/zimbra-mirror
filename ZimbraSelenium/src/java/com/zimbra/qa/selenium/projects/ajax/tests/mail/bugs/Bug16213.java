@@ -55,7 +55,7 @@ public class Bug16213 extends AjaxCommonTest {
 	public void Bug_16213MV() throws HarnessException {
 
 		String subject = "Encoding test";
-		String from = "Unknown";
+		String from = "";
 
 		String MimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/private/mime/Bugs/Bug16213";
 		LmtpInject.injectFile(ZimbraAccount.AccountZWC().EmailAddress, new File(MimeFolder));
