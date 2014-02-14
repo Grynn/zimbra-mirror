@@ -127,7 +127,7 @@
 	    <Arg>        
 		<New class="org.eclipse.jetty.rewrite.handler.RewritePatternRule">
 		    <Set name="pattern">/zimbra/*</Set>
-		    <Set name="replacement">/zimbra</Set>
+		    <Set name="replacement">/</Set>
 		    <Set name="terminating">true</Set>
 		</New>
 	    </Arg>
@@ -137,7 +137,7 @@
 	    <Arg>        
 		<New class="org.eclipse.jetty.rewrite.handler.RewritePatternRule">
 		    <Set name="pattern">/*</Set>
-		    <Set name="replacement">/zimbra</Set>
+		    <Set name="replacement">/</Set>
 		</New>
 	    </Arg>
         </Call>       
