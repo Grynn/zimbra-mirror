@@ -98,7 +98,9 @@ DwtForm.prototype.setValue = function(id, value, force) {
  * @return	{string}	the value
  */
 DwtForm.prototype.getValue = function(id, defaultValue) {
-	if (typeof id != "string") id = String(id);
+	if (typeof id !== "string") {
+		id = String(id);
+	}
 	if (id.match(/\./) || id.match(/\[/)) {
 		var parts = id.replace(/\[(\d+)\](\.)?/,".$1$2").split(".");
 		var control = this.getControl(parts[0]);
@@ -108,12 +110,16 @@ DwtForm.prototype.getValue = function(id, defaultValue) {
 		return null;
 	}
 	var item = this._items[id];
-	if (!item) return;
+	if (!item) {
+		return;
+	}
 	if (item.getter) {
 		return this._call(item.getter) || defaultValue;
 	}
 	var value = this._getControlValue(id);
-    if (value == null) value = item.value;
+    if (value == null) {
+		value = item.value;
+	}
 
     //added <|| ""> because ... if value="" than it always returns defaultValue which could be undefined.
 	return value || defaultValue || "";
@@ -583,9 +589,15 @@ DwtForm.prototype._getControlValue = function(id) {
 		if (control instanceof DwtCheckbox || control instanceof DwtRadioButton) {
 			return control.isSelected();
 		}
-		if (control.getSelectedValue) return control.getSelectedValue();
-		if (control.getValue) return control.getValue();
-		if (control.getText && !(control instanceof DwtButton)) return control.getText();
+		if (control.getSelectedValue) {
+			return control.getSelectedValue();
+		}
+		if (control.getValue) {
+			return control.getValue();
+		}
+		if (control.getText && !(control instanceof DwtButton)) {
+			return control.getText();
+		}
 		if (!(control instanceof DwtControl)) {
 			if (control.type == "checkbox" || control == "radio") return control.checked;
 			return control.value;
