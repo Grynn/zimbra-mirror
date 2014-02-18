@@ -89,7 +89,10 @@ build:
 	(cd openldap-$(LDAP_VERSION)/contrib/slapd-modules/noopsrch; \
 	LD_RUN_PATH=$(LDAP_LIB_DIR):$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) libexecdir=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin LIBS="-L$(LDAP_LIB_DIR) -lldap_r -llber" install STRIP=""; \
 	rm -f $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin/openldap/noopsrch.a; \
-	chmod 755 $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin/openldap/noopsrch.la;)
+	(cd openldap-$(LDAP_VERSION)/contrib/slapd-modules/passwd/sha2; \
+	LD_RUN_PATH=$(LDAP_LIB_DIR):$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) libexecdir=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin LIBS="-L$(LDAP_LIB_DIR) -lldap_r -llber" install STRIP=""; \
+	rm -f $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin/openldap/pw-sha2.a; \
+	chmod 755 $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin/openldap/pw-sha2.la;)
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
 	rm -rf $(ZIMBRA_HOME)/data; rm -f $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/etc/openldap/DB_CONFIG.example
 
