@@ -65,7 +65,7 @@ public class BubbleEmailAddress extends AbsBubble {
 		}
 
 		// Determine if there is 'expand'/'+' on the bubble
-		locator = bubbleLocator + " div[id$='_com_zimbra_email_expand']";
+		locator = bubbleLocator + " div[class='ImgBubbleExpand']";
 		if ( this.sIsElementPresent(locator) ) {
 			myLocatorExpandIcon = locator;
 		}

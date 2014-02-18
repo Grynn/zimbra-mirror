@@ -831,7 +831,8 @@ public class DisplayMail extends AbsDisplay {
 
 		
 		// Determine how many bubles are listed
-		locator = this.ContainerLocator + fieldLocator + " td[class~='LabelColValue'] span[id$='_com_zimbra_email']";
+		locator = this.ContainerLocator + fieldLocator + " td[class~='LabelColValue'] span[class='addrBubble']";
+		
 		int count = this.sGetCssCount(locator);
 		
 		for (int i = 1; i <= count; i++) {
@@ -1101,7 +1102,9 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( field == Field.OnBehalfOf ) {
 			
-			locator = this.ContainerLocator + " td[id$='_obo'] span[id$='_com_zimbra_email'] span span";
+			//locator = this.ContainerLocator + " td[id$='_obo'] span[id$='_com_zimbra_email'] span span";
+			locator = this.ContainerLocator + "td[id$='_from'] span[id$='_com_zimbra_email'] span:contains(on behalf of)";
+			
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
 				locator = this.ContainerLocator + " td[id$='_obo']";
