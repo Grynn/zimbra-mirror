@@ -1952,6 +1952,16 @@ public class ZimbraAPI
         return retval;
     }
 
+    string CleanInvalidChars(string strToClean)
+    {
+        string tmp = strToClean;
+        foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+        {
+            tmp = tmp.Replace(c, '_');
+        }
+        return tmp;
+    }
+
     public void SetAppointmentRequest(XmlWriter writer, Dictionary<string, string> appt,
         string folderId)
     {
@@ -2211,6 +2221,8 @@ public class ZimbraAPI
                 string ContentDispositionAttr = "attContentDisposition" + "_" + i.ToString();
                 string ContentDisposition = appt[ContentDispositionAttr];
 
+                RealName=CleanInvalidChars(RealName);
+
                 /*
                 if contentType is message/rfc822, we'll rename the temp file to email_n and massage the content disposition
                 if not, we'll just rename the temp file to the real name
@@ -2233,7 +2245,7 @@ public class ZimbraAPI
                 {
                     newfile = path + "\\" + RealName;
                     mode = APPT_VALUE_MODE;
-                }
+                }                
                 File.Move(TempFile, newfile);
 
                 string uploadToken = "";
@@ -2801,6 +2813,8 @@ public class ZimbraAPI
                 string RealName = task[RealNameAttr];
                 string ContentDispositionAttr = "attContentDisposition" + "_" + i.ToString();
                 string ContentDisposition = task[ContentDispositionAttr];
+
+                RealName = CleanInvalidChars(RealName);
 
                 /*
                 if contentType is message/rfc822, we'll rename the temp file to email_n and massage the content disposition
