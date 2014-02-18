@@ -117,8 +117,8 @@ checkDigest() {
        x"$DIGEST" != "xsha224" -a x"$DIGEST" != "xsha256" -a \
        x"$DIGEST" != "xsha384" -a x"$DIGEST" != "xsha512" ]; then
          echo "WARNING: Unknown digest method: $DIGEST"
-         echo "Defaulting digest method to sha1"
-         DIGEST="sha1"
+         echo "Defaulting digest method to sha256"
+         DIGEST="sha256"
   fi
 }
 
