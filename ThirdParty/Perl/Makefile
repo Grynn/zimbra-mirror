@@ -233,7 +233,8 @@ PERL_LIBS 	:= \
 	DBD::SQLite \
 	Filesys::Df \
 	LMDB_File \
-	Data::Validate::IP
+	Data::Validate::IP \
+	Unix::Getrusage
 
 NET_SSLeay := \
 	Net-SSLeay-1.55
