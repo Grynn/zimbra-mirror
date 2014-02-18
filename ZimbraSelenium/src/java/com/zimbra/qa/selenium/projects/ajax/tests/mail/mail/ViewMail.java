@@ -76,12 +76,12 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 		// Verify the To, From, Subject, Body
 		//ZAssert.assertEquals(	actual.zGetMailProperty(Field.OnBehalfOf), from, "Verify the On-Behalf-Of matches the 'From:' header");
 		/* TODO: ... debugging to be removed */
-		String fromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[id$='_com_zimbra_email'] span:contains(from)";
+		String fromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[class='addrBubble']";
 		ZAssert.assertEquals(app.zPageMail.sGetText(fromLocator).trim(), from, "Verify the On-Behalf-Of matches the 'From:' header");
 		
 		//ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), sender, "Verify the From matches the 'Sender:' header");
 		/* TODO: ... debugging to be removed */
-		String senderLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[id$='_com_zimbra_email'] span:contains(sender)";
+		String senderLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[class='addrBubble']";
 		ZAssert.assertEquals(app.zPageMail.sGetText(senderLocator).trim(), sender, "Verify the From matches the 'Sender:' header");
 		
 	}
@@ -115,12 +115,12 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 		// Verify the To, From, Subject, Body
 		//ZAssert.assertEquals(	actual.zGetMailProperty(Field.ReplyTo), replyto, "Verify the Reply-To matches the 'Reply-To:' header");
 		/* TODO: ... debugging to be removed */
-		String replytoLocator = "css=div[id='zv__TV-main__MSG'] tr[id$='_reply to'] td.LabelColValue span[id$='_com_zimbra_email'] span:contains(replyto)";
+		String replytoLocator = "css=div[id='zv__TV-main__MSG'] tr[id$='_reply to'] td.LabelColValue span[class='addrBubble'] ";
 		ZAssert.assertEquals(app.zPageMail.sGetText(replytoLocator).trim(), replyto, "Verify the Reply-To matches the 'Reply-To:' header");
 		
 		//ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), from, "Verify the From matches the 'From:' header");
 		/* TODO: ... debugging to be removed */
-		String fromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[id$='_com_zimbra_email'] span:contains(from)";
+		String fromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[class='addrBubble']";
 		ZAssert.assertEquals(app.zPageMail.sGetText(fromLocator).trim(), from, "Verify the From matches the 'From:' header");
 	
 	}
@@ -154,12 +154,12 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 		// Verify the To, From, Subject, Body
 		//ZAssert.assertEquals(	actual.zGetMailProperty(Field.ResentFrom), resentfrom, "Verify the Resent-From matches the 'Resent-From:' header");
 		/* TODO: ... debugging to be removed */
-		String resentfromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[id$='_com_zimbra_email'] span:contains(resentfrom)";
+		String resentfromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[class='addrBubble']";
 		ZAssert.assertEquals(app.zPageMail.sGetText(resentfromLocator).trim(), resentfrom, "Verify the From matches the 'From:' header");
 
 		//ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), from, "Verify the From matches the 'From:' header");
 		/* TODO: ... debugging to be removed */
-		String fromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[id$='_com_zimbra_email'] span:contains(from)";
+		String fromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[class='addrBubble']";
 		ZAssert.assertEquals(app.zPageMail.sGetText(fromLocator).trim(), from, "Verify the From matches the 'From:' header");
 
 
