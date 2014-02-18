@@ -1202,7 +1202,7 @@ public class DisplayMail extends AbsDisplay {
 		
 		if ( field == Field.From ) {
 			
-			locator = this.ContainerLocator + " td[id$='_from'] span[id$='_com_zimbra_email'] span";
+			locator = this.ContainerLocator + " td[id$='_from'] span[class='addrBubble']";
 
 		} else {
 			throw new HarnessException("Logic not defined for field="+ field);
