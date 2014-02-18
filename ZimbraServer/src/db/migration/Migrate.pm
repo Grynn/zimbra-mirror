@@ -34,6 +34,7 @@ my $ZIMBRA_HOME = $ENV{ZIMBRA_HOME} || '/opt/zimbra';
 my $ZMLOCALCONFIG = "$ZIMBRA_HOME/bin/zmlocalconfig";
 my $ZMSOAP = "$ZIMBRA_HOME/bin/zmsoap";
 my $SQLLOGFH;
+my $DB_SOCKET;
 
 if ($^O !~ /MSWin/i) {
     $DB_PASSWORD = `$ZMLOCALCONFIG -s -m nokey zimbra_mysql_password`;
@@ -41,6 +42,7 @@ if ($^O !~ /MSWin/i) {
     $DB_USER = `$ZMLOCALCONFIG -m nokey zimbra_mysql_user`;
     chomp $DB_USER;
     $MYSQL = "/opt/zimbra/bin/mysql";
+    $DB_SOCKET = `$ZMLOCALCONFIG -s -m nokey mysql_socket`;
 }
 
 sub getSchemaVersion {
@@ -314,7 +316,7 @@ sub runSqlParallel(@) {
       # set an alarm in case the command hangs.
       $SIG{ALRM} = sub { &alarm_handler($array,$timeout,$quiet) };
       alarm($timeout);
-      my $data_source = "dbi:mysql:database=$DATABASE;mysql_read_default_file=/opt/zimbra/conf/my.cnf;mysql_socket=/opt/zimbra/db/mysql.sock";
+      my $data_source = "dbi:mysql:database=$DATABASE;mysql_read_default_file=/opt/zimbra/conf/my.cnf;mysql_socket=$DB_SOCKET";
       my $dbh;
       until ($dbh) {
         $dbh = DBI->connect($data_source, $DB_USER, $DB_PASSWORD, { PrintError => 0 }); 
