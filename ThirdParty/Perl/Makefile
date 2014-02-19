@@ -94,6 +94,7 @@ PRE_PERL_LIBS	:= \
 	ExtUtils::Config \
 	ExtUtils::InstallPaths \
 	Test::Harness \
+	ExtUtils::Helpers \
 	Module::Build::Tiny \
 	Class::Load \
 	Perl::OSType \
