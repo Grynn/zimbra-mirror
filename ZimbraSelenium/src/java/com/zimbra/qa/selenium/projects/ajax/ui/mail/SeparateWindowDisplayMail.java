@@ -113,22 +113,22 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 			
 		} else if ( field == Field.ReceivedDate ) {
 			
-			locator = container + " tr[id$='_hdrTableTopRow'] td[class~='DateCol'] span[id$='_com_zimbra_date']";
+			locator = container + " tr[id$='_hdrTableTopRow'] td[class~='DateCol']";
 
 		} else if ( field == Field.ReceivedTime ) {
 			
-			String timeAndDateLocator = container + " tr[id$='_hdrTableTopRow'] td[class~='DateCol'] span[id$='_com_zimbra_date']";
+			String timeAndDateLocator = container + " tr[id$='_hdrTableTopRow'] td[class~='DateCol'] ";
 
 			// Make sure the subject is present
 			if ( !sIsElementPresent(timeAndDateLocator) )
 				throw new HarnessException("Unable to find the time and date field!");
 			
 			// Get the subject value
-			String timeAndDate = this.sGetText(timeAndDateLocator).trim();
-			String date = this.zGetMailProperty(Field.ReceivedDate);
+			String time = this.sGetText(timeAndDateLocator).trim();
+			//String date = this.zGetMailProperty(Field.ReceivedDate);
 			
 			// Strip the date so that only the time remains
-			String time = timeAndDate.replace(date, "").trim();
+			//String time = timeAndDate.replace(date, "").trim();
 			
 			logger.info("zGetDisplayedValue(" + field + ") = " + time);
 			return(time);

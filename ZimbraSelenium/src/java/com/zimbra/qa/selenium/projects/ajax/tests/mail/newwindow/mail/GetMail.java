@@ -137,11 +137,11 @@ public class GetMail extends PrefGroupMailByMessageTest {
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 			
 			ZAssert.assertEquals(	window.zGetMailProperty(Field.Subject), subject, "Verify the subject matches");
-			ZAssert.assertNotNull(	window.zGetMailProperty(Field.ReceivedDate), "Verify the date is displayed");
+			//ZAssert.assertNotNull(	window.zGetMailProperty(Field.ReceivedDate), "Verify the date is displayed"); as per bug 75743 all date are  consistent
 			ZAssert.assertNotNull(	window.zGetMailProperty(Field.ReceivedTime), "Verify the time is displayed");
 			ZAssert.assertEquals(	window.zGetMailProperty(Field.From), ZimbraAccount.AccountA().EmailAddress, "Verify the From matches");
-			ZAssert.assertEquals(	window.zGetMailProperty(Field.Cc), ZimbraAccount.AccountB().EmailAddress, "Verify the Cc matches");
-			ZAssert.assertEquals(	window.zGetMailProperty(Field.To), app.zGetActiveAccount().EmailAddress, "Verify the To matches");
+			ZAssert.assertEquals(	window.zGetMailProperty(Field.Cc),"Cc:"+ ZimbraAccount.AccountB().EmailAddress, "Verify the Cc matches");
+			ZAssert.assertEquals(	window.zGetMailProperty(Field.To), "To:"+app.zGetActiveAccount().EmailAddress, "Verify the To matches");
 			
 			// The body could contain HTML, even though it is only displaying text (e.g. <br> may be present)
 			// do a contains, rather than equals.
@@ -169,7 +169,7 @@ public class GetMail extends PrefGroupMailByMessageTest {
 		// Create the message data to be sent
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String bodyText = "text" + ZimbraSeleniumProperties.getUniqueString();
-		String bodyHTML = "text <strong>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong> text";
+		String bodyHTML = "text <strong style=\"\">bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong> text";
 		String contentHTML = XmlStringUtil.escapeXml(
 			"<html>" +
 				"<head></head>" +
@@ -215,11 +215,11 @@ public class GetMail extends PrefGroupMailByMessageTest {
 			
 			// Verify the To, From, Subject, Body		
 			ZAssert.assertEquals(	window.zGetMailProperty(Field.Subject), mail.dSubject, "Verify the subject matches");
-			ZAssert.assertNotNull(	window.zGetMailProperty(Field.ReceivedDate), "Verify the date is displayed");
+		//	ZAssert.assertNotNull(	window.zGetMailProperty(Field.ReceivedDate), "Verify the date is displayed");
 			ZAssert.assertNotNull(	window.zGetMailProperty(Field.ReceivedTime), "Verify the time is displayed");
 			ZAssert.assertEquals(	window.zGetMailProperty(Field.From), ZimbraAccount.AccountA().EmailAddress, "Verify the From matches");
-			ZAssert.assertEquals(	window.zGetMailProperty(Field.Cc), ZimbraAccount.AccountB().EmailAddress, "Verify the Cc matches");
-			ZAssert.assertEquals(	window.zGetMailProperty(Field.To), app.zGetActiveAccount().EmailAddress, "Verify the To matches");
+			ZAssert.assertEquals(	window.zGetMailProperty(Field.Cc), "Cc:"+ZimbraAccount.AccountB().EmailAddress, "Verify the Cc matches");
+			ZAssert.assertEquals(	window.zGetMailProperty(Field.To), "To:"+app.zGetActiveAccount().EmailAddress, "Verify the To matches");
 			ZAssert.assertEquals(	window.zGetMailProperty(Field.Body), bodyHTML, "Verify the body matches");
 			
 
@@ -295,7 +295,8 @@ public class GetMail extends PrefGroupMailByMessageTest {
 
 		
 	}
-
+	
+	@Bugs(	ids = "86168")
 	@Test(	description = "Receive a mail with Reply-To: specified",
 			groups = { "functional" })
 	public void ViewMail_02() throws HarnessException {
