@@ -305,6 +305,22 @@ public class ZimbraAPI
         {"/MAPIRoot/Chats","14"},
         {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/\u0417\u0430\u0434\u0430\u0447\u0438","15"}};
 
+    Dictionary<string, string> specialFoldersMap_CN = new Dictionary<string, string>()  
+    {{"","0"},{"/MAPIRoot","1"},
+        {"/MAPIRoot/Inbox","2"}, {"/MAPIRoot/\u6536\u4ef6\u7bb1","2"},
+        {"/MAPIRoot/Deleted Items","3"}, {"/MAPIRoot/\u5df2\u5220\u9664\u90ae\u4ef6","3"},
+        {"/MAPIRoot/Junk E-Mail","4"}, {"/MAPIRoot/\u5783\u573e\u90ae\u4ef6","4"},
+        {"/MAPIRoot/Sent Items","5"}, {"/MAPIRoot/\u5df2\u53d1\u9001\u90ae\u4ef6","5"},
+        {"/MAPIRoot/Drafts","6"}, {"/MAPIRoot/\u8349\u7a3f\u7bb1","6"},
+        {"/MAPIRoot/Contacts","7"}, {"/MAPIRoot/\u8054\u7cfb\u4eba","7"},
+        {"/MAPIRoot/Tags","8"},{"/MAPIRoot/\u6807\u8bb0","8"},
+        {"/MAPIRoot/Conversations","9"},
+        {"/MAPIRoot/Calendar","10"}, {"/MAPIRoot/\u884c\u4e8b\u5386","10"},
+        {"/MAPIRoot/Wiki","12"},
+        {"/MAPIRoot/Emailed Contacts","13"}, {"/MAPIRoot/\u7535\u5b50\u90ae\u4ef6\u8054\u7cfb\u4eba","13"},
+        {"/MAPIRoot/Chats","14"},
+        {"/MAPIRoot/Tasks","15"}, {"/MAPIRoot/\u4efb\u52a1","15"}};
+
    /* Dictionary<string, string> specialFoldersMap_tr = new Dictionary<string, string>()
     {{"","0"},{"/MAPIRoot","1"},{"/MAPIRoot/Gelen Kutusu","2"},{"/MAPIRoot/\u00c7\u00f6p Kutusu","3"},
         {"/MAPIRoot/\u0130stenmeyen Posta","4"}, {"/MAPIRoot/G\u00f6nderilenler","5"},
@@ -529,6 +545,19 @@ public class ZimbraAPI
                         string tempstr = folderPath;
                         if (specialFoldersMap_ITA.ContainsKey(tempstr))
                             return specialFoldersMap_ITA[tempstr];
+                        else
+                            return "";
+                    }
+
+
+                }
+
+            case 2052:
+                {
+                    {
+                        string tempstr = folderPath;
+                        if (specialFoldersMap_CN.ContainsKey(tempstr))
+                            return specialFoldersMap_CN[tempstr];
                         else
                             return "";
                     }
