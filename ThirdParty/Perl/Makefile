@@ -91,12 +91,15 @@ PRE_PERL_LIBS	:= \
 	Dist::CheckConflicts \
 	Module::Implementation \
 	Package::Stash \
+	ExtUtils::Config \
+	ExtUtils::InstallPaths \
+	Test::Harness \
+	Module::Build::Tiny \
 	Class::Load \
 	Perl::OSType \
 	Module::Metadata \
 	ExtUtils::CBuilder \
 	ExtUtils::ParseXS \
-	Test::Harness \
 	Pod::Simple \
 	Pod::Man \
 	Module::Build \
