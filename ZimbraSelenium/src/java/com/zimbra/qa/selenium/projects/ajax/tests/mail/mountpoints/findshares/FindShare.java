@@ -45,7 +45,7 @@ public class FindShare extends PrefGroupMailByMessageTest {
 		
 	}
 	
-	@Bugs(ids = "82125,84339")
+	@Bugs(ids = "82125,84339, 86717")
 	@Test(	description = "Search for a share from another user.  Add it.",
 			groups = { "functional" })
 	public void CreateMountpoint_01() throws HarnessException {
@@ -82,6 +82,7 @@ public class FindShare extends PrefGroupMailByMessageTest {
 		
 		// Click Find Shares
 		DialogShareFind dialog = (DialogShareFind)app.zTreeMail.zPressPulldown(Button.B_TREE_FOLDERS_OPTIONS, Button.B_TREE_FIND_SHARES);
+		
 		
 		// Find shares from the user
 		dialog.zSetFindEmail(Owner.EmailAddress);
