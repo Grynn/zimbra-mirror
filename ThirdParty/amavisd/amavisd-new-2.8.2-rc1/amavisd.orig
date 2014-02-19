@@ -1,8 +1,6 @@
 #!/usr/bin/perl -T
 #!/usr/bin/perl -T -d:NYTProf
 
-use lib $ENV{PERL5LIB} =~ /([^:]+)/g; # Untaint PERL5LIB so Zimbra's modules can be used
-
 #------------------------------------------------------------------------------
 # This is amavisd-new.
 # It is an interface between a message transfer agent (MTA) and virus
@@ -400,7 +398,7 @@ BEGIN {
       %banned_rules $penpals_threshold_low $penpals_threshold_high
       %dkim_signing_keys_by_domain
       @dkim_signing_keys_list @dkim_signing_keys_storage
-      $file $altermime $enable_anomy_sanitizer $external_disclaimer_only
+      $file $altermime $enable_anomy_sanitizer
     )],
     'sa' =>  # global SpamAssassin settings
     [qw(
@@ -1074,7 +1072,6 @@ BEGIN {
   $altermime = 'altermime';  # path to the altermime utility (optional)
   @altermime_args_defang     = qw(--verbose --removeall);
   @altermime_args_disclaimer = qw(--disclaimer=/etc/altermime-disclaimer.txt);
-  $external_disclaimer_only = 0;
   # @altermime_args_disclaimer =
   #  qw(--disclaimer=/etc/_OPTION_.txt --disclaimer-html=/etc/_OPTION_.html);
   # @disclaimer_options_bysender_maps = ( 'altermime-disclaimer' );
@@ -4928,9 +4925,6 @@ sub make_query_keys($$$;$) {
     my(@dkeys); my $d = $domain;
     for (;;) {            # (@).sub.example.com (@).example.com (@).com (@).
       push(@dkeys, $prepend_to_domain.'.'.$d);
-      if ($d ne '') {
-        push(@dkeys, $d);
-      }
       last  if $d eq '';
       $d = ($d =~ /^([^.]*)\.(.*)\z/s) ? $2 : '';
     }
@@ -11197,7 +11191,7 @@ sub init_builtin_macros() {
     P => sub {$MSGINFO->partition_tag}, # SQL partition tag
     partition_tag => sub {$MSGINFO->partition_tag},  # synonym for %P
     q => sub { my $q = $MSGINFO->quarantined_to;
-               $q && [map { my($m)=$_; $m=~s{^\Q$QUARANTINEDIR\E/}{}; $m=~s/^march.*\.archive$//; $m } @$q];
+               $q && [map { my $m=$_; $m=~s{^\Q$QUARANTINEDIR\E/}{}; $m } @$q];
              },  # list of quarantine mailboxes
     v => sub { !defined $av_output ? undef     # anti-virus scanner output
                  : [split(/[ \t]*\r?\n/, $av_output)]},
@@ -13692,9 +13686,6 @@ sub check_mail($$) {
                                    @rfc2822_from, $rfc2822_sender, $sender))) {
                 $to_be_mangled = 0;  # not for foreign 'Sender:' or 'From:'
                 do_log(5,"will not add disclaimer, sender not local");
-              } elsif ($external_disclaimer_only == 1) {
-                $to_be_mangled = 0  if $r->recip_is_local;
-                do_log(5, "will not add disclaimer, recipient is local");
               }
             }
           } else {  # defanging (not disclaiming)
@@ -15986,15 +15977,6 @@ sub do_notify_and_quarantine($$) {
       push(@q_tuples, [$qar_method, $q, 'Arch'])  if defined $q && $q ne '';
     }
   }  # endfor per_recip_data
-
-  if (defined($qar_method) && $qar_method ne '') {  # archiving quarantine on sender
-    my($sender) = $msginfo->sender;
-    if ($sender ne '') {
-      my($q) = lookup(0,$sender,@{ca('archive_quarantine_to_maps')});
-      $q = $sender  if $q ne '' && $qar_method =~ /^bsmtp:/i;  # orig.recip
-      push(@q_tuples, [$qar_method,$q,'Arch'])  if defined $q && $q ne '';
-    }
-  }
 
   if ($ccat == CC_SPAM) {
     my $sqbsm = ca('spam_quarantine_bysender_to_maps');

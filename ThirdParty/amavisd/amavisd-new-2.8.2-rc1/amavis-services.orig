@@ -45,7 +45,6 @@ use warnings FATAL => qw(utf8 void);
 no warnings 'uninitialized';
 
 use vars qw($VERSION);  $VERSION = 2.008001;
-use lib $ENV{PERL5LIB} =~ /([^:]+)/g; # Untaint PERL5LIB so Zimbra's modules can be used
 
 use Errno qw(ESRCH ENOENT);
 use POSIX qw(strftime);
@@ -73,8 +72,7 @@ $MYHOME = '/var/amavis';
 
 # A socket to which amavisd child processes report their data.
 # should match one of the sockets in @zmq_sockets in amavisd.conf
-#$inner_sock_specs = "ipc://$MYHOME/amavisd-zmq.sock";
-$inner_sock_specs = ( "ipc:///opt/zimbra/data/tmp/amavisd-zmq.sock" );
+$inner_sock_specs = "ipc://$MYHOME/amavisd-zmq.sock";
 
 # A socket to which we forward summarized amavisd data.
 # should match a socket of the same name in amavis-status

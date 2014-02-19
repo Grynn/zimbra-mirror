@@ -82,8 +82,7 @@ BEGIN {
 
   $log_level = 1;
 # $socketname = '127.0.0.1:9998';
-#  $socketname = '/var/amavis/amavisd.sock';
-  $socketname = '/opt/zimbra/data/amavisd/amavisd.sock';
+  $socketname = '/var/amavis/amavisd.sock';
 
 ### END OF USER CONFIGURABLE
 }
