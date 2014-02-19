@@ -60,8 +60,8 @@ SASL_INCLUDE	:= $(ZIMBRA_HOME)/cyrus-sasl/include
 
 # Order is important here
 PRE_PERL_LIBS	:= \
-	Try::Tiny \
 	Test::Simple \
+	Try::Tiny \
 	Test::Fatal \
 	ExtUtils::MakeMaker \
 	T/TO/TOKUHIROM/Test-Requires-0.06.tar.gz \
