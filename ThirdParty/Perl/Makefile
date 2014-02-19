@@ -65,6 +65,7 @@ PRE_PERL_LIBS	:= \
 	Test::Fatal \
 	ExtUtils::MakeMaker \
 	T/TO/TOKUHIROM/Test-Requires-0.06.tar.gz \
+	List::Util \
 	CPAN::Meta::YAML \
 	JSON::PP \
 	Parse::CPAN::Meta \
@@ -110,6 +111,7 @@ PRE_PERL_LIBS	:= \
 	Test::Deep \
 	CPAN::Meta::Check \
 	Test::CheckDeps \
+	Devel::StackTrace \
 	Moose \
 	Array::Compare \
 	Test::Pod \
@@ -117,6 +119,7 @@ PRE_PERL_LIBS	:= \
 	File::Temp \
 	File::Spec \
 	File::Slurp \
+	File::Slurp::Tiny \
 	Tree::DAG_Node \
 	Sub::Uplevel \
 	Test::Exception \
@@ -172,7 +175,6 @@ PERL_LIBS 	:= \
 	IPC::Cmd \
 	Pod::Escapes \
 	Class::Data::Inheritable \
-	Devel::StackTrace \
 	Exception::Class \
 	Data::Dumper \
 	Algorithm::Diff \
