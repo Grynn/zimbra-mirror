@@ -2106,9 +2106,9 @@ sub read_config_file($$) {
     elsif (-d _)         { $msg = "is a directory" }
     elsif (-S _ || -b _ || -c _) { $msg = "is not a regular file or pipe" }
     elsif (!$i_know_what_i_am_doing{no_conf_file_writable_check}) {
-      if    ($> && -o _) { $msg = "should not be owned by EUID $>"}
-      elsif ($> && -w _) { $msg = "is writable by EUID $>, EGID $)" }
-      elsif ($owner_uid) { $msg = "should be owned by root (uid 0)" }
+      #if    ($> && -o _) { $msg = "should not be owned by EUID $>"}
+      #elsif ($> && -w _) { $msg = "is writable by EUID $>, EGID $)" }
+      #elsif ($owner_uid) { $msg = "should be owned by root (uid 0)" }
     }
     if (defined $msg)    { die "Config file \"$config_file\" $msg," }
     $read_config_files_depth++;  push(@actual_config_files, $config_file);
