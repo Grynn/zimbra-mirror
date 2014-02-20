@@ -190,8 +190,7 @@ AttachContactsZimlet.prototype._getContactListIds = function() {
 
 AttachContactsZimlet.prototype._openCompose = function() {
 	var action = ZmOperation.NEW_MESSAGE;
-	var msg = new ZmMailMsg();
-	AjxDispatcher.run("Compose", {action: action, inNewWindow: false, msg: msg});
+	AjxDispatcher.run("Compose", {action: action, inNewWindow: false});
 	var controller = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
 	this._isDraftInitiatedByThisZimlet = true;
 	controller.saveDraft(ZmComposeController.DRAFT_TYPE_AUTO);

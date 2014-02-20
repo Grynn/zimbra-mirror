@@ -131,7 +131,9 @@ function() {
 ZmArchiveZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
 	//conversation-list-view or conversation-view or traditional-view(aka message-view)
-	if(appCtxt.isChildWindow) { return; }
+	if (appCtxt.isChildWindow) {
+		return;
+	}
 	var viewType = appCtxt.getViewTypeFromId(viewId);
 	if (viewType == ZmId.VIEW_CONVLIST || viewType == ZmId.VIEW_CONV || viewType == ZmId.VIEW_TRAD || viewType == ZmId.VIEW_MSG) {
 		var buttonIndex = 0;
@@ -186,9 +188,7 @@ function(app, toolbar, controller, viewId) {
 			visible = false; 
 		}
 
-		var listController = appCtxt.getCurrentApp().getMailListController();
-		var isConvListView = listController.getCurrentViewType() === ZmId.VIEW_CONVLIST;
-		var tooltip = this.getMessage("sendAndArchiveToolTip" + (isConvListView ? "Conv" : ""));
+		var tooltip = this.getMessage(this._isConvView() ? "sendAndArchiveToolTipConv" : "sendAndArchiveToolTip");
 
 		var buttonArgs = {
 			text: this.getMessage("sendAndArchiveButton"),
@@ -505,13 +505,18 @@ ZmArchiveZimlet.prototype.onSendMsgSuccess = function(controller, msg) {
 
 	var item = appCtxt.getById(id);
 	var listController = appCtxt.getCurrentApp().getMailListController();
-	if (listController.getCurrentViewType() === ZmId.VIEW_CONVLIST) {
+	if (this._isConvView()) {
 		var cid = msg.cid || (msg._origMsg && msg._origMsg.cid);
 		var conv = cid && appCtxt.getById(cid);
 		item = conv || item;
 	}
 	listController._doMove([item], this._archiveFolder);
 
+};
+
+ZmArchiveZimlet.prototype._isConvView =
+function() {
+	return appCtxt.get(ZmSetting.GROUP_MAIL_BY) === ZmSetting.GROUP_BY_CONV;
 };
 
 ZmArchiveZimlet.prototype._getMetaKeyVal = 
