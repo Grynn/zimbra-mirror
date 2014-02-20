@@ -44,7 +44,7 @@ use re 'taint';
 use warnings;
 use warnings FATAL => qw(utf8 void);
 no warnings 'uninitialized';
-use lib $ENV{PERL5LIB} =~ /([^:]+)/g; # Untaint PERL5LIB so Zimbra's modules can be used
+use lib "/opt/zimbra/zimbramon/lib";
 
 use Errno qw(ESRCH ENOENT);
 use POSIX qw(strftime);
