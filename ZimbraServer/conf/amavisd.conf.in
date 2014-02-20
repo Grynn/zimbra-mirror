@@ -9,8 +9,6 @@ use strict;
 
 # COMMONLY ADJUSTED SETTINGS:
 
-$i_know_what_i_am_doing{no_conf_file_writable_check}=1;
-
 %%comment SERVICE:antivirus%% @bypass_virus_checks_maps = (1);  # uncomment to DISABLE anti-virus code
 %%comment SERVICE:antispam%% @bypass_spam_checks_maps  = (1);  # uncomment to DISABLE anti-spam code
 # $bypass_decode_parts = 1;         # controls running of decoders&dearchivers

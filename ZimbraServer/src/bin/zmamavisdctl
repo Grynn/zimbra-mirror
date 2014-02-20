@@ -151,7 +151,7 @@ case "$1" in
           ${zimbra_home}/data/amavisd/.spamassassin/
         chmod 644 ${zimbra_home}/data/amavisd/.spamassassin/bayes*
       fi
-      ${zimbra_home}/amavisd/sbin/amavisd -c \
+      ${zimbra_home}/amavisd/sbin/amavisd -X no_conf_file_writable_check -c \
         ${zimbra_home}/conf/amavisd.conf &
       for ((i=0; i < 30; i++)); do
         checkrunning
