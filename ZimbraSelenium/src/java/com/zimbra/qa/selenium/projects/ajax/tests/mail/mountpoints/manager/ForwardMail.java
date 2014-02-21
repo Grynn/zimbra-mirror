@@ -22,6 +22,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 
 public class ForwardMail extends PrefGroupMailByMessageTest {
@@ -120,6 +121,7 @@ public class ForwardMail extends PrefGroupMailByMessageTest {
 			// Reply the item
 			FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_FORWARD);
 			mailform.zFillField(FormMailNew.Field.To, ZimbraAccount.AccountA().EmailAddress);
+			mailform.zFillField(Field.From, owner.EmailAddress);	
 			mailform.zSubmit();
 
 		} finally {
@@ -137,7 +139,7 @@ public class ForwardMail extends PrefGroupMailByMessageTest {
 		// From the receiving end, verify the message details
 		// Need 'in:inbox' to separate the message from the sent message
 		MailItem sent = MailItem.importFromSOAP(app.zGetActiveAccount(), "in:sent subject:("+ subject +")");
-
+	
 		ZAssert.assertEquals(sent.dToRecipients.size(), 1, "Verify the message is sent to 1 'to' recipient");
 		ZAssert.assertEquals(sent.dToRecipients.get(0).dEmailAddress, ZimbraAccount.AccountA().EmailAddress, "Verify the 'To' field is correct");
 		ZAssert.assertEquals(sent.dFromRecipient.dEmailAddress, owner.EmailAddress, "Verify the 'From' field is correct");

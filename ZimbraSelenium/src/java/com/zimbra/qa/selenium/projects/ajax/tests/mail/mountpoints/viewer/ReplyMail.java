@@ -22,6 +22,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 
 public class ReplyMail extends PrefGroupMailByMessageTest {
@@ -115,6 +116,7 @@ public class ReplyMail extends PrefGroupMailByMessageTest {
 			
 			// Reply the item
 			FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_REPLY);
+			mailform.zFillField(Field.From, owner.EmailAddress);
 			mailform.zSubmit();
 
 		} finally {
