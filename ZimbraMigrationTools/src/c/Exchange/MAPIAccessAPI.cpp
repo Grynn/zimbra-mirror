@@ -17,6 +17,7 @@
 #include "MAPIAccessAPI.h"
 #include "Logger.h"
 #include "edk/edkmapi.h"
+#include "Util.h"
 
 Zimbra::MAPI::MAPISession *MAPIAccessAPI::m_zmmapisession = NULL;
 Zimbra::MAPI::MAPIStore *MAPIAccessAPI::m_defaultStore = NULL;
@@ -835,13 +836,14 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
     HRESULT hr = S_OK;
     LPMESSAGE pMessage = NULL;
     ULONG objtype;
-
+		
     if (FAILED(hr = m_userStore->OpenEntry(sbItemEID.cb, (LPENTRYID)sbItemEID.lpb, NULL,
             MAPI_BEST_ACCESS, &objtype, (LPUNKNOWN *)&pMessage)))
     {
         lpwstrStatus = FormatExceptionInfo(hr, L"MAPIAccessAPI::GetItem() Failed", __FILE__,
             __LINE__);
-		dloge("MAPIAccessAPI -- User Store OpenEntry failed");
+		LPTSTR pszBin = SBinToStr(sbItemEID);
+		dloge("GetItem::OpenEntry failed: %s",pszBin);
 		dloge(lpwstrStatus);
 		Zimbra::Util::CopyString(lpwstrRetVal, ERR_OPEN_ENTRYID);
         goto ZM_EXIT;

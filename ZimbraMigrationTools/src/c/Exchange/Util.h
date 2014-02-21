@@ -13,6 +13,8 @@
  * ***** END LICENSE BLOCK *****
  */
 #pragma once
+#include "common.h"
+#include <MAPIDefs.h>
 #include <objbase.h>
 #include <dbghelp.h>
 
@@ -110,6 +112,16 @@ inline void AppendString(LPWSTR &pDest, LPCWSTR pSrc)
     pDest = pTempStr;
 }
 
+inline LPTSTR AppendString(LPTSTR p1, LPTSTR p2, LPTSTR p3)
+{
+    LPTSTR pRetVal = new TCHAR[_tcslen(p1) + _tcslen(p2) + _tcslen(p3) + 1];
+
+    _tcscpy(pRetVal, p1);
+    _tcscat(pRetVal, p2);
+    _tcscat(pRetVal, p3);
+    return pRetVal;
+}
+
 //free
 inline void FreeString(LPWSTR wstr)
 {
@@ -126,7 +138,7 @@ inline std::wstring GetAppDir()
     return file_path;
 } 
 
-
+LPTSTR SBinToStr(SBinary &bin);
 
 }
 }

@@ -317,5 +317,45 @@ LONG WINAPI Zimbra::Util::MiniDumpGenerator::GenerateCoreDump(LPEXCEPTION_POINTE
     return retVal;
 }
 
+LPTSTR ZMULongToString(ULONG ul)
+{
+    LPTSTR pRetVal = new TCHAR[34];
+
+    _ultot(ul, pRetVal, 10);
+    return pRetVal;
+}
 
 
+LPTSTR ZMHexEncode(ULONG cb, LPBYTE pb)
+{
+    LPTSTR pszHexEncoded = new TCHAR[(cb * 2) + 1];
+    LPBYTE pSrc = pb;
+    LPTSTR pDst = pszHexEncoded;
+
+    for (ULONG i = 0; i < cb; i++, pSrc++, pDst += 2)
+        wsprintf(pDst, _T("%02X"), *pSrc);
+    *pDst = _T('\0');
+    return pszHexEncoded;
+}
+
+LPTSTR Zimbra::Util::SBinToStr(SBinary &bin)
+{
+    if (bin.cb == 0)
+    {
+        LPTSTR pRetVal = new TCHAR[6];
+
+        _tcscpy(pRetVal, _T("cb:0;"));
+        return pRetVal;
+    }
+
+    LPTSTR pszCount = ZMULongToString(bin.cb);
+    LPTSTR pRetVal = NULL;
+    LPTSTR pszHexEncoded = ZMHexEncode(bin.cb, bin.lpb);
+
+    pRetVal = Zimbra::Util::AppendString(pszCount, _T(";"), pszHexEncoded);
+
+    delete[] pszHexEncoded;
+    delete[] pszCount;
+
+    return pRetVal;
+}
