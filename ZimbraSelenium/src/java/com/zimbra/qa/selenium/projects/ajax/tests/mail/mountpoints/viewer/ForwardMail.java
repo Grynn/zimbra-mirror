@@ -16,6 +16,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.mountpoints.viewer;
 
 import org.testng.annotations.*;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -34,6 +35,7 @@ public class ForwardMail extends PrefGroupMailByMessageTest {
 
 	}
 	
+	@Bugs(	ids = "86168")
 	@Test(	description = "Forward (on behalf of) to a message in a shared folder (admin rights)",
 			groups = { "functional" })
 	public void ForwardMail_01() throws HarnessException {
