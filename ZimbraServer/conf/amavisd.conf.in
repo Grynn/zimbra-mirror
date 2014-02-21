@@ -131,7 +131,7 @@ $policy_bank{'AM.PDP-SOCK'} = {
   auth_required_release => 0,  # do not require secret_id for amavisd-release
 };
 
-# $sa_debug = 1;
+$sa_debug = %%zimbraAmavisSALogLevel%%;
 $sa_configpath = '/opt/zimbra/conf/spamassassin';
 $sa_siteconfigpath = '/opt/zimbra/conf/sa';
 
