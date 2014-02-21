@@ -209,9 +209,11 @@ PERL_LIBS 	:= \
 	Parallel::ForkManager \
 	Package::Constants \
 	Archive::Tar \
+	Digest \
 	Digest::SHA \
 	Digest::SHA1 \
 	Digest::HMAC \
+	Digest::SHA2 \
 	Convert::TNEF \
 	Convert::UUlib \
 	Net::IP \
