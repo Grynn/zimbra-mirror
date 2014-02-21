@@ -257,6 +257,9 @@ CRYPT_RSA := \
 DBFILE_PERL_LIBS := \
 	DB_File
 
+BDB_PERL_LIBS := \
+	BerkeleyDB-0.51
+
 MAIL_SPF := \
 	Mail-SPF-v2.9.0
 
@@ -416,6 +419,15 @@ build:
 				-sdk openldap -lib_path $(LDAP_LIB_DIR) -include_path $(LDAP_INCLUDE) -sasl_include_path $(SASL_INCLUDE); \
 			LD_RUN_PATH="$(LDAP_LIB_DIR)" $(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then echo "FAILED."; else echo "done."; fi \
+	done
+
+	@for lib in $(BDB_PERL_LIBS); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+		BERKELEYDB_INCLUDE=$(BDB_INCLUDE) BERKELEYDB_LIB=$(BDB_LIB_DIR) $(BDB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+		LD_RUN_PATH=$(BDB_LIB_DIR) $(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
 	@for lib in $(DBFILE_PERL_LIBS); do \
