@@ -41,6 +41,15 @@ LinkedInImageZimlet.prototype.init = function() {
 	this._loadLinkedIn();
 };
 
+LinkedInImageZimlet.prototype.doubleClicked =
+function () {
+	//singleClicked doesn't do nothing in this case. but there are no real user preferences either so make sure this
+	//does nothing as well. If one day singleClicked will do something, double click will do the same, unless we change it.
+	//The reason double Click was opening non desired "preferences" was that we use userProperties/property in the config
+	//XML - but the property is not really a user property, it's the key for the LinkedIn app...not sure if there's a way
+	//to set up the Zimlet differently.
+	this.singleClicked();
+};
 
 
 LinkedInImageZimlet.prototype.menuItemSelected =
