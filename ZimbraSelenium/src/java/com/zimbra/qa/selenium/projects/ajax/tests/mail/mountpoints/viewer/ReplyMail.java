@@ -16,6 +16,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.mountpoints.viewer;
 
 import org.testng.annotations.*;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -29,7 +30,7 @@ public class ReplyMail extends PrefGroupMailByMessageTest {
 		logger.info("New "+ ReplyMail.class.getCanonicalName());
 		
 	}
-	
+	@Bugs(	ids = "86168")
 	@Test(	description = "Reply (on behalf of) to a message in a shared folder (admin rights)",
 			groups = { "functional" })
 	public void ReplyMail_01() throws HarnessException {
