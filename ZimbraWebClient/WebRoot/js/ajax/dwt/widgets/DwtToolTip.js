@@ -207,7 +207,7 @@ DwtToolTip.prototype._mouseOverListener =
 function(ev) {
 	this._hovered = true;
     if (this._popdownOnMouseOver && this._poppedUp) {
-        var callback = (this._popdownOnMouseOver.isAjxCallback) ? this._popdownOnMouseOver : null;
+        var callback = (this._popdownOnMouseOver.isAjxCallback || AjxUtil.isFunction(this._popdownOnMouseOver)) ? this._popdownOnMouseOver : null;
         this.popdown();
         if (callback) {
             callback.run();
