@@ -43,6 +43,7 @@ if ($^O !~ /MSWin/i) {
     chomp $DB_USER;
     $MYSQL = "/opt/zimbra/bin/mysql";
     $DB_SOCKET = `$ZMLOCALCONFIG -x -s -m nokey mysql_socket`;
+    chomp $DB_SOCKET;
 }
 
 sub getSchemaVersion {
