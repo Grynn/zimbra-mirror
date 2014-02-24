@@ -126,7 +126,7 @@ if (fork()) {
 	$user_limit = 50 if $user_limit !~ /^\d+/;
 	$host_limit = 50 if $host_limit !~ /^\d+/;
     @ARGV = ('-u', $user_limit, '-h', $host_limit);
-    do '/opt/zimbra/libexec/pflogsumm.pl';
+    do '/opt/zimbra/pflogsumm/bin/pflogsumm.pl';
     close(STDOUT);
 }
 
