@@ -368,15 +368,15 @@ public class FormApptNew extends AbsForm {
 	
 	public void zVerifyDisabledControlInProposeNewTimeUI() throws HarnessException {
 		SleepUtil.sleepMedium(); // opening appt takes some time so assert fails
-		ZAssert.assertTrue(this.sIsElementPresent(Locators.ToDisabled), "Verify to is disabled while attendee propose new time");
-		ZAssert.assertTrue(this.sIsElementPresent(Locators.SubjectDisabled), "Verify subject is disabled while attendee propose new time");		
-		ZAssert.assertTrue(this.sIsElementPresent(Locators.AttendeesDisabled), "Verify attendees is disabled while attendee propose new time");
-		ZAssert.assertTrue(this.sIsElementPresent(Locators.OptionalDisabled), "Verify optional is disabled while attendee propose new time");
-		ZAssert.assertTrue(this.sIsElementPresent(Locators.LocationDisabled), "Verify location is disabled while attendee propose new time");
-		ZAssert.assertTrue(this.sIsElementPresent(Locators.EquipmentDisabled), "Verify equipment is disabled while attendee propose new time");
-		ZAssert.assertTrue(this.sIsElementPresent(Locators.DisplayDisabled), "Verify display is disabled while attendee propose new time");
-		ZAssert.assertTrue(this.sIsElementPresent(Locators.FolderDisabled), "Verify folder is disabled while attendee propose new time");
-		ZAssert.assertTrue(this.sIsElementPresent(Locators.PrivateDisabled), "Verify private is disabled while attendee propose new time");
+		ZAssert.assertTrue(this.sIsElementPresent(Locators.ToDisabled), "Verify to field is disabled when attendee propose new time");
+		ZAssert.assertTrue(this.sIsElementPresent(Locators.SubjectDisabled), "Verify subject field is disabled when attendee propose new time");		
+		ZAssert.assertTrue(this.sIsElementPresent(Locators.AttendeesDisabled), "Verify attendees field is disabled when attendee propose new time");
+		ZAssert.assertTrue(this.sIsElementPresent(Locators.OptionalDisabled), "Verify optional field is disabled when attendee propose new time");
+		ZAssert.assertTrue(this.sIsElementPresent(Locators.LocationDisabled), "Verify location field is disabled when attendee propose new time");
+		ZAssert.assertTrue(this.sIsElementPresent(Locators.EquipmentDisabled), "Verify equipment field is disabled while attendee propose new time");
+		ZAssert.assertTrue(this.sIsElementPresent(Locators.DisplayDisabled), "Verify display field is disabled when attendee propose new time");
+		ZAssert.assertTrue(this.sIsElementPresent(Locators.FolderDisabled), "Verify folder field is disabled when attendee propose new time");
+		ZAssert.assertTrue(this.sIsElementPresent(Locators.PrivateDisabled), "Verify private field is disabled when attendee propose new time");
 	}
 	
 	public void zVerifyDisabledControlInOpenInstance() throws HarnessException {
