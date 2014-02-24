@@ -76,7 +76,7 @@ public class ViewMail extends PrefGroupMailByMessageTest {
 		// Verify the To, From, Subject, Body
 		//ZAssert.assertEquals(	actual.zGetMailProperty(Field.OnBehalfOf), from, "Verify the On-Behalf-Of matches the 'From:' header");
 		/* TODO: ... debugging to be removed */
-		String fromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span[class='addrBubble']";
+		String fromLocator = "css=div[id='zv__TV-main__MSG'] td[id$='_from'] span:nth-child(3)>span[class='addrBubble']";
 		ZAssert.assertEquals(app.zPageMail.sGetText(fromLocator).trim(), from, "Verify the On-Behalf-Of matches the 'From:' header");
 		
 		//ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), sender, "Verify the From matches the 'Sender:' header");
