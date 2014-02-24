@@ -347,8 +347,7 @@ function(buttonId) {
  */
 DwtDialog.prototype.registerCallback =
 function(buttonId, func, obj, args) {
-	this._buttonDesc[buttonId].callback = (func && (func.isAjxCallback || AjxUtil.isFunction(func) || (!obj && !args)))
-		? func : (new AjxCallback(obj, func, args));
+	this._buttonDesc[buttonId].callback = (func && (func.isAjxCallback || (!obj && !args))) ? func : (new AjxCallback(obj, func, args));
 };
 
 /**
