@@ -1,18 +1,4 @@
 #!/usr/bin/perl -w
-# 
-# ***** BEGIN LICENSE BLOCK *****
-# Zimbra Collaboration Suite Server
-# Copyright (C) 2009, 2010, 2013 Zimbra Software, LLC.
-# 
-# The contents of this file are subject to the Zimbra Public License
-# Version 1.4 ("License"); you may not use this file except in
-# compliance with the License.  You may obtain a copy of the License at
-# http://www.zimbra.com/license.
-# 
-# Software distributed under the License is distributed on an "AS IS"
-# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
-# ***** END LICENSE BLOCK *****
-# 
 eval 'exec perl -S $0 "$@"'
     if 0;
 
@@ -20,17 +6,20 @@ eval 'exec perl -S $0 "$@"'
 
 pflogsumm.pl - Produce Postfix MTA logfile summary
 
-Copyright (C) 1998-2007 by James S. Seymour, Release 1.1.1.
+Copyright (C) 1998-2010 by James S. Seymour, Release 1.1.3.
 
 =head1 SYNOPSIS
 
-    pflogsumm.pl -[eq] [-d <today|yesterday>] [-h <cnt>] [-u <cnt>]
-	[--verp_mung[=<n>]] [--verbose_msg_detail] [--iso_date_time]
-	[-m|--uucp_mung] [-i|--ignore_case] [--smtpd_stats] [--mailq]
-	[--problems_first] [--rej_add_from] [--no_bounce_detail]
-	[--no_deferral_detail] [--no_reject_detail] [--no_no_msg_size]
-	[--no_smtpd_warnings] [--zero_fill] [--syslog_name=string]
-	[file1 [filen]]
+    pflogsumm.pl -[eq] [-d <today|yesterday>] [--detail <cnt>]
+	[--bounce_detail <cnt>] [--deferral_detail <cnt>]
+	[-h <cnt>] [-i|--ignore_case] [--iso_date_time] [--mailq]
+	[-m|--uucp_mung] [--no_bounce_detail] [--no_deferral_detail]
+	[--no_no_msg_size] [--no_reject_detail] [--no_smtpd_warnings]
+	[--problems_first] [--rej_add_from] [--reject_detail <cnt>]
+	[--smtp_detail <cnt>] [--smtpd_stats]
+	[--smtpd_warning_detail <cnt>] [--syslog_name=string]
+	[-u <cnt>] [--verbose_msg_detail] [--verp_mung[=<n>]]
+	[--zero_fill] [file1 [filen]]
 
     pflogsumm.pl -[help|version]
 
@@ -49,8 +38,24 @@ Copyright (C) 1998-2007 by James S. Seymour, Release 1.1.1.
 
 =head1 OPTIONS
 
+    --bounce_detail <cnt>
+
+		   Limit detailed bounce reports to the top <cnt>.  0
+		   to suppress entirely.
+
     -d today       generate report for just today
     -d yesterday   generate report for just "yesterday"
+
+    --deferral_detail <cnt>
+
+		   Limit detailed deferral reports to the top <cnt>.  0
+		   to suppress entirely.
+
+    --detail <cnt>
+    
+                   Sets all --*_detail, -h and -u to <cnt>.  Is
+		   over-ridden by individual settings.  --detail 0
+		   suppresses *all* detail.
 
     -e             extended (extreme? excessive?) detail
 
@@ -66,7 +71,7 @@ Copyright (C) 1998-2007 by James S. Seymour, Release 1.1.1.
     
 		   0 = none.
 
-                   See also: "-u" and "--no_*_detail" for further
+                   See also: "-u" and "--*_detail" options for further
 			     report-limiting options.
 
     --help         Emit short usage message and bail out.
@@ -115,6 +120,10 @@ Copyright (C) 1998-2007 by James S. Seymour, Release 1.1.1.
     --no_deferral_detail
     --no_reject_detail
 
+		   These switches are depreciated in favour of
+		   --bounce_detail, --deferral_detail and
+		   --reject_detail, respectively.
+
                    Suppresses the printing of the following detailed
                    reports, respectively:
 
@@ -140,6 +149,9 @@ Copyright (C) 1998-2007 by James S. Seymour, Release 1.1.1.
 
     --no_smtpd_warnings
 
+		   This switch is depreciated in favour of
+		   smtpd_warning_detail
+
 		    On a busy mail server, say at an ISP, SMTPD warnings
 		    can result in a rather sizeable report.  This option
 		    turns reporting them off.
@@ -160,6 +172,16 @@ Copyright (C) 1998-2007 by James S. Seymour, Release 1.1.1.
 		   note: headings for warning, fatal, and "master"
 		   messages will always be printed.
 
+    --reject_detail <cnt>
+
+		   Limit detailed smtpd reject, warn, hold and discard
+		   reports to the top <cnt>.  0 to suppress entirely.
+
+    --smtp_detail <cnt>
+
+		   Limit detailed smtp delivery reports to the top <cnt>.
+		   0 to suppress entirely.
+
     --smtpd_stats
 
                    Generate smtpd connection statistics.
@@ -167,6 +189,11 @@ Copyright (C) 1998-2007 by James S. Seymour, Release 1.1.1.
                    The "per-day" report is not generated for single-day
                    reports.  For multiple-day reports: "per-hour" numbers
                    are daily averages (reflected in the report heading).
+
+    --smtpd_warning_detail <cnt>
+
+		   Limit detailed smtpd warnings reports to the top <cnt>.
+		   0 to suppress entirely.
 
     --syslog_name=name
 
@@ -183,7 +210,7 @@ Copyright (C) 1998-2007 by James S. Seymour, Release 1.1.1.
 
     -u <cnt>       top <cnt> to display in user reports. 0 == none.
 
-                   See also: "-h" and "--no_*_detail" for further
+                   See also: "-h" and "--*_detail" options for further
 			     report-limiting options.
 
     --verbose_msg_detail
@@ -377,7 +404,7 @@ eval { require Date::Calc };
 my $hasDateCalc = $@ ? 0 : 1;
 
 my $mailqCmd = "mailq";
-my $release = "1.1.1";
+my $release = "1.1.3";
 
 # Variables and constants used throughout pflogsumm
 use vars qw(
@@ -463,49 +490,89 @@ for (0 .. 23) {
 
 $progName = "pflogsumm.pl";
 $usageMsg =
-    "usage: $progName -[eq] [-d <today|yesterday>] [-h <cnt>] [-u <cnt>]
-       [--verp_mung[=<n>]] [--verbose_msg_detail] [--iso_date_time]
-       [-m|--uucp_mung] [-i|--ignore_case] [--smtpd_stats] [--mailq]
-       [--problems_first] [--rej_add_from] [--no_bounce_detail]
-       [--no_deferral_detail] [--no_reject_detail] [--no_no_msg_size]
-       [--no_smtpd_warnings] [--zero_fill] [--syslog_name=name]
-       [file1 [filen]]
+    "usage: $progName -[eq] [-d <today|yesterday>] [--detail <cnt>]
+	[--bounce_detail <cnt>] [--deferral_detail <cnt>]
+	[-h <cnt>] [-i|--ignore_case] [--iso_date_time] [--mailq]
+	[-m|--uucp_mung] [--no_bounce_detail] [--no_deferral_detail]
+	[--no_no_msg_size] [--no_reject_detail] [--no_smtpd_warnings]
+	[--problems_first] [--rej_add_from] [--reject_detail <cnt>]
+	[--smtp_detail <cnt>] [--smtpd_stats]
+	[--smtpd_warning_detail <cnt>] [--syslog_name=string]
+	[-u <cnt>] [--verbose_msg_detail] [--verp_mung[=<n>]]
+	[--zero_fill] [file1 [filen]]
 
        $progName --[version|help]";
 
 # Some pre-inits for convenience
 $isoDateTime = 0;	# Don't use ISO date/time formats
 GetOptions(
-    "d=s"                => \$opts{'d'},
-    "e"                  => \$opts{'e'},
-    "help"               => \$opts{'help'},
-    "h=i"                => \$opts{'h'},
-    "i"                  => \$opts{'i'},
-    "ignore_case"        => \$opts{'i'},
-    "iso_date_time"      => \$isoDateTime,
-    "m"                  => \$opts{'m'},
-    "uucp_mung"          => \$opts{'m'},
-    "mailq"              => \$opts{'mailq'},
-    "no_bounce_detail"   => \$opts{'noBounceDetail'},
-    "no_deferral_detail" => \$opts{'noDeferralDetail'},
-    "no_reject_detail"   => \$opts{'noRejectDetail'},
-    "no_no_msg_size"     => \$opts{'noNoMsgSize'},
-    "no_smtpd_warnings"  => \$opts{'noSMTPDWarnings'},
-    "problems_first"     => \$opts{'pf'},
-    "q"                  => \$opts{'q'},
-    "rej_add_from"       => \$opts{'rejAddFrom'},
-    "smtpd_stats"        => \$opts{'smtpdStats'},
-    "syslog_name=s"      => \$opts{'syslogName'},
-    "u=i"                => \$opts{'u'},
-    "verbose_msg_detail" => \$opts{'verbMsgDetail'},
-    "verp_mung:i"        => \$opts{'verpMung'},
-    "version"            => \$opts{'version'},
-    "zero_fill"          => \$opts{'zeroFill'}
+    "bounce_detail=i"          => \$opts{'bounceDetail'},
+    "d=s"                      => \$opts{'d'},
+    "deferral_detail=i"        => \$opts{'deferralDetail'},
+    "detail=i"                 => \$opts{'detail'},
+    "e"                        => \$opts{'e'},
+    "help"                     => \$opts{'help'},
+    "h=i"                      => \$opts{'h'},
+    "ignore_case"              => \$opts{'i'},
+    "i"                        => \$opts{'i'},
+    "iso_date_time"            => \$isoDateTime,
+    "mailq"                    => \$opts{'mailq'},
+    "m"                        => \$opts{'m'},
+    "no_bounce_detail"         => \$opts{'noBounceDetail'},
+    "no_deferral_detail"       => \$opts{'noDeferralDetail'},
+    "no_no_msg_size"           => \$opts{'noNoMsgSize'},
+    "no_reject_detail"         => \$opts{'noRejectDetail'},
+    "no_smtpd_warnings"        => \$opts{'noSMTPDWarnings'},
+    "problems_first"           => \$opts{'pf'},
+    "q"                        => \$opts{'q'},
+    "rej_add_from"             => \$opts{'rejAddFrom'},
+    "reject_detail=i"          => \$opts{'rejectDetail'},
+    "smtp_detail=i"            => \$opts{'smtpDetail'},
+    "smtpd_stats"              => \$opts{'smtpdStats'},
+    "smtpd_warning_detail=i"   => \$opts{'smtpdWarnDetail'},
+    "syslog_name=s"            => \$opts{'syslogName'},
+    "u=i"                      => \$opts{'u'},
+    "uucp_mung"                => \$opts{'m'},
+    "verbose_msg_detail"       => \$opts{'verbMsgDetail'},
+    "verp_mung:i"              => \$opts{'verpMung'},
+    "version"                  => \$opts{'version'},
+    "zero_fill"                => \$opts{'zeroFill'}
 ) || die "$usageMsg\n";
 
 # internally: 0 == none, undefined == -1 == all
 $opts{'h'} = -1 unless(defined($opts{'h'}));
 $opts{'u'} = -1 unless(defined($opts{'u'}));
+$opts{'bounceDetail'} = -1 unless(defined($opts{'bounceDetail'}));
+$opts{'deferralDetail'} = -1 unless(defined($opts{'deferralDetail'}));
+$opts{'smtpDetail'} = -1 unless(defined($opts{'smtpDetail'}));
+$opts{'smtpdWarnDetail'} = -1 unless(defined($opts{'smtpdWarnDetail'}));
+$opts{'rejectDetail'} = -1 unless(defined($opts{'rejectDetail'}));
+
+# These go away eventually
+if(defined($opts{'noBounceDetail'})) {
+    $opts{'bounceDetail'} = 0;
+    warn "$progName: \"no_bounce_detail\" is depreciated, use \"bounce_detail=0\" instead\n"
+}
+if(defined($opts{'noDeferralDetail'})) {
+    $opts{'deferralDetail'} = 0;
+    warn "$progName: \"no_deferral_detail\" is depreciated, use \"deferral_detail=0\" instead\n"
+}
+if(defined($opts{'noRejectDetail'})) {
+    $opts{'rejectDetail'} = 0;
+    warn "$progName: \"no_reject_detail\" is depreciated, use \"reject_detail=0\" instead\n"
+}
+if(defined($opts{'noSMTPDWarnings'})) {
+    $opts{'smtpdWarnDetail'} = 0;
+    warn "$progName: \"no_smtpd_warnings\" is depreciated, use \"smtpd_warning_detail=0\" instead\n"
+}
+
+# If --detail was specified, set anything that's not enumerated to it
+if(defined($opts{'detail'})) {
+    foreach my $optName (qw (h u bounceDetail deferralDetail smtpDetail smtpdWarnDetail rejectDetail)) {
+	$opts{$optName} = $opts{'detail'} unless($opts{"$optName"} != -1);
+    }
+}
+
 my $syslogName = $opts{'syslogName'}? $opts{'syslogName'} : "postfix";
 
 if(defined($opts{'help'})) {
@@ -554,8 +621,21 @@ while(<>) {
     next if(defined($dateStr) && ! /^$dateStr/o);
     s/: \[ID \d+ [^\]]+\] /: /o;	# lose "[ID nnnnnn some.thing]" stuff
     my $logRmdr;
-    next unless((($msgMonStr, $msgDay, $msgHr, $msgMin, $msgSec, $logRmdr) =
-	/^(...) +(\d+) (..):(..):(..) \S+ (.+)$/o) == 6);
+
+    # "Traditional" timestamp format?
+    if((($msgMonStr, $msgDay, $msgHr, $msgMin, $msgSec, $logRmdr) =
+	/^(...) {1,2}(\d{1,2}) (\d{2}):(\d{2}):(\d{2}) \S+ (.+)$/o) == 6)
+    {
+	# Convert string to numeric value for later "month rollover" check
+	$msgMon = $monthNums{$msgMonStr};
+    } else {
+	# RFC 3339 timestamp format?
+	next unless((($msgYr, $msgMon, $msgDay, $msgHr, $msgMin, $msgSec, $logRmdr) =
+	    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:[\+\-](?:\d{2}):(?:\d{2})|Z) \S+ (.+)$/o) == 10);
+	# RFC 3339 months start at "1", we index from 0
+	--$msgMon;
+    }
+
     unless((($cmd, $qid) = $logRmdr =~ m#^(?:postfix|$syslogName)/([^\[:]*).*?: ([^:\s]+)#o) == 2 ||
            (($cmd, $qid) = $logRmdr =~ m#^((?:postfix)(?:-script)?)(?:\[\d+\])?: ([^:\s]+)#o) == 2)
     {
@@ -564,8 +644,9 @@ while(<>) {
     }
     chomp;
 
-    # snatch out log entry date & time
-    $msgMon = $monthNums{$msgMonStr};
+    # If the log line's month is greater than our current month,
+    # we've probably had a year rollover
+    # FIXME: For processing old logfiles: This is a broken test!
     $msgYr = ($msgMon > $thisMon? $thisYr - 1 : $thisYr);
 
     # the following test depends on one getting more than one message a
@@ -587,16 +668,16 @@ while(<>) {
 	$rejRmdr =~ s/( from \S+?)?; from=<.*$//o unless($opts{'verbMsgDetail'});
 	$rejRmdr = string_trimmer($rejRmdr, 64, $opts{'verbMsgDetail'});
 	if($rejSubTyp eq "reject") {
-	    ++$rejects{$cmd}{$rejReas}{$rejRmdr} unless($opts{'noRejectDetail'});
+	    ++$rejects{$cmd}{$rejReas}{$rejRmdr} unless($opts{'rejectDetail'} == 0);
 	    ++$msgsRjctd;
 	} elsif($rejSubTyp eq "warning") {
-	    ++$warns{$cmd}{$rejReas}{$rejRmdr} unless($opts{'noRejectDetail'});
+	    ++$warns{$cmd}{$rejReas}{$rejRmdr} unless($opts{'rejectDetail'} == 0);
 	    ++$msgsWrnd;
 	} elsif($rejSubTyp eq "hold") {
-	    ++$holds{$cmd}{$rejReas}{$rejRmdr} unless($opts{'noRejectDetail'});
+	    ++$holds{$cmd}{$rejReas}{$rejRmdr} unless($opts{'rejectDetail'} == 0);
 	    ++$msgsHld;
 	} elsif($rejSubTyp eq "discard") {
-	    ++$discards{$cmd}{$rejReas}{$rejRmdr} unless($opts{'noRejectDetail'});
+	    ++$discards{$cmd}{$rejReas}{$rejRmdr} unless($opts{'rejectDetail'} == 0);
 	    ++$msgsDscrdd;
 	}
 	++$rejPerHr[$msgHr];
@@ -742,6 +823,7 @@ while(<>) {
 	    }
 	    $addr =~ s/(@.+)/\L$1/o unless($opts{'i'});
 	    $addr = lc($addr) if($opts{'i'});
+	    $relay = lc($relay) if($opts{'i'});
 	    (my $domAddr = $addr) =~ s/^[^@]+\@//o;	# get domain only
 	    if($status eq 'sent') {
 
@@ -777,7 +859,7 @@ while(<>) {
 		}
 		push(@{$msgDetail{$qid}}, $addr) if($opts{'e'});
 	    } elsif($status eq 'deferred') {
-		unless($opts{'noDeferralDetail'}) {
+		unless($opts{'deferralDetail'} == 0) {
 		    my ($deferredReas) = $logRmdr =~ /, status=deferred \(([^\)]+)/o;
 		    unless(defined($opts{'verbMsgDetail'})) {
 			$deferredReas = said_string_trimmer($deferredReas, 65);
@@ -797,7 +879,7 @@ while(<>) {
 		    ${$recipDom{$domAddr}}[$msgDlyMaxI] = $delay
 		}
 	    } elsif($status eq 'bounced') {
-		unless($opts{'noBounceDetail'}) {
+		unless($opts{'bounceDetail'} == 0) {
 		    my ($bounceReas) = $logRmdr =~ /, status=bounced \((.+)\)/o;
 		    unless(defined($opts{'verbMsgDetail'})) {
 			$bounceReas = said_string_trimmer($bounceReas, 66);
@@ -821,7 +903,7 @@ while(<>) {
 	    ++$msgsRcvd;
 	    $rcvdMsg{$qid} = "pickup";	# Whence it came
 	}
-	elsif($cmd eq 'smtp') {
+	elsif($cmd eq 'smtp' && $opts{'smtpDetail'} != 0) {
 	    # Was an IPv6 problem here
 	    if($logRmdr =~ /.* connect to (\S+?): ([^;]+); address \S+ port.*$/o) {
 		++$smtpMsgs{lc($2)}{$1};
@@ -854,7 +936,7 @@ if(defined($dateStr)) {
     print "Postfix log summaries for $dateStr\n";
 }
 
-print "\nGrand Totals\n------------\n";
+print_subsect_title("Grand Totals");
 print "messages\n\n";
 printf " %6d%s  received\n", adj_int_units($msgsRcvd);
 printf " %6d%s  delivered\n", adj_int_units($msgsDlvrd);
@@ -918,29 +1000,33 @@ print_detailed_msg_data(\%msgDetail, "Message detail", $opts{'q'}) if($opts{'e'}
 
 # Print "problems" reports
 sub print_problems_reports {
-    unless($opts{'noDeferralDetail'}) {
-	print_nested_hash(\%deferred, "message deferral detail", $opts{'q'});
+    unless($opts{'deferralDetail'} == 0) {
+	print_nested_hash(\%deferred, "message deferral detail", $opts{'deferralDetail'}, $opts{'q'});
     }
-    unless($opts{'noBounceDetail'}) {
-	print_nested_hash(\%bounced, "message bounce detail (by relay)", $opts{'q'});
+    unless($opts{'bounceDetail'} == 0) {
+	print_nested_hash(\%bounced, "message bounce detail (by relay)", $opts{'bounceDetail'}, $opts{'q'});
     }
-    unless($opts{'noRejectDetail'}) {
-	print_nested_hash(\%rejects, "message reject detail", $opts{'q'});
-	print_nested_hash(\%warns, "message reject warning detail", $opts{'q'});
-	print_nested_hash(\%holds, "message hold detail", $opts{'q'});
-	print_nested_hash(\%discards, "message discard detail", $opts{'q'});
+    unless($opts{'rejectDetail'} == 0) {
+	print_nested_hash(\%rejects, "message reject detail", $opts{'rejectDetail'}, $opts{'q'});
+	print_nested_hash(\%warns, "message reject warning detail", $opts{'rejectDetail'}, $opts{'q'});
+	print_nested_hash(\%holds, "message hold detail", $opts{'rejectDetail'}, $opts{'q'});
+	print_nested_hash(\%discards, "message discard detail", $opts{'rejectDetail'}, $opts{'q'});
     }
-    print_nested_hash(\%smtpMsgs, "smtp delivery failures", $opts{'q'});
-    print_nested_hash(\%warnings, "Warnings", $opts{'q'});
-    print_nested_hash(\%fatals, "Fatal Errors", $opts{'q'});
-    print_nested_hash(\%panics, "Panics", $opts{'q'});
+    unless($opts{'smtpDetail'} == 0) {
+	print_nested_hash(\%smtpMsgs, "smtp delivery failures", $opts{'smtpDetail'}, $opts{'q'});
+    }
+    unless($opts{'smtpdWarnDetail'} == 0) {
+	print_nested_hash(\%warnings, "Warnings", $opts{'smtpdWarnDetail'}, $opts{'q'});
+    }
+    print_nested_hash(\%fatals, "Fatal Errors", 0, $opts{'q'});
+    print_nested_hash(\%panics, "Panics", 0, $opts{'q'});
     print_hash_by_cnt_vals(\%masterMsgs,"Master daemon messages", 0, $opts{'q'});
 }
 
 if($opts{'mailq'}) {
     # flush stdout first cuz of asynchronousity
     $| = 1;
-    print "\nCurrent Mail Queue\n------------------\n";
+    print_subsect_title("Current Mail Queue");
     system($mailqCmd);
 }
 
@@ -949,9 +1035,10 @@ if($opts{'mailq'}) {
 sub print_per_day_summary {
     my($msgsPerDay) = @_;
     my $value;
-    print <<End_Of_Per_Day_Heading;
 
-Per-Day Traffic Summary
+    print_subsect_title("Per-Day Traffic Summary");
+
+    print <<End_Of_Per_Day_Heading;
     date          received  delivered   deferred    bounced     rejected
     --------------------------------------------------------------------
 End_Of_Per_Day_Heading
@@ -978,9 +1065,10 @@ sub print_per_hour_summary {
     my ($rcvPerHr, $dlvPerHr, $dfrPerHr, $bncPerHr, $rejPerHr, $dayCnt) = @_;
     my $reportType = $dayCnt > 1? 'Daily Average' : 'Summary';
     my ($hour, $value);
-    print <<End_Of_Per_Hour_Heading;
 
-Per-Hour Traffic $reportType
+    print_subsect_title("Per-Hour Traffic $reportType");
+
+    print <<End_Of_Per_Hour_Heading;
     time          received  delivered   deferred    bounced     rejected
     --------------------------------------------------------------------
 End_Of_Per_Hour_Heading
@@ -1012,9 +1100,10 @@ sub print_recip_domain_summary {
     return if($cnt == 0);
     my $topCnt = $cnt > 0? "(top $cnt)" : "";
     my $avgDly;
-    print <<End_Of_Recip_Domain_Heading;
 
-Host/Domain Summary: Message Delivery $topCnt
+    print_subsect_title("Host/Domain Summary: Message Delivery $topCnt");
+
+    print <<End_Of_Recip_Domain_Heading;
  sent cnt  bytes   defers   avg dly max dly host/domain
  -------- -------  -------  ------- ------- -----------
 End_Of_Recip_Domain_Heading
@@ -1046,9 +1135,10 @@ sub print_sending_domain_summary {
     my($cnt) = $_[1];
     return if($cnt == 0);
     my $topCnt = $cnt > 0? "(top $cnt)" : "";
-    print <<End_Of_Sender_Domain_Heading;
 
-Host/Domain Summary: Messages Received $topCnt
+    print_subsect_title("Host/Domain Summary: Messages Received $topCnt");
+
+    print <<End_Of_Sender_Domain_Heading;
  msg cnt   bytes   host/domain
  -------- -------  -----------
 End_Of_Sender_Domain_Heading
@@ -1093,16 +1183,16 @@ sub print_per_hour_smtpd {
     my ($smtpdPerHr, $dayCnt) = @_;
     my ($hour, $value);
     if($dayCnt > 1) {
-	print <<End_Of_Per_Hour_Smtp_Average;
+	print_subsect_title("Per-Hour SMTPD Connection Daily Average");
 
-Per-Hour SMTPD Connection Daily Average
+	print <<End_Of_Per_Hour_Smtp_Average;
     hour        connections    time conn.
     -------------------------------------
 End_Of_Per_Hour_Smtp_Average
     } else {
-	print <<End_Of_Per_Hour_Smtp;
+	print_subsect_title("Per-Hour SMTPD Connection Summary");
 
-Per-Hour SMTPD Connection Summary
+	print <<End_Of_Per_Hour_Smtp;
     hour        connections    time conn.    avg./conn.   max. time
     --------------------------------------------------------------------
 End_Of_Per_Hour_Smtp
@@ -1141,9 +1231,10 @@ End_Of_Per_Hour_Smtp
 # (done in a subroutine only to keep main-line code clean)
 sub print_per_day_smtpd {
     my ($smtpdPerDay, $dayCnt) = @_;
-    print <<End_Of_Per_Day_Smtp;
 
-Per-Day SMTPD Connection Summary
+    print_subsect_title("Per-Day SMTPD Connection Summary");
+
+    print <<End_Of_Per_Day_Smtp;
     date        connections    time conn.    avg./conn.   max. time
     --------------------------------------------------------------------
 End_Of_Per_Day_Smtp
@@ -1177,9 +1268,10 @@ sub print_domain_smtpd_summary {
     return if($cnt == 0);
     my $topCnt = $cnt > 0? "(top $cnt)" : "";
     my $avgDly;
-    print <<End_Of_Domain_Smtp_Heading;
 
-Host/Domain Summary: SMTPD Connections $topCnt
+    print_subsect_title("Host/Domain Summary: SMTPD Connections $topCnt");
+
+    print <<End_Of_Domain_Smtp_Heading;
  connections  time conn.  avg./conn.  max. time  host/domain
  -----------  ----------  ----------  ---------  -----------
 End_Of_Domain_Smtp_Heading
@@ -1235,7 +1327,7 @@ sub print_hash_by_key {
 
 # print "nested" hashes
 sub print_nested_hash {
-    my($hashRef, $title, $quiet) = @_;
+    my($hashRef, $title, $cnt, $quiet) = @_;
     my $dottedLine;
     unless(%$hashRef) {
 	return if($quiet);
@@ -1244,12 +1336,12 @@ sub print_nested_hash {
 	$dottedLine = "\n" . "-" x length($title);
     }
     printf "\n$title$dottedLine\n";
-    walk_nested_hash($hashRef, 0);
+    walk_nested_hash($hashRef, $cnt, 0);
 }
 
 # "walk" a "nested" hash
 sub walk_nested_hash {
-    my ($hashRef, $level) = @_;
+    my ($hashRef, $cnt, $level) = @_;
     $level += 2;
     my $indents = ' ' x $level;
     my ($keyName, $hashVal) = each(%$hashRef);
@@ -1262,15 +1354,16 @@ sub walk_nested_hash {
 	    my $hashVal2 = (each(%{$hashRef->{$_}}))[1];
 	    keys(%{$hashRef->{$_}});	# "reset" hash iterator
 	    unless(ref($hashVal2) eq 'HASH') {
-		my $cnt = 0;
-		$cnt += $_ foreach (values %{$hashRef->{$_}});
-		print " (total: $cnt)";
+		print " (top $cnt)" if($cnt > 0);
+		my $rptCnt = 0;
+		$rptCnt += $_ foreach (values %{$hashRef->{$_}});
+		print " (total: $rptCnt)";
 	    }
 	    print "\n";
-	    walk_nested_hash($hashRef->{$_}, $level);
+	    walk_nested_hash($hashRef->{$_}, $cnt, $level);
 	}
     } else {
-	really_print_hash_by_cnt_vals($hashRef, 0, $indents);
+	really_print_hash_by_cnt_vals($hashRef, $cnt, $indents);
     }
 }
 
@@ -1313,6 +1406,12 @@ sub really_print_hash_by_cnt_vals {
     }
 }
 
+# Print a sub-section title with properly-sized underline
+sub print_subsect_title {
+    my $title = $_[0];
+    print "\n$title\n" . "-" x length($title) . "\n";
+}
+
 # Normalize IP addr or hostname
 # (Note: Makes no effort to normalize IPv6 addrs.  Just returns them
 # as they're passed-in.)
@@ -1320,7 +1419,7 @@ sub normalize_host {
     # For IP addrs and hostnames: lop off possible " (user@dom.ain)" bit
     my $norm1 = (split(/\s/, $_[0]))[0];
 
-    if((my @octets = ($norm1 =~ /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/o)) == 4) {
+    if((my @octets = ($norm1 =~ /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/o)) == 4) {
 	# Dotted-quad IP address
 	return(pack('C4', @octets));
     } else {
@@ -1402,11 +1501,11 @@ sub by_count_then_size {
 sub get_datestr {
     my $dateOpt = $_[0];
 
-    my $aDay = 60 * 60 * 24;
-
     my $time = time();
+
     if($dateOpt eq "yesterday") {
-	$time -= $aDay;
+	# Back up to yesterday
+	$time -= ((localtime($time))[2] + 2) * 3600;
     } elsif($dateOpt ne "today") {
 	die "$usageMsg\n";
     }
@@ -1422,6 +1521,7 @@ sub get_datestr {
 # (In case one wants to assume an IPv4 addr. is a dialup or other
 # dynamic IP address in a /24.)
 # Does nothing interesting with IPv6 addresses.
+# FIXME: I think the IPv6 address parsing may be weak
 sub gimme_domain {
     $_ = $_[0];
     my($domain, $ipAddr);
@@ -1429,7 +1529,7 @@ sub gimme_domain {
     # split domain/ipaddr into separates
     # newer versions of Postfix have them "dom.ain[i.p.add.ress]"
     # older versions of Postfix have them "dom.ain/i.p.add.ress"
-    unless((($domain, $ipAddr) = /^([^\[]+)\[([^\]]+)\]/o) == 2 ||
+    unless((($domain, $ipAddr) = /^([^\[]+)\[((?:\d{1,3}\.){3}\d{1,3})\]/o) == 2 ||
            (($domain, $ipAddr) = /^([^\/]+)\/([0-9a-f.:]+)/oi) == 2) {
 	# more exhaustive method
         ($domain, $ipAddr) = /^([^\[\(\/]+)[\[\(\/]([^\]\)]+)[\]\)]?:?\s*$/o;
@@ -1480,6 +1580,8 @@ sub adj_time_units {
 }
 
 # Trim a "said:" string, if necessary.  Add elipses to show it.
+# FIXME: This sometimes elides The Wrong Bits, yielding
+#        summaries that are less useful than they could be.
 sub said_string_trimmer {
     my($trimmedString, $maxLen) = @_;
 
@@ -1529,7 +1631,7 @@ sub proc_smtpd_reject {
 
     # Hate the sub-calling overhead if we're not doing reject details
     # anyway, but this is the only place we can do this.
-    return if($opts{'noRejectDetail'});
+    return if($opts{'rejectDetail'} == 0);
 
     # This could get real ugly!
 
@@ -1565,6 +1667,7 @@ sub proc_smtpd_reject {
 	(($to) = $rejRmdr =~ /\d{3} <([^>]+)>: User unknown /o) ||
 	(($to) = $rejRmdr =~ /to=<(.*?)(?:[, ]|$)/o) ||
 	($to = "<>");
+    $to = lc($to) if($opts{'i'});
 
     # Snag sender address
     (($from) = $rejRmdr =~ /from=<([^>]+)>/o) || ($from = "<>");
@@ -1572,6 +1675,7 @@ sub proc_smtpd_reject {
     if(defined($from)) {
 	$rejAddFrom = $opts{'rejAddFrom'};
 	$from = verp_mung($from);
+	$from = lc($from) if($opts{'i'});
     }
 
     # stash in "triple-subscripted-array"
