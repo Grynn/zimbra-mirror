@@ -433,6 +433,9 @@ AjxPackage.__requireEval = function(text) {
     }
     catch (e) {
         AjxPackage.__log("error on eval: "+e,"color:red");
+		if (window.console && window.console.log) {
+			console.log("Error on eval : " +e);
+		}
     }
     AjxPackage.__depth--;
 };
