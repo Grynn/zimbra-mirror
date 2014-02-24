@@ -60,7 +60,8 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 		
 		if ( field == Field.From ) {
 			
-			locator = container + " tr[id$='_from'] span[id$='_com_zimbra_email']";
+			//locator = container + " tr[id$='_from'] span[id$='_com_zimbra_email']";
+			locator = container + " td[id$='_from'] span:nth-child(1)>span[class='addrBubble']>span";
 			if ( !this.sIsElementPresent(locator) ) {
 				locator = container + " tr[id$='_from']"; // No bubbles
 			}
@@ -81,18 +82,22 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 			
 		} else if ( field == Field.OnBehalfOf ) {
 			
-			locator = container + " td[id$='_obo'] span[id$='_com_zimbra_email']";
+			//locator = container + " td[id$='_obo'] span[id$='_com_zimbra_email']";
+			locator = container + " td[id$='_from'] span:nth-child(2)>span[class='addrBubble']>span";
+			//locator = container + " [@id='zcs2']/span";
+			//locator = container + " td[id$='_from'] span[class='addrBubble']";
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
-				locator = container + " td[id$='_obo']";
+				locator = container + " td[id$='_from']";
 			}
 
 		} else if ( field == Field.ResentFrom ) {
 			
-			locator = container + " td[id$='_bwo'] span[id$='_com_zimbra_email']";
+			locator = container + "  td[id$='_from'] span[class='addrBubble'] span:contains(resentfrom)";
+			
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
-				locator = container + " tr[id$='_bwo']";
+				locator = container + " tr[id$='_from']";
 			}
 
 		} else if ( field == Field.OnBehalfOfLabel ) {
@@ -101,7 +106,8 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 
 		} else if ( field == Field.ReplyTo ) {
 			
-			locator = container + " tr[id$='_reply to'] span[id$='_com_zimbra_email']";
+			locator = container + " tr[id$='_reply to'] span[class='addrBubble'] span:contains(replyto)";
+			
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
 				locator = container + " tr[id$='_reply to']";
