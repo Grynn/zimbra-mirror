@@ -2,23 +2,23 @@
 # See slapd.conf(5) for details on configuration options.
 # This file should NOT be world readable.
 #
-ucdata-path	"/opt/zimbra/openldap/ucdata"
-include		"/opt/zimbra/openldap/etc/openldap/schema/core.schema"
-include		"/opt/zimbra/openldap/etc/openldap/schema/cosine.schema"
-include		"/opt/zimbra/openldap/etc/openldap/schema/inetorgperson.schema"
-include		"/opt/zimbra/openldap/etc/schema/amavisd.schema"
-include		"/opt/zimbra/openldap/etc/openldap/schema/dyngroup.schema"
-include		"/opt/zimbra/openldap/etc/schema/zimbra.schema"
+ucdata-path	"C:/opt/zimbra/openldap/ucdata"
+include		"C:/Program Files (x86)/symas-openldap-gold-win/etc/openldap/schema/core.schema"
+include		"C:/Program Files (x86)/symas-openldap-gold-win/etc/openldap/schema/cosine.schema"
+include		"C:/Program Files (x86)/symas-openldap-gold-win/etc/openldap/schema/inetorgperson.schema"
+include		"C:/Program Files (x86)/symas-openldap-gold-win/etc/openldap/schema/amavisd.schema"
+include		"C:/Program Files (x86)/symas-openldap-gold-win/etc/openldap/schema/dyngroup.schema"
+include		"C:/Program Files (x86)/symas-openldap-gold-win/etc/openldap/schema/zimbra.schema"
 # Define global ACLs to disable default read access.
 
 # Do not enable referrals until AFTER you have a working directory
 # service AND an understanding of referrals.
 #referral	ldap://root.openldap.org
 
-pidfile		"/opt/zimbra/openldap/var/run/slapd.pid"
-argsfile	"/opt/zimbra/openldap/var/run/slapd.args"
+pidfile		"C:/Program Files (x86)/symas-openldap-gold-win/var/slapd.pid"
+argsfile	"C:/Program Files (x86)/symas-openldap-gold-win/var/slapd.args"
 
-modulepath	/opt/zimbra/openldap/openldap
+modulepath	"C:/Program Files (x86)/symas-openldap-gold-win/openldap"
 moduleload	back_bdb-2-4-2.dll
 moduleload	back_monitor-2-4-2.dll
 
@@ -100,7 +100,7 @@ checkpoint 64 5
 # The database directory MUST exist prior to running slapd AND 
 # should only be accessible by the slapd and slap tools.
 # Mode 700 recommended.
-directory	"/opt/zimbra/data/ldap/hdb/db"
+directory	"C:/opt/zimbra/data/ldap/mdb/db"
 # Indices to maintain
 index   objectClass                 eq
 index   zimbraForeignPrincipal      eq
@@ -170,5 +170,5 @@ access to attrs=entry
 	by * read
 
 
-overlay dynlist
-dynlist-attrset groupOfURLs memberURL member
+#overlay dynlist
+#dynlist-attrset groupOfURLs memberURL member
