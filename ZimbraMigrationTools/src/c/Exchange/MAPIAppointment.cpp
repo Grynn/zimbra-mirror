@@ -72,17 +72,17 @@ MAPIAppointment::MAPIAppointment(Zimbra::MAPI::MAPISession &session, Zimbra::MAP
     m_pEndDate = L"";
     m_pInstanceUID = L"";
     m_pLocation = L"";
-    m_pBusyStatus = L"";
-    m_pAllday = L"";
-    m_pTransparency = L"";
+    m_pBusyStatus = L"F";
+    m_pAllday = L"0";
+    m_pTransparency = L"O";
     m_pReminderMinutes = L"";
-    m_pCurrentStatus = L"";
-	m_pResponseStatus = L"";
+    m_pCurrentStatus = L"F";
+	m_pResponseStatus = L"NE";
     m_pOrganizerName = L"";
     m_pOrganizerAddr = L"";
     m_pPrivate = L"";
 	m_pReminderSet = L"";
-	m_pResponseRequested = L"";
+	m_pResponseRequested = L"0";
 	    
 	HRESULT hr=session.OpenAddressBook(&m_pAddrBook);
 	if(!SUCCEEDED(hr))
