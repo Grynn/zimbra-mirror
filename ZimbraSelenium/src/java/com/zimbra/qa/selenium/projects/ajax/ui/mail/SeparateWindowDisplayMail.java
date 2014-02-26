@@ -83,9 +83,8 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 		} else if ( field == Field.OnBehalfOf ) {
 			
 			//locator = container + " td[id$='_obo'] span[id$='_com_zimbra_email']";
-			locator = container + " td[id$='_from'] span:nth-child(2)>span[class='addrBubble']>span";
-			//locator = container + " [@id='zcs2']/span";
-			//locator = container + " td[id$='_from'] span[class='addrBubble']";
+			locator = container + " td[id$='_from']>span:nth-child(3)>span[class='addrBubble']";
+		
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
 				locator = container + " td[id$='_from']";
