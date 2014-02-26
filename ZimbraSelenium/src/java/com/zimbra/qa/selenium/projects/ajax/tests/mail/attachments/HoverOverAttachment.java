@@ -44,7 +44,7 @@ public class HoverOverAttachment extends PrefGroupMailByMessageTest {
 				new Object[] { "subject13715117780534", "/data/public/mime/email12/mime01.txt" },
 				new Object[] { "subject13715024766995", "/data/public/mime/email12/mime02.txt" },
 				new Object[] { "subject13715024846237", "/data/public/mime/email12/mime03.txt" },
-				new Object[] { "subject13715020881915", "/data/public/mime/email12/mime04.txt" },
+				//new Object[] { "subject13715020881915", "/data/public/mime/email12/mime04.txt" }, /As per bug fix 82807 tool-tips for tiff will not be shown
 		};
 	}
 
