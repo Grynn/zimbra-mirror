@@ -38,6 +38,7 @@ AjxUtil.isString 			= function(aThing) { return (typeof(aThing) == 'string'); };
 AjxUtil.isNumber 			= function(aThing) { return (typeof(aThing) == 'number'); };
 AjxUtil.isObject 			= function(aThing) { return ((typeof(aThing) == 'object') && (aThing !== null)); };
 AjxUtil.isArray 			= function(aThing) { return AjxUtil.isInstance(aThing, Array); };
+AjxUtil.isArrayLike			= function(aThing) { return typeof aThing.length === 'number'; };
 AjxUtil.isFunction 			= function(aThing) { return (typeof(aThing) == 'function'); };
 AjxUtil.isDate 				= function(aThing) { return AjxUtil.isInstance(aThing, Date); };
 AjxUtil.isLifeTime 			= function(aThing) { return AjxUtil.LIFETIME_FIELD.test(aThing); };
@@ -462,7 +463,7 @@ AjxUtil.backMap = AjxUtil.valueHash;
 AjxUtil.foreach = function(obj, func) {
     if (!func) return;
 
-    if ('length' in obj) {
+    if (AjxUtil.isArrayLike(obj)) {
         var array = obj;
 
         for (var i = 0; i < array.length; i++) {
@@ -882,6 +883,14 @@ function(arg) {
 	}
 	else if (AjxUtil.isArray1(arg)) {
 		return arg;
+	}
+	else if (AjxUtil.isArrayLike(arg)) {
+		try {
+			// fails in IE8
+			return Array.prototype.slice.call(arg);
+		} catch (e) {
+			return AjxUtil.map(arg);
+		}
 	}
 	else if (arg.isAjxVector) {
         return arg.getArray();

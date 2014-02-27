@@ -1450,24 +1450,48 @@ function(id, ancestor) {
 	return null;
 };
 
+/**
+ * Get all elements of a certain tag name. Similar to
+ * document.getElementsByTagName(), but returning an Array instead of
+ * a NodeList.
+ *
+ * @param {String} tagName	the tag name, such as "A"
+ * @param {HTMLElement} ancestor An optional ancestor element,
+ *                      defaults to the document
+ * @return	{Array}
+ */
 Dwt.byTag =
-function(tagName) {
-	return document.getElementsByTagName(tagName);
+function(tagName, ancestor) {
+	if (!ancestor) {
+		ancestor = document;
+	}
+
+	return AjxUtil.toArray(ancestor.getElementsByTagName(tagName));
 };
 
+/**
+ * Get all elements of the given class name. Similar to
+ * document.getElementsByClassName(), but returning an Array instead
+ * of a NodeList.
+ *
+ * @param {String} className
+ * @param {HTMLElement} ancestor An optional ancestor element,
+ *                      defaults to the document
+ * @return	{Array}
+ */
 Dwt.byClassName =
 function(className, ancestor) {
 	if (!ancestor) {
         ancestor = document;
 	}
 
-    try {
-        return ancestor.getElementsByClassName(className);
-    } catch (e) {
+    if (ancestor.getElementsByClassName) {
+        return AjxUtil.toArray(ancestor.getElementsByClassName(className));
+
+    } else {
         /* fall back for IE 8 and earlier */
         var pattern = new RegExp("\\b"+className+"\\b");
-
-        function byClass(element, accumulator)
+        var byClass = function(element, accumulator)
         {
             if (element.className && element.className.match(pattern))
                 accumulator.push(element);
