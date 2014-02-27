@@ -317,13 +317,13 @@ function(enabled) {
  * @param	{string}	imageInfo		the image
  */
 DwtButton.prototype.setImage =
-function(imageInfo) {
+function(imageInfo, direction) {
 	// This button is set to not show image. Doing it here is safer against bugs resulting from dynamically modified images and text such as teh case of spam vs. "no spam".
 	// This way you don't have to worry in that code whether we show image or not (Which could change for example as it does in this bug when moving the button to the main buttons).
 	if (this.whatToShow && !this.whatToShow.showImage) {
 		return;
 	}
-	DwtLabel.prototype.setImage.call(this, imageInfo);
+	DwtLabel.prototype.setImage.call(this, imageInfo, direction);
 	this._setMinWidth();
 };
 
@@ -358,10 +358,13 @@ function() {
  * Sets the hover image.
  * 
  * @param	{string}	hoverImageInfo		the image
+ * @param	{string}	direction			position of the image
  */
 DwtButton.prototype.setHoverImage =
-function (hoverImageInfo) {
-    this._hoverImageInfo = hoverImageInfo;
+function (hoverImageInfo, direction) {
+	direction = direction || (this._style & DwtLabel.IMAGE_RIGHT ? DwtLabel.RIGHT : DwtLabel.LEFT);
+	this._hoverImageInfo = this._hoverImageInfo || {};
+	this._hoverImageInfo[direction] = hoverImageInfo;
 };
 
 /**
@@ -775,6 +778,18 @@ DwtButton.prototype.dontStealFocus = function(val) {
 /**
  * @private
  */
+DwtButton.prototype._toggleHoverClass =
+function(show, direction) {
+	var iconEl = this._getIconEl(direction);
+	if (iconEl) {  //add a null check so buttons with no icon elements don't break the app.
+		var info = show ? this._hoverImageInfo[direction] : this.__imageInfo[direction];
+		iconEl.firstChild.className = AjxImg.getClassForImage(info);
+	}
+};
+
+/**
+ * @private
+ */
 DwtButton.prototype._showHoverImage =
 function(show) {
 	// if the button is image-only, DwtLabel#setImage is bad
@@ -783,12 +798,14 @@ function(show) {
 	// re-sets the image, which results in a new mouseover
 	// event, thus looping forever eating your CPU and
 	// blinking.
-	if (this._hoverImageInfo){
-		var iconEl = this._getIconEl();
-		if (iconEl) {  //add a null check so buttons with no icon elements don't break the app.
-			var info = show ? this._hoverImageInfo : this.__imageInfo;
-			iconEl.firstChild.className = AjxImg.getClassForImage(info);
-		}
+	if (!this._hoverImageInfo) {
+		return;
+	}
+	if (this._hoverImageInfo.left) {
+		this._toggleHoverClass(show, DwtLabel.LEFT);
+	}
+	if (this._hoverImageInfo.right) {
+		this._toggleHoverClass(show, DwtLabel.RIGHT);
 	}
 };
 

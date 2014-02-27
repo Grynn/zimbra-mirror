@@ -1,4 +1,3 @@
-
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
@@ -398,9 +397,13 @@ function(ev) {
  */
 DwtMenuItem.prototype.getRowElement =
 function() {
-   var el = this._textEl ? this._textEl : this._iconEl ? this._iconEl : this._dropDownEl;
-   if (el)
-    return el.parentNode;
+	var el = this._textEl ||
+		this._dropDownEl ||
+		(this._iconEl && this._iconEl.left) ||
+		(this._iconEl && this._iconEl.right);
+	if (el) {
+		return el.parentNode;
+	}
 };
 
 DwtMenuItem._listeners = {};

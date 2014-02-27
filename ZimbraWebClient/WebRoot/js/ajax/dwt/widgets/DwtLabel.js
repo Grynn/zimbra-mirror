@@ -116,25 +116,40 @@ DwtLabel.IMAGE_LEFT = 1;
 DwtLabel.IMAGE_RIGHT = 2;
 
 /**
+ * Defines both "right" and "left" align images (i.e. align to the left and to the right of text, if all present).
+ */
+DwtLabel.IMAGE_BOTH = 4;
+
+/**
  * Defines the "left" align label.
  */
-DwtLabel.ALIGN_LEFT = 4;
+DwtLabel.ALIGN_LEFT = 8;
 
 /**
  * Defines the "right" align label.
  */
-DwtLabel.ALIGN_RIGHT = 8;
+DwtLabel.ALIGN_RIGHT = 16;
 
 /**
  * Defines the "center" align label.
  */
-DwtLabel.ALIGN_CENTER = 16;
+DwtLabel.ALIGN_CENTER = 32;
 
 /**
  * Defines the last style label (used for subclasses).
  * @private
  */
-DwtLabel._LAST_STYLE = 16;
+DwtLabel._LAST_STYLE = 32;
+
+/**
+ * Defines the "left" side icon
+ */
+DwtLabel.LEFT = "left";
+
+/**
+ * Defines the "right" side icon
+ */
+DwtLabel.RIGHT = "right";
 
 //
 // Data
@@ -168,40 +183,51 @@ DwtLabel.prototype.setEnabled =
 function(enabled) {
 	if (enabled != this._enabled) {
 		DwtControl.prototype.setEnabled.call(this, enabled);
-		this.__setImage(this.__imageInfo);
+		var direction = this._style & DwtLabel.IMAGE_RIGHT ? DwtLabel.RIGHT : DwtLabel.LEFT;
+		this.__imageInfo = this.__imageInfo || {};
+		this.__setImage(this.__imageInfo[direction]);
 	}
 }
 
 /**
  * Gets the current image info.
- * 
+ *
+ * @param	{string}	direction		position of the image
+ *
  * @return	{string}	the image info
  */
 DwtLabel.prototype.getImage =
-function() {
-	return this.__imageInfo;
+function(direction) {
+	direction = direction || (this._style & DwtLabel.IMAGE_RIGHT ? DwtLabel.RIGHT : DwtLabel.LEFT);
+	return this.__imageInfo[direction];
 }
 
 /**
  * Sets the main (enabled) image. If the label is currently enabled, the image is updated.
- * 
+ *
  * @param	{string}	imageInfo		the image
+ * @param	{string}	direction		position of the image
  */
 DwtLabel.prototype.setImage =
-function(imageInfo) {
-	this.__imageInfo = imageInfo;
-	this.__setImage(imageInfo);
+function(imageInfo, direction) {
+	direction = direction || (this._style & DwtLabel.IMAGE_RIGHT ? DwtLabel.RIGHT : DwtLabel.LEFT);
+	this.__imageInfo = this.__imageInfo || {};
+	this.__imageInfo[direction] = imageInfo;
+	this.__setImage(imageInfo, direction);
 }
 
 /**
  *
  * Set _iconEl, used for buttons that contains only images
  *
- * @param       htmlElement/DOM node
+ * @param	htmlElement/DOM node
+ * @param	{string}				direction		position of the image
  *
  */
-DwtLabel.prototype.setIconEl = function(iconElement) {
-        this._iconEl =  iconElement;
+DwtLabel.prototype.setIconEl = function(iconElement, direction) {
+	this._iconEl = this._iconEl || {};
+	direction = direction || (this._style & DwtLabel.IMAGE_RIGHT ? DwtLabel.RIGHT : DwtLabel.LEFT);
+	this._iconEl[direction] =  iconElement;
 }
 
 /**
@@ -282,7 +308,9 @@ function(alignStyle) {
 	this._style = alignStyle;
 
 	// reset dom since alignment style may have changed
-    this.__setImage(this.__imageInfo);
+	var direction = this._style & DwtLabel.IMAGE_RIGHT ? DwtLabel.RIGHT : DwtLabel.LEFT;
+	this.__imageInfo = this.__imageInfo || {};
+    this.__setImage(this.__imageInfo[direction]);
 }
 
 /**
@@ -317,12 +345,15 @@ DwtLabel.prototype._createHtmlFromTemplate = function(templateId, data) {
 
 /**
  * @private
+ *
+ * @param	{string}	direction		position of the image
  */
-DwtLabel.prototype._getIconEl = function() {
+DwtLabel.prototype._getIconEl = function(direction) {
+	direction = direction || (this._style & DwtLabel.IMAGE_RIGHT ? DwtLabel.RIGHT : DwtLabel.LEFT);
 	// MOW: getting the proper icon element on demand rather than all the time for speed
-	var direction = (this._style & DwtLabel.IMAGE_RIGHT ? "right" : "left");
-	return this._iconEl || 
-			(this._iconEl = document.getElementById(this._htmlElId+"_"+direction+"_icon"));
+	this._iconEl = this._iconEl || {};
+	return this._iconEl[direction] ||
+		(this._iconEl[direction] = document.getElementById(this._htmlElId+"_"+direction+"_icon"));
 }
 
 //
@@ -333,12 +364,14 @@ DwtLabel.prototype._getIconEl = function() {
  * Set the label's image, and manage its placement.
  *
  * @private
+ *
+ * @param	{string}	imageInfo		the image
+ * @param	{string}	direction		position of the image
  */
 DwtLabel.prototype.__setImage =
-function(imageInfo) {
+function(imageInfo, direction) {
 
-
-	var iconEl = this._getIconEl();
+	var iconEl = this._getIconEl(direction);
 	if (iconEl) {
 		if (imageInfo) {
 			AjxImg.setImage(iconEl, imageInfo, null, !this._enabled);
