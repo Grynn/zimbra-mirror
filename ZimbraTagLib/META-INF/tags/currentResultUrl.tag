@@ -29,7 +29,7 @@
     <c:when test="${empty context}">
         <c:url value="${value}" var="urlVar">
             <c:if test="${not refresh}">
-                <c:if test="${usecache && (empty dynattrs.su && dynattrs.su!='')}"><c:param name='su' value='1'/></c:if>
+                <c:if test="${zm:boolean(usecache) && (empty dynattrs.su && dynattrs.su!='')}"><c:param name='su' value='1'/></c:if>
                 <c:if test="${empty dynattrs.si && dynattrs.si!=''}"><c:param name='si' value='${empty index ? param.si : index}'/></c:if>
                 <c:if test="${!empty param.so && (empty dynattrs.so && dynattrs.so!='')}"><c:param name='so' value='${param.so}'/></c:if>
                 <c:if test="${!empty param.sc && (empty dynattrs.sc && dynattrs.sc!='')}"><c:param name='sc' value='${param.sc}'/></c:if>
@@ -49,7 +49,7 @@
     <c:otherwise>
         <c:url value="${value}" var="urlVar">
             <c:if test="${not refresh}">
-                <c:if test="${usecache && (empty dynattrs.su && dynattrs.su!='')}"><c:param name='su' value='1'/></c:if>
+                <c:if test="${zm:boolean(usecache) && (empty dynattrs.su && dynattrs.su!='')}"><c:param name='su' value='1'/></c:if>
                 <c:if test="${empty dynattrs.si && dynattrs.si!=''}"><c:param name='si' value='${empty index ? context.currentItemIndex : index}'/></c:if>
                 <c:if test="${empty dynattrs.so && dynattrs.so!=''}"><c:param name='so' value='${context.searchResult.offset}'/></c:if>
                 <c:if test="${!empty context && (empty dynattrs.sc && dynattrs.sc!='')}"><c:param name='sc' value='${context.id}'/></c:if>

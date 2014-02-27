@@ -25,7 +25,7 @@
 <%@ taglib prefix="zm" uri="com.zimbra.zm" %>
 
 <c:url value="${value}" var="urlVar">
-    <c:if test="${usecache}"><c:param name='su' value='1'/></c:if>
+    <c:if test="${zm:boolean(usecache)}"><c:param name='su' value='1'/></c:if>
     <c:param name='si' value='${cursor.prevIndex}'/>
     <c:param name='so' value='${cursor.prevOffset}'/>
     <c:if test="${!empty context}"><c:param name='sc' value='${context.id}'/></c:if>
