@@ -3,13 +3,13 @@ reject_non_fqdn_recipient
 permit_sasl_authenticated
 permit_mynetworks
 reject_unlisted_recipient
-%%contains VAR:zimbraMtaRestriction reject_invalid_helo_hostname%%
-%%contains VAR:zimbraMtaRestriction reject_non_fqdn_helo_hostname%%
-%%contains VAR:zimbraMtaRestriction reject_non_fqdn_sender%%
-%%contains VAR:zimbraMtaRestriction reject_unknown_client_hostname%%
-%%contains VAR:zimbraMtaRestriction reject_unknown_reverse_client_hostname%%
-%%contains VAR:zimbraMtaRestriction reject_unknown_helo_hostname%%
-%%contains VAR:zimbraMtaRestriction reject_unknown_sender_domain%%
+%%exact VAR:zimbraMtaRestriction reject_invalid_helo_hostname%%
+%%exact VAR:zimbraMtaRestriction reject_non_fqdn_helo_hostname%%
+%%exact VAR:zimbraMtaRestriction reject_non_fqdn_sender%%
+%%exact VAR:zimbraMtaRestriction reject_unknown_client_hostname%%
+%%exact VAR:zimbraMtaRestriction reject_unknown_reverse_client_hostname%%
+%%exact VAR:zimbraMtaRestriction reject_unknown_helo_hostname%%
+%%exact VAR:zimbraMtaRestriction reject_unknown_sender_domain%%
 %%contains VAR:zimbraMtaRestriction check_client_access lmdb:/opt/zimbra/conf/postfix_rbl_override%%
 %%explode reject_rbl_client VAR:zimbraMtaRestrictionRBLs%%
 %%explode reject_rhsbl_client VAR:zimbraMtaRestrictionRHSBLCs%%
@@ -17,5 +17,5 @@ reject_unlisted_recipient
 %%explode reject_rhsbl_sender VAR:zimbraMtaRestrictionRHSBLSs%%
 %%contains VAR:zimbraMtaRestriction check_policy_service unix:private/policy%%
 %%contains VAR:zimbraMtaRestriction check_recipient_access ldap:/opt/zimbra/conf/ldap-splitdomain.cf%%
-%%contains VAR:zimbraMtaRestriction reject%%
+%%exact VAR:zimbraMtaRestriction reject%%
 permit

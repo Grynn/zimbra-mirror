@@ -779,6 +779,10 @@ class State:
 	#    for MV attribs, set to string if string is in the attrib
 	#   contains (var string, replacement) - 
 	#    for MV attribs, set to replacement if string is in the attrib
+	#   exact (var string) - 
+	#    for MV attribs, set to string if a value of attrib exactly matches string
+	#   contains (var string, replacement) - 
+	#    for MV attribs, set to replacement if a value of attrib exactly matches string
 	#   list (var separator)
 	#    Works like perl join, for multivalued attrib, joins with join value
 	#    used to create csv or regexes
@@ -907,6 +911,29 @@ class State:
 			else: 
 				val = altreplace
 			Log.logMsg(5, "contains: type=%s key=%s val=%s" % (type, key, val))
+
+		elif re.match(r"exact", sr):
+			f = sr.split('^',2)
+			st = f[0]
+			if len(f) > 2:
+				replace = f[1].strip()
+				altreplace = f[2].strip()
+			elif len(f) > 1:
+				replace = f[1].strip()
+				altreplace = ""
+			else:
+				replace = ""
+				altreplace = ""
+			fields = st.split(' ',2)
+			(type,key) = fields[1].split(':')
+			val = self.lookUpConfig(type, key).split()
+			replace = replace or fields[2]
+			Log.logMsg(5, "debug exact: type %s for key=%s exact matches %s replace=%s or altreplace=%s" % (type, key, fields[2], replace, altreplace))
+			if fields[2] in val:
+				val = replace
+			else: 
+				val = altreplace
+			Log.logMsg(5, "exact: type=%s key=%s val=%s" % (type, key, val))
 
 		elif re.match(r"freq", sr):
 			[(cmd,key,total)] = re.findall(r"freq ([^:]+):(\S+)\s+(\S+)",sr)
