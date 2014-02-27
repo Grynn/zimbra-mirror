@@ -128,11 +128,6 @@ class ServerConfig(config.Config):
 		elif self["zimbraMtaSmtpdMilters"] is None and milter is not None:
 			self["zimbraMtaSmtpdMilters"] = milter
 
-		if self["zimbraMtaAliasMaps"] is not None:
-			v = self["zimbraMtaAliasMaps"]
-			v = str(v)
-			self["zimbraMtaAliasMaps"] = ', '.join(v.split())
-
 		if self["zimbraMtaHeaderChecks"] is not None:
 			v = self["zimbraMtaHeaderChecks"]
 			v = str(v)
@@ -158,11 +153,6 @@ class ServerConfig(config.Config):
 			v = str(v)
 			self["zimbraMtaSmtpSaslMechanismFilter"] = ', '.join(v.split())
 
-		if self["zimbraMtaSmtpSaslPasswordMaps"] is not None:
-			v = self["zimbraMtaSmtpSaslPasswordMaps"]
-			v = str(v)
-			self["zimbraMtaSmtpSaslPasswordMaps"] = ', '.join(v.split())
-
 		if self["zimbraMtaNotifyClasses"] is not None:
 			v = self["zimbraMtaNotifyClasses"]
 			v = str(v)
@@ -172,11 +162,6 @@ class ServerConfig(config.Config):
 			v = self["zimbraMtaPropagateUnmatchedExtensions"]
 			v = str(v)
 			self["zimbraMtaPropagateUnmatchedExtensions"] = ', '.join(v.split())
-
-		if self["zimbraMtaSenderCanonicalMaps"] is not None:
-			v = self["zimbraMtaSenderCanonicalMaps"]
-			v = str(v)
-			self["zimbraMtaSenderCanonicalMaps"] = ', '.join(v.split())
 
 		if self["zimbraMtaSmtpdSaslSecurityOptions"] is not None:
 			v = self["zimbraMtaSmtpdSaslSecurityOptions"]
@@ -192,31 +177,6 @@ class ServerConfig(config.Config):
 			v = self["zimbraMtaSmtpdSaslTlsSecurityOptions"]
 			v = str(v)
 			self["zimbraMtaSmtpdSaslTlsSecurityOptions"] = ', '.join(v.split())
-
-		if self["zimbraMtaTransportMaps"] is not None:
-			v = self["zimbraMtaTransportMaps"]
-			v = str(v)
-			self["zimbraMtaTransportMaps"] = ', '.join(v.split())
-
-		if self["zimbraMtaVirtualAliasDomains"] is not None:
-			v = self["zimbraMtaVirtualAliasDomains"]
-			v = str(v)
-			self["zimbraMtaVirtualAliasDomains"] = ', '.join(v.split())
-
-		if self["zimbraMtaVirtualAliasMaps"] is not None:
-			v = self["zimbraMtaVirtualAliasMaps"]
-			v = str(v)
-			self["zimbraMtaVirtualAliasMaps"] = ', '.join(v.split())
-
-		if self["zimbraMtaVirtualMailboxDomains"] is not None:
-			v = self["zimbraMtaVirtualMailboxDomains"]
-			v = str(v)
-			self["zimbraMtaVirtualMailboxDomains"] = ', '.join(v.split())
-
-		if self["zimbraMtaVirtualMailboxMaps"] is not None:
-			v = self["zimbraMtaVirtualMailboxMaps"]
-			v = str(v)
-			self["zimbraMtaVirtualMailboxMaps"] = ', '.join(v.split())
 
 		dt = time.clock()-t1
 		Log.logMsg(5,"Serverconfig loaded in %.2f seconds" % dt)
