@@ -738,7 +738,7 @@ public class SkinResources
 			sb.append("\n#images\n\n");
 			sb.append("/img/zimbra.gif\n"); //TODO remove this hardcoded image.
 			sb.append("/img/zimbra.png\n"); //TODO remove this hardcoded image.
-            sb.append("/img/large/ImgPerson_48.png\n");
+			sb.append("/img/large/ImgPerson_48.png?v=").append(cacheBusterVersion).append(" \n");
             sb.append("/skins/_base/logos/LoginBanner.png?v=").append(cacheBusterVersion).append(" \n"); //TODO remove this hardcoded image.
 			sb.append("\n#style sheet images\n\n");
 			//find all the css rules with a url in it
