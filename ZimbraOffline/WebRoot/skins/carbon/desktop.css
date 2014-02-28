@@ -26,7 +26,7 @@ BODY {
 }
 
 .ZPanel {
-	background: #a6a6a9 url("img/setup-bkgd-full.gif") no-repeat top left;
+	background: #a6a6a9 no-repeat top left;
 }
 
 .ZTip a {

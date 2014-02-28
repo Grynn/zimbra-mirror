@@ -15,7 +15,6 @@
 
 /* Offline-specific styles */
 
-/******************************************************************************/
-/* NOTE:
-/* Twilight skin is the default skin and takes its styles from /base2/desktop.css
-/******************************************************************************/
+.ZPanel {
+	background: #3e100f url("img/setup-bkgd-full.gif") no-repeat top left;
+}
