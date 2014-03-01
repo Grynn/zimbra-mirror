@@ -38,7 +38,7 @@ AjxUtil.isString 			= function(aThing) { return (typeof(aThing) == 'string'); };
 AjxUtil.isNumber 			= function(aThing) { return (typeof(aThing) == 'number'); };
 AjxUtil.isObject 			= function(aThing) { return ((typeof(aThing) == 'object') && (aThing !== null)); };
 AjxUtil.isArray 			= function(aThing) { return AjxUtil.isInstance(aThing, Array); };
-AjxUtil.isArrayLike			= function(aThing) { return typeof aThing.length === 'number'; };
+AjxUtil.isArrayLike			= function(aThing) { return typeof aThing !== 'string' && typeof aThing.length === 'number'; };
 AjxUtil.isFunction 			= function(aThing) { return (typeof(aThing) == 'function'); };
 AjxUtil.isDate 				= function(aThing) { return AjxUtil.isInstance(aThing, Date); };
 AjxUtil.isLifeTime 			= function(aThing) { return AjxUtil.LIFETIME_FIELD.test(aThing); };
