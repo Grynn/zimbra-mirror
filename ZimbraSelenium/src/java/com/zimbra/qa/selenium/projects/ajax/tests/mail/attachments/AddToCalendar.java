@@ -16,7 +16,9 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.attachments;
 
 import java.io.File;
 import java.util.List;
+
 import org.testng.annotations.Test;
+
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
@@ -177,7 +179,7 @@ public class AddToCalendar extends PrefGroupMailByMessageTest {
 	
 	}
 	
-	@Bugs(ids = "82961")
+	
 	@Test(description = "Bug 51442 - Js error (ZmNewCalendarDialog is not defined) while pressing New Calendar from new window and can't open new calendar dialog",
 			groups = { "functional" })
 			
@@ -229,6 +231,10 @@ public class AddToCalendar extends PrefGroupMailByMessageTest {
 			} else {
 				throw new HarnessException("New calendar dialog not opened on clicking New button");
 			}
+			
+			// Make sure the folder was created on the server
+			FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),foldername);
+			dialog.zChooseCalendarFolder(folder.getId());
 			dialog.zClickButton(Button.B_OK);
 			SleepUtil.sleepLong(); //sometime client takes longer time to add the appointment
 			
