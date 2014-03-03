@@ -92,7 +92,7 @@ public class DialogShare extends AbsDialog {
 	public void zSetEmailAddress(String email) throws HarnessException {
 		logger.info(myPageName() + " zSetEmailAddress(" + email + ")");
 
-		String locator = "css=div#ShareDialog_grantee>input";
+		String locator = "css=input#ShareDialog_grantee";
 
 		// Make sure the locator exists
 		if (!this.sIsElementPresent(locator)) {
@@ -105,9 +105,11 @@ public class DialogShare extends AbsDialog {
 		this.sFocus(locator);
 		this.zClick(locator);
 		this.zWaitForBusyOverlay();
-
+		//this.sType(locator, email);
+		
 		// Instead of sType() use zKeyboard
 		this.zKeyboard.zTypeCharacters(email + ";");
+		this.zWaitForBusyOverlay();
 		
 
 	}
