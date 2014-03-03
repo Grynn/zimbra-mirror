@@ -40,7 +40,7 @@ public class PageAddressbook extends AbsTab {
     
 		//TODO: contact group: "Edit Group" instead of "Edit Contact"
 		public static final ContextMenuItem CONTACT_EDIT = new ContextMenuItem("POPUP_CONTACT","Edit Contact","","");	
-		public static final ContextMenuItem CONTACT_FORWARD = new ContextMenuItem("POPUP_SEND_CONTACTS_IN_EMAIL","Forward Contact","","");	
+		public static final ContextMenuItem CONTACT_FORWARD = new ContextMenuItem("SEND_CONTACTS_IN_EMAIL","Forward Contact","","");	
 	
 		//TODO: contact group: "Tag Group" instead of "Tag Contact"
 		public static final ContextMenuItem CONTACT_TAG = new ContextMenuItem("POPUP_TAG_MENU","Tag Contact","div[class*='ImgTag']"," div[class='ImgCascade']");	
