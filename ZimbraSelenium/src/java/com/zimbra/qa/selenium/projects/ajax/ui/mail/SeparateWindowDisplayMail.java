@@ -62,6 +62,7 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 			
 			//locator = container + " tr[id$='_from'] span[id$='_com_zimbra_email']";
 			locator = container + " td[id$='_from'] span:nth-child(1)>span[class='addrBubble']>span";
+			
 			if ( !this.sIsElementPresent(locator) ) {
 				locator = container + " tr[id$='_from']"; // No bubbles
 			}
@@ -80,23 +81,22 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 				locator = container + " tr[id$='_cc']"; // No bubbles
 			}
 			
-		} else if ( field == Field.OnBehalfOf ) {
-			
-			//locator = container + " td[id$='_obo'] span[id$='_com_zimbra_email']";
-			locator = container + " td[id$='_from']>span:nth-child(3)>span[class='addrBubble']";
+		} else if ( field == Field.OnBehalfOf ) {		
+			locator = container + " span[id$='_obo_span'] span[class='addrBubble']>span";
+			//locator = container + " td[id$='_from']>span:nth-child(3)>span[class='addrBubble']";
 		
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
-				locator = container + " td[id$='_from']";
+				locator = container + " span[id$='_obo_span']";
 			}
 
 		} else if ( field == Field.ResentFrom ) {
 			
-			locator = container + "  td[id$='_from'] span[class='addrBubble'] span:contains(resentfrom)";
-			
+			//locator = container + "  td[id$='_from'] span[class='addrBubble'] span:contains(resentfrom)";
+			locator = container + " span[id$='_bwo_span'] span[class='addrBubble']>span";
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
-				locator = container + " tr[id$='_from']";
+				locator = container + " span[id$='_bwo_span']";
 			}
 
 		} else if ( field == Field.OnBehalfOfLabel ) {
