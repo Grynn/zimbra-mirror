@@ -421,19 +421,28 @@ function() {
 };
 
 ZmArchiveZimlet.prototype._hideDeleteButton = 
-function(display) {
-	var style = display ? "none" : "inline-block";
-	var app = appCtxt.getApp(ZmApp.MAIL);
-	if (appCtxt.getCurrentAppName() === ZmApp.MAIL) {
-		var mlc = appCtxt.getCurrentApp().getMailListController();
-		var toolbar = mlc._toolbar[appCtxt.getCurrentViewId()];
-		if (!toolbar) { return; }
-		var deleteBtn = toolbar.getButton(ZmOperation.DELETE) || toolbar.getButton(ZmOperation.DELETE_MENU);
-		if(deleteBtn) {
-			deleteBtn.getHtmlElement().style.display = style;
-		}
+function(hidden) {
+	if (appCtxt.getCurrentAppName() !== ZmApp.MAIL) {
+		return;
 	}
-}; 
+	var app = appCtxt.getApp(ZmApp.MAIL);
+	var mlc = app.getMailListController();
+	var toolbar = mlc.getCurrentToolbar();
+	if (!toolbar) {
+		return;
+	}
+	var delButton = toolbar.getButton(ZmOperation.DELETE) || toolbar.getButton(ZmOperation.DELETE_MENU);
+	if (!delButton) {
+		return;
+	}
+	var delHtmlEl = delButton.getHtmlElement();
+	if (this._savedDelButtonDisplayStyle === undefined) {
+		//this is the first time this is called, so it's visible - cache the old display style. (could be "block", or "inline" or "inline-block" - we need to make sure to remember as to not mess it up.)
+		this._savedDelButtonDisplayStyle = delHtmlEl.style.display;
+	}
+	//set it always since we might be switching from hidden to visible (if user changed the Zimlet pref of "show delete button")
+	delHtmlEl.style.display = hidden ? "none" : this._savedDelButtonDisplayStyle;
+};
 
 ZmArchiveZimlet.prototype._handleSetArchivePrefs = 
 function() {
