@@ -24,8 +24,8 @@
  *
  * @private
 */
-ZmTimeSelect = function(parent, id) {
-	DwtComposite.call(this, {parent:parent});
+DwtTimeSelect = function(parent, id) {
+	DwtComposite.call(this, {parent:parent, className: 'DwtTimeSelect'});
 
 	this.id = id;
 	this._isLocale24Hour = true;
@@ -33,15 +33,15 @@ ZmTimeSelect = function(parent, id) {
 };
 
 // IDs for types of time selects
-ZmTimeSelect.START	= 1;
-ZmTimeSelect.END	= 2;
+DwtTimeSelect.START	= 1;
+DwtTimeSelect.END	= 2;
 
 // IDs for time select components
-ZmTimeSelect.HOUR	= 1;
-ZmTimeSelect.MINUTE	= 2;
-ZmTimeSelect.AMPM	= 3;
+DwtTimeSelect.HOUR	= 1;
+DwtTimeSelect.MINUTE	= 2;
+DwtTimeSelect.AMPM	= 3;
 
-ZmTimeSelect.getDateFromFields =
+DwtTimeSelect.getDateFromFields =
 function(hours, minutes, ampm, date) {
 	hours = Number(hours);
 	if (ampm) {
@@ -56,15 +56,15 @@ function(hours, minutes, ampm, date) {
 	return date;
 };
 
-ZmTimeSelect.parse =
+DwtTimeSelect.parse =
 function(timeString) {
     var date;
 	var lTimeString = timeString.toLowerCase();
-	if (lTimeString === ZmMsg.midnight.toLowerCase() || lTimeString === ZmMsg.noon.toLowerCase()) {
+	if (lTimeString === AjxMsg.midnight.toLowerCase() || lTimeString === AjxMsg.noon.toLowerCase()) {
 		date = new Date();
 		date.setMinutes(0);
 		date.setSeconds(0);
-		date.setHours(lTimeString === ZmMsg.noon.toLowerCase() ? 12 : 0);
+		date.setHours(lTimeString === AjxMsg.noon.toLowerCase() ? 12 : 0);
 	} else {
 		var timeFormatter = AjxDateFormat.getTimeInstance(AjxDateFormat.SHORT);    
 		date = timeFormatter.parse(timeString) || AjxDateFormat.parseTime(timeString);
@@ -72,12 +72,12 @@ function(timeString) {
     return date;
 };
 
-ZmTimeSelect.format =
+DwtTimeSelect.format =
 function(date) {
 	if (date.getHours() == 0 && date.getMinutes() == 0) {
-		return ZmMsg.midnight;
+		return AjxMsg.midnight;
 	} else if (date.getHours() == 12 && date.getMinutes() == 0) {
-		return ZmMsg.noon;
+		return AjxMsg.noon;
 	} else {
 		return AjxDateFormat.getTimeInstance(AjxDateFormat.SHORT).format(date);
 	}
@@ -89,25 +89,25 @@ function(date) {
 * user changes the end time, we leave things alone.
 *
 * @param ev					[Event]				UI event from a DwtSelect
-* @param startSelect		[ZmTimeSelect]		start time select
-* @param endSelect			[ZmTimeSelect]		end time select
+* @param startSelect		[DwtTimeSelect]		start time select
+* @param endSelect			[DwtTimeSelect]		end time select
 * @param startDateField		[element]			start date field
 * @param endDateField		[element]			end date field
 */
-ZmTimeSelect.adjustStartEnd =
+DwtTimeSelect.adjustStartEnd =
 function(ev, startSelect, endSelect, startDateField, endDateField) {
 	var select = ev._args.selectObj;
 	var startDate = AjxDateUtil.simpleParseDateStr(startDateField.value);
 	var endDate = AjxDateUtil.simpleParseDateStr(endDateField.value);
 	var startDateOrig = startDateField.value;
 	var endDateOrig = endDateField.value;
-	if (select.id == ZmTimeSelect.START) {
-		var hours = (select.compId == ZmTimeSelect.HOUR) ? ev._args.oldValue : startSelect.getHours();
-		var minutes = (select.compId == ZmTimeSelect.MINUTE) ? ev._args.oldValue : startSelect.getMinutes();
-		var ampm = (select.compId == ZmTimeSelect.AMPM) ? ev._args.oldValue : startSelect.getAmPm();
-		var oldStartDateMs = ZmTimeSelect.getDateFromFields(hours, minutes, ampm, startDate).getTime();
-		var newStartDateMs = ZmTimeSelect.getDateFromFields(startSelect.getHours(), startSelect.getMinutes(), startSelect.getAmPm(), startDate).getTime();
-		var oldEndDateMs = ZmTimeSelect.getDateFromFields(endSelect.getHours(), endSelect.getMinutes(), endSelect.getAmPm(), endDate).getTime();
+	if (select.id == DwtTimeSelect.START) {
+		var hours = (select.compId == DwtTimeSelect.HOUR) ? ev._args.oldValue : startSelect.getHours();
+		var minutes = (select.compId == DwtTimeSelect.MINUTE) ? ev._args.oldValue : startSelect.getMinutes();
+		var ampm = (select.compId == DwtTimeSelect.AMPM) ? ev._args.oldValue : startSelect.getAmPm();
+		var oldStartDateMs = DwtTimeSelect.getDateFromFields(hours, minutes, ampm, startDate).getTime();
+		var newStartDateMs = DwtTimeSelect.getDateFromFields(startSelect.getHours(), startSelect.getMinutes(), startSelect.getAmPm(), startDate).getTime();
+		var oldEndDateMs = DwtTimeSelect.getDateFromFields(endSelect.getHours(), endSelect.getMinutes(), endSelect.getAmPm(), endDate).getTime();
 		var delta = oldEndDateMs - oldStartDateMs;
 		if (!delta) return null;
 		var newEndDateMs = newStartDateMs + delta;
@@ -125,12 +125,12 @@ function(ev, startSelect, endSelect, startDateField, endDateField) {
 /**
  * Returns true if the start date/time is before the end date/time.
  *
- * @param ss				[ZmTimeSelect]		start time select
- * @param es				[ZmTimeSelect]		end time select
+ * @param ss				[DwtTimeSelect]		start time select
+ * @param es				[DwtTimeSelect]		end time select
  * @param startDateField	[element]			start date field
  * @param endDateField		[element]			end date field
  */
-ZmTimeSelect.validStartEnd =
+DwtTimeSelect.validStartEnd =
 function(startDateField, endDateField, ss, es) {
 	var startDate = AjxDateUtil.simpleParseDateStr(startDateField.value);
 	var endDate = AjxDateUtil.simpleParseDateStr(endDateField.value);
@@ -144,8 +144,8 @@ function(startDateField, endDateField, ss, es) {
 			return false;
 		}
         if(ss && es){
-            var startDateMs = ZmTimeSelect.getDateFromFields(ss.getHours(), ss.getMinutes(), ss.getAmPm(), startDate).getTime();
-            var endDateMs = ZmTimeSelect.getDateFromFields(es.getHours(), es.getMinutes(), es.getAmPm(), endDate).getTime();
+            var startDateMs = DwtTimeSelect.getDateFromFields(ss.getHours(), ss.getMinutes(), ss.getAmPm(), startDate).getTime();
+            var endDateMs = DwtTimeSelect.getDateFromFields(es.getHours(), es.getMinutes(), es.getAmPm(), endDate).getTime();
             if (startDateMs > endDateMs) {
                 return false;
             }
@@ -156,15 +156,20 @@ function(startDateField, endDateField, ss, es) {
 	return true;
 };
 
-ZmTimeSelect.prototype = new DwtComposite;
-ZmTimeSelect.prototype.constructor = ZmTimeSelect;
+DwtTimeSelect.prototype = new DwtComposite;
+DwtTimeSelect.prototype.constructor = DwtTimeSelect;
+DwtTimeSelect.prototype.isDwtTimeSelect = true;
+
+DwtTimeSelect.prototype.toString = function() {
+    return 'DwtTimeSelect';
+};
 
 /**
 * Sets the time select according to the given date.
 *
 * @param date	[Date]		a Date object
 */
-ZmTimeSelect.prototype.set = 
+DwtTimeSelect.prototype.set = 
 function(date) {
 
 	var hourIdx = 0, minuteIdx = 0, amPmIdx = 0;
@@ -197,27 +202,27 @@ function(date) {
  *                    values will be set on the specified object;
  *                    else, a new <code>Date</code> object is created.
  */
-ZmTimeSelect.prototype.getValue =
+DwtTimeSelect.prototype.getValue =
 function(date) {
-	return (ZmTimeSelect.getDateFromFields(this.getHours(), this.getMinutes(), this.getAmPm(), date));
+	return (DwtTimeSelect.getDateFromFields(this.getHours(), this.getMinutes(), this.getAmPm(), date));
 };
 
-ZmTimeSelect.prototype.getHours =
+DwtTimeSelect.prototype.getHours =
 function() {
 	return this._hourSelect.getValue();
 };
 
-ZmTimeSelect.prototype.getMinutes =
+DwtTimeSelect.prototype.getMinutes =
 function() {
 	return this._minuteSelect.getValue();
 };
 
-ZmTimeSelect.prototype.getAmPm =
+DwtTimeSelect.prototype.getAmPm =
 function() {
 	return this._amPmSelect ? this._amPmSelect.getValue() : null;
 };
 
-ZmTimeSelect.prototype.setSelected = 
+DwtTimeSelect.prototype.setSelected = 
 function(hourIdx, minuteIdx, amPmIdx) {
 	this._hourSelect.setSelected(hourIdx);
 	this._minuteSelect.setSelected(minuteIdx);
@@ -226,7 +231,7 @@ function(hourIdx, minuteIdx, amPmIdx) {
 	}
 };
 
-ZmTimeSelect.prototype.addChangeListener = 
+DwtTimeSelect.prototype.addChangeListener = 
 function(listener) {
 	this._hourSelect.addChangeListener(listener);
 	this._minuteSelect.addChangeListener(listener);
@@ -234,37 +239,37 @@ function(listener) {
 		this._amPmSelect.addChangeListener(listener);
 };
 
-ZmTimeSelect.prototype.isLocale24Hour = 
+DwtTimeSelect.prototype.isLocale24Hour = 
 function() {
 	return this._isLocale24Hour;
 };
 
-ZmTimeSelect.prototype.getHourSelectSize = 
+DwtTimeSelect.prototype.getHourSelectSize = 
 function() {	
 	return this._hourSelect.size();
 };
 
-ZmTimeSelect.prototype.getMinuteSelectSize = 
+DwtTimeSelect.prototype.getMinuteSelectSize = 
 function() {	
 	return this._minuteSelect.size();
 };
 
-ZmTimeSelect.prototype.getSelectedHourIdx = 
+DwtTimeSelect.prototype.getSelectedHourIdx = 
 function() {
 	return this._hourSelect.getSelectedIndex();
 };
 
-ZmTimeSelect.prototype.getSelectedMinuteIdx = 
+DwtTimeSelect.prototype.getSelectedMinuteIdx = 
 function() {
 	return this._minuteSelect.getSelectedIndex();
 };
 
-ZmTimeSelect.prototype.getSelectedAmPmIdx = 
+DwtTimeSelect.prototype.getSelectedAmPmIdx = 
 function() {
 	return this._amPmSelect ? this._amPmSelect.getSelectedIndex() : 0;
 };
 
-ZmTimeSelect.prototype.setEnabled =
+DwtTimeSelect.prototype.setEnabled =
 function(enabled) {
    DwtComposite.prototype.setEnabled.call(this, enabled);
 
@@ -273,7 +278,7 @@ function(enabled) {
    if (this._amPmSelect) this._amPmSelect.setEnabled(enabled);
 };
 
-ZmTimeSelect.prototype._createSelects =
+DwtTimeSelect.prototype._createSelects =
 function() {
 	this._hourSelectId = Dwt.getNextId();
 	this._minuteSelectId = Dwt.getNextId();
@@ -331,7 +336,7 @@ function() {
 	// create new DwtSelect for hour slot
 	this._hourSelect = new DwtSelect({parent:this});
 	this._hourSelect.id = this.id;
-	this._hourSelect.compId = ZmTimeSelect.HOUR;
+	this._hourSelect.compId = DwtTimeSelect.HOUR;
 	for (var i = start; i < limit; i++) {
 		now.setHours(i);
 		var label = timeFormatter._segments[hourSegmentIdx].format(now);
@@ -343,7 +348,7 @@ function() {
 	// create new DwtSelect for minute slot
 	this._minuteSelect = new DwtSelect({parent:this});
 	this._minuteSelect.id = this.id;
-	this._minuteSelect.compId = ZmTimeSelect.MINUTE;
+	this._minuteSelect.compId = DwtTimeSelect.MINUTE;
 	for (var i = 0; i < 60; i = i + 5) {
 		now.setMinutes(i);
 		var label = timeFormatter._segments[minuteSegmentIdx].format(now);
@@ -356,7 +361,7 @@ function() {
 	if (!this._isLocale24Hour) {
 		this._amPmSelect = new DwtSelect({parent:this});
 		this._amPmSelect.id = this.id;
-		this._amPmSelect.compId = ZmTimeSelect.AMPM;
+		this._amPmSelect.compId = DwtTimeSelect.AMPM;
 		this._amPmSelect.addOption(I18nMsg["periodAm"], false, "AM");
 		this._amPmSelect.addOption(I18nMsg["periodPm"], false, "PM");
 		this._amPmSelect.reparentHtmlElement(this._amPmSelectId);
@@ -375,38 +380,38 @@ function() {
  *
  * @private
 */
-ZmTimeInput = function(parent, id, parentElement, interval) {
-    var params = {parent:parent, id: "ZmTimeInput"};
+DwtTimeInput = function(parent, id, parentElement, interval) {
+    var params = {parent:parent, id: "DwtTimeInput", className: 'DwtTimeInput'};
     if(parentElement) {
         params.parentElement = parentElement;
     }
 	DwtComposite.call(this, params);
 
-    this._interval = interval || ZmTimeInput.FIFTEEN_MIN_INTERVAL;
+    this._interval = interval || DwtTimeInput.FIFTEEN_MIN_INTERVAL;
 	this.id = id;
 	this._isLocale24Hour = true;
 	this._createSelects();
     this._useTextInput = true;
 };
 
-ZmTimeInput.THIRTY_MIN_INTERVAL = 30;
-ZmTimeInput.FIFTEEN_MIN_INTERVAL = 15;
+DwtTimeInput.THIRTY_MIN_INTERVAL = 30;
+DwtTimeInput.FIFTEEN_MIN_INTERVAL = 15;
 
 // IDs for types of time selects
-ZmTimeInput.START	= 1;
-ZmTimeInput.END	= 2;
+DwtTimeInput.START	= 1;
+DwtTimeInput.END	= 2;
 
 // IDs for time select components
-ZmTimeInput.HOUR	= 1;
-ZmTimeInput.MINUTE	= 2;
-ZmTimeInput.AMPM	= 3;
+DwtTimeInput.HOUR	= 1;
+DwtTimeInput.MINUTE	= 2;
+DwtTimeInput.AMPM	= 3;
 
-ZmTimeInput.ROWS	= 8; // Show 8 rows at a time
-ZmTimeInput.DEFAULT_TOP_ROW	= 8; // Make row 8 (8 AM) the initial topmost visible row unless overridden
+DwtTimeInput.ROWS	= 8; // Show 8 rows at a time
+DwtTimeInput.DEFAULT_TOP_ROW	= 8; // Make row 8 (8 AM) the initial topmost visible row unless overridden
 
-ZmTimeInput.getDateFromFields =
+DwtTimeInput.getDateFromFields =
 function(timeStr, date) {
-    var formattedDate = ZmTimeSelect.parse(timeStr);
+    var formattedDate = DwtTimeSelect.parse(timeStr);
     date = date || new Date();
     date.setHours(formattedDate.getHours(), formattedDate.getMinutes(), 0, 0);
     return date;
@@ -418,24 +423,24 @@ function(timeStr, date) {
 * user changes the end time, we leave things alone.
 *
 * @param ev					[Event]				UI event from a DwtSelect
-* @param startSelect		[ZmTimeInput]		start time select
-* @param endSelect			[ZmTimeInput]		end time select
+* @param startSelect		[DwtTimeInput]		start time select
+* @param endSelect			[DwtTimeInput]		end time select
 * @param startDateField		[element]			start date field
 * @param endDateField		[element]			end date field
 * @param dateInfo		    [object]			date info used to calculate the old time before changing this
 * @param id		            [string]			an ID which got changed 
 */
-ZmTimeInput.adjustStartEnd =
+DwtTimeInput.adjustStartEnd =
 function(ev, startSelect, endSelect, startDateField, endDateField, dateInfo, id) {
     var startDate = AjxDateUtil.simpleParseDateStr(startDateField.value);
     var endDate = AjxDateUtil.simpleParseDateStr(endDateField.value);
     var startDateOrig = startDateField.value;
     var endDateOrig = endDateField.value;
-    if (id == ZmTimeInput.START) {
+    if (id == DwtTimeInput.START) {
         var timeStr = dateInfo ? dateInfo.startTimeStr : startSelect.getTimeString();
-        var oldStartDateMs = ZmTimeInput.getDateFromFields(timeStr, startDate).getTime();
-        var newStartDateMs = ZmTimeInput.getDateFromFields(startSelect.getTimeString(), startDate).getTime();
-        var oldEndDateMs = ZmTimeInput.getDateFromFields(endSelect.getTimeString(), endDate).getTime();
+        var oldStartDateMs = DwtTimeInput.getDateFromFields(timeStr, startDate).getTime();
+        var newStartDateMs = DwtTimeInput.getDateFromFields(startSelect.getTimeString(), startDate).getTime();
+        var oldEndDateMs = DwtTimeInput.getDateFromFields(endSelect.getTimeString(), endDate).getTime();
 
         var delta = oldEndDateMs - oldStartDateMs;
         if (!delta) return null;
@@ -450,11 +455,11 @@ function(ev, startSelect, endSelect, startDateField, endDateField, dateInfo, id)
         if (endDateField.value != endDateOrig) {
             return endDateField;
         }
-    } else if (id == ZmTimeInput.END){
+    } else if (id == DwtTimeInput.END){
         var timeStr = dateInfo ? dateInfo.endTimeStr : endSelect.getTimeString();
-        var oldEndDateMs = ZmTimeInput.getDateFromFields(timeStr, endDate).getTime();
-        var newEndDateMs = ZmTimeInput.getDateFromFields(endSelect.getTimeString(), endDate).getTime();
-        var oldStartDateMs = ZmTimeInput.getDateFromFields(startSelect.getTimeString(), startDate).getTime();
+        var oldEndDateMs = DwtTimeInput.getDateFromFields(timeStr, endDate).getTime();
+        var newEndDateMs = DwtTimeInput.getDateFromFields(endSelect.getTimeString(), endDate).getTime();
+        var oldStartDateMs = DwtTimeInput.getDateFromFields(startSelect.getTimeString(), startDate).getTime();
 
         var delta = oldEndDateMs - oldStartDateMs;
         if (!delta) return null;
@@ -482,12 +487,12 @@ function(ev, startSelect, endSelect, startDateField, endDateField, dateInfo, id)
 /**
  * Returns true if the start date/time is before the end date/time.
  *
- * @param ss				[ZmTimeInput]		start time select
- * @param es				[ZmTimeInput]		end time select
+ * @param ss				[DwtTimeInput]		start time select
+ * @param es				[DwtTimeInput]		end time select
  * @param startDateField	[element]			start date field
  * @param endDateField		[element]			end date field
  */
-ZmTimeInput.validStartEnd =
+DwtTimeInput.validStartEnd =
 function(startDateField, endDateField, ss, es) {
 	var startDate = AjxDateUtil.simpleParseDateStr(startDateField.value);
 	var endDate = AjxDateUtil.simpleParseDateStr(endDateField.value);
@@ -504,8 +509,8 @@ function(startDateField, endDateField, ss, es) {
 			var startTime = ss.getTimeString();
 			var endTime = es.getTimeString();
 			if (startTime && endTime) {
-				var startDateMs = ZmTimeInput.getDateFromFields(startTime, startDate).getTime();
-				var endDateMs = ZmTimeInput.getDateFromFields(endTime, endDate).getTime();
+				var startDateMs = DwtTimeInput.getDateFromFields(startTime, startDate).getTime();
+				var endDateMs = DwtTimeInput.getDateFromFields(endTime, endDate).getTime();
 				if (startDateMs > endDateMs) {
 					return false;
 				}
@@ -517,17 +522,22 @@ function(startDateField, endDateField, ss, es) {
 	return true;
 };
 
-ZmTimeInput.prototype = new DwtComposite;
-ZmTimeInput.prototype.constructor = ZmTimeInput;
+DwtTimeInput.prototype = new DwtComposite;
+DwtTimeInput.prototype.constructor = DwtTimeInput;
+DwtTimeInput.prototype.isDwtTimeInput = true;
+
+DwtTimeInput.prototype.toString = function() {
+    return 'DwtTimeInput';
+};
 
 /**
 * Sets the time select according to the given date.
 *
 * @param date	[Date]		a Date object
 */
-ZmTimeInput.prototype.set =
+DwtTimeInput.prototype.set =
 function(date) {
-    var timeStr = ZmTimeSelect.format(date);
+    var timeStr = DwtTimeSelect.format(date);
     this._originalTimeStr = timeStr;
     this._timeSelectInput.setValue(timeStr);
     this._scrollToValue(timeStr);
@@ -538,17 +548,17 @@ function(date) {
 *
 * @param date	[Date]		a Date object
 */
-ZmTimeInput.prototype.setValue =
+DwtTimeInput.prototype.setValue =
 function(str) {
     //sets only if the date is valid
-    var date = ZmTimeSelect.parse(str);
+    var date = DwtTimeSelect.parse(str);
     if (!date) str = "";
     this._originalTimeStr = str;
     this._timeSelectInput.setValue(str);
     this._scrollToValue(str);
 };
 
-ZmTimeInput.prototype._scrollToValue =
+DwtTimeInput.prototype._scrollToValue =
 function(str) {
     var index = this.getTimeIndex(str);
     if (index !== null)
@@ -563,10 +573,10 @@ function(str) {
  *                    values will be set on the specified object;
  *                    else, a new <code>Date</code> object is created.
  */
-ZmTimeInput.prototype.getValue =
+DwtTimeInput.prototype.getValue =
 function(date) {
-	//return (ZmTimeInput.getDateFromFields(this.getHours(), this.getMinutes(), this.getAmPm(), date));
-    var d = ZmTimeSelect.parse(this._timeSelectInput.getValue());
+	//return (DwtTimeInput.getDateFromFields(this.getHours(), this.getMinutes(), this.getAmPm(), date));
+    var d = DwtTimeSelect.parse(this._timeSelectInput.getValue());
 	if(!d) {
 		d = new Date();
 	}
@@ -580,19 +590,19 @@ function(date) {
     return date;
 };
 
-ZmTimeInput.prototype.getHours =
+DwtTimeInput.prototype.getHours =
 function() {
     var d = this.getValue();
     return d ? d.getHours() : null;
 };
 
-ZmTimeInput.prototype.getMinutes =
+DwtTimeInput.prototype.getMinutes =
 function() {
     var d = this.getValue();
     return d ? d.getMinutes() : null;
 };
 
-ZmTimeInput.prototype.addChangeListener =
+DwtTimeInput.prototype.addChangeListener =
 function(listener) {
     this._changeListener = listener;
     var callback = AjxCallback.simpleClosure(this.handleTimeChange, this, listener);
@@ -600,15 +610,15 @@ function(listener) {
     this._timeSelectInput.setHandler(DwtEvent.ONBLUR, callback);
 };
 
-ZmTimeInput.prototype.handleTimeChange =
+DwtTimeInput.prototype.handleTimeChange =
 function(listener, ev) {
     //restore old value if the new time is not in correct format
     var str = this._timeSelectInput.getValue();
-    var d = ZmTimeSelect.parse(str);
+    var d = DwtTimeSelect.parse(str);
     if(!d) {
         //TODO: Try to guess the time 
-        /*var newDate = this.correctTimeString(str, ZmTimeSelect.parse(this._originalTimeStr));
-        this.setValue(ZmTimeSelect.format(newDate) || "");*/
+        /*var newDate = this.correctTimeString(str, DwtTimeSelect.parse(this._originalTimeStr));
+        this.setValue(DwtTimeSelect.format(newDate) || "");*/
         this.setValue(this._originalTimeStr);
     } else {
         this._scrollToValue(str);
@@ -617,7 +627,7 @@ function(listener, ev) {
     listener.run(ev, this.id);
 };
 
-ZmTimeInput.prototype.correctTimeString =
+DwtTimeInput.prototype.correctTimeString =
 function(val, originalDate) {
 
     var segments = val.split(":");
@@ -636,12 +646,12 @@ function(val, originalDate) {
 
 };
 
-ZmTimeInput.prototype.isLocale24Hour =
+DwtTimeInput.prototype.isLocale24Hour =
 function() {
 	return this._isLocale24Hour;
 };
 
-ZmTimeInput.prototype.setEnabled =
+DwtTimeInput.prototype.setEnabled =
 function(enabled) {
    DwtComposite.prototype.setEnabled.call(this, enabled);
    this._timeSelectInput.setEnabled(enabled);
@@ -649,7 +659,7 @@ function(enabled) {
 };
 
 
-ZmTimeInput.prototype._timeButtonListener =
+DwtTimeInput.prototype._timeButtonListener =
 function(ev) {
     if(!this._menuItemsAdded) {
         var j,
@@ -674,14 +684,14 @@ function(ev) {
             this.putTimeIndex(text, j);
 
             if (j==0 || j==12) {
-                text = ZmTimeSelect.format(now); // Specialized formatter, returns ZmMsg.midnight for midnight and ZmMsg.noon for noon
+                text = DwtTimeSelect.format(now); // Specialized formatter, returns AjxMsg.midnight for midnight and AjxMsg.noon for noon
                 this.putTimeIndex(text, j); // Both should go in the indexer
             }
 
             mi.setText(text);
             mi.setData("value", j*60);
             if (menuSelectionListener) mi.addSelectionListener(menuSelectionListener);
-            if (j == ZmTimeInput.DEFAULT_TOP_ROW) defaultTopMenuItem = mi;
+            if (j == DwtTimeInput.DEFAULT_TOP_ROW) defaultTopMenuItem = mi;
 
             maxMinutesItem = 60 / this._interval;
             minutesSelectMenu = new DwtMenu({parent:mi, style:DwtMenu.DROPDOWN_CENTERV_STYLE, layout:DwtMenu.LAYOUT_CASCADE, maxRows:maxMinutesItem, congruent: true});
@@ -705,7 +715,7 @@ function(ev) {
 	ev.item.popup();
 };
 
-ZmTimeInput.prototype._timeSelectionListener =
+DwtTimeInput.prototype._timeSelectionListener =
 function(ev) {
     if(ev.item && ev.item instanceof DwtMenuItem){
        this._timeSelectInput.setValue(ev.item.getText());
@@ -715,41 +725,41 @@ function(ev) {
     }
 };
 
-ZmTimeInput.prototype.getTimeString =
+DwtTimeInput.prototype.getTimeString =
 function() {
     //validate and returns only valid time string
-    var date = ZmTimeSelect.parse(this._timeSelectInput.getValue());
+    var date = DwtTimeSelect.parse(this._timeSelectInput.getValue());
     return date ? this._timeSelectInput.getValue() : "";    
 };
 
-ZmTimeInput.prototype.getInputField =
+DwtTimeInput.prototype.getInputField =
 function() {
     return this._timeSelectInput;
 };
 
-ZmTimeInput.prototype.putTimeIndex =
+DwtTimeInput.prototype.putTimeIndex =
 function(text, value) {
     this._timeIndex[text.replace(/\:\d\d/, ":00").replace(/\s/,"").toLowerCase()] = value;
 };
 
-ZmTimeInput.prototype.getTimeIndex =
+DwtTimeInput.prototype.getTimeIndex =
 function(text) {
     if (!text) return null;
     var index = this._timeIndex[text.replace(/\:\d\d/, ":00").replace(/\s/,"").toLowerCase()];
     return (index || index===0) ? index : null;
 };
 
-ZmTimeInput.prototype._createSelects =
+DwtTimeInput.prototype._createSelects =
 function() {
 	// get the time formatter for the user's locale
 
 	this.getHtmlElement().innerHTML = AjxTemplate.expand("calendar.Appointment#ApptTimeInput", {id: this._htmlElId});
 
-    var inputId = Dwt.getNextId("ZmTimeInputSelect_");
-    if (this.id && this.id == ZmTimeSelect.START) {
+    var inputId = Dwt.getNextId("DwtTimeInputSelect_");
+    if (this.id && this.id == DwtTimeSelect.START) {
        inputId += "_startTimeInput";
     }
-    else if (this.id && this.id == ZmTimeSelect.END) {
+    else if (this.id && this.id == DwtTimeSelect.END) {
         inputId += "_endTimeInput";
     }
     //create time select input field
@@ -760,7 +770,7 @@ function() {
         errorIconStyle: DwtInputField.ERROR_ICON_NONE,
         validationStyle: DwtInputField.CONTINUAL_VALIDATION,
         inputId: inputId,
-	    id: Dwt.getNextId("ZmTimeInputField_")
+	    id: Dwt.getNextId("DwtTimeInputField_")
     };
 
     this._timeSelectInput = new DwtInputField(params);
@@ -779,7 +789,7 @@ function() {
     
     this._timeIndex = {};
     // create menu for button
-    this._hoursSelectMenu = new DwtMenu({parent:timeSelectButton, style:DwtMenu.DROPDOWN_STYLE, layout:DwtMenu.LAYOUT_SCROLL, maxRows:ZmTimeInput.ROWS});
+    this._hoursSelectMenu = new DwtMenu({parent:timeSelectButton, style:DwtMenu.DROPDOWN_STYLE, layout:DwtMenu.LAYOUT_SCROLL, maxRows:DwtTimeInput.ROWS});
     timeSelectButton.setMenu(this._hoursSelectMenu, true, false, false, true);
     this._menuItemsAdded = false;
     timeSelectButton.reparentHtmlElement(buttonId);

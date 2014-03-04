@@ -127,6 +127,7 @@ AjxPackage.require("ajax.dwt.widgets.DwtMessageComposite");
 AjxPackage.require("ajax.dwt.widgets.DwtRadioButtonGroup");
 AjxPackage.require("ajax.dwt.widgets.DwtForm");
 AjxPackage.require("ajax.dwt.widgets.DwtComboBox");
+AjxPackage.require("ajax.dwt.widgets.DwtTimeSelect");
 
 AjxPackage.require("ajax.3rdparty.jquery.jquery");
 
