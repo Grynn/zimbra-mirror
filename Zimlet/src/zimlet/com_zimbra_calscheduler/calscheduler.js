@@ -764,12 +764,12 @@ function() {
 
 	var timeSelectListener = new AjxListener(this, this._timeChangeListener);
 
-	this._startTimeSelect = new ZmTimeSelect(this, ZmTimeSelect.START);
+	this._startTimeSelect = new DwtTimeSelect(this, DwtTimeSelect.START);
 	this._startTimeSelect.reparentHtmlElement(this._startTimeSelectId);
 	this._startTimeSelect.addChangeListener(timeSelectListener);
 	delete this._startTimeSelectId;
 
-	this._endTimeSelect = new ZmTimeSelect(this, ZmTimeSelect.END);
+	this._endTimeSelect = new DwtTimeSelect(this, DwtTimeSelect.END);
 	this._endTimeSelect.addChangeListener(timeSelectListener);
 	this._endTimeSelect.reparentHtmlElement(this._endTimeSelectId);
 	delete this._endTimeSelectId;
@@ -829,12 +829,12 @@ function() {
 
 
     var searchTimeSelectListener= new AjxListener(this, this._searchTimeChangeListener);
-    this._startSearchTimeSelect = new ZmTimeSelect(this, ZmTimeSelect.END);
+    this._startSearchTimeSelect = new DwtTimeSelect(this, DwtTimeSelect.END);
     this._startSearchTimeSelect.addChangeListener(searchTimeSelectListener);
     this._startSearchTimeSelect.reparentHtmlElement(this._startSearchTimeSelectId);
     delete this._startSearchTimeSelectId;
 
-    this._endSearchTimeSelect = new ZmTimeSelect(this, ZmTimeSelect.END);
+    this._endSearchTimeSelect = new DwtTimeSelect(this, DwtTimeSelect.END);
     this._endSearchTimeSelect.addChangeListener(searchTimeSelectListener);
     this._endSearchTimeSelect.reparentHtmlElement(this._endSearchTimeSelectId);
     delete this._endSearchTimeSelectId;
@@ -1306,7 +1306,7 @@ function(ev) {
 
 CalSchedulerView.prototype._timeChangeListener =
 function(ev) {
-	this._activeDateField = ZmTimeSelect.adjustStartEnd(ev, this._startTimeSelect, this._endTimeSelect,
+	this._activeDateField = DwtTimeSelect.adjustStartEnd(ev, this._startTimeSelect, this._endTimeSelect,
 														this._startDateField, this._endDateField);
 	ZmApptViewHelper.getDateInfo(this, this._dateInfo);
 	this._dateBorder = this._getBordersFromDateInfo(this._dateInfo);
@@ -1317,7 +1317,7 @@ function(ev) {
 
 CalSchedulerView.prototype._searchTimeChangeListener =
 function(ev) {
-    if(!ZmTimeSelect.validStartEnd(this._startDateField, this._endDateField, this._startSearchTimeSelect, this._endSearchTimeSelect)) {
+    if(!DwtTimeSelect.validStartEnd(this._startDateField, this._endDateField, this._startSearchTimeSelect, this._endSearchTimeSelect)) {
         var startDate = AjxDateUtil.simpleParseDateStr(this._startDateField.value);
         var searchStartDate = this._startSearchTimeSelect.getValue(startDate);
         var searchEndDate = new Date(searchStartDate.getTime());
@@ -1550,10 +1550,10 @@ function(dateInfo) {
 	var index = {start: -99, end: -99};
 	if (dateInfo.showTime) {
 		var idx = AjxDateUtil.isLocale24Hour() ? 0 : 1;
-		var startDate = ZmTimeSelect.getDateFromFields(dateInfo.startHourIdx + idx, dateInfo.startMinuteIdx * 5,
+		var startDate = DwtTimeSelect.getDateFromFields(dateInfo.startHourIdx + idx, dateInfo.startMinuteIdx * 5,
 													   dateInfo.startAmPmIdx,
 													   AjxDateUtil.simpleParseDateStr(dateInfo.startDate));
-		var endDate = ZmTimeSelect.getDateFromFields(dateInfo.endHourIdx + idx, dateInfo.endMinuteIdx * 5,
+		var endDate = DwtTimeSelect.getDateFromFields(dateInfo.endHourIdx + idx, dateInfo.endMinuteIdx * 5,
 													 dateInfo.endAmPmIdx,
 													 AjxDateUtil.simpleParseDateStr(dateInfo.endDate));
 		// subtract 1 from index since we're marking right borders
@@ -2239,7 +2239,7 @@ CalSchedulerView.prototype.getSelectedStartDate =
 function() {
 	var idx = AjxDateUtil.isLocale24Hour() ? 0 : 1;
 	ZmApptViewHelper.getDateInfo(this, this._dateInfo);
-	return ZmTimeSelect.getDateFromFields(this._dateInfo.startHourIdx + idx, this._dateInfo.startMinuteIdx * 5,
+	return DwtTimeSelect.getDateFromFields(this._dateInfo.startHourIdx + idx, this._dateInfo.startMinuteIdx * 5,
 													   this._dateInfo.startAmPmIdx,
 													   AjxDateUtil.simpleParseDateStr(this._dateInfo.startDate));
 };
@@ -2248,7 +2248,7 @@ CalSchedulerView.prototype.getSelectedEndDate =
 function() {
 	var idx = AjxDateUtil.isLocale24Hour() ? 0 : 1;
 	ZmApptViewHelper.getDateInfo(this, this._dateInfo);
-	return ZmTimeSelect.getDateFromFields(this._dateInfo.endHourIdx + idx, this._dateInfo.endMinuteIdx * 5,
+	return DwtTimeSelect.getDateFromFields(this._dateInfo.endHourIdx + idx, this._dateInfo.endMinuteIdx * 5,
 													 this._dateInfo.endAmPmIdx,
 													 AjxDateUtil.simpleParseDateStr(this._dateInfo.endDate));
 };
