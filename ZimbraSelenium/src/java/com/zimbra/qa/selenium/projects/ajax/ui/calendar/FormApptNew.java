@@ -960,7 +960,7 @@ public class FormApptNew extends AbsForm {
 				// iframes. Also there is a a bug in iframe counting if single test
 				// logouts multiple time for e.g. run 2 Accept propose new time tests
 				if (this
-						.sIsElementPresent("css=textarea[class='ZmHtmlEditorTextArea']") && frames == 1) {
+						.sIsElementPresent("css=textarea[class='ZmHtmlEditorTextArea']") && frames == 0) {
 					locator = "css=textarea[class='ZmHtmlEditorTextArea']";
 					
 					this.sFocus(locator);
@@ -971,70 +971,14 @@ public class FormApptNew extends AbsForm {
 					return;
 				}
 
-				if (frames == 0) {
-					// Text compose
-
-					locator = "css=textarea[class='ZmHtmlEditorTextArea']";
-
-					if (!this.sIsElementPresent(locator))
-						throw new HarnessException(
-								"Unable to locate compose body");
-
-					this.sFocus(locator);
-					this.zClick(locator);
-					this.zWaitForBusyOverlay();
-					this.sType(locator, value);
-
-					return;
-
-				} else if (frames == 1) {
+				if (frames >= 1) {
 					// HTML compose
 
 					try {
 
-						//this.sSelectFrame("css=iframe[id$='_content_ifr']");
-
-						//locator = "css=body[id='tinymce']";
-
-						locator = "css=iframe[id$='_content_ifr']";
-
-						if (!this.sIsElementPresent(locator))
-							throw new HarnessException(
-									"Unable to locate compose body");
-
-						this.sFocus(locator);
-						this.zClick(locator);
-
-						/*
-						 * Oct 25, 2011: The new TinyMCE editor broke sType().
-						 * Use zKeyboard instead, however, it is preferred to
-						 * use sType() if possible, but I can't find a solution
-						 * right now.
-						 */
-						// this.sType(locator, value);
-						//this.zKeyboard.zTypeCharacters(value);
-						
-						zTypeFormattedText(locator, value);
-
-					} finally {
-						// Make sure to go back to the original iframe
-						this.sSelectFrame("relative=top");
-
-					}
-
-					// Is this requried?
-					this.zWaitForBusyOverlay();
-
-					return;
-
-				} else if (frames == 2) {
-					// HTML compose
-
-					try {
-
-						if (this.sIsElementPresent("css=iframe[id$='_content_ifr']")) {
+						if (this.sIsElementPresent("css=iframe[id$='ZmHtmlEditor1_body_ifr']")) {
 							locator = "css=html body";
-							this.sSelectFrame("css=iframe[id$='_content_ifr']"); // iframe index is 0 based
+							this.sSelectFrame("css=iframe[id$='ZmHtmlEditor1_body_ifr']"); // iframe index is 0 based
 							this.sFocus(locator);
 							this.zClick(locator);
 							//this.sType(locator, value);
