@@ -282,7 +282,7 @@ Com_Zimbra_Url.YOUTUBE_LINK_PATTERN1 = "youtube.com/watch?";
 Com_Zimbra_Url.YOUTUBE_LINK_PATTERN2 = "youtube.com/v/";
 Com_Zimbra_Url.YOUTUBE_LINK_PATTERN3 = "youtu.be/";
 Com_Zimbra_Url.YOUTUBE_FEED = "http://gdata.youtube.com/feeds/api/videos/@ID?alt=jsonc&v=2";
-Com_Zimbra_Url.YOUTUBE_EMBED_URL = "www.youtube.com/embed/";
+Com_Zimbra_Url.YOUTUBE_EMBED_URL = "//www.youtube.com/embed/";
 Com_Zimbra_Url.YOUTUBE_DEFAULT_THUMBNAIL = "http://img.youtube.com/vi/@ID.jpg";
 Com_Zimbra_Url.PROTOCOL = location.protocol;
 Com_Zimbra_Url.YOUTUBE_MAX_VIDEOS = 5;
@@ -291,14 +291,14 @@ Com_Zimbra_Url.YOUTUBE_MAX_VIDEOS = 5;
  * Get the gDATA feed so we can parse for title & thumbnail
  */
 Com_Zimbra_Url.prototype._getYouTubeFeed =
-function() {
-	for (var youTubeId in this._youTubeHash) {
+function(msgElId, youTubeHash, youTubeCtrl) {
+	for (var youTubeId in youTubeHash) {
 		var gDataUrl = Com_Zimbra_Url.YOUTUBE_FEED;
 		gDataUrl = gDataUrl.replace("@ID", youTubeId);
 		gDataUrl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(gDataUrl);
 		var params = {
 				url: gDataUrl,
-				callback: new AjxCallback(this, this._parseYouTubeFeed, [youTubeId])
+				callback: this._parseYouTubeFeed.bind(this, youTubeId, msgElId, youTubeHash, youTubeCtrl)
 			};
 		AjxLoader.load(params);
 	}
@@ -310,21 +310,19 @@ function() {
  * @param req {HttpResponse} http response
  */
 Com_Zimbra_Url.prototype._parseYouTubeFeed =
-function(youTubeId, req) {
+function(youTubeId, msgElId, youTubeHash, youTubeCtrl, req) {
 	if (req.status != 200) {
 		DBG.println(AjxDebug.DBG1, "Error code in parsing YouTube Feed. Code = " + req.status);
 		var thumbnail = Com_Zimbra_Url.YOUTUBE_DEFAULT_THUMBNAIL.replace("@ID", youTubeId);
 		var title = "";
-		this._youTubeHash[youTubeId] = {"thumbnail" : thumbnail, "title" : title};
-		this._buildYouTubeImageHtml(youTubeId);
 	}
 	else {
 		var json = eval("(" + req.responseText + ")");
 		var thumbnail = json.data.thumbnail["sqDefault"];
 		var title = json.data.title;
-		this._youTubeHash[youTubeId] = {"thumbnail" : thumbnail, "title" : title};
-		this._buildYouTubeImageHtml(youTubeId);
 	}
+	youTubeHash[youTubeId] = {thumbnail : thumbnail, title : title};
+	this._buildYouTubeImageHtml(youTubeId, msgElId, youTubeHash, youTubeCtrl);
 };
 
 /**
@@ -360,53 +358,62 @@ function(url) {
 /**
  * Display YouTube video using iframe API
  * @param youTubeId
- * @param msgId
+ * @param msgElId
  */
 Com_Zimbra_Url.prototype._showYouTubeVideo =
-function(youTubeId, msgId) {
-	if (!youTubeId || !msgId) return;
+function(youTubeId, msgElId, youTubeHash) {
 
-	var el = document.getElementById("youtube-video_" + this._viewId + "_" + msgId);
-	var iframeEl = document.getElementById("youtube-iframe_" + this._viewId + "_" + msgId);
-	if (el) {
-		if (!Dwt.getVisible(el)) {
-			el.innerHTML = "<br/>" + this._showYouTubeEmbed(youTubeId, msgId);
-			Dwt.setVisible(el, true);
-			this._setYouTubeOpacity(youTubeId, msgId, true);
+	var div = document.getElementById(this._getVidDivId(msgElId));
+	if (!div) {
+		return;
+	}
+	var iframeEl = document.getElementById(this._getVidIframeId(msgElId));
+	var opac;
+	if (!Dwt.getVisible(div)) {
+		div.innerHTML = this._getYouTubeEmbed(youTubeId, msgElId);
+		Dwt.setVisible(div, true);
+		opac = true;
+	}
+	else {
+		if (iframeEl && iframeEl.src === this._getVidEmbedUrl(youTubeId)) {
+			//clicking on the thumbnail of the current visible video again, hides the video.
+			Dwt.setVisible(div, false);
+			div.innerHTML = "";
+			opac = false;
 		}
 		else {
-			if (iframeEl && iframeEl.src == Com_Zimbra_Url.PROTOCOL + '//www.youtube.com/embed/' + youTubeId) {
-				Dwt.setVisible(el, false); //toggle visiblity
-				this._setYouTubeOpacity(youTubeId, msgId, false);
-			}
-			else {
-				el.innerHTML = "<br/>" + this._showYouTubeEmbed(youTubeId, msgId);
-				this._setYouTubeOpacity(youTubeId, msgId, true);
-			}
+			div.innerHTML = this._getYouTubeEmbed(youTubeId, msgElId);
+			opac = true;
 		}
 	}
+	this._setYouTubeOpacity(youTubeId, msgElId, youTubeHash, opac);
 };
 
 /**
  * Setup youtube video using iframe API
  * @param youTubeId
- * @param msgId
+ * @param msgElId
  */
-Com_Zimbra_Url.prototype._showYouTubeEmbed = 
-function(youTubeId, msgId) {
-	return '<iframe id="youtube-iframe_' + this._viewId + '_' + msgId +'" class="youtube-player" type="text/html"' +
+Com_Zimbra_Url.prototype._getYouTubeEmbed =
+function(youTubeId, msgElId) {
+	var iframeId = this._getVidIframeId(msgElId);
+	return '<br/><iframe id="' + iframeId +'" class="youtube-player" type="text/html"' +
 			'width="640" '  +
 			'height="385"'  +
-			'src="' + Com_Zimbra_Url.PROTOCOL + "//" +  Com_Zimbra_Url.YOUTUBE_EMBED_URL + youTubeId + '?autoplay=1&rel=0" frameborder="0"></iframe>';
+			'src="' + this._getVidEmbedUrl(youTubeId) + '" frameborder="0"></iframe>';
 };
 
+Com_Zimbra_Url.prototype._getVidEmbedUrl =
+function(youTubeId) {
+	return Com_Zimbra_Url.PROTOCOL + Com_Zimbra_Url.YOUTUBE_EMBED_URL + youTubeId + "?autoplay=1&rel=0";
+};
 /**
  * Display thumbnail of youtube video
  * @param youTubeId
  */
 Com_Zimbra_Url.prototype._showYouTubeThumbnail =
-function(youTubeId) {
-	return "<div class='thumb-wrapper'><div class='play'></div><img src='" + this._youTubeHash[youTubeId].thumbnail + "' border='2'></div>"; 			   
+function(youTubeId, youTubeHash) {
+	return "<div class='thumb-wrapper'><div class='play'></div><img src='" + youTubeHash[youTubeId].thumbnail + "' border='2'></div>";
 };
 
 /**
@@ -415,35 +422,28 @@ function(youTubeId) {
  */
 Com_Zimbra_Url.prototype._getAllYouTubeLinks =
 function(text) {
-	if (!text) return null;
+	var none = {links: {}, reachedMax: false};
+	if (!text) {
+		return none;
+	}
 	var youTubeArr = text.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtube\.com\/watch\?.*\&v=)|(youtube\.com\/v\/)|(youtu\.be\/))((-)?[0-9a-zA-Z_-]+)?(&\w+=\w+)*)\b)/gi);
 	var hash = {};
-	var hashCount = 0;
-	if (youTubeArr) {
-		for (var i=0; i<youTubeArr.length; i++) {
-			var id = this.getYouTubeId(youTubeArr[i]);
-			if (!hash.hasOwnProperty(id)) {
-				hash[id] = youTubeArr[i];
-				hashCount++
-			}
-		}
-		//quick check to see if hash is bigger than max before we do a loop through the hash
-		if (hashCount > Com_Zimbra_Url.YOUTUBE_MAX_VIDEOS) {
-			var tempHash = {};
-			var size = 1;
-			for (var key in hash) {
-				if (size > Com_Zimbra_Url.YOUTUBE_MAX_VIDEOS){
-					this._youTubeHitMax = true;
-					return tempHash;
-				}
-				tempHash[key] = true;
-				size++;
-			}
-			return tempHash;
-		}
-		return hash;
+	if (!youTubeArr) {
+		return none;
 	}
-	return null;
+	var reachedMax = false;
+	for (var i = 0; i < youTubeArr.length; i++) {
+		if (i === Com_Zimbra_Url.YOUTUBE_MAX_VIDEOS) {
+			reachedMax = true;
+			break;
+		}
+		var id = this.getYouTubeId(youTubeArr[i]);
+
+		if (!hash.hasOwnProperty(id)) {
+			hash[id] = youTubeArr[i];
+		}
+	}
+	return {links: hash, reachedMax: reachedMax};
 };
 
 /**
@@ -451,20 +451,22 @@ function(text) {
  * @param youTubeId
  */
 Com_Zimbra_Url.prototype._buildYouTubeImageHtml =
-function(youTubeId) {
-	if (!this._youTubeHash || !youTubeId || document.getElementById("YOUTUBE_" + youTubeId + "_" + this._viewId + "_" + this._msgId)) return;
+function(youTubeId, msgElId, youTubeHash, youTubeCtrl) {
+	if (!youTubeId) {
+		return;
+	}
 	
-	var imgHtml = this._showYouTubeThumbnail(youTubeId);	
+	var imgHtml = this._showYouTubeThumbnail(youTubeId, youTubeHash);
 	var imgSpan = document.createElement("div");
 	imgSpan.className = "youTubeImagePreview";
 	imgSpan.innerHTML = imgHtml;
-	imgSpan.id = "YOUTUBE_" + youTubeId + "_" + this._viewId + "_" + this._msgId;
-	this._youTubeCtrlHash[this._msgId].getHtmlElement().appendChild(imgSpan);
-	this._youTubeCtrlHash[this._msgId].setData(imgSpan.id, {youTubeId: youTubeId, msgId: this._msgId});
-	var parentDiv = document.getElementById("youtube_" + this._viewId + "_" + this._msgId);
-	var videoDiv = document.getElementById("youtube-video_" + this._viewId + "_" + this._msgId);
+	imgSpan.id = this._getThumbSpanId(youTubeId, msgElId);
+	youTubeCtrl.getHtmlElement().appendChild(imgSpan);
+	youTubeCtrl.setData(imgSpan.id, {youTubeId: youTubeId}); //todo - maybe actually use this to get the info? It seems we only store it.
+	var parentDiv = this._getVidsContainer(msgElId);
+	var videoDiv = document.getElementById(this._getVidDivId(msgElId));
 	if (parentDiv && videoDiv) {
-		parentDiv.insertBefore(this._youTubeCtrlHash[this._msgId].getHtmlElement(), videoDiv);
+		parentDiv.insertBefore(youTubeCtrl.getHtmlElement(), videoDiv);
 		Dwt.setVisible(parentDiv, true);
 	}
 };
@@ -474,15 +476,15 @@ function(youTubeId) {
  * @param ev
  */
 Com_Zimbra_Url.prototype._onYouTubeClickListener =
-function(ev) {
-	if (ev && ev.target && ev.target.parentNode && ev.target.parentNode.parentNode) {
-		var id = ev.target.parentNode.parentNode.id.replace("YOUTUBE_", "");
-		id = id.replace("_" + this._viewId, "");
-		var youTubeId = id.substring(0, 11);
-		var msgId = id.substring(12);	
-		if (youTubeId && msgId) {
-			this._showYouTubeVideo(youTubeId, msgId);
-		}
+function(youTubeHash, ev) {
+	if (!ev || !ev.target || !ev.target.parentNode || !ev.target.parentNode.parentNode) {
+		return;
+	}
+	var ids = ev.target.parentNode.parentNode.id.split("$");
+	var youTubeId = ids[1];
+	var msgElId = ids[2];
+	if (youTubeId && msgElId) {
+		this._showYouTubeVideo(youTubeId, msgElId, youTubeHash);
 	}
 };
 
@@ -500,40 +502,56 @@ function(ev) {
 	}
 };
 
+Com_Zimbra_Url.prototype._getVidsContainerId =
+function(msgElId) {
+	return ["YOUTUBE", msgElId].join("$");
+};
+
+Com_Zimbra_Url.prototype._getVidsContainer =
+function(msgElId) {
+	return document.getElementById(this._getVidsContainerId(msgElId));
+};
+
+Com_Zimbra_Url.prototype._getThumbSpanId =
+function(youTubeId, msgElId) {
+	return ["YOUTUBE", youTubeId, msgElId].join("$");
+};
+
+Com_Zimbra_Url.prototype._getThumbSpan =
+function(youTubeId, msgElId) {
+	return document.getElementById(this._getThumbSpanId(youTubeId, msgElId));
+};
+
+Com_Zimbra_Url.prototype._getVidDivId =
+function(msgElId) {
+	return ["YOUTUBE-VID", msgElId].join("$");
+};
+
+Com_Zimbra_Url.prototype._getVidIframeId =
+function(msgElId) {
+	return ["YOUTUBE-IFRAME", msgElId].join("$");
+};
+
 Com_Zimbra_Url.prototype._setYouTubeOpacity =
-function(youTubeId, msgId, opacity) {
-	var img = document.getElementById("YOUTUBE_" + youTubeId + "_" + this._viewId + "_" + msgId);
-	if (img && img.firstChild && opacity) {
-		img = img.firstChild;
-	    img.style.opacity = 0.4;
-		img.style.filter = "alpha(opacity=40)";
-		//clear the other images opacity
-		for (var id in this._youTubeHash) {
-			if (id != youTubeId) {
-				img = document.getElementById("YOUTUBE_" + id + "_" + this._viewId + "_" + msgId);
-				if (img && img.firstChild) {
-					img.firstChild.style.opacity = "";
-					img.firstChild.style.filter = "";
-				}
-			}
+function(youTubeId, msgElId, youTubeHash, opac) {
+	for (var id in youTubeHash) {
+		img = this._getThumbSpan(id, msgElId);
+		img = img && img.firstChild;
+		if (!img) {
+			continue;
 		}
-	}
-	else if(img && img.firstChild) {
-		img = img.firstChild;
-		img.style.opacity = "";
-		img.style.filter = "";
+		if (opac && id === youTubeId) {
+			img.style.opacity = 0.4;
+			img.style.filter = "alpha(opacity=40)";
+		}
+		else {
+			img.style.opacity = "";
+			img.style.filter = "";
+		}
 	}
 };
 
-/**
- * handle youtube videos on conversation view
- * @param msg
- */
-Com_Zimbra_Url.prototype.onConvView = 
-function(msg, oldMsg, msgView) {
-	this._isConv = true;
-	this.renderYouTube(msg, msgView);
-};
+
 
 /**
  * handle youtube videos on message view
@@ -541,63 +559,56 @@ function(msg, oldMsg, msgView) {
  */
 Com_Zimbra_Url.prototype.onMsgView = 
 function(msg, oldMsg, msgView) {
-	this._isConv = false;
 	this.renderYouTube(msg, msgView);
-}
+};
 
 Com_Zimbra_Url.prototype.renderYouTube =
 function(msg, msgView) {
-	if (!this._youtubePreview || appCtxt.isChildWindow ) return;
-	this._youTubeHitMax = false; //reset
-	this._youTubeHash = {}; //hash of youtube links
-	this._youTubeCtrlHash = {};  //hash to keep track of video controls for conversation view
-
-	var text = msgView ? msgView.getContent() : "";
-	this._youTubeHash = text && this._getAllYouTubeLinks(text);
-	if (!this._youTubeHash) return;
-
-	this._msgId = msg.id;
-	this._viewId = appCtxt.getCurrentViewId();
-	var view = appCtxt.getCurrentView();
-	if (view.getItemView) {
-		//view is a instance of list view so get the item view
-		view = view.getItemView();
+	if (!this._youtubePreview || appCtxt.isChildWindow) {
+		return;
 	}
-	var widgetId = this._isConv ? (view._msgViews && view._msgViews[this._msgId] && view._msgViews[this._msgId]._msgBodyDivId) : view._msgBodyDivId;
-	var el = document.getElementById(widgetId);
+
+	var text = msgView && msgView.getContent();
+	var ret = this._getAllYouTubeLinks(text);
+	var youTubeHash = ret.links;
+	var reachedMax = ret.reachedMax;
+	if (!AjxUtil.arraySize(youTubeHash)) {
+		return;
+	}
+
+	var msgElId = msgView._htmlElId;
+	var msgEl = document.getElementById(msgElId);
 	
-	if (el) {
-		var div = document.createElement("DIV");
-		div.className = "video-panel";
-		div.id = "youtube_" + this._viewId + "_" + this._msgId;
-		div.style.display = "none"; //don't show until we're getting all the thumbnails
-		var title = this.getMessage("youTubeTitle");
-		if (this._youTubeHitMax) {
-			title = this.getMessage("youTubeTitleMax").replace("{0}", Com_Zimbra_Url.YOUTUBE_MAX_VIDEOS);
-		}
-		div.innerHTML = "<h3 class='user_font_" + appCtxt.get(ZmSetting.FONT_NAME) +"'>" + title + "</h3>";
-		
-		var spaceDiv = document.createElement("div");
-		spaceDiv.style.padding = "5px";
-		el.appendChild(spaceDiv);
-		el.appendChild(div);
-
-		var videoDiv = document.createElement("div");
-		videoDiv.id = "youtube-video_" + this._viewId + "_" + this._msgId;
-		videoDiv.style.display = "none";
-		videoDiv.className = "movie-player";
-		div.appendChild(videoDiv);
-
-		this._getYouTubeFeed();
-		
-		var youTubeCtrl = new DwtControl({parent:appCtxt.getShell()});
-		youTubeCtrl.addListener(DwtEvent.ONMOUSEDOWN, this._onYouTubeClickListener.bind(this));
-		youTubeCtrl.addListener(DwtEvent.ONMOUSEOVER, this._onYouTubeMouseOver.bind(this));
-		youTubeCtrl.addListener(DwtEvent.ONMOUSEOUT, this._onYouTubeMouseOut.bind(this));
-		youTubeCtrl.reparentHtmlElement(videoDiv);
-
-		this._youTubeCtrlHash[this._msgId] = youTubeCtrl;
+	if (!msgEl) {
+		return;
 	}
+
+	var div = document.createElement("DIV");
+	div.className = "video-panel";
+	div.id = this._getVidsContainerId(msgElId);
+	div.style.display = "none"; //don't show until we're getting all the thumbnails
+	var title = reachedMax ? this.getMessage("youTubeTitleMax").replace("{0}", Com_Zimbra_Url.YOUTUBE_MAX_VIDEOS) : this.getMessage("youTubeTitle");
+
+	div.innerHTML = "<h3 class='user_font_" + appCtxt.get(ZmSetting.FONT_NAME) +"'>" + title + "</h3>";
+		
+	var spaceDiv = document.createElement("div");
+	spaceDiv.style.padding = "5px";
+	msgEl.appendChild(spaceDiv);
+	msgEl.appendChild(div);
+
+	var videoDiv = document.createElement("div");
+	videoDiv.id = this._getVidDivId(msgElId);
+	videoDiv.style.display = "none";
+	videoDiv.className = "movie-player";
+	div.appendChild(videoDiv);
+
+	var youTubeCtrl = new DwtControl({parent: appCtxt.getShell()});
+	youTubeCtrl.addListener(DwtEvent.ONMOUSEDOWN, this._onYouTubeClickListener.bind(this, youTubeHash));
+	youTubeCtrl.addListener(DwtEvent.ONMOUSEOVER, this._onYouTubeMouseOver.bind(this));
+	youTubeCtrl.addListener(DwtEvent.ONMOUSEOUT, this._onYouTubeMouseOut.bind(this));
+	youTubeCtrl.reparentHtmlElement(videoDiv);
+
+	this._getYouTubeFeed(msgElId, youTubeHash, youTubeCtrl);
 
 };
 
