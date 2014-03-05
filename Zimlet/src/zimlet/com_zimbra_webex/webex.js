@@ -1284,12 +1284,12 @@ function() {
 	//This is about where the tab stuff is going to have to go...
 	//Add the tab-bar
 	//add 5 DwtComposites?  For the individual account panels.
-	this._addPrefsDlgViewTabView = new DwtTabView({parent:this._accPrefsDlgView, id:"webExZimlet_accountTabView"});
+	this._addPrefsDlgViewTabView = new DwtTabView({parent: this._accPrefsDlgView, id: "webExZimlet_accountTabView", posStyle: Dwt.STATIC_STYLE});
 	this._addPrefsDlgViewTabView.setSize("560", "420"); //Good - this fixes the resizing-on-tab-change bug.
 	
 	
 	this._addressPrefsViewPage = [];
-	this._tabKeys = []
+	this._tabKeys = [];
 	for (var ii = 1; ii < 6; ii++) {
 		this._addressPrefsViewPage[ii] = new DwtTabViewPage(this._addPrefsDlgViewTabView, "", Dwt.STATIC_STYLE, "WebExZimlet_addressPage" + ii);
 		this._addressPrefsViewPage[ii].getHtmlElement().innerHTML = this._createAccPrefsView(ii);
