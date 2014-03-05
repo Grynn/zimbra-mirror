@@ -255,6 +255,10 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
         SetAllday(m_pPropVals[C_ALLDAY].Value.b);
         bAllday = (m_pPropVals[C_ALLDAY].Value.b == 1);
     }
+	else
+	{
+		dlogd("allday-No value found: Setting to Default (0)");
+	}
     if (m_pPropVals[C_SUBJECT].ulPropTag == appointmentProps.aulPropTag[C_SUBJECT])
     {
 	SetSubject(m_pPropVals[C_SUBJECT].Value.lpszW);
@@ -279,15 +283,26 @@ HRESULT MAPIAppointment::SetMAPIAppointmentValues()
     {
 	SetBusyStatus(m_pPropVals[C_BUSYSTATUS].Value.l);
     }
+	else
+	{
+		dlogd("fb-No value found: Setting to Default (F)");
+	}
     if (m_pPropVals[C_RESPONSESTATUS].ulPropTag == appointmentProps.aulPropTag[C_RESPONSESTATUS])
     {
-	SetResponseStatus(m_pPropVals[C_RESPONSESTATUS].Value.l);
+		SetResponseStatus(m_pPropVals[C_RESPONSESTATUS].Value.l);
     }
-	 if (m_pPropVals[C_RESPONSEREQUESTED].ulPropTag == appointmentProps.aulPropTag[C_RESPONSEREQUESTED])
+	else
+	{
+		dlogd("ptst-No value found: Setting to Default (NE)");
+	}
+	if (m_pPropVals[C_RESPONSEREQUESTED].ulPropTag == appointmentProps.aulPropTag[C_RESPONSEREQUESTED])
     {
-	SetResponseRequested(m_pPropVals[C_RESPONSEREQUESTED].Value.b);
+		SetResponseRequested(m_pPropVals[C_RESPONSEREQUESTED].Value.b);
     }
-	
+	else
+	{
+		dlogd("RSVP-No value found: Setting to Default (0)");
+	}
 	unsigned short usReminderSet=1;
 	if (m_pPropVals[C_REMINDERSET].ulPropTag == appointmentProps.aulPropTag[C_REMINDERSET])
     {
