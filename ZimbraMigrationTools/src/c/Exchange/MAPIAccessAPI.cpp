@@ -836,14 +836,15 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
     HRESULT hr = S_OK;
     LPMESSAGE pMessage = NULL;
     ULONG objtype;
-		
+	
+	LPTSTR pszBin = SBinToStr(sbItemEID);
+	dlogd("Item EntryID: %s",pszBin);
+
     if (FAILED(hr = m_userStore->OpenEntry(sbItemEID.cb, (LPENTRYID)sbItemEID.lpb, NULL,
             MAPI_BEST_ACCESS, &objtype, (LPUNKNOWN *)&pMessage)))
     {
         lpwstrStatus = FormatExceptionInfo(hr, L"MAPIAccessAPI::GetItem() Failed", __FILE__,
-            __LINE__);
-		LPTSTR pszBin = SBinToStr(sbItemEID);
-		dloge("GetItem::OpenEntry failed: %s",pszBin);
+            __LINE__);		
 		dloge(lpwstrStatus);
 		Zimbra::Util::CopyString(lpwstrRetVal, ERR_OPEN_ENTRYID);
         goto ZM_EXIT;
