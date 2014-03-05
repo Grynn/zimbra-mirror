@@ -406,9 +406,7 @@ public class SkinResources
 				resp.setHeader("Content-Encoding", "gzip");
 			}
             if (type.equals(T_APPCACHE)){
-                resp.setHeader("Expires", "Tue, 24 Jan 2000 17:46:50 GMT");
-	            resp.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
-	            resp.setHeader("Pragma", "no-cache");
+				resp.setHeader("Cache-Control", "max-age=0");
             }
 
 			// NOTE: I cast the file length to an int which I think is
@@ -690,32 +688,26 @@ public class SkinResources
 			if (debugStr != null && !"".equals(debugStr)) {
 				debug = "debug=" + debugStr + "&";
 			}
-            String skinStr = (getCookie(req, "ZM_CACHE_NEW_SKIN") != null) ? getCookie(req, "ZM_CACHE_NEW_SKIN").getValue() : skin;
-            String localeStr = (getCookie(req, "ZM_CACHE_NEW_LANG") != null) ? getCookie(req, "ZM_CACHE_NEW_LANG").getValue() : null;
             String reloadStr = (getCookie(req, "ZM_CACHE_RELOAD") != null) ? getCookie(req, "ZM_CACHE_RELOAD").getValue() : null;
-			String locale = "";
-			if (localeStr != null && !"".equals(localeStr)) {
-				locale = "locale=" + localeStr + "&";
-			}
-            if (ZimbraLog.webclient.isDebugEnabled()) {
-			    ZimbraLog.webclient.debug("DEBUG: skin=" + skinStr);
-			    ZimbraLog.webclient.debug("DEBUG: locale=" + localeStr);
-		    }
+			String skinStr = null;
+			String localeStr = null;
             String offlineAccessEnabled = null;
             try{
                 AuthToken authToken = getAuthTokenFromCookie(req, resp, true);
                 Provisioning prov = Provisioning.getInstance();
                 Account account = prov.getAccountById(authToken.getAccountId());
+                skinStr = account.getAttr(Provisioning.A_zimbraPrefSkin);
+                localeStr = account.getAttr(Provisioning.A_zimbraPrefLocale);
                 offlineAccessEnabled = account.getAttr(Provisioning.A_zimbraPrefWebClientOfflineAccessEnabled);
                 if (ZimbraLog.webclient.isDebugEnabled()) {
-                    ZimbraLog.webclient.debug("DEBUG: offlineAccessEnabled :: " + offlineAccessEnabled);
+                    ZimbraLog.webclient.debug("DEBUG: offlineAccessEnabled :: " + offlineAccessEnabled + " :: skin :: " + skinStr + " :: locale :: " + localeStr);
                 }
             } catch(Exception e){
 
             }
 			//create the full manifest file.
 			StringBuffer sb = new StringBuffer();
-			sb.append("CACHE MANIFEST\n\n");
+			sb.append("CACHE MANIFEST\n");
             if (Boolean.FALSE.toString().equalsIgnoreCase(offlineAccessEnabled)) {
                 if (ZimbraLog.webclient.isDebugEnabled()) {
                     ZimbraLog.webclient.debug("DEBUG: offlineAccessEnabledofflineAccessEnabled :: " + offlineAccessEnabled);
@@ -730,17 +722,16 @@ public class SkinResources
 			sb.append("#version ").append(cacheBusterVersion).append(" \n");
 			sb.append("CACHE:\n");
             sb.append("\n#HTML files\n\n");
-            sb.append("\n");
             sb.append(appContextPath).append("/");
             if (debugStr != null && (debugStr.equals(Boolean.TRUE.toString()) || debugStr.equals("1"))) {
                 sb.append("?dev=1");
             }
-			sb.append("\n#images\n\n");
+			sb.append("\n\n#images\n\n");
 			sb.append("/img/zimbra.gif\n"); //TODO remove this hardcoded image.
 			sb.append("/img/zimbra.png\n"); //TODO remove this hardcoded image.
 			sb.append("/img/large/ImgPerson_48.png?v=").append(cacheBusterVersion).append(" \n");
             sb.append("/skins/_base/logos/LoginBanner.png?v=").append(cacheBusterVersion).append(" \n"); //TODO remove this hardcoded image.
-			sb.append("\n#style sheet images\n\n");
+			sb.append("\n#style sheet images\n");
 			//find all the css rules with a url in it
 			Set<String> imgSet = new LinkedHashSet();
 			for(String s: cout.toString().split("\\r?\\n")) {
@@ -868,7 +859,7 @@ public class SkinResources
 				sb.append("\n");
 			}
 			
-			sb.append("\n\n#sound files\n");
+			sb.append("\n#sound files\n");
 			// Append the alert sound file
 			sb.append("\n").append(appContextPath).append("/public/sounds/im/alert.wav");
 

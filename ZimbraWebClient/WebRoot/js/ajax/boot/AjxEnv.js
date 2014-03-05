@@ -491,7 +491,7 @@ function() {
 
 AjxEnv.parseUA();
 
-AjxEnv.isOfflineSupported = AjxEnv.isChrome && AjxEnv.supported.localstorage && AjxEnv.supported.applicationcache && AjxEnv.supported.indexeddb;
+AjxEnv.isOfflineSupported = (AjxEnv.isFirefox || AjxEnv.isChrome) && AjxEnv.supported.localstorage && AjxEnv.supported.applicationcache && AjxEnv.supported.indexeddb;
 
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/bind
 /*
