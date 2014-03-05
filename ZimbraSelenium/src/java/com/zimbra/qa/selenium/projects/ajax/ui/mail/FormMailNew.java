@@ -622,7 +622,7 @@ public class FormMailNew extends AbsForm {
 			SleepUtil.sleepLong();
 
 			
-			locator = "css=div[id^='zv__COMPOSE'] iframe[id$='_content_ifr']";
+			locator = "css=div[id^='zv__COMPOSE'] iframe[id$='_body_ifr']";
 			if ( this.sIsElementPresent(locator) && this.zIsVisiblePerPosition(locator, 0, 0) ) {
 				
 				logger.info("FormMailNew.zFillField: Html Compose");
@@ -660,7 +660,7 @@ public class FormMailNew extends AbsForm {
 				
 				try {
 
-					this.sSelectFrame("css=iframe[id$='_content_ifr']"); // iframe index is 0 based
+					this.sSelectFrame("css=iframe[id$='_body_ifr']"); // iframe index is 0 based
 
 					locator = "css=html body";
 
