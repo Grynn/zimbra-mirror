@@ -350,7 +350,7 @@ public class FormTaskNew extends AbsForm {
 		} else if (field == Field.Body) {
 			
 		//	locator = "css=div[id^='zv__TKE-'] textarea[id$='_content']";
-			locator = "css=div[class='ZmTaskEditView'] div[id$='_notes'] textarea[id$='_content']";
+			locator = "css=div[class='ZmTaskEditView'] div[id$='_notes'] textarea[id$='_body']";
 			this.sFocus(locator);
 			this.zClick(locator);
 			zKeyboard.zTypeCharacters(value);
@@ -381,7 +381,7 @@ public class FormTaskNew extends AbsForm {
 					
 					
 					//sSelectFrame("css=div[id^='zv__TKE-'] iframe[id$='_content_ifr']");
-					sSelectFrame("css=div[class='ZmTaskEditView'] div[id$='_notes'] iframe[id$='_content_ifr']");
+					sSelectFrame("css=div[class='ZmTaskEditView'] div[id$='_notes'] iframe[id$='_body_ifr']");
 					
 
 					locator = "css=body[id='tinymce']";
