@@ -28,8 +28,8 @@ import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseNew.Fi
 public class DocumentBriefcaseEdit extends AbsForm {
 
 	public static class Locators {
-		public static final String zFrame = "css=iframe[id^='DWT'][class='ZDEditor']";
-		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT8_left_icon']";
+		public static final String zFrame = "css=iframe[id$='_body_ifr']";
+		public static final String zSaveAndCloseIconBtn = "css=td[id$='_title']:contains('Close')";
 		public static final String zBodyField = "css=body";
 		public static final String zNameField = "css=[class=DwtInputField] input";
 	}
@@ -193,9 +193,10 @@ public class DocumentBriefcaseEdit extends AbsForm {
 
 			zWaitForElementPresent("css=div[class='ZDToolBar ZWidget']");
 
-			zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']");
+			//zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']");
+			zWaitForElementPresent("css=iframe[id*=body_ifr]");
 
-			zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']",
+			zWaitForIframeText("css=iframe[id*=body_ifr]",
 					docItem.getDocText());
 
 			logger.info("DocumentBriefcaseEdit is Active()");

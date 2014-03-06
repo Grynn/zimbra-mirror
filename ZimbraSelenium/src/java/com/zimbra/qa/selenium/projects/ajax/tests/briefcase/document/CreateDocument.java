@@ -76,9 +76,9 @@ public class CreateDocument extends FeatureBriefcaseTest {
 			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Body,
 					docText);
 
+			
+			//app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
 			// Save and close
-			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
-
 			documentBriefcaseNew.zSubmit();
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
@@ -165,7 +165,7 @@ public class CreateDocument extends FeatureBriefcaseTest {
 					docText);
 
 			// Save and close
-			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
+			//app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
 
 			documentBriefcaseNew.zSubmit();
 		} finally {
@@ -213,7 +213,7 @@ public class CreateDocument extends FeatureBriefcaseTest {
 		app.zPageBriefcase.deleteFileByName(docName);
 	}
 
-	@Test(description = "Create document using keyboard shortcut - verify through SOAP & RestUtil", groups = { "functional" })
+	@Test(description = "Create document using keyboard shortcut - verify through SOAP & RestUtil", groups = { "zfunctional" })
 	public void CreateDocument_03() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -243,7 +243,7 @@ public class CreateDocument extends FeatureBriefcaseTest {
 					docText);
 
 			// Save and close
-			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
+			//app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
 
 			documentBriefcaseNew.zSubmit();
 		} finally {
