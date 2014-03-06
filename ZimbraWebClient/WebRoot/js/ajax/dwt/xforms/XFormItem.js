@@ -4782,7 +4782,7 @@ Dwt_Select_XFormItem.prototype.setElementEnabled = function (enable) {
 
 /**	
  * @class defines XFormItem type _DWT_COLORPICKER_
- * Adapts a DwtDate to work with the XForm
+ * Adapts a DwtButtonColorPicker to work with the XForm
  * @constructor
  * 
  * @private
@@ -4841,7 +4841,7 @@ Dwt_ColorPicker_XFormItem.prototype._colorOnChange = function (event) {
 
 /**	
  * @class defines XFormItem type _DWT_DATE_
- * Adapts a DwtDate to work with the XForm
+ * Adapts a DwtCalendar to work with the XForm
  * @constructor
  * 
  * @private
