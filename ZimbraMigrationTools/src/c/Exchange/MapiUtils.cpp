@@ -23,6 +23,9 @@
 #include <Dsgetdc.h>
 #include <lmcons.h>
 #include <lmapibuf.h>
+#pragma warning(disable: 4995)
+#include "Logger.h"
+#pragma warning(pop)
 enum AttachPropIdx
 {
     ATTACH_METHOD = 0, ATTACH_CONTENT_ID, ATTACH_LONG_FILENAME, WATTACH_LONG_FILENAME,
@@ -312,8 +315,6 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
     lpszPwd, wstring &wstruserdn, wstring &wstrlegacyname)
 {
     wstruserdn = L"";
-    LPWSTR dnEmpty = L"No";
-    LPWSTR ldnEmpty = L"No";
 
     // Get IDirectorySearch Object
     CComPtr<IDirectorySearch> pDirSearch;
@@ -321,6 +322,7 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
     wstring strADServer = L"LDAP://";
 
     strADServer += lpszServer;
+	dlogi("AD Server: ", strADServer.c_str());
 
 	HRESULT hr = ADsOpenObject(strADServer.c_str(),
         /*lpszUser*/ NULL, lpszPwd /*NULL*/, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch,
@@ -349,6 +351,7 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
 		strFilter += L"(sAMAccountName=";
 		 strFilter += lpszUser;
 	strFilter += L")))";
+	dlogi("Search Filter: ",strFilter);
 
     // Set Search Preferences
     ADS_SEARCH_HANDLE hSearch;
@@ -385,19 +388,21 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
             hr = pDirSearch->GetColumn(hSearch, pAttributes[0], &dnCol);
             if (FAILED(hr))
             {
-                dnEmpty = L"Yes";
+				dloge("distinguishedName NOT FOUND");                
                 break;
             }
             wstruserdn = dnCol.pADsValues->CaseIgnoreString;
+			dlogi("distinguishedName: ",wstruserdn.c_str());
 
             // legacyExchangeDN
             hr = pDirSearch->GetColumn(hSearch, pAttributes[1], &dnCol);
             if (FAILED(hr))
             {
-                ldnEmpty =  L"Yes";
+				dloge("legacyExchangeDN NOT FOUND");
                 break;
             }
             wstrlegacyname = dnCol.pADsValues->CaseIgnoreString;
+			dlogi("legacyExchangeDN: ",wstrlegacyname.c_str());
 
             pDirSearch->CloseSearchHandle(hSearch);
             return S_OK;
@@ -421,11 +426,7 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
     pDirSearch->CloseSearchHandle(hSearch);
     if (wstruserdn.empty() || wstrlegacyname.empty())
     {
-		 wstring errorMessage = L"Util::GetUserDNAndLegacyName(): S_ADS_NOMORE_ROWS";
-			errorMessage += L" Error Cause :: DN Empty? : ";
-			errorMessage += dnEmpty;
-			errorMessage += L"  LegacyDN Empty? :";
-			errorMessage += ldnEmpty;
+		wstring errorMessage = L"Util::GetUserDNAndLegacyName(): one of the required param (distinguishedName or legacyExchangeDN) not found!";			
 		throw MapiUtilsException(hr, errorMessage.c_str(),
             ERR_AD_NOROWS, __LINE__, __FILE__);
     }
