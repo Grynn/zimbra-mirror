@@ -339,7 +339,7 @@ public class FormApptNew extends AbsForm {
 	
 	public String zGetApptBodyText() throws HarnessException {
 		String bodyText;
-		this.sSelectFrame("css=iframe[id$='_content_ifr']");
+		this.sSelectFrame("css=iframe[id$='ZmHtmlEditor1_body_ifr']");
 		bodyText = sGetText("css=body[id='tinymce']"); 
 		this.sSelectFrame("relative=top");
 		return bodyText;
@@ -941,7 +941,7 @@ public class FormApptNew extends AbsForm {
 
 				} else if (frames == 2) {
 
-					locator = "css=iframe[id$='_content_ifr']";
+					locator = "css=iframe[id$='ZmHtmlEditor1_body_ifr']";
 					if (!this.sIsElementPresent(locator))
 						throw new HarnessException(
 								"Unable to locate compose body");
