@@ -224,6 +224,7 @@ sub sendEmailReport {
       if ($Debug);
 
     eval {
+	$ENV{MAILADDRESS} = $from_address;
         my $mailer = Mail::Mailer->new( "smtp", Server => $smtphost, Port => $smtpport );
         $mailer->open(
             {
