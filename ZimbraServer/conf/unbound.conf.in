@@ -3,6 +3,8 @@
 server:
 %%explode 	interface: VAR:zimbraUnboundBindAddress%%
 	verbosity: 1
+	do-tcp: %%zimbraDNSUseTCP%%
+	do-udp: %%zimbraDNSUseUDP%%
 
 forward-zone:
 	name: "."
