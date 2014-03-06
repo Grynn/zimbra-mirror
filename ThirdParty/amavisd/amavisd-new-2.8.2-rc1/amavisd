@@ -18721,7 +18721,7 @@ BEGIN {
   @ISA = qw(Exporter);
   $have_sasl = eval { require Authen::SASL };
   import Amavis::Conf qw(:platform :confvars c cr ca);
-  import Amavis::Util qw(ll do_log);
+  import Amavis::Util qw(ll do_log do_log_safe);
   import Amavis::Timing qw(section_time);
 }
 
