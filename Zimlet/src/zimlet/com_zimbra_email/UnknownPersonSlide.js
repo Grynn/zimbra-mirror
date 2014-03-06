@@ -376,9 +376,16 @@ function(attrs) {
     this.attribs = attrs;
     attrs = this._formatTexts(attrs);
 
-	var iHtml = AjxTemplate.expand("com_zimbra_email.templates.Email1#ContactDetails", attrs);
-	document.getElementById(UnknownPersonSlide.TEXT_DIV_ID).innerHTML = iHtml;
-	document.getElementById("UnknownPersonSlide_Frame").onmouseup =  AjxCallback.simpleClosure(this._handleAllClicks, this);
+	var iHtml = AjxTemplate.expand("com_zimbra_email.templates.Email1#ContactDetails", attrs),
+		textDiv = document.getElementById(UnknownPersonSlide.TEXT_DIV_ID),
+		frame = document.getElementById("UnknownPersonSlide_Frame");
+
+	if (textDiv) {
+		textDiv.innerHTML = iHtml;
+	}
+	if (frame) {
+		frame.onmouseup =  AjxCallback.simpleClosure(this._handleAllClicks, this);
+	}
 	/*
 	document.getElementById("UnknownPersonSlide_EmailAnchorId").onclick =  AjxCallback.simpleClosure(this._openCompose, this);
 	if(document.getElementById("UnknownPersonSlide_NameAnchorId")) {
