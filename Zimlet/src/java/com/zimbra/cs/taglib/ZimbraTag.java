@@ -57,7 +57,7 @@ public class ZimbraTag extends BodyTagSupport {
             throw ZimbraTagException.AUTH_FAILURE("cannot parse authtoken");
         }
 
-        if (token.isExpired()) {
+        if (token.isExpired() || !token.isRegistered()) {
             throw ZimbraTagException.AUTH_FAILURE("authtoken expired");
         }
         

@@ -14,24 +14,39 @@
  */
 package com.zimbra.cs.taglib.tag;
 
-import com.zimbra.cs.taglib.ZJspSession;
+import java.io.IOException;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
-import java.io.IOException;
 
 import com.zimbra.common.auth.ZAuthToken;
+import com.zimbra.cs.account.AuthToken;
+import com.zimbra.cs.account.AuthTokenException;
+import com.zimbra.cs.account.ZimbraAuthToken;
+import com.zimbra.cs.taglib.ZJspSession;
 
 public class LogoutTag extends ZimbraSimpleTag {
     
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
         PageContext pageContext = (PageContext) jctxt;
-        HttpServletResponse response = (HttpServletResponse) pageContext.getResponse(); 
-        ZAuthToken.clearCookies(response);
-        ZJspSession.clearSession((PageContext)jctxt);
+        ZAuthToken authToken = ZJspSession.getAuthToken(pageContext);
+        try {
+        	if(authToken != null) {
+        		AuthToken at = ZimbraAuthToken.getAuthToken(authToken.getValue());
+        		if(at != null) {
+        			at.deRegister();
+        		}
+        	}
+        } catch (AuthTokenException e) {
+			throw new JspTagException(e.getMessage(), e);
+		} finally {
+	        HttpServletResponse response = (HttpServletResponse) pageContext.getResponse(); 
+	        ZAuthToken.clearCookies(response);
+	        ZJspSession.clearSession(pageContext);
+		}
     }
 }
