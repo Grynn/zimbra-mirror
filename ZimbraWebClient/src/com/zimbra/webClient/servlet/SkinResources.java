@@ -1949,7 +1949,10 @@ public class SkinResources
 				throw new IOException("grad():type not understood: use 'linear-vertical', 'linear-horizontal");
 			}
 
-			if (isBrowser("MSIE_9")) {
+			if (from.equals(to)) {
+				// no need for all the black magic below for trivial gradients
+				result = String.format("background: %s;", from);
+			} else if (isBrowser("MSIE_9")) {
 				String svgsource = "<?xml version=\"1.0\" ?>" +
 					"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%%\" height=\"100%%\" viewBox=\"0 0 1 1\" preserveAspectRatio=\"none\">" +
 					"<linearGradient id=\"thegradient\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"%1$s\" y2=\"%2$s\">" +
