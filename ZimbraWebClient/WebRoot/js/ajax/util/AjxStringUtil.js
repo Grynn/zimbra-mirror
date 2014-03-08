@@ -2318,12 +2318,8 @@ function(str) {
 
 	// remove empty surrounding <div> containers, and leading/trailing <br>
 	var len = 0;
-	while ((str.length !== len) &&
-		   ((/^<?div>/i.test(str) && /<\/div>$/i.test(str)) ||
-			 /^<br ?\/?>/i.test(str) || /<br ?\/?>$/i.test(str))) {
-
+	while (str.length !== len && (/^<br ?\/?>/i.test(str) || /<br ?\/?>$/i.test(str))) {
 		len = str.length;	// loop prevention
-		str = str.replace(/^<div>/i, "").replace(/<\/div>$/i, "");
 		str = str.replace(/^<br ?\/?>/i, "").replace(/<br ?\/?>$/i, "");
 	}
 	
