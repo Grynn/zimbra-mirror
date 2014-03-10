@@ -60,7 +60,7 @@ public class Bug_78058 extends AjaxCommonTest {
 
 	}
 
-	@Test(description = "Verify Toast Msg for Empty Signature body", groups = { "smoke" })
+	@Test(description = "Verify Toast Msg for Empty Signature body (asp per bug comment#10)", groups = { "depricated" })
 	public void VerifyToastMsgForEmptySigBody_Bug78058() throws HarnessException {
 
 		String sigName = "signame" + ZimbraSeleniumProperties.getUniqueString();
