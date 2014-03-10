@@ -388,16 +388,21 @@ public class EditDocument extends FeatureBriefcaseTest {
 		app.zPageBriefcase.isEditDocLoaded(docItem);
 
 		String editText = "";
+		String newName = "";
 
 		// Select document window opened for editing
 		try {
 			app.zPageBriefcase.zSelectWindow(docItem.getName());
-
+			
 			editText = "editText" + ZimbraSeleniumProperties.getUniqueString();
-
+			newName = "newname" + ZimbraSeleniumProperties.getUniqueString();
+			
 			// Fill out the document with the new data
+			documentBriefcaseEdit.zFillField(DocumentBriefcaseNew.Field.Name,
+					newName);
 			documentBriefcaseEdit.zFillField(DocumentBriefcaseNew.Field.Body,
 					editText);
+		
 
 			// Save and close
 			documentBriefcaseEdit.zSubmit();
@@ -409,7 +414,8 @@ public class EditDocument extends FeatureBriefcaseTest {
 		}
 
 		docItem.setDocText(editText);
-
+		docItem.setDocName(newName);
+		
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 

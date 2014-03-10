@@ -100,7 +100,7 @@ public class SendDocLink extends FeatureBriefcaseTest {
 
 		// Verify link
 		boolean visible = mailform.zWaitForIframeText(
-				"css=iframe[id*=_content_ifr]", docName);
+				"css=iframe[id*=_body_ifr]", docName);
 		ZAssert.assertTrue(visible,"Verify the link text");
 
 		// Cancel the message
@@ -173,7 +173,7 @@ public class SendDocLink extends FeatureBriefcaseTest {
 
 		// Verify link
 		ZAssert.assertTrue(mailform.zWaitForIframeText(
-				"css=iframe[id*=_content_ifr]", docName),
+				"css=iframe[id*=_body_ifr]", docName),
 				"Verify the link text");
 
 		// Cancel the message

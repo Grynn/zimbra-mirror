@@ -102,7 +102,7 @@ public class SendFileLink extends FeatureBriefcaseTest {
 
 		// Verify link
 		ZAssert.assertTrue(mailform.zWaitForIframeText(
-				"css=iframe[id*=_content_ifr]", fileName),
+				"css=iframe[id*=_body_ifr]", fileName),
 				"Verify the link text");
 
 		// Cancel the message
@@ -177,7 +177,7 @@ public class SendFileLink extends FeatureBriefcaseTest {
 
 		// Verify link
 		ZAssert.assertTrue(mailform.zWaitForIframeText(
-				"css=iframe[id*=_content_ifr]", fileName),
+				"css=iframe[id*=_body_ifr]", fileName),
 				"Verify the link text");
 
 		// Cancel the message
