@@ -45,7 +45,7 @@ public class SelectFolder extends PrefGroupMailByMessageTest {
 	}
 	
 	@Test(	description = "Left click on folder - verify messages in that folder are shown",
-			groups = { "functional" })
+			groups = { "functional88" })
 	public void SelectFolder_01() throws HarnessException {
 		
 		
