@@ -1385,7 +1385,7 @@ public class PageAddressbook extends AbsTab {
 		    if (option == Button.B_NEW) {
 		    	locator = "css=div#zm__Contacts tr[id^="+ cmi.locator +"]";			    		
 		    }else if (option == Button.B_FORWARD) {
-		    	locator = "css=div#zm__Contacts td[id^="+ cmi.locator +"]";	
+		    	locator = "css=div#zm__Contacts tr[id^="+ cmi.locator +"]";	
 		    }
 			
 			//locator = "id="+ id;
