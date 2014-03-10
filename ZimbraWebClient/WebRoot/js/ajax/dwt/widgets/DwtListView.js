@@ -2131,6 +2131,10 @@ function(clickedEl, ev) {
 		else if (ev.button == DwtMouseEvent.RIGHT && !bContained &&
 				this._evtMgr.isListenerRegistered(DwtEvent.ACTION))
 		{
+			// Deselect all - otherwise, we can have a selection that is already showing,
+			// but the context menu is not applied to it - very confusing
+			this.deselectAll();
+
 			// save right click selection
 			this._rightSelItem = clickedEl;
             Dwt.delClass(clickedEl, this._styleRe, this._rightClickClass);
