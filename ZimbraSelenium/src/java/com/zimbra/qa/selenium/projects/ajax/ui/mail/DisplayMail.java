@@ -942,7 +942,7 @@ public class DisplayMail extends AbsDisplay {
 		if ( field == Field.Body) {
 
 			try {
-				this.sSelectFrame("css=iframe[id$='_content_ifr']");
+				this.sSelectFrame("css=iframe[id$='_body_ifr']");
 				String bodyhtml = this.sGetHtmlSource();
 				return bodyhtml;				
 			} finally {
@@ -962,7 +962,7 @@ public class DisplayMail extends AbsDisplay {
 		if ( field == Field.Body) {
 
 			try {
-				String bodyLocator= "css=div[class='ZmComposeView'] textarea[id$='_content']";
+				String bodyLocator= "css=div[class='ZmComposeView'] textarea[id$='_body']";
 				this.sFocus(bodyLocator);
 				this.zClick(bodyLocator);
 				logger.info(this.sGetValue(bodyLocator));
