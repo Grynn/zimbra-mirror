@@ -699,6 +699,14 @@ public class SkinResources
                 skinStr = account.getAttr(Provisioning.A_zimbraPrefSkin);
                 localeStr = account.getAttr(Provisioning.A_zimbraPrefLocale);
                 offlineAccessEnabled = account.getAttr(Provisioning.A_zimbraPrefWebClientOfflineAccessEnabled);
+				if (skinStr == null) {
+					skinStr = skin;
+				}
+				if (localeStr == null) {
+					String language = requestedLocale.getLanguage();
+					String country = requestedLocale.getCountry();
+					localeStr = language + "_" + country;
+				}
                 if (ZimbraLog.webclient.isDebugEnabled()) {
                     ZimbraLog.webclient.debug("DEBUG: offlineAccessEnabled :: " + offlineAccessEnabled + " :: skin :: " + skinStr + " :: locale :: " + localeStr);
                 }
