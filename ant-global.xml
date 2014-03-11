@@ -188,7 +188,7 @@
         <delete dir="${build.dir}"/>
     </target>
 
-    <target name="compile" description="Compiles from in src/java into build/classes.">
+    <target name="compile" description="Compiles from src/java into build/classes.">
         <mkdir dir="${build.classes.dir}" />
         <javac destdir="${build.classes.dir}" debug="true" classpathref="class.path" target="${javac.target}">
             <src refid="all.java.path" />
@@ -282,7 +282,7 @@
         <fail if="junit.failure" message="Single Unit test failed"/>
     </target>
 
-    <target name="emma" description="Emma Instrutmentation">
+    <target name="emma" description="Emma Instrumentation">
 
       <taskdef resource="emma_ant.properties" classpathref="emma.lib"/>
       <delete dir="${build.instrumented.dir}" quiet="true" />
