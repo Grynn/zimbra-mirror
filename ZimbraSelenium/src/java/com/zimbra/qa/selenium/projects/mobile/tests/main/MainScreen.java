@@ -59,7 +59,7 @@ public class MainScreen extends MobileCommonTest {
 		// The copyright doesn't seem to be translated
 		//use "\u00a9" (char)169 for Copyright
 		
-		String copyright = "Copyright " + "\u00a9" + " 2005-2013 Telligent Systems, Inc. " + (char)34 + "Telligent" + (char)34 + " and " + (char)34 + "Zimbra" + (char)34 + " are registered trademarks or trademarks of Telligent Systems, Inc.";
+		String copyright = "Copyright " + "\u00a9" + " 2005-2014 Telligent Systems, Inc. " + (char)34 + "Telligent" + (char)34 + " and " + (char)34 + "Zimbra" + (char)34 + " are registered trademarks or trademarks of Telligent Systems, Inc.";
 		
 				
 		ZAssert.assertTrue(app.zPageMain.sIsElementPresent(PageMain.Locators.zMainCopyright),	"Verify that the copyright notice is present");
