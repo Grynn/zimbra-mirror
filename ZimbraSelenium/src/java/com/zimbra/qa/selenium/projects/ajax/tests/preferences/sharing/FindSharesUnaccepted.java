@@ -79,7 +79,7 @@ public class FindSharesUnaccepted extends AjaxCommonTest {
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.Sharing);
 
 		// Add username to the search box
-		app.zPagePreferences.sType("css=input[id$='_owner_input']", Owner.EmailAddress);
+		app.zPagePreferences.sType("css=div#Prefs_Pages_Sharing_shareForm div[id$='_owner'] input", Owner.EmailAddress);
 		
 		// Click "Find Shares"
 		app.zPagePreferences.zClick("css=div[id$='_findButton'] td[id$='_title']");
