@@ -413,16 +413,17 @@ public class AddToCalendar extends PrefGroupMailByMessageTest {
 		ZAssert.assertEquals(apptName, apptSubject, "Verify correct appointment returned'");
 	}
 	
+	@Bugs(ids = "49715")
 	@Test(description = "Bug 49715 - Links in email messages to .ics files should provide method to add to calendar",
 			groups = { "functional" })
 			
 	public void AddToCalendar_icsLink_01() throws HarnessException {
 
 		// -- Data Setup
-		String subject = "test ics";
-		String newCalFolder = ZimbraSeleniumProperties.getUniqueString();
-		ZDate startUTC = new ZDate(2013, 02, 21, 12, 0, 0);
-		ZDate endUTC   = new ZDate(2013, 02, 21, 12, 0, 0);
+		String subject = "AddToCalendar_icsLink_01";
+		String newCalFolder = "Calendar" + ZimbraSeleniumProperties.getUniqueString();
+		ZDate startUTC = new ZDate(2014, 3, 12, 12, 0, 0);
+		ZDate endUTC   = new ZDate(2014, 3, 12, 12, 0, 0);
 		final String mimeFile = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email08/mime02.txt";
 		
 		// Inject the message
