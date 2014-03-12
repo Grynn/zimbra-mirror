@@ -57,6 +57,7 @@ function (uname, pword, callback) {
 	params.asyncMode = true;
 	params.noAuthToken=true;
     params.ignoreAuthToken = true;
+    params.skipExpiredToken = true;
 	params.callback = callback;
 	command.invoke(params);	
 }
