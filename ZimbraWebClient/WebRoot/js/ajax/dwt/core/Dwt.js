@@ -1241,7 +1241,7 @@ function(input, start, end) {
 		range.moveStart("character", start);
 		range.moveEnd("character", end - start);
 		range.select();
-	} else {
+	} else if (input.select) {
 		// FIXME: find solutions for other browsers
 		input.select();
 	}
