@@ -414,7 +414,8 @@ function(preParams, paramsArr) {
                 hasmore= resp.more|hasmore;
 			}
 		        if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
-		                var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
+		                var list = this.scrollSearchParams.controller.getList();
+		                var act = new AjxTimedAction(list, list.loadEffectiveRights, null);
 		                AjxTimedAction.scheduleAction(act, 150)
 		        }
 
@@ -514,7 +515,8 @@ function(params, resp) {
                     tempResultList = tempList;
                 }
 				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
-					var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
+					var list = this.scrollSearchParams.controller.getList();
+					var act = new AjxTimedAction(list, list.loadEffectiveRights, null);
 					AjxTimedAction.scheduleAction(act, 150)
 				}
                  hasmore= response.more;
