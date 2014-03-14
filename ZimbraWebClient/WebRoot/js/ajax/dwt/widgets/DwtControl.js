@@ -1026,7 +1026,9 @@ DwtControl.prototype.condClassName = function(condition, classWhenTrue, classWhe
  */
 DwtControl.prototype.setDisplayState =
 function(state) {
-    if (!this._enabled) state = DwtControl.DISABLED;
+    if (!this._enabled) {
+		state = DwtControl.DISABLED;
+	}
 
     if (arguments.length > 1) {
         var a = [];
