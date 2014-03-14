@@ -55,6 +55,7 @@ DwtMessageDialog = function(params) {
 	this.setContent(this._contentHtml());
 	this._msgCell = document.getElementById(this._msgCellId);
 	this.addEnterListener(new AjxListener(this, this._enterListener));
+	this._setAllowSelection();
 };
 
 DwtMessageDialog.PARAMS = ["parent", "className", "buttons", "extraButtons", "id"];
