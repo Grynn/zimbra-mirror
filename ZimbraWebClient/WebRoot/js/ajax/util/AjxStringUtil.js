@@ -1666,7 +1666,7 @@ AjxStringUtil.HTML_SEP_ID = "zwchr";
 
 // regexes for finding a delimiter such as "On DATE, NAME (EMAIL) wrote:"
 AjxStringUtil.ORIG_EMAIL_RE = /[^@\s]+@[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})+/;	// see AjxUtil.EMAIL_FULL_RE
-AjxStringUtil.ORIG_DATE_RE = /, 20\d\d/;
+AjxStringUtil.ORIG_DATE_RE = /(\/|, )20\d\d/;
 AjxStringUtil.ORIG_INTRO_RE = new RegExp("^(-{2,}|" + AjxMsg.on + ")", "i")
 
 
@@ -1943,6 +1943,26 @@ AjxStringUtil._getOriginalHtmlContent = function(text) {
 		}
 		nodeName = el.nodeName.toLowerCase();
 		type = AjxStringUtil._checkNode(nodeList[i]);
+
+		// Check for a multi-element "wrote:" attribution (usually a combo of #text and A nodes).
+		// If the current node is a #text with a date, concatenate the next few #text nodes and check the result.
+		if (type === AjxStringUtil.ORIG_UNKNOWN && el.nodeName === '#text' && AjxStringUtil.ORIG_DATE_RE.test(el.nodeValue)) {
+			var str = el.nodeValue;
+			for (var j = 1; j < 5; j++) {
+				var el1 = nodeList[i + j];
+				if (el1 && el1.nodeName === '#text') {
+					str += el1.nodeValue;
+					if (/:$/.test(str)) {
+						type = AjxStringUtil._getLineType(AjxStringUtil.trim(str));
+						if (type === AjxStringUtil.ORIG_WROTE_STRONG) {
+							i = i + j;
+							break;
+						}
+					}
+				}
+			}
+		}
+
 		if (type !== null) {
 			results.push({ type: type, node: el, nodeName: nodeName });
 			count[type] = count[type] ? count[type] + 1 : 1;
@@ -1962,14 +1982,6 @@ AjxStringUtil._getOriginalHtmlContent = function(text) {
 			prevType = type;
 		}
 	}
-
-	/*
-	 for (i = 0; i < results.length; i++) {
-	 var r = results[i];
-	 var extra = r.nodeName === '#text' ? ' ' + r.node.nodeValue.substr(0, 100) : '';
-	 DBG.println(r.nodeName + ' ' + r.type + extra);
-	 }
-	 */
 
 	if (sepNode) {
 		AjxStringUtil._prune(sepNode, true);
@@ -2301,39 +2313,58 @@ function(count, results) {
 };
 
 /**
- * Removes non-content HTML from the beginning and end. Would typically be used on raw content from an editor.
- * There's almost certainly a better way to do this.
- * 
- * @param {string}	str		some HTML
+ * Removes non-content HTML from the beginning and end. The idea is to remove anything that would
+ * appear to the user as blank space. This function is an approximation since that's hard to do,
+ * especially when dealing with HTML as a string.
+ *
+ * @param {String}  html    HTML to fix
+ * @return {String} trimmed HTML
+ * @adapts AjxStringUtil.trimHtml
  */
-AjxStringUtil.trimHtml =
-function(str) {
+AjxStringUtil.trimHtml = function(html) {
 
-	if (!str) {
-		return "";
+	if (!html) {
+		return '';
 	}
-	
-	str = str.replace(/<\/?html>|<\/?head>|<\/?body>/gi, "");	// strip empty document-level tags
-	str = str.replace(/<div><br ?\/?><\/div>/gi, "<br>");		// TinyMCE loves <div> containers
+	var trimmedHtml = html;
 
-	// remove empty surrounding <div> containers, and leading/trailing <br>
+	// remove doc-level tags if they don't have attributes
+	var nodes = [ 'html', 'head', 'body' ];
+	for (var i = 0; i < nodes.length; i++) {
+		var node = nodes[i],
+			nodeLc = '<' + node + '>',
+			nodeUc = '<' + node.toUpperCase() + '>',
+			regex;
+		if (trimmedHtml.indexOf(nodeLc) !== -1 || trimmedHtml.indexOf(nodeUc) !== -1) {
+			regex = new RegExp('<\\/?' + node + '>', 'gi');
+			trimmedHtml = trimmedHtml.replace(regex, '');
+		}
+	}
+
+	// some editors like to put every <br> in a <div>
+	trimmedHtml = trimmedHtml.replace(/<div><br ?\/?><\/div>/gi, '<br>');
+
+	// remove leading/trailing <br>
 	var len = 0;
-	while (str.length !== len && (/^<br ?\/?>/i.test(str) || /<br ?\/?>$/i.test(str))) {
-		len = str.length;	// loop prevention
-		str = str.replace(/^<br ?\/?>/i, "").replace(/<br ?\/?>$/i, "");
+	while ((trimmedHtml.length !== len) &&
+		(/^<br ?\/?>/i.test(trimmedHtml) || /<br ?\/?>$/i.test(trimmedHtml))) {
+
+		len = trimmedHtml.length;	// loop prevention
+		trimmedHtml = trimmedHtml.replace(/^<div>/i, "").replace(/<\/div>$/i, '');
+		trimmedHtml = trimmedHtml.replace(/^<br ?\/?>/i, "").replace(/<br ?\/?>$/i, '');
 	}
-	
+
 	// remove trailing <br> trapped in front of closing tags
-	var m = str && str.match(/((<br ?\/?>)+)((<\/\w+>)+)$/i);
+	var m = trimmedHtml && trimmedHtml.match(/((<br ?\/?>)+)((<\/\w+>)+)$/i);
 	if (m && m.length) {
-		var regex = new RegExp(m[1] + m[3] + "$", "i");
-		str = str.replace(regex, m[3]);
+		var regex = new RegExp(m[1] + m[3] + '$', 'i');
+		trimmedHtml = trimmedHtml.replace(regex, m[3]);
 	}
-	
+
 	// remove empty internal <div> containers
-	str = str.replace(/(<div><\/div>)+/gi, "");
-	
-	return AjxStringUtil.trim(str);
+	trimmedHtml = trimmedHtml.replace(/(<div><\/div>)+/gi, '');
+
+	return AjxStringUtil.trim(trimmedHtml);
 };
 
 // Replaces img src to cid for inline or dfsrc if external image and remove dfsrc before sending for a given htmlContent
