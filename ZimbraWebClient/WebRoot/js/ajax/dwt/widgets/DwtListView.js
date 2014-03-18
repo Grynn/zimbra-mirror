@@ -591,13 +591,15 @@ function(item, skipNotify, skipAlternation) {
 	var altIndex = this._getRowIndex(item);	// get index before we remove row
 
 	this._selectedItems.remove(itemEl);
-	if (this._rightSelItem == itemEl) {
+	if (this._rightSelItem === itemEl) {
 		this._rightSelItem = null;
 	}
-	if (this._kbAnchor == itemEl) {
+	if (this._kbAnchor === itemEl) {
 		this._kbAnchor = null;
 	}
-	this._parentEl.removeChild(itemEl);
+	if (itemEl.parentNode === this._parentEl) {
+		this._parentEl.removeChild(itemEl);
+	}
 	if (this._list) {
 		this._list.remove(item);
 	}
