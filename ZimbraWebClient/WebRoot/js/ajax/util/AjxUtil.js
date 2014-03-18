@@ -51,8 +51,10 @@ AjxUtil.isEmpty				= function(aThing) { return ( AjxUtil.isNull(aThing) || AjxUt
 // REVISIT: Should do more precise checking. However, there are names in
 //			common use that do not follow the RFC patterns (e.g. domain
 //			names that start with digits).
-AjxUtil.IP_ADDRESS_RE = /^\d{1,3}(\.\d{1,3}){3}(\.\d{1,3}\.\d{1,3})?$/;
-AjxUtil.IP_ADDRESS_WITH_PORT_RE = /^\d{1,3}(\.\d{1,3}){3}(\.\d{1,3}\.\d{1,3})?:\d{1,5}$/;
+AjxUtil.IPv4_ADDRESS_RE = /^\d{1,3}(\.\d{1,3}){3}(\.\d{1,3}\.\d{1,3})?$/;
+AjxUtil.IPv4_ADDRESS_WITH_PORT_RE = /^\d{1,3}(\.\d{1,3}){3}(\.\d{1,3}\.\d{1,3})?:\d{1,5}$/;
+AjxUtil.IPv6_ADDRESS_RE = /^((?=.*::)(?!.*::.+::)(::)?([\dA-F]{1,4}:(:|\b)|){5}|([\dA-F]{1,4}:){6})((([\dA-F]{1,4}((?!\3)::|:\b|(?:%[-\w.~]+)?$))|(?!\2\3)){2}|(((2[0-4]|1\d|[1-9])?\d|25[0-5])\.?\b){4})(?:%[-\w.~]+)?$/i;
+AjxUtil.IPv6_ADDRESS_WITH_PORT_RE = new RegExp(AjxUtil.IPv6_ADDRESS_RE.source.replace('^', '^\\[').replace('$', '\\]:\\d{1,5}$'), 'i');
 AjxUtil.SUBNET_RE = /^\d{1,3}(\.\d{1,3}){3}(\.\d{1,3}\.\d{1,3})?\/\d{1,2}$/;
 AjxUtil.DOMAIN_NAME_SHORT_RE = /^[A-Za-z0-9\-]{2,}$/;
 AjxUtil.DOMAIN_NAME_FULL_RE = /^[A-Za-z0-9\-]{1,}(\.[A-Za-z0-9\-]{2,}){1,}$/;
@@ -65,8 +67,6 @@ AjxUtil.IP_FULL_URL_RE = /^[A-Za-z0-9]{2,}:\/\/\d{1,3}(\.\d{1,3}){3}(\.\d{1,3}\.
 AjxUtil.SHORT_URL_RE = /^[A-Za-z0-9]{2,}:\/\/[A-Za-z0-9\-]+(\.[A-Za-z0-9\-]+)*(:([0-9])+)?$/;
 AjxUtil.IP_SHORT_URL_RE = /^[A-Za-z0-9]{2,}:\/\/\d{1,3}(\.\d{1,3}){3}(\.\d{1,3}\.\d{1,3})?(:([0-9])+)?$/;
 
-AjxUtil.isIpAddress 		= function(s) { return AjxUtil.IP_ADDR_RE.test(s); };
-AjxUtil.isDomain 			= function(s) {	return AjxUtil.DOMAIN_RE.test(s); };
 AjxUtil.isHostName 			= function(s) { return AjxUtil.HOST_NAME_RE.test(s); };
 AjxUtil.isDomainName = 
 function(s, shortMatch) {

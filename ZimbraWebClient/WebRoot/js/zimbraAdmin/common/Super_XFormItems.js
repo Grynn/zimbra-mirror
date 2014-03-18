@@ -299,8 +299,8 @@ Cos_HostNameOrIp_XModelItem = function (){}
 XModelItemFactory.createItemType("_COS_HOSTNAME_OR_IP_", "cos_hostname_or_ip", Cos_HostNameOrIp_XModelItem, Cos_String_XModelItem);
 Cos_HostNameOrIp_XModelItem.prototype.validateType = XModelItem.prototype.validateString;
 Cos_HostNameOrIp_XModelItem.prototype.maxLength = 256;
-//Cos_HostNameOrIp_XModelItem.prototype.pattern = [ AjxUtil.HOST_NAME_RE, AjxUtil.IP_ADDRESS_RE ];
-Cos_HostNameOrIp_XModelItem.prototype.pattern =  [AjxUtil.HOST_NAME_RE, AjxUtil.IP_ADDRESS_RE, AjxUtil.HOST_NAME_WITH_PORT_RE];
+//Cos_HostNameOrIp_XModelItem.prototype.pattern = [ AjxUtil.HOST_NAME_RE, AjxUtil.IPv4_ADDRESS_RE ];
+Cos_HostNameOrIp_XModelItem.prototype.pattern =  [AjxUtil.HOST_NAME_RE, AjxUtil.IPv4_ADDRESS_RE, AjxUtil.HOST_NAME_WITH_PORT_RE];
 
 /**
 * _COS_PORT_
@@ -318,7 +318,7 @@ Cos_Subnet_XModelItem = function (){}
 XModelItemFactory.createItemType("_COS_SUBNET_", "cos_subnet", Cos_Subnet_XModelItem, Cos_String_XModelItem);
 Cos_Subnet_XModelItem.prototype.validateType = XModelItem.prototype.validateString;
 Cos_Subnet_XModelItem.prototype.maxLength = 256;
-Cos_Subnet_XModelItem.prototype.pattern =  [AjxUtil.IP_ADDRESS_RE, AjxUtil.SUBNET_RE];
+Cos_Subnet_XModelItem.prototype.pattern =  [AjxUtil.IPv4_ADDRESS_RE, AjxUtil.SUBNET_RE];
 
 /**
 *	XForm Items that have overwritable super values
