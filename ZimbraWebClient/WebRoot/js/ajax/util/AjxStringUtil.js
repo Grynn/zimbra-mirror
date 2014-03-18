@@ -1666,7 +1666,7 @@ AjxStringUtil.HTML_SEP_ID = "zwchr";
 
 // regexes for finding a delimiter such as "On DATE, NAME (EMAIL) wrote:"
 AjxStringUtil.ORIG_EMAIL_RE = /[^@\s]+@[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})+/;	// see AjxUtil.EMAIL_FULL_RE
-AjxStringUtil.ORIG_DATE_RE = /(\/|, )20\d\d/;
+AjxStringUtil.ORIG_DATE_RE = /(\/|, )20\d\d/;                                       // matches "03/07/2014" or "March 3, 2014" by looking for year 20xx
 AjxStringUtil.ORIG_INTRO_RE = new RegExp("^(-{2,}|" + AjxMsg.on + ")", "i")
 
 
@@ -1915,8 +1915,7 @@ AjxStringUtil.IGNORE_NODE = AjxUtil.arrayAsHash(AjxStringUtil.IGNORE_NODE_LIST);
 
 /**
  * For HTML, we strip off the html, head, and body tags and stick the rest in a temporary DOM node so that
- * we can walk the tree. Instead of going line by line, we go element by element. If we find one that
- * is recognized as a separator, we remove all subsequent elements.
+ * we can go element by element. If we find one that is recognized as a separator, we remove all subsequent elements.
  *
  * @param {string}	text		message body content
  *
@@ -1944,11 +1943,14 @@ AjxStringUtil._getOriginalHtmlContent = function(text) {
 		nodeName = el.nodeName.toLowerCase();
 		type = AjxStringUtil._checkNode(nodeList[i]);
 
-		// Check for a multi-element "wrote:" attribution (usually a combo of #text and A nodes).
-		// If the current node is a #text with a date, concatenate the next few #text nodes and check the result.
+		// Check for a multi-element "wrote:" attribution (usually a combo of #text and A nodes), for example:
+		//
+		//     On Feb 28, 2014, at 3:42 PM, Joe Smith &lt;<a href="mailto:jsmith@zimbra.com" target="_blank">jsmith@zimbra.com</a>&gt; wrote:
+
+		// If the current node is a #text with a date, find #text nodes within the next ten nodes, concatenate them, and check the result.
 		if (type === AjxStringUtil.ORIG_UNKNOWN && el.nodeName === '#text' && AjxStringUtil.ORIG_DATE_RE.test(el.nodeValue)) {
 			var str = el.nodeValue;
-			for (var j = 1; j < 5; j++) {
+			for (var j = 1; j < 10; j++) {
 				var el1 = nodeList[i + j];
 				if (el1 && el1.nodeName === '#text') {
 					str += el1.nodeValue;
@@ -2329,29 +2331,16 @@ AjxStringUtil.trimHtml = function(html) {
 	var trimmedHtml = html;
 
 	// remove doc-level tags if they don't have attributes
-	var nodes = [ 'html', 'head', 'body' ];
-	for (var i = 0; i < nodes.length; i++) {
-		var node = nodes[i],
-			nodeLc = '<' + node + '>',
-			nodeUc = '<' + node.toUpperCase() + '>',
-			regex;
-		if (trimmedHtml.indexOf(nodeLc) !== -1 || trimmedHtml.indexOf(nodeUc) !== -1) {
-			regex = new RegExp('<\\/?' + node + '>', 'gi');
-			trimmedHtml = trimmedHtml.replace(regex, '');
-		}
-	}
+	trimmedHtml = trimmedHtml.replace(AjxStringUtil.DOC_TAG_REGEX, '');
 
 	// some editors like to put every <br> in a <div>
 	trimmedHtml = trimmedHtml.replace(/<div><br ?\/?><\/div>/gi, '<br>');
 
 	// remove leading/trailing <br>
 	var len = 0;
-	while ((trimmedHtml.length !== len) &&
-		(/^<br ?\/?>/i.test(trimmedHtml) || /<br ?\/?>$/i.test(trimmedHtml))) {
-
+	while (trimmedHtml.length !== len && (/^<br ?\/?>/i.test(trimmedHtml) || /<br ?\/?>$/i.test(trimmedHtml))) {
 		len = trimmedHtml.length;	// loop prevention
-		trimmedHtml = trimmedHtml.replace(/^<div>/i, "").replace(/<\/div>$/i, '');
-		trimmedHtml = trimmedHtml.replace(/^<br ?\/?>/i, "").replace(/<br ?\/?>$/i, '');
+		trimmedHtml = trimmedHtml.replace(/^<br ?\/?>/i, "").replace(/<br ?\/?>$/i, "");
 	}
 
 	// remove trailing <br> trapped in front of closing tags
@@ -2366,6 +2355,9 @@ AjxStringUtil.trimHtml = function(html) {
 
 	return AjxStringUtil.trim(trimmedHtml);
 };
+
+// regex for removing empty doc tags from an HTML string
+AjxStringUtil.DOC_TAG_REGEX = /<\/?(html|head|body)>/gi;
 
 // Replaces img src to cid for inline or dfsrc if external image and remove dfsrc before sending for a given htmlContent
 AjxStringUtil.defangHtmlContent =
