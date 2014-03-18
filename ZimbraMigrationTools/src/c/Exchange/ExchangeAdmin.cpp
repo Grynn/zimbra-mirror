@@ -409,9 +409,9 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
     FreeADsMem(pAttrInfo);
 
     wstring twtsrlogonuserDN = LogonUserDN;
-    size_t nPos = twtsrlogonuserDN.find(_T(","), 0)+1;//twtsrlogonuserDN.find(_T("DC="), 0);
+    size_t nPos = twtsrlogonuserDN.find(_T("DC="), 0);//twtsrlogonuserDN.find(_T(","), 0)+1;//
     wstring wstrServerDN = twtsrlogonuserDN.substr(nPos);
-    wstring wstrADSPath = _T("LDAP://") + wstrServerDN;//_T("LDAP://CN=Users,") + wstrServerDN;
+    wstring wstrADSPath = _T("LDAP://CN=Users,") + wstrServerDN;//wstrServerDN;//
     ADSVALUE cnValue;
     ADSVALUE classValue;
     ADSVALUE sAMValue;
@@ -471,8 +471,8 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
 
 	dlogi("CreateExchangeMailBox: ADSPath: ",wstrADSPath.c_str(), "Logon User:", wstrLoggedUserName.c_str());
     // get dir container
-    if (FAILED(hr = ADsOpenObject(wstrADSPath.c_str(), wstrLoggedUserName.c_str(),
-            lpwstrLogonUsrPwd, ADS_SECURE_AUTHENTICATION, IID_IDirectoryObject,
+    if (FAILED(hr = ADsOpenObject(wstrADSPath.c_str(), NULL,NULL,//wstrLoggedUserName.c_str(), lpwstrLogonUsrPwd,
+		ADS_SECURE_AUTHENTICATION, IID_IDirectoryObject,
             (void **)pDirContainer.getptr())))
         throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): ADsOpenObject Failed.",
             ERR_CREATE_EXCHMBX, __LINE__, __FILE__);
@@ -652,15 +652,15 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
         throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): get_ADsPath Failed.",
             ERR_CREATE_EXCHMBX, __LINE__, __FILE__);
 
-    wstring wstrGroup = _T("LDAP://CN=Domain Admins,") + wstrServerDN;//_T("LDAP://CN=Domain Admins,CN=Users,") + wstrServerDN;
+    wstring wstrGroup = _T("LDAP://CN=Domain Admins,CN=Users,") + wstrServerDN; //+ wstrServerDN;//
 	dlogi("DomainAdmin Group Path: ",wstrGroup);
     Zimbra::Util::ScopedInterface<IADsGroup> pGroup;
 
     if (FAILED(hr = ADsGetObject(wstrGroup.c_str(), IID_IADsGroup, (void **)pGroup.getptr())))
         throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): ADsGetObject Failed.",
             ERR_CREATE_EXCHMBX, __LINE__, __FILE__);
-    if (FAILED(hr = ADsOpenObject(wstrGroup.c_str(), wstrLoggedUserName.c_str(),
-            lpwstrLogonUsrPwd, ADS_SECURE_AUTHENTICATION, IID_IADsGroup,
+    if (FAILED(hr = ADsOpenObject(wstrGroup.c_str(), NULL,NULL,//wstrLoggedUserName.c_str(), lpwstrLogonUsrPwd, 
+		ADS_SECURE_AUTHENTICATION, IID_IADsGroup,
             (void **)pGroup.getptr())))
         throw ExchangeAdminException(hr, L"CreateExchangeMailBox(): ADsOpenObject Failed.",
             ERR_CREATE_EXCHMBX, __LINE__, __FILE__);

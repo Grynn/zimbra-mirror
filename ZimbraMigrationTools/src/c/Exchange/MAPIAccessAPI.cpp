@@ -838,7 +838,7 @@ LPCWSTR MAPIAccessAPI::_GetItem(SBinary sbItemEID, BaseItemData &itemData)
     ULONG objtype;
 	
 	LPTSTR pszBin = SBinToStr(sbItemEID);
-	dlogd("Item EntryID: %s",pszBin);
+	dlogd("Item EntryID: ",pszBin);
 
     if (FAILED(hr = m_userStore->OpenEntry(sbItemEID.cb, (LPENTRYID)sbItemEID.lpb, NULL,
             MAPI_BEST_ACCESS, &objtype, (LPUNKNOWN *)&pMessage)))
