@@ -303,7 +303,7 @@ class tarMigrator implements Runnable
                 if((IsAccountExists(userInfoArr[0]+"@"+targetDomain,accountLog))&&
                    (GetTarredMailBox(userAccount,accountLog,tarMigparams.debug_mig)))
                 {
-                    tarmig_log.log(Level.INFO,"Download TarredMailBox Finsihed "+"("+userAccount+").");
+                    tarmig_log.log(Level.INFO,"Download TarredMailBox Finished "+"("+userAccount+").");
 
                     tarmig_log.log(Level.INFO,"Upload TarredMailBox Started... "+"("+userAccount+")");
                     boolean uploadRet=false;
@@ -314,7 +314,7 @@ class tarMigrator implements Runnable
 
                     if(uploadRet)
                     {
-                        tarmig_log.log(Level.INFO,"Upload TarredMailBox Finsihed "+"("+userAccount+").");
+                        tarmig_log.log(Level.INFO,"Upload TarredMailBox Finished "+"("+userAccount+").");
                         //delete tarred mailbox file?
                         if(tarMigparams.KeepSuccessFiles.compareToIgnoreCase("FALSE")==0)
                         {
