@@ -802,7 +802,7 @@ HRESULT ExchangeAdmin::DeleteExchangeMailBox(LPCWSTR lpwstrMailBox, LPCWSTR lpws
     wstring wstrADSPath = _T("LDAP://CN=Users,") + wstrServerDN;
 
     // get dir container
-    if (FAILED(hr = ADsOpenObject(wstrADSPath.c_str(), lpwstrlogonuser, lpwstrLogonUsrPwd,
+    if (FAILED(hr = ADsOpenObject(wstrADSPath.c_str(), NULL,NULL,//lpwstrlogonuser, lpwstrLogonUsrPwd,
             ADS_SECURE_AUTHENTICATION, IID_IDirectoryObject, (void **)pDirContainer.getptr())))
         throw ExchangeAdminException(hr, L"DeleteExchangeMailBox(): ADsOpenObject Failed.",
             ERR_DELETE_MBOX, __LINE__, __FILE__);
