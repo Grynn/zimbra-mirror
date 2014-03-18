@@ -132,6 +132,7 @@ $policy_bank{'AM.PDP-SOCK'} = {
 };
 
 $sa_debug = %%zimbraAmavisSALogLevel%%;
+#$sa_debug = 'info,dns,async,bayes,check,rules-all,uridnsbl,all';
 $sa_configpath = '/opt/zimbra/conf/spamassassin';
 $sa_siteconfigpath = '/opt/zimbra/conf/sa';
 
