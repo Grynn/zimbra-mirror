@@ -628,6 +628,11 @@ function(item) {
 			this._selectedItems.remove(odiv);
 			this.selectItem(item);
 		}
+
+        //update the _kbAnchor as the old element has been swapped with the new element
+        if (this._kbAnchor === odiv){
+            this._kbAnchor = ndiv;
+        }
     }
 };
 
