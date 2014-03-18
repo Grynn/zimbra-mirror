@@ -1,0 +1,1861 @@
+diff --git a/servers/slapd/back-bdb/attr.c b/servers/slapd/back-bdb/attr.c
+index 2f183b3..bde3503 100644
+--- a/servers/slapd/back-bdb/attr.c
++++ b/servers/slapd/back-bdb/attr.c
+@@ -280,6 +280,8 @@ bdb_attr_index_config(
+ 		a->ai_cr = NULL;
+ #endif
+ 		a->ai_desc = ad;
++		memset( &a->ai_ip, 0, sizeof( a->ai_ip ));
++		slap_index_preset( mask, &ad->ad_cname, ad->ad_type, &a->ai_ip );
+ 
+ 		if ( bdb->bi_flags & BDB_IS_OPEN ) {
+ 			a->ai_indexmask = 0;
+@@ -329,6 +331,8 @@ bdb_attr_index_config(
+ 					if ( b->ai_newmask )
+ 						b->ai_indexmask = b->ai_newmask;
+ 					b->ai_newmask = a->ai_newmask;
++					slap_index_preset_free( &b->ai_ip );
++					b->ai_ip = a->ai_ip;
+ 					ch_free( a );
+ 					rc = 0;
+ 					continue;
+@@ -394,6 +398,7 @@ bdb_attr_index_unparse( struct bdb_info *bdb, BerVarray *bva )
+ void
+ bdb_attr_info_free( AttrInfo *ai )
+ {
++	slap_index_preset_free( &ai->ai_ip );
+ #ifdef LDAP_COMP_MATCH
+ 	free( ai->ai_cr );
+ #endif
+diff --git a/servers/slapd/back-bdb/back-bdb.h b/servers/slapd/back-bdb/back-bdb.h
+index cec642e..8623473 100644
+--- a/servers/slapd/back-bdb/back-bdb.h
++++ b/servers/slapd/back-bdb/back-bdb.h
+@@ -351,6 +351,7 @@ typedef struct bdb_attrinfo {
+ #ifdef LDAP_COMP_MATCH
+ 	ComponentReference* ai_cr; /*component indexing*/
+ #endif
++	IndexPreset ai_ip;
+ } AttrInfo;
+ 
+ /* These flags must not clash with SLAP_INDEX flags or ops in slap.h! */
+diff --git a/servers/slapd/back-bdb/filterindex.c b/servers/slapd/back-bdb/filterindex.c
+index 71e3ea4..c2e794f 100644
+--- a/servers/slapd/back-bdb/filterindex.c
++++ b/servers/slapd/back-bdb/filterindex.c
+@@ -25,6 +25,8 @@
+ #include <component.h>
+ #endif
+ 
++extern struct berval bdb_presence_key;	/* index.c */
++
+ static int presence_candidates(
+ 	Operation *op,
+ 	DB_TXN *rtxn,
+@@ -338,13 +340,6 @@ comp_equality_candidates (
+ 	if ( !cr )
+ 		return 0;
+ 
+-        rc = bdb_index_param( op->o_bd, mra->ma_desc, LDAP_FILTER_EQUALITY,
+-                &db, &mask, &prefix );
+-
+-        if( rc != LDAP_SUCCESS ) {
+-                return 0;
+-        }
+-
+         if( !mr ) {
+                 return 0;
+         }
+@@ -354,11 +349,8 @@ comp_equality_candidates (
+         }
+ 
+ 	rc = (ca->ca_ma_rule->smr_filter)(
+-                LDAP_FILTER_EQUALITY,
+                 cr->cr_indexmask,
+-                sat_syntax,
+-                ca->ca_ma_rule,
+-                &prefix,
++				&ai->ai_ip,
+                 &ca->ca_ma_value,
+                 &keys, op->o_tmpmemctx );
+ 
+@@ -635,9 +627,8 @@ presence_candidates(
+ {
+ 	struct bdb_info *bdb = (struct bdb_info *) op->o_bd->be_private;
+ 	DB *db;
++	AttrInfo *ai;
+ 	int rc;
+-	slap_mask_t mask;
+-	struct berval prefix = {0, NULL};
+ 
+ 	Debug( LDAP_DEBUG_TRACE, "=> bdb_presence_candidates (%s)\n",
+ 			desc->ad_cname.bv_val, 0, 0 );
+@@ -649,7 +640,7 @@ presence_candidates(
+ 	}
+ 
+ 	rc = bdb_index_param( op->o_bd, desc, LDAP_FILTER_PRESENT,
+-		&db, &mask, &prefix );
++		&db, &ai );
+ 
+ 	if( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+ 		/* not indexed */
+@@ -667,14 +658,7 @@ presence_candidates(
+ 		return 0;
+ 	}
+ 
+-	if( prefix.bv_val == NULL ) {
+-		Debug( LDAP_DEBUG_TRACE,
+-			"<= bdb_presence_candidates: (%s) no prefix\n",
+-			desc->ad_cname.bv_val, 0, 0 );
+-		return -1;
+-	}
+-
+-	rc = bdb_key_read( op->o_bd, db, rtxn, &prefix, ids, NULL, 0 );
++	rc = bdb_key_read( op->o_bd, db, rtxn, &bdb_presence_key, ids, NULL, 0 );
+ 
+ 	if( rc == DB_NOTFOUND ) {
+ 		BDB_IDL_ZERO( ids );
+@@ -709,10 +693,9 @@ equality_candidates(
+ 	DB	*db;
+ 	int i;
+ 	int rc;
+-	slap_mask_t mask;
+-	struct berval prefix = {0, NULL};
+ 	struct berval *keys = NULL;
+ 	MatchingRule *mr;
++	AttrInfo *ai;
+ 
+ 	Debug( LDAP_DEBUG_TRACE, "=> bdb_equality_candidates (%s)\n",
+ 			ava->aa_desc->ad_cname.bv_val, 0, 0 );
+@@ -738,7 +721,7 @@ equality_candidates(
+ 	BDB_IDL_ALL( bdb, ids );
+ 
+ 	rc = bdb_index_param( op->o_bd, ava->aa_desc, LDAP_FILTER_EQUALITY,
+-		&db, &mask, &prefix );
++		&db, &ai );
+ 
+ 	if ( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+ 		Debug( LDAP_DEBUG_ANY,
+@@ -765,11 +748,8 @@ equality_candidates(
+ 	}
+ 
+ 	rc = (mr->smr_filter)(
+-		LDAP_FILTER_EQUALITY,
+-		mask,
+-		ava->aa_desc->ad_type->sat_syntax,
+-		mr,
+-		&prefix,
++		ai->ai_indexmask,
++		&ai->ai_ip,
+ 		&ava->aa_value,
+ 		&keys, op->o_tmpmemctx );
+ 
+@@ -777,7 +757,7 @@ equality_candidates(
+ 		Debug( LDAP_DEBUG_TRACE,
+ 			"<= bdb_equality_candidates: (%s, %s) "
+ 			"MR filter failed (%d)\n",
+-			prefix.bv_val, ava->aa_desc->ad_cname.bv_val, rc );
++			ai->ai_desc->ad_cname.bv_val, ava->aa_desc->ad_cname.bv_val, rc );
+ 		return 0;
+ 	}
+ 
+@@ -844,10 +824,9 @@ approx_candidates(
+ 	DB	*db;
+ 	int i;
+ 	int rc;
+-	slap_mask_t mask;
+-	struct berval prefix = {0, NULL};
+ 	struct berval *keys = NULL;
+ 	MatchingRule *mr;
++	AttrInfo *ai;
+ 
+ 	Debug( LDAP_DEBUG_TRACE, "=> bdb_approx_candidates (%s)\n",
+ 			ava->aa_desc->ad_cname.bv_val, 0, 0 );
+@@ -855,7 +834,7 @@ approx_candidates(
+ 	BDB_IDL_ALL( bdb, ids );
+ 
+ 	rc = bdb_index_param( op->o_bd, ava->aa_desc, LDAP_FILTER_APPROX,
+-		&db, &mask, &prefix );
++		&db, &ai );
+ 
+ 	if ( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+ 		Debug( LDAP_DEBUG_ANY,
+@@ -887,11 +866,8 @@ approx_candidates(
+ 	}
+ 
+ 	rc = (mr->smr_filter)(
+-		LDAP_FILTER_APPROX,
+-		mask,
+-		ava->aa_desc->ad_type->sat_syntax,
+-		mr,
+-		&prefix,
++		ai->ai_indexmask,
++		&ai->ai_ip,
+ 		&ava->aa_value,
+ 		&keys, op->o_tmpmemctx );
+ 
+@@ -899,14 +875,14 @@ approx_candidates(
+ 		Debug( LDAP_DEBUG_TRACE,
+ 			"<= bdb_approx_candidates: (%s, %s) "
+ 			"MR filter failed (%d)\n",
+-			prefix.bv_val, ava->aa_desc->ad_cname.bv_val, rc );
++			ai->ai_desc->ad_cname.bv_val, ava->aa_desc->ad_cname.bv_val, rc );
+ 		return 0;
+ 	}
+ 
+ 	if( keys == NULL ) {
+ 		Debug( LDAP_DEBUG_TRACE,
+ 			"<= bdb_approx_candidates: (%s) no keys (%s)\n",
+-			prefix.bv_val, ava->aa_desc->ad_cname.bv_val, 0 );
++			ai->ai_desc->ad_cname.bv_val, ava->aa_desc->ad_cname.bv_val, 0 );
+ 		return 0;
+ 	}
+ 
+@@ -964,10 +940,9 @@ substring_candidates(
+ 	DB	*db;
+ 	int i;
+ 	int rc;
+-	slap_mask_t mask;
+-	struct berval prefix = {0, NULL};
+ 	struct berval *keys = NULL;
+ 	MatchingRule *mr;
++	AttrInfo *ai;
+ 
+ 	Debug( LDAP_DEBUG_TRACE, "=> bdb_substring_candidates (%s)\n",
+ 			sub->sa_desc->ad_cname.bv_val, 0, 0 );
+@@ -975,7 +950,7 @@ substring_candidates(
+ 	BDB_IDL_ALL( bdb, ids );
+ 
+ 	rc = bdb_index_param( op->o_bd, sub->sa_desc, LDAP_FILTER_SUBSTRINGS,
+-		&db, &mask, &prefix );
++		&db, &ai );
+ 
+ 	if ( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+ 		Debug( LDAP_DEBUG_ANY,
+@@ -1003,11 +978,8 @@ substring_candidates(
+ 	}
+ 
+ 	rc = (mr->smr_filter)(
+-		LDAP_FILTER_SUBSTRINGS,
+-		mask,
+-		sub->sa_desc->ad_type->sat_syntax,
+-		mr,
+-		&prefix,
++		ai->ai_indexmask,
++		&ai->ai_ip,
+ 		sub,
+ 		&keys, op->o_tmpmemctx );
+ 
+@@ -1022,7 +994,7 @@ substring_candidates(
+ 	if( keys == NULL ) {
+ 		Debug( LDAP_DEBUG_TRACE,
+ 			"<= bdb_substring_candidates: (0x%04lx) no keys (%s)\n",
+-			mask, sub->sa_desc->ad_cname.bv_val, 0 );
++			ai->ai_indexmask, sub->sa_desc->ad_cname.bv_val, 0 );
+ 		return 0;
+ 	}
+ 
+@@ -1080,11 +1052,10 @@ inequality_candidates(
+ 	struct bdb_info *bdb = (struct bdb_info *) op->o_bd->be_private;
+ 	DB	*db;
+ 	int rc;
+-	slap_mask_t mask;
+-	struct berval prefix = {0, NULL};
+ 	struct berval *keys = NULL;
+ 	MatchingRule *mr;
+ 	DBC * cursor = NULL;
++	AttrInfo *ai;
+ 
+ 	Debug( LDAP_DEBUG_TRACE, "=> bdb_inequality_candidates (%s)\n",
+ 			ava->aa_desc->ad_cname.bv_val, 0, 0 );
+@@ -1092,7 +1063,7 @@ inequality_candidates(
+ 	BDB_IDL_ALL( bdb, ids );
+ 
+ 	rc = bdb_index_param( op->o_bd, ava->aa_desc, LDAP_FILTER_EQUALITY,
+-		&db, &mask, &prefix );
++		&db, &ai );
+ 
+ 	if ( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+ 		Debug( LDAP_DEBUG_ANY,
+@@ -1119,11 +1090,8 @@ inequality_candidates(
+ 	}
+ 
+ 	rc = (mr->smr_filter)(
+-		LDAP_FILTER_EQUALITY,
+-		mask,
+-		ava->aa_desc->ad_type->sat_syntax,
+-		mr,
+-		&prefix,
++		ai->ai_indexmask,
++		&ai->ai_ip,
+ 		&ava->aa_value,
+ 		&keys, op->o_tmpmemctx );
+ 
+@@ -1131,7 +1099,7 @@ inequality_candidates(
+ 		Debug( LDAP_DEBUG_TRACE,
+ 			"<= bdb_inequality_candidates: (%s, %s) "
+ 			"MR filter failed (%d)\n",
+-			prefix.bv_val, ava->aa_desc->ad_cname.bv_val, rc );
++			ai->ai_desc->ad_cname.bv_val, ava->aa_desc->ad_cname.bv_val, rc );
+ 		return 0;
+ 	}
+ 
+diff --git a/servers/slapd/back-bdb/index.c b/servers/slapd/back-bdb/index.c
+index 5c914df..c31b186 100644
+--- a/servers/slapd/back-bdb/index.c
++++ b/servers/slapd/back-bdb/index.c
+@@ -26,18 +26,16 @@
+ #include "lutil_hash.h"
+ 
+ static char presence_keyval[] = {0,0};
+-static struct berval presence_key = BER_BVC(presence_keyval);
++struct berval bdb_presence_key = BER_BVC(presence_keyval);
+ 
+ AttrInfo *bdb_index_mask(
+ 	Backend *be,
+-	AttributeDescription *desc,
+-	struct berval *atname )
++	AttributeDescription *desc )
+ {
+ 	AttributeType *at;
+ 	AttrInfo *ai = bdb_attr_mask( be->be_private, desc );
+ 
+ 	if( ai ) {
+-		*atname = desc->ad_cname;
+ 		return ai;
+ 	}
+ 
+@@ -49,7 +47,6 @@ AttrInfo *bdb_index_mask(
+ 		ai = bdb_attr_mask( be->be_private, desc->ad_type->sat_ad );
+ 
+ 		if ( ai && !( ai->ai_indexmask & SLAP_INDEX_NOTAGS ) ) {
+-			*atname = desc->ad_type->sat_cname;
+ 			return ai;
+ 		}
+ 	}
+@@ -62,7 +59,6 @@ AttrInfo *bdb_index_mask(
+ 		ai = bdb_attr_mask( be->be_private, at->sat_ad );
+ 
+ 		if ( ai && !( ai->ai_indexmask & SLAP_INDEX_NOSUBTYPES ) ) {
+-			*atname = at->sat_cname;
+ 			return ai;
+ 		}
+ 	}
+@@ -77,15 +73,14 @@ int bdb_index_param(
+ 	AttributeDescription *desc,
+ 	int ftype,
+ 	DB **dbp,
+-	slap_mask_t *maskp,
+-	struct berval *prefixp )
++	AttrInfo **aip )
+ {
+ 	AttrInfo *ai;
+ 	int rc;
+ 	slap_mask_t mask, type = 0;
+ 	DB *db;
+ 
+-	ai = bdb_index_mask( be, desc, prefixp );
++	ai = bdb_index_mask( be, desc );
+ 
+ 	if ( !ai ) {
+ #ifdef BDB_MONITOR_IDX
+@@ -110,9 +105,10 @@ int bdb_index_param(
+ 
+ 		return LDAP_INAPPROPRIATE_MATCHING;
+ 	}
++	*aip = ai;
+ 	mask = ai->ai_indexmask;
+ 
+-	rc = bdb_db_cache( be, prefixp, &db );
++	rc = bdb_db_cache( be, &ai->ai_desc->ad_cname, &db );
+ 
+ 	if( rc != LDAP_SUCCESS ) {
+ 		return rc;
+@@ -122,7 +118,6 @@ int bdb_index_param(
+ 	case LDAP_FILTER_PRESENT:
+ 		type = SLAP_INDEX_PRESENT;
+ 		if( IS_SLAP_INDEX( mask, SLAP_INDEX_PRESENT ) ) {
+-			*prefixp = presence_key;
+ 			goto done;
+ 		}
+ 		break;
+@@ -165,15 +160,14 @@ int bdb_index_param(
+ 
+ done:
+ 	*dbp = db;
+-	*maskp = mask;
+ 	return LDAP_SUCCESS;
+ }
+ 
+ static int indexer(
+ 	Operation *op,
+ 	DB_TXN *txn,
++	struct bdb_attrinfo *ai,
+ 	AttributeDescription *ad,
+-	struct berval *atname,
+ 	BerVarray vals,
+ 	ID id,
+ 	int opid,
+@@ -185,17 +179,17 @@ static int indexer(
+ 
+ 	assert( mask != 0 );
+ 
+-	rc = bdb_db_cache( op->o_bd, atname, &db );
++	rc = bdb_db_cache( op->o_bd, &ai->ai_desc->ad_cname, &db );
+ 	
+ 	if ( rc != LDAP_SUCCESS ) {
+ 		Debug( LDAP_DEBUG_ANY,
+ 			"bdb_index_read: Could not open DB %s\n",
+-			atname->bv_val, 0, 0 );
++			ai->ai_desc->ad_cname.bv_val, 0, 0 );
+ 		return LDAP_OTHER;
+ 	}
+ 
+ 	if( IS_SLAP_INDEX( mask, SLAP_INDEX_PRESENT ) ) {
+-		rc = bdb_key_change( op->o_bd, db, txn, &presence_key, id, opid );
++		rc = bdb_key_change( op->o_bd, db, txn, &bdb_presence_key, id, opid );
+ 		if( rc ) {
+ 			goto done;
+ 		}
+@@ -203,11 +197,8 @@ static int indexer(
+ 
+ 	if( IS_SLAP_INDEX( mask, SLAP_INDEX_EQUALITY ) ) {
+ 		rc = ad->ad_type->sat_equality->smr_indexer(
+-			LDAP_FILTER_EQUALITY,
+-			mask,
+-			ad->ad_type->sat_syntax,
+-			ad->ad_type->sat_equality,
+-			atname, vals, &keys, op->o_tmpmemctx );
++			mask, &ai->ai_ip,
++			vals, &keys, op->o_tmpmemctx );
+ 
+ 		if( rc == LDAP_SUCCESS && keys != NULL ) {
+ 			for( i=0; keys[i].bv_val != NULL; i++ ) {
+@@ -224,11 +215,8 @@ static int indexer(
+ 
+ 	if( IS_SLAP_INDEX( mask, SLAP_INDEX_APPROX ) ) {
+ 		rc = ad->ad_type->sat_approx->smr_indexer(
+-			LDAP_FILTER_APPROX,
+-			mask,
+-			ad->ad_type->sat_syntax,
+-			ad->ad_type->sat_approx,
+-			atname, vals, &keys, op->o_tmpmemctx );
++			mask, &ai->ai_ip,
++			vals, &keys, op->o_tmpmemctx );
+ 
+ 		if( rc == LDAP_SUCCESS && keys != NULL ) {
+ 			for( i=0; keys[i].bv_val != NULL; i++ ) {
+@@ -246,11 +234,8 @@ static int indexer(
+ 
+ 	if( IS_SLAP_INDEX( mask, SLAP_INDEX_SUBSTR ) ) {
+ 		rc = ad->ad_type->sat_substr->smr_indexer(
+-			LDAP_FILTER_SUBSTRINGS,
+-			mask,
+-			ad->ad_type->sat_syntax,
+-			ad->ad_type->sat_substr,
+-			atname, vals, &keys, op->o_tmpmemctx );
++			mask, &ai->ai_ip,
++			vals, &keys, op->o_tmpmemctx );
+ 
+ 		if( rc == LDAP_SUCCESS && keys != NULL ) {
+ 			for( i=0; keys[i].bv_val != NULL; i++ ) {
+@@ -283,7 +268,6 @@ done:
+ static int index_at_values(
+ 	Operation *op,
+ 	DB_TXN *txn,
+-	AttributeDescription *ad,
+ 	AttributeType *type,
+ 	struct berval *tags,
+ 	BerVarray vals,
+@@ -300,7 +284,7 @@ static int index_at_values(
+ 
+ 	if( type->sat_sup ) {
+ 		/* recurse */
+-		rc = index_at_values( op, txn, NULL,
++		rc = index_at_values( op, txn,
+ 			type->sat_sup, tags,
+ 			vals, id, opid );
+ 
+@@ -316,13 +300,12 @@ static int index_at_values(
+ 			if ( ai->ai_cr ) {
+ 				ComponentReference *cr;
+ 				for( cr = ai->ai_cr ; cr ; cr = cr->cr_next ) {
+-					rc = indexer( op, txn, cr->cr_ad, &type->sat_cname,
++					rc = indexer( op, txn, ai, cr->cr_ad,
+ 						cr->cr_nvals, id, ixop,
+ 						cr->cr_indexmask );
+ 				}
+ 			}
+ #endif
+-			ad = type->sat_ad;
+ 			/* If we're updating the index, just set the new bits that aren't
+ 			 * already in the old mask.
+ 			 */
+@@ -334,7 +317,7 @@ static int index_at_values(
+ 			 */
+ 				mask = ai->ai_newmask ? ai->ai_newmask : ai->ai_indexmask;
+ 			if( mask ) {
+-				rc = indexer( op, txn, ad, &type->sat_cname,
++				rc = indexer( op, txn, ai, type->sat_ad,
+ 					vals, id, ixop, mask );
+ 
+ 				if( rc ) return rc;
+@@ -355,7 +338,7 @@ static int index_at_values(
+ 				else
+ 					mask = ai->ai_newmask ? ai->ai_newmask : ai->ai_indexmask;
+ 				if ( mask ) {
+-					rc = indexer( op, txn, desc, &desc->ad_cname,
++					rc = indexer( op, txn, ai, desc,
+ 						vals, id, ixop, mask );
+ 
+ 					if( rc ) {
+@@ -383,7 +366,7 @@ int bdb_index_values(
+ 	if ( id == 0 )
+ 		return 0;
+ 
+-	rc = index_at_values( op, txn, desc,
++	rc = index_at_values( op, txn,
+ 		desc->ad_type, &desc->ad_tags,
+ 		vals, id, opid );
+ 
+@@ -457,8 +440,7 @@ int bdb_index_recrun(
+ 		if ( !ir->ai ) continue;
+ 		while (( al = ir->attrs )) {
+ 			ir->attrs = al->next;
+-			rc = indexer( op, NULL, ir->ai->ai_desc,
+-				&ir->ai->ai_desc->ad_type->sat_cname,
++			rc = indexer( op, NULL, ir->ai, ir->ai->ai_desc,
+ 				al->attr->a_nvals, id, SLAP_INDEX_ADD_OP,
+ 				ir->ai->ai_indexmask );
+ 			free( al );
+diff --git a/servers/slapd/back-bdb/modify.c b/servers/slapd/back-bdb/modify.c
+index 3a81d90..37093c6 100644
+--- a/servers/slapd/back-bdb/modify.c
++++ b/servers/slapd/back-bdb/modify.c
+@@ -35,12 +35,11 @@ bdb_modify_idxflags(
+ 	Attribute *newattrs,
+ 	Attribute *oldattrs )
+ {
+-	struct berval	ix_at;
+-	AttrInfo	*ai;
++	AttrInfo	*ai, *a2;
+ 
+ 	/* check if modified attribute was indexed
+ 	 * but not in case of NOOP... */
+-	ai = bdb_index_mask( op->o_bd, desc, &ix_at );
++	ai = bdb_index_mask( op->o_bd, desc );
+ 	if ( ai ) {
+ 		if ( got_delete ) {
+ 			Attribute 	*ap;
+@@ -51,8 +50,8 @@ bdb_modify_idxflags(
+ 
+ 			/* Find all other attrs that index to same slot */
+ 			for ( ap = newattrs; ap; ap = ap->a_next ) {
+-				ai = bdb_index_mask( op->o_bd, ap->a_desc, &ix2 );
+-				if ( ai && ix2.bv_val == ix_at.bv_val )
++				a2 = bdb_index_mask( op->o_bd, ap->a_desc );
++				if ( ai == a2 )
+ 					ap->a_flags |= SLAP_ATTR_IXADD;
+ 			}
+ 
+diff --git a/servers/slapd/back-bdb/proto-bdb.h b/servers/slapd/back-bdb/proto-bdb.h
+index ba65ab3..91ea040 100644
+--- a/servers/slapd/back-bdb/proto-bdb.h
++++ b/servers/slapd/back-bdb/proto-bdb.h
+@@ -347,12 +347,12 @@ int bdb_idl_append_one( ID *ids, ID id );
+ #define bdb_index_entry				BDB_SYMBOL(index_entry)
+ #define bdb_index_recset			BDB_SYMBOL(index_recset)
+ #define bdb_index_recrun			BDB_SYMBOL(index_recrun)
++#define bdb_presence_key			BDB_SYMBOL(presence_key)
+ 
+ extern AttrInfo *
+ bdb_index_mask LDAP_P((
+ 	Backend *be,
+-	AttributeDescription *desc,
+-	struct berval *name ));
++	AttributeDescription *desc ));
+ 
+ extern int
+ bdb_index_param LDAP_P((
+@@ -360,8 +360,7 @@ bdb_index_param LDAP_P((
+ 	AttributeDescription *desc,
+ 	int ftype,
+ 	DB **db,
+-	slap_mask_t *mask,
+-	struct berval *prefix ));
++	AttrInfo **aip ));
+ 
+ extern int
+ bdb_index_values LDAP_P((
+diff --git a/servers/slapd/back-mdb/attr.c b/servers/slapd/back-mdb/attr.c
+index 4dc6825..def6e4b 100644
+--- a/servers/slapd/back-mdb/attr.c
++++ b/servers/slapd/back-mdb/attr.c
+@@ -380,6 +380,8 @@ mdb_attr_index_config(
+ 		a->ai_root = NULL;
+ 		a->ai_desc = ad;
+ 		a->ai_dbi = 0;
++		memset( &a->ai_ip, 0, sizeof( a->ai_ip ));
++		slap_index_preset( mask, &ad->ad_cname, ad->ad_type, &a->ai_ip );
+ 
+ 		if ( mdb->mi_flags & MDB_IS_OPEN ) {
+ 			a->ai_indexmask = 0;
+@@ -429,6 +431,8 @@ mdb_attr_index_config(
+ 					if ( b->ai_newmask )
+ 						b->ai_indexmask = b->ai_newmask;
+ 					b->ai_newmask = a->ai_newmask;
++					slap_index_preset_free( &b->ai_ip );
++					b->ai_ip = a->ai_ip;
+ 					ch_free( a );
+ 					rc = 0;
+ 					continue;
+@@ -494,6 +498,7 @@ mdb_attr_index_unparse( struct mdb_info *mdb, BerVarray *bva )
+ void
+ mdb_attr_info_free( AttrInfo *ai )
+ {
++	slap_index_preset_free( &ai->ai_ip );
+ #ifdef LDAP_COMP_MATCH
+ 	free( ai->ai_cr );
+ #endif
+diff --git a/servers/slapd/back-mdb/back-mdb.h b/servers/slapd/back-mdb/back-mdb.h
+index 9d5d4b1..c72c1ea 100644
+--- a/servers/slapd/back-mdb/back-mdb.h
++++ b/servers/slapd/back-mdb/back-mdb.h
+@@ -148,6 +148,7 @@ typedef struct mdb_attrinfo {
+ 	MDB_cursor *ai_cursor;	/* for tools */
+ 	int ai_idx;	/* position in AI array */
+ 	MDB_dbi ai_dbi;
++	IndexPreset ai_ip;
+ } AttrInfo;
+ 
+ /* tool threaded indexer state */
+diff --git a/servers/slapd/back-mdb/filterindex.c b/servers/slapd/back-mdb/filterindex.c
+index 58c1cc8..78f97d2 100644
+--- a/servers/slapd/back-mdb/filterindex.c
++++ b/servers/slapd/back-mdb/filterindex.c
+@@ -25,6 +25,8 @@
+ #include <component.h>
+ #endif
+ 
++extern struct berval mdb_presence_key[];	/* index.c */
++
+ static int presence_candidates(
+ 	Operation *op,
+ 	MDB_txn *rtxn,
+@@ -301,8 +303,6 @@ comp_equality_candidates (
+ 	MDB_dbi	  dbi;
+ 	int i;
+ 	int rc;
+-	slap_mask_t mask;
+-	struct berval prefix = {0, NULL};
+ 	struct berval *keys = NULL;
+ 	MatchingRule *mr = mra->ma_rule;
+ 	Syntax *sat_syntax;
+@@ -332,13 +332,6 @@ comp_equality_candidates (
+ 	if ( !cr )
+ 		return 0;
+ 
+-	rc = mdb_index_param( op->o_bd, mra->ma_desc, LDAP_FILTER_EQUALITY,
+-			&dbi, &mask, &prefix );
+-
+-	if( rc != LDAP_SUCCESS ) {
+-		return 0;
+-	}
+-
+ 	if( !mr ) {
+ 		return 0;
+ 	}
+@@ -348,11 +341,8 @@ comp_equality_candidates (
+ 	}
+ 
+ 	rc = (ca->ca_ma_rule->smr_filter)(
+-				LDAP_FILTER_EQUALITY,
+ 				cr->cr_indexmask,
+-				sat_syntax,
+-				ca->ca_ma_rule,
+-				&prefix,
++				&ai->ai_ip,
+ 				&ca->ca_ma_value,
+ 				&keys, op->o_tmpmemctx );
+ 
+@@ -606,10 +596,8 @@ presence_candidates(
+ 	AttributeDescription *desc,
+ 	ID *ids )
+ {
+-	MDB_dbi dbi;
++	AttrInfo *ai;
+ 	int rc;
+-	slap_mask_t mask;
+-	struct berval prefix = {0, NULL};
+ 
+ 	Debug( LDAP_DEBUG_TRACE, "=> mdb_presence_candidates (%s)\n",
+ 			desc->ad_cname.bv_val, 0, 0 );
+@@ -620,8 +608,7 @@ presence_candidates(
+ 		return 0;
+ 	}
+ 
+-	rc = mdb_index_param( op->o_bd, desc, LDAP_FILTER_PRESENT,
+-		&dbi, &mask, &prefix );
++	rc = mdb_index_param( op->o_bd, desc, LDAP_FILTER_PRESENT, &ai );
+ 
+ 	if( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+ 		/* not indexed */
+@@ -639,14 +626,7 @@ presence_candidates(
+ 		return 0;
+ 	}
+ 
+-	if( prefix.bv_val == NULL ) {
+-		Debug( LDAP_DEBUG_TRACE,
+-			"<= mdb_presence_candidates: (%s) no prefix\n",
+-			desc->ad_cname.bv_val, 0, 0 );
+-		return -1;
+-	}
+-
+-	rc = mdb_key_read( op->o_bd, rtxn, dbi, &prefix, ids, NULL, 0 );
++	rc = mdb_key_read( op->o_bd, rtxn, ai->ai_dbi, mdb_presence_key, ids, NULL, 0 );
+ 
+ 	if( rc == MDB_NOTFOUND ) {
+ 		MDB_IDL_ZERO( ids );
+@@ -677,13 +657,11 @@ equality_candidates(
+ 	ID *ids,
+ 	ID *tmp )
+ {
+-	MDB_dbi	dbi;
+ 	int i;
+ 	int rc;
+-	slap_mask_t mask;
+-	struct berval prefix = {0, NULL};
+ 	struct berval *keys = NULL;
+ 	MatchingRule *mr;
++	AttrInfo *ai;
+ 
+ 	Debug( LDAP_DEBUG_TRACE, "=> mdb_equality_candidates (%s)\n",
+ 			ava->aa_desc->ad_cname.bv_val, 0, 0 );
+@@ -705,8 +683,7 @@ equality_candidates(
+ 
+ 	MDB_IDL_ALL( ids );
+ 
+-	rc = mdb_index_param( op->o_bd, ava->aa_desc, LDAP_FILTER_EQUALITY,
+-		&dbi, &mask, &prefix );
++	rc = mdb_index_param( op->o_bd, ava->aa_desc, LDAP_FILTER_EQUALITY, &ai );
+ 
+ 	if ( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+ 		Debug( LDAP_DEBUG_ANY,
+@@ -733,11 +710,8 @@ equality_candidates(
+ 	}
+ 
+ 	rc = (mr->smr_filter)(
+-		LDAP_FILTER_EQUALITY,
+-		mask,
+-		ava->aa_desc->ad_type->sat_syntax,
+-		mr,
+-		&prefix,
++		ai->ai_indexmask,
++		&ai->ai_ip,
+ 		&ava->aa_value,
+ 		&keys, op->o_tmpmemctx );
+ 
+@@ -745,7 +719,7 @@ equality_candidates(
+ 		Debug( LDAP_DEBUG_TRACE,
+ 			"<= mdb_equality_candidates: (%s, %s) "
+ 			"MR filter failed (%d)\n",
+-			prefix.bv_val, ava->aa_desc->ad_cname.bv_val, rc );
++			ai->ai_desc->ad_cname.bv_val, ava->aa_desc->ad_cname.bv_val, rc );
+ 		return 0;
+ 	}
+ 
+@@ -757,7 +731,7 @@ equality_candidates(
+ 	}
+ 
+ 	for ( i= 0; keys[i].bv_val != NULL; i++ ) {
+-		rc = mdb_key_read( op->o_bd, rtxn, dbi, &keys[i], tmp, NULL, 0 );
++		rc = mdb_key_read( op->o_bd, rtxn, ai->ai_dbi, &keys[i], tmp, NULL, 0 );
+ 
+ 		if( rc == MDB_NOTFOUND ) {
+ 			MDB_IDL_ZERO( ids );
+@@ -808,21 +782,18 @@ approx_candidates(
+ 	ID *ids,
+ 	ID *tmp )
+ {
+-	MDB_dbi	dbi;
+ 	int i;
+ 	int rc;
+-	slap_mask_t mask;
+-	struct berval prefix = {0, NULL};
+ 	struct berval *keys = NULL;
+ 	MatchingRule *mr;
++	AttrInfo *ai;
+ 
+ 	Debug( LDAP_DEBUG_TRACE, "=> mdb_approx_candidates (%s)\n",
+ 			ava->aa_desc->ad_cname.bv_val, 0, 0 );
+ 
+ 	MDB_IDL_ALL( ids );
+ 
+-	rc = mdb_index_param( op->o_bd, ava->aa_desc, LDAP_FILTER_APPROX,
+-		&dbi, &mask, &prefix );
++	rc = mdb_index_param( op->o_bd, ava->aa_desc, LDAP_FILTER_APPROX, &ai );
+ 
+ 	if ( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+ 		Debug( LDAP_DEBUG_ANY,
+@@ -854,11 +825,8 @@ approx_candidates(
+ 	}
+ 
+ 	rc = (mr->smr_filter)(
+-		LDAP_FILTER_APPROX,
+-		mask,
+-		ava->aa_desc->ad_type->sat_syntax,
+-		mr,
+-		&prefix,
++		ai->ai_indexmask,
++		&ai->ai_ip,
+ 		&ava->aa_value,
+ 		&keys, op->o_tmpmemctx );
+ 
+@@ -866,19 +834,19 @@ approx_candidates(
+ 		Debug( LDAP_DEBUG_TRACE,
+ 			"<= mdb_approx_candidates: (%s, %s) "
+ 			"MR filter failed (%d)\n",
+-			prefix.bv_val, ava->aa_desc->ad_cname.bv_val, rc );
++			ai->ai_desc->ad_cname.bv_val, ava->aa_desc->ad_cname.bv_val, rc );
+ 		return 0;
+ 	}
+ 
+ 	if( keys == NULL ) {
+ 		Debug( LDAP_DEBUG_TRACE,
+ 			"<= mdb_approx_candidates: (%s) no keys (%s)\n",
+-			prefix.bv_val, ava->aa_desc->ad_cname.bv_val, 0 );
++			ai->ai_desc->ad_cname.bv_val, ava->aa_desc->ad_cname.bv_val, 0 );
+ 		return 0;
+ 	}
+ 
+ 	for ( i= 0; keys[i].bv_val != NULL; i++ ) {
+-		rc = mdb_key_read( op->o_bd, rtxn, dbi, &keys[i], tmp, NULL, 0 );
++		rc = mdb_key_read( op->o_bd, rtxn, ai->ai_dbi, &keys[i], tmp, NULL, 0 );
+ 
+ 		if( rc == MDB_NOTFOUND ) {
+ 			MDB_IDL_ZERO( ids );
+@@ -927,21 +895,18 @@ substring_candidates(
+ 	ID *ids,
+ 	ID *tmp )
+ {
+-	MDB_dbi	dbi;
+ 	int i;
+ 	int rc;
+-	slap_mask_t mask;
+-	struct berval prefix = {0, NULL};
+ 	struct berval *keys = NULL;
+ 	MatchingRule *mr;
++	AttrInfo *ai;
+ 
+ 	Debug( LDAP_DEBUG_TRACE, "=> mdb_substring_candidates (%s)\n",
+ 			sub->sa_desc->ad_cname.bv_val, 0, 0 );
+ 
+ 	MDB_IDL_ALL( ids );
+ 
+-	rc = mdb_index_param( op->o_bd, sub->sa_desc, LDAP_FILTER_SUBSTRINGS,
+-		&dbi, &mask, &prefix );
++	rc = mdb_index_param( op->o_bd, sub->sa_desc, LDAP_FILTER_SUBSTRINGS, &ai );
+ 
+ 	if ( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+ 		Debug( LDAP_DEBUG_ANY,
+@@ -969,11 +934,8 @@ substring_candidates(
+ 	}
+ 
+ 	rc = (mr->smr_filter)(
+-		LDAP_FILTER_SUBSTRINGS,
+-		mask,
+-		sub->sa_desc->ad_type->sat_syntax,
+-		mr,
+-		&prefix,
++		ai->ai_indexmask,
++		&ai->ai_ip,
+ 		sub,
+ 		&keys, op->o_tmpmemctx );
+ 
+@@ -988,12 +950,12 @@ substring_candidates(
+ 	if( keys == NULL ) {
+ 		Debug( LDAP_DEBUG_TRACE,
+ 			"<= mdb_substring_candidates: (0x%04lx) no keys (%s)\n",
+-			mask, sub->sa_desc->ad_cname.bv_val, 0 );
++			ai->ai_indexmask, sub->sa_desc->ad_cname.bv_val, 0 );
+ 		return 0;
+ 	}
+ 
+ 	for ( i= 0; keys[i].bv_val != NULL; i++ ) {
+-		rc = mdb_key_read( op->o_bd, rtxn, dbi, &keys[i], tmp, NULL, 0 );
++		rc = mdb_key_read( op->o_bd, rtxn, ai->ai_dbi, &keys[i], tmp, NULL, 0 );
+ 
+ 		if( rc == MDB_NOTFOUND ) {
+ 			MDB_IDL_ZERO( ids );
+@@ -1043,21 +1005,18 @@ inequality_candidates(
+ 	ID *tmp,
+ 	int gtorlt )
+ {
+-	MDB_dbi	dbi;
+ 	int rc;
+-	slap_mask_t mask;
+-	struct berval prefix = {0, NULL};
+ 	struct berval *keys = NULL;
+ 	MatchingRule *mr;
+ 	MDB_cursor *cursor = NULL;
++	AttrInfo *ai;
+ 
+ 	Debug( LDAP_DEBUG_TRACE, "=> mdb_inequality_candidates (%s)\n",
+ 			ava->aa_desc->ad_cname.bv_val, 0, 0 );
+ 
+ 	MDB_IDL_ALL( ids );
+ 
+-	rc = mdb_index_param( op->o_bd, ava->aa_desc, LDAP_FILTER_EQUALITY,
+-		&dbi, &mask, &prefix );
++	rc = mdb_index_param( op->o_bd, ava->aa_desc, LDAP_FILTER_EQUALITY, &ai );
+ 
+ 	if ( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+ 		Debug( LDAP_DEBUG_ANY,
+@@ -1084,11 +1043,8 @@ inequality_candidates(
+ 	}
+ 
+ 	rc = (mr->smr_filter)(
+-		LDAP_FILTER_EQUALITY,
+-		mask,
+-		ava->aa_desc->ad_type->sat_syntax,
+-		mr,
+-		&prefix,
++		ai->ai_indexmask,
++		&ai->ai_ip,
+ 		&ava->aa_value,
+ 		&keys, op->o_tmpmemctx );
+ 
+@@ -1096,7 +1052,7 @@ inequality_candidates(
+ 		Debug( LDAP_DEBUG_TRACE,
+ 			"<= mdb_inequality_candidates: (%s, %s) "
+ 			"MR filter failed (%d)\n",
+-			prefix.bv_val, ava->aa_desc->ad_cname.bv_val, rc );
++			ai->ai_desc->ad_cname.bv_val, ava->aa_desc->ad_cname.bv_val, rc );
+ 		return 0;
+ 	}
+ 
+@@ -1109,7 +1065,7 @@ inequality_candidates(
+ 
+ 	MDB_IDL_ZERO( ids );
+ 	while(1) {
+-		rc = mdb_key_read( op->o_bd, rtxn, dbi, &keys[0], tmp, &cursor, gtorlt );
++		rc = mdb_key_read( op->o_bd, rtxn, ai->ai_dbi, &keys[0], tmp, &cursor, gtorlt );
+ 
+ 		if( rc == MDB_NOTFOUND ) {
+ 			rc = 0;
+diff --git a/servers/slapd/back-mdb/index.c b/servers/slapd/back-mdb/index.c
+index 51a1481..23af232 100644
+--- a/servers/slapd/back-mdb/index.c
++++ b/servers/slapd/back-mdb/index.c
+@@ -26,18 +26,16 @@
+ #include "lutil_hash.h"
+ 
+ static char presence_keyval[] = {0,0,0,0,0};
+-static struct berval presence_key[2] = {BER_BVC(presence_keyval), BER_BVNULL};
++struct berval mdb_presence_key[2] = {BER_BVC(presence_keyval), BER_BVNULL};
+ 
+ AttrInfo *mdb_index_mask(
+ 	Backend *be,
+-	AttributeDescription *desc,
+-	struct berval *atname )
++	AttributeDescription *desc )
+ {
+ 	AttributeType *at;
+ 	AttrInfo *ai = mdb_attr_mask( be->be_private, desc );
+ 
+ 	if( ai ) {
+-		*atname = desc->ad_cname;
+ 		return ai;
+ 	}
+ 
+@@ -49,7 +47,6 @@ AttrInfo *mdb_index_mask(
+ 		ai = mdb_attr_mask( be->be_private, desc->ad_type->sat_ad );
+ 
+ 		if ( ai && !( ai->ai_indexmask & SLAP_INDEX_NOTAGS ) ) {
+-			*atname = desc->ad_type->sat_cname;
+ 			return ai;
+ 		}
+ 	}
+@@ -62,7 +59,6 @@ AttrInfo *mdb_index_mask(
+ 		ai = mdb_attr_mask( be->be_private, at->sat_ad );
+ 
+ 		if ( ai && !( ai->ai_indexmask & SLAP_INDEX_NOSUBTYPES ) ) {
+-			*atname = at->sat_cname;
+ 			return ai;
+ 		}
+ 	}
+@@ -76,14 +72,12 @@ int mdb_index_param(
+ 	Backend *be,
+ 	AttributeDescription *desc,
+ 	int ftype,
+-	MDB_dbi *dbip,
+-	slap_mask_t *maskp,
+-	struct berval *prefixp )
++	AttrInfo **aip )
+ {
+ 	AttrInfo *ai;
+ 	slap_mask_t mask, type = 0;
+ 
+-	ai = mdb_index_mask( be, desc, prefixp );
++	ai = mdb_index_mask( be, desc );
+ 
+ 	if ( !ai ) {
+ #ifdef MDB_MONITOR_IDX
+@@ -108,13 +102,13 @@ int mdb_index_param(
+ 
+ 		return LDAP_INAPPROPRIATE_MATCHING;
+ 	}
++	*aip = ai;
+ 	mask = ai->ai_indexmask;
+ 
+ 	switch( ftype ) {
+ 	case LDAP_FILTER_PRESENT:
+ 		type = SLAP_INDEX_PRESENT;
+ 		if( IS_SLAP_INDEX( mask, SLAP_INDEX_PRESENT ) ) {
+-			*prefixp = presence_key[0];
+ 			goto done;
+ 		}
+ 		break;
+@@ -156,8 +150,6 @@ int mdb_index_param(
+ 	return LDAP_INAPPROPRIATE_MATCHING;
+ 
+ done:
+-	*dbip = ai->ai_dbi;
+-	*maskp = mask;
+ 	return LDAP_SUCCESS;
+ }
+ 
+@@ -166,7 +158,6 @@ static int indexer(
+ 	MDB_txn *txn,
+ 	struct mdb_attrinfo *ai,
+ 	AttributeDescription *ad,
+-	struct berval *atname,
+ 	BerVarray vals,
+ 	ID id,
+ 	int opid,
+@@ -202,7 +193,7 @@ static int indexer(
+ 		keyfunc = mdb_idl_delete_keys;
+ 
+ 	if( IS_SLAP_INDEX( mask, SLAP_INDEX_PRESENT ) ) {
+-		rc = keyfunc( op->o_bd, mc, presence_key, id );
++		rc = keyfunc( op->o_bd, mc, mdb_presence_key, id );
+ 		if( rc ) {
+ 			err = "presence";
+ 			goto done;
+@@ -211,11 +202,8 @@ static int indexer(
+ 
+ 	if( IS_SLAP_INDEX( mask, SLAP_INDEX_EQUALITY ) ) {
+ 		rc = ad->ad_type->sat_equality->smr_indexer(
+-			LDAP_FILTER_EQUALITY,
+-			mask,
+-			ad->ad_type->sat_syntax,
+-			ad->ad_type->sat_equality,
+-			atname, vals, &keys, op->o_tmpmemctx );
++			mask, &ai->ai_ip,
++			vals, &keys, op->o_tmpmemctx );
+ 
+ 		if( rc == LDAP_SUCCESS && keys != NULL ) {
+ 			rc = keyfunc( op->o_bd, mc, keys, id );
+@@ -230,11 +218,8 @@ static int indexer(
+ 
+ 	if( IS_SLAP_INDEX( mask, SLAP_INDEX_APPROX ) ) {
+ 		rc = ad->ad_type->sat_approx->smr_indexer(
+-			LDAP_FILTER_APPROX,
+-			mask,
+-			ad->ad_type->sat_syntax,
+-			ad->ad_type->sat_approx,
+-			atname, vals, &keys, op->o_tmpmemctx );
++			mask, &ai->ai_ip,
++			vals, &keys, op->o_tmpmemctx );
+ 
+ 		if( rc == LDAP_SUCCESS && keys != NULL ) {
+ 			rc = keyfunc( op->o_bd, mc, keys, id );
+@@ -250,11 +235,8 @@ static int indexer(
+ 
+ 	if( IS_SLAP_INDEX( mask, SLAP_INDEX_SUBSTR ) ) {
+ 		rc = ad->ad_type->sat_substr->smr_indexer(
+-			LDAP_FILTER_SUBSTRINGS,
+-			mask,
+-			ad->ad_type->sat_syntax,
+-			ad->ad_type->sat_substr,
+-			atname, vals, &keys, op->o_tmpmemctx );
++			mask, &ai->ai_ip,
++			vals, &keys, op->o_tmpmemctx );
+ 
+ 		if( rc == LDAP_SUCCESS && keys != NULL ) {
+ 			rc = keyfunc( op->o_bd, mc, keys, id );
+@@ -285,7 +267,6 @@ done:
+ static int index_at_values(
+ 	Operation *op,
+ 	MDB_txn *txn,
+-	AttributeDescription *ad,
+ 	AttributeType *type,
+ 	struct berval *tags,
+ 	BerVarray vals,
+@@ -302,7 +283,7 @@ static int index_at_values(
+ 
+ 	if( type->sat_sup ) {
+ 		/* recurse */
+-		rc = index_at_values( op, txn, NULL,
++		rc = index_at_values( op, txn,
+ 			type->sat_sup, tags,
+ 			vals, id, opid );
+ 
+@@ -318,13 +299,12 @@ static int index_at_values(
+ 			if ( ai->ai_cr ) {
+ 				ComponentReference *cr;
+ 				for( cr = ai->ai_cr ; cr ; cr = cr->cr_next ) {
+-					rc = indexer( op, txn, ai, cr->cr_ad, &type->sat_cname,
++					rc = indexer( op, txn, ai, cr->cr_ad,
+ 						cr->cr_nvals, id, ixop,
+ 						cr->cr_indexmask );
+ 				}
+ 			}
+ #endif
+-			ad = type->sat_ad;
+ 			/* If we're updating the index, just set the new bits that aren't
+ 			 * already in the old mask.
+ 			 */
+@@ -336,7 +316,7 @@ static int index_at_values(
+ 			 */
+ 				mask = ai->ai_newmask ? ai->ai_newmask : ai->ai_indexmask;
+ 			if( mask ) {
+-				rc = indexer( op, txn, ai, ad, &type->sat_cname,
++				rc = indexer( op, txn, ai, type->sat_ad,
+ 					vals, id, ixop, mask );
+ 
+ 				if( rc ) return rc;
+@@ -357,7 +337,7 @@ static int index_at_values(
+ 				else
+ 					mask = ai->ai_newmask ? ai->ai_newmask : ai->ai_indexmask;
+ 				if ( mask ) {
+-					rc = indexer( op, txn, ai, desc, &desc->ad_cname,
++					rc = indexer( op, txn, ai, desc,
+ 						vals, id, ixop, mask );
+ 
+ 					if( rc ) {
+@@ -385,7 +365,7 @@ int mdb_index_values(
+ 	if ( id == 0 )
+ 		return 0;
+ 
+-	rc = index_at_values( op, txn, desc,
++	rc = index_at_values( op, txn,
+ 		desc->ad_type, &desc->ad_tags,
+ 		vals, id, opid );
+ 
+@@ -461,7 +441,6 @@ int mdb_index_recrun(
+ 		while (( al = ir->ir_attrs )) {
+ 			ir->ir_attrs = al->next;
+ 			rc = indexer( op, txn, ir->ir_ai, ir->ir_ai->ai_desc,
+-				&ir->ir_ai->ai_desc->ad_type->sat_cname,
+ 				al->attr->a_nvals, id, SLAP_INDEX_ADD_OP,
+ 				ir->ir_ai->ai_indexmask );
+ 			free( al );
+diff --git a/servers/slapd/back-mdb/modify.c b/servers/slapd/back-mdb/modify.c
+index c08e95c..b70929f 100644
+--- a/servers/slapd/back-mdb/modify.c
++++ b/servers/slapd/back-mdb/modify.c
+@@ -35,12 +35,11 @@ mdb_modify_idxflags(
+ 	Attribute *newattrs,
+ 	Attribute *oldattrs )
+ {
+-	struct berval	ix_at;
+-	AttrInfo	*ai;
++	AttrInfo	*ai, *a2;
+ 
+ 	/* check if modified attribute was indexed
+ 	 * but not in case of NOOP... */
+-	ai = mdb_index_mask( op->o_bd, desc, &ix_at );
++	ai = mdb_index_mask( op->o_bd, desc );
+ 	if ( ai ) {
+ 		if ( got_delete ) {
+ 			Attribute 	*ap;
+@@ -51,8 +50,8 @@ mdb_modify_idxflags(
+ 
+ 			/* Find all other attrs that index to same slot */
+ 			for ( ap = newattrs; ap; ap = ap->a_next ) {
+-				ai = mdb_index_mask( op->o_bd, ap->a_desc, &ix2 );
+-				if ( ai && ix2.bv_val == ix_at.bv_val )
++				a2 = mdb_index_mask( op->o_bd, ap->a_desc );
++				if ( ai == a2 )
+ 					ap->a_flags |= SLAP_ATTR_IXADD;
+ 			}
+ 
+diff --git a/servers/slapd/back-mdb/proto-mdb.h b/servers/slapd/back-mdb/proto-mdb.h
+index 3671425..3d2f283 100644
+--- a/servers/slapd/back-mdb/proto-mdb.h
++++ b/servers/slapd/back-mdb/proto-mdb.h
+@@ -249,17 +249,14 @@ int mdb_idl_append_one( ID *ids, ID id );
+ extern AttrInfo *
+ mdb_index_mask LDAP_P((
+ 	Backend *be,
+-	AttributeDescription *desc,
+-	struct berval *name ));
++	AttributeDescription *desc ));
+ 
+ extern int
+ mdb_index_param LDAP_P((
+ 	Backend *be,
+ 	AttributeDescription *desc,
+ 	int ftype,
+-	MDB_dbi *dbi,
+-	slap_mask_t *mask,
+-	struct berval *prefix ));
++	AttrInfo **aip ));
+ 
+ extern int
+ mdb_index_values LDAP_P((
+diff --git a/servers/slapd/proto-slap.h b/servers/slapd/proto-slap.h
+index c112e2f..cec6231 100644
+--- a/servers/slapd/proto-slap.h
++++ b/servers/slapd/proto-slap.h
+@@ -1787,6 +1787,12 @@ LDAP_SLAPD_F (void) schema_destroy LDAP_P(( void ));
+ 
+ LDAP_SLAPD_F (int) slap_hash64 LDAP_P((int));
+ 
++LDAP_SLAPD_F (void) slap_index_preset LDAP_P((
++	slap_mask_t flags,
++	struct berval *prefix,
++	AttributeType *type,
++	IndexPreset *ip ));
++
+ LDAP_SLAPD_F( slap_mr_indexer_func ) octetStringIndexer;
+ LDAP_SLAPD_F( slap_mr_filter_func ) octetStringFilter;
+ 
+diff --git a/servers/slapd/schema_prep.c b/servers/slapd/schema_prep.c
+index 06baa46..6cd008a 100644
+--- a/servers/slapd/schema_prep.c
++++ b/servers/slapd/schema_prep.c
+@@ -239,11 +239,8 @@ objectSubClassMatch(
+ }
+ 
+ static int objectSubClassIndexer( 
+-	slap_mask_t use,
+ 	slap_mask_t mask,
+-	Syntax *syntax,
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	BerVarray values,
+ 	BerVarray *keysp,
+ 	void *ctx )
+@@ -302,8 +299,8 @@ static int objectSubClassIndexer(
+ 	}
+ 	BER_BVZERO( &ocvalues[i] );
+ 
+-	rc = octetStringIndexer( use, mask, syntax, mr,
+-		prefix, ocvalues, keysp, ctx );
++	rc = octetStringIndexer( mask, ip,
++		ocvalues, keysp, ctx );
+ 
+ 	slap_sl_free( ocvalues, ctx );
+ 	slap_sl_free( socs, ctx );
+diff --git a/servers/slapd/slap.h b/servers/slapd/slap.h
+index 5c27042..d9d4f13 100644
+--- a/servers/slapd/slap.h
++++ b/servers/slapd/slap.h
+@@ -471,6 +471,14 @@ typedef struct slap_syntax_defs_rec {
+ #endif
+ } slap_syntax_defs_rec;
+ 
++typedef struct IndexPreset {
++	void *ip_equal;
++	void *ip_approx;
++	void *ip_subany;
++	void *ip_subinitial;
++	void *ip_subfinal;
++} IndexPreset;
++
+ /* X -> Y Converter */
+ typedef int slap_mr_convert_func LDAP_P((
+ 	struct berval * in,
+@@ -497,22 +505,16 @@ typedef int slap_mr_match_func LDAP_P((
+ 
+ /* Index generation function */
+ typedef int slap_mr_indexer_func LDAP_P((
+-	slap_mask_t use,
+ 	slap_mask_t mask,
+-	Syntax *syntax,	/* syntax of stored value */
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	BerVarray values,
+ 	BerVarray *keys,
+ 	void *memctx ));
+ 
+ /* Filter index function */
+ typedef int slap_mr_filter_func LDAP_P((
+-	slap_mask_t use,
+ 	slap_mask_t mask,
+-	Syntax *syntax,	/* syntax of stored value */
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	void *assertValue,
+ 	BerVarray *keys,
+ 	void *memctx ));
+--- openldap-2.4.39/servers/slapd/schema_init.c.orig	2014-01-25 07:36:15.000000000 -0600
++++ openldap-2.4.39/servers/slapd/schema_init.c	2014-03-18 16:52:31.090093727 -0500
+@@ -616,6 +616,61 @@
+ 	return;
+ }
+ 
++void
++slap_index_preset_free(
++	IndexPreset *ip
++)
++{
++	ch_free( ip->ip_equal );
++	ch_free( ip->ip_approx );
++	ch_free( ip->ip_subany );
++	ch_free( ip->ip_subinitial );
++	ch_free( ip->ip_subfinal );
++}
++
++void
++slap_index_preset(
++	slap_mask_t flags,
++	struct berval *prefix,
++	AttributeType *type,
++	IndexPreset *ip
++)
++{
++	if ( IS_SLAP_INDEX( flags, SLAP_INDEX_APPROX )) {
++		if ( ip->ip_approx )
++			ch_free( ip->ip_approx );
++		ip->ip_approx = ch_malloc( sizeof( HASH_CONTEXT ));
++		hashPreset( ip->ip_approx, prefix, 0, type->sat_syntax, type->sat_approx );
++	}
++	if ( IS_SLAP_INDEX( flags, SLAP_INDEX_EQUALITY )) {
++		if ( ip->ip_equal )
++			ch_free( ip->ip_equal );
++		ip->ip_equal = ch_malloc( sizeof( HASH_CONTEXT ));
++		hashPreset( ip->ip_equal, prefix, 0, type->sat_syntax, type->sat_equality );
++	}
++	if ( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR )) {
++		if ( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_ANY )) {
++			if ( ip->ip_subany )
++				ch_free( ip->ip_subany );
++			ip->ip_subany = ch_malloc( sizeof( HASH_CONTEXT ));
++			hashPreset( ip->ip_subany, prefix, SLAP_INDEX_SUBSTR_PREFIX, type->sat_syntax, type->sat_substr );
++		}
++		if ( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_INITIAL )) {
++			if ( ip->ip_subinitial )
++				ch_free( ip->ip_subinitial );
++			ip->ip_subinitial = ch_malloc( sizeof( HASH_CONTEXT ));
++			hashPreset( ip->ip_subinitial, prefix, SLAP_INDEX_SUBSTR_INITIAL_PREFIX, type->sat_syntax, type->sat_substr );
++		}
++		if ( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_FINAL )) {
++			if ( ip->ip_subfinal )
++				ch_free( ip->ip_subfinal );
++			ip->ip_subfinal = ch_malloc( sizeof( HASH_CONTEXT ));
++			hashPreset( ip->ip_subfinal, prefix, SLAP_INDEX_SUBSTR_FINAL_PREFIX, type->sat_syntax, type->sat_substr );
++		}
++
++	}
++}
++
+ /* Set HASHdigest from HASHcontext and value:len */
+ static void
+ hashIter(
+@@ -631,23 +686,14 @@
+ 
+ /* Index generation function: Attribute values -> index hash keys */
+ int octetStringIndexer(
+-	slap_mask_t use,
+ 	slap_mask_t flags,
+-	Syntax *syntax,
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	BerVarray values,
+ 	BerVarray *keysp,
+ 	void *ctx )
+ {
+ 	int i;
+-	size_t slen, mlen;
+ 	BerVarray keys;
+-	HASH_CONTEXT HASHcontext;
+-	unsigned char HASHdigest[HASH_BYTES];
+-	struct berval digest;
+-	digest.bv_val = (char *)HASHdigest;
+-	digest.bv_len = sizeof(HASHdigest);
+ 
+ 	for( i=0; !BER_BVISNULL( &values[i] ); i++ ) {
+ 		/* just count them */
+@@ -658,14 +704,11 @@
+ 
+ 	keys = slap_sl_malloc( sizeof( struct berval ) * (i+1), ctx );
+ 
+-	slen = syntax->ssyn_oidlen;
+-	mlen = mr->smr_oidlen;
+-
+-	hashPreset( &HASHcontext, prefix, 0, syntax, mr);
+ 	for( i=0; !BER_BVISNULL( &values[i] ); i++ ) {
+-		hashIter( &HASHcontext, HASHdigest,
++		keys[i].bv_val = slap_sl_malloc( hashlen, ctx );
++		keys[i].bv_len = hashlen;
++		hashIter( ip->ip_equal, keys[i].bv_val,
+ 			(unsigned char *)values[i].bv_val, values[i].bv_len );
+-		ber_dupbv_x( &keys[i], &digest, ctx );
+ 	}
+ 
+ 	BER_BVZERO( &keys[i] );
+@@ -677,34 +720,22 @@
+ 
+ /* Index generation function: Asserted value -> index hash key */
+ int octetStringFilter(
+-	slap_mask_t use,
+ 	slap_mask_t flags,
+-	Syntax *syntax,
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	void * assertedValue,
+ 	BerVarray *keysp,
+ 	void *ctx )
+ {
+-	size_t slen, mlen;
+ 	BerVarray keys;
+-	HASH_CONTEXT HASHcontext;
+-	unsigned char HASHdigest[HASH_BYTES];
+ 	struct berval *value = (struct berval *) assertedValue;
+-	struct berval digest;
+-	digest.bv_val = (char *)HASHdigest;
+-	digest.bv_len = sizeof(HASHdigest);
+-
+-	slen = syntax->ssyn_oidlen;
+-	mlen = mr->smr_oidlen;
+ 
+ 	keys = slap_sl_malloc( sizeof( struct berval ) * 2, ctx );
++	keys[0].bv_val = slap_sl_malloc( hashlen, ctx );
++	keys[0].bv_len = hashlen;
+ 
+-	hashPreset( &HASHcontext, prefix, 0, syntax, mr );
+-	hashIter( &HASHcontext, HASHdigest,
++	hashIter( ip->ip_equal, keys[0].bv_val,
+ 		(unsigned char *)value->bv_val, value->bv_len );
+ 
+-	ber_dupbv_x( keys, &digest, ctx );
+ 	BER_BVZERO( &keys[1] );
+ 
+ 	*keysp = keys;
+@@ -839,30 +870,20 @@
+ /* Substring index generation function: Attribute values -> index hash keys */
+ static int
+ octetStringSubstringsIndexer(
+-	slap_mask_t use,
+ 	slap_mask_t flags,
+-	Syntax *syntax,
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	BerVarray values,
+ 	BerVarray *keysp,
+ 	void *ctx )
+ {
+ 	ber_len_t i, nkeys;
+-	size_t slen, mlen;
+ 	BerVarray keys;
+ 
+-	HASH_CONTEXT HCany, HCini, HCfin;
+-	unsigned char HASHdigest[HASH_BYTES];
+-	struct berval digest;
+-	digest.bv_val = (char *)HASHdigest;
+-	digest.bv_len = sizeof(HASHdigest);
+-
+ 	nkeys = 0;
+ 
+ 	for ( i = 0; !BER_BVISNULL( &values[i] ); i++ ) {
+ 		/* count number of indices to generate */
+-		if( flags & SLAP_INDEX_SUBSTR_INITIAL ) {
++		if( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_INITIAL )) {
+ 			if( values[i].bv_len >= index_substr_if_maxlen ) {
+ 				nkeys += index_substr_if_maxlen -
+ 					(index_substr_if_minlen - 1);
+@@ -871,13 +892,13 @@
+ 			}
+ 		}
+ 
+-		if( flags & SLAP_INDEX_SUBSTR_ANY ) {
++		if( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_ANY )) {
+ 			if( values[i].bv_len >= index_substr_any_len ) {
+ 				nkeys += values[i].bv_len - (index_substr_any_len - 1);
+ 			}
+ 		}
+ 
+-		if( flags & SLAP_INDEX_SUBSTR_FINAL ) {
++		if( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_FINAL )) {
+ 			if( values[i].bv_len >= index_substr_if_maxlen ) {
+ 				nkeys += index_substr_if_maxlen -
+ 					(index_substr_if_minlen - 1);
+@@ -895,30 +916,22 @@
+ 
+ 	keys = slap_sl_malloc( sizeof( struct berval ) * (nkeys+1), ctx );
+ 
+-	slen = syntax->ssyn_oidlen;
+-	mlen = mr->smr_oidlen;
+-
+-	if ( flags & SLAP_INDEX_SUBSTR_ANY )
+-		hashPreset( &HCany, prefix, SLAP_INDEX_SUBSTR_PREFIX, syntax, mr );
+-	if( flags & SLAP_INDEX_SUBSTR_INITIAL )
+-		hashPreset( &HCini, prefix, SLAP_INDEX_SUBSTR_INITIAL_PREFIX, syntax, mr );
+-	if( flags & SLAP_INDEX_SUBSTR_FINAL )
+-		hashPreset( &HCfin, prefix, SLAP_INDEX_SUBSTR_FINAL_PREFIX, syntax, mr );
+-
+ 	nkeys = 0;
+ 	for ( i = 0; !BER_BVISNULL( &values[i] ); i++ ) {
+ 		ber_len_t j,max;
+ 
+-		if( ( flags & SLAP_INDEX_SUBSTR_ANY ) &&
++		if( ( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_ANY )) &&
+ 			( values[i].bv_len >= index_substr_any_len ) )
+ 		{
+ 			max = values[i].bv_len - (index_substr_any_len - 1);
+ 
+ 			for( j=0; j<max; j++ ) {
+-				hashIter( &HCany, HASHdigest,
++				keys[nkeys].bv_val = slap_sl_malloc( hashlen, ctx );
++				keys[nkeys].bv_len = hashlen;
++				hashIter( ip->ip_subany, keys[nkeys].bv_val,
+ 					(unsigned char *)&values[i].bv_val[j],
+ 					index_substr_any_len );
+-				ber_dupbv_x( &keys[nkeys++], &digest, ctx );
++				nkeys++;
+ 			}
+ 		}
+ 
+@@ -930,16 +943,20 @@
+ 
+ 		for( j=index_substr_if_minlen; j<=max; j++ ) {
+ 
+-			if( flags & SLAP_INDEX_SUBSTR_INITIAL ) {
+-				hashIter( &HCini, HASHdigest,
++			if( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_INITIAL )) {
++				keys[nkeys].bv_val = slap_sl_malloc( hashlen, ctx );
++				keys[nkeys].bv_len = hashlen;
++				hashIter( ip->ip_subinitial, keys[nkeys].bv_val,
+ 					(unsigned char *)values[i].bv_val, j );
+-				ber_dupbv_x( &keys[nkeys++], &digest, ctx );
++				nkeys++;
+ 			}
+ 
+-			if( flags & SLAP_INDEX_SUBSTR_FINAL ) {
+-				hashIter( &HCfin, HASHdigest,
++			if( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_FINAL )) {
++				keys[nkeys].bv_val = slap_sl_malloc( hashlen, ctx );
++				keys[nkeys].bv_len = hashlen;
++				hashIter( ip->ip_subfinal, keys[nkeys].bv_val,
+ 					(unsigned char *)&values[i].bv_val[values[i].bv_len-j], j );
+-				ber_dupbv_x( &keys[nkeys++], &digest, ctx );
++				nkeys++;
+ 			}
+ 
+ 		}
+@@ -959,11 +976,8 @@
+ /* Substring index generation function: Assertion value -> index hash keys */
+ static int
+ octetStringSubstringsFilter (
+-	slap_mask_t use,
+ 	slap_mask_t flags,
+-	Syntax *syntax,
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	void * assertedValue,
+ 	BerVarray *keysp,
+ 	void *ctx)
+@@ -973,26 +987,23 @@
+ 	ber_len_t nkeys = 0;
+ 	size_t slen, mlen, klen;
+ 	BerVarray keys;
+-	HASH_CONTEXT HASHcontext;
+-	unsigned char HASHdigest[HASH_BYTES];
+ 	struct berval *value;
+-	struct berval digest;
+ 
+ 	sa = (SubstringsAssertion *) assertedValue;
+ 
+-	if( flags & SLAP_INDEX_SUBSTR_INITIAL &&
++	if( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_INITIAL ) &&
+ 		!BER_BVISNULL( &sa->sa_initial ) &&
+ 		sa->sa_initial.bv_len >= index_substr_if_minlen )
+ 	{
+ 		nkeys++;
+ 		if ( sa->sa_initial.bv_len > index_substr_if_maxlen &&
+-			( flags & SLAP_INDEX_SUBSTR_ANY ))
++			( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_ANY )))
+ 		{
+ 			nkeys += 1 + (sa->sa_initial.bv_len - index_substr_if_maxlen) / index_substr_any_step;
+ 		}
+ 	}
+ 
+-	if ( flags & SLAP_INDEX_SUBSTR_ANY && sa->sa_any != NULL ) {
++	if ( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_ANY ) && sa->sa_any != NULL ) {
+ 		ber_len_t i;
+ 		for( i=0; !BER_BVISNULL( &sa->sa_any[i] ); i++ ) {
+ 			if( sa->sa_any[i].bv_len >= index_substr_any_len ) {
+@@ -1003,13 +1014,13 @@
+ 		}
+ 	}
+ 
+-	if( flags & SLAP_INDEX_SUBSTR_FINAL &&
++	if( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_FINAL ) &&
+ 		!BER_BVISNULL( &sa->sa_final ) &&
+ 		sa->sa_final.bv_len >= index_substr_if_minlen )
+ 	{
+ 		nkeys++;
+ 		if ( sa->sa_final.bv_len > index_substr_if_maxlen &&
+-			( flags & SLAP_INDEX_SUBSTR_ANY ))
++			( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_ANY )))
+ 		{
+ 			nkeys += 1 + (sa->sa_final.bv_len - index_substr_if_maxlen) / index_substr_any_step;
+ 		}
+@@ -1020,50 +1031,43 @@
+ 		return LDAP_SUCCESS;
+ 	}
+ 
+-	digest.bv_val = (char *)HASHdigest;
+-	digest.bv_len = sizeof(HASHdigest);
+-
+-	slen = syntax->ssyn_oidlen;
+-	mlen = mr->smr_oidlen;
+-
+ 	keys = slap_sl_malloc( sizeof( struct berval ) * (nkeys+1), ctx );
+ 	nkeys = 0;
+ 
+-	if( flags & SLAP_INDEX_SUBSTR_INITIAL &&
++	if( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_INITIAL ) &&
+ 		!BER_BVISNULL( &sa->sa_initial ) &&
+ 		sa->sa_initial.bv_len >= index_substr_if_minlen )
+ 	{
+-		pre = SLAP_INDEX_SUBSTR_INITIAL_PREFIX;
+ 		value = &sa->sa_initial;
+ 
+ 		klen = index_substr_if_maxlen < value->bv_len
+ 			? index_substr_if_maxlen : value->bv_len;
+ 
+-		hashPreset( &HASHcontext, prefix, pre, syntax, mr );
+-		hashIter( &HASHcontext, HASHdigest,
++		keys[nkeys].bv_val = slap_sl_malloc( hashlen, ctx );
++		keys[nkeys].bv_len = hashlen;
++		hashIter( ip->ip_subinitial, keys[nkeys].bv_val,
+ 			(unsigned char *)value->bv_val, klen );
+-		ber_dupbv_x( &keys[nkeys++], &digest, ctx );
++		nkeys++;		
+ 
+ 		/* If initial is too long and we have subany indexed, use it
+ 		 * to match the excess...
+ 		 */
+-		if (value->bv_len > index_substr_if_maxlen && (flags & SLAP_INDEX_SUBSTR_ANY))
++		if (value->bv_len > index_substr_if_maxlen && (IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_ANY)))
+ 		{
+ 			ber_len_t j;
+-			pre = SLAP_INDEX_SUBSTR_PREFIX;
+-			hashPreset( &HASHcontext, prefix, pre, syntax, mr);
+ 			for ( j=index_substr_if_maxlen-1; j <= value->bv_len - index_substr_any_len; j+=index_substr_any_step )
+ 			{
+-				hashIter( &HASHcontext, HASHdigest,
++				keys[nkeys].bv_val = slap_sl_malloc( hashlen, ctx );
++				keys[nkeys].bv_len = hashlen;
++				hashIter( ip->ip_subany, keys[nkeys].bv_val,
+ 					(unsigned char *)&value->bv_val[j], index_substr_any_len );
+-				ber_dupbv_x( &keys[nkeys++], &digest, ctx );
++				nkeys++;				
+ 			}
+ 		}
+ 	}
+ 
+-	if( flags & SLAP_INDEX_SUBSTR_ANY && sa->sa_any != NULL ) {
++	if( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_ANY ) && sa->sa_any != NULL ) {
+ 		ber_len_t i, j;
+-		pre = SLAP_INDEX_SUBSTR_PREFIX;
+ 		klen = index_substr_any_len;
+ 
+ 		for( i=0; !BER_BVISNULL( &sa->sa_any[i] ); i++ ) {
+@@ -1073,46 +1077,47 @@
+ 
+ 			value = &sa->sa_any[i];
+ 
+-			hashPreset( &HASHcontext, prefix, pre, syntax, mr);
+ 			for(j=0;
+ 				j <= value->bv_len - index_substr_any_len;
+ 				j += index_substr_any_step )
+ 			{
+-				hashIter( &HASHcontext, HASHdigest,
++				keys[nkeys].bv_val = slap_sl_malloc( hashlen, ctx );
++				keys[nkeys].bv_len = hashlen;
++				hashIter( ip->ip_subany, keys[nkeys].bv_val,
+ 					(unsigned char *)&value->bv_val[j], klen ); 
+-				ber_dupbv_x( &keys[nkeys++], &digest, ctx );
++				nkeys++;
+ 			}
+ 		}
+ 	}
+ 
+-	if( flags & SLAP_INDEX_SUBSTR_FINAL &&
++	if( IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_FINAL ) &&
+ 		!BER_BVISNULL( &sa->sa_final ) &&
+ 		sa->sa_final.bv_len >= index_substr_if_minlen )
+ 	{
+-		pre = SLAP_INDEX_SUBSTR_FINAL_PREFIX;
+ 		value = &sa->sa_final;
+ 
+ 		klen = index_substr_if_maxlen < value->bv_len
+ 			? index_substr_if_maxlen : value->bv_len;
+ 
+-		hashPreset( &HASHcontext, prefix, pre, syntax, mr );
+-		hashIter( &HASHcontext, HASHdigest,
++		keys[nkeys].bv_val = slap_sl_malloc( hashlen, ctx );
++		keys[nkeys].bv_len = hashlen;
++		hashIter( ip->ip_subfinal, keys[nkeys].bv_val,
+ 			(unsigned char *)&value->bv_val[value->bv_len-klen], klen );
+-		ber_dupbv_x( &keys[nkeys++], &digest, ctx );
++		nkeys++;
+ 
+ 		/* If final is too long and we have subany indexed, use it
+ 		 * to match the excess...
+ 		 */
+-		if (value->bv_len > index_substr_if_maxlen && (flags & SLAP_INDEX_SUBSTR_ANY))
++		if (value->bv_len > index_substr_if_maxlen && (IS_SLAP_INDEX( flags, SLAP_INDEX_SUBSTR_ANY)))
+ 		{
+ 			ber_len_t j;
+-			pre = SLAP_INDEX_SUBSTR_PREFIX;
+-			hashPreset( &HASHcontext, prefix, pre, syntax, mr);
+ 			for ( j=0; j <= value->bv_len - index_substr_if_maxlen; j+=index_substr_any_step )
+ 			{
+-				hashIter( &HASHcontext, HASHdigest,
++				keys[nkeys].bv_val = slap_sl_malloc( hashlen, ctx );
++				keys[nkeys].bv_len = hashlen;
++				hashIter( ip->ip_subany, keys[nkeys].bv_val,
+ 					(unsigned char *)&value->bv_val[j], index_substr_any_len );
+-				ber_dupbv_x( &keys[nkeys++], &digest, ctx );
++				nkeys++;
+ 			}
+ 		}
+ 	}
+@@ -1530,11 +1535,8 @@
+ 
+ static int 
+ uniqueMemberIndexer(
+-	slap_mask_t use,
+ 	slap_mask_t flags,
+-	Syntax *syntax,
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	BerVarray values,
+ 	BerVarray *keysp,
+ 	void *ctx )
+@@ -1573,8 +1575,7 @@
+ 	}
+ 	BER_BVZERO( &dnvalues[i] );
+ 
+-	rc = octetStringIndexer( use, flags, syntax, mr, prefix,
+-		dnvalues, keysp, ctx );
++	rc = octetStringIndexer( flags, ip, dnvalues, keysp, ctx );
+ 
+ 	slap_sl_free( dnvalues, ctx );
+ 	return rc;
+@@ -1582,11 +1583,8 @@
+ 
+ static int 
+ uniqueMemberFilter(
+-	slap_mask_t use,
+ 	slap_mask_t flags,
+-	Syntax *syntax,
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	void * assertedValue,
+ 	BerVarray *keysp,
+ 	void *ctx )
+@@ -1611,8 +1609,7 @@
+ 		}
+ 	}
+ 
+-	return octetStringFilter( use, flags, syntax, mr, prefix,
+-		&assertedDN, keysp, ctx );
++	return octetStringFilter( flags, ip, &assertedDN, keysp, ctx );
+ }
+ 
+ 
+@@ -2114,11 +2111,8 @@
+ 
+ static int 
+ approxIndexer(
+-	slap_mask_t use,
+ 	slap_mask_t flags,
+-	Syntax *syntax,
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	BerVarray values,
+ 	BerVarray *keysp,
+ 	void *ctx )
+@@ -2173,11 +2167,8 @@
+ 
+ static int 
+ approxFilter(
+-	slap_mask_t use,
+ 	slap_mask_t flags,
+-	Syntax *syntax,
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	void * assertedValue,
+ 	BerVarray *keysp,
+ 	void *ctx )
+@@ -2584,11 +2575,8 @@
+ /* Index generation function: Ordered index */
+ static int
+ integerIndexer(
+-	slap_mask_t use,
+ 	slap_mask_t flags,
+-	Syntax *syntax,
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	BerVarray values,
+ 	BerVarray *keysp,
+ 	void *ctx )
+@@ -2650,11 +2638,8 @@
+ /* Index generation function: Ordered index */
+ static int
+ integerFilter(
+-	slap_mask_t use,
+ 	slap_mask_t flags,
+-	Syntax *syntax,
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	void * assertedValue,
+ 	BerVarray *keysp,
+ 	void *ctx )
+@@ -5717,11 +5702,8 @@
+ 
+ /* Index generation function: Ordered index */
+ int generalizedTimeIndexer(
+-	slap_mask_t use,
+ 	slap_mask_t flags,
+-	Syntax *syntax,
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	BerVarray values,
+ 	BerVarray *keysp,
+ 	void *ctx )
+@@ -5773,11 +5755,8 @@
+ 
+ /* Index generation function: Ordered index */
+ int generalizedTimeFilter(
+-	slap_mask_t use,
+ 	slap_mask_t flags,
+-	Syntax *syntax,
+-	MatchingRule *mr,
+-	struct berval *prefix,
++	IndexPreset *ip,
+ 	void * assertedValue,
+ 	BerVarray *keysp,
+ 	void *ctx )
