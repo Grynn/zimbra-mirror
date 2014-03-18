@@ -1,3 +1,4 @@
+%%exact VAR:zimbraMtaSmtpdSenderRestrictions reject_authenticated_sender_login_mismatch%%
 %%contains VAR:zimbraServiceEnabled cbpolicyd^ check_policy_service inet:localhost:%%zimbraCBPolicydBindPort%%%%
 %%contains VAR:zimbraServiceEnabled antivirus^ check_sender_access regexp:/opt/zimbra/postfix/conf/tag_as_originating.re%%
 %%contains VAR:zimbraServiceEnabled antivirus^ permit_mynetworks%%
