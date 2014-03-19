@@ -573,10 +573,7 @@ function() {
     retObj[ZaItem.DL] = 0;
 
     for (var i in retObj) {
-        if (!ZaZimbraAdmin.isGlobalAdmin())
-            retObj[i] = ZaSearch.getObjectNumberBySearch(i);
-        else
-            retObj[i] = ZaSearch.getObjectNumberByType(i);
+        retObj[i] = ZaSearch.getObjectNumberByType(i);
     }
 
     return retObj;
@@ -619,10 +616,20 @@ ZaSearch.getObjectNumberBySearch = function (type) {
 ZaSearch.getObjectNumberByType = function (type) {
     var num = 0;
     var soapDoc = AjxSoapDoc.create("CountObjectsRequest", ZaZimbraAdmin.URN, null);
-    if (type == ZaItem.ACCOUNT) {
-        type = "userAccount"; // exclude system account
-    }
+    
+    if (!ZaZimbraAdmin.isGlobalAdmin()) {
+	    if(type == ZaItem.ACCOUNT || type == ZaItem.DATASOURCE || type==ZaItem.DL || type == ZaItem.ALIAS || type==ZaItem.RESOURCE) {
+	    	var domainList = ZaApp.getInstance().getDomainList().getArray();
+	    	for(var i = 0; i < domainList.length; i++) {
+	            var el = soapDoc.set("domain", domainList[i].name) ;
+	            el.setAttribute("by", "name") ;	    		
+	    	}
+	    }
+	}
 
+	if (type == ZaItem.ACCOUNT) {
+	    type = "userAccount"; // exclude system account
+	}
     soapDoc.setMethodAttribute("type", type);
     try {
         var params = new Object();

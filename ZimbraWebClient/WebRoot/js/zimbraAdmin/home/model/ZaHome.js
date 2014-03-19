@@ -155,7 +155,7 @@ ZaHome.prototype.updateServerNum = function(resp) {
 ZaHome.loadDomainNum = function() {
     var num = 1;
     try {
-        num = ZaApp.getInstance().getDomainList(true).size();
+        num = ZaApp.getInstance().getDomainList(ZaZimbraAdmin.isGlobalAdmin()).size();
     } catch (ex) {
 
     }

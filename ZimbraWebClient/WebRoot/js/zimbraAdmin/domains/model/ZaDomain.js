@@ -444,9 +444,6 @@ function(target) {
 	var query = "";
         if(!ZaZimbraAdmin.hasGlobalDomainListAccess()) {
             var domainNameList = ZaApp.getInstance()._domainNameList;
-            if(!domainNameList || !(domainNameList instanceof Array) || domainNameList.length == 0) {
-                return  new ZaItemList(ZaDomain);
-            }
             if(domainNameList && domainNameList instanceof Array) {
                 for(var i = 0; i < domainNameList.length; i++) {
                     if(!target || domainNameList[i].indexOf(target) != -1)
@@ -458,8 +455,7 @@ function(target) {
         } else
 	    if(target) query = "(" + ZaDomain.A_domainName + "=*" + target + "*)";
 	var params = {
-//		query: ZaDomain.LOCAL_DOMAIN_QUERY,
-        	query: query,
+    	query: query,
 		types:[ZaSearch.DOMAINS],
 		sortBy:ZaDomain.A_domainName,
 		offset:"0",
