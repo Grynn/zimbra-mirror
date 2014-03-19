@@ -109,6 +109,7 @@ public class MigrationOptions
     public long LangID;
     public Int32 MaxRetries;
     public string DateFilterItem;
+    public bool IsPublicFolders;
     
 }
 
@@ -1336,11 +1337,11 @@ public class CSMigrationWrapper
         InitLogFile(accountName, level);
         try
         {
-            bool IsPublic = false;
+            bool IsPublic = options.IsPublicFolders;
             if(IsPublic)
-                value = user.Init("", "", accountName);
+                value = user.Init("", "", accountName, 1);
             else
-            value = user.Init(isServer ? "host" : "", Acct.AccountID, accountName);
+                value = user.Init(isServer ? "host" : "", Acct.AccountID, accountName, 0);
         }
         catch (Exception e)
         {
@@ -1476,8 +1477,8 @@ public class CSMigrationWrapper
                 continue;
             }
             Log.info("Processing folder", folder.Name);
-            if ((folder.Id == 0) || ((folder.id == 1) && (folder.ItemCount > 0))) //1=ZM_ROOT and itemscount>0
-            { 
+            if (folder.Id == 0)
+            {
                 string ViewType = GetFolderViewType(folder.ContainerClass);
                 try
                 {

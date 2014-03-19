@@ -102,7 +102,7 @@ interface IMapiAccessWrap : IDispatch{
 	pointer_default(unique)
 ]
 interface IUserObject : IDispatch{
-     [id(1)] HRESULT Init([in]BSTR host, [in] BSTR location, [in] BSTR accountName, [out, retval] BSTR *pErrorText);
+     [id(1)] HRESULT Init([in]BSTR host, [in] BSTR location, [in] BSTR accountName,[in] long PublicFlag, [out, retval] BSTR *pErrorText);
     [id(2), helpstring("method to retreive folder objects")]
     HRESULT GetFolders([out, retval] VARIANT *vObjects);
     [id(3), helpstring("method to retreive items in folders")]

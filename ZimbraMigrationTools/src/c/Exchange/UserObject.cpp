@@ -33,7 +33,7 @@ STDMETHODIMP CUserObject::InterfaceSupportsErrorInfo(REFIID riid)
     return S_FALSE;
 }
 
-STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account, BSTR *pErrorText)
+STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account,long PublicFlag, BSTR *pErrorText)
 {
     wchar_t buf[1024];
     HRESULT hr = S_FALSE;
@@ -46,12 +46,12 @@ STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account, BSTR *pEr
         Log::KV<BSTR>(L"account", account));
     MailType = L"MAPI";
     UserID = location;
-	bool m_public = false;
+	//bool m_public = PublicFlag;
 
-	if(m_public)
+	if(PublicFlag)
 	{
 
-		 LPCWSTR err = MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook",FL_PUBLIC_FOLDER);
+		 LPCWSTR err = MAPIAccessAPI::InitGlobalSessionAndStore(L"Outlook.PUBLIC",PublicFlag);
 
         if (err)
             *pErrorText = CComBSTR(err);
@@ -68,7 +68,7 @@ STDMETHODIMP CUserObject::Init(BSTR host, BSTR location, BSTR account, BSTR *pEr
     }
     else
     {
-        LPCWSTR err = MAPIAccessAPI::InitGlobalSessionAndStore(location,FL_NONE);
+        LPCWSTR err = MAPIAccessAPI::InitGlobalSessionAndStore(location);
 
         if (err)
             *pErrorText = CComBSTR(err);

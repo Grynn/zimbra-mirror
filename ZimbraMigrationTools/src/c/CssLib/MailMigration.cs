@@ -19,7 +19,7 @@ namespace CssLib
    public abstract class MigrationUser
     {
 
-       public abstract string Init(string host, string AccountID, string accountName);
+       public abstract string Init(string host, string AccountID, string accountName,int Publicflag);
 
        public abstract dynamic[] GetFolders();
 

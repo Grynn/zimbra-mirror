@@ -62,6 +62,8 @@ public class OptionsViewModel: BaseViewModel
         SpecialCharReplace = config.AdvancedImportOptions.SpecialCharReplace;
         LangID = config.AdvancedImportOptions.LangID;
         MaxRetries = config.AdvancedImportOptions.MaxRetries;
+        IsPublicFolders = config.AdvancedImportOptions.IsPublicFolders;
+        
 
         if (config.GeneralOptions != null)  // so old config files will work
         {
@@ -431,6 +433,19 @@ public class OptionsViewModel: BaseViewModel
             m_config.AdvancedImportOptions.SpecialCharReplace = value;
 
             OnPropertyChanged(new PropertyChangedEventArgs("SpecialCharReplace"));
+        }
+    }
+
+    public bool IsPublicFolders
+    {
+        get { return m_config.AdvancedImportOptions.IsPublicFolders; }
+        set
+        {
+            if (value == m_config.AdvancedImportOptions.IsPublicFolders)
+                return;
+            m_config.AdvancedImportOptions.IsPublicFolders = value;
+
+            OnPropertyChanged(new PropertyChangedEventArgs("IsPublicFolders"));
         }
     }
     public string CSVDelimiter

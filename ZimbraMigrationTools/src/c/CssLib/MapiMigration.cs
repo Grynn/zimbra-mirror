@@ -262,13 +262,13 @@ namespace CssLib
         {
             UserObj = new Exchange.UserObject();
         }
-        public override string Init(string host, string AccountID, string accountName)
+        public override string Init(string host, string AccountID, string accountName,int Publicflag)
         {
 
             string value ="";
             try
             {
-                value = UserObj.Init(host, AccountID, accountName);
+                value = UserObj.Init(host, AccountID, accountName,Publicflag);
             }
             catch (Exception e)
             {

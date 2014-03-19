@@ -63,7 +63,7 @@ END_COM_MAP()
 	}
 
 public:
-     STDMETHOD(Init) (BSTR host, BSTR location, BSTR accountName, BSTR *pErrorText);
+     STDMETHOD(Init) (BSTR host, BSTR location, BSTR accountName, long PublicFlag, BSTR *pErrorText);
     STDMETHOD(GetFolders) (VARIANT * vObjects);
     STDMETHOD(GetItemsForFolder) (IFolderObject * folderObj, VARIANT creationDate, VARIANT *
         vItems);
