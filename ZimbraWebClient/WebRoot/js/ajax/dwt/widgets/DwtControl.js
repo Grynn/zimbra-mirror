@@ -1841,7 +1841,7 @@ DwtControl.prototype.getVisibility =
 function() {
 	if (!this._checkState()) { return; }
 
-	return Dwt.getVisiblility(this.getHtmlElement());
+	return Dwt.getVisibility(this.getHtmlElement());
 };
 
 
