@@ -136,7 +136,7 @@ public class UndoDeleteContactGroup extends AjaxCommonTest {
 		app.zPageAddressbook.zRefresh();
 
 		// Select the contact group
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
+		//app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
 
 		// Wait for the toaster (if any) to close
 		toast.zWaitForClose();
@@ -220,7 +220,7 @@ public class UndoDeleteContactGroup extends AjaxCommonTest {
 		// Select the contact group
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group1.getName());
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group2.getName());
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group3.getName());
+		//app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group3.getName());
 
 		// Wait for the toaster (if any) to close
 		toast.zWaitForClose();
@@ -271,7 +271,7 @@ public class UndoDeleteContactGroup extends AjaxCommonTest {
 
 		// Select the contact group
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact.getName());
+		//app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact.getName());
 
 		// Wait for the toaster (if any) to close
 		toast.zWaitForClose();

@@ -132,7 +132,7 @@ public class UndoDeleteContact extends AjaxCommonTest {
 		app.zPageAddressbook.zRefresh();
 
 		// Select the contact's checkbox
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact.firstName);
+		//app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact.firstName);
 
 		// Wait for the toaster (if any) to close
 		toast.zWaitForClose();
@@ -217,7 +217,7 @@ public class UndoDeleteContact extends AjaxCommonTest {
 		// Select the item
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact1.fileAs);
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact2.fileAs);
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact3.fileAs);
+		//app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact3.fileAs);
 
 		// Wait for the toaster (if any) to close
 		toast.zWaitForClose();

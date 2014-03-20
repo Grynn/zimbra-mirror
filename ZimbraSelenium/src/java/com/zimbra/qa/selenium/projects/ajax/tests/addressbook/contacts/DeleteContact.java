@@ -120,8 +120,9 @@ public class DeleteContact extends AjaxCommonTest  {
 		// Refresh to get the contact into the client
 		app.zPageAddressbook.zRefresh();
 		
+		// By default newly created contact will be checked.
 		// Select the contact's checkbox
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact.firstName);
+		//app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact.firstName);
 		
         // delete contact
         app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
@@ -198,7 +199,7 @@ public class DeleteContact extends AjaxCommonTest  {
 	public void DeleteFromContextMenu() throws HarnessException {
 		
 
-		//-- Data
+		//-- Data	
 		
 		// Create a contact item
 		ContactItem contact = new ContactItem();
@@ -300,7 +301,7 @@ public class DeleteContact extends AjaxCommonTest  {
 	    // Select the item
 	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact1.fileAs);
 	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact2.fileAs);
-	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact3.fileAs);
+	   // app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact3.fileAs);
 	   
 		//delete 3 contacts
         app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);

@@ -98,9 +98,10 @@ public class DeleteContactGroup extends AjaxCommonTest {
 
 		// Refresh
 		app.zPageAddressbook.zRefresh();
-
+		
+		// By default newly created contact will be checked.
 		// Select the contact group
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
+		//app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
 
 		// delete contact group by click Delete button on toolbar
 		app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
@@ -174,7 +175,8 @@ public class DeleteContactGroup extends AjaxCommonTest {
 		app.zPageAddressbook.zRefresh();
 
 		// Select the contact group
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group3.getName());
+		// By default newly created contact will be checked.
+		//app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group3.getName());
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group1.getName());
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group2.getName());
 		
@@ -189,7 +191,7 @@ public class DeleteContactGroup extends AjaxCommonTest {
 	
 	}
 
-	@Test(description = "Delete contact + contact group at once and verify toast msg", groups = { "zfunctional" })
+	@Test(description = "Delete contact + contact group at once and verify toast msg", groups = { "functional" })
 	public void DeleteContactGroupToastMsg_07() throws HarnessException {
 
 		// Create a contact group
@@ -202,7 +204,8 @@ public class DeleteContactGroup extends AjaxCommonTest {
 		app.zPageAddressbook.zRefresh();
 
 		// Select the contact group
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact.getName());
+		// By default newly created contact will be checked.
+		//app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact.getName());
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
 		
 

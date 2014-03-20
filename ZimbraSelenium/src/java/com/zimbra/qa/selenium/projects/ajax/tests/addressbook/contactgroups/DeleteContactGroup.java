@@ -140,7 +140,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
 		// Select the contact group
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
+		//app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
 		
         //delete contact group by click Delete button on toolbar
         app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
@@ -254,7 +254,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
 		// Select the contact group
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group3.getName());
+		//app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group3.getName());
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group1.getName());
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group2.getName());
 		
@@ -307,7 +307,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		app.zPageAddressbook.zRefresh();
 		
 		// Select the contact group		
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
+		//app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
 		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact.getName());
 
         //delete contact group by click Delete button on toolbar
