@@ -291,7 +291,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		app.zPageAddressbook.zRefresh();
 
 		// Check 3 contact items
-		app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
+		//app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.getName());
 	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contact.getName());
 	  
 
