@@ -926,7 +926,12 @@ class State:
 				altreplace = ""
 			fields = st.split(' ',2)
 			(type,key) = fields[1].split(':')
-			val = self.lookUpConfig(type, key).split()
+			val = self.lookUpConfig(type, key)
+			if val is None:
+				val = ""
+				return str(val)
+			else:
+				val = val.split()
 			replace = replace or fields[2]
 			Log.logMsg(5, "debug exact: type %s for key=%s exact matches %s replace=%s or altreplace=%s" % (type, key, fields[2], replace, altreplace))
 			if fields[2] in val:
