@@ -77,7 +77,7 @@ start()
           getpid
           echo "Started opendkim: pid $PID"
         else
-          echo "opendkim already running: pid $PID"
+          echo "zmopendkimctl already running: pid $PID"
           exit 0
         fi
 }
@@ -86,7 +86,7 @@ stop()
 {
         checkrunning
         if [ $RUNNING = 0 ]; then
-          echo "opendkim not running"
+          echo "zmopendkimctl not running"
           exit 0
         else
           echo -n "Stopping opendkim..."
@@ -113,7 +113,7 @@ stop()
 status()
 {
         checkrunning
-        echo -n "opendkim is "
+        echo -n "zmopendkimctl is "
         if [ $RUNNING = 0 ]; then
                 echo "not running."
                 exit 1
