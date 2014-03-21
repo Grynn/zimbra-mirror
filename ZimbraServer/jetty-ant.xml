@@ -37,7 +37,7 @@
  </target>
 
   <property name="project.outputDirectory" value="build" />
-  <property name="jetty.version" value="9.1.1.v20140108" />
+  <property name="jetty.version" value="9.1.3.v20140225" />
   <property name="jetty_run_base" location="/opt/zimbra" />
 
   <path id="jetty.plugin.classpath">
