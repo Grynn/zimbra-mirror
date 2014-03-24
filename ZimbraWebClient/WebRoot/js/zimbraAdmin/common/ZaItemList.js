@@ -224,66 +224,6 @@ function(resp) {
 	}
 }
 
-ZaItemList.prototype.loadEffectiveRights = function() {
-	var arr = this.getArray();
-	var cnt = arr.length;
-	var soapDoc, params, resp;
-	//batch the rest of the requests
-	soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
-	soapDoc.setMethodAttribute("onerror", "continue");	
-	
-	for(var i=0; i < cnt; i++) {
-		if(arr[i].id && arr[i].loadEffectiveRights && arr[i].type &&
-			(arr[i].type == ZaItem.ACCOUNT || arr[i].type == ZaItem.DL || arr[i].type == ZaItem.RESOURCE
-			|| arr[i].type == ZaItem.DOMAIN || arr[i].type == ZaItem.COS || arr[i].type == ZaItem.ZIMLET
-			|| arr[i].type == ZaItem.SERVER)) {
-			var getEffRightsDoc = soapDoc.set("GetEffectiveRightsRequest", null, null, ZaZimbraAdmin.URN);
-			var elTarget = soapDoc.set("target", arr[i].id, getEffRightsDoc);
-			elTarget.setAttribute("by","id");
-			elTarget.setAttribute("type", arr[i].type);
-			var elGrantee = soapDoc.set("grantee", ZaZimbraAdmin.currentUserId, getEffRightsDoc);
-			elGrantee.setAttribute("by","id");			
-		} else if (arr[i].type == ZaItem.ALIAS && arr[i].attrs[ZaAlias.A_AliasTargetId]) {
-			var getEffRightsDoc = soapDoc.set("GetEffectiveRightsRequest", null, null, ZaZimbraAdmin.URN);
-			var elTarget = soapDoc.set("target", arr[i].attrs[ZaAlias.A_AliasTargetId], getEffRightsDoc);
-			elTarget.setAttribute("by","id");
-			elTarget.setAttribute("type", arr[i].attrs[ZaAlias.A_targetType]);
-			var elGrantee = soapDoc.set("grantee", ZaZimbraAdmin.currentUserId, getEffRightsDoc);
-			elGrantee.setAttribute("by","id");						
-		}
-	}
-	params = new Object();
-	params.soapDoc = soapDoc;	
-	var reqMgrParams ={
-		controller:ZaApp.getInstance().getCurrentController(),
-		busyMsg:ZaMsg.BUSY_REQUESTING_ACCESS_RIGHTS
-	}
-	
-	var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
-	if(respObj.isException && respObj.isException()) {
-		ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaItemList.prototype.loadEffectiveRights", null, false);
-	} else if(respObj.Body.BatchResponse.Fault) {
-		var fault = respObj.Body.BatchResponse.Fault;
-		if(fault instanceof Array)
-			fault = fault[0];
-		
-		if (fault) {
-			// JS response with fault
-			var ex = ZmCsfeCommand.faultToEx(fault);
-			ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaItemList.prototype.loadEffectiveRights", null, false);
-		}
-	} else {
-		var batchResp = respObj.Body.BatchResponse;
-		if(batchResp.GetEffectiveRightsResponse && batchResp.GetEffectiveRightsResponse instanceof Array) {
-			var cnt2 =  batchResp.GetEffectiveRightsResponse.length;
-			for (var i=0; i < cnt2; i++) {
-				resp = batchResp.GetEffectiveRightsResponse[i];
-				this.getItemById(resp.target[0].id).initEffectiveRightsFromJS(resp);
-			}
-		}
-	}
-	this.loadedRights = true;		
-}
 /**
 * Grab the IDs out of a list of items, and return them as both a string and a hash.
 **/

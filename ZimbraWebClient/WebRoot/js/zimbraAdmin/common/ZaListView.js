@@ -413,12 +413,6 @@ function(preParams, paramsArr) {
 				searchTotal +=  (resp.searchTotal ? resp.searchTotal : 0);
                 hasmore= resp.more|hasmore;
 			}
-		        if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
-		                var list = this.scrollSearchParams.controller.getList();
-		                var act = new AjxTimedAction(list, list.loadEffectiveRights, null);
-		                AjxTimedAction.scheduleAction(act, 150)
-		        }
-
 
             if(tempResultList){
                 var tmpArr = new Array();
@@ -514,11 +508,6 @@ function(params, resp) {
                 } else {
                     tempResultList = tempList;
                 }
-				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
-					var list = this.scrollSearchParams.controller.getList();
-					var act = new AjxTimedAction(list, list.loadEffectiveRights, null);
-					AjxTimedAction.scheduleAction(act, 150)
-				}
                  hasmore= response.more;
 
 			}

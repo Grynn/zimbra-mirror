@@ -521,7 +521,6 @@ function (params, resp) {
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
 			var domainList = new ZaItemList(ZaDomain);	
 			domainList.loadFromJS(response);
-			domainList.loadEffectiveRights();
 			if(ZaSettings.TREE_ENABLED) {
 				this._appCtxt.getAppController().getOverviewPanelController().updateDomainList(domainList);
 			}
@@ -543,7 +542,6 @@ ZaApp.prototype.getDomainList =
 function(refresh) {
 	if (refresh || this._domainList == null) {
 		this._domainList = ZaDomain.getAll();
-		this._domainList.loadEffectiveRights();
 	}
 	return this._domainList;	
 }

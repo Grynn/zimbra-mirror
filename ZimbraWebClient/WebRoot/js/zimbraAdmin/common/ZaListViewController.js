@@ -222,10 +222,6 @@ function(preParams, paramsArr) {
 				this._searchTotal += resp.searchTotal;
                 resultStats = this.getSearchResultStats(resp, resultStats);
 			}
-		        if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
-		                var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
-		                AjxTimedAction.scheduleAction(act, 150)
-		        }
 
 		        var limit = preParams.limit ? preParams.limit : this.RESULTSPERPAGE;
 		        this.numPages = Math.ceil(this._searchTotal/preParams.limit);
@@ -309,11 +305,6 @@ function(params, resp) {
 
                     }
                 } else  this._list = tempList;
-
-				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
-					var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
-					AjxTimedAction.scheduleAction(act, 150)
-				}
 
 				this._searchTotal = response.searchTotal;
 				var limit = params.limit ? params.limit : this.RESULTSPERPAGE; 

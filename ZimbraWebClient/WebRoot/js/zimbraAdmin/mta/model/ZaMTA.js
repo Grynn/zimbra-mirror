@@ -171,8 +171,6 @@ ZaMTA.getAll = function () {
 	var list = new ZaItemList(ZaMTA);
 	var retVal = new ZaItemList(ZaMTA);
 	list.loadFromJS(resp);	
-	if(!list.loadedRights)
-		list.loadEffectiveRights();
 	
 	var servers = list.getArray();
 	var cnt = servers.length;
