@@ -1223,7 +1223,7 @@ public class FormMailNew extends AbsForm {
 		String locator = null;
 		
 		// Get the icon
-		locator = itemLocator + " td.Icon div@class";
+		locator = itemLocator + " td.AutocompleteMatchIcon div@class";
 		String image = this.sGetAttribute(locator);
 		
 		// Get the address
