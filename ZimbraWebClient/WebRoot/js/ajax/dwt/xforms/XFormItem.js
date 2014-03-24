@@ -1271,7 +1271,7 @@ XFormItem.prototype.getInheritedProperty = function(prop) {
 
 	// if not found there, look in the xmodel
 	var modelItem = this.__modelItem;
-	if (modelItem && modelItem[prop]) return modelItem[prop];
+	if (modelItem && modelItem[prop] !== _UNDEFINED_) return modelItem[prop];
 
 	return null;
 }
